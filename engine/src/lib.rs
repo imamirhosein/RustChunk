@@ -1,26 +1,40 @@
+mod workspace;
+
 use jni::objects::{JObject, JString};
 use jni::sys::jstring;
 use jni::JNIEnv;
+use std::path::Path;
 
-/// Native smoke-test endpoint. This verifies that the Android app can load
-/// and call the Rust library; it is not yet a Minecraft implementation.
+/// Reports the native engine target and confirms that the Rust library loaded.
 #[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeStatus(
     mut env: JNIEnv,
     _this: JObject,
 ) -> jstring {
-    let message = "RustChunk native core loaded. Target game profile: Minecraft 1.20.1";
-    let output: JString = env
-        .new_string(message)
-        .expect("could not allocate Java status string");
-    output.into_raw()
+    match env.new_string("RustChunk native core ready. Target: Minecraft Java 1.20.1") {
+        Ok(output) => output.into_raw(),
+        Err(_) => std::ptr::null_mut(),
+    }
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn target_profile_is_1201() {
-        let target = (1, 20, 1);
-        assert_eq!(target, (1, 20, 1));
+/// Initializes the private Minecraft directory layout using Rust filesystem code.
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareWorkspace(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+) -> jstring {
+    let message = match env.get_string(&app_data_dir) {
+        Ok(java_path) => match java_path.to_str() {
+            Ok(path) => workspace::prepare_workspace(Path::new(path))
+                .unwrap_or_else(|error| format!("Workspace initialization failed: {}", error)),
+            Err(error) => format!("Workspace initialization failed: invalid path: {}", error),
+        },
+        Err(error) => format!("Workspace initialization failed: JNI string error: {}", error),
+    };
+
+    match env.new_string(message) {
+        Ok(output) => output.into_raw(),
+        Err(_) => std::ptr::null_mut(),
     }
 }

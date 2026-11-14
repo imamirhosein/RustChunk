@@ -7,21 +7,29 @@ import android.widget.TextView
 
 class MainActivity : Activity() {
     private external fun nativeStatus(): String
+    private external fun nativePrepareWorkspace(appDataDirectory: String): String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val status = try {
+        val nativeStatusText = try {
             nativeStatus()
         } catch (error: Throwable) {
             "Rust native core could not start: ${error.javaClass.simpleName}: ${error.message}"
         }
 
+        val workspaceStatusText = try {
+            nativePrepareWorkspace(filesDir.absolutePath)
+        } catch (error: Throwable) {
+            "Workspace initialization failed: ${error.javaClass.simpleName}: ${error.message}"
+        }
+
         val view = TextView(this).apply {
-            text = "RustChunk\n\n$status\n\nStage 0: Android ↔ Rust bridge test"
-            textSize = 18f
+            text = "RustChunk\n\n$nativeStatusText\n\n$workspaceStatusText\n\nStage 1: Minecraft workspace initialization"
+            textSize = 16f
             gravity = Gravity.CENTER
-            setPadding(32, 32, 32, 32)
+            setPadding(28, 32, 28, 32)
+            setTextIsSelectable(true)
         }
         setContentView(view)
     }
