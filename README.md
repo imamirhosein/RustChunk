@@ -2,27 +2,33 @@
 
 An independent Android-native Rust launcher and game-engine research project targeting Minecraft Java 1.20.1 and incremental Forge 47.x compatibility.
 
-## Current milestone: Stage 2 — Official metadata and installation planning
+## Current milestone: Stage 3 — Resumable base-game downloads
 
-Stage 2 adds a real Android network path from the Kotlin UI into the Rust core.
+Stage 3 adds an actual downloader for the saved Mojang installation plan.
 
-When the user taps **Resolve Minecraft 1.20.1 metadata**, RustChunk:
+The Android UI can now:
 
-1. Fetches Mojang's version manifest over HTTPS and selects the 1.20.1 release.
-2. Fetches and SHA-1 validates the Minecraft version metadata and asset index.
-3. Resolves the client JAR, Android ARM64-compatible library artifacts selected by metadata rules, and all asset object URLs.
-4. Creates a JSON installation plan with paths, URLs, sizes, and SHA-1 hashes.
-5. Persists the manifest, version metadata, asset index, and plan inside the app-private Minecraft directory.
+1. Download Minecraft 1.20.1's client JAR, applicable library artifacts, and asset objects.
+2. Run four simultaneous transfers to balance speed and mobile-device resource use.
+3. Resume interrupted transfers from .part files when the HTTP server supports byte ranges.
+4. Validate every completed file against its expected SHA-1 before moving it into its final path.
+5. Skip files already present and verified, including valid completed partial files.
+6. Show transfer progress, completed file count, total bytes, and the current path.
+7. Request cancellation while preserving partial files for a later resume.
 
-The plan is saved at:
+Downloads are stored in app-private storage under:
 
-`files/minecraft/instances/forge-1.20.1/install-plan.json`
+files/minecraft/
 
-The app only fetches metadata at this stage. It does **not** download the Minecraft client JAR, library JARs, assets, Forge installer, or Java runtime, and it does not launch Minecraft yet. OS-version regular-expression rules and native classifier selection are not implemented in this stage.
+The 1.20.1 installation plan must first be generated using the Resolve Minecraft 1.20.1 metadata button. The downloader deduplicates entries that resolve to the same content-addressed path.
 
-## Current platform target
+## What Stage 3 does not do
 
-- Android ARM64 (`arm64-v8a`)
+This stage downloads the base files listed in Mojang's Minecraft 1.20.1 metadata. It does not install Forge, download or configure a Java runtime, extract platform natives, load Forge mods, or launch the game. Forge 47.x / Aternos / the user's modpack remain future compatibility milestones and must be tested independently.
+
+## Platform target
+
+- Android ARM64 (arm64-v8a)
 - Java 17 runtime target
 - Minecraft Java 1.20.1
 - Forge 47.x compatibility target, implemented incrementally
@@ -30,10 +36,8 @@ The app only fetches metadata at this stage. It does **not** download the Minecr
 
 ## APK updates
 
-GitHub Actions caches the Android debug signing key. The first Stage 2 APK establishes that persistent key; subsequent APK builds should be installable as updates without uninstalling the app. The Stage 1 APK may need to be uninstalled once because it was built before persistent signing was configured. This debug key is for test builds only, not production releases.
+GitHub Actions caches the Android debug signing key. Subsequent APK builds should be installable as updates without uninstalling the app. This debug key is for test builds only, not production releases.
 
 ## Build and tests
 
-Push to `main` or run **RustChunk Android Build** manually from GitHub Actions. The workflow runs Rust unit tests, cross-compiles the Rust shared library for Android ARM64, packages the debug APK, and uploads it as a workflow artifact.
-
-Stage 2 includes Rust unit tests for download-plan construction, platform library rules, SHA-1 checks, safe paths, and atomic metadata writes.
+Push to main or run RustChunk Android Build manually from GitHub Actions. The workflow runs Rust unit tests, cross-compiles the Rust shared library for Android ARM64, packages the debug APK, and uploads it as a workflow artifact.

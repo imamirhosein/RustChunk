@@ -1,8 +1,9 @@
+mod downloader;
 mod installer;
 mod workspace;
 
 use jni::objects::{JObject, JString};
-use jni::sys::jstring;
+use jni::sys::{jint, jstring};
 use jni::JNIEnv;
 use std::path::Path;
 
@@ -19,7 +20,6 @@ fn rust_string_to_java(env: &mut JNIEnv, value: String) -> jstring {
     }
 }
 
-/// Reports the native engine target and confirms that the Rust library loaded.
 #[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeStatus(
     mut env: JNIEnv,
@@ -31,24 +31,20 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeStatus(
     )
 }
 
-/// Initializes the private Minecraft directory layout using Rust filesystem code.
 #[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareWorkspace(
     mut env: JNIEnv,
     _this: JObject,
     app_data_dir: JString,
 ) -> jstring {
-    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|path| {
-        workspace::prepare_workspace(Path::new(&path))
-    });
+    let result = java_string_to_rust(&mut env, &app_data_dir)
+        .and_then(|path| workspace::prepare_workspace(Path::new(&path)));
     rust_string_to_java(
         &mut env,
         result.unwrap_or_else(|error| format!("Workspace initialization failed: {}", error)),
     )
 }
 
-/// Fetches official 1.20.1 metadata and writes a verified download plan.
-/// No game JARs, libraries, or assets are downloaded by this function.
 #[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeResolveMinecraft(
     mut env: JNIEnv,
@@ -61,4 +57,36 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeResolveMinecraf
         &mut env,
         result.unwrap_or_else(|error| format!("Metadata resolution failed: {}", error)),
     )
+}
+
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeDownloadMinecraft(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+    parallelism: jint,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|path| {
+        downloader::download_minecraft(Path::new(&path), parallelism.max(1) as usize)
+    });
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Download failed: {}", error)),
+    )
+}
+
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeDownloadProgress(
+    mut env: JNIEnv,
+    _this: JObject,
+) -> jstring {
+    rust_string_to_java(&mut env, downloader::download_progress())
+}
+
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeCancelDownload(
+    mut env: JNIEnv,
+    _this: JObject,
+) -> jstring {
+    rust_string_to_java(&mut env, downloader::cancel_download())
 }
