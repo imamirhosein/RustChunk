@@ -26,11 +26,41 @@ jobs:
         with:
           packages: platform-tools
 
-      - name: Restore persistent debug signing key
+      - name: Prepare signing directory
+        run: mkdir -p .ci-signing
+
+      - name: Restore stable RustChunk debug signing key
         uses: actions/cache/restore@v4
         with:
-          path: ~/.android/debug.keystore
-          key: rustchunk-debug-signing-key-v1
+          path: .ci-signing/rustchunk-debug.keystore
+          key: rustchunk-debug-signing-key-v2
+
+      - name: Create stable debug signing key when cache is empty
+        run: |
+          mkdir -p .ci-signing
+          if [[ ! -f .ci-signing/rustchunk-debug.keystore ]]; then
+            keytool -genkeypair -v \
+              -keystore .ci-signing/rustchunk-debug.keystore \
+              -storepass android \
+              -alias rustchunkdebug \
+              -keypass android \
+              -dname "CN=RustChunk Debug,O=RustChunk,C=US" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000
+          fi
+          chmod 600 .ci-signing/rustchunk-debug.keystore
+          keytool -list -v \
+            -keystore .ci-signing/rustchunk-debug.keystore \
+            -storepass android \
+            -alias rustchunkdebug | grep -E "SHA256:|SHA-256"
+
+      - name: Save stable RustChunk debug signing key
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: .ci-signing/rustchunk-debug.keystore
+          key: rustchunk-debug-signing-key-v2
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -54,21 +84,16 @@ jobs:
           mkdir -p app/src/main/jniLibs/arm64-v8a
           cp target/aarch64-linux-android/release/librustchunk.so app/src/main/jniLibs/arm64-v8a/librustchunk.so
 
-      - name: Build debug APK
+      - name: Build debug APK with stable signing identity
         run: |
           gradle --version
           gradle :app:assembleDebug --no-daemon
-
-      - name: Save persistent debug signing key
-        if: success()
-        uses: actions/cache/save@v4
-        with:
-          path: ~/.android/debug.keystore
-          key: rustchunk-debug-signing-key-v1
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RustChunk-stage3-downloader-arm64-debug
+          name: RustChunk-stage4-zalith-import-arm64-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error

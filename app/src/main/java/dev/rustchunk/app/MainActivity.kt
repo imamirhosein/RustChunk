@@ -1,6 +1,8 @@
 package dev.rustchunk.app
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,8 +27,10 @@ class MainActivity : Activity() {
     private lateinit var statusView: TextView
     private lateinit var resolveButton: Button
     private lateinit var downloadButton: Button
+    private lateinit var importButton: Button
     private lateinit var cancelButton: Button
     private var downloadInProgress = false
+    private var importInProgress = false
 
     private val progressPoller = object : Runnable {
         override fun run() {
@@ -64,6 +68,12 @@ class MainActivity : Activity() {
             setTextIsSelectable(true)
         }
 
+        importButton = Button(this).apply {
+            text = "Import game files from Zalith"
+            isEnabled = !importInProgress
+            setOnClickListener { chooseZalithFolder() }
+        }
+
         resolveButton = Button(this).apply {
             text = "Resolve Minecraft 1.20.1 metadata"
             isEnabled = workspaceStatus.startsWith("Minecraft workspace ready")
@@ -91,6 +101,7 @@ class MainActivity : Activity() {
         val content = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(18, 18, 18, 18)
+            addView(importButton, matchWrapParams())
             addView(resolveButton, matchWrapParams())
             addView(downloadButton, matchWrapParams())
             addView(cancelButton, matchWrapParams())
@@ -130,7 +141,90 @@ class MainActivity : Activity() {
             "minecraft/instances/forge-1.20.1/install-plan.json"
         ).isFile
 
+    private fun chooseZalithFolder() {
+        if (downloadInProgress || importInProgress) return
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+        }
+        try {
+            startActivityForResult(intent, REQUEST_ZALITH_FOLDER)
+        } catch (error: Throwable) {
+            statusView.text = "Could not open Android folder picker: ${error.message}"
+        }
+    }
+
+    @Deprecated("Legacy activity result is used to keep the app independent of AndroidX Activity.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != REQUEST_ZALITH_FOLDER || resultCode != RESULT_OK) return
+
+        val selectedUri: Uri = data?.data ?: run {
+            statusView.text = "No folder was selected."
+            return
+        }
+
+        try {
+            contentResolver.takePersistableUriPermission(
+                selectedUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } catch (_: Throwable) {
+            // The current read grant is enough for this immediate import operation.
+        }
+
+        startZalithImport(selectedUri)
+    }
+
+    private fun startZalithImport(sourceTree: Uri) {
+        if (downloadInProgress || importInProgress) return
+        importInProgress = true
+        importButton.isEnabled = false
+        resolveButton.isEnabled = false
+        downloadButton.isEnabled = false
+        statusView.text = "Importing game files from the selected Zalith folder...\nDo not close RustChunk during the copy."
+
+        worker.execute {
+            val result = try {
+                ZalithImporter.import(
+                    this,
+                    sourceTree,
+                    File(filesDir, "minecraft")
+                ) { progress ->
+                    runOnUiThread {
+                        statusView.text = buildString {
+                            appendLine("Importing Zalith game data...")
+                            appendLine("Files copied: ${progress.filesCopied}")
+                            appendLine("Data copied: ${formatBytes(progress.bytesCopied)}")
+                            append("Current: ${progress.currentPath}")
+                        }
+                    }
+                }
+            } catch (error: Throwable) {
+                "Zalith import failed: ${error.javaClass.simpleName}: ${error.message}"
+            }
+
+            val workspaceStatus = try {
+                nativePrepareWorkspace(filesDir.absolutePath)
+            } catch (error: Throwable) {
+                "Workspace check failed: ${error.message}"
+            }
+
+            runOnUiThread {
+                importInProgress = false
+                statusView.text = result + "\n\n" + workspaceStatus
+                importButton.isEnabled = true
+                resolveButton.isEnabled = isWorkspaceReady(workspaceStatus)
+                downloadButton.isEnabled = hasInstallPlan()
+            }
+        }
+    }
+
+    private fun formatBytes(bytes: Long): String =
+        String.format(java.util.Locale.US, "%.1f MiB", bytes.toDouble() / (1024.0 * 1024.0))
+
     private fun resolveMinecraftMetadata() {
+        if (importInProgress || downloadInProgress) return
         resolveButton.isEnabled = false
         resolveButton.text = "Resolving..."
         statusView.text = "Connecting to Mojang metadata services...\nThis step only reads metadata and builds a download plan."
@@ -146,13 +240,13 @@ class MainActivity : Activity() {
                 statusView.text = result
                 resolveButton.text = "Resolve Minecraft 1.20.1 metadata"
                 resolveButton.isEnabled = true
-                downloadButton.isEnabled = hasInstallPlan() && !downloadInProgress
+                downloadButton.isEnabled = hasInstallPlan() && !downloadInProgress && !importInProgress
             }
         }
     }
 
     private fun startMinecraftDownload() {
-        if (downloadInProgress) return
+        if (downloadInProgress || importInProgress) return
         if (!hasInstallPlan()) {
             statusView.text = "No install plan found. Resolve Minecraft metadata first."
             downloadButton.isEnabled = false
@@ -161,6 +255,7 @@ class MainActivity : Activity() {
 
         downloadInProgress = true
         downloadButton.isEnabled = false
+        importButton.isEnabled = false
         cancelButton.isEnabled = true
         statusView.text = "Preparing download...\nThe app will verify every file with SHA-1.\nPartial files are kept for resume."
         mainHandler.removeCallbacks(progressPoller)
@@ -178,6 +273,7 @@ class MainActivity : Activity() {
                 mainHandler.removeCallbacks(progressPoller)
                 statusView.text = result
                 cancelButton.isEnabled = false
+                importButton.isEnabled = true
                 downloadButton.isEnabled = hasInstallPlan()
             }
         }
@@ -197,6 +293,8 @@ class MainActivity : Activity() {
     }
 
     companion object {
+        private const val REQUEST_ZALITH_FOLDER = 4102
+
         init {
             System.loadLibrary("rustchunk")
         }

@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val rustChunkDebugKeystore = rootProject.file(".ci-signing/rustchunk-debug.keystore")
+
 android {
     namespace = "dev.rustchunk.app"
     compileSdk = 35
@@ -11,11 +13,26 @@ android {
         applicationId = "dev.rustchunk.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.3.0-stage3"
+        versionCode = 4
+        versionName = "0.4.0-stage4-import"
 
         ndk {
             abiFilters += "arm64-v8a"
+        }
+    }
+
+    signingConfigs {
+        create("rustchunkDebug") {
+            storeFile = rustChunkDebugKeystore
+            storePassword = "android"
+            keyAlias = "rustchunkdebug"
+            keyPassword = "android"
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("rustchunkDebug")
         }
     }
 
