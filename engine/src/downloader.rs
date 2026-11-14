@@ -343,7 +343,7 @@ fn run_download(app_data_dir: &Path, parallelism: usize) -> Result<String, Strin
 }
 
 fn download_one(task: &DownloadTask, agent: &ureq::Agent) -> Result<(), String> {
-    for attempt in 1..=MAX_RETRIES {
+    'attempt: for attempt in 1..=MAX_RETRIES {
         if CANCEL_REQUESTED.load(Ordering::SeqCst) {
             return Ok(());
         }
@@ -436,8 +436,9 @@ fn download_one(task: &DownloadTask, agent: &ureq::Agent) -> Result<(), String> 
                     if attempt == MAX_RETRIES {
                         return Err(format!("Download stream failed: {}", error));
                     }
+                    drop(output);
                     thread::sleep(Duration::from_millis(400 * attempt as u64));
-                    continue;
+                    continue 'attempt;
                 }
             };
             output
