@@ -26,6 +26,14 @@ jobs:
         with:
           packages: platform-tools
 
+      # Keep the debug certificate stable between hosted runners so later APKs
+      # can update the installed app instead of requiring an uninstall.
+      - name: Restore persistent debug signing key
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: rustchunk-debug-signing-key-v1
+
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -53,9 +61,16 @@ jobs:
           gradle --version
           gradle :app:assembleDebug --no-daemon
 
+      - name: Save persistent debug signing key
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: rustchunk-debug-signing-key-v1
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RustChunk-stage1-workspace-arm64-debug
+          name: RustChunk-stage2-metadata-arm64-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error

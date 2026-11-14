@@ -1,3 +1,4 @@
+mod installer;
 mod workspace;
 
 use jni::objects::{JObject, JString};
@@ -5,16 +6,29 @@ use jni::sys::jstring;
 use jni::JNIEnv;
 use std::path::Path;
 
+fn java_string_to_rust(env: &mut JNIEnv, value: &JString) -> Result<String, String> {
+    env.get_string(value)
+        .map(|text| text.to_string_lossy().into_owned())
+        .map_err(|error| format!("JNI string error: {}", error))
+}
+
+fn rust_string_to_java(env: &mut JNIEnv, value: String) -> jstring {
+    match env.new_string(value) {
+        Ok(output) => output.into_raw(),
+        Err(_) => std::ptr::null_mut(),
+    }
+}
+
 /// Reports the native engine target and confirms that the Rust library loaded.
 #[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeStatus(
     mut env: JNIEnv,
     _this: JObject,
 ) -> jstring {
-    match env.new_string("RustChunk native core ready. Target: Minecraft Java 1.20.1") {
-        Ok(output) => output.into_raw(),
-        Err(_) => std::ptr::null_mut(),
-    }
+    rust_string_to_java(
+        &mut env,
+        "RustChunk native core ready. Target: Minecraft Java 1.20.1".to_string(),
+    )
 }
 
 /// Initializes the private Minecraft directory layout using Rust filesystem code.
@@ -24,17 +38,27 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareWorkspac
     _this: JObject,
     app_data_dir: JString,
 ) -> jstring {
-    let message = match env.get_string(&app_data_dir) {
-        Ok(java_path) => match java_path.to_str() {
-            Ok(path) => workspace::prepare_workspace(Path::new(path))
-                .unwrap_or_else(|error| format!("Workspace initialization failed: {}", error)),
-            Err(error) => format!("Workspace initialization failed: invalid path: {}", error),
-        },
-        Err(error) => format!("Workspace initialization failed: JNI string error: {}", error),
-    };
+    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|path| {
+        workspace::prepare_workspace(Path::new(&path))
+    });
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Workspace initialization failed: {}", error)),
+    )
+}
 
-    match env.new_string(message) {
-        Ok(output) => output.into_raw(),
-        Err(_) => std::ptr::null_mut(),
-    }
+/// Fetches official 1.20.1 metadata and writes a verified download plan.
+/// No game JARs, libraries, or assets are downloaded by this function.
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeResolveMinecraft(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir)
+        .and_then(|path| installer::resolve_minecraft(Path::new(&path)));
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Metadata resolution failed: {}", error)),
+    )
 }
