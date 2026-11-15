@@ -13,8 +13,8 @@ android {
         applicationId = "dev.rustchunk.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 9
-        versionName = "0.10.0-stage10-java-runtime-test"
+        versionCode = 10
+        versionName = "0.11.0-stage11-zalith-runtime"
 
         ndk {
             abiFilters += "arm64-v8a"
@@ -44,4 +44,8 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    // Java 17 runtime packages are read from the installed Zalith APK and unpacked with symlink support.
+    implementation("org.apache.commons:commons-compress:1.28.0")
+    implementation("org.tukaani:xz:1.12")
 }

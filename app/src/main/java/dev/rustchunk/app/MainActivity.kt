@@ -42,6 +42,7 @@ class MainActivity : Activity() {
     private lateinit var refreshProfilesButton: Button
     private lateinit var runtimeImportButton: Button
     private lateinit var runtimeTestButton: Button
+    private lateinit var runtimeInstallButton: Button
     private lateinit var cancelButton: Button
     private val profileOptions = ArrayList<ProfileOption>()
     private var selectedProfileId: String? = null
@@ -108,6 +109,11 @@ class MainActivity : Activity() {
             setOnClickListener { testJavaRuntime() }
         }
 
+        runtimeInstallButton = Button(this).apply {
+            text = "Install Java 17 from installed Zalith"
+            setOnClickListener { installJava17FromZalith() }
+        }
+
         profileSpinner = Spinner(this).apply {
             isEnabled = false
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -166,6 +172,7 @@ class MainActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             setPadding(18, 18, 18, 18)
             addView(importButton, matchWrapParams())
+            addView(runtimeInstallButton, matchWrapParams())
             addView(runtimeImportButton, matchWrapParams())
             addView(runtimeTestButton, matchWrapParams())
             addView(refreshProfilesButton, matchWrapParams())
@@ -259,6 +266,52 @@ class MainActivity : Activity() {
         }
     }
 
+
+    private fun installJava17FromZalith() {
+        if (downloadInProgress || importInProgress) return
+        importInProgress = true
+        setImportControlsEnabled(false)
+        val selectedProfileAtStart = selectedProfileId
+        statusView.text = "Searching installed ZalithLauncher2 packages for their bundled Java 17 ARM64 runtime..."
+        worker.execute {
+            var result = ""
+            var succeeded = false
+            try {
+                result = JavaRuntimeInstaller.installFromInstalledZalith(
+                    this,
+                    File(filesDir, "games/runtimes")
+                ) { progress ->
+                    runOnUiThread {
+                        if (importInProgress) statusView.text = progress
+                    }
+                }
+                succeeded = true
+            } catch (error: Throwable) {
+                result = "Java 17 installation failed: " +
+                    error.javaClass.simpleName + ": " + error.message
+            }
+
+            val analysis = if (succeeded && !selectedProfileAtStart.isNullOrBlank()) {
+                try {
+                    nativePrepareForgeLaunchProfile(filesDir.absolutePath, selectedProfileAtStart)
+                } catch (error: Throwable) {
+                    "Java 17 was installed, but profile re-analysis failed: " + error.message
+                }
+            } else if (succeeded) {
+                "Java 17 is installed. Select your Forge 1.20.1 profile and analyze it to check runtime detection."
+            } else {
+                "The existing game files and profiles were not changed."
+            }
+
+            runOnUiThread {
+                importInProgress = false
+                statusView.text = result + "\n\n" + analysis
+                setImportControlsEnabled(true)
+                updateForgeAnalyzeButton()
+            }
+        }
+    }
+
     private fun startRuntimeImport(sourceTree: Uri) {
         if (downloadInProgress || importInProgress) return
         importInProgress = true
@@ -302,6 +355,7 @@ class MainActivity : Activity() {
 
     private fun setImportControlsEnabled(enabled: Boolean) {
         importButton.isEnabled = enabled
+        runtimeInstallButton.isEnabled = enabled
         runtimeImportButton.isEnabled = enabled
         runtimeTestButton.isEnabled = enabled
         refreshProfilesButton.isEnabled = enabled
