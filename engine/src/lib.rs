@@ -1,6 +1,7 @@
 mod downloader;
 mod forge;
 mod installer;
+mod jli;
 mod workspace;
 
 use jni::objects::{JObject, JString};
@@ -145,5 +146,23 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareForgeLau
     rust_string_to_java(
         &mut env,
         result.unwrap_or_else(|error| format!("Forge profile preparation failed: {}", error)),
+    )
+}
+
+
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeTestJavaRuntimeNative(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+    native_library_dir: JString,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|data| {
+        java_string_to_rust(&mut env, &native_library_dir)
+            .and_then(|native_dir| jli::test_java_runtime(Path::new(&data), Path::new(&native_dir)))
+    });
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Native Java JLI test failed: {}", error)),
     )
 }

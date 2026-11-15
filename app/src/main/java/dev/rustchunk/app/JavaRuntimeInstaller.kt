@@ -10,7 +10,6 @@ import java.io.FileOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.concurrent.TimeUnit
 
 /**
  * Installs the ARM64 Java 17 payload from the already-installed ZalithLauncher2 APK.
@@ -105,10 +104,11 @@ object JavaRuntimeInstaller {
             java.setExecutable(true, true)
             val libjvm = staging.walkTopDown().maxDepth(9).firstOrNull {
                 it.isFile && it.name == "libjvm.so"
-            }
-            if (libjvm == null) {
-                throw IllegalStateException("The extracted Java 17 runtime does not contain libjvm.so.")
-            }
+            } ?: throw IllegalStateException("The extracted Java 17 runtime does not contain libjvm.so.")
+            val libjli = staging.walkTopDown().maxDepth(9).firstOrNull {
+                it.isFile && it.name == "libjli.so"
+            } ?: throw IllegalStateException("The extracted Java 17 runtime does not contain libjli.so, required for Android native Java startup.")
+
 
             if (backup.exists() && !backup.deleteRecursively()) {
                 throw IllegalStateException("Cannot remove the previous runtime backup.")
@@ -126,20 +126,20 @@ object JavaRuntimeInstaller {
             }
             if (backup.exists()) backup.deleteRecursively()
 
-            val javaTest = testJava(destination, context)
             val report = buildString {
                 appendLine("RustChunk Java 17 runtime installation")
                 appendLine("Source package: " + source.packageName)
                 appendLine("Zalith runtime asset version: " + version)
                 appendLine("Runtime directory: " + destination.absolutePath)
                 appendLine("Java executable: " + File(destination, "bin/java").absolutePath)
-                appendLine("JVM library: " + File(libjvm.absolutePath.replace(staging.absolutePath, destination.absolutePath)).absolutePath)
+                appendLine("JVM library: " + libjvm.absolutePath.replace(staging.absolutePath, destination.absolutePath))
+                appendLine("JLI library: " + libjli.absolutePath.replace(staging.absolutePath, destination.absolutePath))
                 appendLine("Archive entries extracted: " + budget.entries)
                 appendLine("Expanded archive bytes: " + budget.bytes)
                 appendLine()
-                append(javaTest)
-                appendLine()
-                appendLine("This verifies Java startup only; Forge and Minecraft have not been launched.")
+                appendLine("RESULT: JAVA RUNTIME INSTALLED; NATIVE JLI STARTUP TEST PENDING")
+                appendLine("Direct execution of app-private bin/java is intentionally avoided on modern Android.")
+                appendLine("Use the native JLI startup test in RustChunk. Forge and Minecraft have not been launched.")
             }
 
             val reportFile = File(context.filesDir, "runtime/java17-install-report.txt")
@@ -286,44 +286,4 @@ object JavaRuntimeInstaller {
         bin.walkTopDown().filter { it.isFile }.forEach { it.setExecutable(true, true) }
     }
 
-    private fun testJava(runtime: File, context: Context): String {
-        val java = File(runtime, "bin/java")
-        val outputFile = File(context.cacheDir, "rustchunk-java17-version.txt")
-        try {
-            java.setExecutable(true, true)
-            val builder = ProcessBuilder(java.absolutePath, "-version")
-                .directory(runtime)
-                .redirectErrorStream(true)
-                .redirectOutput(outputFile)
-            val environment = builder.environment()
-            environment["JAVA_HOME"] = runtime.absolutePath
-            val libraryPaths = listOf(
-                context.applicationInfo.nativeLibraryDir,
-                File(runtime, "lib").absolutePath,
-                File(runtime, "lib/server").absolutePath,
-                File(runtime, "lib/aarch64/server").absolutePath
-            )
-            val existing = environment["LD_LIBRARY_PATH"]
-            if (!existing.isNullOrBlank()) libraryPaths.plus(existing)
-            environment["LD_LIBRARY_PATH"] = (libraryPaths + listOfNotNull(existing)).distinct().joinToString(":")
-            val process = builder.start()
-            if (!process.waitFor(20, TimeUnit.SECONDS)) {
-                process.destroyForcibly()
-                process.waitFor(2, TimeUnit.SECONDS)
-                return "RESULT: JAVA EXECUTION TIMEOUT (20 seconds)"
-            }
-            val output = if (outputFile.isFile) outputFile.readText(Charsets.UTF_8).trim() else ""
-            val ok = process.exitValue() == 0 && output.contains("version", ignoreCase = true)
-            return buildString {
-                appendLine("Exit code: " + process.exitValue())
-                if (output.isNotBlank()) appendLine(output.take(2500))
-                append(if (ok) "RESULT: JAVA EXECUTION OK" else "RESULT: JAVA EXECUTION FAILED")
-            }
-        } catch (error: Throwable) {
-            return "RESULT: JAVA EXECUTION ERROR\n" +
-                error.javaClass.simpleName + ": " + error.message
-        } finally {
-            outputFile.delete()
-        }
-    }
 }
