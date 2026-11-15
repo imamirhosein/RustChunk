@@ -30,37 +30,34 @@ jobs:
         run: mkdir -p .ci-signing
 
       - name: Restore stable RustChunk debug signing key
+        id: restore-signing-key
         uses: actions/cache/restore@v4
         with:
           path: .ci-signing/rustchunk-debug.keystore
           key: rustchunk-debug-signing-key-v2
 
-      - name: Create stable debug signing key when cache is empty
+      - name: Require the original signing key
         run: |
-          mkdir -p .ci-signing
-          if [[ ! -f .ci-signing/rustchunk-debug.keystore ]]; then
-            keytool -genkeypair -v \
-              -keystore .ci-signing/rustchunk-debug.keystore \
-              -storepass android \
-              -alias rustchunkdebug \
-              -keypass android \
-              -dname "CN=RustChunk Debug,O=RustChunk,C=US" \
-              -keyalg RSA \
-              -keysize 2048 \
-              -validity 10000
+          if [[ "${{ steps.restore-signing-key.outputs.cache-hit }}" != "true" ]]; then
+            echo "The original RustChunk signing key was not restored. Refusing to create a new key because that would break APK updates." >&2
+            exit 1
           fi
-          chmod 600 .ci-signing/rustchunk-debug.keystore
-          keytool -list -v \
+          if [[ ! -f .ci-signing/rustchunk-debug.keystore ]]; then
+            echo "The cached RustChunk signing key file is missing." >&2
+            exit 1
+          fi
+          ACTUAL="$(keytool -list -v \
             -keystore .ci-signing/rustchunk-debug.keystore \
             -storepass android \
-            -alias rustchunkdebug | grep -E "SHA256:|SHA-256"
-
-      - name: Save stable RustChunk debug signing key
-        if: success()
-        uses: actions/cache/save@v4
-        with:
-          path: .ci-signing/rustchunk-debug.keystore
-          key: rustchunk-debug-signing-key-v2
+            -alias rustchunkdebug | awk -F': ' '/SHA256:/{print $2; exit}' | tr -d ':')"
+          EXPECTED="EFDAE870A0AE4A1E5DB29A044F38EDA2B06356825DC2CC5EA2E710FC53989AE9"
+          if [[ "${ACTUAL^^}" != "$EXPECTED" ]]; then
+            echo "Signing key fingerprint mismatch. Refusing to build an APK with a different identity." >&2
+            echo "Expected: $EXPECTED" >&2
+            echo "Actual:   $ACTUAL" >&2
+            exit 1
+          fi
+          echo "Stable RustChunk signing key restored and fingerprint verified: $ACTUAL"
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -90,10 +87,19 @@ jobs:
           gradle :app:assembleDebug --no-daemon
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose --print-certs app/build/outputs/apk/debug/app-debug.apk
+          ACTUAL_APK_CERT="$("$APKSIGNER" verify --print-certs app/build/outputs/apk/debug/app-debug.apk | awk '/certificate SHA-256 digest:/{print tolower($NF); exit}' | tr -d ':')"
+          EXPECTED_APK_CERT="efdae870a0ae4a1e5db29a044f38eda2b06356825dc2cc5ea2e710fc53989ae9"
+          if [[ "$ACTUAL_APK_CERT" != "$EXPECTED_APK_CERT" ]]; then
+            echo "APK signer fingerprint mismatch. Refusing to upload this APK." >&2
+            echo "Expected: $EXPECTED_APK_CERT" >&2
+            echo "Actual:   $ACTUAL_APK_CERT" >&2
+            exit 1
+          fi
+          echo "Verified APK certificate SHA-256: $ACTUAL_APK_CERT"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RustChunk-stage4-zalith-import-arm64-debug
+          name: RustChunk-stage5-import-audit-arm64-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error

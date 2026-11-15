@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.AtomicFile
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
@@ -28,6 +29,7 @@ class MainActivity : Activity() {
     private lateinit var resolveButton: Button
     private lateinit var downloadButton: Button
     private lateinit var importButton: Button
+    private lateinit var inspectButton: Button
     private lateinit var cancelButton: Button
     private var downloadInProgress = false
     private var importInProgress = false
@@ -62,7 +64,7 @@ class MainActivity : Activity() {
         }
 
         statusView = TextView(this).apply {
-            text = "RustChunk\n\n" + nativeStatusText + "\n\n" + workspaceStatus
+            text = "RustChunk\n\n" + nativeStatusText + "\n\n" + workspaceStatus + loadSavedImportReport()
             textSize = 15f
             setPadding(20, 20, 20, 20)
             setTextIsSelectable(true)
@@ -72,6 +74,11 @@ class MainActivity : Activity() {
             text = "Import game files from Zalith"
             isEnabled = !importInProgress
             setOnClickListener { chooseZalithFolder() }
+        }
+
+        inspectButton = Button(this).apply {
+            text = "Inspect imported game files"
+            setOnClickListener { inspectImportedGameData() }
         }
 
         resolveButton = Button(this).apply {
@@ -102,6 +109,7 @@ class MainActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             setPadding(18, 18, 18, 18)
             addView(importButton, matchWrapParams())
+            addView(inspectButton, matchWrapParams())
             addView(resolveButton, matchWrapParams())
             addView(downloadButton, matchWrapParams())
             addView(cancelButton, matchWrapParams())
@@ -185,7 +193,7 @@ class MainActivity : Activity() {
         statusView.text = "Importing game files from the selected Zalith folder...\nDo not close RustChunk during the copy."
 
         worker.execute {
-            val result = try {
+            var result = try {
                 ZalithImporter.import(
                     this,
                     sourceTree,
@@ -204,6 +212,15 @@ class MainActivity : Activity() {
                 "Zalith import failed: ${error.javaClass.simpleName}: ${error.message}"
             }
 
+            if (result.startsWith("Zalith import completed.")) {
+                try {
+                    saveImportReport(result)
+                    result += "\nPersistent report saved to files/minecraft/import-report.txt"
+                } catch (error: Throwable) {
+                    result += "\nWARNING: Import completed, but its report could not be saved: " + error.message
+                }
+            }
+
             val workspaceStatus = try {
                 nativePrepareWorkspace(filesDir.absolutePath)
             } catch (error: Throwable) {
@@ -214,8 +231,55 @@ class MainActivity : Activity() {
                 importInProgress = false
                 statusView.text = result + "\n\n" + workspaceStatus
                 importButton.isEnabled = true
+                inspectButton.isEnabled = true
                 resolveButton.isEnabled = isWorkspaceReady(workspaceStatus)
                 downloadButton.isEnabled = hasInstallPlan()
+            }
+        }
+    }
+
+    private fun saveImportReport(report: String) {
+        val reportFile = File(filesDir, "minecraft/import-report.txt")
+        val atomicFile = AtomicFile(reportFile)
+        val output = atomicFile.startWrite()
+        try {
+            output.write(report.toByteArray(Charsets.UTF_8))
+            output.fd.sync()
+            atomicFile.finishWrite(output)
+        } catch (error: Throwable) {
+            atomicFile.failWrite(output)
+            throw error
+        }
+    }
+
+    private fun loadSavedImportReport(): String {
+        val reportFile = File(filesDir, "minecraft/import-report.txt")
+        if (!reportFile.isFile) {
+            return "\n\nNo saved Zalith import report yet."
+        }
+        return try {
+            "\n\nLast completed Zalith import:\n" +
+                reportFile.readText(Charsets.UTF_8).take(10000)
+        } catch (error: Throwable) {
+            "\n\nA saved import report exists but could not be read: " + error.message
+        }
+    }
+
+    private fun inspectImportedGameData() {
+        if (downloadInProgress || importInProgress) return
+        inspectButton.isEnabled = false
+        statusView.text = "Inspecting the imported files in RustChunk private storage..."
+
+        worker.execute {
+            val inspection = try {
+                GameDataInspector.inspect(File(filesDir, "minecraft"))
+            } catch (error: Throwable) {
+                "Game-data inspection failed: " + error.javaClass.simpleName + ": " + error.message
+            }
+            val savedReport = loadSavedImportReport()
+            runOnUiThread {
+                statusView.text = inspection + savedReport
+                inspectButton.isEnabled = true
             }
         }
     }
@@ -256,6 +320,7 @@ class MainActivity : Activity() {
         downloadInProgress = true
         downloadButton.isEnabled = false
         importButton.isEnabled = false
+        inspectButton.isEnabled = false
         cancelButton.isEnabled = true
         statusView.text = "Preparing download...\nThe app will verify every file with SHA-1.\nPartial files are kept for resume."
         mainHandler.removeCallbacks(progressPoller)
@@ -274,6 +339,7 @@ class MainActivity : Activity() {
                 statusView.text = result
                 cancelButton.isEnabled = false
                 importButton.isEnabled = true
+                inspectButton.isEnabled = true
                 downloadButton.isEnabled = hasInstallPlan()
             }
         }
