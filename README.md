@@ -2,9 +2,9 @@
 
 An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
 
-## Current milestone: Stage 7 — selectable profiles and runtime import
+## Current milestone: Stage 8 — robust profile selection and runtime import
 
-Stage 7 adds a catalogue for the version JSON profiles found under `minecraft/versions/`. The app identifies Forge, NeoForge, Fabric, Quilt, and Vanilla entries and lets the user select a profile. The analysis action is currently enabled only for Forge profiles inheriting Minecraft 1.20.1; other profile types and game versions are listed but are not yet launchable.
+Stage 8 hardens the selectable-profile UI: the supported Forge 1.20.1 profile is preselected explicitly, and the app recognizes it from its ID even when older metadata omits the support flag. Stage 7 added a catalogue for the version JSON profiles found under `minecraft/versions/`. The app identifies Forge, NeoForge, Fabric, Quilt, and Vanilla entries and lets the user select a profile. The analysis action is currently enabled only for Forge profiles inheriting Minecraft 1.20.1; other profile types and game versions are listed but are not yet launchable.
 
 The selected profile is resolved by its exact profile ID rather than by choosing the first Forge folder. Its mods, config, generated launch specification, and readiness report are handled inside that selected profile's own version directory. An analysis of one profile no longer overwrites a global report belonging to another profile.
 
@@ -36,6 +36,7 @@ It copies reusable assets, libraries, versions, mods, configs, resource packs, s
 - Stage 5: persists import/inspection reports and audits game-data presence.
 - Stage 6: resolves inherited Forge metadata, libraries, launch arguments, and local runtime candidates.
 - Stage 7: lists installed profiles, selects an exact Forge 1.20.1 profile, stores reports per profile, and imports a user-selected Java runtime directory.
+- Stage 8: fixes the profile-selection state so the Forge analysis action is enabled for the imported Minecraft 1.20.1 Forge profile.
 
 **Not yet implemented:** complete argument substitution and rule evaluation, Android native-library extraction/mapping, runtime compatibility validation, a safe Java process bootstrap, actual Forge startup, graphics/runtime integration, and on-device modpack/Aternos compatibility testing. The launch specification is still an intermediate diagnostic file, not a runnable command.
 
