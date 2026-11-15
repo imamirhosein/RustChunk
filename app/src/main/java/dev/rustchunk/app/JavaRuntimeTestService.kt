@@ -38,17 +38,17 @@ class JavaRuntimeTestService : Service() {
             try {
                 writeAtomic(
                     reportFile,
-                    "TEST STATUS: RUNNING\\n" +
-                        "Helper process: " + ApplicationProcessName.value(this) + "\\n"
+                    "TEST STATUS: RUNNING\n" +
+                        "Helper process: " + ApplicationProcessName.value(this) + "\n"
                 )
                 val result = nativeTestJavaRuntimeNative(
                     filesDir.absolutePath,
                     applicationInfo.nativeLibraryDir
                 )
-                writeAtomic(reportFile, "TEST STATUS: COMPLETED\\n" + result)
+                writeAtomic(reportFile, "TEST STATUS: COMPLETED\n" + result)
             } catch (error: Throwable) {
-                val result = "TEST STATUS: COMPLETED\\n" +
-                    "RESULT: NATIVE JLI STARTUP ERROR\\n" +
+                val result = "TEST STATUS: COMPLETED\n" +
+                    "RESULT: NATIVE JLI STARTUP ERROR\n" +
                     error.javaClass.simpleName + ": " + error.message
                 runCatching { writeAtomic(reportFile, result) }
             } finally {

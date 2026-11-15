@@ -33,7 +33,7 @@ unsafe extern "C" {
 unsafe extern "C" {
     // Android/Bionic uses the same signal(2) ABI as POSIX: SIG_DFL=0, SIG_IGN=1.
     fn signal(signum: c_int, handler: usize) -> usize;
-    fn open(pathname: *const c_char, flags: c_int, mode: c_int) -> c_int;
+    fn open(pathname: *const c_char, flags: c_int, ...) -> c_int;
     fn dup(fd: c_int) -> c_int;
     fn dup2(old_fd: c_int, new_fd: c_int) -> c_int;
     fn close(fd: c_int) -> c_int;
@@ -385,27 +385,6 @@ fn last_dl_error() -> String {
     let error = unsafe { dlerror() };
     if error.is_null() { "no dynamic-linker diagnostic".to_string() }
     else { unsafe { CStr::from_ptr(error) }.to_string_lossy().into_owned() }
-}
-
-fn find_named_library(home: &Path, name: &str) -> Option<PathBuf> {
-    let direct = [home.join("lib/server").join(name), home.join("lib").join(name), home.join("lib/jli").join(name)];
-    if let Some(path) = direct.into_iter().find(|p| p.is_file()) { return Some(path); }
-    let mut pending = vec![(home.to_path_buf(), 0usize)];
-    let mut seen = BTreeSet::<PathBuf>::new();
-    let mut visited = 0usize;
-    while let Some((dir, depth)) = pending.pop() {
-        if visited >= MAX_SCAN_DIRECTORIES || depth > MAX_SCAN_DEPTH { break; }
-        let Ok(canonical) = dir.canonicalize() else { continue };
-        if !seen.insert(canonical) { continue; }
-        visited += 1;
-        let Ok(entries) = fs::read_dir(dir) else { continue };
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if path.is_dir() { pending.push((path, depth + 1)); }
-            else if path.file_name().and_then(|v| v.to_str()) == Some(name) { return Some(path); }
-        }
-    }
-    None
 }
 
 #[cfg(test)]

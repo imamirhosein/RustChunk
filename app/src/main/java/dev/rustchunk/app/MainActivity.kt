@@ -86,8 +86,8 @@ class MainActivity : Activity() {
             }
 
             if (report.startsWith("TEST STATUS: COMPLETED")) {
-                statusView.text = report.removePrefix("TEST STATUS: COMPLETED\\n") +
-                    "\\nSaved to files/runtime/native-jli-test-report.txt"
+                statusView.text = report.removePrefix("TEST STATUS: COMPLETED\n") +
+                    "\nSaved to files/runtime/native-jli-test-report.txt"
                 runtimeTestStartedAt = 0L
                 runtimeTestButton.isEnabled = true
                 return
@@ -118,8 +118,8 @@ class MainActivity : Activity() {
                 return
             }
 
-            statusView.text = "Java 17 is being tested in a separate helper process.\\n" +
-                "Elapsed: " + (elapsed / 1000L) + " seconds.\\n" +
+            statusView.text = "Java 17 is being tested in a separate helper process.\n" +
+                "Elapsed: " + (elapsed / 1000L) + " seconds.\n" +
                 "The RustChunk interface remains isolated from JVM startup."
             mainHandler.postDelayed(this, 500)
         }
@@ -696,8 +696,8 @@ class MainActivity : Activity() {
             val output = atomicFile.startWrite()
             try {
                 output.write(
-                    ("TEST STATUS: RUNNING\\n" +
-                        "The test is executing in Android process dev.rustchunk.app:jvm.\\n")
+                    ("TEST STATUS: RUNNING\n" +
+                        "The test is executing in Android process dev.rustchunk.app:jvm.\n")
                         .toByteArray(Charsets.UTF_8)
                 )
                 output.fd.sync()
@@ -711,7 +711,7 @@ class MainActivity : Activity() {
             if (consoleFile.exists()) consoleFile.delete()
 
             runtimeTestStartedAt = SystemClock.elapsedRealtime()
-            statusView.text = "Starting Java 17 in a dedicated helper process...\\n" +
+            statusView.text = "Starting Java 17 in a dedicated helper process...\n" +
                 "A JVM startup failure must not close the RustChunk interface."
             mainHandler.removeCallbacks(runtimeTestPoller)
             startService(
