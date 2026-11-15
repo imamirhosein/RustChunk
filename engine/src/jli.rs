@@ -4,6 +4,8 @@
 use std::collections::BTreeSet;
 use std::ffi::{CStr, CString};
 use std::fs;
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::os::raw::{c_char, c_int, c_void};
 use std::path::{Path, PathBuf};
 use std::ptr;
@@ -131,15 +133,27 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     if !app_data_dir.is_absolute() || !app_native_library_dir.is_absolute() {
         return Err("RustChunk and Android native library paths must be absolute.".to_string());
     }
+    let trace_file = app_data_dir.join("runtime").join("native-jli-trace.txt");
+    if let Some(parent) = trace_file.parent() {
+        fs::create_dir_all(parent).map_err(|error| format!("Cannot create JLI trace directory: {}", error))?;
+    }
+    fs::write(&trace_file, "JLI TRACE: START\n").map_err(|error| format!("Cannot create JLI trace: {}", error))?;
+    trace_checkpoint(&trace_file, &format!("app data: {}", app_data_dir.display()));
+    trace_checkpoint(&trace_file, &format!("native library dir: {}", app_native_library_dir.display()));
+
     let _guard = JLI_LOCK.get_or_init(|| Mutex::new(())).lock()
         .unwrap_or_else(|poisoned| poisoned.into_inner());
+    trace_checkpoint(&trace_file, "JLI mutex acquired; beginning Java runtime discovery");
 
-    let runtime = find_java17_runtime(app_data_dir)?;
+    let runtime = find_java17_runtime(app_data_dir, &trace_file)?;
+    trace_checkpoint(&trace_file, &format!("runtime discovered: home={}", runtime.home.display()));
     let home = runtime.home.canonicalize()
         .map_err(|error| format!("Cannot resolve Java home {}: {}", runtime.home.display(), error))?;
+    trace_checkpoint(&trace_file, &format!("canonical Java home: {}", home.display()));
     let cache_dir = app_data_dir.join("cache").join("jli");
     fs::create_dir_all(&cache_dir)
         .map_err(|error| format!("Cannot create JLI temporary directory {}: {}", cache_dir.display(), error))?;
+    trace_checkpoint(&trace_file, &format!("JLI cache directory ready: {}", cache_dir.display()));
 
     let mut directories = BTreeSet::<PathBuf>::new();
     directories.insert(home.join("lib"));
@@ -176,7 +190,9 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     report.push_str(&format!("Android native library directory: {}\n", app_native_library_dir.display()));
     report.push_str(&format!("Runtime library directories: {}\n", directories.iter().filter(|p| p.is_dir()).count()));
 
+    trace_checkpoint(&trace_file, "resolving Android linker path bridge");
     if let Some(update_path) = resolve_android_update_library_path() {
+        trace_checkpoint(&trace_file, "Android linker path bridge found; applying search path");
         let path_c = CString::new(ld_path.as_bytes())
             .map_err(|_| "LD_LIBRARY_PATH contains an embedded NUL byte.".to_string())?;
         unsafe { update_path(path_c.as_ptr() as *mut c_char); }
@@ -185,17 +201,22 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
         report.push_str("NOTICE: Android loader path bridge unavailable; absolute library paths will be used.\n");
     }
 
+    trace_checkpoint(&trace_file, &format!("loading libjli: {}", runtime.libjli.display()));
     let jli_handle = open_library(&runtime.libjli)
         .map_err(|error| format!("Cannot load libjli.so: {}\n{}", error, report))?;
+    trace_checkpoint(&trace_file, "libjli loaded successfully");
 
     // The Android launcher must give HotSpot a clean signal-handler slate.
     // Run this only in the dedicated :jvm process, never in the UI process.
+    trace_checkpoint(&trace_file, "preparing JVM signal handlers");
     let (signals_reset, segv_ignored) = prepare_jvm_signal_handlers();
+    trace_checkpoint(&trace_file, &format!("signal handlers prepared: {} reset; SIGSEGV ignored={}", signals_reset, segv_ignored == 1));
     report.push_str(&format!(
         "Android signal handlers prepared: {} reset; SIGSEGV ignored: {}\n",
         signals_reset, segv_ignored == 1
     ));
 
+    trace_checkpoint(&trace_file, "resolving JLI_Launch symbol");
     let symbol_name = CString::new("JLI_Launch").unwrap();
     unsafe { dlerror(); }
     let symbol = unsafe { dlsym(jli_handle, symbol_name.as_ptr()) };
@@ -229,17 +250,20 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     let console_log = cache_dir.join("native-jli-console.log");
     report.push_str(&format!("JLI console log: {}\n", console_log.display()));
     report.push_str("Calling OpenJDK JLI_Launch: java -version\n");
+    trace_checkpoint(&trace_file, &format!("JLI_Launch symbol resolved; preparing stdio capture at {}", console_log.display()));
 
     // JLI_Launch may call process-wide exit(1) if VM initialization fails.
     // The caller therefore runs in Android's separate :jvm process.
     let capture = StdioCapture::begin(&console_log)
         .map_err(|error| format!("{}\n{}", error, report))?;
+    trace_checkpoint(&trace_file, "stdio capture ready; entering JLI_Launch java -version");
     let exit_code = unsafe {
         launch(argc, argv.as_mut_ptr(), 0, ptr::null(), 0, ptr::null(),
             version_c.as_ptr(), major_c.as_ptr(), program_c.as_ptr(),
             launcher_c.as_ptr(), JNI_FALSE, JNI_TRUE, JNI_FALSE, 0)
     };
     drop(capture);
+    trace_checkpoint(&trace_file, &format!("JLI_Launch returned with exit code {}", exit_code));
     let console_output = fs::read_to_string(&console_log).unwrap_or_default();
     if !console_output.trim().is_empty() {
         report.push_str("\nJLI console output:\n");
@@ -256,7 +280,14 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     Ok(report)
 }
 
-fn find_java17_runtime(app_data_dir: &Path) -> Result<RuntimeCandidate, String> {
+fn trace_checkpoint(path: &Path, message: &str) {
+    if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(path) {
+        let _ = writeln!(file, "{}", message);
+        let _ = file.sync_data();
+    }
+}
+
+fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<RuntimeCandidate, String> {
     let roots = [
         app_data_dir.join("games/runtimes"),
         app_data_dir.join("runtime"),
@@ -267,8 +298,22 @@ fn find_java17_runtime(app_data_dir: &Path) -> Result<RuntimeCandidate, String> 
     let mut files = Vec::new();
     let mut visited = 0usize;
     for root in &roots {
-        if root.is_dir() { scan_runtime_tree(root, &mut files, &mut visited); }
+        if root.is_dir() {
+            trace_checkpoint(trace_file, &format!("runtime scan starting: {}", root.display()));
+            let before = visited;
+            scan_runtime_tree(root, &mut files, &mut visited, trace_file);
+            trace_checkpoint(trace_file, &format!("runtime scan finished: {} new directories; {} candidate files", visited.saturating_sub(before), files.len()));
+            let has_jli = files.iter().any(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjli.so"));
+            let has_jvm = files.iter().any(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjvm.so"));
+            if has_jli && has_jvm {
+                trace_checkpoint(trace_file, "both libjli.so and libjvm.so found; skipping other search roots");
+                break;
+            }
+        } else {
+            trace_checkpoint(trace_file, &format!("runtime scan root missing: {}", root.display()));
+        }
     }
+    trace_checkpoint(trace_file, &format!("runtime discovery scan complete: {} directories visited; {} files indexed", visited, files.len()));
 
     let jli_paths: Vec<PathBuf> = files.iter()
         .filter(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjli.so"))
@@ -315,7 +360,7 @@ fn find_java17_runtime(app_data_dir: &Path) -> Result<RuntimeCandidate, String> 
     })
 }
 
-fn scan_runtime_tree(root: &Path, files: &mut Vec<PathBuf>, visited_total: &mut usize) {
+fn scan_runtime_tree(root: &Path, files: &mut Vec<PathBuf>, visited_total: &mut usize, trace_file: &Path) {
     let mut pending = vec![(root.to_path_buf(), 0usize)];
     let mut seen = BTreeSet::<PathBuf>::new();
     while let Some((directory, depth)) = pending.pop() {
@@ -323,6 +368,9 @@ fn scan_runtime_tree(root: &Path, files: &mut Vec<PathBuf>, visited_total: &mut 
         let Ok(canonical) = directory.canonicalize() else { continue };
         if !seen.insert(canonical) { continue; }
         *visited_total += 1;
+        if *visited_total % 500 == 0 {
+            trace_checkpoint(trace_file, &format!("runtime scan progress: {} directories visited", *visited_total));
+        }
         let Ok(entries) = fs::read_dir(&directory) else { continue };
         for entry in entries.flatten() {
             let path = entry.path();

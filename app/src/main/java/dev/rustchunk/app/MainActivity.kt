@@ -102,13 +102,31 @@ class MainActivity : Activity() {
                 } catch (error: Throwable) {
                     "Could not read native JLI console log: " + error.message
                 }
+                val traceFile = File(filesDir, "runtime/native-jli-trace.txt")
+                val trace = try {
+                    if (traceFile.isFile) traceFile.readText(Charsets.UTF_8).takeLast(9000)
+                    else "No native JLI stage trace was produced."
+                } catch (error: Throwable) {
+                    "Could not read native JLI trace: " + error.message
+                }
+                val helper = try {
+                    val manager = getSystemService(android.app.ActivityManager::class.java)
+                    val process = manager.runningAppProcesses?.firstOrNull { it.processName == "$packageName:jvm" }
+                    if (process == null) "NOT LISTED (helper may have exited)"
+                    else "RUNNING (PID " + process.pid + ")"
+                } catch (error: Throwable) {
+                    "UNKNOWN: " + error.message
+                }
                 statusView.text = buildString {
                     appendLine("The isolated Java test process did not return within 45 seconds.")
                     appendLine("RustChunk's main process is still running; the test was isolated from the UI.")
-                    appendLine("The helper may have exited during JVM initialization.")
+                    appendLine("Helper process state: " + helper)
                     appendLine()
                     appendLine("Saved startup marker:")
                     appendLine(report.ifBlank { "No startup marker found." })
+                    appendLine()
+                    appendLine("Native JLI stage trace:")
+                    appendLine(trace)
                     appendLine()
                     appendLine("Native JLI output:")
                     append(console)

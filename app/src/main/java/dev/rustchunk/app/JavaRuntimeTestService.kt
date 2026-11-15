@@ -39,7 +39,8 @@ class JavaRuntimeTestService : Service() {
                 writeAtomic(
                     reportFile,
                     "TEST STATUS: RUNNING\n" +
-                        "Helper process: " + ApplicationProcessName.value(this) + "\n"
+                        "Helper process: " + ApplicationProcessName.value(this) + "\n" +
+                        "Helper PID: " + android.os.Process.myPid() + "\n"
                 )
                 val result = nativeTestJavaRuntimeNative(
                     filesDir.absolutePath,
