@@ -18,6 +18,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import java.io.File
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class MainActivity : Activity() {
     private external fun nativeStatus(): String
@@ -40,6 +41,7 @@ class MainActivity : Activity() {
     private lateinit var profileSpinner: Spinner
     private lateinit var refreshProfilesButton: Button
     private lateinit var runtimeImportButton: Button
+    private lateinit var runtimeTestButton: Button
     private lateinit var cancelButton: Button
     private val profileOptions = ArrayList<ProfileOption>()
     private var selectedProfileId: String? = null
@@ -101,6 +103,11 @@ class MainActivity : Activity() {
             setOnClickListener { chooseRuntimeFolder() }
         }
 
+        runtimeTestButton = Button(this).apply {
+            text = "Test installed Java runtime"
+            setOnClickListener { testJavaRuntime() }
+        }
+
         profileSpinner = Spinner(this).apply {
             isEnabled = false
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -160,6 +167,7 @@ class MainActivity : Activity() {
             setPadding(18, 18, 18, 18)
             addView(importButton, matchWrapParams())
             addView(runtimeImportButton, matchWrapParams())
+            addView(runtimeTestButton, matchWrapParams())
             addView(refreshProfilesButton, matchWrapParams())
             addView(profileSpinner, matchWrapParams())
             addView(inspectButton, matchWrapParams())
@@ -295,6 +303,7 @@ class MainActivity : Activity() {
     private fun setImportControlsEnabled(enabled: Boolean) {
         importButton.isEnabled = enabled
         runtimeImportButton.isEnabled = enabled
+        runtimeTestButton.isEnabled = enabled
         refreshProfilesButton.isEnabled = enabled
         inspectButton.isEnabled = enabled
         profileSpinner.isEnabled = enabled && profileOptions.isNotEmpty()
@@ -554,6 +563,80 @@ class MainActivity : Activity() {
     private fun formatBytes(bytes: Long): String =
         String.format(java.util.Locale.US, "%.1f MiB", bytes.toDouble() / (1024.0 * 1024.0))
 
+    private fun testJavaRuntime() {
+        if (importInProgress || downloadInProgress) return
+        runtimeTestButton.isEnabled = false
+        statusView.text = "Testing Android Java runtimes...\\nThis runs bin/java -version; finding libjvm.so alone is not considered a successful test."
+        worker.execute {
+            val roots = listOf(
+                File(filesDir, "runtime"),
+                File(filesDir, "runtimes"),
+                File(filesDir, "games/runtimes"),
+                File(filesDir, "minecraft/runtime")
+            )
+            val candidates = ArrayList<File>()
+            var visited = 0
+            for (root in roots) {
+                if (!root.isDirectory) continue
+                root.walkTopDown().onEnter { directory ->
+                    directory == root || directory.relativeTo(root).nameCount <= 12
+                }.forEach { file ->
+                    visited++
+                    if (visited > 10000) return@forEach
+                    if (file.isFile && file.name == "java" && file.parentFile?.name == "bin") {
+                        candidates.add(file)
+                    }
+                }
+            }
+            val report = buildString {
+                appendLine("RustChunk Java runtime execution test")
+                appendLine("Search entries visited: $visited")
+                appendLine("Candidates found: ${candidates.size}")
+                if (candidates.isEmpty()) {
+                    appendLine("RESULT: NO JAVA EXECUTABLE FOUND")
+                    appendLine("The imported folder may have an unexpected layout, missing bin/java, or broken symbolic links.")
+                } else {
+                    for (java in candidates.distinct()) {
+                        appendLine()
+                        appendLine("Candidate: ${java.absolutePath}")
+                        appendLine("Executable permission: ${java.canExecute()}")
+                        try {
+                            val process = ProcessBuilder(java.absolutePath, "-version")
+                                .redirectErrorStream(true)
+                                .start()
+                            val output = process.inputStream.bufferedReader().use { it.readText() }
+                            val finished = process.waitFor(15, TimeUnit.SECONDS)
+                            if (!finished) {
+                                process.destroyForcibly()
+                                appendLine("RESULT: TIMEOUT (15 seconds)")
+                            } else {
+                                appendLine("Exit code: ${process.exitValue()}")
+                                appendLine(output.trim().take(2000))
+                                val ok = process.exitValue() == 0 &&
+                                    output.contains("version", ignoreCase = true)
+                                appendLine(if (ok) "RESULT: JAVA EXECUTION OK" else "RESULT: JAVA EXECUTION FAILED")
+                            }
+                        } catch (error: Throwable) {
+                            appendLine("RESULT: EXECUTION ERROR")
+                            appendLine("${error.javaClass.simpleName}: ${error.message}")
+                        }
+                    }
+                }
+                appendLine()
+                appendLine("This test validates Java startup only; it does not launch Forge or Minecraft.")
+            }
+            try {
+                val reportFile = File(filesDir, "runtime/runtime-test-report.txt")
+                reportFile.parentFile?.mkdirs()
+                reportFile.writeText(report, Charsets.UTF_8)
+            } catch (_: Throwable) { }
+            runOnUiThread {
+                statusView.text = report + "\\nSaved to files/runtime/runtime-test-report.txt"
+                runtimeTestButton.isEnabled = !importInProgress && !downloadInProgress
+            }
+        }
+    }
+
     private fun prepareForgeLaunchProfile() {
         if (importInProgress || downloadInProgress) return
         val profileId = selectedProfileId
@@ -610,6 +693,7 @@ class MainActivity : Activity() {
         downloadButton.isEnabled = false
         importButton.isEnabled = false
         runtimeImportButton.isEnabled = false
+        runtimeTestButton.isEnabled = false
         refreshProfilesButton.isEnabled = false
         profileSpinner.isEnabled = false
         inspectButton.isEnabled = false
@@ -633,6 +717,7 @@ class MainActivity : Activity() {
                 cancelButton.isEnabled = false
                 importButton.isEnabled = true
                 runtimeImportButton.isEnabled = true
+                runtimeTestButton.isEnabled = true
                 refreshProfilesButton.isEnabled = true
                 profileSpinner.isEnabled = profileOptions.isNotEmpty()
                 inspectButton.isEnabled = true
