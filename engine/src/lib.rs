@@ -94,13 +94,30 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeCancelDownload(
 
 
 #[no_mangle]
-pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareForgeLaunchProfile(
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeListMinecraftProfiles(
     mut env: JNIEnv,
     _this: JObject,
     app_data_dir: JString,
 ) -> jstring {
     let result = java_string_to_rust(&mut env, &app_data_dir)
-        .and_then(|path| forge::prepare_forge_profile(Path::new(&path)));
+        .and_then(|path| forge::list_profiles(Path::new(&path)));
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Profile scan failed: {}", error)),
+    )
+}
+
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareForgeLaunchProfile(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+    profile_id: JString,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|path| {
+        java_string_to_rust(&mut env, &profile_id)
+            .and_then(|id| forge::prepare_forge_profile(Path::new(&path), &id))
+    });
     rust_string_to_java(
         &mut env,
         result.unwrap_or_else(|error| format!("Forge profile preparation failed: {}", error)),

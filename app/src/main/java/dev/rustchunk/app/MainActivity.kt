@@ -8,8 +8,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AtomicFile
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Spinner
+import org.json.JSONArray
 import android.widget.ScrollView
 import android.widget.TextView
 import java.io.File
@@ -19,7 +23,8 @@ class MainActivity : Activity() {
     private external fun nativeStatus(): String
     private external fun nativePrepareWorkspace(appDataDirectory: String): String
     private external fun nativeResolveMinecraft(appDataDirectory: String): String
-    private external fun nativePrepareForgeLaunchProfile(appDataDirectory: String): String
+    private external fun nativeListMinecraftProfiles(appDataDirectory: String): String
+    private external fun nativePrepareForgeLaunchProfile(appDataDirectory: String, profileId: String): String
     private external fun nativeDownloadMinecraft(appDataDirectory: String, parallelism: Int): String
     private external fun nativeDownloadProgress(): String
     private external fun nativeCancelDownload(): String
@@ -32,9 +37,22 @@ class MainActivity : Activity() {
     private lateinit var importButton: Button
     private lateinit var inspectButton: Button
     private lateinit var forgeProfileButton: Button
+    private lateinit var profileSpinner: Spinner
+    private lateinit var refreshProfilesButton: Button
+    private lateinit var runtimeImportButton: Button
     private lateinit var cancelButton: Button
+    private val profileOptions = ArrayList<ProfileOption>()
+    private var selectedProfileId: String? = null
     private var downloadInProgress = false
     private var importInProgress = false
+
+    private data class ProfileOption(
+        val id: String,
+        val label: String,
+        val supportedForForgeAnalysis: Boolean
+    ) {
+        override fun toString(): String = label
+    }
 
     private val progressPoller = object : Runnable {
         override fun run() {
@@ -78,14 +96,38 @@ class MainActivity : Activity() {
             setOnClickListener { chooseZalithFolder() }
         }
 
+        runtimeImportButton = Button(this).apply {
+            text = "Import Android Java runtime folder"
+            setOnClickListener { chooseRuntimeFolder() }
+        }
+
+        profileSpinner = Spinner(this).apply {
+            isEnabled = false
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                    selectedProfileId = profileOptions.getOrNull(position)?.id
+                    updateForgeAnalyzeButton()
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectedProfileId = null
+                    updateForgeAnalyzeButton()
+                }
+            }
+        }
+
+        refreshProfilesButton = Button(this).apply {
+            text = "Refresh installed profiles"
+            setOnClickListener { refreshMinecraftProfiles() }
+        }
+
         inspectButton = Button(this).apply {
             text = "Inspect imported game files"
             setOnClickListener { inspectImportedGameData() }
         }
 
         forgeProfileButton = Button(this).apply {
-            text = "Analyze Forge profile and prepare launch plan"
-            isEnabled = isWorkspaceReady(workspaceStatus)
+            text = "Analyze selected Forge 1.20.1 profile"
+            isEnabled = false
             setOnClickListener { prepareForgeLaunchProfile() }
         }
 
@@ -117,6 +159,9 @@ class MainActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             setPadding(18, 18, 18, 18)
             addView(importButton, matchWrapParams())
+            addView(runtimeImportButton, matchWrapParams())
+            addView(refreshProfilesButton, matchWrapParams())
+            addView(profileSpinner, matchWrapParams())
             addView(inspectButton, matchWrapParams())
             addView(forgeProfileButton, matchWrapParams())
             addView(resolveButton, matchWrapParams())
@@ -141,6 +186,7 @@ class MainActivity : Activity() {
             )
         }
         setContentView(scroll)
+        refreshMinecraftProfiles()
     }
 
     private fun matchWrapParams(): LinearLayout.LayoutParams =
@@ -174,23 +220,140 @@ class MainActivity : Activity() {
     @Deprecated("Legacy activity result is used to keep the app independent of AndroidX Activity.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != REQUEST_ZALITH_FOLDER || resultCode != RESULT_OK) return
-
+        if (resultCode != RESULT_OK) return
         val selectedUri: Uri = data?.data ?: run {
             statusView.text = "No folder was selected."
             return
         }
-
         try {
             contentResolver.takePersistableUriPermission(
-                selectedUri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                selectedUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
         } catch (_: Throwable) {
             // The current read grant is enough for this immediate import operation.
         }
+        when (requestCode) {
+            REQUEST_ZALITH_FOLDER -> startZalithImport(selectedUri)
+            REQUEST_RUNTIME_FOLDER -> startRuntimeImport(selectedUri)
+        }
+    }
 
-        startZalithImport(selectedUri)
+    private fun chooseRuntimeFolder() {
+        if (downloadInProgress || importInProgress) return
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+        }
+        try {
+            startActivityForResult(intent, REQUEST_RUNTIME_FOLDER)
+        } catch (error: Throwable) {
+            statusView.text = "Could not open Android folder picker: ${error.message}"
+        }
+    }
+
+    private fun startRuntimeImport(sourceTree: Uri) {
+        if (downloadInProgress || importInProgress) return
+        importInProgress = true
+        setImportControlsEnabled(false)
+        val selectedProfileAtStart = selectedProfileId
+        statusView.text = "Importing the selected Java runtime directory...\nChoose the runtime folder itself, not the entire launcher folder."
+        worker.execute {
+            val result = try {
+                ZalithImporter.importRuntime(this, sourceTree, File(filesDir, "runtime")) { progress ->
+                    runOnUiThread {
+                        statusView.text = buildString {
+                            appendLine("Importing Java runtime...")
+                            appendLine("Files copied: ${progress.filesCopied}")
+                            appendLine("Data copied: ${formatBytes(progress.bytesCopied)}")
+                            append("Current: ${progress.currentPath}")
+                        }
+                    }
+                }
+            } catch (error: Throwable) {
+                "Java runtime import failed: ${error.javaClass.simpleName}: ${error.message}"
+            }
+            val analysis = if (result.startsWith("Java runtime import completed.") &&
+                !selectedProfileAtStart.isNullOrBlank()
+            ) {
+                try {
+                    nativePrepareForgeLaunchProfile(filesDir.absolutePath, selectedProfileAtStart)
+                } catch (error: Throwable) {
+                    "Runtime imported, but profile re-analysis failed: ${error.message}"
+                }
+            } else {
+                "Select a supported Forge 1.20.1 profile and analyze it to check whether the runtime was detected."
+            }
+            runOnUiThread {
+                importInProgress = false
+                statusView.text = result + "\n\n" + analysis
+                setImportControlsEnabled(true)
+                updateForgeAnalyzeButton()
+            }
+        }
+    }
+
+    private fun setImportControlsEnabled(enabled: Boolean) {
+        importButton.isEnabled = enabled
+        runtimeImportButton.isEnabled = enabled
+        refreshProfilesButton.isEnabled = enabled
+        inspectButton.isEnabled = enabled
+        profileSpinner.isEnabled = enabled && profileOptions.isNotEmpty()
+        resolveButton.isEnabled = enabled
+        downloadButton.isEnabled = enabled && hasInstallPlan()
+    }
+
+    private fun refreshMinecraftProfiles() {
+        if (importInProgress || downloadInProgress) return
+        refreshProfilesButton.isEnabled = false
+        statusView.text = "Scanning installed version profiles..."
+        worker.execute {
+            val result = try {
+                val raw = nativeListMinecraftProfiles(filesDir.absolutePath)
+                val json = JSONArray(raw)
+                val parsed = ArrayList<ProfileOption>()
+                for (index in 0 until json.length()) {
+                    val item = json.optJSONObject(index) ?: continue
+                    val id = item.optString("id")
+                    if (id.isBlank() || id == "null") continue
+                    val displayName = item.optString("display_name", id)
+                    val loader = item.optString("loader", "Unknown")
+                    val mcVersion = item.optString("minecraft_version", "unknown")
+                    parsed.add(ProfileOption(
+                        id,
+                        "$displayName  |  $loader  |  Minecraft $mcVersion",
+                        item.optBoolean("supported_for_forge_analysis", false)
+                    ))
+                }
+                Pair(parsed, null as String?)
+            } catch (error: Throwable) {
+                Pair(ArrayList<ProfileOption>(), "Profile scan failed: ${error.javaClass.simpleName}: ${error.message}")
+            }
+            runOnUiThread {
+                profileOptions.clear()
+                profileOptions.addAll(result.first)
+                val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, profileOptions)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                profileSpinner.adapter = adapter
+                profileSpinner.isEnabled = profileOptions.isNotEmpty() && !importInProgress
+                refreshProfilesButton.isEnabled = !importInProgress && !downloadInProgress
+                if (profileOptions.isEmpty()) {
+                    selectedProfileId = null
+                    statusView.text = result.second ?: "No installed version profiles were found under minecraft/versions."
+                } else if (result.second != null) {
+                    statusView.text = result.second!!
+                } else {
+                    statusView.text = "Found ${profileOptions.size} profile(s). Select a Forge 1.20.1 profile to analyze."
+                }
+                updateForgeAnalyzeButton()
+            }
+        }
+    }
+
+    private fun updateForgeAnalyzeButton() {
+        if (!::forgeProfileButton.isInitialized) return
+        val selected = profileOptions.firstOrNull { it.id == selectedProfileId }
+        forgeProfileButton.isEnabled =
+            !importInProgress && !downloadInProgress && selected?.supportedForForgeAnalysis == true
     }
 
     private fun startZalithImport(sourceTree: Uri) {
@@ -239,11 +402,9 @@ class MainActivity : Activity() {
             runOnUiThread {
                 importInProgress = false
                 statusView.text = result + "\n\n" + workspaceStatus
-                importButton.isEnabled = true
-                inspectButton.isEnabled = true
-                forgeProfileButton.isEnabled = isWorkspaceReady(workspaceStatus)
-                resolveButton.isEnabled = isWorkspaceReady(workspaceStatus)
-                downloadButton.isEnabled = hasInstallPlan()
+                setImportControlsEnabled(true)
+                updateForgeAnalyzeButton()
+                refreshMinecraftProfiles()
             }
         }
     }
@@ -317,15 +478,24 @@ class MainActivity : Activity() {
     }
 
     private fun loadSavedForgeProfileReport(): String {
-        val reportFile = File(filesDir, "minecraft/forge-readiness-report.txt")
-        if (!reportFile.isFile) {
-            return "\n\nNo Forge launch-profile analysis has been prepared yet."
-        }
-        return try {
-            "\n\nLast Forge launch-profile analysis:\n" +
-                reportFile.readText(Charsets.UTF_8).take(12000)
-        } catch (error: Throwable) {
-            "\n\nA Forge readiness report exists but could not be read: " + error.message
+        val versionsRoot = File(filesDir, "minecraft/versions")
+        val reports = versionsRoot.listFiles()
+            ?.filter { it.isDirectory }
+            ?.mapNotNull { directory ->
+                val reportFile = File(directory, "rustchunk-readiness-report.txt")
+                if (reportFile.isFile) directory.name to reportFile else null
+            }
+            ?.sortedBy { it.first.lowercase(java.util.Locale.ROOT) }
+            .orEmpty()
+        if (reports.isEmpty()) return "\n\nNo profile-specific Forge analysis report has been prepared yet."
+        return buildString {
+            for ((profileName, reportFile) in reports) {
+                append("\n\nSaved Forge analysis for ")
+                append(profileName)
+                append(":\n")
+                try { append(reportFile.readText(Charsets.UTF_8).take(8000)) }
+                catch (error: Throwable) { append("Report exists but could not be read: ${error.message}") }
+            }
         }
     }
 
@@ -347,19 +517,22 @@ class MainActivity : Activity() {
 
     private fun prepareForgeLaunchProfile() {
         if (importInProgress || downloadInProgress) return
+        val profileId = selectedProfileId
+        if (profileId.isNullOrBlank()) {
+            statusView.text = "Select a Forge 1.20.1 profile first."
+            return
+        }
         forgeProfileButton.isEnabled = false
-        statusView.text = "Analyzing the imported Forge profile...\nThis step does not launch Minecraft or modify imported game files."
-
+        statusView.text = "Analyzing selected profile: $profileId\nThis step does not launch Minecraft or modify imported game files."
         worker.execute {
             val result = try {
-                nativePrepareForgeLaunchProfile(filesDir.absolutePath)
+                nativePrepareForgeLaunchProfile(filesDir.absolutePath, profileId)
             } catch (error: Throwable) {
                 "Forge profile preparation failed: " + error.javaClass.simpleName + ": " + error.message
             }
-
             runOnUiThread {
                 statusView.text = result
-                forgeProfileButton.isEnabled = true
+                updateForgeAnalyzeButton()
             }
         }
     }
@@ -397,6 +570,9 @@ class MainActivity : Activity() {
         downloadInProgress = true
         downloadButton.isEnabled = false
         importButton.isEnabled = false
+        runtimeImportButton.isEnabled = false
+        refreshProfilesButton.isEnabled = false
+        profileSpinner.isEnabled = false
         inspectButton.isEnabled = false
         forgeProfileButton.isEnabled = false
         cancelButton.isEnabled = true
@@ -417,8 +593,11 @@ class MainActivity : Activity() {
                 statusView.text = result
                 cancelButton.isEnabled = false
                 importButton.isEnabled = true
+                runtimeImportButton.isEnabled = true
+                refreshProfilesButton.isEnabled = true
+                profileSpinner.isEnabled = profileOptions.isNotEmpty()
                 inspectButton.isEnabled = true
-                forgeProfileButton.isEnabled = true
+                updateForgeAnalyzeButton()
                 downloadButton.isEnabled = hasInstallPlan()
             }
         }
@@ -439,6 +618,7 @@ class MainActivity : Activity() {
 
     companion object {
         private const val REQUEST_ZALITH_FOLDER = 4102
+        private const val REQUEST_RUNTIME_FOLDER = 4103
 
         init {
             System.loadLibrary("rustchunk")

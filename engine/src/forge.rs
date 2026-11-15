@@ -73,7 +73,8 @@ pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> 
         .and_then(Value::as_str)
         .filter(|id| !id.to_lowercase().contains("forge")
             && !id.to_lowercase().contains("fabric")
-            && !id.to_lowercase().contains("quilt"))
+            && !id.to_lowercase().contains("quilt")
+            && !id.to_lowercase().contains("neoforge"))
         .map(str::to_string)
         .or_else(|| profile.get("inheritsFrom").and_then(Value::as_str).map(str::to_string))
         .unwrap_or_else(|| profile_minecraft_version(&profile, &profile_id));
@@ -202,21 +203,21 @@ pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> 
 
     let client_jar_present = client_jar.as_ref().is_some_and(|path| path.is_file());
     let mut report = String::new();
-    report.push_str("RustChunk Forge launch-profile preparation (Stage 7)\\n");
-    report.push_str(&format!("Selected profile: {}\\n", profile_id));
-    report.push_str(&format!("Profile JSON: {}\\n", profile_json_path.display()));
-    report.push_str(&format!("Profile directory: {}\\n", profile_dir.display()));
-    report.push_str(&format!("Minecraft target: {}\\n", minecraft_version));
-    report.push_str(&format!("Inheritance chain (base -> selected): {}\\n", chain_ids.join(" -> ")));
-    report.push_str(&format!("Main class: {}\\n", main_class.as_deref().unwrap_or("MISSING")));
-    report.push_str(&format!("Java major version requested by metadata: {}\\n", java_major));
+    report.push_str("RustChunk Forge launch-profile preparation (Stage 7)\n");
+    report.push_str(&format!("Selected profile: {}\n", profile_id));
+    report.push_str(&format!("Profile JSON: {}\n", profile_json_path.display()));
+    report.push_str(&format!("Profile directory: {}\n", profile_dir.display()));
+    report.push_str(&format!("Minecraft target: {}\n", minecraft_version));
+    report.push_str(&format!("Inheritance chain (base -> selected): {}\n", chain_ids.join(" -> ")));
+    report.push_str(&format!("Main class: {}\n", main_class.as_deref().unwrap_or("MISSING")));
+    report.push_str(&format!("Java major version requested by metadata: {}\n", java_major));
     report.push_str(&format!(
-        "Client JAR: {}\\n",
+        "Client JAR: {}\n",
         if client_jar_present { client_jar.as_ref().unwrap().display().to_string() }
         else { "MISSING".to_string() }
     ));
     report.push_str(&format!(
-        "Asset index: {}\\n",
+        "Asset index: {}\n",
         match (asset_index_id.as_deref(), asset_index_present) {
             (Some(id), true) => format!("PRESENT ({})", id),
             (Some(id), false) => format!("MISSING ({})", id),
@@ -224,35 +225,35 @@ pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> 
         }
     ));
     report.push_str(&format!(
-        "Libraries: {} entries; {} non-desktop-native artifact paths checked; {} missing (up to 30 listed); {} unresolved; {} desktop-native entries skipped\\n",
+        "Libraries: {} entries; {} non-desktop-native artifact paths checked; {} missing (up to 30 listed); {} unresolved; {} desktop-native entries skipped\n",
         libraries.len(), checked_libraries, missing_library_total,
         unresolved_libraries.len(), skipped_desktop_native
     ));
-    for item in &missing_libraries { report.push_str(&format!("  MISSING: {}\\n", item)); }
+    for item in &missing_libraries { report.push_str(&format!("  MISSING: {}\n", item)); }
     for item in unresolved_libraries.iter().take(20) {
-        report.push_str(&format!("  UNRESOLVED: {}\\n", item));
+        report.push_str(&format!("  UNRESOLVED: {}\n", item));
     }
     report.push_str(&format!(
-        "Mods: {} | {} JAR files\\n",
+        "Mods: {} | {} JAR files\n",
         if mods_dir.is_dir() { "PRESENT" } else { "MISSING" }, mod_jar_count
     ));
-    report.push_str(&format!("Config: {}\\n", if config_dir.is_dir() { "PRESENT" } else { "MISSING" }));
-    report.push_str("Java runtime search roots:\\n");
+    report.push_str(&format!("Config: {}\n", if config_dir.is_dir() { "PRESENT" } else { "MISSING" }));
+    report.push_str("Java runtime search roots:\n");
     for root in &runtime_roots {
-        report.push_str(&format!("  - {} | {}\\n", root.display(), if root.is_dir() { "PRESENT" } else { "MISSING" }));
+        report.push_str(&format!("  - {} | {}\n", root.display(), if root.is_dir() { "PRESENT" } else { "MISSING" }));
     }
-    report.push_str(&format!("Java runtime candidates: {}\\n", runtime_candidates.len()));
+    report.push_str(&format!("Java runtime candidates: {}\n", runtime_candidates.len()));
     for runtime in runtime_candidates.iter().take(10) {
         report.push_str(&format!(
-            "  - java: {} | libjvm: {} | AArch64 ELF: {}\\n",
+            "  - java: {} | libjvm: {} | AArch64 ELF: {}\n",
             runtime.java_executable.display(), runtime.libjvm.display(), runtime.aarch64_elf
         ));
     }
-    for notice in &notices { report.push_str(&format!("NOTICE: {}\\n", notice)); }
-    report.push_str(&format!("Profile-specific launch specification: {}\\n", spec_path.display()));
-    report.push_str(&format!("Profile-specific report: {}\\n", report_path.display()));
+    for notice in &notices { report.push_str(&format!("NOTICE: {}\n", notice)); }
+    report.push_str(&format!("Profile-specific launch specification: {}\n", spec_path.display()));
+    report.push_str(&format!("Profile-specific report: {}\n", report_path.display()));
     report.push_str(
-        "\\nThis step only analyzes metadata and writes a profile-specific launch specification. It does NOT start Java, launch Forge, load mods, or verify Aternos compatibility.\\n",
+        "\nThis step only analyzes metadata and writes a profile-specific launch specification. It does NOT start Java, launch Forge, load mods, or verify Aternos compatibility.\n",
     );
 
     write_atomic(&report_path, report.as_bytes())?;
@@ -697,6 +698,47 @@ mod tests {
         assert!(is_desktop_native_library(&linux));
         assert!(!is_desktop_native_library(&ordinary));
         assert!(!is_desktop_native_library(&android));
+    }
+
+
+    #[test]
+    fn identifies_loader_families_and_inherited_minecraft_version() {
+        let forge: Value = serde_json::from_str(
+            r#"{"id":"1.20.1 Forge 47.4.22","inheritsFrom":"1.20.1","mainClass":"cpw.mods.bootstraplauncher.BootstrapLauncher"}"#
+        ).unwrap();
+        let fabric: Value = serde_json::from_str(
+            r#"{"id":"fabric-loader-0.15.11-1.20.1","inheritsFrom":"1.20.1","mainClass":"net.fabricmc.loader.impl.launch.knot.KnotClient"}"#
+        ).unwrap();
+        let neo: Value = serde_json::from_str(
+            r#"{"id":"1.20.1-neoforge-20.4.1","inheritsFrom":"1.20.1","mainClass":"cpw.mods.bootstraplauncher.BootstrapLauncher"}"#
+        ).unwrap();
+        assert_eq!(profile_loader(&forge), "Forge");
+        assert_eq!(profile_loader(&fabric), "Fabric");
+        assert_eq!(profile_loader(&neo), "NeoForge");
+        assert_eq!(profile_minecraft_version(&forge, "fallback"), "1.20.1");
+    }
+
+    #[test]
+    fn selected_profile_resolves_to_its_own_version_directory() {
+        let root = std::env::temp_dir().join(format!("rustchunk-profile-select-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&root);
+        let first = root.join("1.20.1 Forge 47.4.5");
+        let second = root.join("1.20.1 Forge 47.4.22");
+        fs::create_dir_all(&first).unwrap();
+        fs::create_dir_all(&second).unwrap();
+        fs::write(
+            first.join("1.20.1 Forge 47.4.5.json"),
+            r#"{"id":"1.20.1 Forge 47.4.5","inheritsFrom":"1.20.1","mainClass":"cpw.mods.bootstraplauncher.BootstrapLauncher"}"#
+        ).unwrap();
+        fs::write(
+            second.join("1.20.1 Forge 47.4.22.json"),
+            r#"{"id":"1.20.1 Forge 47.4.22","inheritsFrom":"1.20.1","mainClass":"cpw.mods.bootstraplauncher.BootstrapLauncher"}"#
+        ).unwrap();
+        let (selected_dir, _, selected) =
+            find_forge_profile(&root, "1.20.1 Forge 47.4.22").unwrap();
+        assert_eq!(selected_dir, second);
+        assert_eq!(selected["id"], "1.20.1 Forge 47.4.22");
+        fs::remove_dir_all(root).unwrap();
     }
 
     #[test]

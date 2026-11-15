@@ -2,38 +2,44 @@
 
 An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
 
-## Current milestone: Stage 6 — Forge profile analysis and launch-spec generation
+## Current milestone: Stage 7 — selectable profiles and runtime import
 
-Stage 6 adds a read-only resolver for the imported Minecraft 1.20.1 Forge profile. It locates the actual Forge JSON inside the imported version directory, follows available \`inheritsFrom\` metadata, combines parent/child libraries and launch-argument arrays, checks declared library artifact files, checks the client JAR and asset index, and retains the profile-specific mods/config directory layout.
+Stage 7 adds a catalogue for the version JSON profiles found under `minecraft/versions/`. The app identifies Forge, NeoForge, Fabric, Quilt, and Vanilla entries and lets the user select a profile. The analysis action is currently enabled only for Forge profiles inheriting Minecraft 1.20.1; other profile types and game versions are listed but are not yet launchable.
 
-The resolver writes:
+The selected profile is resolved by its exact profile ID rather than by choosing the first Forge folder. Its mods, config, generated launch specification, and readiness report are handled inside that selected profile's own version directory. An analysis of one profile no longer overwrites a global report belonging to another profile.
 
-- \`minecraft/forge-launch-spec.json\`: structured profile metadata, library entries, inherited game/JVM arguments, paths, mod/config locations, and runtime candidates.
-- \`minecraft/forge-readiness-report.txt\`: a readable audit that survives closing the app.
+Stage 7 also corrects inherited library overrides and legacy argument inheritance. Desktop-only `natives-linux`, `natives-windows`, and `natives-macos` classifiers are separated from the Android artifact-presence audit rather than incorrectly treated as Android libraries. This does not mean Android native replacements have been installed; native mapping remains future work.
 
-It also performs a limited Java-runtime inventory under \`minecraft/runtime/\`, looking for a \`bin/java\` executable and \`libjvm.so\`, and checks whether the shared library is a 64-bit little-endian AArch64 ELF file. This is only a file/architecture check; it does not prove the runtime can execute on Android.
+The **Import Android Java runtime folder** action copies a user-selected runtime directory to a separate `files/runtime/imported-*/` location. Files in `bin/` are marked executable after SAF copying. This only imports files and checks their layout; it does not prove that the runtime can execute on Android.
 
-The app button is labelled **Analyze Forge profile and prepare launch plan**. It does not launch Java or Minecraft.
+## Reports and profile-specific data
+
+For a selected profile such as `1.20.1 Forge 47.4.22`, RustChunk stores:
+- `versions/<selected-profile>/rustchunk-launch-spec.json`
+- `versions/<selected-profile>/rustchunk-readiness-report.txt`
+
+The selected profile's mods and config are referenced in place. RustChunk does not move, merge, or duplicate profile-specific files.
+
+The profile list is discovered from JSON metadata. A profile is shown even when it is not currently supported by the Forge analysis action. Full profile creation, editing, deletion, and independent game-directory migration are not implemented yet.
 
 ## Zalith game-data import
 
-The Android Storage Access Framework importer accepts a folder directly containing at least two of \`assets/\`, \`libraries/\`, and \`versions/\`; it also detects a wrapper folder containing a \`.minecraft/\` child.
+The Android Storage Access Framework importer accepts a folder directly containing at least two of `assets/`, `libraries/`, and `versions/`; it also detects a wrapper folder containing a `.minecraft/` child.
 
-The importer copies reusable game data into RustChunk's private \`files/minecraft/\` directory, including Minecraft assets, libraries, versions, mods, configs, resource packs, shader packs, KubeJS scripts, and selected mod data folders. It deliberately does not copy launcher account databases, authentication tokens, logs, crash reports, or launcher-specific private data.
-
-The imported Zalith profile can keep its mods and config inside its own version directory. RustChunk therefore analyzes and records those paths without relocating files.
+It copies reusable assets, libraries, versions, mods, configs, resource packs, shader packs, KubeJS scripts, and selected mod data folders. Launcher account databases, authentication tokens, logs, crash reports, and launcher-specific private data are not copied.
 
 ## Current capabilities and limitations
 
 - Stage 2: resolves official Minecraft 1.20.1 metadata and builds a SHA-1-aware install plan.
 - Stage 3: downloads base Minecraft files with four parallel workers, resume support, and SHA-1 verification.
-- Stage 4: imports reusable game files from a user-selected Zalith game directory.
+- Stage 4: imports reusable game data from a user-selected Zalith game directory.
 - Stage 5: persists import/inspection reports and audits game-data presence.
-- Stage 6: resolves the imported Forge profile, available inheritance metadata, library paths, launch arguments, mod/config paths, and possible local Java runtime files.
+- Stage 6: resolves inherited Forge metadata, libraries, launch arguments, and local runtime candidates.
+- Stage 7: lists installed profiles, selects an exact Forge 1.20.1 profile, stores reports per profile, and imports a user-selected Java runtime directory.
 
-**Not yet implemented:** Android-compatible Java runtime provisioning, complete Forge argument/rule substitution, native-library extraction for Android, a safe Java process bootstrap, actual Forge startup, graphics/runtime integration, and on-device Aternos/modpack compatibility testing. The generated launch specification is an intermediate input for those steps, not a runnable command.
+**Not yet implemented:** complete argument substitution and rule evaluation, Android native-library extraction/mapping, runtime compatibility validation, a safe Java process bootstrap, actual Forge startup, graphics/runtime integration, and on-device modpack/Aternos compatibility testing. The launch specification is still an intermediate diagnostic file, not a runnable command.
 
-A pure Rust game engine cannot directly load Java Forge mods. RustChunk must supply a compatible Java/Forge execution layer; this milestone prepares and audits the real imported profile rather than pretending the game is already runnable.
+A pure Rust game engine cannot directly load Java Forge mods. RustChunk still needs a compatible Java/Forge execution layer. This milestone prepares and audits profile-specific inputs; it does not launch Minecraft.
 
 ## Platform target
 
@@ -44,4 +50,4 @@ A pure Rust game engine cannot directly load Java Forge mods. RustChunk must sup
 
 ## Build and tests
 
-Push to \`main\` or run RustChunk Android Build manually from GitHub Actions. The workflow runs Rust unit tests, cross-compiles the Rust shared library for Android ARM64, builds the Android APK, verifies the persistent signing key and APK certificate, and uploads the artifact.
+Push to `main` or run RustChunk Android Build manually from GitHub Actions. The workflow runs Rust unit tests, cross-compiles the Rust shared library for Android ARM64, builds the Android APK, verifies the persistent signing key and APK certificate, and uploads the artifact.

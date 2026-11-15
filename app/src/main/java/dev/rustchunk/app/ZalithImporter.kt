@@ -126,6 +126,44 @@ object ZalithImporter {
         }
     }
 
+    /**
+     * Imports a user-selected Java runtime directory into a separate app-private location.
+     * Select the runtime root itself (or a parent containing the runtime), never the whole launcher data folder.
+     */
+    fun importRuntime(
+        context: Context,
+        selectedTree: Uri,
+        destinationParent: File,
+        onProgress: (Progress) -> Unit
+    ): String {
+        val resolver = context.contentResolver
+        val rootId = DocumentsContract.getTreeDocumentId(selectedTree)
+        val destination = File(destinationParent, "imported-${System.currentTimeMillis()}")
+        if (!destination.mkdirs()) {
+            throw IllegalStateException("Cannot create runtime destination: ${destination.absolutePath}")
+        }
+        val stats = MutableStats()
+        onProgress(Progress(0, 0L, "Scanning selected Java runtime folder..."))
+        copyDirectory(resolver, selectedTree, rootId, destination, "runtime", stats, onProgress)
+
+        fun markBinExecutables(directory: File) {
+            val children = directory.listFiles() ?: return
+            for (child in children) {
+                if (child.isDirectory) markBinExecutables(child)
+                else if (child.isFile && child.parentFile?.name == "bin") child.setExecutable(true, true)
+            }
+        }
+        markBinExecutables(destination)
+
+        return buildString {
+            appendLine("Java runtime import completed.")
+            appendLine("Files copied: ${stats.files}")
+            appendLine("Data copied: ${formatBytes(stats.bytes)}")
+            appendLine("Destination: ${destination.absolutePath}")
+            append("Execute permission was enabled for files in bin/; run profile analysis to check whether this runtime layout is recognized.")
+        }
+    }
+
     private class MutableStats {
         var files: Int = 0
         var bytes: Long = 0L
