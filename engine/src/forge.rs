@@ -1,5 +1,5 @@
 use serde_json::{json, Value};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::io::Read;
 use std::path::{Path, PathBuf};
@@ -8,9 +8,46 @@ const TARGET_VERSION: &str = "1.20.1";
 const MAX_INHERITANCE_DEPTH: usize = 8;
 const MAX_SCAN_ENTRIES: usize = 6000;
 
-pub fn prepare_forge_profile(app_data_dir: &Path) -> Result<String, String> {
+pub fn list_profiles(app_data_dir: &Path) -> Result<String, String> {
     if !app_data_dir.is_absolute() {
         return Err("Android app data path must be absolute".to_string());
+    }
+    let versions_root = app_data_dir.join("minecraft").join("versions");
+    if !versions_root.is_dir() {
+        return Err(format!("Minecraft versions directory is missing: {}", versions_root.display()));
+    }
+
+    let discovered = discover_profiles(&versions_root)?;
+    let mut seen = HashSet::new();
+    let mut profiles = Vec::new();
+    for (directory, _json_path, profile) in discovered {
+        let Some(id) = profile.get("id").and_then(Value::as_str) else { continue };
+        if !seen.insert(id.to_string()) { continue; }
+        let loader = profile_loader(&profile);
+        let minecraft_version = profile_minecraft_version(&profile, id);
+        profiles.push(json!({
+            "id": id,
+            "display_name": id,
+            "loader": loader,
+            "minecraft_version": minecraft_version,
+            "directory": directory.file_name().and_then(|value| value.to_str()).unwrap_or(""),
+            "supported_for_forge_analysis": loader == "Forge" && minecraft_version == TARGET_VERSION
+        }));
+    }
+    profiles.sort_by(|left, right| {
+        left.get("id").and_then(Value::as_str).unwrap_or("")
+            .cmp(right.get("id").and_then(Value::as_str).unwrap_or(""))
+    });
+    serde_json::to_string(&profiles)
+        .map_err(|error| format!("Could not encode profile list: {}", error))
+}
+
+pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> Result<String, String> {
+    if !app_data_dir.is_absolute() {
+        return Err("Android app data path must be absolute".to_string());
+    }
+    if !is_safe_version_id(selected_profile_id) {
+        return Err("Selected profile identifier is invalid.".to_string());
     }
 
     let game_root = app_data_dir.join("minecraft");
@@ -19,27 +56,35 @@ pub fn prepare_forge_profile(app_data_dir: &Path) -> Result<String, String> {
         return Err(format!("Minecraft versions directory is missing: {}", versions_root.display()));
     }
 
-    let (profile_dir, profile_json_path, profile) = find_forge_profile(&versions_root)?;
-    let profile_id = profile
-        .get("id")
-        .and_then(Value::as_str)
-        .unwrap_or_else(|| profile_dir.file_name().and_then(|v| v.to_str()).unwrap_or("unknown"))
-        .to_string();
+    let (profile_dir, profile_json_path, profile) =
+        find_forge_profile(&versions_root, selected_profile_id)?;
+    let profile_id = profile.get("id").and_then(Value::as_str)
+        .unwrap_or(selected_profile_id).to_string();
 
     let mut chain = Vec::new();
     let mut visited = HashSet::new();
     let mut notices = Vec::new();
     collect_inheritance_chain(
-        &versions_root,
-        &profile,
-        &mut visited,
-        &mut chain,
-        &mut notices,
-        0,
+        &versions_root, &profile, &mut visited, &mut chain, &mut notices, 0,
     );
 
-    let minecraft_version = inherited_string(&chain, "inheritsFrom")
-        .unwrap_or_else(|| TARGET_VERSION.to_string());
+    let minecraft_version = chain.first()
+        .and_then(|item| item.get("id"))
+        .and_then(Value::as_str)
+        .filter(|id| !id.to_lowercase().contains("forge")
+            && !id.to_lowercase().contains("fabric")
+            && !id.to_lowercase().contains("quilt"))
+        .map(str::to_string)
+        .or_else(|| profile.get("inheritsFrom").and_then(Value::as_str).map(str::to_string))
+        .unwrap_or_else(|| profile_minecraft_version(&profile, &profile_id));
+
+    if minecraft_version != TARGET_VERSION {
+        return Err(format!(
+            "The selected profile '{}' targets Minecraft {}, but this analysis stage currently supports Forge {} only.",
+            profile_id, minecraft_version, TARGET_VERSION
+        ));
+    }
+
     let main_class = inherited_string(&chain, "mainClass");
     let java_major = inherited_integer(&chain, "javaVersion", "majorVersion").unwrap_or(17);
     let asset_index = inherited_value(&chain, "assetIndex").cloned();
@@ -49,12 +94,17 @@ pub fn prepare_forge_profile(app_data_dir: &Path) -> Result<String, String> {
     let legacy_arguments = merge_legacy_arguments(&chain);
 
     let mut checked_libraries = 0usize;
+    let mut skipped_desktop_native = 0usize;
     let mut missing_libraries = Vec::new();
     let mut missing_library_total = 0usize;
     let mut unresolved_libraries = Vec::new();
 
     for library in &libraries {
         let name = library.get("name").and_then(Value::as_str).unwrap_or("(unnamed library)");
+        if is_desktop_native_library(library) {
+            skipped_desktop_native += 1;
+            continue;
+        }
         match library_artifact_path(library) {
             Some(relative) => {
                 checked_libraries += 1;
@@ -75,41 +125,49 @@ pub fn prepare_forge_profile(app_data_dir: &Path) -> Result<String, String> {
     }
 
     let client_jar = find_client_jar(&game_root, &profile_dir, &profile, &minecraft_version);
-    let asset_index_id = asset_index
-        .as_ref()
+    let asset_index_id = asset_index.as_ref()
         .and_then(|value| value.get("id"))
         .and_then(Value::as_str)
         .map(str::to_string);
-    let asset_index_file = asset_index_id
-        .as_deref()
+    let asset_index_file = asset_index_id.as_deref()
         .map(|id| game_root.join("assets").join("indexes").join(format!("{}.json", id)));
     let asset_index_present = asset_index_file.as_ref().is_some_and(|path| path.is_file());
 
-    // This imported Zalith profile keeps its mods/config beside its version JSON/JAR.
-    // Record the existing paths; never move or duplicate the user's files.
+    // Keep mods/config and generated launch files isolated inside the selected profile folder.
     let mods_dir = profile_dir.join("mods");
     let config_dir = profile_dir.join("config");
     let mod_jar_count = count_direct_jars(&mods_dir);
-    let runtime_root = game_root.join("runtime");
-    let runtime_candidates = find_runtime_candidates(&runtime_root);
 
-    let relative = |path: &Path| relative_path(&game_root, path);
-    let chain_ids: Vec<String> = chain
-        .iter()
+    // Zalith may keep its Android Java runtime outside the .minecraft tree.
+    let runtime_roots = vec![
+        app_data_dir.join("runtime"),
+        app_data_dir.join("runtimes"),
+        game_root.join("runtime"),
+    ];
+    let mut runtime_candidates = Vec::new();
+    for root in &runtime_roots {
+        runtime_candidates.extend(find_runtime_candidates(root));
+    }
+
+    let relative_game = |path: &Path| relative_path(&game_root, path);
+    let relative_app = |path: &Path| relative_path(app_data_dir, path);
+    let chain_ids: Vec<String> = chain.iter()
         .filter_map(|item| item.get("id").and_then(Value::as_str).map(str::to_string))
         .collect();
+    let runtime_root_strings: Vec<String> = runtime_roots.iter()
+        .map(|path| relative_app(path)).collect();
 
     let spec = json!({
-        "schema_version": 1,
+        "schema_version": 2,
         "status": "prepared_for_review_only",
         "profile_id": profile_id.clone(),
-        "profile_json": relative(&profile_json_path),
-        "profile_directory": relative(&profile_dir),
+        "profile_json": relative_game(&profile_json_path),
+        "profile_directory": relative_game(&profile_dir),
         "minecraft_version": minecraft_version.clone(),
         "inheritance_chain": chain_ids.clone(),
         "main_class": main_class.clone(),
         "java_major_version": java_major,
-        "client_jar": client_jar.as_ref().map(|path| relative(path)),
+        "client_jar": client_jar.as_ref().map(|path| relative_game(path)),
         "client_jar_present": client_jar.as_ref().is_some_and(|path| path.is_file()),
         "asset_index": asset_index,
         "asset_index_present": asset_index_present,
@@ -118,52 +176,47 @@ pub fn prepare_forge_profile(app_data_dir: &Path) -> Result<String, String> {
         "library_artifacts_missing": missing_libraries.clone(),
         "library_artifacts_missing_total": missing_library_total,
         "library_artifacts_unresolved": unresolved_libraries.clone(),
-        "arguments": {
-            "game": game_arguments,
-            "jvm": jvm_arguments
-        },
+        "desktop_native_artifacts_skipped": skipped_desktop_native,
+        "arguments": { "game": game_arguments, "jvm": jvm_arguments },
         "legacy_minecraft_arguments": legacy_arguments,
-        "game_directory": relative(&profile_dir),
-        "mods_directory": relative(&mods_dir),
+        "game_directory": relative_game(&profile_dir),
+        "mods_directory": relative_game(&mods_dir),
         "mods_directory_present": mods_dir.is_dir(),
         "mods_jar_count": mod_jar_count,
-        "config_directory": relative(&config_dir),
+        "config_directory": relative_game(&config_dir),
         "config_directory_present": config_dir.is_dir(),
-        "java_runtime_root": relative(&runtime_root),
+        "java_runtime_search_roots": runtime_root_strings,
         "java_runtime_candidates": runtime_candidates.iter().map(|item| json!({
-            "java_executable": relative(&item.java_executable),
-            "libjvm": relative(&item.libjvm),
+            "java_executable": relative_app(&item.java_executable),
+            "libjvm": relative_app(&item.libjvm),
             "aarch64_elf": item.aarch64_elf
         })).collect::<Vec<Value>>(),
         "launch_performed": false
     });
 
-    let spec_path = game_root.join("forge-launch-spec.json");
-    let report_path = game_root.join("forge-readiness-report.txt");
+    let spec_path = profile_dir.join("rustchunk-launch-spec.json");
+    let report_path = profile_dir.join("rustchunk-readiness-report.txt");
     let spec_bytes = serde_json::to_vec_pretty(&spec)
         .map_err(|error| format!("Could not encode Forge launch specification: {}", error))?;
     write_atomic(&spec_path, &spec_bytes)?;
 
     let client_jar_present = client_jar.as_ref().is_some_and(|path| path.is_file());
     let mut report = String::new();
-    report.push_str("RustChunk Forge launch-profile preparation\n");
-    report.push_str(&format!("Profile: {}\n", profile_id));
-    report.push_str(&format!("Profile JSON: {}\n", profile_json_path.display()));
-    report.push_str(&format!("Profile directory: {}\n", profile_dir.display()));
-    report.push_str(&format!("Minecraft target: {}\n", minecraft_version));
-    report.push_str(&format!("Inheritance chain: {}\n", chain_ids.join(" -> ")));
-    report.push_str(&format!("Main class: {}\n", main_class.as_deref().unwrap_or("MISSING")));
-    report.push_str(&format!("Java major version requested by metadata: {}\n", java_major));
+    report.push_str("RustChunk Forge launch-profile preparation (Stage 7)\\n");
+    report.push_str(&format!("Selected profile: {}\\n", profile_id));
+    report.push_str(&format!("Profile JSON: {}\\n", profile_json_path.display()));
+    report.push_str(&format!("Profile directory: {}\\n", profile_dir.display()));
+    report.push_str(&format!("Minecraft target: {}\\n", minecraft_version));
+    report.push_str(&format!("Inheritance chain (base -> selected): {}\\n", chain_ids.join(" -> ")));
+    report.push_str(&format!("Main class: {}\\n", main_class.as_deref().unwrap_or("MISSING")));
+    report.push_str(&format!("Java major version requested by metadata: {}\\n", java_major));
     report.push_str(&format!(
-        "Client JAR: {}\n",
-        if client_jar_present {
-            client_jar.as_ref().unwrap().display().to_string()
-        } else {
-            "MISSING".to_string()
-        }
+        "Client JAR: {}\\n",
+        if client_jar_present { client_jar.as_ref().unwrap().display().to_string() }
+        else { "MISSING".to_string() }
     ));
     report.push_str(&format!(
-        "Asset index: {}\n",
+        "Asset index: {}\\n",
         match (asset_index_id.as_deref(), asset_index_present) {
             (Some(id), true) => format!("PRESENT ({})", id),
             (Some(id), false) => format!("MISSING ({})", id),
@@ -171,70 +224,50 @@ pub fn prepare_forge_profile(app_data_dir: &Path) -> Result<String, String> {
         }
     ));
     report.push_str(&format!(
-        "Libraries: {} entries; {} artifact paths checked; {} missing (up to 30 listed); {} unresolved\n",
-        libraries.len(),
-        checked_libraries,
-        missing_library_total,
-        unresolved_libraries.len()
+        "Libraries: {} entries; {} non-desktop-native artifact paths checked; {} missing (up to 30 listed); {} unresolved; {} desktop-native entries skipped\\n",
+        libraries.len(), checked_libraries, missing_library_total,
+        unresolved_libraries.len(), skipped_desktop_native
     ));
-    for item in &missing_libraries {
-        report.push_str(&format!("  MISSING: {}\n", item));
-    }
+    for item in &missing_libraries { report.push_str(&format!("  MISSING: {}\\n", item)); }
     for item in unresolved_libraries.iter().take(20) {
-        report.push_str(&format!("  UNRESOLVED: {}\n", item));
+        report.push_str(&format!("  UNRESOLVED: {}\\n", item));
     }
     report.push_str(&format!(
-        "Mods: {} | {} JAR files\n",
-        if mods_dir.is_dir() { "PRESENT" } else { "MISSING" },
-        mod_jar_count
+        "Mods: {} | {} JAR files\\n",
+        if mods_dir.is_dir() { "PRESENT" } else { "MISSING" }, mod_jar_count
     ));
-    report.push_str(&format!(
-        "Config: {}\n",
-        if config_dir.is_dir() { "PRESENT" } else { "MISSING" }
-    ));
-    report.push_str(&format!(
-        "Java runtime root: {}\n",
-        if runtime_root.is_dir() { "PRESENT" } else { "MISSING" }
-    ));
-    report.push_str(&format!("Java runtime candidates: {}\n", runtime_candidates.len()));
+    report.push_str(&format!("Config: {}\\n", if config_dir.is_dir() { "PRESENT" } else { "MISSING" }));
+    report.push_str("Java runtime search roots:\\n");
+    for root in &runtime_roots {
+        report.push_str(&format!("  - {} | {}\\n", root.display(), if root.is_dir() { "PRESENT" } else { "MISSING" }));
+    }
+    report.push_str(&format!("Java runtime candidates: {}\\n", runtime_candidates.len()));
     for runtime in runtime_candidates.iter().take(10) {
         report.push_str(&format!(
-            "  - java: {} | libjvm: {} | AArch64 ELF: {}\n",
-            runtime.java_executable.display(),
-            runtime.libjvm.display(),
-            runtime.aarch64_elf
+            "  - java: {} | libjvm: {} | AArch64 ELF: {}\\n",
+            runtime.java_executable.display(), runtime.libjvm.display(), runtime.aarch64_elf
         ));
     }
-    for notice in &notices {
-        report.push_str(&format!("NOTICE: {}\n", notice));
-    }
-    report.push_str(&format!("Launch specification: {}\n", spec_path.display()));
-    report.push_str(&format!("Saved report: {}\n", report_path.display()));
+    for notice in &notices { report.push_str(&format!("NOTICE: {}\\n", notice)); }
+    report.push_str(&format!("Profile-specific launch specification: {}\\n", spec_path.display()));
+    report.push_str(&format!("Profile-specific report: {}\\n", report_path.display()));
     report.push_str(
-        "\nThis step only analyzes metadata and writes a launch specification. It does NOT start Java, launch Forge, load mods, or verify Aternos compatibility.\n",
+        "\\nThis step only analyzes metadata and writes a profile-specific launch specification. It does NOT start Java, launch Forge, load mods, or verify Aternos compatibility.\\n",
     );
 
     write_atomic(&report_path, report.as_bytes())?;
     Ok(report)
 }
 
-fn find_forge_profile(versions_root: &Path) -> Result<(PathBuf, PathBuf, Value), String> {
+fn discover_profiles(versions_root: &Path) -> Result<Vec<(PathBuf, PathBuf, Value)>, String> {
     let entries = fs::read_dir(versions_root)
         .map_err(|error| format!("Cannot list versions directory: {}", error))?;
-    let mut candidates: Vec<(PathBuf, PathBuf, Value)> = Vec::new();
+    let mut candidates = Vec::new();
 
     for entry in entries {
         let entry = entry.map_err(|error| format!("Cannot read version entry: {}", error))?;
         let directory = entry.path();
-        if !directory.is_dir() {
-            continue;
-        }
-
-        let folder_name = directory.file_name().and_then(|value| value.to_str()).unwrap_or("");
-        let lower_name = folder_name.to_lowercase();
-        if !lower_name.contains(TARGET_VERSION) || !lower_name.contains("forge") {
-            continue;
-        }
+        if !directory.is_dir() { continue; }
 
         let files = match fs::read_dir(&directory) {
             Ok(value) => value,
@@ -242,23 +275,17 @@ fn find_forge_profile(versions_root: &Path) -> Result<(PathBuf, PathBuf, Value),
         };
         for file in files.flatten() {
             let path = file.path();
-            if path.extension().and_then(|value| value.to_str()) != Some("json") {
-                continue;
-            }
+            if path.extension().and_then(|value| value.to_str()) != Some("json") { continue; }
             let Ok(bytes) = fs::read(&path) else { continue };
             let Ok(value) = serde_json::from_slice::<Value>(&bytes) else { continue };
             let Some(id) = value.get("id").and_then(Value::as_str) else { continue };
+            if !is_safe_version_id(id) { continue; }
             let looks_like_profile = value.get("mainClass").is_some()
                 || value.get("inheritsFrom").is_some()
                 || value.get("libraries").is_some();
-            if !looks_like_profile {
-                continue;
+            if looks_like_profile {
+                candidates.push((directory.clone(), path, value));
             }
-            let lower_id = id.to_lowercase();
-            if !lower_id.contains(TARGET_VERSION) || !lower_id.contains("forge") {
-                continue;
-            }
-            candidates.push((directory.clone(), path, value));
         }
     }
 
@@ -269,10 +296,46 @@ fn find_forge_profile(versions_root: &Path) -> Result<(PathBuf, PathBuf, Value),
         let right_exact = right_id == right.0.file_name().and_then(|value| value.to_str()).unwrap_or("");
         right_exact.cmp(&left_exact).then_with(|| left_id.cmp(right_id))
     });
+    Ok(candidates)
+}
 
-    candidates.into_iter().next().ok_or_else(|| {
-        "No Minecraft 1.20.1 Forge profile JSON was found under versions/. Run the game-data inspection first.".to_string()
-    })
+fn find_forge_profile(
+    versions_root: &Path,
+    selected_profile_id: &str,
+) -> Result<(PathBuf, PathBuf, Value), String> {
+    let candidates = discover_profiles(versions_root)?;
+    let matches: Vec<_> = candidates.into_iter()
+        .filter(|(_, _, profile)| profile.get("id").and_then(Value::as_str) == Some(selected_profile_id))
+        .collect();
+    let Some((directory, json_path, profile)) = matches.into_iter().next() else {
+        return Err(format!("The selected profile '{}' was not found under versions/.", selected_profile_id));
+    };
+    if profile_loader(&profile) != "Forge" {
+        return Err(format!("The selected profile '{}' is not a Forge profile.", selected_profile_id));
+    }
+    let base_version = profile_minecraft_version(&profile, selected_profile_id);
+    if base_version != TARGET_VERSION {
+        return Err(format!(
+            "The selected Forge profile targets Minecraft {}, while this stage supports {}.",
+            base_version, TARGET_VERSION
+        ));
+    }
+    Ok((directory, json_path, profile))
+}
+
+fn profile_loader(profile: &Value) -> &'static str {
+    let id = profile.get("id").and_then(Value::as_str).unwrap_or("").to_lowercase();
+    let main = profile.get("mainClass").and_then(Value::as_str).unwrap_or("").to_lowercase();
+    if id.contains("neoforge") { "NeoForge" }
+    else if id.contains("forge") || main.contains("bootstraplauncher") { "Forge" }
+    else if id.contains("quilt") || main.contains("org.quiltmc") { "Quilt" }
+    else if id.contains("fabric") || main.contains("net.fabricmc") { "Fabric" }
+    else { "Vanilla" }
+}
+
+fn profile_minecraft_version(profile: &Value, id: &str) -> String {
+    profile.get("inheritsFrom").and_then(Value::as_str)
+        .unwrap_or(id).to_string()
 }
 
 fn collect_inheritance_chain(
@@ -358,17 +421,19 @@ fn inherited_integer(chain: &[Value], object_key: &str, value_key: &str) -> Opti
 }
 
 fn merge_libraries(chain: &[Value]) -> Vec<Value> {
-    let mut names = HashSet::new();
-    let mut merged = Vec::new();
+    // Parent entries establish order; a child entry with the same Maven name overrides it.
+    let mut positions: HashMap<String, usize> = HashMap::new();
+    let mut merged: Vec<Value> = Vec::new();
     for profile in chain {
         if let Some(items) = profile.get("libraries").and_then(Value::as_array) {
             for item in items {
-                let key = item
-                    .get("name")
-                    .and_then(Value::as_str)
+                let key = item.get("name").and_then(Value::as_str)
                     .map(str::to_string)
                     .unwrap_or_else(|| format!("anonymous-{}", merged.len()));
-                if names.insert(key) {
+                if let Some(index) = positions.get(&key).copied() {
+                    merged[index] = item.clone();
+                } else {
+                    positions.insert(key, merged.len());
                     merged.push(item.clone());
                 }
             }
@@ -392,15 +457,24 @@ fn merge_arguments(chain: &[Value], group: &str) -> Vec<Value> {
 }
 
 fn merge_legacy_arguments(chain: &[Value]) -> Option<String> {
-    let values: Vec<&str> = chain
-        .iter()
-        .filter_map(|profile| profile.get("minecraftArguments").and_then(Value::as_str))
-        .collect();
-    if values.is_empty() {
-        None
-    } else {
-        Some(values.join(" "))
+    // Legacy minecraftArguments is a single inherited value, not a parent+child concatenation.
+    chain.iter().rev()
+        .find_map(|profile| profile.get("minecraftArguments").and_then(Value::as_str))
+        .map(str::to_string)
+}
+
+fn is_desktop_native_library(library: &Value) -> bool {
+    let name = library.get("name").and_then(Value::as_str).unwrap_or("");
+    let classifier = name.split(':').nth(3).unwrap_or("");
+    if classifier.starts_with("natives-") && !classifier.contains("android") {
+        return true;
     }
+    let artifact_path = library.get("downloads")
+        .and_then(|value| value.get("artifact"))
+        .and_then(|value| value.get("path"))
+        .and_then(Value::as_str).unwrap_or("");
+    let filename = artifact_path.rsplit('/').next().unwrap_or("");
+    filename.contains("-natives-") && !filename.contains("natives-android")
 }
 
 fn library_artifact_path(library: &Value) -> Option<String> {
@@ -486,9 +560,7 @@ struct RuntimeCandidate {
 }
 
 fn find_runtime_candidates(runtime_root: &Path) -> Vec<RuntimeCandidate> {
-    if !runtime_root.is_dir() {
-        return Vec::new();
-    }
+    if !runtime_root.is_dir() { return Vec::new(); }
 
     let mut pending = vec![(runtime_root.to_path_buf(), 0usize)];
     let mut visited = 0usize;
@@ -496,9 +568,7 @@ fn find_runtime_candidates(runtime_root: &Path) -> Vec<RuntimeCandidate> {
     let mut jvm_libraries = Vec::new();
 
     while let Some((directory, depth)) = pending.pop() {
-        if visited >= MAX_SCAN_ENTRIES || depth > 8 {
-            break;
-        }
+        if visited >= MAX_SCAN_ENTRIES || depth > 10 { break; }
         visited += 1;
         let Ok(entries) = fs::read_dir(&directory) else { continue };
 
@@ -522,8 +592,7 @@ fn find_runtime_candidates(runtime_root: &Path) -> Vec<RuntimeCandidate> {
     let mut candidates = Vec::new();
     for java_executable in java_executables {
         let java_root = java_executable.parent().and_then(Path::parent);
-        let matching_jvm = jvm_libraries
-            .iter()
+        let matching_jvm = jvm_libraries.iter()
             .find(|path| path.starts_with(java_root.unwrap_or(runtime_root)))
             .or_else(|| jvm_libraries.first());
         if let Some(libjvm) = matching_jvm {
@@ -534,6 +603,7 @@ fn find_runtime_candidates(runtime_root: &Path) -> Vec<RuntimeCandidate> {
             });
         }
     }
+    candidates.sort_by(|left, right| left.java_executable.cmp(&right.java_executable));
     candidates
 }
 
@@ -554,7 +624,7 @@ fn is_safe_version_id(value: &str) -> bool {
         && value != "."
         && value != ".."
         && value.chars().all(|character| {
-            character.is_ascii_alphanumeric() || "._- ".contains(character)
+            character.is_ascii_alphanumeric() || "._- +".contains(character)
         })
 }
 
@@ -598,6 +668,36 @@ fn write_atomic(path: &Path, bytes: &[u8]) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+
+    #[test]
+    fn child_library_overrides_parent_with_same_coordinate() {
+        let parent: Value = serde_json::from_str(r#"{"libraries":[{"name":"org.example:demo:1.0","marker":"parent"}]}"#).unwrap();
+        let child: Value = serde_json::from_str(r#"{"libraries":[{"name":"org.example:demo:1.0","marker":"child"}]}"#).unwrap();
+        let merged = merge_libraries(&[parent, child]);
+        assert_eq!(merged.len(), 1);
+        assert_eq!(merged[0]["marker"], "child");
+    }
+
+    #[test]
+    fn legacy_arguments_use_nearest_child_value_without_concatenation() {
+        let parent: Value = serde_json::from_str(r#"{"minecraftArguments":"--username parent"}"#).unwrap();
+        let child: Value = serde_json::from_str(r#"{"minecraftArguments":"--username child"}"#).unwrap();
+        assert_eq!(
+            merge_legacy_arguments(&[parent, child]).as_deref(),
+            Some("--username child")
+        );
+    }
+
+    #[test]
+    fn desktop_native_classifiers_are_not_required_for_android_audit() {
+        let linux: Value = serde_json::from_str(r#"{"name":"org.lwjgl:lwjgl:3.3.1:natives-linux"}"#).unwrap();
+        let ordinary: Value = serde_json::from_str(r#"{"name":"org.lwjgl:lwjgl:3.3.1"}"#).unwrap();
+        let android: Value = serde_json::from_str(r#"{"name":"org.example:demo:1.0:natives-android"}"#).unwrap();
+        assert!(is_desktop_native_library(&linux));
+        assert!(!is_desktop_native_library(&ordinary));
+        assert!(!is_desktop_native_library(&android));
+    }
 
     #[test]
     fn converts_maven_coordinates_to_relative_jar_paths() {
