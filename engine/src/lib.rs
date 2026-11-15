@@ -77,6 +77,30 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeDownloadMinecra
 }
 
 #[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeDownloadForgeLibraries(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+    profile_id: JString,
+    parallelism: jint,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|path| {
+        java_string_to_rust(&mut env, &profile_id).and_then(|id| {
+            let data_dir = Path::new(&path);
+            let plan_report = forge::prepare_forge_dependency_plan(data_dir, &id)?;
+            let download_report = downloader::download_forge_libraries(
+                data_dir, &id, parallelism.clamp(1, 8) as usize
+            )?;
+            Ok(format!("{}\n\n{}", plan_report, download_report))
+        })
+    });
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Forge dependency download failed: {}", error)),
+    )
+}
+
+#[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeDownloadProgress(
     mut env: JNIEnv,
     _this: JObject,

@@ -2,7 +2,9 @@
 
 An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
 
-## Current milestone: Stage 11 — Java 17 runtime installation from Zalith
+## Current milestone: Stage 12 — Forge profile dependency repair
+
+Stage 12 adds a profile-specific dependency plan and downloader for the selected Minecraft 1.20.1 Forge profile. It reads merged library metadata from the selected profile's inheritance chain, applies Android/Linux ARM64 library rules, excludes native classifiers, and schedules only artifacts with an HTTPS URL, safe relative path, valid SHA-1, and declared size. Existing files are reused only after size and SHA-1 verification; partial downloads can resume and are verified before finalization. The generated plan and post-download readiness report remain inside the selected profile directory. Library declarations without complete verification metadata are reported as unresolved rather than downloaded blindly.
 
 Stage 11 adds **Install Java 17 from installed Zalith**. RustChunk checks the installed ZalithLauncher2 package variants and reads the two ARM64 JRE 17 TAR.XZ assets directly from the Zalith APK's public assets. It does not attempt to read Zalith's private `/data/user/0` directory, does not ask the user to copy that protected directory through a file picker, and does not bundle or download a separate runtime package.
 
@@ -38,6 +40,7 @@ It copies reusable assets, libraries, versions, mods, configs, resource packs, s
 - Stage 9: adds the standard Zalith `files/games/runtimes` directory to runtime discovery.
 - Stage 10: adds actual Java executable testing with timeout handling and a persistent diagnostic report.
 - Stage 11: installs the same ARM64 Java 17 runtime payload already present in the installed ZalithLauncher2 APK, without requiring access to Zalith's private app data.
+- Stage 12: prepares and downloads checksum-verified Java library artifacts for the selected Forge profile, reusing valid files and keeping profile-specific plans/reports isolated.
 
 **Not yet implemented:** complete Android AWT/audio compatibility integration, complete argument substitution and rule evaluation, Android native-library extraction/mapping, a safe Java process bootstrap, actual Forge startup, graphics/runtime integration, and on-device modpack/Aternos compatibility testing. Java startup success alone does not prove Forge or Minecraft can launch.
 

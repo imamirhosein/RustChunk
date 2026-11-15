@@ -106,6 +106,25 @@ pub fn cancel_download() -> String {
 }
 
 pub fn download_minecraft(app_data_dir: &Path, parallelism: usize) -> Result<String, String> {
+    let plan_path = app_data_dir.join("minecraft").join("instances").join("forge-1.20.1").join("install-plan.json");
+    download_from_plan(app_data_dir, &plan_path, "forge-1.20.1", parallelism, "Minecraft 1.20.1 base")
+}
+
+pub fn download_forge_libraries(app_data_dir: &Path, profile_id: &str, parallelism: usize) -> Result<String, String> {
+    if !is_safe_profile_identifier(profile_id) {
+        return Err("Selected Forge profile identifier is invalid.".to_string());
+    }
+    let plan_path = app_data_dir.join("minecraft").join("versions").join(profile_id).join("rustchunk-dependency-plan.json");
+    download_from_plan(app_data_dir, &plan_path, profile_id, parallelism, "Forge profile Java library")
+}
+
+fn download_from_plan(
+    app_data_dir: &Path,
+    plan_path: &Path,
+    expected_instance: &str,
+    parallelism: usize,
+    description: &str,
+) -> Result<String, String> {
     if !app_data_dir.is_absolute() {
         return Err("App data path must be absolute".to_string());
     }
@@ -123,17 +142,16 @@ pub fn download_minecraft(app_data_dir: &Path, parallelism: usize) -> Result<Str
             state.files_done = 0;
             state.total_files = 0;
             state.current_file.clear();
-            state.message = "Preparing Minecraft downloads...".to_string();
+            state.message = format!("Preparing {} downloads...", description);
             false
         }
     });
     if already_active {
-        return Err("A Minecraft download is already running".to_string());
+        return Err("A download is already running".to_string());
     }
 
     CANCEL_REQUESTED.store(false, Ordering::SeqCst);
-    let result = run_download(app_data_dir, parallelism);
-
+    let result = run_download(app_data_dir, plan_path, expected_instance, parallelism, description);
     with_progress(|state| {
         state.active = false;
         state.current_file.clear();
@@ -142,24 +160,32 @@ pub fn download_minecraft(app_data_dir: &Path, parallelism: usize) -> Result<Str
             Err(error) => format!("Download failed: {}", error),
         };
     });
-
     result
 }
 
-fn run_download(app_data_dir: &Path, parallelism: usize) -> Result<String, String> {
-    let game_root = app_data_dir.join("minecraft");
-    let plan_path = game_root
-        .join("instances")
-        .join("forge-1.20.1")
-        .join("install-plan.json");
+fn is_safe_profile_identifier(value: &str) -> bool {
+    !value.is_empty() && value.len() <= 128 && value != "." && value != ".."
+        && value.chars().all(|character| character.is_ascii_alphanumeric() || "._- +".contains(character))
+}
 
-    let plan_bytes = fs::read(&plan_path)
-        .map_err(|error| format!("Could not read install plan {}: {}", plan_path.display(), error))?;
+fn run_download(
+    app_data_dir: &Path,
+    plan_path: &Path,
+    expected_instance: &str,
+    parallelism: usize,
+    description: &str,
+) -> Result<String, String> {
+    let game_root = app_data_dir.join("minecraft");
+    let plan_bytes = fs::read(plan_path)
+        .map_err(|error| format!("Could not read download plan {}: {}", plan_path.display(), error))?;
     let plan: InstallPlan = serde_json::from_slice(&plan_bytes)
         .map_err(|error| format!("Install plan JSON is invalid: {}", error))?;
 
-    if plan.minecraft_version != TARGET_VERSION || plan.instance != "forge-1.20.1" {
-        return Err("Install plan does not target Minecraft 1.20.1 / forge-1.20.1".to_string());
+    if plan.minecraft_version != TARGET_VERSION || plan.instance != expected_instance {
+        return Err(format!(
+            "Download plan target mismatch: expected Minecraft {} / {}, received {} / {}",
+            TARGET_VERSION, expected_instance, plan.minecraft_version, plan.instance
+        ));
     }
 
     // Asset indexes can contain multiple logical names with the same SHA-1.
@@ -260,14 +286,16 @@ fn run_download(app_data_dir: &Path, parallelism: usize) -> Result<String, Strin
         state.files_done = already_done_files;
         state.total_files = already_done_files + tasks.len();
         state.message = format!(
-            "Downloading Minecraft 1.20.1 files with {} parallel workers...",
+            "Downloading {} files with {} parallel workers...",
+            description,
             parallelism
         );
     });
 
     if tasks.is_empty() {
         return Ok(format!(
-            "Minecraft 1.20.1 files are already complete.\nVerified files: {}\nTotal data: {}",
+            "{} files are already complete.\nVerified files: {}\nTotal data: {}",
+            description,
             already_done_files,
             format_bytes(total_bytes)
         ));
@@ -335,7 +363,8 @@ fn run_download(app_data_dir: &Path, parallelism: usize) -> Result<String, Strin
     }
 
     Ok(format!(
-        "Minecraft 1.20.1 base files downloaded and SHA-1 verified successfully.\nVerified files: {}\nTotal data: {}\nLocation: {}\n\nForge, Java runtime, native extraction, and game launching are not installed in this stage.",
+        "{} files downloaded and SHA-1 verified successfully.\nVerified files: {}\nTotal data: {}\nLocation: {}",
+        description,
         files_done,
         format_bytes(total_bytes),
         game_root.display()

@@ -27,6 +27,7 @@ class MainActivity : Activity() {
     private external fun nativeListMinecraftProfiles(appDataDirectory: String): String
     private external fun nativePrepareForgeLaunchProfile(appDataDirectory: String, profileId: String): String
     private external fun nativeDownloadMinecraft(appDataDirectory: String, parallelism: Int): String
+    private external fun nativeDownloadForgeLibraries(appDataDirectory: String, profileId: String, parallelism: Int): String
     private external fun nativeDownloadProgress(): String
     private external fun nativeCancelDownload(): String
 
@@ -38,6 +39,7 @@ class MainActivity : Activity() {
     private lateinit var importButton: Button
     private lateinit var inspectButton: Button
     private lateinit var forgeProfileButton: Button
+    private lateinit var forgeDependencyButton: Button
     private lateinit var profileSpinner: Spinner
     private lateinit var refreshProfilesButton: Button
     private lateinit var runtimeImportButton: Button
@@ -144,6 +146,12 @@ class MainActivity : Activity() {
             setOnClickListener { prepareForgeLaunchProfile() }
         }
 
+        forgeDependencyButton = Button(this).apply {
+            text = "Download missing Forge libraries"
+            isEnabled = false
+            setOnClickListener { startForgeLibrariesDownload() }
+        }
+
         resolveButton = Button(this).apply {
             text = "Resolve Minecraft 1.20.1 metadata"
             isEnabled = workspaceStatus.startsWith("Minecraft workspace ready")
@@ -179,6 +187,7 @@ class MainActivity : Activity() {
             addView(profileSpinner, matchWrapParams())
             addView(inspectButton, matchWrapParams())
             addView(forgeProfileButton, matchWrapParams())
+            addView(forgeDependencyButton, matchWrapParams())
             addView(resolveButton, matchWrapParams())
             addView(downloadButton, matchWrapParams())
             addView(cancelButton, matchWrapParams())
@@ -360,6 +369,10 @@ class MainActivity : Activity() {
         runtimeTestButton.isEnabled = enabled
         refreshProfilesButton.isEnabled = enabled
         inspectButton.isEnabled = enabled
+        if (::forgeDependencyButton.isInitialized) {
+            forgeDependencyButton.isEnabled = enabled &&
+                profileOptions.getOrNull(profileSpinner.selectedItemPosition)?.supportedForForgeAnalysis == true
+        }
         profileSpinner.isEnabled = enabled && profileOptions.isNotEmpty()
         resolveButton.isEnabled = enabled
         downloadButton.isEnabled = enabled && hasInstallPlan()
@@ -453,9 +466,12 @@ class MainActivity : Activity() {
             ?: profileOptions.firstOrNull { it.id == selectedProfileId }
 
         selectedProfileId = selected?.id
-        forgeProfileButton.isEnabled =
-            !importInProgress && !downloadInProgress &&
-                selected?.supportedForForgeAnalysis == true
+        val canUseForgeProfile = !importInProgress && !downloadInProgress &&
+            selected?.supportedForForgeAnalysis == true
+        forgeProfileButton.isEnabled = canUseForgeProfile
+        if (::forgeDependencyButton.isInitialized) {
+            forgeDependencyButton.isEnabled = canUseForgeProfile
+        }
     }
 
     private fun startZalithImport(sourceTree: Uri) {
@@ -795,6 +811,7 @@ class MainActivity : Activity() {
         profileSpinner.isEnabled = false
         inspectButton.isEnabled = false
         forgeProfileButton.isEnabled = false
+        forgeDependencyButton.isEnabled = false
         cancelButton.isEnabled = true
         statusView.text = "Preparing download...\nThe app will verify every file with SHA-1.\nPartial files are kept for resume."
         mainHandler.removeCallbacks(progressPoller)
@@ -820,6 +837,61 @@ class MainActivity : Activity() {
                 inspectButton.isEnabled = true
                 updateForgeAnalyzeButton()
                 downloadButton.isEnabled = hasInstallPlan()
+            }
+        }
+    }
+
+    private fun startForgeLibrariesDownload() {
+        if (downloadInProgress || importInProgress) return
+        val profileId = selectedProfileId
+        if (profileId.isNullOrBlank()) {
+            statusView.text = "Select a supported Forge 1.20.1 profile first."
+            return
+        }
+
+        downloadInProgress = true
+        downloadButton.isEnabled = false
+        forgeProfileButton.isEnabled = false
+        forgeDependencyButton.isEnabled = false
+        importButton.isEnabled = false
+        runtimeInstallButton.isEnabled = false
+        runtimeImportButton.isEnabled = false
+        runtimeTestButton.isEnabled = false
+        refreshProfilesButton.isEnabled = false
+        profileSpinner.isEnabled = false
+        inspectButton.isEnabled = false
+        cancelButton.isEnabled = true
+        statusView.text = "Preparing the selected Forge profile's Java-library plan...\nExisting files will be reused only after size and SHA-1 verification."
+        mainHandler.removeCallbacks(progressPoller)
+        mainHandler.post(progressPoller)
+
+        worker.execute {
+            val result = try {
+                nativeDownloadForgeLibraries(filesDir.absolutePath, profileId, 4)
+            } catch (error: Throwable) {
+                "Forge dependency download failed: " + error.javaClass.simpleName + ": " + error.message
+            }
+            val analysis = try {
+                nativePrepareForgeLaunchProfile(filesDir.absolutePath, profileId)
+            } catch (error: Throwable) {
+                "Post-download profile analysis failed: " + error.javaClass.simpleName + ": " + error.message
+            }
+
+            runOnUiThread {
+                downloadInProgress = false
+                mainHandler.removeCallbacks(progressPoller)
+                statusView.text = result + "\n\nPost-download profile check:\n" + analysis
+                cancelButton.isEnabled = false
+                importButton.isEnabled = true
+                runtimeInstallButton.isEnabled = true
+                runtimeImportButton.isEnabled = true
+                runtimeTestButton.isEnabled = true
+                refreshProfilesButton.isEnabled = true
+                profileSpinner.isEnabled = profileOptions.isNotEmpty()
+                inspectButton.isEnabled = true
+                resolveButton.isEnabled = true
+                downloadButton.isEnabled = hasInstallPlan()
+                updateForgeAnalyzeButton()
             }
         }
     }

@@ -1,5 +1,5 @@
 use serde_json::{json, Value};
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fs;
 use std::io::Read;
 use std::path::{Path, PathBuf};
@@ -254,6 +254,219 @@ pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> 
 
     write_atomic(&report_path, report.as_bytes())?;
     Ok(report)
+}
+
+
+pub fn prepare_forge_dependency_plan(
+    app_data_dir: &Path,
+    selected_profile_id: &str,
+) -> Result<String, String> {
+    if !app_data_dir.is_absolute() {
+        return Err("Android app data path must be absolute".to_string());
+    }
+    if !is_safe_version_id(selected_profile_id) {
+        return Err("Selected profile identifier is invalid.".to_string());
+    }
+
+    let game_root = app_data_dir.join("minecraft");
+    let versions_root = game_root.join("versions");
+    let (profile_dir, _profile_json_path, profile) =
+        find_forge_profile(&versions_root, selected_profile_id)?;
+    let mut chain = Vec::new();
+    let mut visited = HashSet::new();
+    let mut notices = Vec::new();
+    collect_inheritance_chain(
+        &versions_root, &profile, &mut visited, &mut chain, &mut notices, 0,
+    );
+
+    let libraries = merge_libraries(&chain);
+    let (files, skipped_native, skipped_rules, unresolved) =
+        build_forge_library_entries(&libraries)?;
+    if files.is_empty() {
+        return Err(format!(
+            "No checksum-verifiable Java library artifacts could be planned for '{}'. Unresolved entries: {}.",
+            selected_profile_id,
+            unresolved.len()
+        ));
+    }
+
+    let total_bytes = files.iter().try_fold(0u64, |total, file| {
+        total.checked_add(file["size"].as_u64().unwrap_or(0))
+            .ok_or_else(|| "Forge dependency download size overflow".to_string())
+    })?;
+    let missing_on_disk = files.iter().filter(|file| {
+        file["path"].as_str()
+            .map(|relative| !game_root.join(relative).is_file())
+            .unwrap_or(true)
+    }).count();
+
+    let plan = json!({
+        "minecraft_version": TARGET_VERSION,
+        "instance": selected_profile_id,
+        "plan_type": "forge_profile_java_libraries",
+        "files": files,
+        "library_count": libraries.len(),
+        "skipped_native_classifiers": skipped_native,
+        "skipped_non_android_rules": skipped_rules,
+        "unresolved_libraries": unresolved,
+        "total_bytes": total_bytes
+    });
+    let plan_path = profile_dir.join("rustchunk-dependency-plan.json");
+    let bytes = serde_json::to_vec_pretty(&plan)
+        .map_err(|error| format!("Could not encode Forge dependency plan: {}", error))?;
+    write_atomic(&plan_path, &bytes)?;
+
+    let unresolved_names = plan["unresolved_libraries"].as_array().cloned().unwrap_or_default();
+    let planned_count = plan["files"].as_array().map(Vec::len).unwrap_or(0);
+    let mut report = String::new();
+    report.push_str("RustChunk Forge profile dependency plan (Stage 12)\n");
+    report.push_str(&format!("Selected profile: {}\n", selected_profile_id));
+    report.push_str(&format!("Merged library declarations: {}\n", libraries.len()));
+    report.push_str(&format!("Checksum-verifiable Java artifacts: {}\n", planned_count));
+    report.push_str(&format!("Artifacts not present on disk (pre-download check): {}\n", missing_on_disk));
+    report.push_str(&format!("Native classifiers skipped: {}\n", skipped_native));
+    report.push_str(&format!("Libraries excluded by Android/Linux ARM64 rules: {}\n", skipped_rules));
+    report.push_str(&format!("Unresolved library declarations: {}\n", unresolved_names.len()));
+    for item in unresolved_names.iter().take(30) {
+        report.push_str(&format!("  UNRESOLVED: {}\n", item.as_str().unwrap_or("(unknown)")));
+    }
+    report.push_str(&format!("Estimated artifact data: {}\n", format_bytes(total_bytes)));
+    report.push_str(&format!("Plan saved: {}\n", plan_path.display()));
+    for notice in notices {
+        report.push_str(&format!("NOTICE: {}\n", notice));
+    }
+    report.push_str("\nOnly HTTPS artifacts with valid SHA-1 values, declared sizes, and safe relative paths are eligible. This step does not install native libraries or launch Forge.\n");
+    Ok(report)
+}
+
+fn build_forge_library_entries(
+    libraries: &[Value],
+) -> Result<(Vec<Value>, usize, usize, Vec<String>), String> {
+    let mut by_path = BTreeMap::<String, Value>::new();
+    let mut skipped_native = 0usize;
+    let mut skipped_rules = 0usize;
+    let mut unresolved = Vec::new();
+
+    for library in libraries {
+        if !library_rules_allow_android(library) {
+            skipped_rules += 1;
+            continue;
+        }
+        if is_any_native_library(library) {
+            skipped_native += 1;
+            continue;
+        }
+
+        let name = library.get("name").and_then(Value::as_str).unwrap_or("(unnamed library)");
+        let path = match library_artifact_path(library) {
+            Some(value) => match validate_relative_path(&value) {
+                Ok(safe) => safe,
+                Err(_) => {
+                    unresolved.push(format!("{} (unsafe artifact path)", name));
+                    continue;
+                }
+            },
+            None => {
+                unresolved.push(format!("{} (no Maven artifact path)", name));
+                continue;
+            }
+        };
+
+        let artifact = library.get("downloads").and_then(|value| value.get("artifact"));
+        let url = artifact
+            .and_then(|value| value.get("url"))
+            .and_then(Value::as_str)
+            .filter(|value| !value.trim().is_empty())
+            .map(str::to_string)
+            .or_else(|| {
+                library.get("url").and_then(Value::as_str).map(|base| {
+                    format!("{}/{}", base.trim_end_matches('/'), path.trim_start_matches('/'))
+                })
+            });
+        let sha1 = artifact.and_then(|value| value.get("sha1")).and_then(Value::as_str);
+        let size = artifact.and_then(|value| value.get("size")).and_then(Value::as_u64);
+
+        let (Some(url), Some(sha1), Some(size)) = (url, sha1, size) else {
+            unresolved.push(format!("{} (missing URL, SHA-1, or size metadata)", name));
+            continue;
+        };
+        if !url.starts_with("https://") || !is_sha1_value(sha1) {
+            unresolved.push(format!("{} (invalid HTTPS URL or SHA-1 metadata)", name));
+            continue;
+        }
+
+        let entry = json!({
+            "kind": "library",
+            "url": url,
+            "path": path,
+            "sha1": sha1,
+            "size": size
+        });
+        if let Some(existing) = by_path.get(&path) {
+            if existing["sha1"] != entry["sha1"] || existing["size"] != entry["size"] {
+                return Err(format!("Conflicting Forge library declarations target {}", path));
+            }
+        } else {
+            by_path.insert(path, entry);
+        }
+    }
+    Ok((by_path.into_values().collect(), skipped_native, skipped_rules, unresolved))
+}
+
+fn library_rules_allow_android(library: &Value) -> bool {
+    let Some(rules) = library.get("rules").and_then(Value::as_array) else {
+        return true;
+    };
+    let mut allowed = false;
+    for rule in rules {
+        if android_library_rule_matches(rule) {
+            allowed = rule.get("action").and_then(Value::as_str) == Some("allow");
+        }
+    }
+    allowed
+}
+
+fn android_library_rule_matches(rule: &Value) -> bool {
+    if let Some(os) = rule.get("os") {
+        if os.get("name").and_then(Value::as_str)
+            .is_some_and(|name| name != "linux" && name != "android")
+        {
+            return false;
+        }
+        if os.get("arch").and_then(Value::as_str)
+            .is_some_and(|arch| arch != "aarch64" && arch != "arm64" && arch != "arm64-v8a")
+        {
+            return false;
+        }
+        if os.get("version").is_some() {
+            return false;
+        }
+    }
+    if let Some(features) = rule.get("features").and_then(Value::as_object) {
+        if features.values().any(|required| required.as_bool() == Some(true)) {
+            return false;
+        }
+    }
+    true
+}
+
+fn is_any_native_library(library: &Value) -> bool {
+    let name = library.get("name").and_then(Value::as_str).unwrap_or("");
+    let classifier = name.split(':').nth(3).unwrap_or("");
+    if classifier.starts_with("natives-") {
+        return true;
+    }
+    let artifact_path = library.get("downloads")
+        .and_then(|value| value.get("artifact"))
+        .and_then(|value| value.get("path"))
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    artifact_path.rsplit('/').next()
+        .is_some_and(|filename| filename.contains("-natives-"))
+}
+
+fn is_sha1_value(value: &str) -> bool {
+    value.len() == 40 && value.chars().all(|character| character.is_ascii_hexdigit())
 }
 
 fn discover_profiles(versions_root: &Path) -> Result<Vec<(PathBuf, PathBuf, Value)>, String> {
@@ -831,4 +1044,33 @@ mod tests {
         assert!(is_aarch64_elf(&temp));
         fs::remove_file(temp).unwrap();
     }
+
+    #[test]
+    fn forge_dependency_plan_includes_verified_java_artifacts_and_skips_natives() {
+        let libraries: Vec<Value> = serde_json::from_str(r#"[
+            {"name":"org.example:core:1.0","rules":[{"action":"allow","os":{"name":"linux","arch":"aarch64"}}],"downloads":{"artifact":{"path":"org/example/core/1.0/core-1.0.jar","url":"https://repo.example/core-1.0.jar","sha1":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","size":123}}},
+            {"name":"org.lwjgl:lwjgl:3.3.1:natives-linux","downloads":{"artifact":{"path":"org/lwjgl/lwjgl/3.3.1/lwjgl-3.3.1-natives-linux.jar","url":"https://repo.example/native.jar","sha1":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","size":456}}},
+            {"name":"org.example:windows-only:1.0","rules":[{"action":"allow","os":{"name":"windows"}}],"downloads":{"artifact":{"path":"org/example/windows-only/1.0/windows-only-1.0.jar","url":"https://repo.example/windows.jar","sha1":"cccccccccccccccccccccccccccccccccccccccc","size":789}}}
+        ]"#).unwrap();
+        let (entries, native_count, rule_count, unresolved) = build_forge_library_entries(&libraries).unwrap();
+        assert_eq!(entries.len(), 1);
+        assert_eq!(entries[0]["path"], "org/example/core/1.0/core-1.0.jar");
+        assert_eq!(native_count, 1);
+        assert_eq!(rule_count, 1);
+        assert!(unresolved.is_empty());
+    }
+
+    #[test]
+    fn forge_dependency_plan_rejects_unverified_or_unsafe_artifacts() {
+        let libraries: Vec<Value> = serde_json::from_str(r#"[
+            {"name":"org.example:no-checksum:1.0","downloads":{"artifact":{"path":"org/example/no-checksum/1.0/no-checksum-1.0.jar","url":"https://repo.example/file.jar","size":4}}},
+            {"name":"org.example:unsafe:1.0","downloads":{"artifact":{"path":"../../outside.jar","url":"https://repo.example/file.jar","sha1":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","size":4}}}
+        ]"#).unwrap();
+        let (entries, _, _, unresolved) = build_forge_library_entries(&libraries).unwrap();
+        assert!(entries.is_empty());
+        assert_eq!(unresolved.len(), 2);
+        assert!(unresolved.iter().any(|value| value.contains("missing URL")));
+        assert!(unresolved.iter().any(|value| value.contains("unsafe artifact path")));
+    }
+
 }

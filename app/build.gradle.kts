@@ -13,8 +13,8 @@ android {
         applicationId = "dev.rustchunk.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 10
-        versionName = "0.11.0-stage11-zalith-runtime"
+        versionCode = 11
+        versionName = "0.12.0-stage12-forge-dependency-repair"
 
         ndk {
             abiFilters += "arm64-v8a"
