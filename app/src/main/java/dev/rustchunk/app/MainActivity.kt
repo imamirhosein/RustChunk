@@ -601,21 +601,25 @@ class MainActivity : Activity() {
                         appendLine("Candidate: ${java.absolutePath}")
                         appendLine("Executable permission: ${java.canExecute()}")
                         try {
+                            val outputFile = File(cacheDir, "rustchunk-java-version-${System.nanoTime()}.txt")
                             val process = ProcessBuilder(java.absolutePath, "-version")
                                 .redirectErrorStream(true)
+                                .redirectOutput(outputFile)
                                 .start()
-                            val output = process.inputStream.bufferedReader().use { it.readText() }
                             val finished = process.waitFor(15, TimeUnit.SECONDS)
                             if (!finished) {
                                 process.destroyForcibly()
+                                process.waitFor(2, TimeUnit.SECONDS)
                                 appendLine("RESULT: TIMEOUT (15 seconds)")
                             } else {
+                                val output = if (outputFile.isFile) outputFile.readText(Charsets.UTF_8) else ""
                                 appendLine("Exit code: ${process.exitValue()}")
                                 appendLine(output.trim().take(2000))
                                 val ok = process.exitValue() == 0 &&
                                     output.contains("version", ignoreCase = true)
                                 appendLine(if (ok) "RESULT: JAVA EXECUTION OK" else "RESULT: JAVA EXECUTION FAILED")
                             }
+                            outputFile.delete()
                         } catch (error: Throwable) {
                             appendLine("RESULT: EXECUTION ERROR")
                             appendLine("${error.javaClass.simpleName}: ${error.message}")
