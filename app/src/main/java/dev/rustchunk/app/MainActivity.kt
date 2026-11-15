@@ -318,10 +318,18 @@ class MainActivity : Activity() {
                     val displayName = item.optString("display_name", id)
                     val loader = item.optString("loader", "Unknown")
                     val mcVersion = item.optString("minecraft_version", "unknown")
+                    // Be tolerant of older or incomplete profile metadata. The profile ID
+                    // itself is authoritative for this supported 1.20.1 Forge naming style.
+                    val supportedByMetadata =
+                        item.optBoolean("supported_for_forge_analysis", false)
+                    val supportedByProfileId =
+                        MinecraftProfileMatcher.isMinecraft1201Forge(id)
+                    val supportedByFields =
+                        loader.equals("Forge", ignoreCase = true) && mcVersion == "1.20.1"
                     parsed.add(ProfileOption(
                         id,
                         "$displayName  |  $loader  |  Minecraft $mcVersion",
-                        item.optBoolean("supported_for_forge_analysis", false)
+                        supportedByMetadata || supportedByProfileId || supportedByFields
                     ))
                 }
                 Pair(parsed, null as String?)
@@ -335,6 +343,25 @@ class MainActivity : Activity() {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 profileSpinner.adapter = adapter
                 profileSpinner.isEnabled = profileOptions.isNotEmpty() && !importInProgress
+
+                // Android may defer Spinner's onItemSelected callback until after layout.
+                // Set the selected profile ID explicitly so the action button is not left
+                // disabled while waiting for that callback.
+                val preferredIndex = profileOptions.indexOfFirst {
+                    it.supportedForForgeAnalysis
+                }
+                val initialIndex = when {
+                    preferredIndex >= 0 -> preferredIndex
+                    profileOptions.isNotEmpty() -> 0
+                    else -> -1
+                }
+                if (initialIndex >= 0) {
+                    profileSpinner.setSelection(initialIndex, false)
+                    selectedProfileId = profileOptions[initialIndex].id
+                } else {
+                    selectedProfileId = null
+                }
+
                 refreshProfilesButton.isEnabled = !importInProgress && !downloadInProgress
                 if (profileOptions.isEmpty()) {
                     selectedProfileId = null
@@ -351,9 +378,21 @@ class MainActivity : Activity() {
 
     private fun updateForgeAnalyzeButton() {
         if (!::forgeProfileButton.isInitialized) return
-        val selected = profileOptions.firstOrNull { it.id == selectedProfileId }
+
+        // Prefer the Spinner's actual selection; fall back to the explicitly stored ID
+        // during the short interval before Android dispatches onItemSelected.
+        val spinnerSelection = if (::profileSpinner.isInitialized) {
+            profileOptions.getOrNull(profileSpinner.selectedItemPosition)
+        } else {
+            null
+        }
+        val selected = spinnerSelection
+            ?: profileOptions.firstOrNull { it.id == selectedProfileId }
+
+        selectedProfileId = selected?.id
         forgeProfileButton.isEnabled =
-            !importInProgress && !downloadInProgress && selected?.supportedForForgeAnalysis == true
+            !importInProgress && !downloadInProgress &&
+                selected?.supportedForForgeAnalysis == true
     }
 
     private fun startZalithImport(sourceTree: Uri) {
