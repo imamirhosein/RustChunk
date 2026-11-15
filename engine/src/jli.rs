@@ -130,15 +130,20 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     let major_c = CString::new("17").unwrap();
     let program_c = CString::new("java").unwrap();
     let launcher_c = CString::new("openjdk").unwrap();
+    // JLI_Launch accepts writable C argv strings. Keep each NUL-terminated
+    // buffer alive and mutable for the entire native call.
     let mut args = vec![
-        CString::new("java").unwrap(),
-        CString::new(format!("-Djava.home={}", home.to_string_lossy())).unwrap(),
-        CString::new(format!("-Djava.io.tmpdir={}", cache_dir.to_string_lossy())).unwrap(),
-        CString::new("-Djava.awt.headless=true").unwrap(),
-        CString::new("-version").unwrap(),
+        CString::new("java").unwrap().into_bytes_with_nul(),
+        CString::new(format!("-Djava.home={}", home.to_string_lossy())).unwrap().into_bytes_with_nul(),
+        CString::new(format!("-Djava.io.tmpdir={}", cache_dir.to_string_lossy())).unwrap().into_bytes_with_nul(),
+        CString::new("-Djava.awt.headless=true").unwrap().into_bytes_with_nul(),
+        CString::new("-version").unwrap().into_bytes_with_nul(),
     ];
     let argc = args.len() as c_int;
-    let mut argv: Vec<*mut c_char> = args.iter_mut().map(|arg| arg.as_mut_ptr()).collect();
+    let mut argv: Vec<*mut c_char> = args
+        .iter_mut()
+        .map(|arg| arg.as_mut_ptr().cast::<c_char>())
+        .collect();
     argv.push(ptr::null_mut());
 
     report.push_str("Calling OpenJDK JLI_Launch: java -version\n");
