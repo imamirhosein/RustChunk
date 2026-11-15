@@ -106,7 +106,7 @@ object ZalithImporter {
 
         val versionRoot = File(destinationRoot, "versions")
         val forgeVersions = versionRoot.listFiles()
-            ?.filter { it.isDirectory && it.name.startsWith("1.20.1-forge-", ignoreCase = true) }
+            ?.filter { it.isDirectory && MinecraftProfileMatcher.isMinecraft1201Forge(it.name) }
             ?.map { it.name }
             ?.sorted()
             .orEmpty()

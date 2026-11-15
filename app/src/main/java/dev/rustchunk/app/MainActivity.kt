@@ -64,7 +64,7 @@ class MainActivity : Activity() {
         }
 
         statusView = TextView(this).apply {
-            text = "RustChunk\n\n" + nativeStatusText + "\n\n" + workspaceStatus + loadSavedImportReport()
+            text = "RustChunk\n\n" + nativeStatusText + "\n\n" + workspaceStatus + loadSavedImportReport() + loadSavedInspectionReport()
             textSize = 15f
             setPadding(20, 20, 20, 20)
             setTextIsSelectable(true)
@@ -276,11 +276,46 @@ class MainActivity : Activity() {
             } catch (error: Throwable) {
                 "Game-data inspection failed: " + error.javaClass.simpleName + ": " + error.message
             }
+
+            val reportStatus = try {
+                saveInspectionReport(inspection)
+                "\n\nInspection report saved to files/minecraft/inspection-report.txt"
+            } catch (error: Throwable) {
+                "\n\nWARNING: Inspection completed, but the report could not be saved: " + error.message
+            }
+
             val savedReport = loadSavedImportReport()
             runOnUiThread {
-                statusView.text = inspection + savedReport
+                statusView.text = inspection + reportStatus + savedReport
                 inspectButton.isEnabled = true
             }
+        }
+    }
+
+    private fun saveInspectionReport(report: String) {
+        val reportFile = File(filesDir, "minecraft/inspection-report.txt")
+        val atomicFile = AtomicFile(reportFile)
+        val output = atomicFile.startWrite()
+        try {
+            output.write(report.toByteArray(Charsets.UTF_8))
+            output.fd.sync()
+            atomicFile.finishWrite(output)
+        } catch (error: Throwable) {
+            atomicFile.failWrite(output)
+            throw error
+        }
+    }
+
+    private fun loadSavedInspectionReport(): String {
+        val reportFile = File(filesDir, "minecraft/inspection-report.txt")
+        if (!reportFile.isFile) {
+            return "\n\nNo saved inspection report yet."
+        }
+        return try {
+            "\n\nLast saved game-data inspection:\n" +
+                reportFile.readText(Charsets.UTF_8).take(10000)
+        } catch (error: Throwable) {
+            "\n\nA saved inspection report exists but could not be read: " + error.message
         }
     }
 
