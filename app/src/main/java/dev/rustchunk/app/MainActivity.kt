@@ -407,9 +407,7 @@ class MainActivity : Activity() {
     private fun startZalithImport(sourceTree: Uri) {
         if (downloadInProgress || importInProgress) return
         importInProgress = true
-        importButton.isEnabled = false
-        resolveButton.isEnabled = false
-        downloadButton.isEnabled = false
+        setImportControlsEnabled(false)
         statusView.text = "Importing game files from the selected Zalith folder...\nDo not close RustChunk during the copy."
 
         worker.execute {
@@ -566,7 +564,8 @@ class MainActivity : Activity() {
     private fun testJavaRuntime() {
         if (importInProgress || downloadInProgress) return
         runtimeTestButton.isEnabled = false
-        statusView.text = "Testing Android Java runtimes...\\nThis runs bin/java -version; finding libjvm.so alone is not considered a successful test."
+        statusView.text = "Testing Android Java runtimes...\nThis runs bin/java -version; finding libjvm.so alone is not considered a successful test."
+
         worker.execute {
             val roots = listOf(
                 File(filesDir, "runtime"),
@@ -576,32 +575,48 @@ class MainActivity : Activity() {
             )
             val candidates = ArrayList<File>()
             var visited = 0
+            val scanLimit = 10_000
+
             for (root in roots) {
-                if (!root.isDirectory) continue
-                root.walkTopDown().onEnter { directory ->
-                    directory == root || directory.relativeTo(root).nameCount <= 12
-                }.forEach { file ->
-                    visited++
-                    if (visited > 10000) return@forEach
-                    if (file.isFile && file.name == "java" && file.parentFile?.name == "bin") {
-                        candidates.add(file)
+                if (!root.isDirectory || visited >= scanLimit) continue
+                root.walkTopDown()
+                    .maxDepth(12)
+                    .take(scanLimit - visited)
+                    .forEach { file ->
+                        visited++
+                        if (file.isFile && file.name == "java" &&
+                            file.parentFile?.name == "bin"
+                        ) {
+                            candidates.add(file)
+                        }
                     }
-                }
             }
+
+            val uniqueCandidates = candidates.distinctBy { it.absolutePath }.take(8)
             val report = buildString {
                 appendLine("RustChunk Java runtime execution test")
-                appendLine("Search entries visited: $visited")
-                appendLine("Candidates found: ${candidates.size}")
-                if (candidates.isEmpty()) {
+                appendLine("Search entries visited: $visited (limit: $scanLimit)")
+                appendLine("Search roots:")
+                for (root in roots) {
+                    appendLine("  \${root.absolutePath} | \${if (root.isDirectory) "PRESENT" else "MISSING"}")
+                }
+                appendLine("Java executables found: \${candidates.size}")
+                if (visited >= scanLimit) {
+                    appendLine("NOTICE: Scan limit reached; deeply nested or later entries may not have been checked.")
+                }
+
+                if (uniqueCandidates.isEmpty()) {
                     appendLine("RESULT: NO JAVA EXECUTABLE FOUND")
-                    appendLine("The imported folder may have an unexpected layout, missing bin/java, or broken symbolic links.")
+                    appendLine("Check that the imported runtime contains bin/java and that its files were copied correctly.")
                 } else {
-                    for (java in candidates.distinct()) {
+                    for (java in uniqueCandidates) {
                         appendLine()
-                        appendLine("Candidate: ${java.absolutePath}")
-                        appendLine("Executable permission: ${java.canExecute()}")
+                        appendLine("Candidate: \${java.absolutePath}")
+                        appendLine("File size: \${java.length()} bytes")
+                        appendLine("Executable permission: \${java.canExecute()}")
+
+                        val outputFile = File(cacheDir, "rustchunk-java-version-\${System.nanoTime()}.txt")
                         try {
-                            val outputFile = File(cacheDir, "rustchunk-java-version-${System.nanoTime()}.txt")
                             val process = ProcessBuilder(java.absolutePath, "-version")
                                 .redirectErrorStream(true)
                                 .redirectOutput(outputFile)
@@ -612,30 +627,54 @@ class MainActivity : Activity() {
                                 process.waitFor(2, TimeUnit.SECONDS)
                                 appendLine("RESULT: TIMEOUT (15 seconds)")
                             } else {
-                                val output = if (outputFile.isFile) outputFile.readText(Charsets.UTF_8) else ""
-                                appendLine("Exit code: ${process.exitValue()}")
-                                appendLine(output.trim().take(2000))
+                                val output = if (outputFile.isFile) {
+                                    outputFile.readText(Charsets.UTF_8)
+                                } else {
+                                    ""
+                                }
+                                appendLine("Exit code: \${process.exitValue()}")
+                                if (output.isNotBlank()) appendLine(output.trim().take(2000))
                                 val ok = process.exitValue() == 0 &&
                                     output.contains("version", ignoreCase = true)
                                 appendLine(if (ok) "RESULT: JAVA EXECUTION OK" else "RESULT: JAVA EXECUTION FAILED")
                             }
-                            outputFile.delete()
                         } catch (error: Throwable) {
                             appendLine("RESULT: EXECUTION ERROR")
-                            appendLine("${error.javaClass.simpleName}: ${error.message}")
+                            appendLine("\${error.javaClass.simpleName}: \${error.message}")
+                        } finally {
+                            outputFile.delete()
                         }
                     }
+                    if (candidates.size > uniqueCandidates.size) {
+                        appendLine()
+                        appendLine("Only the first \${uniqueCandidates.size} unique candidates were executed.")
+                    }
                 }
+
                 appendLine()
                 appendLine("This test validates Java startup only; it does not launch Forge or Minecraft.")
             }
+
+            var saveStatus = ""
             try {
                 val reportFile = File(filesDir, "runtime/runtime-test-report.txt")
-                reportFile.parentFile?.mkdirs()
-                reportFile.writeText(report, Charsets.UTF_8)
-            } catch (_: Throwable) { }
+                val atomicFile = AtomicFile(reportFile)
+                val output = atomicFile.startWrite()
+                try {
+                    output.write(report.toByteArray(Charsets.UTF_8))
+                    output.fd.sync()
+                    atomicFile.finishWrite(output)
+                    saveStatus = "\nSaved to files/runtime/runtime-test-report.txt"
+                } catch (error: Throwable) {
+                    atomicFile.failWrite(output)
+                    throw error
+                }
+            } catch (error: Throwable) {
+                saveStatus = "\nCould not save report: \${error.message}"
+            }
+
             runOnUiThread {
-                statusView.text = report + "\\nSaved to files/runtime/runtime-test-report.txt"
+                statusView.text = report + saveStatus
                 runtimeTestButton.isEnabled = !importInProgress && !downloadInProgress
             }
         }
