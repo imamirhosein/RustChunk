@@ -45,7 +45,10 @@ android {
         jvmTarget = "17"
     }
 
-    // Java 17 runtime packages are read from the installed Zalith APK and unpacked with symlink support.
+}
+
+dependencies {
+    // Java 17 runtime archives are read from the installed Zalith APK and extracted with symlink support.
     implementation("org.apache.commons:commons-compress:1.28.0")
     implementation("org.tukaani:xz:1.12")
 }
