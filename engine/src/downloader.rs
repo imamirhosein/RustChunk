@@ -4,7 +4,7 @@ use std::collections::BTreeMap;
 use std::fs::{self, File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::{Mutex, OnceLock};
 use std::thread;
 use std::time::Duration;
@@ -114,7 +114,7 @@ pub fn download_forge_libraries(app_data_dir: &Path, profile_id: &str, paralleli
     if !is_safe_profile_identifier(profile_id) {
         return Err("Selected Forge profile identifier is invalid.".to_string());
     }
-    let plan_path = app_data_dir.join("minecraft").join("versions").join(profile_id).join("rustchunk-dependency-plan.json");
+    let plan_path = find_forge_dependency_plan(app_data_dir, profile_id)?;
     download_from_plan(app_data_dir, &plan_path, profile_id, parallelism, "Forge profile Java library")
 }
 
@@ -161,6 +161,40 @@ fn download_from_plan(
         };
     });
     result
+}
+
+fn find_forge_dependency_plan(app_data_dir: &Path, profile_id: &str) -> Result<PathBuf, String> {
+    let versions_root = app_data_dir.join("minecraft").join("versions");
+    let direct = versions_root.join(profile_id).join("rustchunk-dependency-plan.json");
+    if direct.is_file() {
+        return Ok(direct);
+    }
+
+    let directories = fs::read_dir(&versions_root)
+        .map_err(|error| format!("Cannot scan Forge profiles in {}: {}", versions_root.display(), error))?;
+    for directory in directories.flatten() {
+        let folder = directory.path();
+        if !folder.is_dir() {
+            continue;
+        }
+        let plan = folder.join("rustchunk-dependency-plan.json");
+        if !plan.is_file() {
+            continue;
+        }
+        let Ok(profile_files) = fs::read_dir(&folder) else { continue };
+        for profile_file in profile_files.flatten() {
+            let path = profile_file.path();
+            if path.extension().and_then(|value| value.to_str()) != Some("json") {
+                continue;
+            }
+            let Ok(bytes) = fs::read(path) else { continue };
+            let Ok(metadata) = serde_json::from_slice::<serde_json::Value>(&bytes) else { continue };
+            if metadata.get("id").and_then(serde_json::Value::as_str) == Some(profile_id) {
+                return Ok(plan);
+            }
+        }
+    }
+    Err(format!("No generated dependency plan was found for Forge profile '{}'. Analyze/download the selected profile again.", profile_id))
 }
 
 fn is_safe_profile_identifier(value: &str) -> bool {
