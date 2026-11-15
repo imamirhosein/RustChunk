@@ -335,8 +335,20 @@ fn profile_loader(profile: &Value) -> &'static str {
 }
 
 fn profile_minecraft_version(profile: &Value, id: &str) -> String {
-    profile.get("inheritsFrom").and_then(Value::as_str)
-        .unwrap_or(id).to_string()
+    if let Some(parent) = profile.get("inheritsFrom").and_then(Value::as_str)
+        .filter(|value| !value.trim().is_empty())
+    {
+        return parent.to_string();
+    }
+
+    // Some launchers export a standalone Forge profile without inheritsFrom.
+    // In that case, recover the Minecraft version from IDs such as
+    // "1.20.1 Forge 47.4.22" or "1.20.1-forge-47.4.22".
+    let prefix = id.split(|character: char| character.is_ascii_whitespace() || character == '-')
+        .next().unwrap_or(id);
+    let looks_like_version = prefix.chars().next().is_some_and(|value| value.is_ascii_digit())
+        && prefix.contains('.');
+    if looks_like_version { prefix.to_string() } else { id.to_string() }
 }
 
 fn collect_inheritance_chain(
@@ -716,6 +728,22 @@ mod tests {
         assert_eq!(profile_loader(&fabric), "Fabric");
         assert_eq!(profile_loader(&neo), "NeoForge");
         assert_eq!(profile_minecraft_version(&forge, "fallback"), "1.20.1");
+
+        let standalone_forge: Value = serde_json::from_str(
+            r#"{"id":"1.20.1 Forge 47.4.22","mainClass":"cpw.mods.bootstraplauncher.BootstrapLauncher"}"#
+        ).unwrap();
+        assert_eq!(
+            profile_minecraft_version(&standalone_forge, "1.20.1 Forge 47.4.22"),
+            "1.20.1"
+        );
+
+        let hyphenated_forge: Value = serde_json::from_str(
+            r#"{"id":"1.20.1-forge-47.4.22","mainClass":"cpw.mods.bootstraplauncher.BootstrapLauncher"}"#
+        ).unwrap();
+        assert_eq!(
+            profile_minecraft_version(&hyphenated_forge, "1.20.1-forge-47.4.22"),
+            "1.20.1"
+        );
     }
 
     #[test]
