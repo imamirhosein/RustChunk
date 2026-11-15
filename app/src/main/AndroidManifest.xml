@@ -11,6 +11,10 @@
         android:allowBackup="false"
         android:label="RustChunk"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <service
+            android:name=".JavaRuntimeTestService"
+            android:exported="false"
+            android:process=":jvm" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

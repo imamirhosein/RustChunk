@@ -16,12 +16,28 @@ const JNI_FALSE: u8 = 0;
 const JNI_TRUE: u8 = 1;
 const MAX_SCAN_DIRECTORIES: usize = 25_000;
 const MAX_SCAN_DEPTH: usize = 14;
+const SIGSEGV: c_int = 11;
+const ANDROID_NSIG: c_int = 65;
+const O_WRONLY: c_int = 1;
+const O_CREAT: c_int = 64;
+const O_TRUNC: c_int = 512;
 
 #[link(name = "dl")]
 unsafe extern "C" {
     fn dlopen(filename: *const c_char, flags: c_int) -> *mut c_void;
     fn dlsym(handle: *mut c_void, symbol: *const c_char) -> *mut c_void;
     fn dlerror() -> *const c_char;
+}
+
+#[link(name = "c")]
+unsafe extern "C" {
+    // Android/Bionic uses the same signal(2) ABI as POSIX: SIG_DFL=0, SIG_IGN=1.
+    fn signal(signum: c_int, handler: usize) -> usize;
+    fn open(pathname: *const c_char, flags: c_int, mode: c_int) -> c_int;
+    fn dup(fd: c_int) -> c_int;
+    fn dup2(old_fd: c_int, new_fd: c_int) -> c_int;
+    fn close(fd: c_int) -> c_int;
+    fn fflush(stream: *mut c_void) -> c_int;
 }
 
 type JliLaunch = unsafe extern "C" fn(
@@ -43,6 +59,73 @@ struct RuntimeCandidate {
 }
 
 static JLI_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+
+struct StdioCapture {
+    saved_stdout: c_int,
+    saved_stderr: c_int,
+    log_fd: c_int,
+}
+
+impl StdioCapture {
+    fn begin(log_path: &Path) -> Result<Self, String> {
+        let path = CString::new(log_path.to_string_lossy().as_bytes())
+            .map_err(|_| "JLI console log path contains a NUL byte.".to_string())?;
+        let log_fd = unsafe { open(path.as_ptr(), O_WRONLY | O_CREAT | O_TRUNC, 0o600) };
+        if log_fd < 0 {
+            return Err(format!("Cannot open JLI console log {}.", log_path.display()));
+        }
+
+        let saved_stdout = unsafe { dup(1) };
+        let saved_stderr = unsafe { dup(2) };
+        if saved_stdout < 0 || saved_stderr < 0 {
+            unsafe {
+                if saved_stdout >= 0 { close(saved_stdout); }
+                if saved_stderr >= 0 { close(saved_stderr); }
+                close(log_fd);
+            }
+            return Err("Cannot preserve stdout/stderr before native Java startup.".to_string());
+        }
+
+        if unsafe { dup2(log_fd, 1) } < 0 || unsafe { dup2(log_fd, 2) } < 0 {
+            unsafe {
+                dup2(saved_stdout, 1);
+                dup2(saved_stderr, 2);
+                close(saved_stdout);
+                close(saved_stderr);
+                close(log_fd);
+            }
+            return Err("Cannot redirect native Java diagnostics to the JLI log.".to_string());
+        }
+        Ok(Self { saved_stdout, saved_stderr, log_fd })
+    }
+}
+
+impl Drop for StdioCapture {
+    fn drop(&mut self) {
+        unsafe {
+            fflush(ptr::null_mut());
+            dup2(self.saved_stdout, 1);
+            dup2(self.saved_stderr, 2);
+            close(self.saved_stdout);
+            close(self.saved_stderr);
+            close(self.log_fd);
+        }
+    }
+}
+
+fn prepare_jvm_signal_handlers() -> (usize, usize) {
+    let mut reset = 0usize;
+    let mut ignored_segv = false;
+    for signal_number in 1..ANDROID_NSIG {
+        let handler = if signal_number == SIGSEGV { 1usize } else { 0usize };
+        let previous = unsafe { signal(signal_number, handler) };
+        if previous != usize::MAX {
+            reset += 1;
+            if signal_number == SIGSEGV { ignored_segv = true; }
+        }
+    }
+    (reset, if ignored_segv { 1 } else { 0 })
+}
 
 pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> Result<String, String> {
     if !app_data_dir.is_absolute() || !app_native_library_dir.is_absolute() {
@@ -104,17 +187,14 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
 
     let jli_handle = open_library(&runtime.libjli)
         .map_err(|error| format!("Cannot load libjli.so: {}\n{}", error, report))?;
-    let _jvm_handle = open_library(&runtime.libjvm)
-        .map_err(|error| format!("Cannot load libjvm.so: {}\n{}", error, report))?;
 
-    for name in ["libverify.so", "libjava.so", "libnet.so", "libnio.so"] {
-        if let Some(path) = find_named_library(&home, name) {
-            match open_library(&path) {
-                Ok(_) => report.push_str(&format!("Preloaded {}\n", path.display())),
-                Err(error) => report.push_str(&format!("NOTICE: Optional {} preload failed: {}\n", name, error)),
-            }
-        }
-    }
+    // The Android launcher must give HotSpot a clean signal-handler slate.
+    // Run this only in the dedicated :jvm process, never in the UI process.
+    let (signals_reset, segv_ignored) = prepare_jvm_signal_handlers();
+    report.push_str(&format!(
+        "Android signal handlers prepared: {} reset; SIGSEGV ignored: {}\n",
+        signals_reset, segv_ignored == 1
+    ));
 
     let symbol_name = CString::new("JLI_Launch").unwrap();
     unsafe { dlerror(); }
@@ -146,12 +226,26 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
         .collect();
     argv.push(ptr::null_mut());
 
+    let console_log = cache_dir.join("native-jli-console.log");
+    report.push_str(&format!("JLI console log: {}\n", console_log.display()));
     report.push_str("Calling OpenJDK JLI_Launch: java -version\n");
+
+    // JLI_Launch may call process-wide exit(1) if VM initialization fails.
+    // The caller therefore runs in Android's separate :jvm process.
+    let capture = StdioCapture::begin(&console_log)
+        .map_err(|error| format!("{}\n{}", error, report))?;
     let exit_code = unsafe {
         launch(argc, argv.as_mut_ptr(), 0, ptr::null(), 0, ptr::null(),
             version_c.as_ptr(), major_c.as_ptr(), program_c.as_ptr(),
             launcher_c.as_ptr(), JNI_FALSE, JNI_TRUE, JNI_FALSE, 0)
     };
+    drop(capture);
+    let console_output = fs::read_to_string(&console_log).unwrap_or_default();
+    if !console_output.trim().is_empty() {
+        report.push_str("\nJLI console output:\n");
+        report.push_str(&console_output);
+        if !console_output.ends_with('\n') { report.push('\n'); }
+    }
     report.push_str(&format!("JLI_Launch exit code: {}\n", exit_code));
     if exit_code == 0 {
         report.push_str("RESULT: JAVA 17 NATIVE JLI STARTUP OK\n");

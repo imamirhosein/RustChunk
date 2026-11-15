@@ -151,7 +151,7 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareForgeLau
 
 
 #[no_mangle]
-pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeTestJavaRuntimeNative(
+pub extern "system" fn Java_dev_rustchunk_app_JavaRuntimeTestService_nativeTestJavaRuntimeNative(
     mut env: JNIEnv,
     _this: JObject,
     app_data_dir: JString,

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.AtomicFile
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -27,7 +28,6 @@ class MainActivity : Activity() {
     private external fun nativePrepareForgeLaunchProfile(appDataDirectory: String, profileId: String): String
     private external fun nativeDownloadMinecraft(appDataDirectory: String, parallelism: Int): String
     private external fun nativeDownloadForgeLibraries(appDataDirectory: String, profileId: String, parallelism: Int): String
-    private external fun nativeTestJavaRuntimeNative(appDataDirectory: String, nativeLibraryDirectory: String): String
     private external fun nativeDownloadProgress(): String
     private external fun nativeCancelDownload(): String
 
@@ -50,6 +50,7 @@ class MainActivity : Activity() {
     private var selectedProfileId: String? = null
     private var downloadInProgress = false
     private var importInProgress = false
+    private var runtimeTestStartedAt = 0L
 
     private data class ProfileOption(
         val id: String,
@@ -70,6 +71,57 @@ class MainActivity : Activity() {
             if (downloadInProgress) {
                 mainHandler.postDelayed(this, 500)
             }
+        }
+    }
+
+    private val runtimeTestPoller = object : Runnable {
+        override fun run() {
+            if (runtimeTestStartedAt == 0L) return
+
+            val reportFile = File(filesDir, "runtime/native-jli-test-report.txt")
+            val report = try {
+                if (reportFile.isFile) reportFile.readText(Charsets.UTF_8) else ""
+            } catch (error: Throwable) {
+                "Could not read JLI test report: " + error.message
+            }
+
+            if (report.startsWith("TEST STATUS: COMPLETED")) {
+                statusView.text = report.removePrefix("TEST STATUS: COMPLETED\\n") +
+                    "\\nSaved to files/runtime/native-jli-test-report.txt"
+                runtimeTestStartedAt = 0L
+                runtimeTestButton.isEnabled = true
+                return
+            }
+
+            val elapsed = SystemClock.elapsedRealtime() - runtimeTestStartedAt
+            if (elapsed >= 45_000L) {
+                val consoleFile = File(filesDir, "runtime/native-jli-console.log")
+                val console = try {
+                    if (consoleFile.isFile) consoleFile.readText(Charsets.UTF_8).takeLast(7000)
+                    else "No native JLI console log was produced."
+                } catch (error: Throwable) {
+                    "Could not read native JLI console log: " + error.message
+                }
+                statusView.text = buildString {
+                    appendLine("The isolated Java test process did not return within 45 seconds.")
+                    appendLine("RustChunk's main process is still running; the test was isolated from the UI.")
+                    appendLine("The helper may have exited during JVM initialization.")
+                    appendLine()
+                    appendLine("Saved startup marker:")
+                    appendLine(report.ifBlank { "No startup marker found." })
+                    appendLine()
+                    appendLine("Native JLI output:")
+                    append(console)
+                }
+                runtimeTestStartedAt = 0L
+                runtimeTestButton.isEnabled = true
+                return
+            }
+
+            statusView.text = "Java 17 is being tested in a separate helper process.\\n" +
+                "Elapsed: " + (elapsed / 1000L) + " seconds.\\n" +
+                "The RustChunk interface remains isolated from JVM startup."
+            mainHandler.postDelayed(this, 500)
         }
     }
 
@@ -632,40 +684,46 @@ class MainActivity : Activity() {
         String.format(java.util.Locale.US, "%.1f MiB", bytes.toDouble() / (1024.0 * 1024.0))
 
     private fun testJavaRuntime() {
-        if (importInProgress || downloadInProgress) return
+        if (importInProgress || downloadInProgress || runtimeTestStartedAt != 0L) return
         runtimeTestButton.isEnabled = false
-        statusView.text = "Testing Java 17 through the native OpenJDK JLI launcher...\nRustChunk will not execute bin/java directly."
 
-        worker.execute {
-            val report = try {
-                nativeTestJavaRuntimeNative(filesDir.absolutePath, applicationInfo.nativeLibraryDir)
-            } catch (error: Throwable) {
-                "RESULT: NATIVE JLI STARTUP ERROR\n" +
-                    error.javaClass.simpleName + ": " + error.message
+        val reportFile = File(filesDir, "runtime/native-jli-test-report.txt")
+        try {
+            if (!reportFile.parentFile!!.exists() && !reportFile.parentFile!!.mkdirs()) {
+                throw IllegalStateException("Cannot create the runtime diagnostics directory.")
             }
-
-            var saveStatus = ""
+            val atomicFile = AtomicFile(reportFile)
+            val output = atomicFile.startWrite()
             try {
-                val reportFile = File(filesDir, "runtime/native-jli-test-report.txt")
-                val atomicFile = AtomicFile(reportFile)
-                val output = atomicFile.startWrite()
-                try {
-                    output.write(report.toByteArray(Charsets.UTF_8))
-                    output.fd.sync()
-                    atomicFile.finishWrite(output)
-                    saveStatus = "\nSaved to files/runtime/native-jli-test-report.txt"
-                } catch (error: Throwable) {
-                    atomicFile.failWrite(output)
-                    throw error
-                }
+                output.write(
+                    ("TEST STATUS: RUNNING\\n" +
+                        "The test is executing in Android process dev.rustchunk.app:jvm.\\n")
+                        .toByteArray(Charsets.UTF_8)
+                )
+                output.fd.sync()
+                atomicFile.finishWrite(output)
             } catch (error: Throwable) {
-                saveStatus = "\nCould not save report: " + error.message
+                atomicFile.failWrite(output)
+                throw error
             }
 
-            runOnUiThread {
-                statusView.text = report + saveStatus
-                runtimeTestButton.isEnabled = !importInProgress && !downloadInProgress
-            }
+            val consoleFile = File(filesDir, "runtime/native-jli-console.log")
+            if (consoleFile.exists()) consoleFile.delete()
+
+            runtimeTestStartedAt = SystemClock.elapsedRealtime()
+            statusView.text = "Starting Java 17 in a dedicated helper process...\\n" +
+                "A JVM startup failure must not close the RustChunk interface."
+            mainHandler.removeCallbacks(runtimeTestPoller)
+            startService(
+                Intent(this, JavaRuntimeTestService::class.java)
+                    .setAction(JavaRuntimeTestService.ACTION_RUN_TEST)
+            )
+            mainHandler.postDelayed(runtimeTestPoller, 400)
+        } catch (error: Throwable) {
+            runtimeTestStartedAt = 0L
+            runtimeTestButton.isEnabled = true
+            statusView.text = "Could not start the isolated Java test: " +
+                error.javaClass.simpleName + ": " + error.message
         }
     }
 
@@ -825,6 +883,7 @@ class MainActivity : Activity() {
             }
         }
         mainHandler.removeCallbacks(progressPoller)
+        mainHandler.removeCallbacks(runtimeTestPoller)
         worker.shutdown()
         super.onDestroy()
     }
