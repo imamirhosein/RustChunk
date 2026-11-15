@@ -598,9 +598,9 @@ class MainActivity : Activity() {
                 appendLine("Search entries visited: $visited (limit: $scanLimit)")
                 appendLine("Search roots:")
                 for (root in roots) {
-                    appendLine("  \${root.absolutePath} | \${if (root.isDirectory) "PRESENT" else "MISSING"}")
+                    appendLine("  ${root.absolutePath} | ${if (root.isDirectory) "PRESENT" else "MISSING"}")
                 }
-                appendLine("Java executables found: \${candidates.size}")
+                appendLine("Java executables found: ${candidates.size}")
                 if (visited >= scanLimit) {
                     appendLine("NOTICE: Scan limit reached; deeply nested or later entries may not have been checked.")
                 }
@@ -611,11 +611,11 @@ class MainActivity : Activity() {
                 } else {
                     for (java in uniqueCandidates) {
                         appendLine()
-                        appendLine("Candidate: \${java.absolutePath}")
-                        appendLine("File size: \${java.length()} bytes")
-                        appendLine("Executable permission: \${java.canExecute()}")
+                        appendLine("Candidate: ${java.absolutePath}")
+                        appendLine("File size: ${java.length()} bytes")
+                        appendLine("Executable permission: ${java.canExecute()}")
 
-                        val outputFile = File(cacheDir, "rustchunk-java-version-\${System.nanoTime()}.txt")
+                        val outputFile = File(cacheDir, "rustchunk-java-version-${System.nanoTime()}.txt")
                         try {
                             val process = ProcessBuilder(java.absolutePath, "-version")
                                 .redirectErrorStream(true)
@@ -632,7 +632,7 @@ class MainActivity : Activity() {
                                 } else {
                                     ""
                                 }
-                                appendLine("Exit code: \${process.exitValue()}")
+                                appendLine("Exit code: ${process.exitValue()}")
                                 if (output.isNotBlank()) appendLine(output.trim().take(2000))
                                 val ok = process.exitValue() == 0 &&
                                     output.contains("version", ignoreCase = true)
@@ -640,14 +640,14 @@ class MainActivity : Activity() {
                             }
                         } catch (error: Throwable) {
                             appendLine("RESULT: EXECUTION ERROR")
-                            appendLine("\${error.javaClass.simpleName}: \${error.message}")
+                            appendLine("${error.javaClass.simpleName}: ${error.message}")
                         } finally {
                             outputFile.delete()
                         }
                     }
                     if (candidates.size > uniqueCandidates.size) {
                         appendLine()
-                        appendLine("Only the first \${uniqueCandidates.size} unique candidates were executed.")
+                        appendLine("Only the first ${uniqueCandidates.size} unique candidates were executed.")
                     }
                 }
 
@@ -670,7 +670,7 @@ class MainActivity : Activity() {
                     throw error
                 }
             } catch (error: Throwable) {
-                saveStatus = "\nCould not save report: \${error.message}"
+                saveStatus = "\nCould not save report: ${error.message}"
             }
 
             runOnUiThread {
