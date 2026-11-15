@@ -18,8 +18,6 @@ const JNI_FALSE: u8 = 0;
 const JNI_TRUE: u8 = 1;
 const MAX_SCAN_DIRECTORIES: usize = 25_000;
 const MAX_SCAN_DEPTH: usize = 14;
-const SIGSEGV: c_int = 11;
-const ANDROID_NSIG: c_int = 65;
 const O_WRONLY: c_int = 1;
 const O_CREAT: c_int = 64;
 const O_TRUNC: c_int = 512;
@@ -34,7 +32,6 @@ unsafe extern "C" {
 #[link(name = "c")]
 unsafe extern "C" {
     // Android/Bionic uses the same signal(2) ABI as POSIX: SIG_DFL=0, SIG_IGN=1.
-    fn signal(signum: c_int, handler: usize) -> usize;
     fn open(pathname: *const c_char, flags: c_int, ...) -> c_int;
     fn dup(fd: c_int) -> c_int;
     fn dup2(old_fd: c_int, new_fd: c_int) -> c_int;
@@ -58,6 +55,7 @@ struct RuntimeCandidate {
     java_executable: Option<PathBuf>,
     version: String,
     library_directories: Vec<PathBuf>,
+    native_libraries: Vec<PathBuf>,
 }
 
 static JLI_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
@@ -116,14 +114,22 @@ impl Drop for StdioCapture {
 }
 
 fn prepare_jvm_signal_handlers() -> (usize, usize) {
+    // Match the Android OpenJDK launcher convention: use sigaction, not
+    // signal(), and temporarily ignore SIGSEGV until HotSpot installs its
+    // own crash/null-check handler.
     let mut reset = 0usize;
     let mut ignored_segv = false;
-    for signal_number in 1..ANDROID_NSIG {
-        let handler = if signal_number == SIGSEGV { 1usize } else { 0usize };
-        let previous = unsafe { signal(signal_number, handler) };
-        if previous != usize::MAX {
+    for signal_number in 1..65 {
+        let mut action: libc::sigaction = unsafe { std::mem::zeroed() };
+        action.sa_sigaction = if signal_number == libc::SIGSEGV {
+            libc::SIG_IGN
+        } else {
+            libc::SIG_DFL
+        };
+        let result = unsafe { libc::sigaction(signal_number, &action, ptr::null_mut()) };
+        if result == 0 {
             reset += 1;
-            if signal_number == SIGSEGV { ignored_segv = true; }
+            if signal_number == libc::SIGSEGV { ignored_segv = true; }
         }
     }
     (reset, if ignored_segv { 1 } else { 0 })
@@ -206,6 +212,12 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
         .map_err(|error| format!("Cannot load libjli.so: {}\n{}", error, report))?;
     trace_checkpoint(&trace_file, "libjli loaded successfully");
 
+    // Pojav/Amethyst preloads the Android OpenJDK runtime libraries before
+    // entering JLI_Launch. Do the same here: Android's linker namespaces and
+    // dependency resolution are not equivalent to a desktop Linux launcher.
+    let _preloaded_runtime_handles = preload_runtime_libraries(&runtime, &trace_file)?;
+    trace_checkpoint(&trace_file, "runtime native library preload complete");
+
     // The Android launcher must give HotSpot a clean signal-handler slate.
     // Run this only in the dedicated :jvm process, never in the UI process.
     trace_checkpoint(&trace_file, "preparing JVM signal handlers");
@@ -230,14 +242,14 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
         .map_err(|_| "Java release version contains an embedded NUL byte.".to_string())?;
     let major_c = CString::new("17").unwrap();
     let program_c = CString::new("java").unwrap();
-    let launcher_c = CString::new("openjdk").unwrap();
+    // Android OpenJDK launchers commonly pass argv[0] for both pname/lname.
+    let launcher_c = CString::new("java").unwrap();
     // JLI_Launch accepts writable C argv strings. Keep each NUL-terminated
     // buffer alive and mutable for the entire native call.
     let mut args = vec![
         CString::new("java").unwrap().into_bytes_with_nul(),
         CString::new(format!("-Djava.home={}", home.to_string_lossy())).unwrap().into_bytes_with_nul(),
         CString::new(format!("-Djava.io.tmpdir={}", cache_dir.to_string_lossy())).unwrap().into_bytes_with_nul(),
-        CString::new("-Djava.awt.headless=true").unwrap().into_bytes_with_nul(),
         CString::new("-version").unwrap().into_bytes_with_nul(),
     ];
     let argc = args.len() as c_int;
@@ -285,6 +297,55 @@ fn trace_checkpoint(path: &Path, message: &str) {
         let _ = writeln!(file, "{}", message);
         let _ = file.sync_data();
     }
+}
+
+fn preload_runtime_libraries(
+    runtime: &RuntimeCandidate,
+    trace_file: &Path,
+) -> Result<Vec<*mut c_void>, String> {
+    let mut ordered = Vec::<PathBuf>::new();
+    ordered.push(runtime.libjvm.clone());
+
+    // These are the core libraries preloaded by the established Android
+    // OpenJDK launcher before it calls JLI_Launch.
+    for name in [
+        "libverify.so", "libjava.so", "libnet.so", "libnio.so",
+        "libawt.so", "libawt_headless.so", "libfreetype.so", "libfontmanager.so",
+    ] {
+        if let Some(path) = runtime.native_libraries.iter()
+            .find(|path| path.file_name().and_then(|v| v.to_str()) == Some(name)) {
+            ordered.push(path.clone());
+        }
+    }
+
+    // Match the launcher's recursive preload of the runtime's Android
+    // architecture directory. Optional libraries may legitimately fail to
+    // load; record them and continue. libjvm is mandatory.
+    ordered.extend(runtime.native_libraries.iter().cloned());
+
+    let mut seen = BTreeSet::<PathBuf>::new();
+    let mut handles = Vec::new();
+    for path in ordered {
+        let identity = path.canonicalize().unwrap_or_else(|_| path.clone());
+        if !seen.insert(identity) { continue; }
+        let name = path.file_name().and_then(|v| v.to_str()).unwrap_or("unknown");
+        trace_checkpoint(trace_file, &format!("preloading runtime library: {}", path.display()));
+        match open_library(&path) {
+            Ok(handle) => {
+                trace_checkpoint(trace_file, &format!("runtime library loaded: {}", name));
+                handles.push(handle);
+            }
+            Err(error) if path == runtime.libjvm => {
+                trace_checkpoint(trace_file, &format!("FATAL: libjvm preload failed: {}", error));
+                return Err(format!("Cannot preload required libjvm.so at {}: {}", path.display(), error));
+            }
+            Err(error) => {
+                trace_checkpoint(trace_file, &format!("optional runtime library failed: {}: {}", name, error));
+            }
+        }
+    }
+    trace_checkpoint(trace_file, &format!("runtime libraries successfully preloaded: {}", handles.len()));
+    Ok(handles)
 }
 
 fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<RuntimeCandidate, String> {
@@ -339,13 +400,17 @@ fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<Runtime
         let Some(libjvm) = libjvm else { continue };
         if !is_aarch64_elf(&libjli) || !is_aarch64_elf(&libjvm) { continue; }
         let java_executable = java_paths.iter().find(|p| p.starts_with(&home)).cloned();
-        let library_directories: BTreeSet<PathBuf> = files.iter()
+        let native_libraries: Vec<PathBuf> = files.iter()
             .filter(|p| p.starts_with(&home) && p.extension().and_then(|e| e.to_str()) == Some("so"))
+            .cloned()
+            .collect();
+        let library_directories: BTreeSet<PathBuf> = native_libraries.iter()
             .filter_map(|p| p.parent().map(Path::to_path_buf))
             .collect();
         candidates.push(RuntimeCandidate {
             home, libjli, libjvm, java_executable, version,
             library_directories: library_directories.into_iter().collect(),
+            native_libraries,
         });
     }
 
