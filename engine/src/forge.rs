@@ -140,11 +140,7 @@ pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> 
     let mod_jar_count = count_direct_jars(&mods_dir);
 
     // Zalith may keep its Android Java runtime outside the .minecraft tree.
-    let runtime_roots = vec![
-        app_data_dir.join("runtime"),
-        app_data_dir.join("runtimes"),
-        game_root.join("runtime"),
-    ];
+    let runtime_roots = runtime_search_roots(app_data_dir);
     let mut runtime_candidates = Vec::new();
     for root in &runtime_roots {
         runtime_candidates.extend(find_runtime_candidates(root));
@@ -203,7 +199,7 @@ pub fn prepare_forge_profile(app_data_dir: &Path, selected_profile_id: &str) -> 
 
     let client_jar_present = client_jar.as_ref().is_some_and(|path| path.is_file());
     let mut report = String::new();
-    report.push_str("RustChunk Forge launch-profile preparation (Stage 7)\n");
+    report.push_str("RustChunk Forge launch-profile preparation (Stage 9)\n");
     report.push_str(&format!("Selected profile: {}\n", profile_id));
     report.push_str(&format!("Profile JSON: {}\n", profile_json_path.display()));
     report.push_str(&format!("Profile directory: {}\n", profile_dir.display()));
@@ -572,6 +568,16 @@ struct RuntimeCandidate {
     aarch64_elf: bool,
 }
 
+fn runtime_search_roots(app_data_dir: &Path) -> Vec<PathBuf> {
+    let game_root = app_data_dir.join("minecraft");
+    vec![
+        app_data_dir.join("runtime"),
+        app_data_dir.join("runtimes"),
+        app_data_dir.join("games").join("runtimes"),
+        game_root.join("runtime"),
+    ]
+}
+
 fn find_runtime_candidates(runtime_root: &Path) -> Vec<RuntimeCandidate> {
     if !runtime_root.is_dir() { return Vec::new(); }
 
@@ -803,6 +809,14 @@ mod tests {
         assert!(!is_safe_version_id("../outside"));
         assert!(validate_relative_path("net/minecraftforge/forge/file.jar").is_ok());
         assert!(validate_relative_path("../../outside.jar").is_err());
+    }
+
+    #[test]
+    fn includes_zalith_runtime_directory_in_search_roots() {
+        let app = Path::new("/data/user/0/dev.rustchunk.app/files");
+        let roots = runtime_search_roots(app);
+        assert!(roots.contains(&app.join("games").join("runtimes")));
+        assert!(roots.contains(&app.join("minecraft").join("runtime")));
     }
 
     #[test]
