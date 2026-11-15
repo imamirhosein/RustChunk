@@ -100,6 +100,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RustChunk-stage5-import-audit-arm64-debug
+          name: RustChunk-stage6-forge-profile-arm64-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error

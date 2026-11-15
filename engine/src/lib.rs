@@ -1,4 +1,5 @@
 mod downloader;
+mod forge;
 mod installer;
 mod workspace;
 
@@ -89,4 +90,19 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativeCancelDownload(
     _this: JObject,
 ) -> jstring {
     rust_string_to_java(&mut env, downloader::cancel_download())
+}
+
+
+#[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareForgeLaunchProfile(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir)
+        .and_then(|path| forge::prepare_forge_profile(Path::new(&path)));
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("Forge profile preparation failed: {}", error)),
+    )
 }

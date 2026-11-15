@@ -19,6 +19,7 @@ class MainActivity : Activity() {
     private external fun nativeStatus(): String
     private external fun nativePrepareWorkspace(appDataDirectory: String): String
     private external fun nativeResolveMinecraft(appDataDirectory: String): String
+    private external fun nativePrepareForgeLaunchProfile(appDataDirectory: String): String
     private external fun nativeDownloadMinecraft(appDataDirectory: String, parallelism: Int): String
     private external fun nativeDownloadProgress(): String
     private external fun nativeCancelDownload(): String
@@ -30,6 +31,7 @@ class MainActivity : Activity() {
     private lateinit var downloadButton: Button
     private lateinit var importButton: Button
     private lateinit var inspectButton: Button
+    private lateinit var forgeProfileButton: Button
     private lateinit var cancelButton: Button
     private var downloadInProgress = false
     private var importInProgress = false
@@ -64,7 +66,7 @@ class MainActivity : Activity() {
         }
 
         statusView = TextView(this).apply {
-            text = "RustChunk\n\n" + nativeStatusText + "\n\n" + workspaceStatus + loadSavedImportReport() + loadSavedInspectionReport()
+            text = "RustChunk\n\n" + nativeStatusText + "\n\n" + workspaceStatus + loadSavedImportReport() + loadSavedInspectionReport() + loadSavedForgeProfileReport()
             textSize = 15f
             setPadding(20, 20, 20, 20)
             setTextIsSelectable(true)
@@ -79,6 +81,12 @@ class MainActivity : Activity() {
         inspectButton = Button(this).apply {
             text = "Inspect imported game files"
             setOnClickListener { inspectImportedGameData() }
+        }
+
+        forgeProfileButton = Button(this).apply {
+            text = "Analyze Forge profile and prepare launch plan"
+            isEnabled = isWorkspaceReady(workspaceStatus)
+            setOnClickListener { prepareForgeLaunchProfile() }
         }
 
         resolveButton = Button(this).apply {
@@ -110,6 +118,7 @@ class MainActivity : Activity() {
             setPadding(18, 18, 18, 18)
             addView(importButton, matchWrapParams())
             addView(inspectButton, matchWrapParams())
+            addView(forgeProfileButton, matchWrapParams())
             addView(resolveButton, matchWrapParams())
             addView(downloadButton, matchWrapParams())
             addView(cancelButton, matchWrapParams())
@@ -232,6 +241,7 @@ class MainActivity : Activity() {
                 statusView.text = result + "\n\n" + workspaceStatus
                 importButton.isEnabled = true
                 inspectButton.isEnabled = true
+                forgeProfileButton.isEnabled = isWorkspaceReady(workspaceStatus)
                 resolveButton.isEnabled = isWorkspaceReady(workspaceStatus)
                 downloadButton.isEnabled = hasInstallPlan()
             }
@@ -306,6 +316,19 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun loadSavedForgeProfileReport(): String {
+        val reportFile = File(filesDir, "minecraft/forge-readiness-report.txt")
+        if (!reportFile.isFile) {
+            return "\n\nNo Forge launch-profile analysis has been prepared yet."
+        }
+        return try {
+            "\n\nLast Forge launch-profile analysis:\n" +
+                reportFile.readText(Charsets.UTF_8).take(12000)
+        } catch (error: Throwable) {
+            "\n\nA Forge readiness report exists but could not be read: " + error.message
+        }
+    }
+
     private fun loadSavedInspectionReport(): String {
         val reportFile = File(filesDir, "minecraft/inspection-report.txt")
         if (!reportFile.isFile) {
@@ -321,6 +344,25 @@ class MainActivity : Activity() {
 
     private fun formatBytes(bytes: Long): String =
         String.format(java.util.Locale.US, "%.1f MiB", bytes.toDouble() / (1024.0 * 1024.0))
+
+    private fun prepareForgeLaunchProfile() {
+        if (importInProgress || downloadInProgress) return
+        forgeProfileButton.isEnabled = false
+        statusView.text = "Analyzing the imported Forge profile...\nThis step does not launch Minecraft or modify imported game files."
+
+        worker.execute {
+            val result = try {
+                nativePrepareForgeLaunchProfile(filesDir.absolutePath)
+            } catch (error: Throwable) {
+                "Forge profile preparation failed: " + error.javaClass.simpleName + ": " + error.message
+            }
+
+            runOnUiThread {
+                statusView.text = result
+                forgeProfileButton.isEnabled = true
+            }
+        }
+    }
 
     private fun resolveMinecraftMetadata() {
         if (importInProgress || downloadInProgress) return
@@ -356,6 +398,7 @@ class MainActivity : Activity() {
         downloadButton.isEnabled = false
         importButton.isEnabled = false
         inspectButton.isEnabled = false
+        forgeProfileButton.isEnabled = false
         cancelButton.isEnabled = true
         statusView.text = "Preparing download...\nThe app will verify every file with SHA-1.\nPartial files are kept for resume."
         mainHandler.removeCallbacks(progressPoller)
@@ -375,6 +418,7 @@ class MainActivity : Activity() {
                 cancelButton.isEnabled = false
                 importButton.isEnabled = true
                 inspectButton.isEnabled = true
+                forgeProfileButton.isEnabled = true
                 downloadButton.isEnabled = hasInstallPlan()
             }
         }
