@@ -1,0 +1,8 @@
+/target/
+/.gradle/
+/.idea/
+/build/
+/app/build/
+.ci-signing/
+*.iml
+local.properties

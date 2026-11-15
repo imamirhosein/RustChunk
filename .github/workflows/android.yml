@@ -1,0 +1,105 @@
+name: RustChunk Android Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: platform-tools
+
+      - name: Prepare signing directory
+        run: mkdir -p .ci-signing
+
+      - name: Restore stable RustChunk debug signing key
+        id: restore-signing-key
+        uses: actions/cache/restore@v4
+        with:
+          path: .ci-signing/rustchunk-debug.keystore
+          key: rustchunk-debug-signing-key-v2
+
+      - name: Require the original signing key
+        run: |
+          if [[ "${{ steps.restore-signing-key.outputs.cache-hit }}" != "true" ]]; then
+            echo "The original RustChunk signing key was not restored. Refusing to create a new key because that would break APK updates." >&2
+            exit 1
+          fi
+          if [[ ! -f .ci-signing/rustchunk-debug.keystore ]]; then
+            echo "The cached RustChunk signing key file is missing." >&2
+            exit 1
+          fi
+          ACTUAL="$(keytool -list -v \
+            -keystore .ci-signing/rustchunk-debug.keystore \
+            -storepass android \
+            -alias rustchunkdebug | awk -F': ' '/SHA256:/{print $2; exit}' | tr -d ':')"
+          EXPECTED="EFDAE870A0AE4A1E5DB29A044F38EDA2B06356825DC2CC5EA2E710FC53989AE9"
+          if [[ "${ACTUAL^^}" != "$EXPECTED" ]]; then
+            echo "Signing key fingerprint mismatch. Refusing to build an APK with a different identity." >&2
+            echo "Expected: $EXPECTED" >&2
+            echo "Actual:   $ACTUAL" >&2
+            exit 1
+          fi
+          echo "Stable RustChunk signing key restored and fingerprint verified: $ACTUAL"
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk --locked
+
+      - name: Run Rust tests
+        run: cargo test --workspace
+
+      - name: Build Rust library for Android ARM64
+        run: cargo ndk -t arm64-v8a build --release -p rustchunk-engine
+
+      - name: Copy native library into Android app
+        run: |
+          mkdir -p app/src/main/jniLibs/arm64-v8a
+          cp target/aarch64-linux-android/release/librustchunk.so app/src/main/jniLibs/arm64-v8a/librustchunk.so
+
+      - name: Build debug APK with stable signing identity
+        run: |
+          gradle --version
+          gradle :app:assembleDebug --no-daemon
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs app/build/outputs/apk/debug/app-debug.apk
+          ACTUAL_APK_CERT="$("$APKSIGNER" verify --print-certs app/build/outputs/apk/debug/app-debug.apk | awk '/certificate SHA-256 digest:/{print tolower($NF); exit}' | tr -d ':')"
+          EXPECTED_APK_CERT="efdae870a0ae4a1e5db29a044f38eda2b06356825dc2cc5ea2e710fc53989ae9"
+          if [[ "$ACTUAL_APK_CERT" != "$EXPECTED_APK_CERT" ]]; then
+            echo "APK signer fingerprint mismatch. Refusing to upload this APK." >&2
+            echo "Expected: $EXPECTED_APK_CERT" >&2
+            echo "Actual:   $ACTUAL_APK_CERT" >&2
+            exit 1
+          fi
+          echo "Verified APK certificate SHA-256: $ACTUAL_APK_CERT"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: RustChunk-stage14-isolated-jli-test-arm64-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
