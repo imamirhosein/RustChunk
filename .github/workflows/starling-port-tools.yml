@@ -86,6 +86,27 @@ jobs:
             --prepared-dir .local/minecraft/1.20.1-remap \
             --work-dir .local/minecraft/1.20.1-decompile
 
+      - name: Set up Rust for the Starling world-registry compatibility test
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Starling host test build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            upstream/starling -> upstream/starling/target
+          shared-key: starling-world-facts-compatibility
+
+      - name: Test the 1.20.1 facts file with Starling's real Rust BlockRegistry
+        run: |
+          set -euo pipefail
+          facts=".local/minecraft/1.20.1-decompile/block-facts/facts.json"
+          test -s "$facts"
+          mkdir -p upstream/starling/.local/horizon-client/26.3
+          cp "$facts" upstream/starling/.local/horizon-client/26.3/facts.json
+          cargo test --locked --manifest-path upstream/starling/Cargo.toml \
+            -p horizon-world --lib \
+            registry::facts::tests::matches_the_tree_built_registry -- --exact --nocapture
+
       - name: Export metadata-only audit reports
         uses: actions/upload-artifact@v4
         with:
