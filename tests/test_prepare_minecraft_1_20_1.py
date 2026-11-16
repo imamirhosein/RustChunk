@@ -102,6 +102,27 @@ class Minecraft1201PreparationTests(unittest.TestCase):
             with self.assertRaisesRegex(PrepareError, "Client JAR identifies itself"):
                 read_game_facts(client, {"javaVersion": {"majorVersion": 17}})
 
+    def test_summarize_data_reports_keeps_metadata_not_game_data(self):
+        from tools.prepare_minecraft_1_20_1 import summarize_data_reports
+
+        with tempfile.TemporaryDirectory() as temp:
+            reports = Path(temp)
+            (reports / "minecraft").mkdir()
+            (reports / "blocks.json").write_text(
+                json.dumps({"minecraft:stone": {}, "minecraft:dirt": {}}),
+                encoding="utf-8",
+            )
+            (reports / "minecraft" / "nested.json").write_text(
+                json.dumps({"secret_game_data": "not copied into report"}),
+                encoding="utf-8",
+            )
+            summary = summarize_data_reports(reports)
+            self.assertEqual(summary["json_file_count"], 2)
+            self.assertEqual(summary["top_level_reports"]["blocks.json"]["entry_count"], 2)
+            self.assertNotIn("minecraft", summary["top_level_reports"])
+            self.assertNotIn("secret_game_data", json.dumps(summary))
+
+
     def test_digest_file(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "x.bin"
