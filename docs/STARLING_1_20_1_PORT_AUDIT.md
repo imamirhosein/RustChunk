@@ -136,7 +136,9 @@ Current groundwork in this branch:
 - `tests/test_prepare_minecraft_1_20_1.py` tests server-bundle parsing and hash validation, version-fact validation and file hashing without downloading game files.
 - `.github/workflows/starling-port-tools.yml` runs the unit tests on changes. Its manual `workflow_dispatch` path performs the real official download/remap smoke test and exports only a metadata report. The Minecraft JARs, mappings and remapped JARs remain in the runner's ignored working directory and are not uploaded as artifacts.
 
-**Not yet proven:** the script has not yet completed its manual GitHub Actions run against the full Mojang 1.20.1 files. Until that run succeeds, remapping is an implementation attempt, not a validated result. A successful remap also does not mean Horizon has been ported to 1.20.1; it only unlocks the next analysis stage.
+**M1 remapping smoke test passed:** GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
+
+This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
 
 Sources:
 - Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
