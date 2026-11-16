@@ -94,6 +94,25 @@ class StarlingPatchSeriesTests(unittest.TestCase):
         self.assertEqual(result["patch_count"], 2)
         self.assertEqual((self.starling / "value.txt").read_text(), "after\n")
 
+    def test_check_mode_validates_without_mutating_checkout(self):
+        self.write_patch("0001-value.patch", "before", "after")
+        self.set_manifest(["0001-value.patch"])
+
+        result = apply_series(self.starling, self.patch_root, check_only=True)
+
+        self.assertEqual(result["mode"], "checked")
+        self.assertEqual((self.starling / "value.txt").read_text(), "before\\n")
+        self.assertEqual(self.git("status", "--porcelain"), "")
+
+    def test_duplicate_patch_in_manifest_is_rejected(self):
+        self.write_patch("0001-value.patch", "before", "after")
+        self.set_manifest(["0001-value.patch", "0001-value.patch"])
+
+        with self.assertRaisesRegex(PatchError, "appears more than once"):
+            apply_series(self.starling, self.patch_root)
+
+        self.assertEqual((self.starling / "value.txt").read_text(), "before\\n")
+
     def test_dirty_submodule_is_rejected(self):
         self.set_manifest([])
         (self.starling / "value.txt").write_text("local edit\n")
