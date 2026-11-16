@@ -117,6 +117,33 @@ class MainActivity : Activity() {
                 } catch (error: Throwable) {
                     "UNKNOWN: " + error.message
                 }
+                val helperPid = Regex("Helper PID:\\s*(\\d+)").find(report)
+                    ?.groupValues?.getOrNull(1)?.toIntOrNull() ?: -1
+                val exitDiagnostics = try {
+                    if (android.os.Build.VERSION.SDK_INT < 30) {
+                        "Historical process-exit diagnostics require Android 11 or newer."
+                    } else {
+                        val manager = getSystemService(android.app.ActivityManager::class.java)
+                        val exits = manager.getHistoricalProcessExitReasons(packageName, helperPid, 5)
+                        if (exits.isNullOrEmpty()) {
+                            "Android has no historical exit record for helper PID $helperPid."
+                        } else {
+                            exits.joinToString("\\n\\n") { info ->
+                                val tombstone = try {
+                                    info.traceInputStream?.bufferedReader()?.use { it.readText().take(10000) }
+                                        ?.takeIf { it.isNotBlank() } ?: "No native tombstone trace attached."
+                                } catch (error: Throwable) {
+                                    "Could not read tombstone trace: ${error.message}"
+                                }
+                                "Process: ${info.processName}\\nPID: ${info.pid}\\nReason: ${info.reason}\\n" +
+                                    "Status: ${info.status}\\nTimestamp: ${info.timestamp}\\n" +
+                                    "Description: ${info.description}\\nTrace:\\n$tombstone"
+                            }
+                        }
+                    }
+                } catch (error: Throwable) {
+                    "Could not query Android process-exit history: ${error.javaClass.simpleName}: ${error.message}"
+                }
                 statusView.text = buildString {
                     appendLine("The isolated Java test process did not return within 45 seconds.")
                     appendLine("RustChunk's main process is still running; the test was isolated from the UI.")
@@ -124,6 +151,9 @@ class MainActivity : Activity() {
                     appendLine()
                     appendLine("Saved startup marker:")
                     appendLine(report.ifBlank { "No startup marker found." })
+                    appendLine()
+                    appendLine("Android helper-process exit diagnostics:")
+                    appendLine(exitDiagnostics)
                     appendLine()
                     appendLine("Native JLI stage trace:")
                     appendLine(trace)
