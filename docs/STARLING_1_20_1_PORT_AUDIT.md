@@ -86,14 +86,26 @@ The 1.20.1 data generator does **not** emit `packets.json` or the modern item-co
 
 Starling's Rust `BlockRegistry` consumes an ordered `facts.json` shape: each row carries the block identifier, air and fluid flags, a display descriptor and the full block-state descriptor; the file also carries each block's default state ID. RustChunk now has a separate Java 17 exporter for Minecraft 1.20.1 that reads the verified remapped official game classes and writes this schema privately. It does not reuse Starling's Java 25 / 26.3 exporter. The workflow checks the state descriptors, unique state identities, default-state references and the locked counts (1,003 blocks / 24,135 states). Only a compact summary and hash are uploaded; the full facts file remains in ignored `.local`.
 
-The exporter compiled and executed successfully in the preparation job of run [#43906032401](https://github.com/imamirhosein/RustChunk/actions/runs/43906032401). Its verified output summary was:
+The exporter compiled and executed successfully. Its verified output summary was:
 - 1,003 blocks and 24,135 block states
 - 3 air states, 8,365 fluid-containing states, 23,774 states with properties
 - 6,203,510-byte private facts file; SHA-256 `c0258fa8719e754cd67b46509a0c4c310d84677e99f468f17bef0d6a195c6edf`
 
-That run's preparation/export job passed; its overall workflow was marked failed only because the unit tests in that older commit still had two test-fixture expectation errors. Those fixtures were corrected, and the latest unit-test job on the current branch has passed. A following CI step now feeds the private facts file into Starling's real Rust `BlockRegistry` test; that Rust compatibility check is still running and is not yet claimed as passed.
+The follow-up workflow [#43906779498](https://github.com/imamirhosein/RustChunk/actions/runs/43906779498) passed end-to-end: pinned input verification, comparison, private decompilation, exporter execution, all Python unit tests, and the real Starling Rust `BlockRegistry` test. That test loaded the private 1.20.1 facts file through `BlockRegistry::from_facts_json_with_flags` and passed the existing tree-built registry round-trip check.
+
+This confirms that the 1.20.1 block-state export matches the data contract consumed by Starling's Rust registry. It does **not** yet mean Starling's game loop, world generator, chunk storage, items, or renderer have been ported to 1.20.1.
 
 This is the first version-specific data bridge into a concrete Starling engine subsystem, not yet a full engine integration.
+
+## Pinned Starling Android build baseline
+
+The new RustChunk baseline workflow [#43905001244](https://github.com/imamirhosein/RustChunk/actions/runs/43905001244) completed successfully. It built the exact pinned Starling 0.8.0 source for ARM64 and passed the package and native-library checks:
+- Android package: `io.github.juanluci.starling.preview`
+- Native library: `lib/arm64-v8a/libhorizon_android.so`
+- APK size: 34,608,516 bytes
+- APK SHA-256: `b293d3eff23611e339509a9d34798d4eafe28911c19d4881f3a4d6ccb60e5ad1`
+
+This proves the pinned Starling source can be built and packaged by RustChunk CI for ARM64. It is the upstream Starling 26.3 Preview APK, **not** a RustChunk 1.20.1 client; it has not been validated on the Galaxy A22 and is not a test APK for the target version.
 
 ### 4. Automated 1.20.1 ↔ 26.3 comparison passed
 
@@ -157,12 +169,12 @@ See [STARLING_1_20_1_ENGINE_MAP.md](STARLING_1_20_1_ENGINE_MAP.md) for the modul
 
 ## Next engineering steps
 
-1. **E0 — Reproducible Android base build:** build the exact pinned Starling ARM64 source in RustChunk CI. This verifies the native Android toolchain and submodule integration only; the resulting Starling Preview APK is still 26.3, not the target game.
-2. **E1 — 1.20.1 preparation profile:** create a separate target lock and private preparation flow, then build/verify the version-specific Java exporters needed for assets, registries, blocks, biomes and world generation.
-3. **E2 — Core world model:** generate 1.20.1 version facts, block/biome registries, legacy item data, chunk formats and DataVersion 3465, with tests against the Java 1.20.1 oracle.
-4. **E3 — Local single-player vertical slice:** create a deterministic flat/test world, spawn, move, break/place blocks, save and reopen. Expand into normal Overworld terrain, lighting, entities, structures and gameplay after the small world passes.
-5. **E4 — Android and performance:** first prove the desktop/headless slice; then build ARM64 and test on the Galaxy A22, including frame timing, memory, temperature and high-speed chunk arrival.
-6. **E5 — Later networking/mods:** only after Vanilla works, add protocol 763 for multiplayer; only after that plan the optional Java 17/Forge bridge. No Forge work is scheduled in the current milestone.
+1. **E0 — Reproducible Android base build: passed.** The exact pinned Starling source built and packaged as an ARM64 Preview APK in RustChunk CI. This verifies the Android toolchain and source integration only; the resulting APK is still Starling 26.3, not 1.20.1.
+2. **E1 — 1.20.1 preparation and block-registry bridge: first gate passed.** Official inputs are pinned; the 1.20.1 exporter emits the exact ordered facts schema; Starling's real Rust `BlockRegistry` accepts it in CI. Other version-specific data (block behavior, biomes, resources and world generation) is still outstanding.
+3. **E2 — Core world model: not started.** Backport version facts, chunk format/DataVersion 3465, block behavior, legacy items and registry consumers, with tests against the Java 1.20.1 oracle.
+4. **E3 — Local single-player vertical slice: not started.** Create a deterministic flat/test world, spawn, move, break/place blocks, save and reopen. Expand into normal Overworld terrain, lighting, entities, structures and gameplay after the small world passes.
+5. **E4 — Android and performance: not started.** First prove the desktop/headless 1.20.1 slice; then build the actual RustChunk ARM64 client and test on the Galaxy A22, including frame timing, memory, temperature and high-speed chunk arrival.
+6. **E5 — Later networking/mods: deferred.** Only after Vanilla works, add protocol 763 for multiplayer; the optional Java 17/Forge bridge remains a later long-term objective. No Forge work is scheduled in the current milestone.
 
 No native RustChunk 1.20.1 APK is ready to install. A successful research or baseline build workflow is not proof of a playable 1.20.1 port.
 

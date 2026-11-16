@@ -80,8 +80,8 @@ Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency license
 
 | Gate | Deliverable | Pass condition |
 |---|---|---|
-| E0 | Reproducible pinned ARM64 Starling build | RustChunk CI compiles and packages the exact upstream pin; artifact identity and ABI are checked |
-| E1 | 1.20.1 preparation profile | Official 1.20.1 client/server inputs verify; required version-specific data/exporters are generated privately and deterministically |
+| E0 | Reproducible pinned ARM64 Starling build | **Passed** in CI run #43905001244; exact pin, Preview package identity and ARM64 native library verified |
+| E1 | 1.20.1 preparation and first registry bridge | **Block-registry gate passed** in CI run #43906779498: official 1.20.1 inputs verify, facts are exported privately, and Starling's Rust BlockRegistry test accepts the file. Other exporters remain |
 | E2 | Core 1.20.1 world model | Correct registries, blocks, legacy items, chunk format and DataVersion 3465; Rust tests compare with Java oracle |
 | E3 | 1.20.1 local simulation/worldgen | Known-seed chunks and gameplay probes match Java 1.20.1; save/reopen round-trip passes |
 | E4 | Desktop/headless vertical slice | A local 1.20.1 world can be created, entered, modified, saved and reopened before Android debugging |
@@ -91,9 +91,10 @@ Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency license
 
 ## Immediate next work
 
-1. Finish the pinned Starling ARM64 baseline workflow and inspect its APK package/ABI and build logs. This proves the Android engine toolchain in RustChunk CI, not 1.20.1 compatibility.
-2. Continue the 1.20.1 preparation lane with separate Java 17 exporters. The first exporter targets the exact `facts.json` schema consumed by Starling's ordered `BlockRegistry`; the complete file stays private and CI publishes only its validated summary.
-3. Extend version-specific exports to biome, block behavior and world-generation inputs, then add Rust parity fixtures before changing gameplay code.
-4. Start with chunk storage, block states and flat-world local play, then expand world generation and gameplay in dependency order.
+1. E0 is closed: the pinned Starling ARM64 baseline builds and its package/ABI checks pass. Do not install that baseline as a 1.20.1 test client.
+2. The 1.20.1 block facts exporter and the real Rust BlockRegistry consumption test both pass. Preserve that verified data path.
+3. Next build version-specific exports and parity tests for block behavior, item/legacy NBT, biomes and world-generation inputs. Keep the full generated facts and decompiled source private.
+4. Begin the maintained RustChunk engine patch series with the version/data layer and chunk/world storage; keep the renderer/streaming architecture intact where its contracts still fit.
+5. Only after a desktop/headless 1.20.1 single-player world can be created, modified, saved and reopened should the ARM64 1.20.1 APK be built and tested on the Galaxy A22.
 
 No 1.20.1 APK is ready for installation. Every milestone must be labelled by what it actually proves.
