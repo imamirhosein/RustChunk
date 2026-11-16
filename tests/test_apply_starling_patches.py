@@ -92,7 +92,7 @@ class StarlingPatchSeriesTests(unittest.TestCase):
         result = apply_series(self.starling, self.patch_root)
 
         self.assertEqual(result["patch_count"], 2)
-        self.assertEqual((self.starling / "value.txt").read_text(), "after\\n")
+        self.assertEqual((self.starling / "value.txt").read_text(), "after\n")
 
     def test_dirty_submodule_is_rejected(self):
         self.set_manifest([])
