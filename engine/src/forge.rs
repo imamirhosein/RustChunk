@@ -363,6 +363,17 @@ pub fn prepare_jni_forge_launch_plan(
     let (profile_dir, profile_json_path, profile) = find_forge_profile(&versions_root, selected_profile_id)?;
     let profile_id = profile.get("id").and_then(Value::as_str).unwrap_or(selected_profile_id).to_string();
 
+    // Regenerate the manifest from this exact profile before comparing classpath paths.
+    let dependency_plan_refresh = prepare_forge_dependency_plan(app_data_dir, selected_profile_id);
+    let dependency_plan_path = profile_dir.join("rustchunk-dependency-plan.json");
+    let (dependency_plan_paths, dependency_plan_status) = match &dependency_plan_refresh {
+        Ok(_) => match load_dependency_plan_paths(&dependency_plan_path, &profile_id) {
+            Ok(paths) => (paths, "refreshed and profile-matched".to_string()),
+            Err(error) => (HashSet::new(), format!("refresh succeeded but plan could not be read: {}", error)),
+        },
+        Err(error) => (HashSet::new(), format!("refresh failed: {}", error)),
+    };
+
     let mut chain = Vec::new();
     let mut visited = HashSet::new();
     let mut notices = Vec::new();
@@ -493,8 +504,13 @@ pub fn prepare_jni_forge_launch_plan(
         String::new(),
         String::new(),
     ];
-    let replacements: Vec<(String, String)> = keys.iter().zip(values.iter())
+    let mut replacements: Vec<(String, String)> = keys.iter().zip(values.iter())
         .map(|(key, value)| (placeholder(key), value.clone())).collect();
+    // Forge's generated JVM options include HMCL's primary_jar_name token.
+    replacements.push((
+        placeholder("primary_jar_name"),
+        primary_jar_name(&profile_id),
+    ));
 
     let (mut jvm_options, module_path_values, unsupported_jvm_arguments) =
         normalize_jvm_arguments(&jvm_raw, &replacements);
@@ -528,6 +544,15 @@ pub fn prepare_jni_forge_launch_plan(
     unresolved_placeholders.sort();
     unresolved_placeholders.dedup();
 
+    let missing_classpath_in_dependency_plan: Vec<String> = missing_classpath.iter()
+        .filter(|path| dependency_plan_paths.contains(*path))
+        .cloned()
+        .collect();
+    let missing_classpath_not_in_dependency_plan: Vec<String> = missing_classpath.iter()
+        .filter(|path| !dependency_plan_paths.contains(*path))
+        .cloned()
+        .collect();
+
     ensure_vm_property(&mut jvm_options, "java.class.path", &classpath);
     ensure_vm_property(&mut jvm_options, "java.home", &app_data_dir.join("games/runtimes/Internal-17").to_string_lossy());
     ensure_vm_property(&mut jvm_options, "java.io.tmpdir", &app_data_dir.join("cache/java").to_string_lossy());
@@ -555,6 +580,15 @@ pub fn prepare_jni_forge_launch_plan(
     let mut blockers = Vec::<String>::new();
     if classpath_entries.is_empty() { blockers.push("Java classpath is empty.".to_string()); }
     if !missing_classpath.is_empty() { blockers.push(format!("{} classpath artifact(s) are missing.", missing_classpath.len())); }
+    if !missing_classpath_not_in_dependency_plan.is_empty() {
+        blockers.push(format!(
+            "{} missing classpath artifact(s) are absent from the freshly generated checksum-verifiable dependency plan.",
+            missing_classpath_not_in_dependency_plan.len()
+        ));
+    }
+    if dependency_plan_refresh.is_err() {
+        blockers.push("The Forge dependency plan could not be refreshed for this profile.".to_string());
+    }
     if !missing_module_path.is_empty() { blockers.push(format!("{} Forge module-path artifact(s) are missing.", missing_module_path.len())); }
     if module_path_entries.is_empty() { blockers.push("Forge module path is empty.".to_string()); }
     if !unresolved_placeholders.is_empty() { blockers.push(format!("{} launch placeholder(s) remain unresolved.", unresolved_placeholders.len())); }
@@ -587,6 +621,11 @@ pub fn prepare_jni_forge_launch_plan(
         "jni_vm_options": jvm_options.clone(),
         "main_arguments": game_arguments.clone(),
         "missing_classpath_artifacts": missing_classpath.clone(),
+        "dependency_plan_status": dependency_plan_status,
+        "dependency_plan_artifact_count": dependency_plan_paths.len(),
+        "missing_classpath_in_dependency_plan": missing_classpath_in_dependency_plan.clone(),
+        "missing_classpath_not_in_dependency_plan": missing_classpath_not_in_dependency_plan.clone(),
+        "dependency_plan_path": relative_path(&game_root, &dependency_plan_path),
         "missing_module_path_artifacts": missing_module_path.clone(),
         "unresolved_library_declarations": unresolved_libraries.clone(),
         "unsupported_jvm_arguments": unsupported_jvm_arguments.clone(),
@@ -621,6 +660,10 @@ pub fn prepare_jni_forge_launch_plan(
     report.push_str(&format!("Java classpath entries present: {}\n", classpath_entries.len()));
     report.push_str(&format!("Forge module-path entries present: {}\n", module_path_entries.len()));
     report.push_str(&format!("Missing classpath artifacts: {}\n", missing_classpath.len()));
+    report.push_str(&format!("Dependency plan status: {}\n", dependency_plan_status));
+    report.push_str(&format!("Dependency plan artifacts: {}\n", dependency_plan_paths.len()));
+    report.push_str(&format!("Missing classpath artifacts present in dependency plan: {}\n", missing_classpath_in_dependency_plan.len()));
+    report.push_str(&format!("Missing classpath artifacts absent from dependency plan: {}\n", missing_classpath_not_in_dependency_plan.len()));
     report.push_str(&format!("Missing module-path artifacts: {}\n", missing_module_path.len()));
     report.push_str(&format!("Unresolved library declarations: {}\n", unresolved_libraries.len()));
     report.push_str(&format!("Unresolved launch placeholders: {}\n", unresolved_placeholders.len()));
@@ -633,7 +676,11 @@ pub fn prepare_jni_forge_launch_plan(
     report.push_str("Android LWJGL/OpenGL integration ready: NO\n");
     report.push_str("Actual Forge launch performed: NO\n");
     for blocker in &blockers { report.push_str(&format!("BLOCKER: {}\n", blocker)); }
-    for item in missing_classpath.iter().take(30) { report.push_str(&format!("MISSING CLASSPATH: {}\n", item)); }
+    for item in missing_classpath.iter().take(30) {
+        let plan_state = if dependency_plan_paths.contains(item) { "IN DEPENDENCY PLAN" } else { "NOT IN DEPENDENCY PLAN" };
+        report.push_str(&format!("MISSING CLASSPATH: {} | {} | checked path: {}\n",
+            item, plan_state, library_dir.join(item).display()));
+    }
     for item in missing_module_path.iter().take(30) { report.push_str(&format!("MISSING MODULE PATH: {}\n", item)); }
     for item in &unresolved_placeholders {
         report.push_str(&format!("UNRESOLVED PLACEHOLDER: {}\n", item));
@@ -646,6 +693,36 @@ pub fn prepare_jni_forge_launch_plan(
 
     write_atomic(&report_path, report.as_bytes())?;
     Ok(report)
+}
+
+fn load_dependency_plan_paths(plan_path: &Path, profile_id: &str) -> Result<HashSet<String>, String> {
+    let bytes = fs::read(plan_path).map_err(|error| {
+        format!("Cannot read {}: {}", plan_path.display(), error)
+    })?;
+    let plan: Value = serde_json::from_slice(&bytes)
+        .map_err(|error| format!("Dependency plan JSON is invalid: {}", error))?;
+    let recorded_profile = plan.get("instance").and_then(Value::as_str).unwrap_or("");
+    if recorded_profile != profile_id {
+        return Err(format!(
+            "Dependency plan profile mismatch: expected '{}', found '{}'.",
+            profile_id, recorded_profile
+        ));
+    }
+    let files = plan.get("files").and_then(Value::as_array)
+        .ok_or_else(|| "Dependency plan has no files array.".to_string())?;
+    let mut paths = HashSet::new();
+    for file in files {
+        let relative = file.get("path").and_then(Value::as_str)
+            .ok_or_else(|| "Dependency plan contains an entry without a path.".to_string())?;
+        let safe = validate_relative_path(relative)
+            .map_err(|_| format!("Dependency plan contains an unsafe path: {}", relative))?;
+        paths.insert(safe);
+    }
+    Ok(paths)
+}
+
+fn primary_jar_name(profile_id: &str) -> String {
+    format!("{}.jar", profile_id)
 }
 
 fn placeholder(key: &str) -> String {
@@ -1580,6 +1657,30 @@ mod tests {
         let value = placeholder("auth_player_name");
         let values = vec!["--username".to_string(), value.clone()];
         assert_eq!(collect_unresolved_placeholders(values.iter().map(String::as_str)), vec![value]);
+    }
+
+    #[test]
+    fn resolves_forge_primary_jar_name_for_selected_profile() {
+        let profile = "1.20.1 Forge 47.4.22";
+        let replacements = vec![(placeholder("primary_jar_name"), primary_jar_name(profile))];
+        let resolved = replace_launch_placeholders(&placeholder("primary_jar_name"), &replacements);
+        assert_eq!(resolved, "1.20.1 Forge 47.4.22.jar");
+        assert!(collect_unresolved_placeholders([resolved.as_str()].into_iter()).is_empty());
+    }
+
+    #[test]
+    fn dependency_plan_paths_are_profile_scoped_and_sanitized() {
+        let root = std::env::temp_dir().join(format!("rustchunk-dependency-audit-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&root);
+        fs::create_dir_all(&root).unwrap();
+        let plan_path = root.join("rustchunk-dependency-plan.json");
+        fs::write(&plan_path, r#"{"instance":"1.20.1 Forge 47.4.22","files":[{"path":"org/example/demo/1.0/demo-1.0.jar"}]}"#).unwrap();
+        let paths = load_dependency_plan_paths(&plan_path, "1.20.1 Forge 47.4.22").unwrap();
+        assert!(paths.contains("org/example/demo/1.0/demo-1.0.jar"));
+        assert!(load_dependency_plan_paths(&plan_path, "1.20.1 Forge 47.4.5").is_err());
+        fs::write(&plan_path, r#"{"instance":"1.20.1 Forge 47.4.22","files":[{"path":"../../outside.jar"}]}"#).unwrap();
+        assert!(load_dependency_plan_paths(&plan_path, "1.20.1 Forge 47.4.22").is_err());
+        fs::remove_dir_all(root).unwrap();
     }
 
     #[test]

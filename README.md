@@ -2,9 +2,15 @@
 
 An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
 
-## Current milestone: Stage 20 — Forge dependency repair and exact launch-plan diagnostics
+## Current milestone: Stage 21 — dependency-plan/classpath reconciliation
 
-The Forge-library download action now downloads/verifies the selected profile's Java dependencies and immediately rebuilds the JNI launch plan. This makes the nine missing classpath entries from Stage 19 directly testable in one pass. The launch-plan report now prints the exact unresolved placeholder token(s), rather than only showing a count, so any Forge-specific argument that still needs mapping can be identified. This remains a preparation/validation step: it does not launch Forge or claim Android LWJGL/OpenGL readiness.
+The JNI launch-plan check now regenerates the dependency manifest from the exact selected Forge profile before auditing its classpath. It compares every missing classpath path against the freshly generated checksum-verifiable manifest and prints the checked absolute path plus whether that artifact was included in the plan. It also resolves Forge's `${primary_jar_name}` token to the selected profile's `<profile-id>.jar` filename. New Rust tests cover profile scoping, path safety, and placeholder mapping.
+
+This is a diagnostic/reconciliation milestone, not an assertion that the missing JARs have already been repaired. Missing or unverified dependencies remain launch blockers until their exact cause is established. It does not launch Forge or claim Android LWJGL/OpenGL readiness.
+
+## Previous milestone: Stage 20 — Forge dependency repair and exact launch-plan diagnostics
+
+The Forge-library download action downloads/verifies the selected profile's Java dependencies and immediately rebuilds the JNI launch plan. The launch-plan report prints exact unresolved placeholder token(s).
 
 ## Previous milestone: Stage 19 — JNI Forge launch-plan preparation
 
@@ -53,7 +59,8 @@ It copies reusable assets, libraries, versions, mods, configs, resource packs, s
 - Stage 12: prepares and downloads checksum-verified Java library artifacts for the selected Forge profile, reusing valid files and keeping profile-specific plans/reports isolated.
 - Stage 18: verifies direct Java 17 HotSpot startup using the JNI Invocation API, avoiding execution of app-private bin/java.
 - Stage 19: prepares a JNI-compatible Forge launch plan with inherited argument rules, module-path conversion, verified classpath entries, and an offline player identity.
-- Stage 20: downloads/verifies missing Forge Java libraries, automatically regenerates the JNI plan, and prints exact unresolved placeholder tokens.
+- Stage 20: downloads/verifies Forge Java libraries, automatically regenerates the JNI plan, and prints exact unresolved placeholder tokens.
+- Stage 21: refreshes the selected profile dependency manifest during JNI preparation, reconciles missing classpath artifacts against that manifest, and resolves the Forge primary-jar placeholder.
 
 **Not yet implemented:** Android LWJGL native-library mapping/extraction, EGL/OpenGL surface integration, audio integration, actual Forge JVM invocation, complete game launch lifecycle, and on-device modpack/Aternos compatibility testing. The launch plan is a preparation artifact, not proof that Forge starts. Java startup success alone does not prove Forge or Minecraft can launch.
 
