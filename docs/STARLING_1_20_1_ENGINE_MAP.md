@@ -92,9 +92,10 @@ Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency license
 ## Immediate next work
 
 1. E0 is closed: the pinned Starling ARM64 baseline builds and its package/ABI checks pass. Do not install that baseline as a 1.20.1 test client.
-2. The 1.20.1 block facts exporter and the real Rust BlockRegistry consumption test both pass. Preserve that verified data path.
-3. Next build version-specific exports and parity tests for block behavior, item/legacy NBT, biomes and world-generation inputs. Keep the full generated facts and decompiled source private.
-4. Begin the maintained RustChunk engine patch series with the version/data layer and chunk/world storage; keep the renderer/streaming architecture intact where its contracts still fit.
-5. Only after a desktop/headless 1.20.1 single-player world can be created, modified, saved and reopened should the ARM64 1.20.1 APK be built and tested on the Galaxy A22.
+2. The 1.20.1 block facts exporter and real Rust BlockRegistry test both pass. The 1.20.1 block-tag exporter also passes client/server equality and has emitted 170 tags / 1,668 entries. Preserve both private input bundles.
+3. Finish the test-only Rust TagDefinitions compatibility check, then export and validate fluid tags and the minimum 1.20.1 registry/resource files needed by the world loader.
+4. Next build version-specific block behavior, collision/shape, legacy item/NBT, biome and world-generation exports. Keep full generated facts and decompiled source private.
+5. Begin the actual maintained engine backport in dependency order (version constants, registry/data contracts, chunk storage and worldgen), preserving the renderer/streaming pipeline where its data contract still fits.
+6. Only after a desktop/headless 1.20.1 single-player world can be created, modified, saved and reopened should the ARM64 1.20.1 APK be built and tested on the Galaxy A22.
 
 No 1.20.1 APK is ready for installation. Every milestone must be labelled by what it actually proves.

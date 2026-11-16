@@ -97,6 +97,20 @@ This confirms that the 1.20.1 block-state export matches the data contract consu
 
 This is the first version-specific data bridge into a concrete Starling engine subsystem, not yet a full engine integration.
 
+### 4. Vanilla 1.20.1 block tags exported and client/server-verified
+
+The target resource layout uses `data/minecraft/tags/blocks/` (plural), whereas the inspected current Starling preparation code reads the newer `data/minecraft/tags/block/` path. The RustChunk exporter detects the target layout, normalizes its resource names into the `minecraft:<path>` keys consumed by Starling's `TagDefinitions`, and verifies byte-identical block-tag resources in the official client and extracted server JARs.
+
+Successful preparation report from run [#43908150242](https://github.com/imamirhosein/RustChunk/actions/runs/43908150242):
+- 170 block-tag JSON resources.
+- 1,668 entries.
+- No `replace` tags and no optional entries in this bundle.
+- Private normalized bundle: 68,977 bytes.
+- Canonical bundle SHA-256: `ce5be12fd9bf4e66df56ba0b8c6b3b13e16db02ef532059bd9bbb026122291b1`.
+- Client/server equality was checked against client SHA-1 `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838` and extracted server SHA-256 `80db52b203ac5de6e5fc1c5082259df440fb2b5390b4c61d474e8fbc63cc41f5`.
+
+The complete bundle remains in ignored `.local`; the workflow artifact carries only the report. The next CI check applies a test-only patch to the pinned Starling source and asks its real Rust `TagDefinitions` to resolve every 1.20.1 block tag against the newly exported `BlockRegistry`. That cross-check is not yet confirmed as passed.
+
 ## Pinned Starling Android build baseline
 
 The new RustChunk baseline workflow [#43905001244](https://github.com/imamirhosein/RustChunk/actions/runs/43905001244) completed successfully. It built the exact pinned Starling 0.8.0 source for ARM64 and passed the package and native-library checks:
@@ -107,7 +121,7 @@ The new RustChunk baseline workflow [#43905001244](https://github.com/imamirhose
 
 This proves the pinned Starling source can be built and packaged by RustChunk CI for ARM64. It is the upstream Starling 26.3 Preview APK, **not** a RustChunk 1.20.1 client; it has not been validated on the Galaxy A22 and is not a test APK for the target version.
 
-### 4. Automated 1.20.1 ↔ 26.3 comparison passed
+### 5. Automated 1.20.1 ↔ 26.3 comparison passed
 
 The latest branch run [completed successfully](https://github.com/imamirhosein/RustChunk/actions/runs/43891766193), including unit tests, remapping, data generation, class indexing, baseline comparison and private decompilation. Its artifact contains only metadata reports, not Minecraft JARs, mappings, game data or decompiled source.
 
@@ -148,7 +162,7 @@ These are class-index comparison counts, not a claim that every changed class ne
 | Data | 5,887 | 9,883 | 9,045 | 5,049 | 378 |
 | World-generation data | 844 | 1,144 | 502 | 202 | 334 |
 
-#### 5. Private decompilation completed
+#### 6. Private decompilation completed
 
 The pinned Vineflower 1.12.0 workflow successfully decompiled both verified, remapped JARs using Java 17:
 - Client: 4,786 Java source files, 22,360,918 bytes.
