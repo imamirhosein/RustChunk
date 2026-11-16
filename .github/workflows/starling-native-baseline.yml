@@ -77,7 +77,6 @@ jobs:
       - name: Build pinned Starling Android ARM64 preview
         working-directory: upstream/starling
         env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/28.2.13676358
           CARGO_BUILD_JOBS: "2"
         run: python packaging/android/build_apk.py --preview --abi arm64-v8a
 
