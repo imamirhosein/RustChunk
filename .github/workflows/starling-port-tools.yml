@@ -7,12 +7,14 @@ on:
     paths:
       - "tools/prepare_minecraft_1_20_1.py"
       - "tools/compare_starling_baseline.py"
+      - "tools/decompile_minecraft_1_20_1.py"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   pull_request:
     paths:
       - "tools/prepare_minecraft_1_20_1.py"
       - "tools/compare_starling_baseline.py"
+      - "tools/decompile_minecraft_1_20_1.py"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   workflow_dispatch:
@@ -31,7 +33,7 @@ jobs:
       - name: Run all RustChunk preparation-tool tests
         run: python -m unittest discover -s tests -v
 
-  official-remap-and-version-diff:
+  official-remap-version-diff-and-decompile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,12 +64,21 @@ jobs:
             --java-25 "$JAVA_HOME_25_X64/bin/java" \
             --starling-root upstream/starling \
             --target-work-dir .local/minecraft/1.20.1-remap
-      - name: Export metadata-only version comparison
+      - name: Decompile verified 1.20.1 client and server privately
+        run: |
+          python tools/decompile_minecraft_1_20_1.py \
+            --java "$JAVA_HOME_17_X64/bin/java" \
+            --starling-root upstream/starling \
+            --prepared-dir .local/minecraft/1.20.1-remap \
+            --work-dir .local/minecraft/1.20.1-decompile \
+            --side both --threads 4 --heap 4G
+      - name: Export metadata-only audit reports
         uses: actions/upload-artifact@v4
         with:
-          name: minecraft-1.20.1-vs-starling-26.3-audit
+          name: minecraft-1.20.1-port-audit
           path: |
             .local/minecraft/1.20.1-remap/audit-report.json
             .local/minecraft/version-compare/comparison-report.json
+            .local/minecraft/1.20.1-decompile/decompile-report.json
           include-hidden-files: true
           if-no-files-found: error
