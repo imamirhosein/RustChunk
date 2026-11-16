@@ -111,7 +111,12 @@ Successful preparation report from run [#43908150242](https://github.com/imamirh
 
 The complete bundle remains in ignored `.local`; the workflow artifact carries only the report. The test-only patch is now part of RustChunk's pinned Starling patch series. In workflow [#43908914224](https://github.com/imamirhosein/RustChunk/actions/runs/43908914224), the actual Rust `TagDefinitions` implementation parsed all 170 files, built their dependency graph against the 1.20.1 `BlockRegistry`, found no unresolved required references, and built every tag successfully (1 Rust integration test passed).
 
-This validates the block-tag codec and registry references. It does **not** yet prove that all version-specific tags required by Starling's 26.3 renderer/gameplay exist in 1.20.1, or that the full `Assets::load` / world-data loading path accepts 1.20.1.
+This validates the block-tag codec and registry references, but the report exposed a **hard compatibility blocker**: all three block-tag IDs that the pinned 26.3 renderer requires are absent from the 1.20.1 vanilla tag set:
+- `minecraft:blocks_motion_in_heightmap`
+- `minecraft:blocks_motion_in_heightmap_no_leaves`
+- `minecraft:blocks_fluid_flow`
+
+The inspected Starling `Assets::load` treats each of those as mandatory and returns an error when one is missing. We must not insert empty tags just to get past the loader; that would silently break heightmaps and fluid flow. The right next step is a 1.20.1-specific **per-block-state behavior export** based on the official 1.20.1 Java predicates (including leaves and fluid-flow behavior), then a small Rust data-loader change so heightmap and fluid-meshing behavior can consume exact per-state facts instead of assuming 26.3 tag names. A Java-oracle parity test must confirm the derived rules before they are used for gameplay.
 
 ## Pinned Starling Android build baseline
 

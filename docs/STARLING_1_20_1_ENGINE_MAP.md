@@ -93,8 +93,8 @@ Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency license
 
 1. E0 is closed: the pinned Starling ARM64 baseline builds and its package/ABI checks pass. Do not install that baseline as a 1.20.1 test client.
 2. The 1.20.1 block facts exporter, real Rust BlockRegistry test, block-tag client/server equality check, and the actual Rust TagDefinitions resolution test all pass. The tag test resolves 170 tags / 1,668 entries with no missing required references. Preserve both private bundles and the test-only Starling patch.
-3. Next check whether the three tag IDs currently hard-required by Starling's renderer exist in 1.20.1, then export and validate fluid tags plus the minimum resources required by the version-specific world loader.
-4. Next build version-specific block behavior, collision/shape, legacy item/NBT, biome and world-generation exports. Keep full generated facts and decompiled source private.
+3. The 1.20.1 target is missing all three 26.3 renderer-required tags for heightmap motion / no-leaves motion / fluid flow. Do not synthesize empty tags. Export per-state equivalents from official 1.20.1 predicates and add a Java-oracle parity test; then adapt Rust `Assets::load` and the mesher to consume those facts.
+4. Finish fluid-tag extraction and validate its references against `FluidKind`. Then continue block behavior, collision/shape, legacy item/NBT, biome and world-generation exports. Keep full generated facts and decompiled source private.
 5. Begin the actual maintained engine backport in dependency order (version constants, registry/data contracts, chunk storage and worldgen), preserving the renderer/streaming pipeline where its data contract still fits.
 6. Only after a desktop/headless 1.20.1 single-player world can be created, modified, saved and reopened should the ARM64 1.20.1 APK be built and tested on the Galaxy A22.
 
