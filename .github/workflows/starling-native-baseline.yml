@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-build-starling-arm64-baseline:
+  build-starling-arm64-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
