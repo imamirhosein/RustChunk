@@ -1,0 +1,4 @@
+[submodule "upstream/starling"]
+	path = upstream/starling
+	url = https://github.com/starling-client/starling.git
+	branch = starling

@@ -1,0 +1,41 @@
+name: RustChunk Starling source pin
+
+on:
+  push:
+    branches:
+      - starling-1.20.1-port-audit
+    paths:
+      - ".gitmodules"
+      - "upstream/starling"
+      - "docs/STARLING_UPSTREAM.md"
+      - ".github/workflows/starling-source-pin.yml"
+  pull_request:
+    paths:
+      - ".gitmodules"
+      - "upstream/starling"
+      - "docs/STARLING_UPSTREAM.md"
+      - ".github/workflows/starling-source-pin.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-upstream-pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Verify exact source pin and critical engine files
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected="5432370d573642041585c69b40fb045b27133488"
+          actual="$(git -C upstream/starling rev-parse HEAD)"
+          test "$actual" = "$expected"
+          test -f upstream/starling/LICENSE
+          test -f upstream/starling/THIRD_PARTY_NOTICES.md
+          test -f upstream/starling/crates/horizon-client-render/src/streaming.rs
+          test -f upstream/starling/crates/horizon-client-render/src/gfx.rs
+          test -f upstream/starling/crates/horizon-world/src/chunk.rs
+          echo "Starling source pin verified: $actual"

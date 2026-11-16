@@ -1,78 +1,33 @@
 # RustChunk
 
-An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
+RustChunk is being redirected from the former Java/JNI launcher toward a native Rust Minecraft client, using Starling/Horizon as the engine base.
 
-## Current milestone: Stage 21 — dependency-plan/classpath reconciliation
+## Active direction
 
-The JNI launch-plan check now regenerates the dependency manifest from the exact selected Forge profile before auditing its classpath. It compares every missing classpath path against the freshly generated checksum-verifiable manifest and prints the checked absolute path plus whether that artifact was included in the plan. It also resolves Forge's `${primary_jar_name}` token to the selected profile's `<profile-id>.jar` filename. New Rust tests cover profile scoping, path safety, and placeholder mapping.
+The active development branch is `starling-1.20.1-port-audit`. The original `main` branch remains preserved as the Stage 21 JNI/Forge launch-plan prototype; it is not the native game engine.
 
-This is a diagnostic/reconciliation milestone, not an assertion that the missing JARs have already been repaired. Missing or unverified dependencies remain launch blockers until their exact cause is established. It does not launch Forge or claim Android LWJGL/OpenGL readiness.
+The upstream Starling source is pinned as a Git submodule at `upstream/starling`. Its exact commit and license notes are documented in [docs/STARLING_UPSTREAM.md](docs/STARLING_UPSTREAM.md).
 
-## Previous milestone: Stage 20 — Forge dependency repair and exact launch-plan diagnostics
+## Target order
 
-The Forge-library download action downloads/verifies the selected profile's Java dependencies and immediately rebuilds the JNI launch plan. The launch-plan report prints exact unresolved placeholder token(s).
+1. Reproduce and understand the Starling engine architecture.
+2. Port the native game rules/data from Minecraft 26.3 back to **vanilla 1.20.1**.
+3. Build and test a playable ARM64 Android client on the Samsung Galaxy A22.
+4. Validate world creation, saving/reopening, chunk streaming and high-speed elytra flight.
+5. Only after vanilla 1.20.1 works, investigate Forge 1.20.1 compatibility.
 
-## Previous milestone: Stage 19 — JNI Forge launch-plan preparation
+Forge/JAR mod support is not implemented in the current engine. Starling's `.hmod` and `.hnmod` formats are not drop-in replacements for Java Forge mods.
 
-Stage 19 builds a profile-specific launch plan for Minecraft 1.20.1 Forge 47.x using the already-verified Java 17 JNI runtime. RustChunk flattens inherited game/JVM arguments, applies Android/Linux ARM64 argument rules, resolves standard Minecraft placeholders, computes the offline-player UUID, assembles the Java class path, resolves Forge's module path, and converts launcher-only module option pairs (such as -p and --add-opens <value>) into the option=value form required by the JNI Invocation API. It writes the result to rustchunk-jni-launch-plan.json and a readable report in the selected Forge profile directory.
+## Current verified progress
 
-The launch-plan action is deliberately a preparation/validation step. It does not start Forge. It reports missing JARs, unresolved arguments, and unsupported JVM tokens rather than silently trying to launch an incomplete profile. Android LWJGL native mapping, EGL/OpenGL surface integration, audio, and the actual Forge client invocation remain separate work.
+- The official Mojang 1.20.1 client/server inputs and client/server ProGuard mappings were downloaded and checksum-verified by GitHub Actions.
+- SpecialSource 1.11.6 remapped both JARs successfully.
+- The remapped JARs contain the expected named client/server entry classes: `net.minecraft.client.Minecraft` and `net.minecraft.server.MinecraftServer`.
+- The smoke-test report counted 7,436 client classes and 5,460 server classes.
+- The next stage is running the 1.20.1 data generator and then adapting Starling's version-preparation and parity tooling.
 
-Stage 18 established that Java 17.0.10 can be created directly with JNI_CreateJavaVM from libjvm.so on the target ARM64 Android device. The test successfully queried java.version, java.home, and os.arch, and detached its JNI-created thread. No app-private bin/java executable is run.
+**This is not yet a playable Minecraft 1.20.1 build. No RustChunk APK from this native port is ready to install.** See [the port audit](docs/STARLING_1_20_1_PORT_AUDIT.md) for the current technical status.
 
-Stage 12 adds a profile-specific dependency plan and downloader for the selected Minecraft 1.20.1 Forge profile. It reads merged library metadata from the selected profile's inheritance chain, applies Android/Linux ARM64 library rules, excludes native classifiers, and schedules only artifacts with an HTTPS URL, safe relative path, valid SHA-1, and declared size. Existing files are reused only after size and SHA-1 verification; partial downloads can resume and are verified before finalization. The generated plan and post-download readiness report remain inside the selected profile directory. Library declarations without complete verification metadata are reported as unresolved rather than downloaded blindly.
+## Previous JNI launcher
 
-Stage 11 adds **Install Java 17 from installed Zalith**. RustChunk checks the installed ZalithLauncher2 package variants and reads the two ARM64 JRE 17 TAR.XZ assets directly from the Zalith APK's public assets. It does not attempt to read Zalith's private `/data/user/0` directory, does not ask the user to copy that protected directory through a file picker, and does not bundle or download a separate runtime package.
-
-The installer extracts the common and ARM64 runtime archives into RustChunk's own `files/games/runtimes/Internal-17/` directory. TAR symbolic links are recreated with Android's native symlink API, archive paths are checked against path traversal, extracted data is size-limited, executable permissions are restored for `bin/`, and the previous runtime is preserved until the new directory has been extracted. The installer then runs `bin/java -version` and saves its report to `files/runtime/java17-install-report.txt`.
-
-Stage 10's **Test installed Java runtime** remains available as a separate diagnostic. It searches known runtime roots, executes detected `bin/java -version` files, and saves the report at `files/runtime/runtime-test-report.txt`.
-
-## Reports and profile-specific data
-
-For a selected profile such as `1.20.1 Forge 47.4.22`, RustChunk stores:
-- `versions/<selected-profile>/rustchunk-launch-spec.json`
-- `versions/<selected-profile>/rustchunk-readiness-report.txt`
-
-The selected profile's mods and config are referenced in place. RustChunk does not move, merge, or duplicate profile-specific files.
-
-The profile list is discovered from JSON metadata. A profile is shown even when it is not currently supported by the Forge analysis action. Full profile creation, editing, deletion, and independent game-directory migration are not implemented yet.
-
-## Zalith game-data import
-
-The Android Storage Access Framework importer accepts a folder directly containing at least two of `assets/`, `libraries/`, and `versions/`; it also detects a wrapper folder containing a `.minecraft/` child.
-
-It copies reusable assets, libraries, versions, mods, configs, resource packs, shader packs, KubeJS scripts, and selected mod data folders. Launcher account databases, authentication tokens, logs, crash reports, and launcher-specific private data are not copied.
-
-## Current capabilities and limitations
-
-- Stage 2: resolves official Minecraft 1.20.1 metadata and builds a SHA-1-aware install plan.
-- Stage 3: downloads base Minecraft files with four parallel workers, resume support, and SHA-1 verification.
-- Stage 4: imports reusable game data from a user-selected Zalith game directory.
-- Stage 5: persists import/inspection reports and audits game-data presence.
-- Stage 6: resolves inherited Forge metadata, libraries, launch arguments, and local runtime candidates.
-- Stage 7: lists installed profiles, selects an exact Forge 1.20.1 profile, stores reports per profile, and imports a user-selected Java runtime directory.
-- Stage 8: fixes the profile-selection state so the Forge analysis action is enabled for the imported Minecraft 1.20.1 Forge profile.
-- Stage 9: adds the standard Zalith `files/games/runtimes` directory to runtime discovery.
-- Stage 10: adds actual Java executable testing with timeout handling and a persistent diagnostic report.
-- Stage 11: installs the same ARM64 Java 17 runtime payload already present in the installed ZalithLauncher2 APK, without requiring access to Zalith's private app data.
-- Stage 12: prepares and downloads checksum-verified Java library artifacts for the selected Forge profile, reusing valid files and keeping profile-specific plans/reports isolated.
-- Stage 18: verifies direct Java 17 HotSpot startup using the JNI Invocation API, avoiding execution of app-private bin/java.
-- Stage 19: prepares a JNI-compatible Forge launch plan with inherited argument rules, module-path conversion, verified classpath entries, and an offline player identity.
-- Stage 20: downloads/verifies Forge Java libraries, automatically regenerates the JNI plan, and prints exact unresolved placeholder tokens.
-- Stage 21: refreshes the selected profile dependency manifest during JNI preparation, reconciles missing classpath artifacts against that manifest, and resolves the Forge primary-jar placeholder.
-
-**Not yet implemented:** Android LWJGL native-library mapping/extraction, EGL/OpenGL surface integration, audio integration, actual Forge JVM invocation, complete game launch lifecycle, and on-device modpack/Aternos compatibility testing. The launch plan is a preparation artifact, not proof that Forge starts. Java startup success alone does not prove Forge or Minecraft can launch.
-
-A pure Rust game engine cannot directly load Java Forge mods. RustChunk still needs a compatible Java/Forge execution layer. This milestone installs and validates Java 17; it does not yet launch Minecraft.
-
-## Platform target
-
-- Android ARM64 (arm64-v8a)
-- Minecraft Java 1.20.1
-- Forge 47.x compatibility target
-- Android app-private storage under the RustChunk application directory
-
-## Build and tests
-
-Push to `main` or run RustChunk Android Build manually from GitHub Actions. The workflow runs Rust unit tests, cross-compiles the Rust shared library for Android ARM64, builds the Android APK, verifies the persistent signing key and APK certificate, and uploads the artifact.
+The previous Stage 1–21 launcher implementation is preserved for reference in [docs/LEGACY_JNI_LAUNCHER.md](docs/LEGACY_JNI_LAUNCHER.md). It prepared a Java/Forge launch plan but did not provide a native Minecraft engine or launch Forge on Android.
