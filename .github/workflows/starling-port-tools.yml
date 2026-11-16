@@ -30,7 +30,6 @@ jobs:
         run: python -m unittest tests.test_prepare_minecraft_1_20_1 -v
 
   official-remap-smoke-test:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
