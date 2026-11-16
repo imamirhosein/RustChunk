@@ -259,6 +259,73 @@ def read_game_facts(client_jar: Path, manifest_info: dict) -> dict:
     return facts
 
 
+def run_data_generator(java: str, server_bundler: Path, work_dir: Path) -> dict:
+    """Run 1.20.1's own data generator and retain its JSON reports privately."""
+    datagen_dir = work_dir / "datagen"
+    output_dir = datagen_dir / "out"
+    log_path = datagen_dir / "datagen.log"
+    reports_dir = output_dir / "reports"
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    command = [
+        java,
+        "-DbundlerMainClass=net.minecraft.data.Main",
+        "-jar",
+        str(server_bundler),
+        "--reports",
+        "--output",
+        str(output_dir),
+    ]
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    log_path.write_text(result.stdout + result.stderr, encoding="utf-8")
+    if result.returncode != 0:
+        raise PrepareError(
+            f"Minecraft {VERSION} data generator failed; see {log_path}:\n"
+            + (result.stdout + result.stderr)[-5000:]
+        )
+    if not reports_dir.is_dir():
+        raise PrepareError(
+            f"Minecraft {VERSION} data generator returned success but did not create {reports_dir}"
+        )
+
+    return summarize_data_reports(reports_dir)
+
+
+def summarize_data_reports(reports_dir: Path) -> dict:
+    """Return metadata only; never put generated Minecraft JSON data in a public artifact."""
+    files = sorted(path for path in reports_dir.rglob("*.json") if path.is_file())
+    if not files:
+        raise PrepareError(f"No JSON reports were generated under {reports_dir}")
+
+    summaries = {}
+    for path in files:
+        relative = path.relative_to(reports_dir).as_posix()
+        # Keep detailed summaries for high-value root reports but not their proprietary game data.
+        if "/" not in relative:
+            summary = {"bytes": path.stat().st_size}
+            try:
+                value = json.loads(path.read_text(encoding="utf-8"))
+                summary["type"] = type(value).__name__
+                if isinstance(value, dict):
+                    summary["entry_count"] = len(value)
+                    summary["sample_keys"] = sorted(map(str, value.keys()))[:12]
+                elif isinstance(value, list):
+                    summary["entry_count"] = len(value)
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+                summary["parseable_json"] = False
+            summaries[relative] = summary
+
+    return {
+        "status": "completed",
+        "json_file_count": len(files),
+        "total_bytes": sum(path.stat().st_size for path in files),
+        "top_level_reports": summaries,
+        "reports_path": "datagen/out/reports",
+    }
+
+
 def prepare(work_dir: Path, java: str, maven: str) -> dict:
     work_dir.mkdir(parents=True, exist_ok=True)
     info, manifest_sha1 = load_official_version()
@@ -296,6 +363,7 @@ def prepare(work_dir: Path, java: str, maven: str) -> dict:
         server_bundle, jar_dir / "server-game.jar", VERSION
     )
 
+    data_generator_report = run_data_generator(java, server_bundle, work_dir)
     classpath = ensure_specialsource_classpath(work_dir, maven)
     client_mapped_classes = remap_jar(
         java, classpath, client, client_map, mapped_dir / "client-named.jar",
@@ -327,6 +395,7 @@ def prepare(work_dir: Path, java: str, maven: str) -> dict:
             "server_mappings_sha1": downloads["server_mappings"]["sha1"],
             "server_game_sha256": server_game_sha256,
         },
+        "data_generator": data_generator_report,
         "remapper": {
             "name": "SpecialSource",
             "version": MAVEN_COORDINATES[2],
@@ -357,8 +426,8 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        if java_major(args.java) < 8:
-            raise PrepareError("SpecialSource 1.11.6 needs Java 8 or newer")
+        if java_major(args.java) != 17:
+            raise PrepareError("The 1.20.1 preparation pipeline requires Java 17 exactly")
         report = prepare(args.work_dir.resolve(), args.java, args.maven)
     except (OSError, ValueError, KeyError, urllib.error.URLError, PrepareError) as exc:
         print(f"1.20.1 preparation failed: {exc}", file=sys.stderr)
