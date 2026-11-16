@@ -118,6 +118,7 @@ class Minecraft1201PreparationTests(unittest.TestCase):
             )
             summary = summarize_data_reports(reports)
             self.assertEqual(summary["json_file_count"], 2)
+            self.assertEqual(summary["report_paths"], ["blocks.json", "minecraft/nested.json"])
             self.assertEqual(summary["top_level_reports"]["blocks.json"]["entry_count"], 2)
             self.assertNotIn("minecraft", summary["top_level_reports"])
             self.assertNotIn("secret_game_data", json.dumps(summary))
