@@ -115,31 +115,33 @@ The user's Windows 7 PC does not need to compile the project. The port and APK c
 
 ## M1 groundwork: official 1.20.1 mappings
 
-The 1.20.1 version metadata contains separate client and server mapping files. The current upstream pipeline rejects these fields, so the backport must add a remapping stage before decompilation and class indexing.
+The 1.20.1 version metadata contains separate client and server mapping files. The current upstream pipeline rejects these fields, so the backport needs a remapping stage before decompilation and class indexing.
 
-Pinned SHA-1 values observed in the 1.20.1 version metadata:
+The verified 1.20.1 metadata values are:
 
 | Input | SHA-1 |
 |---|---|
 | Client JAR | `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838` |
 | Client mappings | `6c48521eed01fe2e8ecdadbd5ae348415f3c47da` |
-| Server JAR | `84194a2f286ef7c14ed7ce0090dba59902951553` |
+| Server bundler JAR | `84194a2f286ef7c14ed7ce0090dba59902951553` |
 | Server mappings | `0b4dba049482496c507b2387a73a913230ebbd76` |
 
-Mojang's historical maps use ProGuard format. The selected remapping approach is to translate them into SRG and apply the SRG file with **SpecialSource 1.11.6** (BSD-3-Clause). This avoids introducing AutoRenamingTool's LGPL-2.1 code into a project whose upstream contribution rules exclude LGPL source. SpecialSource exposes an `--srg-in` input option; the final invocation, version and tool checksum still need to be pinned and integration-tested.
+The mappings are ProGuard format. An important correction from source inspection: **SpecialSource 1.11.6 can parse ProGuard mappings directly** through its own `JarMapping.parseProguardLine` path. We do not need an intermediate ProGuard-to-SRG converter. The earlier converter prototype was discarded so we do not keep an unnecessary translation layer.
 
-A first isolated helper now exists in this RustChunk branch:
+SpecialSource 1.11.6 is published on Maven Central under BSD-3-Clause. The preparation script resolves the tool and its declared dependencies through Maven, then runs its main class with the official Mojang mappings.
 
-- `tools/mojang_proguard_to_srg.py` translates class, field and method mappings from ProGuard into obfuscated-to-named SRG entries and reconstructs JVM descriptors, including arrays and generic erasure.
-- `tests/test_mojang_proguard_to_srg.py` covers classes, fields, line-numbered methods, constructors, arrays, generic erasure and malformed input.
-- The six synthetic unit tests passed in a local Python 3.12 test run.
+Current groundwork in this branch:
 
-**Important boundary:** the helper has not yet been run against the full official 1.20.1 client/server mapping files, used to remap either actual JAR, or integrated into Starling's `tools/lab.py` / `tools/version_port.py`. This is groundwork, not proof that the 1.20.1 port pipeline is operational. The next check is to download both maps, verify their SHA-1 values, convert them, remap the matching JARs, then verify class/member references in the outputs.
+- `tools/prepare_minecraft_1_20_1.py` resolves version 1.20.1 through Mojang's official version manifest; verifies the manifest JSON, client/server JARs and both mapping files against Mojang's SHA-1 and size metadata; extracts the bundled server game JAR and verifies its embedded SHA-256; remaps client and server JARs with SpecialSource; and checks for the expected named Minecraft entry classes.
+- `tests/test_prepare_minecraft_1_20_1.py` tests server-bundle parsing and hash validation, version-fact validation and file hashing without downloading game files.
+- `.github/workflows/starling-port-tools.yml` runs the unit tests on changes. Its manual `workflow_dispatch` path performs the real official download/remap smoke test and exports only a metadata report. The Minecraft JARs, mappings and remapped JARs remain in the runner's ignored working directory and are not uploaded as artifacts.
+
+**Not yet proven:** the script has not yet completed its manual GitHub Actions run against the full Mojang 1.20.1 files. Until that run succeeds, remapping is an implementation attempt, not a validated result. A successful remap also does not mean Horizon has been ported to 1.20.1; it only unlocks the next analysis stage.
 
 Sources:
-- 1.20.1 version metadata and official download hashes: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
-- Mojang mapping format is ProGuard: https://minecraft.wiki/w/Obfuscation_map
-- SpecialSource CLI and BSD-3-Clause artifact metadata: https://central.sonatype.com/artifact/net.md-5/SpecialSource
+- Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
+- SpecialSource 1.11.6 release source: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
+- SpecialSource 1.11.6 Maven Central metadata and BSD-3-Clause license: https://central.sonatype.com/artifact/net.md-5/SpecialSource/1.11.6
 
 ## Ordered RustChunk milestones
 

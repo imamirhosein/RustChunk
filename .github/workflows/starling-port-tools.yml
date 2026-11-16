@@ -1,21 +1,17 @@
-name: Starling port-tool tests
+name: RustChunk 1.20.1 port preparation
 
 on:
   push:
     branches:
       - starling-1.20.1-port-audit
     paths:
-      - "tools/mojang_proguard_to_srg.py"
-      - "tools/__init__.py"
-      - "tests/test_mojang_proguard_to_srg.py"
-      - "tests/__init__.py"
+      - "tools/prepare_minecraft_1_20_1.py"
+      - "tests/test_prepare_minecraft_1_20_1.py"
       - ".github/workflows/starling-port-tools.yml"
   pull_request:
     paths:
-      - "tools/mojang_proguard_to_srg.py"
-      - "tools/__init__.py"
-      - "tests/test_mojang_proguard_to_srg.py"
-      - "tests/__init__.py"
+      - "tools/prepare_minecraft_1_20_1.py"
+      - "tests/test_prepare_minecraft_1_20_1.py"
       - ".github/workflows/starling-port-tools.yml"
   workflow_dispatch:
 
@@ -23,12 +19,37 @@ permissions:
   contents: read
 
 jobs:
-  mapping-tool:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run mapping conversion unit tests
-        run: python -m unittest tests.test_mojang_proguard_to_srg -v
+      - name: Run preparation-tool unit tests
+        run: python -m unittest tests.test_prepare_minecraft_1_20_1 -v
+
+  official-remap-smoke-test:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Maven
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y maven
+      - name: Download, verify and remap the official 1.20.1 inputs
+        run: python tools/prepare_minecraft_1_20_1.py
+      - name: Export metadata-only audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-1.20.1-remap-audit
+          path: .local/minecraft/1.20.1-remap/audit-report.json
+          if-no-files-found: error
