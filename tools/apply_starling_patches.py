@@ -130,7 +130,7 @@ def apply_series(
         "base_commit": actual_commit,
         "patch_count": len(patches),
         "patches": [str(p.relative_to(patch_root)) for p in patches],
-        "mode": "check" if check_only else "apply",
+        "mode": "checked" if check_only else "applied",
     }
 
 
@@ -147,7 +147,7 @@ def main() -> int:
         return 2
     if result["patch_count"]:
         print(
-            f"Starling patch series {result['mode']}d: "
+            f"Starling patch series {result['mode']}: "
             f"{result['patch_count']} patch(es) on {result['base_commit']}"
         )
         for patch in result["patches"]:
