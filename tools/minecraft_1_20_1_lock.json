@@ -6,6 +6,8 @@
     "java_major": 17,
     "resource_pack_format": 15,
     "data_pack_format": 15,
+    "expected_block_count": 1003,
+    "expected_block_state_count": 24135,
     "downloads": {
       "client": "0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838",
       "client_mappings": "6c48521eed01fe2e8ecdadbd5ae348415f3c47da",
@@ -25,5 +27,5 @@
       "sha256": "1dfcfe974395734fa467ce620661c7623d05ba83670de0529b1fbd63ff548b9d"
     }
   },
-  "policy": "Official metadata is resolved live, but all four primary client/server JAR and mapping SHA-1 values plus the game version facts must match this lock. Decompiled sources and game inputs remain private."
+  "policy": "Official metadata is resolved live, but all four primary client/server JAR and mapping SHA-1 values plus game version facts and generated block-registry counts must match this reviewed lock. Decompiled sources, exporter output and game inputs remain private."
 }

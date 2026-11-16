@@ -9,6 +9,8 @@ on:
       - "tools/compare_starling_baseline.py"
       - "tools/decompile_minecraft_1_20_1.py"
       - "tools/minecraft_1_20_1_lock.json"
+      - "tools/export_minecraft_1_20_1_block_facts.py"
+      - "tools/java/Vanilla1201BlockFactsExporter.java"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   pull_request:
@@ -74,6 +76,14 @@ jobs:
             --prepared-dir .local/minecraft/1.20.1-remap \
             --work-dir .local/minecraft/1.20.1-decompile \
             --side both --threads 4 --heap 4G
+      - name: Export 1.20.1 block-state registry using the official game classes
+        run: |
+          python tools/export_minecraft_1_20_1_block_facts.py \
+            --java "$JAVA_HOME_17_X64/bin/java" \
+            --javac "$JAVA_HOME_17_X64/bin/javac" \
+            --prepared-dir .local/minecraft/1.20.1-remap \
+            --work-dir .local/minecraft/1.20.1-decompile
+
       - name: Export metadata-only audit reports
         uses: actions/upload-artifact@v4
         with:
@@ -82,5 +92,6 @@ jobs:
             .local/minecraft/1.20.1-remap/audit-report.json
             .local/minecraft/version-compare/comparison-report.json
             .local/minecraft/1.20.1-decompile/decompile-report.json
+            .local/minecraft/1.20.1-decompile/block-facts/block-facts-report.json
           include-hidden-files: true
           if-no-files-found: error

@@ -82,7 +82,13 @@ The remapped 1.20.1 client/server code was indexed with Starling's own `tools/cl
 
 The 1.20.1 data generator does **not** emit `packets.json` or the modern item-component reports. The comparison therefore records those as absent, not as empty data. A 1.20.1-specific packet exporter is still needed for multiplayer; the old item representation must be modelled from 1.20.1 itself.
 
-### 3. Automated 1.20.1 ↔ 26.3 comparison passed
+### 3. A version-specific block-registry exporter is now part of the pipeline
+
+Starling's Rust `BlockRegistry` consumes an ordered `facts.json` shape: each row carries the block identifier, air and fluid flags, a display descriptor and the full block-state descriptor; the file also carries each block's default state ID. RustChunk now has a separate Java 17 exporter for Minecraft 1.20.1 that reads the verified remapped official game classes and writes this schema privately. It does not reuse Starling's Java 25 / 26.3 exporter. The workflow checks the state descriptors, unique state identities, default-state references and the locked counts (1,003 blocks / 24,135 states). Only a compact summary and hash are uploaded; the full facts file remains in ignored `.local`.
+
+This is the first version-specific data bridge into a concrete Starling engine subsystem, not yet a full engine integration.
+
+### 4. Automated 1.20.1 ↔ 26.3 comparison passed
 
 The latest branch run [completed successfully](https://github.com/imamirhosein/RustChunk/actions/runs/43891766193), including unit tests, remapping, data generation, class indexing, baseline comparison and private decompilation. Its artifact contains only metadata reports, not Minecraft JARs, mappings, game data or decompiled source.
 
@@ -123,7 +129,7 @@ These are class-index comparison counts, not a claim that every changed class ne
 | Data | 5,887 | 9,883 | 9,045 | 5,049 | 378 |
 | World-generation data | 844 | 1,144 | 502 | 202 | 334 |
 
-#### 4. Private decompilation completed
+#### 5. Private decompilation completed
 
 The pinned Vineflower 1.12.0 workflow successfully decompiled both verified, remapped JARs using Java 17:
 - Client: 4,786 Java source files, 22,360,918 bytes.

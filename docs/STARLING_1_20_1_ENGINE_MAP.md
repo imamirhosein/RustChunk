@@ -91,9 +91,9 @@ Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency license
 
 ## Immediate next work
 
-1. Run the new pinned Starling ARM64 baseline workflow and inspect the APK package/ABI and build logs. This proves the Android engine toolchain in RustChunk CI, not 1.20.1 compatibility.
-2. Add a deterministic 1.20.1 resource-preparation profile (separate from the 26.3 `research-lock.json`) and version-specific Java exporters.
-3. Generate the target version constants and the minimum registry/block/biome tables; add parity fixtures before changing gameplay code.
+1. Finish the pinned Starling ARM64 baseline workflow and inspect its APK package/ABI and build logs. This proves the Android engine toolchain in RustChunk CI, not 1.20.1 compatibility.
+2. Continue the 1.20.1 preparation lane with separate Java 17 exporters. The first exporter targets the exact `facts.json` schema consumed by Starling's ordered `BlockRegistry`; the complete file stays private and CI publishes only its validated summary.
+3. Extend version-specific exports to biome, block behavior and world-generation inputs, then add Rust parity fixtures before changing gameplay code.
 4. Start with chunk storage, block states and flat-world local play, then expand world generation and gameplay in dependency order.
 
 No 1.20.1 APK is ready for installation. Every milestone must be labelled by what it actually proves.
