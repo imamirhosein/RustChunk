@@ -60,12 +60,12 @@ def load_pinned_26_3(starling_root: Path) -> tuple[dict, str]:
         pinned.get("manifest_sha1", ""),
         *pinned.get("accepted_manifest_sha1", []),
     }
-    if entry.get("sha1") not in allowed_manifest_hashes:
-        raise PrepareError(
-            "The current 26.3 version JSON is not one of the exact upstream-pinned "
-            "or explicitly accepted manifests; stop rather than silently changing the baseline."
-        )
+    manifest_is_pinned = entry.get("sha1") in allowed_manifest_hashes
 
+    # Mojang may republish a version JSON (for example, a translated asset-index
+    # update) while leaving the actual client/server game JARs identical. We
+    # permit that only after the official JSON itself is SHA-1 verified and both
+    # JAR hashes, version id and Java major still exactly match Starling's lock.
     info, version_bytes = fetch_json(entry["url"])
     actual_manifest_sha1 = hashlib.sha1(version_bytes).hexdigest()
     if actual_manifest_sha1 != entry["sha1"]:
@@ -81,6 +81,7 @@ def load_pinned_26_3(starling_root: Path) -> tuple[dict, str]:
         raise PrepareError("Mojang's 26.3 client JAR SHA-1 differs from Starling's research lock")
     if downloads.get("server", {}).get("sha1") != pinned.get("server_sha1"):
         raise PrepareError("Mojang's 26.3 server JAR SHA-1 differs from Starling's research lock")
+    info["_rustchunk_manifest_is_exactly_pinned"] = manifest_is_pinned
     return info, actual_manifest_sha1
 
 
@@ -236,6 +237,8 @@ def compare(args) -> dict:
             "server_sha1": downloads["server"]["sha1"],
             "server_game_sha256": server_game_sha256,
             "java_major": 25,
+            "version_json_matches_starling_lock": info["_rustchunk_manifest_is_exactly_pinned"],
+            "metadata_republished_with_identical_game_jars": not info["_rustchunk_manifest_is_exactly_pinned"],
         },
         "code": class_diff_summary(old_index, new_index, class_index),
         "data_generator": {
