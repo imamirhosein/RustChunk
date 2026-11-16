@@ -20,7 +20,7 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 
 ## Current verified progress
 
-- The official Mojang 1.20.1 client/server inputs and client/server ProGuard mappings were downloaded and checksum-verified by GitHub Actions.
+- The official Mojang 1.20.1 client/server inputs and client/server ProGuard mappings are checksum-verified against the separate reviewed pins in `tools/minecraft_1_20_1_lock.json`.
 - SpecialSource 1.11.6 remapped both JARs successfully.
 - The remapped JARs contain the expected named client/server entry classes: `net.minecraft.client.Minecraft` and `net.minecraft.server.MinecraftServer`.
 - The smoke-test report counted 7,436 client classes and 5,460 server classes.
@@ -29,6 +29,7 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 - The automated comparison against Starling 26.3 passed: 5,355 classes exist only in 26.3, 1,408 are absent there, 581 moved and 4,842 changed; 50,674 methods differ.
 - The verified client and server were privately decompiled: 4,786 client and 3,568 server Java source files. These sources remain private and are not included in the workflow artifact.
 - The Starling architecture and target version-sensitive subsystems have been mapped in [the engineering map](docs/STARLING_1_20_1_ENGINE_MAP.md).
+- Preparation and decompilation now reject any primary 1.20.1 JAR or mapping whose SHA-1 differs from the reviewed target lock.
 
 The new [ARM64 baseline workflow](.github/workflows/starling-native-baseline.yml) builds the exact pinned Starling source as a CI-only preview artifact. That proves the base engine build pipeline when it passes; it is still Minecraft 26.3 and **not** a RustChunk 1.20.1 APK.
 

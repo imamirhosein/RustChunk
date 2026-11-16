@@ -8,6 +8,7 @@ on:
       - "tools/prepare_minecraft_1_20_1.py"
       - "tools/compare_starling_baseline.py"
       - "tools/decompile_minecraft_1_20_1.py"
+      - "tools/minecraft_1_20_1_lock.json"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   pull_request:
@@ -15,6 +16,7 @@ on:
       - "tools/prepare_minecraft_1_20_1.py"
       - "tools/compare_starling_baseline.py"
       - "tools/decompile_minecraft_1_20_1.py"
+      - "tools/minecraft_1_20_1_lock.json"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   workflow_dispatch:

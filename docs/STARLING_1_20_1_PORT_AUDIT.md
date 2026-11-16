@@ -58,13 +58,13 @@ These affect real behavior: packet registration, registries, blocks/items, save 
 
 ### 1. Official 1.20.1 inputs verified and remapped
 
-The current preparation tool downloads the official 1.20.1 version JSON, client/server JARs and Mojang's client/server ProGuard mappings. It checks SHA-1 and size values from Mojang's metadata, extracts the versioned server JAR and verifies the embedded SHA-256, then remaps client and server using SpecialSource 1.11.6 (BSD-3-Clause). SpecialSource reads Mojang ProGuard mappings directly; no intermediate mapping converter is needed.
+The current preparation tool resolves the official 1.20.1 version JSON, then checks the client/server JAR and client/server ProGuard mapping SHA-1 values against the separate reviewed target lock. It also checks download sizes from Mojang's metadata, extracts the versioned server JAR and verifies the embedded SHA-256, then remaps client and server using SpecialSource 1.11.6 (BSD-3-Clause). SpecialSource reads Mojang ProGuard mappings directly; no intermediate mapping converter is needed.
 
 The remapped JARs expose the expected named entry points:
 - Client: `net/minecraft/client/Minecraft.class`
 - Server: `net/minecraft/server/MinecraftServer.class`
 
-The official 1.20.1 values used by the workflow are:
+The reviewed 1.20.1 target lock is stored separately in `tools/minecraft_1_20_1_lock.json`. Preparation and decompilation reject any mismatch against its four primary input hashes. The pinned values are:
 - Client JAR SHA-1: `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838`
 - Client mappings SHA-1: `6c48521eed01fe2e8ecdadbd5ae348415f3c47da`
 - Server bundler SHA-1: `84194a2f286ef7c14ed7ce0090dba59902951553`

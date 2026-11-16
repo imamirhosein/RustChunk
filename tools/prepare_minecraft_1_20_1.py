@@ -26,6 +26,42 @@ SPECIALSOURCE_MAIN = "net.md_5.specialsource.SpecialSource"
 MAVEN_DEPENDENCY_PLUGIN = "org.apache.maven.plugins:maven-dependency-plugin:3.8.1"
 
 
+PINNED_LOCK_PATH = Path(__file__).with_name("minecraft_1_20_1_lock.json")
+
+
+def load_target_lock() -> dict:
+    """Read the separately maintained, reviewed Minecraft 1.20.1 input lock."""
+    try:
+        lock = json.loads(PINNED_LOCK_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise PrepareError(f"Could not read the 1.20.1 target lock at {PINNED_LOCK_PATH}: {exc}") from exc
+    target = lock.get("minecraft", {})
+    if target.get("version") != VERSION:
+        raise PrepareError(
+            f"Target lock identifies {target.get('version')!r}; expected {VERSION}"
+        )
+    expected_downloads = target.get("downloads", {})
+    required = ("client", "client_mappings", "server", "server_mappings")
+    for name in required:
+        digest = expected_downloads.get(name, "")
+        if len(digest) != 40 or any(c not in "0123456789abcdef" for c in digest.lower()):
+            raise PrepareError(f"Target lock has no valid SHA-1 pin for {name}")
+    return lock
+
+
+def validate_official_downloads(downloads: dict, lock: dict | None = None) -> None:
+    """Reject republished or substituted primary inputs that are not in the reviewed target lock."""
+    target = (lock or load_target_lock())["minecraft"]
+    for name, expected_sha1 in target["downloads"].items():
+        record = downloads.get(name)
+        actual_sha1 = record.get("sha1", "").lower() if isinstance(record, dict) else ""
+        if actual_sha1 != expected_sha1:
+            raise PrepareError(
+                f"Official metadata {name} SHA-1 does not match the 1.20.1 target lock: "
+                f"expected {expected_sha1}, got {actual_sha1 or 'missing'}"
+            )
+
+
 class PrepareError(RuntimeError):
     """A version input failed validation or a preparation stage failed."""
 
@@ -246,12 +282,13 @@ def read_game_facts(client_jar: Path, manifest_info: dict) -> dict:
     facts = version_facts(game_info, manifest_info)
     if facts["version"] != VERSION:
         raise PrepareError(f"Client JAR identifies itself as {facts['version']!r}, not {VERSION}")
+    pinned = load_target_lock()["minecraft"]
     expected = {
-        "protocol": 763,
-        "data_version": 3465,
-        "java_major": 17,
-        "resource_pack_format": 15,
-        "data_pack_format": 15,
+        "protocol": pinned["protocol"],
+        "data_version": pinned["data_version"],
+        "java_major": pinned["java_major"],
+        "resource_pack_format": pinned["resource_pack_format"],
+        "data_pack_format": pinned["data_pack_format"],
     }
     differences = {key: [value, facts.get(key)] for key, value in expected.items() if facts.get(key) != value}
     if differences:
@@ -375,6 +412,7 @@ def prepare(work_dir: Path, java: str, maven: str) -> dict:
         raise PrepareError(f"Expected Java 17 metadata for {VERSION}, got {facts_manifest!r}")
 
     downloads = info.get("downloads", {})
+    validate_official_downloads(downloads)
     required = ("client", "client_mappings", "server", "server_mappings")
     if any(name not in downloads for name in required):
         raise PrepareError("Official 1.20.1 metadata is missing one or more required client/server files")

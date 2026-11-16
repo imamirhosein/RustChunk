@@ -26,6 +26,7 @@ from tools.prepare_minecraft_1_20_1 import (
     download_verified,
     java_major,
     load_official_version,
+    validate_official_downloads,
 )
 
 
@@ -193,6 +194,8 @@ def decompile(args) -> dict:
     version_info, metadata_sha1 = load_official_version()
     if version_info.get("id") != "1.20.1":
         raise PrepareError("Official version metadata did not resolve to 1.20.1")
+
+    validate_official_downloads(version_info.get("downloads", {}))
 
     starling_root = args.starling_root.resolve()
     lock_path = starling_root / "research-lock.json"

@@ -12,6 +12,8 @@ from tools.prepare_minecraft_1_20_1 import (
     parse_server_bundle_entry,
     read_game_facts,
     version_facts,
+    load_target_lock,
+    validate_official_downloads,
 )
 
 
@@ -54,6 +56,30 @@ class Minecraft1201PreparationTests(unittest.TestCase):
                 archive.writestr("META-INF/versions/1.20.1/server.jar", payload)
             with self.assertRaisesRegex(PrepareError, "SHA-256 mismatch"):
                 extract_server_game(bundler, root / "out/server-game.jar", "1.20.1")
+
+    def test_target_lock_pins_primary_official_inputs(self):
+        lock = load_target_lock()
+        target = lock["minecraft"]
+        self.assertEqual(target["version"], "1.20.1")
+        self.assertEqual(target["protocol"], 763)
+        self.assertEqual(target["data_version"], 3465)
+        self.assertEqual(target["java_major"], 17)
+        self.assertEqual(
+            target["downloads"]["client"],
+            "0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838",
+        )
+
+    def test_official_download_metadata_must_match_all_pins(self):
+        target = load_target_lock()["minecraft"]["downloads"]
+        downloads = {name: {"sha1": digest} for name, digest in target.items()}
+        validate_official_downloads(downloads)
+        downloads["client_mappings"]["sha1"] = "0" * 40
+        with self.assertRaisesRegex(PrepareError, "client_mappings SHA-1"):
+            validate_official_downloads(downloads)
+
+    def test_missing_official_download_pin_fails(self):
+        with self.assertRaisesRegex(PrepareError, "server_mappings SHA-1"):
+            validate_official_downloads({"client": {"sha1": "0" * 40}})
 
     def test_game_facts_match_target(self):
         with tempfile.TemporaryDirectory() as temp:
