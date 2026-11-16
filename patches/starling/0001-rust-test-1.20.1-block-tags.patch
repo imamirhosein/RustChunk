@@ -45,4 +45,4 @@ new file mode 100644
 +    );
 +    assert_eq!(built.tags.len(), expected_tag_count, "some 1.20.1 block tags were not built");
 +}
-+
+
