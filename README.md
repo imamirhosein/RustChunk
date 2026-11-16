@@ -28,7 +28,8 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 - The 1.20.1 data generator produced 1,003 block entries, 66 registries, the command tree and two biome-parameter reports.
 - The automated comparison against Starling 26.3 passed: 5,355 classes exist only in 26.3, 1,408 are absent there, 581 moved and 4,842 changed; 50,674 methods differ.
 - The verified client and server were privately decompiled: 4,786 client and 3,568 server Java source files. These sources remain private and are not included in the workflow artifact.
-- A dedicated Java 17 exporter is being added for the ordered 1.20.1 block-state registry. It targets the exact `facts.json` schema consumed by Starling's `BlockRegistry`; only counts and a SHA-256 summary are published, never the complete registry file.
+- A dedicated Java 17 exporter has successfully generated the ordered 1.20.1 block-state registry in the exact `facts.json` schema consumed by Starling's `BlockRegistry`: 1,003 blocks and 24,135 states. Only counts and a SHA-256 summary are published, never the complete registry file.
+- CI is now testing that private 1.20.1 facts file with Starling's actual Rust `BlockRegistry` parser; this integration check has not yet been confirmed.
 - The Starling architecture and target version-sensitive subsystems have been mapped in [the engineering map](docs/STARLING_1_20_1_ENGINE_MAP.md).
 - Preparation and decompilation now reject any primary 1.20.1 JAR or mapping whose SHA-1 differs from the reviewed target lock.
 

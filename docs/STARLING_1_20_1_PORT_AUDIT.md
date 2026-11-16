@@ -86,6 +86,13 @@ The 1.20.1 data generator does **not** emit `packets.json` or the modern item-co
 
 Starling's Rust `BlockRegistry` consumes an ordered `facts.json` shape: each row carries the block identifier, air and fluid flags, a display descriptor and the full block-state descriptor; the file also carries each block's default state ID. RustChunk now has a separate Java 17 exporter for Minecraft 1.20.1 that reads the verified remapped official game classes and writes this schema privately. It does not reuse Starling's Java 25 / 26.3 exporter. The workflow checks the state descriptors, unique state identities, default-state references and the locked counts (1,003 blocks / 24,135 states). Only a compact summary and hash are uploaded; the full facts file remains in ignored `.local`.
 
+The exporter compiled and executed successfully in the preparation job of run [#43906032401](https://github.com/imamirhosein/RustChunk/actions/runs/43906032401). Its verified output summary was:
+- 1,003 blocks and 24,135 block states
+- 3 air states, 8,365 fluid-containing states, 23,774 states with properties
+- 6,203,510-byte private facts file; SHA-256 `c0258fa8719e754cd67b46509a0c4c310d84677e99f468f17bef0d6a195c6edf`
+
+That run's preparation/export job passed; its overall workflow was marked failed only because the unit tests in that older commit still had two test-fixture expectation errors. Those fixtures were corrected, and the latest unit-test job on the current branch has passed. A following CI step now feeds the private facts file into Starling's real Rust `BlockRegistry` test; that Rust compatibility check is still running and is not yet claimed as passed.
+
 This is the first version-specific data bridge into a concrete Starling engine subsystem, not yet a full engine integration.
 
 ### 4. Automated 1.20.1 ↔ 26.3 comparison passed
