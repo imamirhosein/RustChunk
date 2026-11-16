@@ -260,7 +260,7 @@ class MainActivity : Activity() {
         }
 
         forgeDependencyButton = Button(this).apply {
-            text = "Download missing Forge libraries"
+            text = "Download missing Forge libraries + recheck plan"
             isEnabled = false
             setOnClickListener { startForgeLibrariesDownload() }
         }
@@ -944,6 +944,11 @@ class MainActivity : Activity() {
             statusView.text = "Select a supported Forge 1.20.1 profile first."
             return
         }
+        val username = offlineUsernameInput.text.toString().trim()
+        if (!Regex("^[A-Za-z0-9_]{1,16}$").matches(username)) {
+            statusView.text = "Offline username must contain 1–16 English letters, numbers, or underscores."
+            return
+        }
 
         downloadInProgress = true
         downloadButton.isEnabled = false
@@ -958,7 +963,7 @@ class MainActivity : Activity() {
         profileSpinner.isEnabled = false
         inspectButton.isEnabled = false
         cancelButton.isEnabled = true
-        statusView.text = "Preparing the selected Forge profile's Java-library plan...\nExisting files will be reused only after size and SHA-1 verification."
+        statusView.text = "Downloading/verifying Forge Java libraries...\nThe JNI launch plan will be checked again automatically when this finishes."
         mainHandler.removeCallbacks(progressPoller)
         mainHandler.post(progressPoller)
 
@@ -968,16 +973,22 @@ class MainActivity : Activity() {
             } catch (error: Throwable) {
                 "Forge dependency download failed: " + error.javaClass.simpleName + ": " + error.message
             }
-            val analysis = try {
-                nativePrepareForgeLaunchProfile(filesDir.absolutePath, profileId)
+            val launchPlan = try {
+                nativePrepareJniForgeLaunchPlan(
+                    filesDir.absolutePath,
+                    profileId,
+                    username,
+                    applicationInfo.nativeLibraryDir
+                )
             } catch (error: Throwable) {
-                "Post-download profile analysis failed: " + error.javaClass.simpleName + ": " + error.message
+                "Post-download JNI launch-plan check failed: " +
+                    error.javaClass.simpleName + ": " + error.message
             }
 
             runOnUiThread {
                 downloadInProgress = false
                 mainHandler.removeCallbacks(progressPoller)
-                statusView.text = result + "\n\nPost-download profile check:\n" + analysis
+                statusView.text = result + "\n\nUpdated JNI launch-plan check:\n" + launchPlan
                 cancelButton.isEnabled = false
                 importButton.isEnabled = true
                 runtimeInstallButton.isEnabled = true

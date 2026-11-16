@@ -2,7 +2,11 @@
 
 An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
 
-## Current milestone: Stage 19 — JNI Forge launch-plan preparation
+## Current milestone: Stage 20 — Forge dependency repair and exact launch-plan diagnostics
+
+The Forge-library download action now downloads/verifies the selected profile's Java dependencies and immediately rebuilds the JNI launch plan. This makes the nine missing classpath entries from Stage 19 directly testable in one pass. The launch-plan report now prints the exact unresolved placeholder token(s), rather than only showing a count, so any Forge-specific argument that still needs mapping can be identified. This remains a preparation/validation step: it does not launch Forge or claim Android LWJGL/OpenGL readiness.
+
+## Previous milestone: Stage 19 — JNI Forge launch-plan preparation
 
 Stage 19 builds a profile-specific launch plan for Minecraft 1.20.1 Forge 47.x using the already-verified Java 17 JNI runtime. RustChunk flattens inherited game/JVM arguments, applies Android/Linux ARM64 argument rules, resolves standard Minecraft placeholders, computes the offline-player UUID, assembles the Java class path, resolves Forge's module path, and converts launcher-only module option pairs (such as -p and --add-opens <value>) into the option=value form required by the JNI Invocation API. It writes the result to rustchunk-jni-launch-plan.json and a readable report in the selected Forge profile directory.
 
@@ -49,6 +53,7 @@ It copies reusable assets, libraries, versions, mods, configs, resource packs, s
 - Stage 12: prepares and downloads checksum-verified Java library artifacts for the selected Forge profile, reusing valid files and keeping profile-specific plans/reports isolated.
 - Stage 18: verifies direct Java 17 HotSpot startup using the JNI Invocation API, avoiding execution of app-private bin/java.
 - Stage 19: prepares a JNI-compatible Forge launch plan with inherited argument rules, module-path conversion, verified classpath entries, and an offline player identity.
+- Stage 20: downloads/verifies missing Forge Java libraries, automatically regenerates the JNI plan, and prints exact unresolved placeholder tokens.
 
 **Not yet implemented:** Android LWJGL native-library mapping/extraction, EGL/OpenGL surface integration, audio integration, actual Forge JVM invocation, complete game launch lifecycle, and on-device modpack/Aternos compatibility testing. The launch plan is a preparation artifact, not proof that Forge starts. Java startup success alone does not prove Forge or Minecraft can launch.
 

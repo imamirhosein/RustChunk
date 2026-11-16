@@ -635,6 +635,9 @@ pub fn prepare_jni_forge_launch_plan(
     for blocker in &blockers { report.push_str(&format!("BLOCKER: {}\n", blocker)); }
     for item in missing_classpath.iter().take(30) { report.push_str(&format!("MISSING CLASSPATH: {}\n", item)); }
     for item in missing_module_path.iter().take(30) { report.push_str(&format!("MISSING MODULE PATH: {}\n", item)); }
+    for item in &unresolved_placeholders {
+        report.push_str(&format!("UNRESOLVED PLACEHOLDER: {}\n", item));
+    }
     for item in unsupported_jvm_arguments.iter().take(20) { report.push_str(&format!("UNSUPPORTED JVM ARGUMENT: {}\n", item)); }
     for notice in notices { report.push_str(&format!("NOTICE: {}\n", notice)); }
     report.push_str(&format!("Launch plan JSON: {}\n", plan_path.display()));
