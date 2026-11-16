@@ -85,7 +85,7 @@ class Minecraft1201PreparationTests(unittest.TestCase):
                         "pack_version": {"resource_major": 97, "data_major": 121},
                     }),
                 )
-            with self.assertRaisesRegex(PrepareError, "Unexpected 1.20.1 version facts"):
+            with self.assertRaisesRegex(PrepareError, "Client JAR identifies itself"):
                 read_game_facts(client, {"javaVersion": {"majorVersion": 17}})
 
     def test_digest_file(self):
