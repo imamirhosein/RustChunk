@@ -48,7 +48,7 @@ class BlockTagExportTests(unittest.TestCase):
             with zipfile.ZipFile(jar, "w") as archive:
                 archive.writestr("data/minecraft/tags/blocks/stone.json", '{"values":[]}')
                 archive.writestr("data/minecraft/tags/block/stone.json", '{"values":[]}')
-            with self.assertRaisesRegex(PrepareError, "exactly one"):
+            with self.assertRaisesRegex(PrepareError, "ambiguous"):
                 read_block_tag_bundle(jar)
 
     def test_rejects_malformed_tag_entries(self):
