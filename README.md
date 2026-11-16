@@ -24,7 +24,9 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 - SpecialSource 1.11.6 remapped both JARs successfully.
 - The remapped JARs contain the expected named client/server entry classes: `net.minecraft.client.Minecraft` and `net.minecraft.server.MinecraftServer`.
 - The smoke-test report counted 7,436 client classes and 5,460 server classes.
-- The next stage is running the 1.20.1 data generator and then adapting Starling's version-preparation and parity tooling.
+- Starling's class-index tool successfully indexed 7,436 classes and 58,542 methods for 1.20.1.
+- The 1.20.1 data generator produced 1,003 block entries, 66 registries, the command tree and two biome-parameter reports.
+- The current comparison job is measuring code, registry, data-pack, asset and world-generation differences against the exact pinned Starling 26.3 baseline.
 
 **This is not yet a playable Minecraft 1.20.1 build. No RustChunk APK from this native port is ready to install.** See [the port audit](docs/STARLING_1_20_1_PORT_AUDIT.md) for the current technical status.
 
