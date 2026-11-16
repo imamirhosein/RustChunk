@@ -109,7 +109,9 @@ Successful preparation report from run [#43908150242](https://github.com/imamirh
 - Canonical bundle SHA-256: `ce5be12fd9bf4e66df56ba0b8c6b3b13e16db02ef532059bd9bbb026122291b1`.
 - Client/server equality was checked against client SHA-1 `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838` and extracted server SHA-256 `80db52b203ac5de6e5fc1c5082259df440fb2b5390b4c61d474e8fbc63cc41f5`.
 
-The complete bundle remains in ignored `.local`; the workflow artifact carries only the report. The next CI check applies a test-only patch to the pinned Starling source and asks its real Rust `TagDefinitions` to resolve every 1.20.1 block tag against the newly exported `BlockRegistry`. That cross-check is not yet confirmed as passed.
+The complete bundle remains in ignored `.local`; the workflow artifact carries only the report. The test-only patch is now part of RustChunk's pinned Starling patch series. In workflow [#43908914224](https://github.com/imamirhosein/RustChunk/actions/runs/43908914224), the actual Rust `TagDefinitions` implementation parsed all 170 files, built their dependency graph against the 1.20.1 `BlockRegistry`, found no unresolved required references, and built every tag successfully (1 Rust integration test passed).
+
+This validates the block-tag codec and registry references. It does **not** yet prove that all version-specific tags required by Starling's 26.3 renderer/gameplay exist in 1.20.1, or that the full `Assets::load` / world-data loading path accepts 1.20.1.
 
 ## Pinned Starling Android build baseline
 
