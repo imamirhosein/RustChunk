@@ -121,12 +121,15 @@ jobs:
         env:
           RUSTCHUNK_1201_FACTS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-decompile/block-facts/facts.json
           RUSTCHUNK_1201_BLOCK_TAGS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-decompile/block-tags/block-tags.json
+          RUSTCHUNK_1201_FLUID_TAGS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-decompile/fluid-tags/fluid-tags.json
         run: |
           set -euo pipefail
           facts="$RUSTCHUNK_1201_FACTS_JSON"
           tags="$RUSTCHUNK_1201_BLOCK_TAGS_JSON"
+          fluids="$RUSTCHUNK_1201_FLUID_TAGS_JSON"
           test -s "$facts"
           test -s "$tags"
+          test -s "$fluids"
           mkdir -p upstream/starling/.local/horizon-client/26.3
           cp "$facts" upstream/starling/.local/horizon-client/26.3/facts.json
           cargo test --locked --manifest-path upstream/starling/Cargo.toml \

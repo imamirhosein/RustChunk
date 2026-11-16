@@ -2,10 +2,11 @@ diff --git a/crates/horizon-world/tests/rustchunk_1201_tags.rs b/crates/horizon-
 new file mode 100644
 --- /dev/null
 +++ b/crates/horizon-world/tests/rustchunk_1201_tags.rs
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,70 @@
 +use std::{collections::BTreeMap, env, fs::File, path::PathBuf};
 +
 +use horizon_world::{
++    fluid::FluidKind,
 +    registry::BlockRegistry,
 +    worldgen::tags::TagDefinitions,
 +};
@@ -44,4 +45,31 @@ new file mode 100644
 +        built.missing.iter().take(12).collect::<Vec<_>>()
 +    );
 +    assert_eq!(built.tags.len(), expected_tag_count, "some 1.20.1 block tags were not built");
++}
++
++#[test]
++fn minecraft_1_20_1_fluid_tags_resolve_against_the_fluid_registry() {
++    let tags_path = required_path("RUSTCHUNK_1201_FLUID_TAGS_JSON");
++    let resources: BTreeMap<String, String> = serde_json::from_reader(
++        File::open(&tags_path).expect("open private 1.20.1 fluid-tag bundle"),
++    )
++    .expect("parse the extracted fluid-tag bundle");
++    assert!(!resources.is_empty(), "1.20.1 fluid-tag bundle is empty");
++
++    let mut definitions = TagDefinitions::default();
++    for (name, text) in &resources {
++        definitions
++            .apply_json(name, "minecraft-1.20.1", text)
++            .unwrap_or_else(|error| panic!("could not decode fluid tag {name}: {error}"));
++    }
++    let expected_tag_count = definitions.definitions().len();
++    let built = definitions
++        .build(|name, _required| FluidKind::from_name(name).map(|kind| kind as u8))
++        .expect("build 1.20.1 fluid tags and resolve their dependencies");
++    assert!(
++        built.missing.is_empty(),
++        "1.20.1 fluid tags contain required references absent from the pinned fluid registry: {:?}",
++        built.missing.iter().take(12).collect::<Vec<_>>()
++    );
++    assert_eq!(built.tags.len(), expected_tag_count, "some 1.20.1 fluid tags were not built");
 +}
