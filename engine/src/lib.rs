@@ -163,6 +163,6 @@ pub extern "system" fn Java_dev_rustchunk_app_JavaRuntimeTestService_nativeTestJ
     });
     rust_string_to_java(
         &mut env,
-        result.unwrap_or_else(|error| format!("Native Java JLI test failed: {}", error)),
+        result.unwrap_or_else(|error| format!("Native Java JNI test failed: {}", error)),
     )
 }

@@ -1,5 +1,5 @@
-//! Android Java runtime smoke test using the OpenJDK JLI entry point.
-//! This avoids directly executing the app-private bin/java ELF binary.
+//! Android Java runtime smoke test using the JNI Invocation API.
+//! The VM is created directly from libjvm.so; app-private bin/java is never executed.
 
 use std::collections::BTreeSet;
 use std::ffi::{CStr, CString};
@@ -11,11 +11,13 @@ use std::path::{Path, PathBuf};
 use std::ptr;
 use std::sync::{Mutex, OnceLock};
 
+use jni::objects::{JString, JValue};
+use jni::JNIEnv;
+
 const RTLD_LAZY: c_int = 1;
 const RTLD_NOW: c_int = 2;
 const RTLD_GLOBAL: c_int = 0x100;
-const JNI_FALSE: u8 = 0;
-const JNI_TRUE: u8 = 1;
+const JNI_FALSE: jni::sys::jboolean = jni::sys::JNI_FALSE;
 const MAX_SCAN_DIRECTORIES: usize = 25_000;
 const MAX_SCAN_DEPTH: usize = 14;
 const O_WRONLY: c_int = 1;
@@ -39,26 +41,24 @@ unsafe extern "C" {
     fn fflush(stream: *mut c_void) -> c_int;
 }
 
-type JliLaunch = unsafe extern "C" fn(
-    c_int, *mut *mut c_char, c_int, *const *const c_char,
-    c_int, *const *const c_char, *const c_char, *const c_char,
-    *const c_char, *const c_char, u8, u8, u8, c_int
-) -> c_int;
+type JniCreateJavaVm = unsafe extern "system" fn(
+    pvm: *mut *mut jni::sys::JavaVM,
+    penv: *mut *mut c_void,
+    args: *mut c_void,
+) -> jni::sys::jint;
 
 type AndroidUpdateLdLibraryPath = unsafe extern "C" fn(*mut c_char);
 
 #[derive(Debug, Clone)]
 struct RuntimeCandidate {
     home: PathBuf,
-    libjli: PathBuf,
     libjvm: PathBuf,
-    java_executable: Option<PathBuf>,
     version: String,
     library_directories: Vec<PathBuf>,
     native_libraries: Vec<PathBuf>,
 }
 
-static JLI_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+static JVM_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
 struct StdioCapture {
     saved_stdout: c_int,
@@ -69,10 +69,10 @@ struct StdioCapture {
 impl StdioCapture {
     fn begin(log_path: &Path) -> Result<Self, String> {
         let path = CString::new(log_path.to_string_lossy().as_bytes())
-            .map_err(|_| "JLI console log path contains a NUL byte.".to_string())?;
+            .map_err(|_| "JNI console log path contains a NUL byte.".to_string())?;
         let log_fd = unsafe { open(path.as_ptr(), O_WRONLY | O_CREAT | O_TRUNC, 0o600) };
         if log_fd < 0 {
-            return Err(format!("Cannot open JLI console log {}.", log_path.display()));
+            return Err(format!("Cannot open JNI console log {}.", log_path.display()));
         }
 
         let saved_stdout = unsafe { dup(1) };
@@ -94,7 +94,7 @@ impl StdioCapture {
                 close(saved_stderr);
                 close(log_fd);
             }
-            return Err("Cannot redirect native Java diagnostics to the JLI log.".to_string());
+            return Err("Cannot redirect native Java diagnostics to the JNI log.".to_string());
         }
         Ok(Self { saved_stdout, saved_stderr, log_fd })
     }
@@ -139,27 +139,29 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     if !app_data_dir.is_absolute() || !app_native_library_dir.is_absolute() {
         return Err("RustChunk and Android native library paths must be absolute.".to_string());
     }
-    let trace_file = app_data_dir.join("runtime").join("native-jli-trace.txt");
+
+    let trace_file = app_data_dir.join("runtime").join("native-jni-trace.txt");
     if let Some(parent) = trace_file.parent() {
-        fs::create_dir_all(parent).map_err(|error| format!("Cannot create JLI trace directory: {}", error))?;
+        fs::create_dir_all(parent).map_err(|error| format!("Cannot create JNI trace directory: {}", error))?;
     }
-    fs::write(&trace_file, "JLI TRACE: START\n").map_err(|error| format!("Cannot create JLI trace: {}", error))?;
+    fs::write(&trace_file, "JNI TRACE: START\n").map_err(|error| format!("Cannot create JNI trace: {}", error))?;
     trace_checkpoint(&trace_file, &format!("app data: {}", app_data_dir.display()));
     trace_checkpoint(&trace_file, &format!("native library dir: {}", app_native_library_dir.display()));
 
-    let _guard = JLI_LOCK.get_or_init(|| Mutex::new(())).lock()
+    let _guard = JVM_LOCK.get_or_init(|| Mutex::new(())).lock()
         .unwrap_or_else(|poisoned| poisoned.into_inner());
-    trace_checkpoint(&trace_file, "JLI mutex acquired; beginning Java runtime discovery");
+    trace_checkpoint(&trace_file, "JVM mutex acquired; beginning Java runtime discovery");
 
     let runtime = find_java17_runtime(app_data_dir, &trace_file)?;
-    trace_checkpoint(&trace_file, &format!("runtime discovered: home={}", runtime.home.display()));
+    trace_checkpoint(&trace_file, &format!("Java 17 runtime discovered: home={}", runtime.home.display()));
     let home = runtime.home.canonicalize()
         .map_err(|error| format!("Cannot resolve Java home {}: {}", runtime.home.display(), error))?;
     trace_checkpoint(&trace_file, &format!("canonical Java home: {}", home.display()));
-    let cache_dir = app_data_dir.join("cache").join("jli");
+
+    let cache_dir = app_data_dir.join("cache").join("jni");
     fs::create_dir_all(&cache_dir)
-        .map_err(|error| format!("Cannot create JLI temporary directory {}: {}", cache_dir.display(), error))?;
-    trace_checkpoint(&trace_file, &format!("JLI cache directory ready: {}", cache_dir.display()));
+        .map_err(|error| format!("Cannot create JNI temporary directory {}: {}", cache_dir.display(), error))?;
+    trace_checkpoint(&trace_file, &format!("JNI cache directory ready: {}", cache_dir.display()));
 
     let mut directories = BTreeSet::<PathBuf>::new();
     directories.insert(home.join("lib"));
@@ -182,19 +184,15 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
     std::env::set_var("HOME", app_data_dir);
     std::env::set_var("TMPDIR", &cache_dir);
     std::env::set_var("LD_LIBRARY_PATH", &ld_path);
-    let previous_path = std::env::var("PATH").unwrap_or_default();
-    std::env::set_var("PATH", format!("{}:{}", home.join("bin").to_string_lossy(), previous_path));
 
     let mut report = String::new();
-    report.push_str("RustChunk Android native Java runtime test (JLI)\n");
+    report.push_str("RustChunk Android embedded Java runtime test (JNI Invocation API)\n");
     report.push_str(&format!("Java home: {}\n", home.display()));
-    report.push_str(&format!("Java release: {}\n", runtime.version));
-    report.push_str(&format!("Java executable (not directly executed): {}\n",
-        runtime.java_executable.as_ref().map(|p| p.display().to_string()).unwrap_or_else(|| "not found".to_string())));
-    report.push_str(&format!("libjli.so: {}\n", runtime.libjli.display()));
+    report.push_str(&format!("Java release metadata: {}\n", runtime.version));
     report.push_str(&format!("libjvm.so: {}\n", runtime.libjvm.display()));
     report.push_str(&format!("Android native library directory: {}\n", app_native_library_dir.display()));
     report.push_str(&format!("Runtime library directories: {}\n", directories.iter().filter(|p| p.is_dir()).count()));
+    report.push_str("Startup method: JNI_CreateJavaVM; app-private bin/java is not executed.\n");
 
     trace_checkpoint(&trace_file, "resolving Android linker path bridge");
     if let Some(update_path) = resolve_android_update_library_path() {
@@ -207,99 +205,202 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
         report.push_str("NOTICE: Android loader path bridge unavailable; absolute library paths will be used.\n");
     }
 
-    trace_checkpoint(&trace_file, &format!("loading libjli: {}", runtime.libjli.display()));
-    let jli_handle = open_library(&runtime.libjli)
-        .map_err(|error| format!("Cannot load libjli.so: {}\n{}", error, report))?;
-    trace_checkpoint(&trace_file, "libjli loaded successfully");
-
-    // Pojav/Amethyst preloads the Android OpenJDK runtime libraries before
-    // entering JLI_Launch. Do the same here: Android's linker namespaces and
-    // dependency resolution are not equivalent to a desktop Linux launcher.
+    // Retain all handles for the full VM lifetime. HotSpot can resolve runtime
+    // symbols lazily after JNI_CreateJavaVM returns.
+    trace_checkpoint(&trace_file, "preloading OpenJDK runtime libraries");
     let _preloaded_runtime_handles = preload_runtime_libraries(&runtime, &trace_file)?;
     trace_checkpoint(&trace_file, "runtime native library preload complete");
 
-    // The Android launcher must give HotSpot a clean signal-handler slate.
-    // Run this only in the dedicated :jvm process, never in the UI process.
-    trace_checkpoint(&trace_file, "preparing JVM signal handlers");
+    trace_checkpoint(&trace_file, "preparing JVM signal handlers in isolated :jvm process");
     let (signals_reset, segv_ignored) = prepare_jvm_signal_handlers();
-    trace_checkpoint(&trace_file, &format!("signal handlers prepared: {} reset; SIGSEGV ignored={}", signals_reset, segv_ignored == 1));
+    trace_checkpoint(&trace_file, &format!(
+        "signal handlers prepared: {} reset; SIGSEGV ignored={}",
+        signals_reset, segv_ignored == 1
+    ));
     report.push_str(&format!(
         "Android signal handlers prepared: {} reset; SIGSEGV ignored: {}\n",
         signals_reset, segv_ignored == 1
     ));
 
-    trace_checkpoint(&trace_file, "resolving JLI_Launch symbol");
-    let symbol_name = CString::new("JLI_Launch").unwrap();
+    trace_checkpoint(&trace_file, &format!("opening libjvm for JNI_CreateJavaVM: {}", runtime.libjvm.display()));
+    let jvm_handle = open_library(&runtime.libjvm)
+        .map_err(|error| format!("Cannot load libjvm.so: {}\n{}", error, report))?;
+
+    let symbol_name = CString::new("JNI_CreateJavaVM").unwrap();
     unsafe { dlerror(); }
-    let symbol = unsafe { dlsym(jli_handle, symbol_name.as_ptr()) };
+    let symbol = unsafe { dlsym(jvm_handle, symbol_name.as_ptr()) };
     if symbol.is_null() {
-        return Err(format!("JLI_Launch is not exported by {}: {}\n{}",
-            runtime.libjli.display(), last_dl_error(), report));
+        return Err(format!(
+            "JNI_CreateJavaVM is not exported by {}: {}\n{}",
+            runtime.libjvm.display(), last_dl_error(), report
+        ));
     }
-    let launch: JliLaunch = unsafe { std::mem::transmute(symbol) };
+    let create_vm: JniCreateJavaVm = unsafe { std::mem::transmute(symbol) };
+    trace_checkpoint(&trace_file, "JNI_CreateJavaVM symbol resolved successfully");
 
-    let version_c = CString::new(runtime.version.as_str())
-        .map_err(|_| "Java release version contains an embedded NUL byte.".to_string())?;
-    trace_checkpoint(&trace_file, &format!("runtime JAVA_VERSION passed to JLI: {}", runtime.version));
-    if let Ok(release_text) = fs::read_to_string(home.join("release")) {
-        trace_checkpoint(&trace_file, &format!("runtime release metadata: {}", release_text.replace('\n', " | ")));
-    }
-    let major_c = CString::new("17").unwrap();
-    let program_c = CString::new("java").unwrap();
-    // Android OpenJDK launchers commonly pass argv[0] for both pname/lname.
-    let launcher_c = CString::new("java").unwrap();
-    // JLI_Launch accepts writable C argv strings. Keep each NUL-terminated
-    // buffer alive and mutable for the entire native call.
-    let mut args = vec![
-        CString::new("java").unwrap().into_bytes_with_nul(),
-        CString::new(format!("-Djava.home={}", home.to_string_lossy())).unwrap().into_bytes_with_nul(),
-        CString::new(format!("-Djava.io.tmpdir={}", cache_dir.to_string_lossy())).unwrap().into_bytes_with_nul(),
-        CString::new("-version").unwrap().into_bytes_with_nul(),
+    let library_path = directories.iter()
+        .filter(|path| path.is_dir())
+        .map(|path| path.to_string_lossy().into_owned())
+        .collect::<Vec<_>>()
+        .join(":");
+
+    let option_values = vec![
+        format!("-Djava.home={}", home.to_string_lossy()),
+        format!("-Djava.io.tmpdir={}", cache_dir.to_string_lossy()),
+        format!("-Duser.home={}", app_data_dir.to_string_lossy()),
+        format!("-Djava.library.path={}", library_path),
+        "-Djava.awt.headless=true".to_string(),
+        "-Xms32m".to_string(),
+        "-Xmx512m".to_string(),
     ];
-    let argc = args.len() as c_int;
-    let mut argv: Vec<*mut c_char> = args
-        .iter_mut()
-        .map(|arg| arg.as_mut_ptr().cast::<c_char>())
+    let c_options: Vec<CString> = option_values.iter()
+        .map(|value| CString::new(value.as_str())
+            .map_err(|_| format!("JVM option contains an embedded NUL byte: {}", value)))
+        .collect::<Result<_, _>>()?;
+    let mut vm_options: Vec<jni::sys::JavaVMOption> = c_options.iter()
+        .map(|value| jni::sys::JavaVMOption {
+            optionString: value.as_ptr() as *mut c_char,
+            extraInfo: ptr::null_mut(),
+        })
         .collect();
-    argv.push(ptr::null_mut());
 
-    trace_checkpoint(&trace_file, &format!(
-        "JLI argv prepared: argc={}, argv={}",
-        argc,
-        args.iter().map(|arg| String::from_utf8_lossy(arg).trim_end_matches('\0').to_string())
-            .collect::<Vec<_>>().join(" || ")
-    ));
-    let console_log = cache_dir.join("native-jli-console.log");
-    report.push_str(&format!("JLI console log: {}\n", console_log.display()));
-    report.push_str("Calling OpenJDK JLI_Launch: java -version\n");
-    trace_checkpoint(&trace_file, &format!("JLI_Launch symbol resolved; preparing stdio capture at {}", console_log.display()));
+    let mut vm_args = jni::sys::JavaVMInitArgs {
+        version: jni::sys::JNI_VERSION_1_8,
+        nOptions: vm_options.len() as jni::sys::jint,
+        options: vm_options.as_mut_ptr(),
+        ignoreUnrecognized: JNI_FALSE,
+    };
 
-    // JLI_Launch may call process-wide exit(1) if VM initialization fails.
-    // The caller therefore runs in Android's separate :jvm process.
+    trace_checkpoint(&trace_file, &format!("JNI init args prepared: version=0x00010008; options={}", option_values.join(" || ")));
+    let console_log = cache_dir.join("native-jni-console.log");
+    report.push_str(&format!("JNI console log: {}\n", console_log.display()));
+    report.push_str("Calling JNI_CreateJavaVM from libjvm.so.\n");
+
     let capture = StdioCapture::begin(&console_log)
         .map_err(|error| format!("{}\n{}", error, report))?;
-    trace_checkpoint(&trace_file, "stdio capture ready; entering JLI_Launch java -version");
-    let exit_code = unsafe {
-        launch(argc, argv.as_mut_ptr(), 0, ptr::null(), 0, ptr::null(),
-            version_c.as_ptr(), major_c.as_ptr(), program_c.as_ptr(),
-            launcher_c.as_ptr(), JNI_FALSE, JNI_TRUE, JNI_FALSE, 0)
+    trace_checkpoint(&trace_file, "stdio capture ready; entering JNI_CreateJavaVM");
+    let mut raw_vm: *mut jni::sys::JavaVM = ptr::null_mut();
+    let mut raw_env: *mut c_void = ptr::null_mut();
+    let create_status = unsafe {
+        create_vm(
+            &mut raw_vm,
+            &mut raw_env,
+            &mut vm_args as *mut jni::sys::JavaVMInitArgs as *mut c_void,
+        )
     };
     drop(capture);
-    trace_checkpoint(&trace_file, &format!("JLI_Launch returned with exit code {}", exit_code));
+
+    trace_checkpoint(&trace_file, &format!(
+        "JNI_CreateJavaVM returned: status={}, vm_is_null={}, env_is_null={}",
+        create_status, raw_vm.is_null(), raw_env.is_null()
+    ));
+
     let console_output = fs::read_to_string(&console_log).unwrap_or_default();
     if !console_output.trim().is_empty() {
-        report.push_str("\nJLI console output:\n");
+        report.push_str("\nJNI console output:\n");
         report.push_str(&console_output);
         if !console_output.ends_with('\n') { report.push('\n'); }
     }
-    report.push_str(&format!("JLI_Launch exit code: {}\n", exit_code));
-    if exit_code == 0 {
-        report.push_str("RESULT: JAVA 17 NATIVE JLI STARTUP OK\n");
-    } else {
-        report.push_str("RESULT: JAVA 17 NATIVE JLI STARTUP FAILED\n");
+
+    if create_status != jni::sys::JNI_OK {
+        report.push_str(&format!("JNI_CreateJavaVM status: {}\n", create_status));
+        report.push_str("RESULT: JAVA 17 JNI STARTUP FAILED\n");
+        report.push_str("JNI_CreateJavaVM was called but did not initialize a usable Java VM.\n");
+        report.push_str("Forge, Minecraft graphics, mods, and Aternos networking have not been tested.\n");
+        return Err(report);
     }
+    if raw_vm.is_null() || raw_env.is_null() {
+        report.push_str("JNI_CreateJavaVM returned JNI_OK but provided a null VM or JNIEnv pointer.\n");
+        report.push_str("RESULT: JAVA 17 JNI STARTUP FAILED\n");
+        return Err(report);
+    }
+
+    trace_checkpoint(&trace_file, "wrapping the JNI environment returned by JNI_CreateJavaVM");
+    let env_result = unsafe { JNIEnv::from_raw(raw_env as *mut jni::sys::JNIEnv) };
+    let mut env = match env_result {
+        Ok(env) => env,
+        Err(error) => {
+            let detach_result = detach_current_jni_thread(raw_vm);
+            trace_checkpoint(&trace_file, &format!("thread detach after JNIEnv wrapping failure: {:?}", detach_result));
+            return Err(format!("Cannot wrap the JNIEnv returned by JNI_CreateJavaVM: {}\n{}", error, report));
+        }
+    };
+
+    trace_checkpoint(&trace_file, "JNI environment created; reading Java system properties");
+    let properties_result = (|| -> Result<(String, String, String), String> {
+        let version = read_java_property(&mut env, "java.version")?;
+        let java_home = read_java_property(&mut env, "java.home")?;
+        let architecture = read_java_property(&mut env, "os.arch")?;
+        Ok((version, java_home, architecture))
+    })();
+
+    drop(env);
+    let detach_result = detach_current_jni_thread(raw_vm);
+    trace_checkpoint(&trace_file, &format!("created-VM thread detach result: {:?}", detach_result));
+
+    let (java_version, reported_home, architecture) = properties_result?;
+    report.push_str(&format!("Java system property java.version: {}\n", java_version));
+    report.push_str(&format!("Java system property java.home: {}\n", reported_home));
+    report.push_str(&format!("Java system property os.arch: {}\n", architecture));
+    match detach_result {
+        Ok(()) => report.push_str("JNI-created thread detached cleanly.\n"),
+        Err(error) => report.push_str(&format!("WARNING: JNI-created thread detach failed: {}\n", error)),
+    }
+
+    if java_major(&java_version) != Some(17) {
+        report.push_str("RESULT: JAVA 17 JNI STARTUP FAILED (unexpected Java major version)\n");
+        return Err(report);
+    }
+    if architecture != "aarch64" && architecture != "arm64" {
+        report.push_str("RESULT: JAVA 17 JNI STARTUP FAILED (unexpected architecture)\n");
+        return Err(report);
+    }
+
+    report.push_str("RESULT: JAVA 17 JNI STARTUP OK\n");
+    report.push_str("JNI_CreateJavaVM initialized HotSpot without executing bin/java.\n");
     report.push_str("This validates Java VM startup only. Forge, Minecraft graphics, mods, and Aternos networking have not been tested.\n");
+    trace_checkpoint(&trace_file, "RESULT: JAVA 17 JNI STARTUP OK");
     Ok(report)
+}
+
+fn read_java_property(env: &mut JNIEnv<'_>, name: &str) -> Result<String, String> {
+    let key = env.new_string(name)
+        .map_err(|error| format!("Cannot create Java property key '{}': {}", name, error))?;
+    let key_object = jni::objects::JObject::from(key);
+    let result = env.call_static_method(
+        "java/lang/System",
+        "getProperty",
+        "(Ljava/lang/String;)Ljava/lang/String;",
+        &[JValue::Object(&key_object)],
+    ).map_err(|error| format!("System.getProperty('{}') failed: {}", name, error))?;
+    let value = result.l()
+        .map_err(|error| format!("System.getProperty('{}') returned a non-object: {}", name, error))?;
+    if value.is_null() {
+        return Err(format!("System.getProperty('{}') returned null.", name));
+    }
+    let value = JString::from(value);
+    env.get_string(&value)
+        .map(|text| text.to_string_lossy().into_owned())
+        .map_err(|error| format!("Cannot read Java system property '{}': {}", name, error))
+}
+
+fn detach_current_jni_thread(vm: *mut jni::sys::JavaVM) -> Result<(), String> {
+    if vm.is_null() {
+        return Err("JavaVM pointer is null; cannot detach the JNI-created thread.".to_string());
+    }
+    let interface = unsafe { *vm };
+    if interface.is_null() {
+        return Err("JavaVM invocation table is null; cannot detach the JNI-created thread.".to_string());
+    }
+    // DetachCurrentThread is part of the JNI 1.1 invocation-table prefix.
+    // jni-sys 0.3 models the versioned table as a union with a v1_1 view.
+    let detach = unsafe { (*interface).v1_1.DetachCurrentThread };
+    let status = unsafe { detach(vm) };
+    if status == jni::sys::JNI_OK {
+        Ok(())
+    } else {
+        Err(format!("DetachCurrentThread returned JNI status {}.", status))
+    }
 }
 
 fn trace_checkpoint(path: &Path, message: &str) {
@@ -317,7 +418,7 @@ fn preload_runtime_libraries(
     ordered.push(runtime.libjvm.clone());
 
     // These are the core libraries preloaded by the established Android
-    // OpenJDK launcher before it calls JLI_Launch.
+    // OpenJDK launcher before it calls JNI_CreateJavaVM.
     for name in [
         "libverify.so", "libjava.so", "libnet.so", "libnio.so",
         "libawt.so", "libawt_headless.so", "libfreetype.so", "libfontmanager.so",
@@ -374,10 +475,9 @@ fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<Runtime
             let before = visited;
             scan_runtime_tree(root, &mut files, &mut visited, trace_file);
             trace_checkpoint(trace_file, &format!("runtime scan finished: {} new directories; {} candidate files", visited.saturating_sub(before), files.len()));
-            let has_jli = files.iter().any(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjli.so"));
             let has_jvm = files.iter().any(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjvm.so"));
-            if has_jli && has_jvm {
-                trace_checkpoint(trace_file, "both libjli.so and libjvm.so found; skipping other search roots");
+            if has_jvm {
+                trace_checkpoint(trace_file, "libjvm.so found; skipping other search roots");
                 break;
             }
         } else {
@@ -386,30 +486,19 @@ fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<Runtime
     }
     trace_checkpoint(trace_file, &format!("runtime discovery scan complete: {} directories visited; {} files indexed", visited, files.len()));
 
-    let jli_paths: Vec<PathBuf> = files.iter()
-        .filter(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjli.so"))
-        .cloned().collect();
     let jvm_paths: Vec<PathBuf> = files.iter()
         .filter(|p| p.file_name().and_then(|s| s.to_str()) == Some("libjvm.so"))
         .cloned().collect();
-    let java_paths: Vec<PathBuf> = files.iter()
-        .filter(|p| p.file_name().and_then(|s| s.to_str()) == Some("java")
-            && p.parent().and_then(Path::file_name).and_then(|s| s.to_str()) == Some("bin"))
-        .cloned().collect();
 
     let mut candidates = Vec::new();
-    for libjli in jli_paths {
-        let Some(home) = libjli.ancestors()
+    for libjvm in jvm_paths {
+        let Some(home) = libjvm.ancestors()
             .find(|ancestor| ancestor.join("release").is_file())
             .map(Path::to_path_buf) else { continue };
         let release = fs::read_to_string(home.join("release")).unwrap_or_default();
         let Some(version) = parse_java_version(&release) else { continue };
         if java_major(&version) != Some(17) { continue; }
-
-        let libjvm = jvm_paths.iter().find(|p| p.starts_with(&home)).cloned();
-        let Some(libjvm) = libjvm else { continue };
-        if !is_aarch64_elf(&libjli) || !is_aarch64_elf(&libjvm) { continue; }
-        let java_executable = java_paths.iter().find(|p| p.starts_with(&home)).cloned();
+        if !is_aarch64_elf(&libjvm) { continue; }
         let native_libraries: Vec<PathBuf> = files.iter()
             .filter(|p| p.starts_with(&home) && p.extension().and_then(|e| e.to_str()) == Some("so"))
             .cloned()
@@ -418,7 +507,7 @@ fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<Runtime
             .filter_map(|p| p.parent().map(Path::to_path_buf))
             .collect();
         candidates.push(RuntimeCandidate {
-            home, libjli, libjvm, java_executable, version,
+            home, libjvm, version,
             library_directories: library_directories.into_iter().collect(),
             native_libraries,
         });
@@ -430,7 +519,7 @@ fn find_java17_runtime(app_data_dir: &Path, trace_file: &Path) -> Result<Runtime
         bp.cmp(&ap).then_with(|| a.home.cmp(&b.home))
     });
     candidates.into_iter().next().ok_or_else(|| {
-        format!("No ARM64 Java 17 runtime found. Required: release with JAVA_VERSION 17, libjli.so, and libjvm.so. Scanned {} files; roots: {}",
+        format!("No ARM64 Java 17 runtime found. Required: release with JAVA_VERSION 17 and libjvm.so. Scanned {} files; roots: {}",
             files.len(), roots.iter().map(|p| format!("{} ({})", p.display(), if p.is_dir(){"present"}else{"missing"})).collect::<Vec<_>>().join("; "))
     })
 }

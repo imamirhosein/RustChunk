@@ -78,16 +78,16 @@ class MainActivity : Activity() {
         override fun run() {
             if (runtimeTestStartedAt == 0L) return
 
-            val reportFile = File(filesDir, "runtime/native-jli-test-report.txt")
+            val reportFile = File(filesDir, "runtime/native-jni-test-report.txt")
             val report = try {
                 if (reportFile.isFile) reportFile.readText(Charsets.UTF_8) else ""
             } catch (error: Throwable) {
-                "Could not read JLI test report: " + error.message
+                "Could not read JNI test report: " + error.message
             }
 
             if (report.startsWith("TEST STATUS: COMPLETED")) {
                 statusView.text = report.removePrefix("TEST STATUS: COMPLETED\n") +
-                    "\nSaved to files/runtime/native-jli-test-report.txt"
+                    "\nSaved to files/runtime/native-jni-test-report.txt"
                 runtimeTestStartedAt = 0L
                 runtimeTestButton.isEnabled = true
                 return
@@ -96,8 +96,8 @@ class MainActivity : Activity() {
             val elapsed = SystemClock.elapsedRealtime() - runtimeTestStartedAt
             if (elapsed >= 45_000L) {
                 val consoleFiles = listOf(
-                    File(filesDir, "cache/jli/native-jli-console.log"),
-                    File(filesDir, "runtime/native-jli-console.log")
+                    File(filesDir, "cache/jni/native-jni-console.log"),
+                    File(filesDir, "runtime/native-jni-console.log")
                 )
                 val console = try {
                     val consoleFile = consoleFiles.firstOrNull { it.isFile && it.length() > 0L }
@@ -105,18 +105,18 @@ class MainActivity : Activity() {
                         "Console source: ${consoleFile.absolutePath}\\n" +
                             consoleFile.readText(Charsets.UTF_8).takeLast(7000)
                     } else {
-                        "No native JLI console output was captured. Checked: " +
+                        "No native JNI console output was captured. Checked: " +
                             consoleFiles.joinToString { it.absolutePath }
                     }
                 } catch (error: Throwable) {
-                    "Could not read native JLI console log: " + error.message
+                    "Could not read native JNI console log: " + error.message
                 }
-                val traceFile = File(filesDir, "runtime/native-jli-trace.txt")
+                val traceFile = File(filesDir, "runtime/native-jni-trace.txt")
                 val trace = try {
                     if (traceFile.isFile) traceFile.readText(Charsets.UTF_8).takeLast(9000)
-                    else "No native JLI stage trace was produced."
+                    else "No native JNI stage trace was produced."
                 } catch (error: Throwable) {
-                    "Could not read native JLI trace: " + error.message
+                    "Could not read native JNI trace: " + error.message
                 }
                 val helper = try {
                     val manager = getSystemService(android.app.ActivityManager::class.java)
@@ -164,10 +164,10 @@ class MainActivity : Activity() {
                     appendLine("Android helper-process exit diagnostics:")
                     appendLine(exitDiagnostics)
                     appendLine()
-                    appendLine("Native JLI stage trace:")
+                    appendLine("Native JNI stage trace:")
                     appendLine(trace)
                     appendLine()
-                    appendLine("Native JLI output:")
+                    appendLine("Native JNI output:")
                     append(console)
                 }
                 runtimeTestStartedAt = 0L
@@ -216,7 +216,7 @@ class MainActivity : Activity() {
         }
 
         runtimeTestButton = Button(this).apply {
-            text = "Test Java 17 using native JLI launcher"
+            text = "Test Java 17 using JNI Invocation API"
             setOnClickListener { testJavaRuntime() }
         }
 
@@ -744,7 +744,7 @@ class MainActivity : Activity() {
         if (importInProgress || downloadInProgress || runtimeTestStartedAt != 0L) return
         runtimeTestButton.isEnabled = false
 
-        val reportFile = File(filesDir, "runtime/native-jli-test-report.txt")
+        val reportFile = File(filesDir, "runtime/native-jni-test-report.txt")
         try {
             if (!reportFile.parentFile!!.exists() && !reportFile.parentFile!!.mkdirs()) {
                 throw IllegalStateException("Cannot create the runtime diagnostics directory.")
@@ -764,7 +764,7 @@ class MainActivity : Activity() {
                 throw error
             }
 
-            val consoleFile = File(filesDir, "runtime/native-jli-console.log")
+            val consoleFile = File(filesDir, "runtime/native-jni-console.log")
             if (consoleFile.exists()) consoleFile.delete()
 
             runtimeTestStartedAt = SystemClock.elapsedRealtime()

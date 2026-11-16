@@ -10,9 +10,9 @@ import java.util.concurrent.Executors
 /**
  * Runs embedded HotSpot in its own Android process.
  *
- * OpenJDK's JLI_Launch can call process-wide exit(1) when VM initialization
- * fails. Keeping it in :jvm prevents a failed JVM startup from terminating
- * RustChunk's UI process or discarding the diagnostic screen.
+ * HotSpot is initialized through JNI_CreateJavaVM in this isolated process.
+ * A failed JVM startup therefore cannot terminate RustChunk's UI process or
+ * discard the diagnostic screen.
  */
 class JavaRuntimeTestService : Service() {
     private val executor = Executors.newSingleThreadExecutor()
@@ -34,7 +34,7 @@ class JavaRuntimeTestService : Service() {
         }
 
         executor.execute {
-            val reportFile = File(filesDir, "runtime/native-jli-test-report.txt")
+            val reportFile = File(filesDir, "runtime/native-jni-test-report.txt")
             try {
                 writeAtomic(
                     reportFile,
@@ -49,11 +49,14 @@ class JavaRuntimeTestService : Service() {
                 writeAtomic(reportFile, "TEST STATUS: COMPLETED\n" + result)
             } catch (error: Throwable) {
                 val result = "TEST STATUS: COMPLETED\n" +
-                    "RESULT: NATIVE JLI STARTUP ERROR\n" +
+                    "RESULT: NATIVE JNI STARTUP ERROR\n" +
                     error.javaClass.simpleName + ": " + error.message
                 runCatching { writeAtomic(reportFile, result) }
             } finally {
                 stopSelf(startId)
+                // JNI_CreateJavaVM is a one-time operation per process. End this
+                // isolated helper process so the next test starts with a fresh VM slot.
+                android.os.Process.killProcess(android.os.Process.myPid())
             }
         }
         return START_NOT_STICKY
@@ -85,7 +88,7 @@ class JavaRuntimeTestService : Service() {
     }
 
     companion object {
-        const val ACTION_RUN_TEST = "dev.rustchunk.app.action.RUN_NATIVE_JLI_TEST"
+        const val ACTION_RUN_TEST = "dev.rustchunk.app.action.RUN_NATIVE_JNI_TEST"
     }
 }
 
