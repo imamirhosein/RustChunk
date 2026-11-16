@@ -1,0 +1,111 @@
+name: RustChunk Starling ARM64 baseline
+
+on:
+  push:
+    branches:
+      - starling-1.20.1-port-audit
+    paths:
+      - ".github/workflows/starling-native-baseline.yml"
+      - ".gitmodules"
+      - "upstream/starling"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rustchunk-starling-arm64-baseline
+  cancel-in-progress: true
+
+jobs:
+  build-starling-arm64-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - name: Checkout RustChunk with the pinned Starling submodule
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Verify the exact upstream source pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected="5432370d573642041585c69b40fb045b27133488"
+          actual="$(git -C upstream/starling rev-parse HEAD)"
+          test "$actual" = "$expected"
+          test -f upstream/starling/LICENSE
+          test -f upstream/starling/THIRD_PARTY_NOTICES.md
+          test -f upstream/starling/crates/horizon-android/Cargo.toml
+          test -f upstream/starling/packaging/android/build_apk.py
+          echo "Pinned Starling source verified: $actual"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Install Android SDK platform, build-tools and NDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install \
+            "build-tools;35.0.0" "platforms;android-36" "ndk;28.2.13676358" >/dev/null
+
+      - name: Install Rust stable for Android ARM64 and cargo-ndk
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal --target aarch64-linux-android
+          rustup default stable
+          cargo install cargo-ndk --version 3.5.4 --locked
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            upstream/starling -> upstream/starling/target
+          shared-key: starling-pinned-arm64-baseline
+
+      - name: Build pinned Starling Android ARM64 preview
+        working-directory: upstream/starling
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/28.2.13676358
+          CARGO_BUILD_JOBS: "2"
+        run: python packaging/android/build_apk.py --preview --abi arm64-v8a
+
+      - name: Verify APK package identity and native ABI
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk="upstream/starling/target/android/starling-preview-0.8.0-arm64-v8a.apk"
+          test -s "$apk"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$apk" | grep -F "package: name='io.github.juanluci.starling.preview'"
+          unzip -l "$apk" | grep -F "lib/arm64-v8a/libhorizon_android.so"
+          sha256sum "$apk" | tee upstream/starling/target/android/rustchunk-starling-baseline.sha256
+          {
+            echo "Purpose: pinned Starling 26.3 Android ARM64 build baseline only."
+            echo "Not a Minecraft 1.20.1 port and not a RustChunk release APK."
+            echo "RustChunk commit: $GITHUB_SHA"
+            echo "Starling submodule: $(git -C upstream/starling rev-parse HEAD)"
+            echo "APK: $apk"
+            echo "SHA-256: $(cut -d ' ' -f 1 upstream/starling/target/android/rustchunk-starling-baseline.sha256)"
+          } > upstream/starling/target/android/rustchunk-starling-baseline.txt
+
+      - name: Upload baseline APK and build identity
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustchunk-starling-engine-baseline-arm64
+          path: |
+            upstream/starling/target/android/starling-preview-0.8.0-arm64-v8a.apk
+            upstream/starling/target/android/rustchunk-starling-baseline.txt
+            upstream/starling/target/android/rustchunk-starling-baseline.sha256
+          if-no-files-found: error
+          retention-days: 14

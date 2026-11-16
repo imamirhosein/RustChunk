@@ -2,13 +2,13 @@
 
 Date: 2026-11-16
 
-Status: **research and input-comparison pipeline is working. No native 1.20.1 game port or APK has been built yet.**
+Status: **official 1.20.1 inputs verified, indexed, compared and privately decompiled. Starling architecture has been inspected. No native 1.20.1 game port or APK has been built yet.**
 
 ## Decision and target
 
-Use Starling as the native Rust engine base. Preserve its asynchronous chunk streaming, lighting, meshing and Vulkan renderer while bringing the gameplay and data layers back to **vanilla Minecraft Java 1.20.1**.
+Use Starling as the native Rust engine base. Preserve its asynchronous chunk streaming, lighting, meshing and wgpu renderer while bringing the gameplay and data layers back to **vanilla Minecraft Java 1.20.1**.
 
-The first playable target is single-player vanilla 1.20.1. Forge 1.20.1 / 47.4.22 and mods are explicitly later work. Keep the old `main` branch and its signing identity untouched until the native 1.20.1 client is proven.
+The first playable target is single-player vanilla 1.20.1. Forge 1.20.1 / 47.4.22 and Java mods are explicitly later work. Their future compatibility bridge remains a long-term design goal, but no Forge/JVM work is in the current milestone. Keep the old `main` branch and its signing identity untouched until the native 1.20.1 client is proven.
 
 ## Pinned upstream source
 
@@ -38,7 +38,7 @@ Starling is not a Java launcher. Its Minecraft client/gameplay implementation ru
 
 Inspection of `crates/horizon-client-render/src/streaming.rs` confirms that chunk loading is a worker-based pipeline. It queues saved-chunk reads, terrain generation, 3×3 decoration regions, chunk finishing, lighting, meshing and mesh freeing. Jobs are prioritized by distance from the player, and their queue priority is recalculated when the player moves. Workers use immutable snapshots so the game/render thread does not do all the expensive work itself.
 
-The game loop also limits chunk-mesh uploads per frame, with a larger budget while the view is initially arriving. Network chunk decoding happens away from the frame loop, and overdue chunk packets get a bounded per-frame budget on Android. This is a meaningful architecture advantage; we should preserve it unless measurements show a specific defect.
+The game loop also limits chunk-mesh uploads per frame, with a larger budget while the view is initially arriving. Network chunk decoding happens away from the frame loop, and overdue chunk packets get a bounded per-frame budget on Android. This is a meaningful architecture advantage; preserve it unless measurements show a specific defect.
 
 ## The version gap is substantial
 
@@ -80,19 +80,15 @@ Using Java 17, the official 1.20.1 server data generator produced five JSON repo
 
 The remapped 1.20.1 client/server code was indexed with Starling's own `tools/class_index.py`: **7,436 classes and 58,542 methods** (7,103 `net/*`, 333 `com/*`).
 
-The 1.20.1 data generator does **not** emit `packets.json` or the modern item-component reports. The comparison therefore records those as absent, not as empty data. We need a 1.20.1-specific packet exporter and the older item representation; modern data components cannot be assumed.
+The 1.20.1 data generator does **not** emit `packets.json` or the modern item-component reports. The comparison therefore records those as absent, not as empty data. A 1.20.1-specific packet exporter is still needed for multiplayer; the old item representation must be modelled from 1.20.1 itself.
 
 ### 3. Automated 1.20.1 ↔ 26.3 comparison passed
 
-The GitHub Actions workflow [completed successfully](https://github.com/imamirhosein/RustChunk/actions/runs/43891125869), including unit tests, remapping, data generation, bytecode indexing and the baseline comparison. Its artifact contains only two small metadata JSON reports, not Minecraft JARs, mappings, generated game data or full class indexes:
-- `minecraft-1.20.1-remap-audit`
-- `minecraft-1.20.1-vs-starling-26.3-audit`
+The latest branch run [completed successfully](https://github.com/imamirhosein/RustChunk/actions/runs/43891766193), including unit tests, remapping, data generation, class indexing, baseline comparison and private decompilation. Its artifact contains only metadata reports, not Minecraft JARs, mappings, game data or decompiled source.
 
-The comparison used the exact Starling-pinned client and server JAR SHA-1 values. Mojang's current 26.3 version JSON had been republished outside the lock's listed JSON hashes, so the tool accepted it only after verifying that both actual game JAR SHA-1 values still match the pinned Starling lock. The report marks this as a metadata republish with identical game JARs.
+Mojang's current 26.3 version JSON had been republished outside the lock's listed JSON hashes, so the comparison tool accepted it only after verifying that both actual game JAR SHA-1 values still match the pinned Starling lock. The report marks this as a metadata republish with identical game JARs.
 
 #### Code differences
-
-Starling's class-index comparison found:
 
 | Measure | Result |
 |---|---:|
@@ -127,21 +123,39 @@ These are class-index comparison counts, not a claim that every changed class ne
 | Data | 5,887 | 9,883 | 9,045 | 5,049 | 378 |
 | World-generation data | 844 | 1,144 | 502 | 202 | 334 |
 
-This confirms that reusing all 26.3 resources and generated world data unchanged would be wrong.
+#### 4. Private decompilation completed
+
+The pinned Vineflower 1.12.0 workflow successfully decompiled both verified, remapped JARs using Java 17:
+- Client: 4,786 Java source files, 22,360,918 bytes.
+- Server: 3,568 Java source files, 16,889,671 bytes.
+- The decompiler used four threads and a 4 GB heap.
+
+**Privacy and reproducibility:** these files stayed in the ignored private `.local` workspace on the GitHub runner and were not committed or uploaded. The runner workspace is ephemeral; a future job that needs the actual sources must repeat the verified preparation/decompile steps. The small workflow artifact contains metadata only.
+
+## Architecture findings that affect implementation
+
+1. **The submodule is source, not integration.** RustChunk's current `engine` workspace is still the former JNI launcher core; Starling lives at `upstream/starling` and is not yet a member of the RustChunk Cargo workspace. The pinned source has a separate Android build entry point in `crates/horizon-android`.
+2. **The renderer is reusable only behind version-correct data.** The chunk stream, worker pool, wgpu rendering, meshing and upload scheduling are promising to preserve. Their block-state IDs, models, lighting inputs, biome data and chunk contracts must match 1.20.1.
+3. **The preparation pipeline is version-sensitive.** Starling's current `research-lock.json` pins 26.3/Java 25. Its Java exporters are compiled against that game's libraries. A distinct 1.20.1 preparation/exporter profile is required; do not feed 1.20.1 data into an unmodified 26.3 resource pipeline.
+4. **The version-port script is forward-facing.** Upstream `tools/version_port.py` documents a new-release flow from the currently pinned game to a newer candidate. The RustChunk task is a backport from 26.3 to 1.20.1; reuse tools selectively, but do not assume the forward-port worktree/regeneration sequence handles a downgrade.
+5. **Single-player comes before remote protocol.** Local play is the best vertical slice for world, game simulation, player, renderer and save behavior. Protocol 763 and 1.20.1 packet bodies are needed for remote servers later, but not to prove a local world can run.
+
+See [STARLING_1_20_1_ENGINE_MAP.md](STARLING_1_20_1_ENGINE_MAP.md) for the module-by-module implementation map and gates.
 
 ## Next engineering steps
 
-1. **Decompile the verified 1.20.1 client/server JARs privately** with the pinned Vineflower version and Java 17. Decompiled game source must remain in the ignored `.local` workspace and must never be committed or uploaded.
-2. **Create missing 1.20.1 exporters**, starting with packet registration and legacy item behavior; generate accurate version-specific tables from the 1.20.1 code/data.
-3. **Build a port map** from each version-sensitive Java subsystem/class to Starling Rust files and existing parity tests. Prioritize protocol-independent single-player foundations, registries/blocks, chunk/world storage, world generation, entities and saves.
-4. **Backport in small, testable subsystems**, with 1.20.1 as the oracle. Preserve the current chunk worker pipeline and renderer where behavior permits.
-5. **Only after the 1.20.1 engine compiles and its world-generation/save tests pass**, build an ARM64 APK and test the Galaxy A22: fresh world, save/reopen, block interaction, render distance and high-speed elytra flight.
+1. **E0 — Reproducible Android base build:** build the exact pinned Starling ARM64 source in RustChunk CI. This verifies the native Android toolchain and submodule integration only; the resulting Starling Preview APK is still 26.3, not the target game.
+2. **E1 — 1.20.1 preparation profile:** create a separate target lock and private preparation flow, then build/verify the version-specific Java exporters needed for assets, registries, blocks, biomes and world generation.
+3. **E2 — Core world model:** generate 1.20.1 version facts, block/biome registries, legacy item data, chunk formats and DataVersion 3465, with tests against the Java 1.20.1 oracle.
+4. **E3 — Local single-player vertical slice:** create a deterministic flat/test world, spawn, move, break/place blocks, save and reopen. Expand into normal Overworld terrain, lighting, entities, structures and gameplay after the small world passes.
+5. **E4 — Android and performance:** first prove the desktop/headless slice; then build ARM64 and test on the Galaxy A22, including frame timing, memory, temperature and high-speed chunk arrival.
+6. **E5 — Later networking/mods:** only after Vanilla works, add protocol 763 for multiplayer; only after that plan the optional Java 17/Forge bridge. No Forge work is scheduled in the current milestone.
 
-No native RustChunk 1.20.1 APK is ready to install. A successful research workflow is not proof of a playable port.
+No native RustChunk 1.20.1 APK is ready to install. A successful research or baseline build workflow is not proof of a playable 1.20.1 port.
 
 ## Later: Forge
 
-Forge 1.20.1 / 47.4.22 remains a separate milestone. Existing Forge JARs contain Java bytecode and expect the exact Minecraft/Forge classes, ModLauncher, transformers and often Mixin/coremod behavior. Starling's `.hmod` and `.hnmod` formats are not drop-in Forge compatibility. Do not advertise Forge or the user's modpack as supported until an actual compatibility runtime/bridge and staged real-mod tests pass.
+Forge 1.20.1 / 47.4.22 remains a long-term compatibility objective, not a current task. Existing Forge JARs contain Java bytecode and expect exact Minecraft/Forge classes, ModLauncher, transformers and often Mixin/coremod behavior. Starling's `.hmod` and `.hnmod` formats are not drop-in Forge compatibility. Keep the future bridge boundary in mind, but do not let it delay the native Vanilla engine.
 
 ## References
 

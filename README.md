@@ -10,13 +10,13 @@ The upstream Starling source is pinned as a Git submodule at `upstream/starling`
 
 ## Target order
 
-1. Reproduce and understand the Starling engine architecture.
-2. Port the native game rules/data from Minecraft 26.3 back to **vanilla 1.20.1**.
-3. Build and test a playable ARM64 Android client on the Samsung Galaxy A22.
-4. Validate world creation, saving/reopening, chunk streaming and high-speed elytra flight.
-5. Only after vanilla 1.20.1 works, investigate Forge 1.20.1 compatibility.
+1. Reproduce and verify the pinned Starling ARM64 Android build.
+2. Port the native game rules and data from Minecraft 26.3 back to **vanilla 1.20.1**.
+3. Prove local single-player world creation, movement, block interaction and save/reopen.
+4. Build and test the playable ARM64 Android client on the Samsung Galaxy A22; measure chunk arrival, frame pacing, RAM and heat.
+5. Only after Vanilla 1.20.1 works, investigate protocol 763 and the long-term Forge/Java compatibility bridge.
 
-Forge/JAR mod support is not implemented in the current engine. Starling's `.hmod` and `.hnmod` formats are not drop-in replacements for Java Forge mods.
+Forge/JAR mod support is not implemented in the current engine. Starling's `.hmod` and `.hnmod` formats are not drop-in replacements for Java Forge mods. The future bridge is a long-term goal, not current work.
 
 ## Current verified progress
 
@@ -27,9 +27,12 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 - Starling's class-index tool successfully indexed 7,436 classes and 58,542 methods for 1.20.1.
 - The 1.20.1 data generator produced 1,003 block entries, 66 registries, the command tree and two biome-parameter reports.
 - The automated comparison against Starling 26.3 passed: 5,355 classes exist only in 26.3, 1,408 are absent there, 581 moved and 4,842 changed; 50,674 methods differ.
-- The comparison also measured changes across 7,590 vs 11,603 asset files, 5,887 vs 9,883 data files, and 844 vs 1,144 world-generation data files.
+- The verified client and server were privately decompiled: 4,786 client and 3,568 server Java source files. These sources remain private and are not included in the workflow artifact.
+- The Starling architecture and target version-sensitive subsystems have been mapped in [the engineering map](docs/STARLING_1_20_1_ENGINE_MAP.md).
 
-**This is not yet a playable Minecraft 1.20.1 build. No RustChunk APK from this native port is ready to install.** See [the port audit](docs/STARLING_1_20_1_PORT_AUDIT.md) for the current technical status.
+The new [ARM64 baseline workflow](.github/workflows/starling-native-baseline.yml) builds the exact pinned Starling source as a CI-only preview artifact. That proves the base engine build pipeline when it passes; it is still Minecraft 26.3 and **not** a RustChunk 1.20.1 APK.
+
+**No native RustChunk Minecraft 1.20.1 APK is ready to install.** See [the port audit](docs/STARLING_1_20_1_PORT_AUDIT.md) for the current technical status.
 
 ## Previous JNI launcher
 
