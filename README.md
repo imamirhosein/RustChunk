@@ -6,7 +6,7 @@ RustChunk is being redirected from the former Java/JNI launcher toward a native 
 
 The active development branch is `starling-1.20.1-port-audit`. The original `main` branch remains preserved as the Stage 21 JNI/Forge launch-plan prototype; it is not the native game engine.
 
-The upstream Starling source is pinned as a Git submodule at `upstream/starling`. Its exact commit and license notes are documented in [docs/STARLING_UPSTREAM.md](docs/STARLING_UPSTREAM.md).
+The upstream Starling source is pinned as a Git submodule at `upstream/starling`. Project-specific engine edits are kept as an ordered patch series under `patches/starling/` and applied by CI to that exact pin. Its source commit and license notes are documented in [docs/STARLING_UPSTREAM.md](docs/STARLING_UPSTREAM.md).
 
 ## Target order
 

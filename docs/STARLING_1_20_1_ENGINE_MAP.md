@@ -72,7 +72,7 @@ Protocol 763, Forge and Aternos connectivity are later gates, not shortcuts arou
 
 ## Source ownership and patching rule
 
-`upstream/starling` is a pinned Git submodule. Editing files inside a checked-out submodule does not make those changes part of the RustChunk parent commit. Until RustChunk has a maintained Starling fork, keep all project-specific changes as a reviewable patch series under RustChunk (for example, `patches/starling/`) and make CI apply those patches to the exact pinned commit before compiling. Never silently move the submodule pointer or modify upstream source without recording the base commit and patch order.
+`upstream/starling` is a pinned Git submodule. Editing files inside a checked-out submodule does not make those changes part of the RustChunk parent commit. Until RustChunk has a maintained Starling fork, keep all project-specific changes as a reviewable patch series under `patches/starling/`. The applier `tools/apply_starling_patches.py` checks the exact base SHA, rejects dirty submodules, preflights every patch, then applies them in manifest order before CI compiles. The series is currently empty. Never silently move the submodule pointer or modify upstream source without recording the base commit and patch order.
 
 Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency licenses remain separate. Do not commit Mojang JARs, game assets, generated private resources or decompiled source.
 

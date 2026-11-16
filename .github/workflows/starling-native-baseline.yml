@@ -8,6 +8,8 @@ on:
       - ".github/workflows/starling-native-baseline.yml"
       - ".gitmodules"
       - "upstream/starling"
+      - "tools/apply_starling_patches.py"
+      - "patches/starling/**"
   workflow_dispatch:
 
 permissions:
@@ -39,6 +41,9 @@ jobs:
           test -f upstream/starling/crates/horizon-android/Cargo.toml
           test -f upstream/starling/packaging/android/build_apk.py
           echo "Pinned Starling source verified: $actual"
+
+      - name: Apply RustChunk's reviewed Starling patch series
+        run: python tools/apply_starling_patches.py
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
