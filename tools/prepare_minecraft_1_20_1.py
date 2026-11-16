@@ -351,7 +351,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work-dir", type=Path, default=Path(".local/minecraft/1.20.1-remap"))
     parser.add_argument("--java", default="java")
-    parser.add_argument("--maven", default="mvn")
+    parser.add_argument("--maven", default=os.environ.get("MAVEN_EXECUTABLE", "mvn"))
     args = parser.parse_args()
 
     try:
