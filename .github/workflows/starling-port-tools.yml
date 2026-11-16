@@ -6,6 +6,8 @@ on:
       - starling-1.20.1-port-audit
     paths:
       - "tools/prepare_minecraft_1_20_1.py"
+      - "tools/apply_starling_patches.py"
+      - "patches/starling/**"
       - "tools/compare_starling_baseline.py"
       - "tools/decompile_minecraft_1_20_1.py"
       - "tools/minecraft_1_20_1_lock.json"
@@ -47,6 +49,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Apply RustChunk's pinned Starling test patch series
+        run: python tools/apply_starling_patches.py
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
