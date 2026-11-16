@@ -25,6 +25,13 @@ TAG_PREFIXES = (
     "data/minecraft/tags/blocks/",
     "data/minecraft/tags/block/",
 )
+# Assets::load currently requires these names in the pinned 26.3 renderer.
+# The 1.20.1 report records presence rather than synthesizing newer semantics.
+RENDERER_REQUIRED_TAGS = (
+    "minecraft:blocks_motion_in_heightmap",
+    "minecraft:blocks_motion_in_heightmap_no_leaves",
+    "minecraft:blocks_fluid_flow",
+)
 
 
 def _validate_tag_file(name: str, text: str) -> dict:
@@ -125,6 +132,11 @@ def summarize_block_tags(bundle: dict[str, str], prefix: str) -> dict:
         namespace = tag_name.split(":", 1)[0]
         namespaces[namespace] = namespaces.get(namespace, 0) + 1
     canonical = json.dumps(dict(files), ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    tag_names = [name for name, _ in files]
+    renderer_required = {
+        name: name in bundle
+        for name in RENDERER_REQUIRED_TAGS
+    }
     return {
         "status": "completed",
         "minecraft_version": VERSION,
@@ -134,6 +146,11 @@ def summarize_block_tags(bundle: dict[str, str], prefix: str) -> dict:
         "replace_tag_count": replace_count,
         "optional_entry_count": optional_entries,
         "tag_namespaces": dict(sorted(namespaces.items())),
+        "tag_names": tag_names,
+        "renderer_required_tags": renderer_required,
+        "missing_renderer_required_tags": [
+            name for name, present in renderer_required.items() if not present
+        ],
         "bundle_sha256": hashlib.sha256(canonical).hexdigest(),
     }
 

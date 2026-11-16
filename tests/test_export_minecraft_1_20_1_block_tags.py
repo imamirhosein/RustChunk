@@ -42,6 +42,38 @@ class BlockTagExportTests(unittest.TestCase):
         self.assertEqual(report["optional_entry_count"], 1)
         self.assertEqual(report["tag_namespaces"], {"minecraft": 2})
 
+    def test_reports_current_renderer_required_tags_without_fabricating_them(self):
+        bundle = {
+            "minecraft:mineable/pickaxe": json.dumps({"values": ["minecraft:stone"]}),
+        }
+        report = summarize_block_tags(bundle, "data/minecraft/tags/blocks/")
+        self.assertEqual(
+            report["renderer_required_tags"],
+            {
+                "minecraft:blocks_motion_in_heightmap": False,
+                "minecraft:blocks_motion_in_heightmap_no_leaves": False,
+                "minecraft:blocks_fluid_flow": False,
+            },
+        )
+        self.assertEqual(
+            report["missing_renderer_required_tags"],
+            [
+                "minecraft:blocks_motion_in_heightmap",
+                "minecraft:blocks_motion_in_heightmap_no_leaves",
+                "minecraft:blocks_fluid_flow",
+            ],
+        )
+
+    def test_reports_present_renderer_required_tags(self):
+        bundle = {
+            "minecraft:blocks_motion_in_heightmap": json.dumps({"values": ["minecraft:stone"]}),
+            "minecraft:blocks_motion_in_heightmap_no_leaves": json.dumps({"values": ["minecraft:stone"]}),
+            "minecraft:blocks_fluid_flow": json.dumps({"values": ["minecraft:stone"]}),
+        }
+        report = summarize_block_tags(bundle, "data/minecraft/tags/blocks/")
+        self.assertTrue(all(report["renderer_required_tags"].values()))
+        self.assertEqual(report["missing_renderer_required_tags"], [])
+
     def test_rejects_ambiguous_singular_and_plural_roots(self):
         with tempfile.TemporaryDirectory() as temp:
             jar = Path(temp) / "client.jar"
