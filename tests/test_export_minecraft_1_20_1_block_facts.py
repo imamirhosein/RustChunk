@@ -34,7 +34,7 @@ class BlockFactsSummaryTests(unittest.TestCase):
         self.assertEqual(report["block_state_count"], 5)
         self.assertEqual(report["air_state_count"], 1)
         self.assertEqual(report["fluid_state_count"], 1)
-        self.assertEqual(report["states_with_properties"], 2)
+        self.assertEqual(report["states_with_properties"], 3)
 
     def test_rejects_duplicate_state_descriptors(self):
         facts = valid_facts()
