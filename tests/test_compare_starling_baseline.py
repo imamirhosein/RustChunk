@@ -1,18 +1,76 @@
+import hashlib
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 
 from tools.compare_starling_baseline import (
     class_diff_summary,
     command_node_count,
+    load_pinned_26_3,
     jar_path_diff,
     report_features,
 )
+from tools.prepare_minecraft_1_20_1 import PrepareError
 
 
 class StarlingBaselineComparisonTests(unittest.TestCase):
+
+    def _write_lock_and_fake_manifest(self, root: Path, client_sha="c" * 40, server_sha="s" * 40):
+        pinned = {
+            "minecraft": {
+                "version": "26.3",
+                "manifest_sha1": "a" * 40,
+                "accepted_manifest_sha1": ["b" * 40],
+                "client_sha1": "c" * 40,
+                "server_sha1": "s" * 40,
+            }
+        }
+        (root / "research-lock.json").write_text(json.dumps(pinned), encoding="utf-8")
+        info = {
+            "id": "26.3",
+            "javaVersion": {"majorVersion": 25},
+            "downloads": {
+                "client": {"sha1": client_sha},
+                "server": {"sha1": server_sha},
+            },
+        }
+        payload = json.dumps(info, sort_keys=True).encode("utf-8")
+        payload_sha = hashlib.sha1(payload).hexdigest()
+        manifest = {"versions": [{
+            "id": "26.3",
+            "sha1": payload_sha,
+            "url": "https://example.invalid/26.3.json",
+        }]}
+        return manifest, info, payload, payload_sha
+
+    def test_republished_version_json_allowed_only_when_game_jars_match_lock(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest, info, payload, payload_sha = self._write_lock_and_fake_manifest(root)
+            with patch(
+                "tools.compare_starling_baseline.fetch_json",
+                side_effect=[(manifest, b"manifest"), (info, payload)],
+            ):
+                loaded, actual_sha = load_pinned_26_3(root)
+            self.assertEqual(actual_sha, payload_sha)
+            self.assertFalse(loaded["_rustchunk_manifest_is_exactly_pinned"])
+
+    def test_republished_version_json_with_changed_client_jar_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest, info, payload, _ = self._write_lock_and_fake_manifest(
+                root, client_sha="x" * 40
+            )
+            with patch(
+                "tools.compare_starling_baseline.fetch_json",
+                side_effect=[(manifest, b"manifest"), (info, payload)],
+            ):
+                with self.assertRaisesRegex(PrepareError, "client JAR SHA-1 differs"):
+                    load_pinned_26_3(root)
+
     def test_command_node_count(self):
         tree = {
             "type": "root",
