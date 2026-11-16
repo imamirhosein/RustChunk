@@ -95,10 +95,19 @@ class MainActivity : Activity() {
 
             val elapsed = SystemClock.elapsedRealtime() - runtimeTestStartedAt
             if (elapsed >= 45_000L) {
-                val consoleFile = File(filesDir, "runtime/native-jli-console.log")
+                val consoleFiles = listOf(
+                    File(filesDir, "cache/jli/native-jli-console.log"),
+                    File(filesDir, "runtime/native-jli-console.log")
+                )
                 val console = try {
-                    if (consoleFile.isFile) consoleFile.readText(Charsets.UTF_8).takeLast(7000)
-                    else "No native JLI console log was produced."
+                    val consoleFile = consoleFiles.firstOrNull { it.isFile && it.length() > 0L }
+                    if (consoleFile != null) {
+                        "Console source: ${consoleFile.absolutePath}\\n" +
+                            consoleFile.readText(Charsets.UTF_8).takeLast(7000)
+                    } else {
+                        "No native JLI console output was captured. Checked: " +
+                            consoleFiles.joinToString { it.absolutePath }
+                    }
                 } catch (error: Throwable) {
                     "Could not read native JLI console log: " + error.message
                 }

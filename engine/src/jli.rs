@@ -240,6 +240,10 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
 
     let version_c = CString::new(runtime.version.as_str())
         .map_err(|_| "Java release version contains an embedded NUL byte.".to_string())?;
+    trace_checkpoint(&trace_file, &format!("runtime JAVA_VERSION passed to JLI: {}", runtime.version));
+    if let Ok(release_text) = fs::read_to_string(home.join("release")) {
+        trace_checkpoint(&trace_file, &format!("runtime release metadata: {}", release_text.replace('\\n', " | ")));
+    }
     let major_c = CString::new("17").unwrap();
     let program_c = CString::new("java").unwrap();
     // Android OpenJDK launchers commonly pass argv[0] for both pname/lname.
@@ -259,6 +263,12 @@ pub fn test_java_runtime(app_data_dir: &Path, app_native_library_dir: &Path) -> 
         .collect();
     argv.push(ptr::null_mut());
 
+    trace_checkpoint(&trace_file, &format!(
+        "JLI argv prepared: argc={}, argv={}",
+        argc,
+        args.iter().map(|arg| String::from_utf8_lossy(arg).trim_end_matches('\\0').to_string())
+            .collect::<Vec<_>>().join(" || ")
+    ));
     let console_log = cache_dir.join("native-jli-console.log");
     report.push_str(&format!("JLI console log: {}\n", console_log.display()));
     report.push_str("Calling OpenJDK JLI_Launch: java -version\n");
