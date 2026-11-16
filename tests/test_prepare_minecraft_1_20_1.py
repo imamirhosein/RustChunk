@@ -63,7 +63,7 @@ class Minecraft1201PreparationTests(unittest.TestCase):
                 "id": "1.20.1",
                 "protocol_version": 763,
                 "world_version": 3465,
-                "pack_version": {"resource_major": 15, "data_major": 15},
+                "pack_version": {"resource": 15, "data": 15},
             }
             with zipfile.ZipFile(client, "w") as archive:
                 archive.writestr("version.json", json.dumps(game_info))
@@ -73,6 +73,20 @@ class Minecraft1201PreparationTests(unittest.TestCase):
             self.assertEqual(facts["java_major"], 17)
             self.assertEqual(facts["resource_pack_format"], 15)
             self.assertEqual(facts["data_pack_format"], 15)
+
+
+    def test_newer_pack_version_field_names_remain_supported(self):
+        facts = version_facts(
+            {
+                "id": "26.3",
+                "protocol_version": 777,
+                "world_version": 5023,
+                "pack_version": {"resource_major": 97, "data_major": 121},
+            },
+            {"javaVersion": {"majorVersion": 25}},
+        )
+        self.assertEqual(facts["resource_pack_format"], 97)
+        self.assertEqual(facts["data_pack_format"], 121)
 
     def test_wrong_version_facts_are_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
