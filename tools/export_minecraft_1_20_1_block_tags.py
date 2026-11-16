@@ -65,9 +65,14 @@ def read_block_tag_bundle(jar_path: Path) -> tuple[str, dict[str, str]]:
                 prefix for prefix in TAG_PREFIXES
                 if any(name.startswith(prefix) and name.endswith(".json") for name in files)
             ]
-            if len(matching_prefixes) != 1:
+            if not matching_prefixes:
                 raise PrepareError(
-                    f"{jar_path.name}: expected exactly one 1.20.1 block-tag root "
+                    f"No Minecraft {VERSION} block tags found in {jar_path.name}; "
+                    f"checked roots {TAG_PREFIXES}"
+                )
+            if len(matching_prefixes) > 1:
+                raise PrepareError(
+                    f"{jar_path.name}: ambiguous 1.20.1 block-tag roots "
                     f"from {TAG_PREFIXES}, found {matching_prefixes}"
                 )
             prefix = matching_prefixes[0]
