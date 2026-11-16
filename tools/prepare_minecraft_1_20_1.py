@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -327,6 +328,45 @@ def summarize_data_reports(reports_dir: Path) -> dict:
     }
 
 
+def index_remapped_game(client_jar: Path, server_jar: Path, starling_root: Path,
+                         work_dir: Path, jobs: int | None = None) -> dict:
+    """Use the pinned upstream class indexer; keep the full bytecode inventory private."""
+    indexer = starling_root / "tools" / "class_index.py"
+    if not indexer.is_file():
+        raise PrepareError(
+            f"Starling's class indexer was not found at {indexer}; "
+            "check out the pinned upstream submodule before preparing."
+        )
+
+    tools_dir = str(indexer.parent.resolve())
+    if tools_dir not in sys.path:
+        sys.path.insert(0, tools_dir)
+    try:
+        import class_index
+        inventory = class_index.index_jars([client_jar, server_jar], jobs=jobs)
+    except Exception as exc:
+        raise PrepareError(f"Starling's class indexer failed on the remapped 1.20.1 JARs: {exc}") from exc
+
+    report_dir = work_dir / "private-index"
+    report_dir.mkdir(parents=True, exist_ok=True)
+    inventory_path = report_dir / "1.20.1-classes.json"
+    inventory_path.write_text(
+        json.dumps(inventory, separators=(",", ":")) + "\n", encoding="utf-8"
+    )
+    methods = sum(len(value.get("methods", {})) for value in inventory.values())
+    prefixes = {}
+    for name in inventory:
+        prefix = name.split("/", 1)[0]
+        prefixes[prefix] = prefixes.get(prefix, 0) + 1
+    return {
+        "status": "completed",
+        "class_count": len(inventory),
+        "method_count": methods,
+        "class_prefix_counts": dict(sorted(prefixes.items())),
+        "private_inventory_path": "private-index/1.20.1-classes.json",
+    }
+
+
 def prepare(work_dir: Path, java: str, maven: str) -> dict:
     work_dir.mkdir(parents=True, exist_ok=True)
     info, manifest_sha1 = load_official_version()
@@ -385,6 +425,15 @@ def prepare(work_dir: Path, java: str, maven: str) -> dict:
             f"(client={client_has_minecraft}, server={server_has_minecraft})"
         )
 
+    starling_root = Path(os.environ.get("RUSTCHUNK_STARLING_ROOT", "upstream/starling"))
+    code_inventory_report = index_remapped_game(
+        mapped_dir / "client-named.jar",
+        mapped_dir / "server-named.jar",
+        starling_root,
+        work_dir,
+        jobs=int(os.environ.get("RUSTCHUNK_INDEX_JOBS", "2")),
+    )
+
     report = {
         "status": "remapped",
         "version_metadata_sha1": manifest_sha1,
@@ -397,6 +446,7 @@ def prepare(work_dir: Path, java: str, maven: str) -> dict:
             "server_game_sha256": server_game_sha256,
         },
         "data_generator": data_generator_report,
+        "code_inventory": code_inventory_report,
         "remapper": {
             "name": "SpecialSource",
             "version": MAVEN_COORDINATES[2],
