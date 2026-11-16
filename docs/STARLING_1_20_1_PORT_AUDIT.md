@@ -113,6 +113,34 @@ The current Android build instructions use Rust 1.90+, cargo-ndk, Android NDK r2
 
 The user's Windows 7 PC does not need to compile the project. The port and APK can be built by GitHub Actions once the source and workflow are prepared. A successful CI APK build alone is not a pass: the phone must boot it, create and reopen a 1.20.1 world, and pass the chunk-flight test.
 
+## M1 groundwork: official 1.20.1 mappings
+
+The 1.20.1 version metadata contains separate client and server mapping files. The current upstream pipeline rejects these fields, so the backport must add a remapping stage before decompilation and class indexing.
+
+Pinned SHA-1 values observed in the 1.20.1 version metadata:
+
+| Input | SHA-1 |
+|---|---|
+| Client JAR | `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838` |
+| Client mappings | `6c48521eed01fe2e8ecdadbd5ae348415f3c47da` |
+| Server JAR | `84194a2f286ef7c14ed7ce0090dba59902951553` |
+| Server mappings | `0b4dba049482496c507b2387a73a913230ebbd76` |
+
+Mojang's historical maps use ProGuard format. The selected remapping approach is to translate them into SRG and apply the SRG file with **SpecialSource 1.11.6** (BSD-3-Clause). This avoids introducing AutoRenamingTool's LGPL-2.1 code into a project whose upstream contribution rules exclude LGPL source. SpecialSource exposes an `--srg-in` input option; the final invocation, version and tool checksum still need to be pinned and integration-tested.
+
+A first isolated helper now exists in this RustChunk branch:
+
+- `tools/mojang_proguard_to_srg.py` translates class, field and method mappings from ProGuard into obfuscated-to-named SRG entries and reconstructs JVM descriptors, including arrays and generic erasure.
+- `tests/test_mojang_proguard_to_srg.py` covers classes, fields, line-numbered methods, constructors, arrays, generic erasure and malformed input.
+- The six synthetic unit tests passed in a local Python 3.12 test run.
+
+**Important boundary:** the helper has not yet been run against the full official 1.20.1 client/server mapping files, used to remap either actual JAR, or integrated into Starling's `tools/lab.py` / `tools/version_port.py`. This is groundwork, not proof that the 1.20.1 port pipeline is operational. The next check is to download both maps, verify their SHA-1 values, convert them, remap the matching JARs, then verify class/member references in the outputs.
+
+Sources:
+- 1.20.1 version metadata and official download hashes: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
+- Mojang mapping format is ProGuard: https://minecraft.wiki/w/Obfuscation_map
+- SpecialSource CLI and BSD-3-Clause artifact metadata: https://central.sonatype.com/artifact/net.md-5/SpecialSource
+
 ## Ordered RustChunk milestones
 
 ### M0 — Freeze a known-good engine baseline
