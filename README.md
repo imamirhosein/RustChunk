@@ -30,6 +30,7 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 - The verified client and server were privately decompiled: 4,786 client and 3,568 server Java source files. These sources remain private and are not included in the workflow artifact.
 - A dedicated Java 17 exporter has successfully generated the ordered 1.20.1 block-state registry in the exact `facts.json` schema consumed by Starling's `BlockRegistry`: 1,003 blocks and 24,135 states. Only counts and a SHA-256 summary are published, never the complete registry file.
 - The private 1.20.1 facts file passed Starling's actual Rust `BlockRegistry` test in CI run [#43906779498](https://github.com/imamirhosein/RustChunk/actions/runs/43906779498).
+- A version-specific block-tag exporter is being added; it compares the official client and server tag resources before producing Starling's `minecraft:<path>` bundle schema.
 - The pinned Starling ARM64 Android baseline also built and passed package/ABI verification in CI run [#43905001244](https://github.com/imamirhosein/RustChunk/actions/runs/43905001244). This artifact is Starling 26.3 Preview, not the 1.20.1 game.
 - The Starling architecture and target version-sensitive subsystems have been mapped in [the engineering map](docs/STARLING_1_20_1_ENGINE_MAP.md).
 - Preparation and decompilation now reject any primary 1.20.1 JAR or mapping whose SHA-1 differs from the reviewed target lock.

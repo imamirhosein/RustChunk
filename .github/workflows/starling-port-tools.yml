@@ -11,6 +11,7 @@ on:
       - "tools/minecraft_1_20_1_lock.json"
       - "tools/export_minecraft_1_20_1_block_facts.py"
       - "tools/java/Vanilla1201BlockFactsExporter.java"
+      - "tools/export_minecraft_1_20_1_block_tags.py"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   pull_request:
@@ -21,6 +22,7 @@ on:
       - "tools/minecraft_1_20_1_lock.json"
       - "tools/export_minecraft_1_20_1_block_facts.py"
       - "tools/java/Vanilla1201BlockFactsExporter.java"
+      - "tools/export_minecraft_1_20_1_block_tags.py"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   workflow_dispatch:
@@ -86,6 +88,12 @@ jobs:
             --prepared-dir .local/minecraft/1.20.1-remap \
             --work-dir .local/minecraft/1.20.1-decompile
 
+      - name: Export 1.20.1 vanilla block tags from verified client/server JARs
+        run: |
+          python tools/export_minecraft_1_20_1_block_tags.py \
+            --prepared-dir .local/minecraft/1.20.1-remap \
+            --work-dir .local/minecraft/1.20.1-decompile
+
       - name: Set up Rust for the Starling world-registry compatibility test
         uses: dtolnay/rust-toolchain@stable
 
@@ -116,5 +124,6 @@ jobs:
             .local/minecraft/version-compare/comparison-report.json
             .local/minecraft/1.20.1-decompile/decompile-report.json
             .local/minecraft/1.20.1-decompile/block-facts/block-facts-report.json
+            .local/minecraft/1.20.1-decompile/block-tags/block-tags-report.json
           include-hidden-files: true
           if-no-files-found: error
