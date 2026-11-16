@@ -151,6 +151,35 @@ pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareForgeLau
 
 
 #[no_mangle]
+pub extern "system" fn Java_dev_rustchunk_app_MainActivity_nativePrepareJniForgeLaunchPlan(
+    mut env: JNIEnv,
+    _this: JObject,
+    app_data_dir: JString,
+    profile_id: JString,
+    offline_username: JString,
+    native_library_dir: JString,
+) -> jstring {
+    let result = java_string_to_rust(&mut env, &app_data_dir).and_then(|data| {
+        java_string_to_rust(&mut env, &profile_id).and_then(|profile| {
+            java_string_to_rust(&mut env, &offline_username).and_then(|username| {
+                java_string_to_rust(&mut env, &native_library_dir).and_then(|native_dir| {
+                    forge::prepare_jni_forge_launch_plan(
+                        Path::new(&data),
+                        &profile,
+                        &username,
+                        Path::new(&native_dir),
+                    )
+                })
+            })
+        })
+    });
+    rust_string_to_java(
+        &mut env,
+        result.unwrap_or_else(|error| format!("JNI Forge launch-plan preparation failed: {}", error)),
+    )
+}
+
+#[no_mangle]
 pub extern "system" fn Java_dev_rustchunk_app_JavaRuntimeTestService_nativeTestJavaRuntimeNative(
     mut env: JNIEnv,
     _this: JObject,

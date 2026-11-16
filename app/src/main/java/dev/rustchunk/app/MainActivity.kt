@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
 import org.json.JSONArray
@@ -26,6 +27,7 @@ class MainActivity : Activity() {
     private external fun nativeResolveMinecraft(appDataDirectory: String): String
     private external fun nativeListMinecraftProfiles(appDataDirectory: String): String
     private external fun nativePrepareForgeLaunchProfile(appDataDirectory: String, profileId: String): String
+    private external fun nativePrepareJniForgeLaunchPlan(appDataDirectory: String, profileId: String, offlineUsername: String, nativeLibraryDirectory: String): String
     private external fun nativeDownloadMinecraft(appDataDirectory: String, parallelism: Int): String
     private external fun nativeDownloadForgeLibraries(appDataDirectory: String, profileId: String, parallelism: Int): String
     private external fun nativeDownloadProgress(): String
@@ -40,6 +42,8 @@ class MainActivity : Activity() {
     private lateinit var inspectButton: Button
     private lateinit var forgeProfileButton: Button
     private lateinit var forgeDependencyButton: Button
+    private lateinit var forgeLaunchPlanButton: Button
+    private lateinit var offlineUsernameInput: EditText
     private lateinit var profileSpinner: Spinner
     private lateinit var refreshProfilesButton: Button
     private lateinit var runtimeImportButton: Button
@@ -261,6 +265,19 @@ class MainActivity : Activity() {
             setOnClickListener { startForgeLibrariesDownload() }
         }
 
+        offlineUsernameInput = EditText(this).apply {
+            setSingleLine(true)
+            hint = "Offline username (1–16 letters, numbers, underscores)"
+            setText("RustPlayer")
+            inputType = android.text.InputType.TYPE_CLASS_TEXT
+        }
+
+        forgeLaunchPlanButton = Button(this).apply {
+            text = "Prepare JNI Forge launch plan"
+            isEnabled = false
+            setOnClickListener { prepareJniForgeLaunchPlan() }
+        }
+
         resolveButton = Button(this).apply {
             text = "Resolve Minecraft 1.20.1 metadata"
             isEnabled = workspaceStatus.startsWith("Minecraft workspace ready")
@@ -297,6 +314,8 @@ class MainActivity : Activity() {
             addView(inspectButton, matchWrapParams())
             addView(forgeProfileButton, matchWrapParams())
             addView(forgeDependencyButton, matchWrapParams())
+            addView(offlineUsernameInput, matchWrapParams())
+            addView(forgeLaunchPlanButton, matchWrapParams())
             addView(resolveButton, matchWrapParams())
             addView(downloadButton, matchWrapParams())
             addView(cancelButton, matchWrapParams())
@@ -482,6 +501,10 @@ class MainActivity : Activity() {
             forgeDependencyButton.isEnabled = enabled &&
                 profileOptions.getOrNull(profileSpinner.selectedItemPosition)?.supportedForForgeAnalysis == true
         }
+        if (::forgeLaunchPlanButton.isInitialized) {
+            forgeLaunchPlanButton.isEnabled = enabled &&
+                profileOptions.getOrNull(profileSpinner.selectedItemPosition)?.supportedForForgeAnalysis == true
+        }
         profileSpinner.isEnabled = enabled && profileOptions.isNotEmpty()
         resolveButton.isEnabled = enabled
         downloadButton.isEnabled = enabled && hasInstallPlan()
@@ -580,6 +603,9 @@ class MainActivity : Activity() {
         forgeProfileButton.isEnabled = canUseForgeProfile
         if (::forgeDependencyButton.isInitialized) {
             forgeDependencyButton.isEnabled = canUseForgeProfile
+        }
+        if (::forgeLaunchPlanButton.isInitialized) {
+            forgeLaunchPlanButton.isEnabled = canUseForgeProfile
         }
     }
 
@@ -807,6 +833,41 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun prepareJniForgeLaunchPlan() {
+        if (importInProgress || downloadInProgress) return
+        val profileId = selectedProfileId
+        if (profileId.isNullOrBlank()) {
+            statusView.text = "Select a supported Forge 1.20.1 profile first."
+            return
+        }
+        val username = offlineUsernameInput.text.toString().trim()
+        if (!Regex("^[A-Za-z0-9_]{1,16}$").matches(username)) {
+            statusView.text = "Offline username must contain 1–16 English letters, numbers, or underscores."
+            return
+        }
+
+        forgeLaunchPlanButton.isEnabled = false
+        statusView.text = "Building the JNI Forge launch plan for '$profileId'...\n" +
+            "This validates classpath, Forge module path, JVM options, and offline identity. It does not start the game."
+        worker.execute {
+            val result = try {
+                nativePrepareJniForgeLaunchPlan(
+                    filesDir.absolutePath,
+                    profileId,
+                    username,
+                    applicationInfo.nativeLibraryDir
+                )
+            } catch (error: Throwable) {
+                "JNI Forge launch-plan preparation failed: " +
+                    error.javaClass.simpleName + ": " + error.message
+            }
+            runOnUiThread {
+                statusView.text = result
+                updateForgeAnalyzeButton()
+            }
+        }
+    }
+
     private fun resolveMinecraftMetadata() {
         if (importInProgress || downloadInProgress) return
         resolveButton.isEnabled = false
@@ -888,6 +949,7 @@ class MainActivity : Activity() {
         downloadButton.isEnabled = false
         forgeProfileButton.isEnabled = false
         forgeDependencyButton.isEnabled = false
+        if (::forgeLaunchPlanButton.isInitialized) forgeLaunchPlanButton.isEnabled = false
         importButton.isEnabled = false
         runtimeInstallButton.isEnabled = false
         runtimeImportButton.isEnabled = false

@@ -1,3 +1,4 @@
+use md5::{Digest, Md5};
 use serde_json::{json, Value};
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fs;
@@ -338,6 +339,494 @@ pub fn prepare_forge_dependency_plan(
     report.push_str("\nOnly HTTPS artifacts with valid SHA-1 values, declared sizes, and safe relative paths are eligible. This step does not install native libraries or launch Forge.\n");
     Ok(report)
 }
+
+
+pub fn prepare_jni_forge_launch_plan(
+    app_data_dir: &Path,
+    selected_profile_id: &str,
+    offline_username: &str,
+    app_native_library_dir: &Path,
+) -> Result<String, String> {
+    if !app_data_dir.is_absolute() || !app_native_library_dir.is_absolute() {
+        return Err("RustChunk data and Android native-library paths must be absolute.".to_string());
+    }
+    if !is_safe_version_id(selected_profile_id) {
+        return Err("Selected Forge profile identifier is invalid.".to_string());
+    }
+    if offline_username.is_empty() || offline_username.len() > 16
+        || !offline_username.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+        return Err("Offline username must contain 1-16 ASCII letters, numbers, or underscores.".to_string());
+    }
+
+    let game_root = app_data_dir.join("minecraft");
+    let versions_root = game_root.join("versions");
+    let (profile_dir, profile_json_path, profile) = find_forge_profile(&versions_root, selected_profile_id)?;
+    let profile_id = profile.get("id").and_then(Value::as_str).unwrap_or(selected_profile_id).to_string();
+
+    let mut chain = Vec::new();
+    let mut visited = HashSet::new();
+    let mut notices = Vec::new();
+    collect_inheritance_chain(&versions_root, &profile, &mut visited, &mut chain, &mut notices, 0);
+
+    let minecraft_version = chain.first()
+        .and_then(|item| item.get("id"))
+        .and_then(Value::as_str)
+        .filter(|id| !id.to_lowercase().contains("forge")
+            && !id.to_lowercase().contains("fabric")
+            && !id.to_lowercase().contains("quilt")
+            && !id.to_lowercase().contains("neoforge"))
+        .map(str::to_string)
+        .or_else(|| profile.get("inheritsFrom").and_then(Value::as_str).map(str::to_string))
+        .unwrap_or_else(|| profile_minecraft_version(&profile, &profile_id));
+
+    if profile_loader(&profile) != "Forge" || minecraft_version != TARGET_VERSION {
+        return Err(format!("Selected profile '{}' is not a supported Minecraft {} Forge profile.", profile_id, TARGET_VERSION));
+    }
+    let main_class = inherited_string(&chain, "mainClass")
+        .ok_or_else(|| "Forge profile does not declare a mainClass.".to_string())?;
+    if main_class != "cpw.mods.bootstraplauncher.BootstrapLauncher" {
+        return Err(format!("Unexpected Forge 1.20.1 main class '{}'.", main_class));
+    }
+
+    let library_dir = game_root.join("libraries");
+    let natives_dir = profile_dir.join("rustchunk-natives");
+    fs::create_dir_all(&natives_dir)
+        .map_err(|error| format!("Cannot create native-library staging directory: {}", error))?;
+
+    let mut classpath_entries = Vec::<String>::new();
+    let mut classpath_seen = HashSet::<String>::new();
+    let mut missing_classpath = Vec::<String>::new();
+    let mut skipped_native = 0usize;
+    let mut skipped_rules = 0usize;
+    let mut unresolved_libraries = Vec::<String>::new();
+
+    for library in merge_libraries(&chain).iter() {
+        if !library_rules_allow_android(library) { skipped_rules += 1; continue; }
+        if is_any_native_library(library) || is_desktop_native_library(library) {
+            skipped_native += 1;
+            continue;
+        }
+        let name = library.get("name").and_then(Value::as_str).unwrap_or("(unnamed library)");
+        let Some(relative) = library_artifact_path(library) else {
+            unresolved_libraries.push(format!("{} (no artifact path)", name));
+            continue;
+        };
+        let relative = match validate_relative_path(&relative) {
+            Ok(value) => value,
+            Err(_) => {
+                unresolved_libraries.push(format!("{} (unsafe artifact path)", name));
+                continue;
+            }
+        };
+        let extension = Path::new(&relative).extension().and_then(|v| v.to_str()).unwrap_or("");
+        if extension != "jar" && extension != "zip" { continue; }
+
+        let absolute = library_dir.join(&relative);
+        let key = absolute.to_string_lossy().into_owned();
+        if !classpath_seen.insert(key.clone()) { continue; }
+        if absolute.is_file() { classpath_entries.push(key); }
+        else { missing_classpath.push(relative); }
+    }
+
+    let client_jar = find_client_jar(&game_root, &profile_dir, &profile, &minecraft_version);
+    let client_jar_present = client_jar.as_ref().is_some_and(|path| path.is_file());
+    if let Some(path) = &client_jar {
+        if client_jar_present {
+            let key = path.to_string_lossy().into_owned();
+            if classpath_seen.insert(key.clone()) { classpath_entries.push(key); }
+        }
+    } else {
+        missing_classpath.push(format!("versions/{}/{}.jar", minecraft_version, minecraft_version));
+    }
+
+    let classpath = classpath_entries.join(":");
+    let jvm_raw = flatten_launch_arguments(&merge_arguments(&chain, "jvm"));
+    let mut game_raw = flatten_launch_arguments(&merge_arguments(&chain, "game"));
+    if game_raw.is_empty() {
+        game_raw = merge_legacy_arguments(&chain).unwrap_or_default()
+            .split_whitespace().map(str::to_string).collect();
+    }
+
+    let asset_index_id = inherited_value(&chain, "assetIndex")
+        .and_then(|value| value.get("id")).and_then(Value::as_str).map(str::to_string)
+        .or_else(|| inherited_string(&chain, "assets"));
+    let assets_root = game_root.join("assets");
+    let assets_index_path = asset_index_id.as_ref()
+        .map(|id| assets_root.join("indexes").join(format!("{}.json", id)));
+    let assets_index_present = assets_index_path.as_ref().is_some_and(|path| path.is_file());
+    let offline_uuid = offline_player_uuid(offline_username);
+    let version_type = profile.get("type").and_then(Value::as_str).unwrap_or("release");
+
+    let keys = [
+        "auth_player_name", "version_name", "game_directory", "assets_root", "assets_index_name",
+        "auth_uuid", "auth_access_token", "user_type", "version_type", "user_properties",
+        "resolution_width", "resolution_height", "game_assets", "auth_session", "library_directory",
+        "classpath_separator", "classpath", "natives_directory", "launcher_name", "launcher_version",
+        "clientid", "auth_xuid", "quickPlayPath", "quickPlaySingleplayer", "quickPlayMultiplayer",
+        "quickPlayRealms"
+    ];
+    let values = [
+        offline_username.to_string(),
+        profile_id.clone(),
+        profile_dir.to_string_lossy().into_owned(),
+        assets_root.to_string_lossy().into_owned(),
+        asset_index_id.clone().unwrap_or_else(|| minecraft_version.clone()),
+        offline_uuid.clone(),
+        "0".to_string(),
+        "legacy".to_string(),
+        version_type.to_string(),
+        "{}".to_string(),
+        "854".to_string(),
+        "480".to_string(),
+        assets_root.join("virtual/legacy").to_string_lossy().into_owned(),
+        "0".to_string(),
+        library_dir.to_string_lossy().into_owned(),
+        ":".to_string(),
+        classpath.clone(),
+        natives_dir.to_string_lossy().into_owned(),
+        "RustChunk".to_string(),
+        "0.18.0".to_string(),
+        String::new(),
+        String::new(),
+        String::new(),
+        String::new(),
+        String::new(),
+        String::new(),
+    ];
+    let replacements: Vec<(String, String)> = keys.iter().zip(values.iter())
+        .map(|(key, value)| (placeholder(key), value.clone())).collect();
+
+    let (mut jvm_options, module_path_values, unsupported_jvm_arguments) =
+        normalize_jvm_arguments(&jvm_raw, &replacements);
+    let mut module_path_entries = Vec::<String>::new();
+    let mut missing_module_path = Vec::<String>::new();
+    for module_path in &module_path_values {
+        for entry in module_path.split(':').filter(|value| !value.trim().is_empty()) {
+            let entry = entry.trim().to_string();
+            if !module_path_entries.contains(&entry) {
+                if Path::new(&entry).exists() { module_path_entries.push(entry); }
+                else { missing_module_path.push(entry); }
+            }
+        }
+    }
+
+    let mut game_arguments: Vec<String> = game_raw.iter()
+        .map(|value| replace_launch_placeholders(value, &replacements)).collect();
+    if !game_arguments.iter().any(|value| value == "--width") {
+        game_arguments.extend(["--width".to_string(), "854".to_string()]);
+    }
+    if !game_arguments.iter().any(|value| value == "--height") {
+        game_arguments.extend(["--height".to_string(), "480".to_string()]);
+    }
+
+    let mut unresolved_placeholders = collect_unresolved_placeholders(
+        jvm_options.iter().chain(game_arguments.iter()).map(String::as_str)
+    );
+    if classpath_entries.is_empty() {
+        unresolved_placeholders.push(format!("{}{{classpath}} (no resolved classpath entries)", "$"));
+    }
+    unresolved_placeholders.sort();
+    unresolved_placeholders.dedup();
+
+    ensure_vm_property(&mut jvm_options, "java.class.path", &classpath);
+    ensure_vm_property(&mut jvm_options, "java.home", &app_data_dir.join("games/runtimes/Internal-17").to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "java.io.tmpdir", &app_data_dir.join("cache/java").to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "user.home", &profile_dir.to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "java.library.path",
+        &format!("{}:{}", natives_dir.to_string_lossy(), app_native_library_dir.to_string_lossy()));
+    ensure_vm_property(&mut jvm_options, "org.lwjgl.librarypath", &natives_dir.to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "org.lwjgl.system.SharedLibraryExtractPath", &natives_dir.to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "jna.tmpdir", &natives_dir.to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "jna.boot.library.path", &app_native_library_dir.to_string_lossy());
+    ensure_vm_property(&mut jvm_options, "fml.earlyprogresswindow", "false");
+    ensure_vm_property(&mut jvm_options, "log4j2.formatMsgNoLookups", "true");
+    ensure_vm_property(&mut jvm_options, "net.minecraft.clientmodname", "RustChunk");
+    if !jvm_options.iter().any(|value| value.starts_with("-Xms")) {
+        jvm_options.push("-Xms256m".to_string());
+    }
+    if !jvm_options.iter().any(|value| value.starts_with("-Xmx")) {
+        jvm_options.push("-Xmx2048m".to_string());
+    }
+    if !jvm_options.iter().any(|value| value.starts_with("-XX:ActiveProcessorCount=")) {
+        let processors = std::thread::available_parallelism().map(|v| v.get()).unwrap_or(4);
+        jvm_options.push(format!("-XX:ActiveProcessorCount={}", processors));
+    }
+
+    let mut blockers = Vec::<String>::new();
+    if classpath_entries.is_empty() { blockers.push("Java classpath is empty.".to_string()); }
+    if !missing_classpath.is_empty() { blockers.push(format!("{} classpath artifact(s) are missing.", missing_classpath.len())); }
+    if !missing_module_path.is_empty() { blockers.push(format!("{} Forge module-path artifact(s) are missing.", missing_module_path.len())); }
+    if module_path_entries.is_empty() { blockers.push("Forge module path is empty.".to_string()); }
+    if !unresolved_placeholders.is_empty() { blockers.push(format!("{} launch placeholder(s) remain unresolved.", unresolved_placeholders.len())); }
+    if !unsupported_jvm_arguments.is_empty() { blockers.push(format!("{} JVM argument token(s) could not be interpreted safely.", unsupported_jvm_arguments.len())); }
+    if !unresolved_libraries.is_empty() { blockers.push(format!("{} library declaration(s) could not be mapped to JAR files.", unresolved_libraries.len())); }
+    if !client_jar_present { blockers.push("Minecraft client JAR is missing.".to_string()); }
+    if !assets_index_present { blockers.push("Minecraft asset index is missing.".to_string()); }
+
+    let metadata_ready = blockers.is_empty();
+    let plan = json!({
+        "schema_version": 1,
+        "status": "prepared_for_review_only",
+        "profile_id": profile_id.clone(),
+        "profile_json": relative_path(&game_root, &profile_json_path),
+        "profile_directory": relative_path(&game_root, &profile_dir),
+        "minecraft_version": minecraft_version.clone(),
+        "main_class": main_class.clone(),
+        "offline_identity": {
+            "username": offline_username,
+            "uuid": offline_uuid.clone(),
+            "access_token": "0",
+            "user_type": "legacy",
+            "server_compatibility_note": "Only for servers configured for offline/cracked authentication. Not a Microsoft/Mojang login."
+        },
+        "working_directory": profile_dir.to_string_lossy(),
+        "classpath": classpath_entries.clone(),
+        "classpath_entry_count": classpath_entries.len(),
+        "module_path": module_path_entries.clone(),
+        "module_path_entry_count": module_path_entries.len(),
+        "jni_vm_options": jvm_options.clone(),
+        "main_arguments": game_arguments.clone(),
+        "missing_classpath_artifacts": missing_classpath.clone(),
+        "missing_module_path_artifacts": missing_module_path.clone(),
+        "unresolved_library_declarations": unresolved_libraries.clone(),
+        "unsupported_jvm_arguments": unsupported_jvm_arguments.clone(),
+        "unresolved_placeholders": unresolved_placeholders.clone(),
+        "native_classifiers_skipped": skipped_native,
+        "libraries_excluded_by_platform_rules": skipped_rules,
+        "client_jar_present": client_jar_present,
+        "asset_index_present": assets_index_present,
+        "assets_index": asset_index_id,
+        "metadata_ready": metadata_ready,
+        "android_native_lwjgl_ready": false,
+        "android_graphics_bridge_ready": false,
+        "game_launch_ready": false,
+        "launch_performed": false,
+        "launch_blockers": blockers.clone(),
+        "runtime_note": "Java 17 JNI startup was verified separately. Android LWJGL native mapping, OpenGL/EGL surface integration, and actual Forge execution are not implemented by this planning step."
+    });
+
+    let plan_path = profile_dir.join("rustchunk-jni-launch-plan.json");
+    let report_path = profile_dir.join("rustchunk-jni-launch-plan-report.txt");
+    let plan_bytes = serde_json::to_vec_pretty(&plan)
+        .map_err(|error| format!("Could not encode JNI Forge launch plan: {}", error))?;
+    write_atomic(&plan_path, &plan_bytes)?;
+
+    let mut report = String::new();
+    report.push_str("RustChunk Forge JNI launch-plan preparation (Stage 19)\n");
+    report.push_str(&format!("Selected profile: {}\n", profile_id));
+    report.push_str(&format!("Minecraft target: {}\n", minecraft_version));
+    report.push_str(&format!("Main class: {}\n", main_class));
+    report.push_str(&format!("Offline username: {}\n", offline_username));
+    report.push_str(&format!("Offline UUID: {}\n", offline_uuid));
+    report.push_str(&format!("Java classpath entries present: {}\n", classpath_entries.len()));
+    report.push_str(&format!("Forge module-path entries present: {}\n", module_path_entries.len()));
+    report.push_str(&format!("Missing classpath artifacts: {}\n", missing_classpath.len()));
+    report.push_str(&format!("Missing module-path artifacts: {}\n", missing_module_path.len()));
+    report.push_str(&format!("Unresolved library declarations: {}\n", unresolved_libraries.len()));
+    report.push_str(&format!("Unresolved launch placeholders: {}\n", unresolved_placeholders.len()));
+    report.push_str(&format!("Unsupported JVM argument tokens: {}\n", unsupported_jvm_arguments.len()));
+    report.push_str(&format!("Native library declarations skipped: {}\n", skipped_native));
+    report.push_str(&format!("Libraries excluded by Android/Linux ARM64 rules: {}\n", skipped_rules));
+    report.push_str(&format!("Minecraft client JAR present: {}\n", client_jar_present));
+    report.push_str(&format!("Minecraft asset index present: {}\n", assets_index_present));
+    report.push_str(&format!("Launch metadata ready: {}\n", metadata_ready));
+    report.push_str("Android LWJGL/OpenGL integration ready: NO\n");
+    report.push_str("Actual Forge launch performed: NO\n");
+    for blocker in &blockers { report.push_str(&format!("BLOCKER: {}\n", blocker)); }
+    for item in missing_classpath.iter().take(30) { report.push_str(&format!("MISSING CLASSPATH: {}\n", item)); }
+    for item in missing_module_path.iter().take(30) { report.push_str(&format!("MISSING MODULE PATH: {}\n", item)); }
+    for item in unsupported_jvm_arguments.iter().take(20) { report.push_str(&format!("UNSUPPORTED JVM ARGUMENT: {}\n", item)); }
+    for notice in notices { report.push_str(&format!("NOTICE: {}\n", notice)); }
+    report.push_str(&format!("Launch plan JSON: {}\n", plan_path.display()));
+    report.push_str(&format!("Launch plan report: {}\n", report_path.display()));
+    report.push_str("\nThis step converts the Forge profile into JNI_CreateJavaVM options and main-class arguments. It does not execute Forge, create an OpenGL surface, or connect to a server.\n");
+
+    write_atomic(&report_path, report.as_bytes())?;
+    Ok(report)
+}
+
+fn placeholder(key: &str) -> String {
+    format!("{}{{{}}}", "$", key)
+}
+
+fn offline_player_uuid(username: &str) -> String {
+    let digest = Md5::digest(format!("OfflinePlayer:{}", username).as_bytes());
+    let mut bytes = digest.to_vec();
+    bytes[6] = (bytes[6] & 0x0f) | 0x30;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    format!(
+        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
+        bytes[0], bytes[1], bytes[2], bytes[3],
+        bytes[4], bytes[5], bytes[6], bytes[7],
+        bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]
+    )
+}
+
+fn flatten_launch_arguments(arguments: &[Value]) -> Vec<String> {
+    let mut flattened = Vec::new();
+    for argument in arguments {
+        match argument {
+            Value::String(value) => flattened.push(value.clone()),
+            Value::Object(object) => {
+                if !launch_argument_rules_allow_android(argument) { continue; }
+                let Some(value) = object.get("value") else { continue };
+                match value {
+                    Value::String(value) => flattened.push(value.clone()),
+                    Value::Array(values) => flattened.extend(values.iter().filter_map(Value::as_str).map(str::to_string)),
+                    _ => {}
+                }
+            }
+            _ => {}
+        }
+    }
+    flattened
+}
+
+fn launch_argument_rules_allow_android(argument: &Value) -> bool {
+    let Some(rules) = argument.get("rules").and_then(Value::as_array) else { return true; };
+    let mut allowed = false;
+    for rule in rules {
+        if launch_argument_rule_matches(rule) {
+            allowed = rule.get("action").and_then(Value::as_str) == Some("allow");
+        }
+    }
+    allowed
+}
+
+fn launch_argument_rule_matches(rule: &Value) -> bool {
+    if let Some(os) = rule.get("os") {
+        if os.get("name").and_then(Value::as_str)
+            .is_some_and(|name| name != "linux" && name != "android") { return false; }
+        if os.get("arch").and_then(Value::as_str)
+            .is_some_and(|arch| arch != "aarch64" && arch != "arm64" && arch != "arm64-v8a") { return false; }
+        if os.get("version").is_some() { return false; }
+    }
+    if let Some(features) = rule.get("features").and_then(Value::as_object) {
+        for (name, required) in features {
+            let actual = match name.as_str() {
+                "has_custom_resolution" => true,
+                "is_demo_user" => false,
+                "has_quick_plays_support" => false,
+                "is_quick_play_singleplayer" => false,
+                "is_quick_play_multiplayer" => false,
+                "is_quick_play_realms" => false,
+                _ => false,
+            };
+            if required.as_bool() != Some(actual) { return false; }
+        }
+    }
+    true
+}
+
+fn replace_launch_placeholders(value: &str, replacements: &[(String, String)]) -> String {
+    let mut result = value.to_string();
+    for (placeholder, replacement) in replacements { result = result.replace(placeholder, replacement); }
+    result
+}
+
+fn normalize_jvm_arguments(
+    raw: &[String],
+    replacements: &[(String, String)],
+) -> (Vec<String>, Vec<String>, Vec<String>) {
+    let mut options = Vec::new();
+    let mut module_paths = Vec::new();
+    let mut unsupported = Vec::new();
+    let mut index = 0usize;
+    while index < raw.len() {
+        let argument = &raw[index];
+        if argument == "-p" || argument == "--module-path" {
+            if let Some(value) = raw.get(index + 1) {
+                let value = replace_launch_placeholders(value, replacements);
+                module_paths.push(value.clone());
+                options.push(format!("--module-path={}", value));
+                index += 2;
+                continue;
+            }
+            unsupported.push(format!("{} (missing value)", argument));
+            index += 1;
+            continue;
+        }
+        if argument == "-cp" || argument == "-classpath" || argument == "--class-path" {
+            if raw.get(index + 1).is_some() { index += 2; }
+            else { unsupported.push(format!("{} (missing value)", argument)); index += 1; }
+            continue;
+        }
+
+        const VALUE_OPTIONS: [&str; 7] = [
+            "--add-modules", "--add-exports", "--add-opens", "--add-reads",
+            "--limit-modules", "--patch-module", "--upgrade-module-path",
+        ];
+        if VALUE_OPTIONS.contains(&argument.as_str()) {
+            if let Some(value) = raw.get(index + 1) {
+                let value = replace_launch_placeholders(value, replacements);
+                options.push(format!("{}={}", argument, value));
+                index += 2;
+                continue;
+            }
+            unsupported.push(format!("{} (missing value)", argument));
+            index += 1;
+            continue;
+        }
+
+        let resolved = replace_launch_placeholders(argument, replacements);
+        if resolved.starts_with("-Djava.class.path=") {
+            // Use the class path assembled from verified artifacts.
+        } else if resolved.starts_with("--module-path=") {
+            let value = resolved["--module-path=".len()..].to_string();
+            module_paths.push(value);
+            options.push(resolved);
+        } else if resolved.starts_with("--add-modules=")
+            || resolved.starts_with("--add-exports=")
+            || resolved.starts_with("--add-opens=")
+            || resolved.starts_with("--add-reads=")
+            || resolved.starts_with("--limit-modules=")
+            || resolved.starts_with("--patch-module=")
+            || resolved.starts_with("--upgrade-module-path=")
+            || resolved.starts_with("-D")
+            || resolved.starts_with("-X")
+            || resolved.starts_with("-XX:")
+            || resolved.starts_with("-agentlib:")
+            || resolved.starts_with("-javaagent:")
+            || resolved == "--enable-preview"
+        {
+            options.push(resolved);
+        } else if resolved.starts_with('-') {
+            unsupported.push(resolved);
+        } else {
+            unsupported.push(format!("unexpected JVM argument token: {}", resolved));
+        }
+        index += 1;
+    }
+    (options, module_paths, unsupported)
+}
+
+fn ensure_vm_property(options: &mut Vec<String>, name: &str, value: &str) {
+    let prefix = format!("-D{}=", name);
+    options.retain(|argument| !argument.starts_with(&prefix));
+    options.push(format!("{}{}", prefix, value));
+}
+
+fn collect_unresolved_placeholders<'a>(arguments: impl Iterator<Item = &'a str>) -> Vec<String> {
+    let mut unresolved = Vec::new();
+    let opening = format!("{}{{", "$");
+    for argument in arguments {
+        let mut rest = argument;
+        while let Some(start) = rest.find(&opening) {
+            let after = &rest[start..];
+            if let Some(end) = after.find('}') {
+                unresolved.push(after[..=end].to_string());
+                rest = &after[end + 1..];
+            } else {
+                unresolved.push(after.to_string());
+                break;
+            }
+        }
+    }
+    unresolved.sort();
+    unresolved.dedup();
+    unresolved
+}
+
 
 fn build_forge_library_entries(
     libraries: &[Value],
@@ -1035,6 +1524,59 @@ mod tests {
         let roots = runtime_search_roots(app);
         assert!(roots.contains(&app.join("games").join("runtimes")));
         assert!(roots.contains(&app.join("minecraft").join("runtime")));
+    }
+
+    #[test]
+    fn offline_uuid_uses_name_based_version_three_format() {
+        let uuid = offline_player_uuid("RustPlayer");
+        assert_eq!(uuid.len(), 36);
+        assert_eq!(uuid.chars().filter(|character| *character == '-').count(), 4);
+        assert_eq!(uuid.chars().nth(14), Some('3'));
+        assert!(matches!(uuid.chars().nth(19), Some('8' | '9' | 'a' | 'b')));
+        assert_eq!(uuid, offline_player_uuid("RustPlayer"));
+    }
+
+    #[test]
+    fn flattens_profile_arguments_and_applies_android_rules() {
+        let values: Vec<Value> = serde_json::from_str(
+            r#"[
+                "--always",
+                {"rules":[{"action":"allow","os":{"name":"linux"}}],"value":["--linux","yes"]},
+                {"rules":[{"action":"allow","os":{"name":"windows"}}],"value":"--windows"}
+            ]"#
+        ).unwrap();
+        assert_eq!(flatten_launch_arguments(&values), vec!["--always", "--linux", "yes"]);
+    }
+
+    #[test]
+    fn converts_launcher_module_pairs_to_jni_equals_options() {
+        let raw = vec![
+            format!("-DlibraryDirectory={}", placeholder("library_directory")),
+            "-p".to_string(),
+            format!("{}/a.jar{}{}{}", placeholder("library_directory"), placeholder("classpath_separator"), placeholder("library_directory"), "/b.jar"),
+            "--add-modules".to_string(),
+            "ALL-MODULE-PATH".to_string(),
+            "--add-opens".to_string(),
+            "java.base/java.util.jar=cpw.mods.securejarhandler".to_string(),
+        ];
+        let replacements = vec![
+            (placeholder("library_directory"), "/game/libraries".to_string()),
+            (placeholder("classpath_separator"), ":".to_string()),
+        ];
+        let (options, module_paths, unsupported) = normalize_jvm_arguments(&raw, &replacements);
+        assert!(unsupported.is_empty());
+        assert_eq!(module_paths, vec!["/game/libraries/a.jar:/game/libraries/b.jar"]);
+        assert!(options.contains(&"-DlibraryDirectory=/game/libraries".to_string()));
+        assert!(options.contains(&"--module-path=/game/libraries/a.jar:/game/libraries/b.jar".to_string()));
+        assert!(options.contains(&"--add-modules=ALL-MODULE-PATH".to_string()));
+        assert!(options.contains(&"--add-opens=java.base/java.util.jar=cpw.mods.securejarhandler".to_string()));
+    }
+
+    #[test]
+    fn detects_unresolved_launch_placeholders() {
+        let value = placeholder("auth_player_name");
+        let values = vec!["--username".to_string(), value.clone()];
+        assert_eq!(collect_unresolved_placeholders(values.iter().map(String::as_str)), vec![value]);
     }
 
     #[test]

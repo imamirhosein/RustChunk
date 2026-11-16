@@ -2,9 +2,13 @@
 
 An independent Android launcher and game-engine research project targeting Minecraft Java 1.20.1 and Forge 47.x.
 
-## Current milestone: Stage 13 — Native Java JLI startup
+## Current milestone: Stage 19 — JNI Forge launch-plan preparation
 
-Stage 13 replaces direct execution of the app-private bin/java file with an Android native smoke test. RustChunk locates a Java 17 ARM64 runtime, verifies its release metadata and ELF architecture, loads libjli.so and libjvm.so, resolves the exported OpenJDK JLI_Launch entry point, and invokes Java with -version. This is only a JVM startup test, not a Forge or Minecraft launch. The implementation uses the public OpenJDK JLI function signature and does not copy the separately licensed Zalith/Pojav launcher implementation.
+Stage 19 builds a profile-specific launch plan for Minecraft 1.20.1 Forge 47.x using the already-verified Java 17 JNI runtime. RustChunk flattens inherited game/JVM arguments, applies Android/Linux ARM64 argument rules, resolves standard Minecraft placeholders, computes the offline-player UUID, assembles the Java class path, resolves Forge's module path, and converts launcher-only module option pairs (such as -p and --add-opens <value>) into the option=value form required by the JNI Invocation API. It writes the result to rustchunk-jni-launch-plan.json and a readable report in the selected Forge profile directory.
+
+The launch-plan action is deliberately a preparation/validation step. It does not start Forge. It reports missing JARs, unresolved arguments, and unsupported JVM tokens rather than silently trying to launch an incomplete profile. Android LWJGL native mapping, EGL/OpenGL surface integration, audio, and the actual Forge client invocation remain separate work.
+
+Stage 18 established that Java 17.0.10 can be created directly with JNI_CreateJavaVM from libjvm.so on the target ARM64 Android device. The test successfully queried java.version, java.home, and os.arch, and detached its JNI-created thread. No app-private bin/java executable is run.
 
 Stage 12 adds a profile-specific dependency plan and downloader for the selected Minecraft 1.20.1 Forge profile. It reads merged library metadata from the selected profile's inheritance chain, applies Android/Linux ARM64 library rules, excludes native classifiers, and schedules only artifacts with an HTTPS URL, safe relative path, valid SHA-1, and declared size. Existing files are reused only after size and SHA-1 verification; partial downloads can resume and are verified before finalization. The generated plan and post-download readiness report remain inside the selected profile directory. Library declarations without complete verification metadata are reported as unresolved rather than downloaded blindly.
 
@@ -43,9 +47,10 @@ It copies reusable assets, libraries, versions, mods, configs, resource packs, s
 - Stage 10: adds actual Java executable testing with timeout handling and a persistent diagnostic report.
 - Stage 11: installs the same ARM64 Java 17 runtime payload already present in the installed ZalithLauncher2 APK, without requiring access to Zalith's private app data.
 - Stage 12: prepares and downloads checksum-verified Java library artifacts for the selected Forge profile, reusing valid files and keeping profile-specific plans/reports isolated.
-- Stage 13: adds a native OpenJDK JLI Java 17 startup smoke test and removes direct ProcessBuilder execution of app-private Java binaries.
+- Stage 18: verifies direct Java 17 HotSpot startup using the JNI Invocation API, avoiding execution of app-private bin/java.
+- Stage 19: prepares a JNI-compatible Forge launch plan with inherited argument rules, module-path conversion, verified classpath entries, and an offline player identity.
 
-**Not yet implemented:** complete Android AWT/audio compatibility integration, complete argument substitution and rule evaluation, Android native-library extraction/mapping, a safe Java process bootstrap, actual Forge startup, graphics/runtime integration, and on-device modpack/Aternos compatibility testing. Java startup success alone does not prove Forge or Minecraft can launch.
+**Not yet implemented:** Android LWJGL native-library mapping/extraction, EGL/OpenGL surface integration, audio integration, actual Forge JVM invocation, complete game launch lifecycle, and on-device modpack/Aternos compatibility testing. The launch plan is a preparation artifact, not proof that Forge starts. Java startup success alone does not prove Forge or Minecraft can launch.
 
 A pure Rust game engine cannot directly load Java Forge mods. RustChunk still needs a compatible Java/Forge execution layer. This milestone installs and validates Java 17; it does not yet launch Minecraft.
 
