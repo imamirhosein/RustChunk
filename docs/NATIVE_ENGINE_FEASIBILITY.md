@@ -23,7 +23,9 @@ Its own Android feature documentation explicitly says Java/Fabric/Forge/Mixin co
 
 The upstream design discussion for a Java bridge describes running unchanged **Fabric 26.3** mods in a JVM beside the Rust engine. The design keeps world simulation and rendering in Rust and asks Java mods for their changes through a bridge.
 
-That proposal is version-specific and is not the same as Forge 1.20.1 support. It is described as optional, requires a Java runtime, and was designed around Microsoft-authenticated Java Edition use. It is not an Android Forge 1.20.1 implementation.
+A separate unofficial beta repository, `iaxivers/horizon-java-bridge`, now demonstrates the idea on desktop: unchanged Fabric 26.3 JARs run in an optional JVM while Horizon owns the game and renderer. Its published instructions target Windows/Linux, require a Microsoft account that owns Java Edition, and provide no offline path. It is not an Android build and it does not implement Forge 1.20.1.
+
+The bridge idea is useful evidence that a Rust game engine can coexist with Java mod code. It does not supply the version-matched Minecraft 1.20.1 classes, Forge 47.x loader/events, or Android runtime integration our target needs.
 
 ### 3. Why unchanged Forge JARs cannot simply be loaded by Rust
 
@@ -64,6 +66,7 @@ Do not replace the working `main` branch or discard its stable signing identity 
 - Horizon project: https://github.com/horizon-rust/horizon
 - Horizon Android port: https://github.com/RxLauncherTeam/RxLauncher-Rust-Edition/tree/android
 - Horizon Android feature support: https://github.com/RxLauncherTeam/RxLauncher-Rust-Edition/blob/android/docs/android-features.md
+- Horizon Java bridge beta (Fabric 26.3, desktop): https://github.com/iaxivers/horizon-java-bridge
 - Horizon Java mod design discussion: https://github.com/horizon-rust/horizon/issues/10216
 - Forge 1.20.x documentation: https://docs.minecraftforge.net/en/1.20.x/
 - Target device Vulkan record: https://slions.net/resources/samsung-galaxy-a22.33/
