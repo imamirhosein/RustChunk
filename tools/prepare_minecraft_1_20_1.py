@@ -321,6 +321,7 @@ def summarize_data_reports(reports_dir: Path) -> dict:
         "status": "completed",
         "json_file_count": len(files),
         "total_bytes": sum(path.stat().st_size for path in files),
+        "report_paths": [path.relative_to(reports_dir).as_posix() for path in files],
         "top_level_reports": summaries,
         "reports_path": "datagen/out/reports",
     }
