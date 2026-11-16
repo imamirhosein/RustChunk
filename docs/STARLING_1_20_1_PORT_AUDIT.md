@@ -136,7 +136,57 @@ Current groundwork in this branch:
 - `tests/test_prepare_minecraft_1_20_1.py` tests server-bundle parsing and hash validation, version-fact validation and file hashing without downloading game files.
 - `.github/workflows/starling-port-tools.yml` runs the unit tests on changes. Its manual `workflow_dispatch` path performs the real official download/remap smoke test and exports only a metadata report. The Minecraft JARs, mappings and remapped JARs remain in the runner's ignored working directory and are not uploaded as artifacts.
 
+**M1 data-generation smoke test also passed:** GitHub Actions run [#9](https://github.com/imamirhosein/RustChunk/actions/runs/43888928163) launched the official Minecraft 1.20.1 data generator with Java 17. It produced five JSON reports (about 9.18 MB in the private runner workspace). The metadata-only report recorded 1,003 block entries and 66 registries; the generated command report was also present. The full report JSON and all game inputs stayed private and were not uploaded.
+
+The upstream source pin is now checked out as a submodule at `upstream/starling`, fixed to commit `5432370d573642041585c69b40fb045b27133488`. The source-pin workflow [#1](https://github.com/imamirhosein/RustChunk/actions/runs/43889253288) successfully verified the pinned commit and critical renderer/chunk files.
+
 **M1 remapping smoke test passed:** GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
+
+This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
+
+Sources:
+- Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
+- SpecialSource 1.11.6 release source: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
+- SpecialSource 1.11.6 Maven Central metadata and BSD-3-Clause license: https://central.sonatype.com/artifact/net.md-5/SpecialSource/1.11.6
+
+## Ordered RustChunk milestones
+
+### M0 — Freeze a known-good engine baseline
+Record the exact Starling commit and release, keep upstream attribution and notices, and make sure an unchanged ARM64 build can be reproduced. No version changes yet.
+
+### M1 — Make the 1.20.1 research pipeline work
+Add official-mapping download/verification/remapping and Java 17 support. Produce the verified 1.20.1 facts, generated reports, and class/method/registry/packet diff. This is the next concrete engineering milestone.
+
+### M2 — Backport vanilla 1.20.1 behavior
+Regenerate version constants, packet IDs, registry/data tables and assets. Use a 1.20.1 Java oracle and parity tests to backport the engine subsystems in dependency order. Keep the asynchronous chunk streaming and GPU renderer unless tests show they need changes.
+
+### M3 — First playable 1.20.1 Android build
+On the Galaxy A22, prove: app startup, title menu, new single-player world, world generation, chunk rendering, block interaction, save, reopen, and high-speed movement/elytra without the visible world falling behind. No Forge or mods in this milestone.
+
+### M4 — Multiplayer 1.20.1
+Verify the 763 protocol, login mode, registries and chunk packets against a real matching vanilla 1.20.1 server. Offline identity is only for single-player or servers that explicitly allow offline-mode authentication.
+
+### M5 — Forge compatibility research
+Only after M3 succeeds, investigate Forge 1.20.1 / 47.4.22 separately. Forge JARs are Java code; the current Starling `.hmod` and `.hnmod` formats are not drop-in Forge support. Do not advertise the user's Forge mods as supported until a real bridge and representative mod tests pass.
+
+## Acceptance rule
+
+Do not call RustChunk "Minecraft 1.20.1" until the single-player game logic, save format, assets, world generation and target data are actually 1.20.1. Do not call it Forge-compatible until Forge 47.4.22 starts and the user's real mod set passes staged tests.
+
+## References
+
+- Starling source at the inspected commit: https://github.com/starling-client/starling/tree/5432370d573642041585c69b40fb045b27133488
+- Starling version-port design: https://github.com/starling-client/starling/blob/starling/docs/version-ports.md
+- Current version lock: https://github.com/starling-client/starling/blob/starling/research-lock.json
+- Current version constants: https://github.com/starling-client/starling/blob/starling/crates/horizon-core/src/version.rs
+- Current packet IDs: https://github.com/starling-client/starling/blob/starling/crates/horizon-protocol/src/ids.rs
+- Chunk streaming implementation: https://github.com/starling-client/starling/blob/starling/crates/horizon-client-render/src/streaming.rs
+- Android build instructions: https://github.com/starling-client/starling/blob/starling/README.md#build-from-source
+- Mojang announcement on removing obfuscation: https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition
+- 1.20.1 facts: https://minecraft.wiki/w/Java_Edition_1.20.1
+- Forge 1.20.1 / 47.4.22 release listing: https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html
+- Forge mod file metadata documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarted/modfiles/
+ GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
 
 This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
 
