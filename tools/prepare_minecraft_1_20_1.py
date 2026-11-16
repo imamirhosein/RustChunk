@@ -230,8 +230,10 @@ def version_facts(game_info: dict, manifest_info: dict) -> dict:
         "protocol": game_info.get("protocol_version"),
         "data_version": game_info.get("world_version"),
         "java_major": manifest_info.get("javaVersion", {}).get("majorVersion"),
-        "resource_pack_format": pack.get("resource_major"),
-        "data_pack_format": pack.get("data_major"),
+        # 1.20.1 stores these as "resource"/"data"; newer 26.x JARs
+        # use "resource_major"/"data_major".
+        "resource_pack_format": pack.get("resource_major", pack.get("resource")),
+        "data_pack_format": pack.get("data_major", pack.get("data")),
     }
 
 
