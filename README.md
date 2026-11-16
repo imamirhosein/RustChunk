@@ -26,7 +26,8 @@ Forge/JAR mod support is not implemented in the current engine. Starling's `.hmo
 - The smoke-test report counted 7,436 client classes and 5,460 server classes.
 - Starling's class-index tool successfully indexed 7,436 classes and 58,542 methods for 1.20.1.
 - The 1.20.1 data generator produced 1,003 block entries, 66 registries, the command tree and two biome-parameter reports.
-- The current comparison job is measuring code, registry, data-pack, asset and world-generation differences against the exact pinned Starling 26.3 baseline.
+- The automated comparison against Starling 26.3 passed: 5,355 classes exist only in 26.3, 1,408 are absent there, 581 moved and 4,842 changed; 50,674 methods differ.
+- The comparison also measured changes across 7,590 vs 11,603 asset files, 5,887 vs 9,883 data files, and 844 vs 1,144 world-generation data files.
 
 **This is not yet a playable Minecraft 1.20.1 build. No RustChunk APK from this native port is ready to install.** See [the port audit](docs/STARLING_1_20_1_PORT_AUDIT.md) for the current technical status.
 
