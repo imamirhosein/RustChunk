@@ -1,332 +1,153 @@
-# RustChunk — Starling 1.20.1 Port Audit
+# RustChunk: Starling engine and Minecraft 1.20.1 port audit
 
 Date: 2026-11-16
 
-Status: source-level audit completed; no 1.20.1 port or APK has been built yet.
+Status: **research and input-comparison pipeline is working. No native 1.20.1 game port or APK has been built yet.**
 
-## Decision
+## Decision and target
 
-Use **Starling as the engine base**, not the old RustChunk Java/JNI launcher. Keep the successful Starling chunk-streaming and Vulkan renderer architecture intact while bringing the game simulation and version data back to **Minecraft Java 1.20.1**.
+Use Starling as the native Rust engine base. Preserve its asynchronous chunk streaming, lighting, meshing and Vulkan renderer while bringing the gameplay and data layers back to **vanilla Minecraft Java 1.20.1**.
 
-The first deliverable is **vanilla 1.20.1 single-player**, without Forge or mods. Forge 1.20.1 / 47.4.22 remains a later compatibility target. Do not replace the protected `main` branch or the existing signing identity during this research and porting phase.
+The first playable target is single-player vanilla 1.20.1. Forge 1.20.1 / 47.4.22 and mods are explicitly later work. Keep the old `main` branch and its signing identity untouched until the native 1.20.1 client is proven.
 
-## Exact upstream snapshot inspected
+## Pinned upstream source
 
 - Repository: https://github.com/starling-client/starling
 - Branch: `starling`
-- Commit inspected: `5432370d573642041585c69b40fb045b27133488`
-- Current upstream README identifies Starling 0.8.0 as the Android release.
-- Root license: MIT for Starling's original work. Third-party components retain their own licenses; preserve `LICENSE` and `THIRD_PARTY_NOTICES.md` and review each third-party component before copying or changing it.
-- The repository tree at this commit contains 5,749 entries, including a substantial Rust workspace, Android packaging, tests, parity tooling, documentation, and third-party components.
+- Exact commit: `5432370d573642041585c69b40fb045b27133488`
+- Release noted in the inspected README: Starling 0.8.0
+- The original Starling code is MIT-licensed. Third-party dependencies keep their own licenses; preserve `LICENSE` and `THIRD_PARTY_NOTICES.md`.
 
-## What Starling actually is
+RustChunk pins this exact source as the `upstream/starling` Git submodule. The submodule workflow [passed](https://github.com/imamirhosein/RustChunk/actions/runs/43889253288). The pin lets us audit upstream updates rather than silently inheriting a moving branch.
 
-Starling is not a Java launcher or a renderer wrapped around the original Java game. It is the Android client for Horizon: the Minecraft Java game logic has been reimplemented in Rust. Its Android app starts a Rust `NativeActivity` library; it does not run the Minecraft Java client in a JVM.
+## What Starling actually contains
 
-Important workspace areas:
+Starling is not a Java launcher. Its Minecraft client/gameplay implementation runs natively in Rust; the Android app enters a Rust NativeActivity library. Java code is used for Android integration and temporary resource preparation, not as a JVM running the Minecraft game.
 
-| Area | Responsibility |
+| Upstream area | Responsibility |
 |---|---|
-| `crates/horizon-client` | Game loop, player, single-player and client-side gameplay |
-| `crates/horizon-world` | World state, blocks, entities, chunk/world simulation and generation |
-| `crates/horizon-client-render` | Chunk streaming, lighting, meshing, Vulkan/GPU rendering, HUD |
-| `crates/horizon-protocol` | Multiplayer protocol and packet codecs |
-| `crates/horizon-client-input` | Input handling |
-| `crates/horizon-threads` | Shared worker/job pool |
-| `crates/horizon-android` and `packaging/android` | Android entry points, activities, controls, packaging and Java-to-Android glue |
+| `crates/horizon-client` | Game loop, player, gameplay and single-player |
+| `crates/horizon-world` | World state, blocks, entities, chunks and world generation |
+| `crates/horizon-client-render` | Chunk streaming, lighting, meshing, wgpu rendering |
+| `crates/horizon-protocol` | Network protocol and packet codecs |
+| `crates/horizon-client-input` | Input |
+| `crates/horizon-threads` | Worker/job pool |
+| `crates/horizon-android`, `packaging/android` | Android activity, lifecycle, controls and packaging |
 
-The renderer uses `wgpu`, with Vulkan enabled for Android and GLES available as a fallback. The Android library is loaded through NativeActivity/winit and JNI hooks; those are Android integration hooks, not a JVM running Minecraft.
+### Why its chunk system is worth preserving
 
-## Why its chunk performance is worth preserving
+Inspection of `crates/horizon-client-render/src/streaming.rs` confirms that chunk loading is a worker-based pipeline. It queues saved-chunk reads, terrain generation, 3×3 decoration regions, chunk finishing, lighting, meshing and mesh freeing. Jobs are prioritized by distance from the player, and their queue priority is recalculated when the player moves. Workers use immutable snapshots so the game/render thread does not do all the expensive work itself.
 
-The source confirms a real asynchronous chunk pipeline in `crates/horizon-client-render/src/streaming.rs`:
+The game loop also limits chunk-mesh uploads per frame, with a larger budget while the view is initially arriving. Network chunk decoding happens away from the frame loop, and overdue chunk packets get a bounded per-frame budget on Android. This is a meaningful architecture advantage; we should preserve it unless measurements show a specific defect.
 
-- Jobs include loading saved chunks, generating chunks, decorating 3×3 regions, finishing chunks, lighting, meshing and freeing completed meshes.
-- Work is queued by priority. The nearest columns are processed first.
-- When the player's centre or loading band changes, queued priorities are recalculated. This avoids a large batch of old distant work blocking chunks newly needed around the player.
-- Workers operate on immutable snapshots rather than forcing the game/render thread to perform all generation and meshing itself.
-- The game loop bounds mesh uploads per frame; it uses a larger upload allowance while the view is still arriving, rather than allowing an unlimited burst to stall a frame.
-- Network chunk decoding is also off the frame. On Android, overdue chunk packets have a bounded per-frame budget.
+## The version gap is substantial
 
-This is a strong architecture to retain. We should not rewrite the streamer just to port the game version. First bring the correct 1.20.1 game data and behavior into the engine, then measure the phone and tune only where the evidence shows a bottleneck.
+The pinned Starling engine targets Minecraft **26.3**, not 1.20.1.
 
-## The main version mismatch
-
-The inspected Starling source is pinned to **Minecraft 26.3**, not 1.20.1:
-
-- `research-lock.json` pins 26.3 and Java 25.
-- `crates/horizon-core/src/version.rs` reports protocol 777, data version 5023 and Java 25.
-- `crates/horizon-protocol/src/ids.rs` is generated for protocol 777.
-- The Android setup prepares the resources for the pinned 26.3 game.
-
-For Minecraft Java 1.20.1, the target facts are:
-
-| Fact | 1.20.1 target | Current Starling |
+| Fact | Minecraft 1.20.1 | Starling baseline 26.3 |
 |---|---:|---:|
 | Protocol | 763 | 777 |
 | World/data version | 3465 | 5023 |
+| Java major for the game | 17 | 25 |
 | Resource pack format | 15 | 97.1 |
 | Data pack format | 15 | 121.0 |
-| Java major used by that game | 17 | 25 |
 
-These are not cosmetic labels. They affect packet IDs and codecs, save metadata, registries, data/resource formats, game rules and preparation tools. Merely changing the version string or protocol constant would not create a 1.20.1 client.
+These affect real behavior: packet registration, registries, blocks/items, save format, resource/data formats, world generation, entity behavior and commands. Opening an old save in a newer engine is not the same as running the old game's rules. Changing only version constants would be incorrect.
 
-Starling can read and upgrade many older world-save formats, but that does **not** mean it runs the old game's rules. An older save opened by a 26.3 engine is upgraded and then played as 26.3. RustChunk must target 1.20.1 behavior and data, not just accept an old save.
+## Verified work completed
 
-## First engineering blocker: Mojang mappings
+### 1. Official 1.20.1 inputs verified and remapped
 
-The existing version-port tooling is valuable, but it explicitly supports unobfuscated releases (26.1 and later):
+The current preparation tool downloads the official 1.20.1 version JSON, client/server JARs and Mojang's client/server ProGuard mappings. It checks SHA-1 and size values from Mojang's metadata, extracts the versioned server JAR and verifies the embedded SHA-256, then remaps client and server using SpecialSource 1.11.6 (BSD-3-Clause). SpecialSource reads Mojang ProGuard mappings directly; no intermediate mapping converter is needed.
 
-- `tools/version_port.py prepare_download()` stops if the version manifest contains `client_mappings`.
-- `tools/lab.py prepare()` independently stops if either `client_mappings` or `server_mappings` is present, with the message that older releases need a remapping stage.
-- Minecraft 1.20.1 is an older obfuscated release and its version metadata provides client and server obfuscation mappings.
+The remapped JARs expose the expected named entry points:
+- Client: `net/minecraft/client/Minecraft.class`
+- Server: `net/minecraft/server/MinecraftServer.class`
 
-Therefore, **the first code change should not be inside the renderer or game loop**. It should extend the research/preparation pipeline to:
-1. Fetch 1.20.1's official version JSON and verify the manifest and JAR SHA-1 values.
-2. Fetch and verify the matching client and server mapping files.
-3. Remap the client and server game JARs into a consistent named form for analysis and Java parity oracles. Keep all game JARs, mappings and decompiled sources in a private/ignored working area; never commit or package them.
-4. Run the 1.20.1 server data generator and create the version facts, registry reports, packet reports and class inventories.
-5. Produce a machine-readable 26.3 ↔ 1.20.1 difference report before changing gameplay code.
+The official 1.20.1 values used by the workflow are:
+- Client JAR SHA-1: `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838`
+- Client mappings SHA-1: `6c48521eed01fe2e8ecdadbd5ae348415f3c47da`
+- Server bundler SHA-1: `84194a2f286ef7c14ed7ce0090dba59902951553`
+- Server mappings SHA-1: `0b4dba049482496c507b2387a73a913230ebbd76`
 
-The current toolchain already has a version-port pipeline that compares protocol facts, registries, blocks, item components, commands, data packs, assets and Java class/method inventories. It creates a candidate worktree and can run parity harnesses. That pipeline is designed for newer versions; it needs the mapping/remapping stage and older-JDK handling before it can be used for 1.20.1.
+### 2. Minecraft 1.20.1 data generation and bytecode inventory passed
 
-## Second engineering blocker: Java 17 preparation
+Using Java 17, the official 1.20.1 server data generator produced five JSON reports in the private runner workspace (about 9.18 MB). The report contains:
+- 1,003 block definitions and 24,135 block states
+- 66 registries and 5,067 registry entries
+- 1,663 command-tree nodes
+- Overworld and Nether biome parameter reports
 
-The game engine itself is Rust and does not need a JVM during play. However, Starling currently uses Java 25 for its 26.3 preparation/export pipeline, and the Android build packages a Java launcher plus the exporter bundle.
+The remapped 1.20.1 client/server code was indexed with Starling's own `tools/class_index.py`: **7,436 classes and 58,542 methods** (7,103 `net/*`, 333 `com/*`).
 
-Minecraft 1.20.1 uses Java 17. We must audit and retarget the preparation/exporter pipeline to Java 17, including the Android preparation runtime and exporter compatibility. The Rust compiler/toolchain is a separate requirement: the upstream workspace uses Rust 2024 and current crates require Rust 1.90. Do not confuse the Java game version with the Rust compiler version.
+The 1.20.1 data generator does **not** emit `packets.json` or the modern item-component reports. The comparison therefore records those as absent, not as empty data. We need a 1.20.1-specific packet exporter and the older item representation; modern data components cannot be assumed.
 
-## Other version-sensitive systems to audit
+### 3. Automated 1.20.1 ↔ 26.3 comparison passed
 
-1. **Game logic:** newer blocks, items, mobs, commands, components, effects and gameplay behavior must be reconciled against the 1.20.1 oracle. In particular, the current code contains later-version item/component and registry assumptions.
-2. **World generation:** use 1.20.1's own generator data, codecs, carvers, features, structures, biomes, dimensions and seeds. Do not reuse 26.3 worldgen JSON unchanged.
-3. **Save format:** write 1.20.1's data version and NBT/chunk/entity structure. Validate new-world save/reopen and region files.
-4. **Protocol:** regenerate protocol 763 packet IDs and update codecs/registries before claiming 1.20.1 server compatibility.
-5. **Resources and UI:** use the 1.20.1 assets, sounds, models, blockstates, translations, language and pack formats.
-6. **Android:** preserve touch controls, storage, lifecycle and diagnostics, but verify the renderer and memory policy on the actual Galaxy A22 / Mali-G52 device.
+The GitHub Actions workflow [completed successfully](https://github.com/imamirhosein/RustChunk/actions/runs/43891125869), including unit tests, remapping, data generation, bytecode indexing and the baseline comparison. Its artifact contains only two small metadata JSON reports, not Minecraft JARs, mappings, generated game data or full class indexes:
+- `minecraft-1.20.1-remap-audit`
+- `minecraft-1.20.1-vs-starling-26.3-audit`
 
-There is one documentation discrepancy to resolve during the port: `docs/horizon-parity.md` describes a complete 26.3 world-generation parity audit, while the opening lines of `docs/world-generation.md` still say complete terrain generation is pending. Treat the audit and its harness results as evidence to recheck at the pinned commit, not as an unconditional guarantee.
+The comparison used the exact Starling-pinned client and server JAR SHA-1 values. Mojang's current 26.3 version JSON had been republished outside the lock's listed JSON hashes, so the tool accepted it only after verifying that both actual game JAR SHA-1 values still match the pinned Starling lock. The report marks this as a metadata republish with identical game JARs.
 
-## Build environment and device implications
+#### Code differences
 
-The current Android build instructions use Rust 1.90+, cargo-ndk, Android NDK r28c, Android platform 36/build-tools 35, JDK 25 for the current exporter/build setup and Python 3.10+. The Android app supports ARM64, and its README says it has also run on some Mali-G52 devices. That is encouraging for the Galaxy A22, but the user's own A22 test remains the deciding test.
+Starling's class-index comparison found:
 
-The user's Windows 7 PC does not need to compile the project. The port and APK can be built by GitHub Actions once the source and workflow are prepared. A successful CI APK build alone is not a pass: the phone must boot it, create and reopen a 1.20.1 world, and pass the chunk-flight test.
+| Measure | Result |
+|---|---:|
+| Classes in 1.20.1 | 7,436 |
+| Classes in 26.3 | 11,383 |
+| Added in 26.3 | 5,355 |
+| Removed since 1.20.1 | 1,408 |
+| Moved | 581 |
+| Changed | 4,842 |
+| Changed methods | 50,674 |
 
-## M1 groundwork: official 1.20.1 mappings
+These are class-index comparison counts, not a claim that every changed class needs a manual rewrite. They show that the version gap is broad and needs a dependency-aware backport.
 
-The 1.20.1 version metadata contains separate client and server mapping files. The current upstream pipeline rejects these fields, so the backport needs a remapping stage before decompilation and class indexing.
+#### Data and registry differences
 
-The verified 1.20.1 metadata values are:
+| Measure | 1.20.1 | 26.3 |
+|---|---:|---:|
+| Block definitions | 1,003 | 1,286 |
+| Block states | 24,135 | 35,723 |
+| Registries | 66 | 95 |
+| Registry entries | 5,067 | 7,053 |
+| Command-tree nodes | 1,663 | 2,474 |
+| JSON reports | 5 | 1,666 |
+| `packets.json` | absent | present |
+| Item-component report files | 0 | 1,658 |
 
-| Input | SHA-1 |
-|---|---|
-| Client JAR | `0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838` |
-| Client mappings | `6c48521eed01fe2e8ecdadbd5ae348415f3c47da` |
-| Server bundler JAR | `84194a2f286ef7c14ed7ce0090dba59902951553` |
-| Server mappings | `0b4dba049482496c507b2387a73a913230ebbd76` |
+#### Resource and world-generation files
 
-The mappings are ProGuard format. An important correction from source inspection: **SpecialSource 1.11.6 can parse ProGuard mappings directly** through its own `JarMapping.parseProguardLine` path. We do not need an intermediate ProGuard-to-SRG converter. The earlier converter prototype was discarded so we do not keep an unnecessary translation layer.
+| Resource group | 1.20.1 files | 26.3 files | Added in 26.3 | Removed since 1.20.1 | Changed CRC |
+|---|---:|---:|---:|---:|---:|
+| Assets | 7,590 | 11,603 | 5,235 | 1,222 | 2,559 |
+| Data | 5,887 | 9,883 | 9,045 | 5,049 | 378 |
+| World-generation data | 844 | 1,144 | 502 | 202 | 334 |
 
-SpecialSource 1.11.6 is published on Maven Central under BSD-3-Clause. The preparation script resolves the tool and its declared dependencies through Maven, then runs its main class with the official Mojang mappings.
+This confirms that reusing all 26.3 resources and generated world data unchanged would be wrong.
 
-Current groundwork in this branch:
+## Next engineering steps
 
-- `tools/prepare_minecraft_1_20_1.py` resolves version 1.20.1 through Mojang's official version manifest; verifies the manifest JSON, client/server JARs and both mapping files against Mojang's SHA-1 and size metadata; extracts the bundled server game JAR and verifies its embedded SHA-256; remaps client and server JARs with SpecialSource; and checks for the expected named Minecraft entry classes.
-- `tests/test_prepare_minecraft_1_20_1.py` tests server-bundle parsing and hash validation, version-fact validation and file hashing without downloading game files.
-- `.github/workflows/starling-port-tools.yml` runs the unit tests on changes. Its manual `workflow_dispatch` path performs the real official download/remap smoke test and exports only a metadata report. The Minecraft JARs, mappings and remapped JARs remain in the runner's ignored working directory and are not uploaded as artifacts.
+1. **Decompile the verified 1.20.1 client/server JARs privately** with the pinned Vineflower version and Java 17. Decompiled game source must remain in the ignored `.local` workspace and must never be committed or uploaded.
+2. **Create missing 1.20.1 exporters**, starting with packet registration and legacy item behavior; generate accurate version-specific tables from the 1.20.1 code/data.
+3. **Build a port map** from each version-sensitive Java subsystem/class to Starling Rust files and existing parity tests. Prioritize protocol-independent single-player foundations, registries/blocks, chunk/world storage, world generation, entities and saves.
+4. **Backport in small, testable subsystems**, with 1.20.1 as the oracle. Preserve the current chunk worker pipeline and renderer where behavior permits.
+5. **Only after the 1.20.1 engine compiles and its world-generation/save tests pass**, build an ARM64 APK and test the Galaxy A22: fresh world, save/reopen, block interaction, render distance and high-speed elytra flight.
 
-**M1 data-generation smoke test also passed:** GitHub Actions run [#9](https://github.com/imamirhosein/RustChunk/actions/runs/43888928163) launched the official Minecraft 1.20.1 data generator with Java 17. It produced five JSON reports (about 9.18 MB in the private runner workspace). The metadata-only report recorded 1,003 block entries and 66 registries; the generated command report was also present. The full report JSON and all game inputs stayed private and were not uploaded.
+No native RustChunk 1.20.1 APK is ready to install. A successful research workflow is not proof of a playable port.
 
-**M1 code inventory passed:** the submodule-backed run [#14](https://github.com/imamirhosein/RustChunk/actions/runs/43889588880) used Starling's own `tools/class_index.py` against the remapped 1.20.1 client/server JARs. It indexed **7,436 classes and 58,542 methods** (7,103 `net/*`, 333 `com/*`). The full bytecode index remains under the ignored private workspace and was not uploaded.
+## Later: Forge
 
-The exact 1.20.1 data-generator output is now known: five JSON files — `blocks.json`, `commands.json`, `registries.json`, plus Nether and Overworld biome-parameter reports. It has **no `packets.json` or item-component report**. Those modern reports cannot be treated as empty compatibility data: packet IDs must be exported from 1.20.1's own protocol classes, and item handling must use the older 1.20.1 representation rather than the later data-component model.
-
-The upstream source pin is now checked out as a submodule at `upstream/starling`, fixed to commit `5432370d573642041585c69b40fb045b27133488`. The source-pin workflow [#1](https://github.com/imamirhosein/RustChunk/actions/runs/43889253288) successfully verified the pinned commit and critical renderer/chunk files.
-
-**M1 remapping smoke test passed:** GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
-
-This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
-
-Sources:
-- Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
-- SpecialSource 1.11.6 release source: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
-- SpecialSource 1.11.6 Maven Central metadata and BSD-3-Clause license: https://central.sonatype.com/artifact/net.md-5/SpecialSource/1.11.6
-
-## Ordered RustChunk milestones
-
-### M0 — Freeze a known-good engine baseline
-Record the exact Starling commit and release, keep upstream attribution and notices, and make sure an unchanged ARM64 build can be reproduced. No version changes yet.
-
-### M1 — Make the 1.20.1 research pipeline work
-Add official-mapping download/verification/remapping and Java 17 support. Produce the verified 1.20.1 facts, generated reports, and class/method/registry/packet diff. This is the next concrete engineering milestone.
-
-### M2 — Backport vanilla 1.20.1 behavior
-Regenerate version constants, packet IDs, registry/data tables and assets. Use a 1.20.1 Java oracle and parity tests to backport the engine subsystems in dependency order. Keep the asynchronous chunk streaming and GPU renderer unless tests show they need changes.
-
-### M3 — First playable 1.20.1 Android build
-On the Galaxy A22, prove: app startup, title menu, new single-player world, world generation, chunk rendering, block interaction, save, reopen, and high-speed movement/elytra without the visible world falling behind. No Forge or mods in this milestone.
-
-### M4 — Multiplayer 1.20.1
-Verify the 763 protocol, login mode, registries and chunk packets against a real matching vanilla 1.20.1 server. Offline identity is only for single-player or servers that explicitly allow offline-mode authentication.
-
-### M5 — Forge compatibility research
-Only after M3 succeeds, investigate Forge 1.20.1 / 47.4.22 separately. Forge JARs are Java code; the current Starling `.hmod` and `.hnmod` formats are not drop-in Forge support. Do not advertise the user's Forge mods as supported until a real bridge and representative mod tests pass.
-
-## Acceptance rule
-
-Do not call RustChunk "Minecraft 1.20.1" until the single-player game logic, save format, assets, world generation and target data are actually 1.20.1. Do not call it Forge-compatible until Forge 47.4.22 starts and the user's real mod set passes staged tests.
+Forge 1.20.1 / 47.4.22 remains a separate milestone. Existing Forge JARs contain Java bytecode and expect the exact Minecraft/Forge classes, ModLauncher, transformers and often Mixin/coremod behavior. Starling's `.hmod` and `.hnmod` formats are not drop-in Forge compatibility. Do not advertise Forge or the user's modpack as supported until an actual compatibility runtime/bridge and staged real-mod tests pass.
 
 ## References
 
-- Starling source at the inspected commit: https://github.com/starling-client/starling/tree/5432370d573642041585c69b40fb045b27133488
-- Starling version-port design: https://github.com/starling-client/starling/blob/starling/docs/version-ports.md
-- Current version lock: https://github.com/starling-client/starling/blob/starling/research-lock.json
-- Current version constants: https://github.com/starling-client/starling/blob/starling/crates/horizon-core/src/version.rs
-- Current packet IDs: https://github.com/starling-client/starling/blob/starling/crates/horizon-protocol/src/ids.rs
+- Starling source at the pinned commit: https://github.com/starling-client/starling/tree/5432370d573642041585c69b40fb045b27133488
+- Starling's version-port design: https://github.com/starling-client/starling/blob/starling/docs/version-ports.md
+- Starling's pinned version lock: https://github.com/starling-client/starling/blob/starling/research-lock.json
 - Chunk streaming implementation: https://github.com/starling-client/starling/blob/starling/crates/horizon-client-render/src/streaming.rs
-- Android build instructions: https://github.com/starling-client/starling/blob/starling/README.md#build-from-source
-- Mojang announcement on removing obfuscation: https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition
-- 1.20.1 facts: https://minecraft.wiki/w/Java_Edition_1.20.1
-- Forge 1.20.1 / 47.4.22 release listing: https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html
-- Forge mod file metadata documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarted/modfiles/
- GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
-
-This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
-
-Sources:
-- Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
-- SpecialSource 1.11.6 release source: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
-- SpecialSource 1.11.6 Maven Central metadata and BSD-3-Clause license: https://central.sonatype.com/artifact/net.md-5/SpecialSource/1.11.6
-
-## Ordered RustChunk milestones
-
-### M0 — Freeze a known-good engine baseline
-Record the exact Starling commit and release, keep upstream attribution and notices, and make sure an unchanged ARM64 build can be reproduced. No version changes yet.
-
-### M1 — Make the 1.20.1 research pipeline work
-Add official-mapping download/verification/remapping and Java 17 support. Produce the verified 1.20.1 facts, generated reports, and class/method/registry/packet diff. This is the next concrete engineering milestone.
-
-### M2 — Backport vanilla 1.20.1 behavior
-Regenerate version constants, packet IDs, registry/data tables and assets. Use a 1.20.1 Java oracle and parity tests to backport the engine subsystems in dependency order. Keep the asynchronous chunk streaming and GPU renderer unless tests show they need changes.
-
-### M3 — First playable 1.20.1 Android build
-On the Galaxy A22, prove: app startup, title menu, new single-player world, world generation, chunk rendering, block interaction, save, reopen, and high-speed movement/elytra without the visible world falling behind. No Forge or mods in this milestone.
-
-### M4 — Multiplayer 1.20.1
-Verify the 763 protocol, login mode, registries and chunk packets against a real matching vanilla 1.20.1 server. Offline identity is only for single-player or servers that explicitly allow offline-mode authentication.
-
-### M5 — Forge compatibility research
-Only after M3 succeeds, investigate Forge 1.20.1 / 47.4.22 separately. Forge JARs are Java code; the current Starling `.hmod` and `.hnmod` formats are not drop-in Forge support. Do not advertise the user's Forge mods as supported until a real bridge and representative mod tests pass.
-
-## Acceptance rule
-
-Do not call RustChunk "Minecraft 1.20.1" until the single-player game logic, save format, assets, world generation and target data are actually 1.20.1. Do not call it Forge-compatible until Forge 47.4.22 starts and the user's real mod set passes staged tests.
-
-## References
-
-- Starling source at the inspected commit: https://github.com/starling-client/starling/tree/5432370d573642041585c69b40fb045b27133488
-- Starling version-port design: https://github.com/starling-client/starling/blob/starling/docs/version-ports.md
-- Current version lock: https://github.com/starling-client/starling/blob/starling/research-lock.json
-- Current version constants: https://github.com/starling-client/starling/blob/starling/crates/horizon-core/src/version.rs
-- Current packet IDs: https://github.com/starling-client/starling/blob/starling/crates/horizon-protocol/src/ids.rs
-- Chunk streaming implementation: https://github.com/starling-client/starling/blob/starling/crates/horizon-client-render/src/streaming.rs
-- Android build instructions: https://github.com/starling-client/starling/blob/starling/README.md#build-from-source
-- Mojang announcement on removing obfuscation: https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition
-- 1.20.1 facts: https://minecraft.wiki/w/Java_Edition_1.20.1
-- Forge 1.20.1 / 47.4.22 release listing: https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html
-- Forge mod file metadata documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarted/modfiles/
- `upstream/starling`, fixed to commit `5432370d573642041585c69b40fb045b27133488`. The source-pin workflow [#1](https://github.com/imamirhosein/RustChunk/actions/runs/43889253288) successfully verified the pinned commit and critical renderer/chunk files.
-
-**M1 remapping smoke test passed:** GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
-
-This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
-
-Sources:
-- Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
-- SpecialSource 1.11.6 release source: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
-- SpecialSource 1.11.6 Maven Central metadata and BSD-3-Clause license: https://central.sonatype.com/artifact/net.md-5/SpecialSource/1.11.6
-
-## Ordered RustChunk milestones
-
-### M0 — Freeze a known-good engine baseline
-Record the exact Starling commit and release, keep upstream attribution and notices, and make sure an unchanged ARM64 build can be reproduced. No version changes yet.
-
-### M1 — Make the 1.20.1 research pipeline work
-Add official-mapping download/verification/remapping and Java 17 support. Produce the verified 1.20.1 facts, generated reports, and class/method/registry/packet diff. This is the next concrete engineering milestone.
-
-### M2 — Backport vanilla 1.20.1 behavior
-Regenerate version constants, packet IDs, registry/data tables and assets. Use a 1.20.1 Java oracle and parity tests to backport the engine subsystems in dependency order. Keep the asynchronous chunk streaming and GPU renderer unless tests show they need changes.
-
-### M3 — First playable 1.20.1 Android build
-On the Galaxy A22, prove: app startup, title menu, new single-player world, world generation, chunk rendering, block interaction, save, reopen, and high-speed movement/elytra without the visible world falling behind. No Forge or mods in this milestone.
-
-### M4 — Multiplayer 1.20.1
-Verify the 763 protocol, login mode, registries and chunk packets against a real matching vanilla 1.20.1 server. Offline identity is only for single-player or servers that explicitly allow offline-mode authentication.
-
-### M5 — Forge compatibility research
-Only after M3 succeeds, investigate Forge 1.20.1 / 47.4.22 separately. Forge JARs are Java code; the current Starling `.hmod` and `.hnmod` formats are not drop-in Forge support. Do not advertise the user's Forge mods as supported until a real bridge and representative mod tests pass.
-
-## Acceptance rule
-
-Do not call RustChunk "Minecraft 1.20.1" until the single-player game logic, save format, assets, world generation and target data are actually 1.20.1. Do not call it Forge-compatible until Forge 47.4.22 starts and the user's real mod set passes staged tests.
-
-## References
-
-- Starling source at the inspected commit: https://github.com/starling-client/starling/tree/5432370d573642041585c69b40fb045b27133488
-- Starling version-port design: https://github.com/starling-client/starling/blob/starling/docs/version-ports.md
-- Current version lock: https://github.com/starling-client/starling/blob/starling/research-lock.json
-- Current version constants: https://github.com/starling-client/starling/blob/starling/crates/horizon-core/src/version.rs
-- Current packet IDs: https://github.com/starling-client/starling/blob/starling/crates/horizon-protocol/src/ids.rs
-- Chunk streaming implementation: https://github.com/starling-client/starling/blob/starling/crates/horizon-client-render/src/streaming.rs
-- Android build instructions: https://github.com/starling-client/starling/blob/starling/README.md#build-from-source
-- Mojang announcement on removing obfuscation: https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition
-- 1.20.1 facts: https://minecraft.wiki/w/Java_Edition_1.20.1
-- Forge 1.20.1 / 47.4.22 release listing: https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html
-- Forge mod file metadata documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarted/modfiles/
- GitHub Actions run [#8](https://github.com/imamirhosein/RustChunk/actions/runs/43888336356) successfully downloaded and SHA-1-verified the official inputs, extracted the server game JAR with its embedded SHA-256 check, remapped both client and server with SpecialSource, and confirmed the named entry classes. The metadata-only report records 7,436 client classes and 5,460 server classes. The report artifact contains no JARs or mappings.
-
-This proves the old-version obfuscation/remapping gate is open. It does **not** mean Horizon has been ported to 1.20.1 or that gameplay/terrain generation now runs on that version. The next step is to run 1.20.1's data generator and build the version-specific registry, packet, block, command and asset comparison reports.
-
-Sources:
-- Mojang version metadata values for 1.20.1: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
-- SpecialSource 1.11.6 release source: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
-- SpecialSource 1.11.6 Maven Central metadata and BSD-3-Clause license: https://central.sonatype.com/artifact/net.md-5/SpecialSource/1.11.6
-
-## Ordered RustChunk milestones
-
-### M0 — Freeze a known-good engine baseline
-Record the exact Starling commit and release, keep upstream attribution and notices, and make sure an unchanged ARM64 build can be reproduced. No version changes yet.
-
-### M1 — Make the 1.20.1 research pipeline work
-Add official-mapping download/verification/remapping and Java 17 support. Produce the verified 1.20.1 facts, generated reports, and class/method/registry/packet diff. This is the next concrete engineering milestone.
-
-### M2 — Backport vanilla 1.20.1 behavior
-Regenerate version constants, packet IDs, registry/data tables and assets. Use a 1.20.1 Java oracle and parity tests to backport the engine subsystems in dependency order. Keep the asynchronous chunk streaming and GPU renderer unless tests show they need changes.
-
-### M3 — First playable 1.20.1 Android build
-On the Galaxy A22, prove: app startup, title menu, new single-player world, world generation, chunk rendering, block interaction, save, reopen, and high-speed movement/elytra without the visible world falling behind. No Forge or mods in this milestone.
-
-### M4 — Multiplayer 1.20.1
-Verify the 763 protocol, login mode, registries and chunk packets against a real matching vanilla 1.20.1 server. Offline identity is only for single-player or servers that explicitly allow offline-mode authentication.
-
-### M5 — Forge compatibility research
-Only after M3 succeeds, investigate Forge 1.20.1 / 47.4.22 separately. Forge JARs are Java code; the current Starling `.hmod` and `.hnmod` formats are not drop-in Forge support. Do not advertise the user's Forge mods as supported until a real bridge and representative mod tests pass.
-
-## Acceptance rule
-
-Do not call RustChunk "Minecraft 1.20.1" until the single-player game logic, save format, assets, world generation and target data are actually 1.20.1. Do not call it Forge-compatible until Forge 47.4.22 starts and the user's real mod set passes staged tests.
-
-## References
-
-- Starling source at the inspected commit: https://github.com/starling-client/starling/tree/5432370d573642041585c69b40fb045b27133488
-- Starling version-port design: https://github.com/starling-client/starling/blob/starling/docs/version-ports.md
-- Current version lock: https://github.com/starling-client/starling/blob/starling/research-lock.json
-- Current version constants: https://github.com/starling-client/starling/blob/starling/crates/horizon-core/src/version.rs
-- Current packet IDs: https://github.com/starling-client/starling/blob/starling/crates/horizon-protocol/src/ids.rs
-- Chunk streaming implementation: https://github.com/starling-client/starling/blob/starling/crates/horizon-client-render/src/streaming.rs
-- Android build instructions: https://github.com/starling-client/starling/blob/starling/README.md#build-from-source
-- Mojang announcement on removing obfuscation: https://www.minecraft.net/en-us/article/removing-obfuscation-in-java-edition
-- 1.20.1 facts: https://minecraft.wiki/w/Java_Edition_1.20.1
-- Forge 1.20.1 / 47.4.22 release listing: https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html
-- Forge mod file metadata documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarted/modfiles/
+- 1.20.1 Mojang metadata: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
+- SpecialSource 1.11.6: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
