@@ -13,6 +13,7 @@ from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
+import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,16 +107,44 @@ def apply_series(
             "Refusing to apply patches to a dirty Starling checkout; start from the pinned clean submodule"
         )
 
-    # Preflight every patch first. A conflict in the last patch cannot partially
-    # mutate the submodule before the failure is reported.
-    for patch in patches:
-        run_git(
-            starling_root,
-            "apply",
-            "--check",
-            "--whitespace=error",
-            str(patch),
-        )
+    # Preflight patches in a temporary worktree, applying them there in series
+    # order. This validates dependent patches without mutating the real checkout.
+    with tempfile.TemporaryDirectory(prefix="rustchunk-starling-preflight-") as temporary:
+        preflight_root = Path(temporary) / "starling"
+        worktree_added = False
+        try:
+            run_git(
+                starling_root,
+                "worktree",
+                "add",
+                "--detach",
+                str(preflight_root),
+                actual_commit,
+            )
+            worktree_added = True
+            for patch in patches:
+                run_git(
+                    preflight_root,
+                    "apply",
+                    "--check",
+                    "--whitespace=error",
+                    str(patch),
+                )
+                run_git(
+                    preflight_root,
+                    "apply",
+                    "--whitespace=error",
+                    str(patch),
+                )
+        finally:
+            if worktree_added:
+                run_git(
+                    starling_root,
+                    "worktree",
+                    "remove",
+                    "--force",
+                    str(preflight_root),
+                )
 
     if not check_only:
         for patch in patches:

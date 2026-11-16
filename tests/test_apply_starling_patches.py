@@ -84,6 +84,16 @@ class StarlingPatchSeriesTests(unittest.TestCase):
             apply_series(self.starling, self.patch_root)
         self.assertEqual((self.starling / "value.txt").read_text(), "before\n")
 
+    def test_dependent_patches_are_preflighted_and_applied_in_order(self):
+        self.write_patch("0001-first.patch", "before", "middle")
+        self.write_patch("0002-second.patch", "middle", "after")
+        self.set_manifest(["0001-first.patch", "0002-second.patch"])
+
+        result = apply_series(self.starling, self.patch_root)
+
+        self.assertEqual(result["patch_count"], 2)
+        self.assertEqual((self.starling / "value.txt").read_text(), "after\\n")
+
     def test_dirty_submodule_is_rejected(self):
         self.set_manifest([])
         (self.starling / "value.txt").write_text("local edit\n")
