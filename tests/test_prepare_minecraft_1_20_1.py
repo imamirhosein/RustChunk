@@ -78,8 +78,14 @@ class Minecraft1201PreparationTests(unittest.TestCase):
             validate_official_downloads(downloads)
 
     def test_missing_official_download_pin_fails(self):
+        target = load_target_lock()["minecraft"]["downloads"]
+        downloads = {
+            name: {"sha1": digest}
+            for name, digest in target.items()
+            if name != "server_mappings"
+        }
         with self.assertRaisesRegex(PrepareError, "server_mappings SHA-1"):
-            validate_official_downloads({"client": {"sha1": "0" * 40}})
+            validate_official_downloads(downloads)
 
     def test_game_facts_match_target(self):
         with tempfile.TemporaryDirectory() as temp:
