@@ -8,8 +8,6 @@ on:
       - "tools/prepare_minecraft_1_20_1.py"
       - "tools/apply_starling_patches.py"
       - "patches/starling/**"
-      - "tools/compare_starling_baseline.py"
-      - "tools/decompile_minecraft_1_20_1.py"
       - "tools/minecraft_1_20_1_lock.json"
       - "tools/export_minecraft_1_20_1_block_facts.py"
       - "tools/java/Vanilla1201BlockFactsExporter.java"
@@ -20,8 +18,6 @@ on:
   pull_request:
     paths:
       - "tools/prepare_minecraft_1_20_1.py"
-      - "tools/compare_starling_baseline.py"
-      - "tools/decompile_minecraft_1_20_1.py"
       - "tools/minecraft_1_20_1_lock.json"
       - "tools/export_minecraft_1_20_1_block_facts.py"
       - "tools/java/Vanilla1201BlockFactsExporter.java"
@@ -45,7 +41,7 @@ jobs:
       - name: Run all RustChunk preparation-tool tests
         run: python -m unittest discover -s tests -v
 
-  official-remap-version-diff-and-decompile:
+  official-inputs-and-rust-compatibility:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,50 +58,39 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - name: Set up Java 25 for Starling 26.3
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "25"
       - name: Install Maven
         run: |
           sudo apt-get update
           sudo apt-get install -y maven
+
+      - name: Restore verified 1.20.1 inputs and official libraries
+        uses: actions/cache@v4
+        with:
+          path: |
+            .local/minecraft/1.20.1-remap
+            .local/minecraft/1.20.1-export/libraries
+          key: rustchunk-minecraft-1.20.1-${{ hashFiles('tools/minecraft_1_20_1_lock.json') }}
       - name: Download, verify, remap and index Minecraft 1.20.1
         run: python tools/prepare_minecraft_1_20_1.py --java "$JAVA_HOME_17_X64/bin/java"
-      - name: Compare 1.20.1 against the pinned Starling 26.3 engine
-        run: |
-          python tools/compare_starling_baseline.py \
-            --java-25 "$JAVA_HOME_25_X64/bin/java" \
-            --starling-root upstream/starling \
-            --target-work-dir .local/minecraft/1.20.1-remap
-      - name: Decompile verified 1.20.1 client and server privately
-        run: |
-          python tools/decompile_minecraft_1_20_1.py \
-            --java "$JAVA_HOME_17_X64/bin/java" \
-            --starling-root upstream/starling \
-            --prepared-dir .local/minecraft/1.20.1-remap \
-            --work-dir .local/minecraft/1.20.1-decompile \
-            --side both --threads 4 --heap 4G
       - name: Export 1.20.1 block-state registry using the official game classes
         run: |
           python tools/export_minecraft_1_20_1_block_facts.py \
             --java "$JAVA_HOME_17_X64/bin/java" \
             --javac "$JAVA_HOME_17_X64/bin/javac" \
             --prepared-dir .local/minecraft/1.20.1-remap \
-            --work-dir .local/minecraft/1.20.1-decompile
+            --work-dir .local/minecraft/1.20.1-export
 
       - name: Export 1.20.1 vanilla block tags from verified client/server JARs
         run: |
           python tools/export_minecraft_1_20_1_block_tags.py \
             --prepared-dir .local/minecraft/1.20.1-remap \
-            --work-dir .local/minecraft/1.20.1-decompile
+            --work-dir .local/minecraft/1.20.1-export
 
       - name: Export 1.20.1 vanilla fluid tags from verified client/server JARs
         run: |
           python tools/export_minecraft_1_20_1_fluid_tags.py \
             --prepared-dir .local/minecraft/1.20.1-remap \
-            --work-dir .local/minecraft/1.20.1-decompile
+            --work-dir .local/minecraft/1.20.1-export
 
       - name: Set up Rust for the Starling world-registry compatibility test
         uses: dtolnay/rust-toolchain@stable
@@ -119,9 +104,9 @@ jobs:
 
       - name: Test the 1.20.1 facts and block tags with Starling's real Rust world code
         env:
-          RUSTCHUNK_1201_FACTS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-decompile/block-facts/facts.json
-          RUSTCHUNK_1201_BLOCK_TAGS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-decompile/block-tags/block-tags.json
-          RUSTCHUNK_1201_FLUID_TAGS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-decompile/fluid-tags/fluid-tags.json
+          RUSTCHUNK_1201_FACTS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-export/block-facts/facts.json
+          RUSTCHUNK_1201_BLOCK_TAGS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-export/block-tags/block-tags.json
+          RUSTCHUNK_1201_FLUID_TAGS_JSON: ${{ github.workspace }}/.local/minecraft/1.20.1-export/fluid-tags/fluid-tags.json
         run: |
           set -euo pipefail
           facts="$RUSTCHUNK_1201_FACTS_JSON"
@@ -144,10 +129,8 @@ jobs:
           name: minecraft-1.20.1-port-audit
           path: |
             .local/minecraft/1.20.1-remap/audit-report.json
-            .local/minecraft/version-compare/comparison-report.json
-            .local/minecraft/1.20.1-decompile/decompile-report.json
-            .local/minecraft/1.20.1-decompile/block-facts/block-facts-report.json
-            .local/minecraft/1.20.1-decompile/block-tags/block-tags-report.json
-            .local/minecraft/1.20.1-decompile/fluid-tags/fluid-tags-report.json
+            .local/minecraft/1.20.1-export/block-facts/block-facts-report.json
+            .local/minecraft/1.20.1-export/block-tags/block-tags-report.json
+            .local/minecraft/1.20.1-export/fluid-tags/fluid-tags-report.json
           include-hidden-files: true
           if-no-files-found: error

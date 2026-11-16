@@ -1,15 +1,6 @@
-name: RustChunk Starling ARM64 baseline
+name: RustChunk Starling ARM64 baseline (manual)
 
 on:
-  push:
-    branches:
-      - starling-1.20.1-port-audit
-    paths:
-      - ".github/workflows/starling-native-baseline.yml"
-      - ".gitmodules"
-      - "upstream/starling"
-      - "tools/apply_starling_patches.py"
-      - "patches/starling/**"
   workflow_dispatch:
 
 permissions:
@@ -20,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-starling-arm64-baseline:
+build-starling-arm64-baseline:
     runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:

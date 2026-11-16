@@ -44,3 +44,10 @@ The new [ARM64 baseline workflow](.github/workflows/starling-native-baseline.yml
 ## Previous JNI launcher
 
 The previous Stage 1–21 launcher implementation is preserved for reference in [docs/LEGACY_JNI_LAUNCHER.md](docs/LEGACY_JNI_LAUNCHER.md). It prepared a Java/Forge launch plan but did not provide a native Minecraft engine or launch Forge on Android.
+
+
+## CI runtime
+
+The ordinary 1.20.1 preparation workflow is intentionally lightweight: verify/cache official 1.20.1 inputs, export only the data needed for the current port tasks, and run the real Rust compatibility tests. It no longer decompiles thousands of Java source files or repeats the broad 26.3 comparison on every small exporter/test change.
+
+The complete class/version comparison and private Vineflower decompilation are available on demand through [the manual deep-audit workflow](.github/workflows/starling-deep-audit.yml). The upstream 26.3 Android baseline is also manual; it is not rebuilt just because a test patch changed.

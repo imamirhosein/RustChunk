@@ -99,3 +99,8 @@ Preserve Starling's MIT license and `THIRD_PARTY_NOTICES.md`; dependency license
 6. Only after a desktop/headless 1.20.1 single-player world can be created, modified, saved and reopened should the ARM64 1.20.1 APK be built and tested on the Galaxy A22.
 
 No 1.20.1 APK is ready for installation. Every milestone must be labelled by what it actually proves.
+
+
+## CI execution policy
+
+Do not run the full comparison/decompiler in the ordinary exporter loop. Use the fast preparation workflow for each 1.20.1 data change; invoke the deep audit manually only when class-level investigation requires the complete decompiled source. Keep the 26.3 ARM64 baseline build manual until actual 1.20.1 engine integration is ready for packaging.

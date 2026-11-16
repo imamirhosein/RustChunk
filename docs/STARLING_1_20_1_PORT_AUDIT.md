@@ -211,3 +211,8 @@ Forge 1.20.1 / 47.4.22 remains a long-term compatibility objective, not a curren
 - Chunk streaming implementation: https://github.com/starling-client/starling/blob/starling/crates/horizon-client-render/src/streaming.rs
 - 1.20.1 Mojang metadata: https://github.com/sya-ri/minecraft-skills/blob/main/packages/data/data/java/version-details/1.20.1.json
 - SpecialSource 1.11.6: https://github.com/md-5/SpecialSource/tree/SpecialSource-1.11.6
+
+
+## CI runtime optimization
+
+The fast preparation workflow now skips the full source comparison and Vineflower decompilation. It keeps the official 1.20.1 preparation, block/block-tag/fluid-tag exports and Rust compatibility tests, with a cache keyed by the reviewed target lock. The expensive class comparison and 8,000+ Java source decompilation are available only through `.github/workflows/starling-deep-audit.yml` via manual dispatch. The Starling 26.3 ARM64 baseline APK workflow is manual too, because it is not the 1.20.1 target client.
