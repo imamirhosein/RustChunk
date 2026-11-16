@@ -101,7 +101,7 @@ class StarlingPatchSeriesTests(unittest.TestCase):
         result = apply_series(self.starling, self.patch_root, check_only=True)
 
         self.assertEqual(result["mode"], "checked")
-        self.assertEqual((self.starling / "value.txt").read_text(), "before\\n")
+        self.assertEqual((self.starling / "value.txt").read_text(), "before\n")
         self.assertEqual(self.git("status", "--porcelain"), "")
 
     def test_duplicate_patch_in_manifest_is_rejected(self):
@@ -111,7 +111,7 @@ class StarlingPatchSeriesTests(unittest.TestCase):
         with self.assertRaisesRegex(PatchError, "appears more than once"):
             apply_series(self.starling, self.patch_root)
 
-        self.assertEqual((self.starling / "value.txt").read_text(), "before\\n")
+        self.assertEqual((self.starling / "value.txt").read_text(), "before\n")
 
     def test_dirty_submodule_is_rejected(self):
         self.set_manifest([])
