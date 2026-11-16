@@ -6,3 +6,6 @@
 .ci-signing/
 *.iml
 local.properties
+
+# Private Mojang game inputs, mappings, generated data, decompilation and class indexes.
+.local/
