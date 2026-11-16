@@ -392,9 +392,8 @@ fn detach_current_jni_thread(vm: *mut jni::sys::JavaVM) -> Result<(), String> {
     if interface.is_null() {
         return Err("JavaVM invocation table is null; cannot detach the JNI-created thread.".to_string());
     }
-    // DetachCurrentThread is part of the JNI 1.1 invocation-table prefix.
-    // jni-sys 0.3 models the versioned table as a union with a v1_1 view.
-    let detach = unsafe { (*interface).v1_1.DetachCurrentThread };
+    // DetachCurrentThread is part of the base JNI invocation table.
+    let detach = unsafe { (*interface).DetachCurrentThread };
     let status = unsafe { detach(vm) };
     if status == jni::sys::JNI_OK {
         Ok(())
