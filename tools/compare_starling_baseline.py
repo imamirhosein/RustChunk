@@ -12,8 +12,13 @@ import json
 import os
 from pathlib import Path
 import sys
+import urllib.error
 import urllib.request
 import zipfile
+
+# Running this file as `python tools/compare_starling_baseline.py` puts tools/ on
+# sys.path; also add the repository root so the shared tools package resolves.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.prepare_minecraft_1_20_1 import (
     MANIFEST_URL,
