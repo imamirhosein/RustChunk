@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -260,8 +259,9 @@ def read_game_facts(client_jar: Path, manifest_info: dict) -> dict:
     return facts
 
 
-def run_data_generator(java: str, server_bundler: Path, work_dir: Path) -> dict:
-    """Run 1.20.1's own data generator and retain its JSON reports privately."""
+def run_data_generator(java: str, server_bundler: Path, work_dir: Path,
+                       version: str = VERSION) -> dict:
+    """Run the selected version's own data generator and retain its JSON reports privately."""
     datagen_dir = work_dir / "datagen"
     output_dir = datagen_dir / "out"
     log_path = datagen_dir / "datagen.log"
@@ -283,12 +283,12 @@ def run_data_generator(java: str, server_bundler: Path, work_dir: Path) -> dict:
     log_path.write_text(result.stdout + result.stderr, encoding="utf-8")
     if result.returncode != 0:
         raise PrepareError(
-            f"Minecraft {VERSION} data generator failed; see {log_path}:\n"
+            f"Minecraft {version} data generator failed; see {log_path}:\n"
             + (result.stdout + result.stderr)[-5000:]
         )
     if not reports_dir.is_dir():
         raise PrepareError(
-            f"Minecraft {VERSION} data generator returned success but did not create {reports_dir}"
+            f"Minecraft {version} data generator returned success but did not create {reports_dir}"
         )
 
     return summarize_data_reports(reports_dir)
