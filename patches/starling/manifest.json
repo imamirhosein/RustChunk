@@ -1,4 +1,6 @@
 {
   "base_commit": "5432370d573642041585c69b40fb045b27133488",
-  "patches": []
+  "patches": [
+    "0001-rust-test-1.20.1-block-tags.patch"
+  ]
 }

@@ -1,0 +1,48 @@
+diff --git a/crates/horizon-world/tests/rustchunk_1201_tags.rs b/crates/horizon-world/tests/rustchunk_1201_tags.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/horizon-world/tests/rustchunk_1201_tags.rs
+@@ -0,0 +1,43 @@
++use std::{collections::BTreeMap, env, fs::File, path::PathBuf};
++
++use horizon_world::{
++    registry::BlockRegistry,
++    worldgen::tags::TagDefinitions,
++};
++
++fn required_path(name: &str) -> PathBuf {
++    PathBuf::from(env::var_os(name).unwrap_or_else(|| panic!("{name} is not set")))
++}
++
++#[test]
++fn minecraft_1_20_1_block_tags_resolve_against_its_block_registry() {
++    let facts_path = required_path("RUSTCHUNK_1201_FACTS_JSON");
++    let tags_path = required_path("RUSTCHUNK_1201_BLOCK_TAGS_JSON");
++    let (registry, _flags) = BlockRegistry::from_facts_json_with_flags(
++        File::open(&facts_path).expect("open private 1.20.1 block facts"),
++    )
++    .expect("load the official 1.20.1 block-state registry");
++    let resources: BTreeMap<String, String> = serde_json::from_reader(
++        File::open(&tags_path).expect("open private 1.20.1 block-tag bundle"),
++    )
++    .expect("parse the extracted block-tag bundle");
++    assert!(!resources.is_empty(), "1.20.1 block-tag bundle is empty");
++
++    let mut definitions = TagDefinitions::default();
++    for (name, text) in &resources {
++        definitions
++            .apply_json(name, "minecraft-1.20.1", text)
++            .unwrap_or_else(|error| panic!("could not decode block tag {name}: {error}"));
++    }
++    let expected_tag_count = definitions.definitions().len();
++    let built = definitions
++        .build(|name, _required| registry.default_state(name).map(|_| name.to_owned()))
++        .expect("build 1.20.1 tags and resolve their dependencies");
++    assert!(
++        built.missing.is_empty(),
++        "1.20.1 block tags contain required references absent from the 1.20.1 block registry: {:?}",
++        built.missing.iter().take(12).collect::<Vec<_>>()
++    );
++    assert_eq!(built.tags.len(), expected_tag_count, "some 1.20.1 block tags were not built");
++}
++
