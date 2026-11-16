@@ -38,10 +38,9 @@ class BlockFactsSummaryTests(unittest.TestCase):
 
     def test_rejects_duplicate_state_descriptors(self):
         facts = valid_facts()
-        facts["states"].append(facts["states"][2])
-        facts["defaults"]["minecraft:oak_slab"] = 2
-        with self.assertRaisesRegex(PrepareError, "block-state count"):
-            summarize_facts(facts, expected_blocks=4, expected_states=6)
+        facts["states"][3] = list(facts["states"][2])
+        with self.assertRaisesRegex(PrepareError, "Duplicate block state descriptor"):
+            summarize_facts(facts, expected_blocks=4, expected_states=5)
 
     def test_rejects_default_state_that_points_to_another_block(self):
         facts = valid_facts()

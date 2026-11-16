@@ -19,6 +19,8 @@ on:
       - "tools/compare_starling_baseline.py"
       - "tools/decompile_minecraft_1_20_1.py"
       - "tools/minecraft_1_20_1_lock.json"
+      - "tools/export_minecraft_1_20_1_block_facts.py"
+      - "tools/java/Vanilla1201BlockFactsExporter.java"
       - "tests/**"
       - ".github/workflows/starling-port-tools.yml"
   workflow_dispatch:
