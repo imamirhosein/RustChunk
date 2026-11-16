@@ -2,7 +2,7 @@ diff --git a/crates/horizon-world/tests/rustchunk_1201_tags.rs b/crates/horizon-
 new file mode 100644
 --- /dev/null
 +++ b/crates/horizon-world/tests/rustchunk_1201_tags.rs
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,42 @@
 +use std::{collections::BTreeMap, env, fs::File, path::PathBuf};
 +
 +use horizon_world::{
