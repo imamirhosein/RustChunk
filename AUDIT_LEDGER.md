@@ -685,3 +685,27 @@
 - Dependencies / cross-references: `research-lock.json`; `artifacts::Lock`; `OUTPUT_VERSION`; `SCHEMA`; `horizon-resources.json`; `horizon-prepare.json`; `missing_extras`; launcher backend completion checks; resource commands `packs`, `panorama`, `fonts`, `languages`, `sounds`.
 - Follow-up checks: inspect `main.rs`, `lib.rs`, `artifacts.rs`, the manifest writer and resource exporter implementations to verify that the stamp and Minecraft version are written only after all mandatory 1.20.1 artifacts are verified.
 - Completion state: complete source and unit-test review; unit tests were read but not executed.
+
+
+### 32. `crates/horizon-prepare/src/main.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `55ce8e1f306532fd2613e98ab63f115b9e52305e`.
+- Size: 16,104 bytes; 369 lines; fetched in one complete range.
+- Coverage: lines 1–369, complete, including argument parsing and unit tests.
+- Purpose: CLI entry point for importing the player's official Minecraft Java installation and preparing Horizon's version-pinned resources.
+- Behavior and dependencies:
+  - Reads `research-lock.json` from a resolved root; that lock governs the Minecraft version and Java requirement. Horizon's own application `VERSION` is a separate build/release value, not the Minecraft game version.
+  - Supports imports via an official launcher game directory or explicit version JSON, client JAR, libraries and assets directory; accepts a separately supplied server JAR and a Java home. Imported files are verified by the internal artifact/lock logic.
+  - Exposes `--prepare`, `--check`, `--launch-api`, `compile-exporters`, and optional asset commands for sounds, panorama, fonts, built-in packs and languages. Asset commands can be rerun independently; `--complete` adds sounds and enforces the readiness check.
+  - Can emit progress as line-oriented JSON (`message`, `fraction`, `error`) for launcher integration. `--launch-api` reports the preparer's API, pinned Minecraft/Java versions, resource layout and supported options.
+  - It does not itself contain the game data exporters; it delegates to the `horizon_prepare` library. Java may be needed for exporters/preparation, while `--check` intentionally avoids Java and game-file reads.
+  - The source's tests verify progress JSON compatibility and that advertised Launch API options are present in help output; they were read but not run.
+- RustChunk relevance: very high as a launcher/resource-ingestion architecture: it cleanly separates application version, target Minecraft version, the player's local official files, Java runtime selection, prepared resources, and launcher-facing progress/API contracts.
+- 1.20.1 implications:
+  - Switching the lock to 1.20.1 would alter the default resources folder and expected game version, but it is not enough by itself. `artifacts`, `java`, exporters, generated resource schemas and every game reader must accept the historical 1.20.1 client/server JAR and metadata.
+  - 1.20.1 requires its matching Java baseline and matching client/server artifact hashes; do not carry over the 26.3/JDK25 assumptions without validating the 1.20.1 version manifest.
+  - This CLI is a preparer for the native Rust reimplementation. It does not launch the original Java Minecraft client and does not establish a JVM/Forge runtime.
+- Decision: **adaptable** as the preparation CLI and launch API; **version-specific implementation changes required** in the lock/artifact resolver, Java selection, exporters, and output resource contracts before it can prepare 1.20.1 resources.
+- Dependencies / cross-references: `horizon_prepare::Options`; `artifacts::Lock`; `prepare_with_progress`; `add_assets`; `compile_exporters`; `check`; `launch_api`; `research-lock.json`; `horizon-resources.json`; launcher Launch API.
+- Follow-up checks: inspect `java.rs`, `artifacts.rs`, `lib.rs`, exporters, output manifest/stamping, and the precise 1.20.1 version metadata/JDK requirement. Confirm whether the preparer's asset path expects 26.3-only layouts.
+- Completion state: complete source and test review; no preparation, Java invocation, asset import, build or test was executed.
