@@ -1628,3 +1628,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon-mod.toml, content registries, .hmod/.hnmod formats, modpack/resource-pack pipeline and native-mod docs.
 - Follow-up checks: فعلاً mod framework نساز. بعد از playable client، resource/data pack 1.20.1 را جداگانه بررسی و compatibility scope را تعیین کن.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 61. `crates/horizon-protocol/src/attachment_sync.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `532c3854124c11910f9a1cc3e44f59e25e03a184`.
+- Size: 7,213 bytes; 213 lines; full source fetched.
+- Coverage: lines 1–213, complete.
+- Purpose: تعریف پیام شبکه‌ای برای همگام‌سازی مقادیر synced attachment متعلق به native mod از سرور Horizon به کلاینت‌های ناظر holder.
+- Implementation / logic: کانال clientbound برابر horizon:attachment_sync است. پیام holder kind و شناسه/موقعیت آن، پرچم replace و لیست تغییرات namespace/name/value را حمل می‌کند. انواع holder شامل Entity، Player، BlockEntity، Chunk و Level هستند. value به CompoundTag در قالب NBT network تبدیل می‌شود؛ None با Tag::End به معنی حذف است. payload حداکثر 1 MiB و نام‌ها حداکثر 256 UTF-16 unit هستند. Decoder count را به bytes باقی‌مانده محدود و trailing bytes را رد می‌کند.
+- Findings: کد مسیر compact و versioned-by-kind دارد و هیچ پیام clientbound به serverbound ندارد. encoder unknown holder را رد می‌کند، اما تغییرات خالی/نام‌های namespace یا syntax شناسه را از نظر محتوا اعتبارسنجی نمی‌کند. replace semantics یعنی کل cache synced holder در client پیش از اعمال delta پاک می‌شود. تست‌ها round-trip پنج نوع holder، removal، payload cap، name cap، NBT depth و trailing bytes را پوشش می‌دهند؛ اجرا نشده‌اند.
+- RustChunk relevance: از مفاهیم wire protocol مربوط به attachment و NBT update pattern می‌توان استفاده کرد، اما native mod framework خود هدف فعلی RustChunk نیست. محدودیت payload و دفاع در برابر malformed input الگوی مفیدی برای پروتکل کلاینت است.
+- 1.20.1 implications: Attachment API/این کانال نسخه 26.3 است و Minecraft 1.20.1 vanilla آن را ندارد؛ نباید به عنوان vanilla packet یا data format منتقل شود. اگر در آینده extension-state sync لازم شد، باید پیام اختصاصی با holder IDs، limits، replacement/patch semantics و version negotiation جدا طراحی شود.
+- Decision: **unnecessary برای فاز پایه 1.20.1؛ pattern محدودسازی NBT payload قابل اقتباس در پروتکل آینده**.
+- Dependencies / cross-references: horizon_world::attachments::{AttachmentSync,Holder}, horizon_world::nbt, protocol::{Reader,Writer}; docs/native-mods.md, server attachment hook/sync lifecycle.
+- Follow-up checks: بعداً بررسی client attachment cache lifecycle و سرور dispatcher؛ برای RustChunk core فقط NBT network bounds و trailing-byte policy را در design notes نگه دار.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
