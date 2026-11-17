@@ -66,3 +66,113 @@ No findings are promoted to confirmed solely from the old conversational summari
 - Confirmed no root `AUDIT_LEDGER.md` existed on the branch before this commit.
 - No source code was changed by this ledger initialization.
 - No build or test result is claimed.
+
+
+## Reconstructed exact 100-file batch
+
+Source ordering: recursive Git tree returned by GitHub for `starling-client/starling` at commit `5432370d573642041585c69b40fb045b27133488`; only Rust blobs directly beneath `crates/horizon-client/src/game/` and its descendants, lexicographically ordered as returned by the Git tree. The batch is the next 100 Rust files after `input_mode.rs`. Tree response reported `truncated=false` and 361 Rust files in this game subtree.
+
+| # | File | Status |
+|---:|---|---|
+| 1 | `crates/horizon-client/src/game/input_trace.rs` | Complete (historical; no blob SHA recorded) |
+| 2 | `crates/horizon-client/src/game/integrated.rs` | Pending |
+| 3 | `crates/horizon-client/src/game/interactions.rs` | Pending |
+| 4 | `crates/horizon-client/src/game/item_draw.rs` | Pending |
+| 5 | `crates/horizon-client/src/game/item_particles.rs` | Pending |
+| 6 | `crates/horizon-client/src/game/item_use.rs` | Complete (historical; no blob SHA recorded) |
+| 7 | `crates/horizon-client/src/game/jigsaw_blocks.rs` | Pending |
+| 8 | `crates/horizon-client/src/game/jigsaw_edit.rs` | Pending |
+| 9 | `crates/horizon-client/src/game/jukebox.rs` | Pending |
+| 10 | `crates/horizon-client/src/game/key_focus.rs` | Pending |
+| 11 | `crates/horizon-client/src/game/kinetic_machines.rs` | Pending |
+| 12 | `crates/horizon-client/src/game/kinetics.rs` | Pending |
+| 13 | `crates/horizon-client/src/game/lan.rs` | Pending |
+| 14 | `crates/horizon-client/src/game/lan_actions.rs` | Pending |
+| 15 | `crates/horizon-client/src/game/lan_attributes.rs` | Pending |
+| 16 | `crates/horizon-client/src/game/lan_camera.rs` | Pending |
+| 17 | `crates/horizon-client/src/game/lan_chat.rs` | Pending |
+| 18 | `crates/horizon-client/src/game/lan_crafting.rs` | Pending |
+| 19 | `crates/horizon-client/src/game/lan_entities.rs` | Pending |
+| 20 | `crates/horizon-client/src/game/lan_far.rs` | Pending |
+| 21 | `crates/horizon-client/src/game/lan_mobs.rs` | Pending |
+| 22 | `crates/horizon-client/src/game/lan_mount_menu.rs` | Pending |
+| 23 | `crates/horizon-client/src/game/lan_particles.rs` | Pending |
+| 24 | `crates/horizon-client/src/game/lan_pvp.rs` | Pending |
+| 25 | `crates/horizon-client/src/game/lan_quiet.rs` | Pending |
+| 26 | `crates/horizon-client/src/game/lan_screen.rs` | Pending |
+| 27 | `crates/horizon-client/src/game/lan_stations.rs` | Pending |
+| 28 | `crates/horizon-client/src/game/lan_trading.rs` | Pending |
+| 29 | `crates/horizon-client/src/game/lan_vehicles.rs` | Pending |
+| 30 | `crates/horizon-client/src/game/lan_waypoints.rs` | Pending |
+| 31 | `crates/horizon-client/src/game/launch_api.rs` | Pending |
+| 32 | `crates/horizon-client/src/game/leads.rs` | Pending |
+| 33 | `crates/horizon-client/src/game/level_particles.rs` | Pending |
+| 34 | `crates/horizon-client/src/game/levels.rs` | Pending |
+| 35 | `crates/horizon-client/src/game/lightning.rs` | Pending |
+| 36 | `crates/horizon-client/src/game/llamas.rs` | Pending |
+| 37 | `crates/horizon-client/src/game/locator_bar.rs` | Pending |
+| 38 | `crates/horizon-client/src/game/loom.rs` | Pending |
+| 39 | `crates/horizon-client/src/game/mace.rs` | Pending |
+| 40 | `crates/horizon-client/src/game/machine_entities.rs` | Pending |
+| 41 | `crates/horizon-client/src/game/machines.rs` | Pending |
+| 42 | `crates/horizon-client/src/game/machines/crafter.rs` | Pending |
+| 43 | `crates/horizon-client/src/game/machines/native_energy.rs` | Pending |
+| 44 | `crates/horizon-client/src/game/machines/native_fluids.rs` | Pending |
+| 45 | `crates/horizon-client/src/game/machines/native_items.rs` | Pending |
+| 46 | `crates/horizon-client/src/game/maps.rs` | Pending |
+| 47 | `crates/horizon-client/src/game/memory.rs` | Pending |
+| 48 | `crates/horizon-client/src/game/minecarts.rs` | Pending |
+| 49 | `crates/horizon-client/src/game/mob_blocks.rs` | Pending |
+| 50 | `crates/horizon-client/src/game/mob_gear.rs` | Pending |
+| 51 | `crates/horizon-client/src/game/mob_index.rs` | Pending |
+| 52 | `crates/horizon-client/src/game/mob_looting.rs` | Pending |
+| 53 | `crates/horizon-client/src/game/mob_sounds.rs` | Pending |
+| 54 | `crates/horizon-client/src/game/mobile_controls.rs` | Pending |
+| 55 | `crates/horizon-client/src/game/mobile_controls/mobile_platform.rs` | Pending |
+| 56 | `crates/horizon-client/src/game/mod_api_host.rs` | Pending |
+| 57 | `crates/horizon-client/src/game/mod_api_host_generated.rs` | Pending |
+| 58 | `crates/horizon-client/src/game/mod_assets.rs` | Pending |
+| 59 | `crates/horizon-client/src/game/mod_catalog.rs` | Pending |
+| 60 | `crates/horizon-client/src/game/mods.rs` | Pending |
+| 61 | `crates/horizon-client/src/game/mount_menu.rs` | Pending |
+| 62 | `crates/horizon-client/src/game/mounts.rs` | Pending |
+| 63 | `crates/horizon-client/src/game/moving_pistons.rs` | Pending |
+| 64 | `crates/horizon-client/src/game/music.rs` | Pending |
+| 65 | `crates/horizon-client/src/game/names.rs` | Pending |
+| 66 | `crates/horizon-client/src/game/narrator.rs` | Pending |
+| 67 | `crates/horizon-client/src/game/native_biome_colors.rs` | Pending |
+| 68 | `crates/horizon-client/src/game/native_block_entity_draw.rs` | Pending |
+| 69 | `crates/horizon-client/src/game/native_builds.rs` | Pending |
+| 70 | `crates/horizon-client/src/game/native_claimed_items.rs` | Pending |
+| 71 | `crates/horizon-client/src/game/native_components.rs` | Pending |
+| 72 | `crates/horizon-client/src/game/native_criteria.rs` | Pending |
+| 73 | `crates/horizon-client/src/game/native_data_maps.rs` | Pending |
+| 74 | `crates/horizon-client/src/game/native_entities.rs` | Pending |
+| 75 | `crates/horizon-client/src/game/native_entity_refs.rs` | Pending |
+| 76 | `crates/horizon-client/src/game/native_explosions.rs` | Pending |
+| 77 | `crates/horizon-client/src/game/native_falling.rs` | Pending |
+| 78 | `crates/horizon-client/src/game/native_hooks.rs` | Pending |
+| 79 | `crates/horizon-client/src/game/native_inventories.rs` | Pending |
+| 80 | `crates/horizon-client/src/game/native_item_container.rs` | Pending |
+| 81 | `crates/horizon-client/src/game/native_item_energy.rs` | Pending |
+| 82 | `crates/horizon-client/src/game/native_item_fluids.rs` | Pending |
+| 83 | `crates/horizon-client/src/game/native_lifecycle.rs` | Pending |
+| 84 | `crates/horizon-client/src/game/native_menus.rs` | Pending |
+| 85 | `crates/horizon-client/src/game/native_mob_draw.rs` | Pending |
+| 86 | `crates/horizon-client/src/game/native_mobs.rs` | Pending |
+| 87 | `crates/horizon-client/src/game/native_motion.rs` | Pending |
+| 88 | `crates/horizon-client/src/game/native_mounts.rs` | Pending |
+| 89 | `crates/horizon-client/src/game/native_net.rs` | Pending |
+| 90 | `crates/horizon-client/src/game/native_panel.rs` | Pending |
+| 91 | `crates/horizon-client/src/game/native_panel_recipes.rs` | Pending |
+| 92 | `crates/horizon-client/src/game/native_projectiles.rs` | Pending |
+| 93 | `crates/horizon-client/src/game/native_quick_move.rs` | Pending |
+| 94 | `crates/horizon-client/src/game/native_recipes.rs` | Pending |
+| 95 | `crates/horizon-client/src/game/native_server.rs` | Pending |
+| 96 | `crates/horizon-client/src/game/native_shaders.rs` | Pending |
+| 97 | `crates/horizon-client/src/game/native_ticks.rs` | Pending |
+| 98 | `crates/horizon-client/src/game/native_visuals.rs` | Pending |
+| 99 | `crates/horizon-client/src/game/native_world_columns.rs` | Pending |
+| 100 | `crates/horizon-client/src/game/native_world_edit.rs` | Pending |
+
+Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do not advance beyond this list until all 100 rows are complete or explicitly blocked.
