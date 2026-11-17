@@ -1900,3 +1900,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Cargo workspace manifests, horizon-client-render, horizon-client-core, horizon-client-input, horizon-command, horizon-items, horizon-server-files and modules declared in this root.
 - Follow-up checks: بررسی Cargo.tomlهای workspace و entry point/Game loop که این crate را مصرف می‌کند؛ تعیین minimal RustChunk crate graph پیش از انتقال subsystemها.
 - Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
+
+
+### 78. `crates/horizon-client/src/heartbeat.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `9f3f3a5a69aa8db7ca24ac9986b3ba8148c33dba`.
+- Size: 2,697 bytes; 75 lines; full source fetched.
+- Coverage: lines 1–75, complete.
+- Purpose: ارسال ping دوره‌ای ناشناس به telemetry backend برای شمارنده تعداد بازیکنان Horizon و وضعیت باز بودن LAN/friends world.
+- Implementation / logic: پس از start شدن خود client (نه dedicated server/benchmark/automated run)، اگر telemetry endpoint موجود و heartbeat غیرفعال نشده باشد، thread مستقل Heartbeat ساخته می‌شود. یک session ID تصادفی فقط در حافظه تولید و همراه version و LAN flag در Ping فرستاده می‌شود. فاصله پیش‌فرض از live::INTERVAL می‌آید؛ خطا باعث exponential backoff تا 600 ثانیه و log یک‌باره می‌شود. تغییر LAN flag با AtomicBool ذخیره و thread با unpark برای ارسال زودهنگام بیدار می‌شود.
+- Findings: این قابلیت خارج از gameplay/network protocol Minecraft است و صرفاً telemetry محصول Horizon است. فعال بودن به endpoint و دو opt-out mechanism محیطی وابسته است. session identifier در حافظه نگهداری می‌شود، ولی thread loop پایان/stop hook در همین فایل دیده نمی‌شود. ارسال از thread جداست تا tick/render block نشود.
+- RustChunk relevance: برای اجرای کلاینت RustChunk هسته‌ای نیست؛ از این جهت مفید است که telemetry اختیاری باید جدا از game networking و با opt-out روشن پیاده شود.
+- 1.20.1 implications: برای vanilla 1.20.1 هیچ heartbeat محصولی لازم نیست و این endpoint/format/telemetry باید حذف باشد. هر telemetry آینده RustChunk باید opt-in/قابل خاموش کردن باشد، داده حداقلی بفرستد و thread lifecycle/shutdown مشخص داشته باشد؛ Minecraft protocol نباید از آن تأثیر بگیرد.
+- Decision: **unnecessary برای فاز پایه و برای compatibility با Minecraft 1.20.1**.
+- Dependencies / cross-references: horizon_telemetry::live::{session_id,INTERVAL,Ping,send}, telemetry::version, telemetry endpoint config, LAN/friends world lifecycle.
+- Follow-up checks: هیچ port لازم نیست؛ در صورت اضافه شدن telemetry در آینده، بررسی privacy notice, consent, disable switch, shutdown lifecycle و داده‌های دقیق ارسالی.
+- Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
