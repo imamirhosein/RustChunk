@@ -1436,3 +1436,19 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ## Audit ledger integrity note — 2026-11-18
 A post-batch verification found that the first-batch source-file numbers 9–20 (`packaging/android/build_apk.py` through `docs/mods.md`) are still present only under `Pending first batch (selected order)` and do not have individual completed review entries in this ledger. The earlier conversational report that all 20 first-batch files had been individually recorded is therefore not supported by the current ledger. They are **not counted as fully documented audit entries** until their contents are re-reviewed (or their existing findings are recovered and recorded with verifiable coverage). The current ledger contains detailed completed entries 1–8 and 21–60: 48 individual file records. This note does not assert that those 12 files were never read; it records that this repository artifact cannot presently prove their full review and findings.
+
+
+### 9. `packaging/android/build_apk.py`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `3c215d5875d364e215ade3eeafbe55bd81238ab9`.
+- Size: 17,919 bytes; 381 lines; full source fetched.
+- Coverage: lines 1–381, complete.
+- Purpose: ساخت APK اندروید Starling به‌صورت NativeActivity، بسته‌بندی کتابخانه Rust، Java launcherها، منابع UI و prepare-kit.
+- Implementation / logic: SDK/NDK و JDK را با نسخه‌های ثابت بررسی می‌کند؛ cargo-ndk کتابخانه horizon-android را برای ABI انتخابی می‌سازد؛ لانچرهای java/javac و libc++ را کامپایل می‌کند؛ prepare-kit.zip، lowbudget.zip و StarlingVisuals.zip را می‌سازد؛ Java را با javac و d8 به classes.dex تبدیل می‌کند؛ manifest/resources را با aapt2 لینک، APK را zipalign و امضا می‌کند و در صورت درخواست نصب/zip می‌سازد. ABIها، variantهای dev/preview، 16KB page alignment، BuildId و symbol copy نیز مدیریت می‌شوند.
+- Findings: وابستگی build به Android SDK/NDK مشخص، cargo-ndk، Rust target و JDK 25 است. APK فایل‌های Minecraft را حمل نمی‌کند. PREPARE_KIT شامل research-lock.json، exporters.rs و سورس‌های Java منتخب است. ABIهای ARM64/ARMv7/x86/x86_64 تعریف شده‌اند؛ بعضی مسیرهای ABI و آماده‌سازی متفاوت‌اند. اسکریپت asset pack را تولید می‌کند و debug signing fallback دارد.
+- RustChunk relevance: برای بسته‌بندی نهایی RustChunk روی Android مفید است: معماری APK، NativeActivity، toolchain و ABI packaging الگوی قابل اقتباس دارد؛ package ids، Java launcher و فایل‌های Horizon نباید کپی کورکورانه شوند.
+- 1.20.1 implications: برای هدف 1.20.1 باید APK جدید بر اساس موتور RustChunk و runtime واقعی آن طراحی شود. اگر موتور بدون JVM اجرا می‌شود، java_launcher و javac/dex مسیرهای غیرضروری‌اند؛ ابزار Java صرفاً oracle/exporter می‌تواند خارج از APK و در مرحله توسعه بماند. نسخه SDK/NDK و minSdk باید با دستگاه هدف سنجیده شوند؛ arm64-v8a و Mali مسیر اولویت‌دار است. prepare-kit مربوط به 26.3 قابل استفاده به‌عنوان asset بازی نیست.
+- Decision: **adaptable (ساختار Android packaging)؛ بخش‌های Java launcher و exporter kit برای runtime Rust-native غیرضروری/بازطراحی‌شدنی**.
+- Dependencies / cross-references: AndroidManifest.xml, packaging/android/native/java_launcher.c, tools/build_android_exporters.py, crates/horizon-prepare, cargo-ndk, Android SDK/NDK/JDK.
+- Follow-up checks: بررسی AndroidManifest.xml، NativeActivity lifecycle، CI و crate horizon-android؛ تعیین NativeActivity یا Activity/JNI اختصاصی؛ build APK و تست ARM64 بعداً لازم است.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
