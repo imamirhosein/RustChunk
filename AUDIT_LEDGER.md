@@ -557,3 +557,22 @@
 - Dependencies / cross-references: `crates/horizon-client`; `crates/horizon-client-lib`; `crates/horizon-world`; `crates/horizon-protocol`; `crates/horizon-client-render`; `crates/horizon-client-input`; `crates/horizon-client-core`; `crates/horizon-command`; `crates/horizon-items`; `tools/parity.py`; the harnesses named in the table; `AGENTS.md`.
 - Follow-up checks: use the map to guide source-level audits of startup/resource loading, game loop, worldgen, save/load, packet processing, renderer and launcher integration; run no harness until its environment and 1.20.1 oracle are confirmed.
 - Completion state: complete document review; no test selection, build or parity command was executed.
+
+
+### 26. `docs/how-horizon-is-built.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `91a037b8d46468cf3e77acfd24a23b1837312bcf`.
+- Size: 6,430 bytes; 41 lines; fetched in one complete range.
+- Coverage: lines 1–41, complete.
+- Purpose: summarizes Horizon's development, parity/review/CI process, distribution security, mod trust model and legal boundary around Minecraft game files.
+- Key claims and constraints:
+  - At the document's 2026-10-25 snapshot, it reports 326 harnesses comparing Horizon with real Minecraft 26.3, PR checks and selected parity runs; the text explicitly warns that passing all scoped harnesses does not prove complete equivalence.
+  - It describes an open-source MIT project whose releases are built from public code, with signed SHA-256 manifests and launcher/server verification, while noting platform signing/notarization gaps.
+  - It states that Horizon contains no Minecraft code/assets/data and does not download them; the player's own copy of Minecraft Java Edition 26.3 is prepared locally. A public-tree check is intended to prevent committing Mojang game files or decompiled code.
+  - The project claims its post-2026-10-24 implementation is written from Minecraft 26.3 and public documentation, with strict third-party license constraints. Native mods execute with the user's rights and are not sandboxed at runtime.
+- RustChunk relevance: very high for the legal/provenance design of obtaining game assets and code-derived facts. It establishes a clear distinction between open-source Rust implementation and player-supplied official Minecraft files. It does not show that the same preparation workflow accepts 1.20.1 or that any Minecraft files can be redistributed in RustChunk.
+- 1.20.1 implications: if RustChunk targets 1.20.1, the permitted source of assets/JARs and the preparation path must be version-specific and must not assume the 26.3 checksums or existing data exporters are applicable. The code review must keep decompiled code and proprietary assets out of the RustChunk repository unless a separately verified legal basis allows otherwise. The page is a project policy summary, not a legal opinion.
+- Decision: **adaptable** for user-owned asset preparation, public-source hygiene, signed release checksums and scoped parity gates; **no direct runtime code reuse decision** from this policy page. Reconfirm actual license and contribution constraints from the governing LICENSE/CONTRIBUTING files before any port or copying.
+- Dependencies / cross-references: root LICENSE and CONTRIBUTING.md; THIRD_PARTY_NOTICES.md; `tools/check_public_tree.py`; `.github/workflows/ci.yml`; `.github/workflows/release.yml`; `crates/horizon-release-sign`; `horizon-prepare`; research-lock.json; docs/security.md; docs/mods.md and docs/native-mods.md.
+- Follow-up checks: inspect the actual legal notices and the preparation/checksum implementation; verify Minecraft 1.20.1 ownership/manifest handling and local data-generation support independently. No reliance should be placed solely on this summary page for legal conclusions.
+- Completion state: complete document review; no license review beyond this document, checksum verification, build, release or asset import was performed in this file review.
