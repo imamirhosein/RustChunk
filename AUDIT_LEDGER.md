@@ -1804,3 +1804,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: item/hash.rs, item/hash/raw.rs, item/hash/exact.rs, HashOps, Reader, Registry Names, modern component stream codecs.
 - Follow-up checks: از source 1.20.1، ItemStack, FoodProperties, AttributeModifiers و item-specific NBT را جدا استخراج و golden vectors مستقل تهیه کن.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
+
+
+### 72. `crates/horizon-protocol/src/item/hash/raw.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `252f61fadd02d10945cd40f31470c3c89d4b2287`.
+- Size: 53,132 bytes; 1,156 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–1156, complete.
+- Purpose: بازسازی Codec hash از stream bytes برای Data Componentهایی که Horizon به‌صورت Component::Raw نگه می‌دارد.
+- Implementation / logic: Readerهای component stream را می‌خوانند و شکل persistent Codec را می‌سازند: registry references به resource IDs تبدیل می‌شوند؛ NBT typed entity data با id درست بازسازی می‌شود؛ Profile, potion tail, trim/instrument/banner holders, container contents, pot decorations, bees و sign text مسیرهای مستقل دارند. تابع `code` بر اساس kind IDهای نسخه 26.3 dispatch می‌کند و در انتها باقی‌ماندن byteها را رد می‌کند. همراه فایل آزمون‌های بزرگ golden-vector هستند که stream hex و hashهای چاپ‌شده توسط vanilla 26.3 را مقایسه می‌کنند.
+- Findings: هم کد و هم جدول‌های registry/test fixture به ترتیب ID و Codec نسخه 26.3 وابسته‌اند. بعضی مسیرها به component modules دیگر fallback می‌کنند. هر component ناشناخته یا malformed/بدون registry name مقدار None می‌دهد؛ raw bytes به تنهایی برای ساخت hash کافی نیست. آزمون‌ها componentهای زیادی را پوشش می‌دهند ولی در این ممیزی اجرا نشده‌اند. فایل 1,156 خط است و در سه بازه متوالی 1–400، 401–800 و 801–1156 کامل خوانده شد.
+- RustChunk relevance: برای درک روش reverse engineering از `STREAM_CODEC` به `Codec` و نگهداری golden vectors مفید است، ولی خود schema modern 26.3 به RustChunk 1.20.1 منتقل نمی‌شود.
+- 1.20.1 implications: 1.20.1 این Data Component registry/stream IDs را ندارد؛ کپی dispatch table یا hash rules باعث parsing غلط packet و item metadata می‌شود. در نسخه پایه، ItemStack/NBT serializer واقعی 1.20.1 باید جایگزین شود. روش استخراج دقیق byte vectors از vanilla oracle و رد کردن trailing bytes را می‌توان حفظ کرد.
+- Decision: **نسخه‌محور و برای 1.20.1 غیرقابل استفاده؛ روش golden-vector/oracle testing قابل اقتباس**.
+- Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs, item/hash/exact.rs, item/skip.rs, HashOps, Item::Component::Raw, registry name tables, vanilla 26.3 StreamCodec and persistent Codec.
+- Follow-up checks: برای 1.20.1 از Vanilla StreamCodec/packet schema همان نسخه ItemStack و NBT را ثبت کن؛ golden vectors برای هر item form بساز و unknown/trailing field behavior را دقیق مشخص کن.
+- Completion state: complete source review; no tests or runtime interoperability were executed.
