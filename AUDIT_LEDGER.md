@@ -821,3 +821,26 @@
 - Dependencies / cross-references: `horizon-core`; `horizon-world`; protocol `adapter.rs`; packet modules; compression, crypto, login and connection handling; `protocol_probe`; `item_wire_probe`; vanilla protocol report/packet-ID generation.
 - Follow-up checks: inspect `adapter.rs` and its version modules, packet ID table and packet bodies for handshake/login/configuration/play, then compare against an authoritative 1.20.1 protocol schema and a real vanilla 1.20.1 server handshake.
 - Completion state: complete manifest review; no Cargo build, dependency resolution, packet probe, network connection or server test was run.
+
+
+### 37. `crates/horizon-protocol/src/adapter.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `52b7439919e630c2e0d4fc3a4f6a768d7ee26f7c`.
+- Size: 6,576 bytes; 184 lines; fetched in one complete range, including tests.
+- Coverage: lines 1–184, complete.
+- Purpose: first layer of protocol compatibility for older servers; maps packet IDs per protocol state and direction between Horizon's pinned protocol and an older server.
+- Implementation:
+  - `ServerVersion` recognizes only `Current` (26.3/protocol 777) and `V26_2` (protocol 776). It uses a separate version table for packet-ID translations in each state/direction.
+  - Translates clientbound packet IDs from the old server to the pinned client's IDs, and outgoing serverbound IDs from the pinned client to the older server's IDs.
+  - Returns `None` when a packet does not exist in the other version, allowing unsupported packets to be dropped/not sent.
+  - `serverbound_body` rewrites only the VarInt packet ID and copies the payload bytes unchanged. It explicitly does **not** translate packet contents, field encodings, state transitions, registry data, chunk formats or other semantic changes.
+  - Tests hardcode the 26.2↔26.3 ID examples and packet omissions, rather than deriving expected values from the same generated table.
+- RustChunk relevance: very high for server-connection strategy. It demonstrates a protocol adapter abstraction, but also makes a strict distinction between packet-ID renumbering and payload compatibility.
+- 1.20.1 implications:
+  - 1.20.1 is not the adjacent 26.2 protocol generation. Its packet structure and state machine are substantially different, and the current ID-table adapter cannot safely translate 1.20.1 by shifting IDs alone.
+  - A usable 1.20.1 connection path needs a true 1.20.1 packet schema/codec or a separate protocol implementation, including handshake/status/login/configuration/play state differences, packet body changes, registries, chunk/section encodings, entity metadata, chat, encryption/compression and feature-specific behavior.
+  - `ServerVersion::ALL`, protocol lookup and adapter routing are currently limited to two known versions. A new 1.20.1 adapter would need an explicit, independently validated entry and likely a broader abstraction than ID tables.
+- Decision: **adaptable** as a multi-version routing and ID-map pattern; **insufficient and unsafe** as a 1.20.1 compatibility layer without a complete packet-body/state adapter.
+- Dependencies / cross-references: `horizon-protocol` `PROTOCOL_VERSION`, `GAME_VERSION`, `State`, `Direction`, `buf::Reader`, `write_varint`, `ids`; `adapter/v26_2.rs`; connection handshake/status/server detection; protocol probes.
+- Follow-up checks: inspect `adapter/v26_2.rs` and connection startup/state handling; build a full authoritative 1.20.1 packet table and body codecs from protocol data; test with a real vanilla 1.20.1 server instead of assuming 26.2 mappings generalize.
+- Completion state: complete source and test review; tests and network interoperability were not run.
