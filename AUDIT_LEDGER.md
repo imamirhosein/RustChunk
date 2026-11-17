@@ -1196,3 +1196,29 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `registries.json`; `packets::configuration::{RegistryData,UpdateTags}`; `item::Names`; `item::custom`; `horizon-world::nbt`; `packets/play.rs`; `chunk.rs`; `horizon-prepare` datagen; `horizon-core::version`.
 - Follow-up checks: inspect `Join Game`/login packet in the target version and data-driven dimension registry serialization; map all 1.20.1 built-in network registry reports; ensure no modern-only registry IDs leak into item/chunk/entity packet decoding.
 - Completion state: complete source/test review; no registry reports, dynamic packets, 1.20.1 world registry or protocol tests were run.
+
+
+### 52. `crates/horizon-protocol/src/entity_data.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `34f9fb132a3ea8daa1faffb60bf458f260aa615d`.
+- Size: 27,001 bytes; 754 lines; fetched in consecutive ranges 1–400 and 401–754.
+- Coverage: lines 1–754, complete; both ranges returned the same blob SHA; all entity metadata and particle codecs/tests read.
+- Purpose: decodes/encodes `ClientboundSetEntityDataPacket` synchronized entity metadata values using serializer IDs, plus modern particles, position sources and resolvable player profiles.
+- Implementation:
+  - `EntityDataSerializers` table is hardcoded in 26.3 registration order with IDs 0–43: byte/int/long/float/string/components/optional components/item stack/boolean/rotations/positions/directions/optional entity references/block states/particles/villager data/pose/variant enums/optional global position/vector/quaternion/resolvable profile/humanoid arm/dye color.
+  - Each metadata record is index byte, serializer VarInt, serializer-specific value; `0xFF` terminates the list. Unknown serializer IDs have no known value length, so decoder stops and discards the rest while retaining preceding entries.
+  - Metadata values cover primitives, NBT components, item stacks, vectors/quaternions, optional positions/UUID/global positions, registry IDs and multi-ID values, particles/lists and modern profile/skin data.
+  - Particle payloads are decoded by hardcoded 26.3 `particle_type` registry IDs and per-type payload schemas (block state, colors/scales/power, delay, trail, item, geyser, vibration, etc.). A negative sentinel is a Starling native-mod extension, not vanilla.
+  - `Profile` decodes modern full/partial ResolvableProfile and skin patch data, including properties and body/cape/elytra texture overrides.
+- Tests read: primitive/metadata round trips and `0xFF` terminator; unknown serializer truncation; vectors/quaternions big-endian floats; representative particle types and particle lists; optional global positions; full/partial resolvable profiles and preserving following metadata entries. Not executed.
+- RustChunk relevance: critical. Entity metadata is required for mob/player state, equipment, poses, effects, particles, variants and other entity rendering/behavior. It is versioned both by serializer ID and nested registry/item codecs.
+- 1.20.1 implications:
+  - Serializer IDs and serializer roster are version-specific. The current 26.3 order includes many later types (numerous animal/copper variants, resolvable profile, quaternion/vector3, etc.) and cannot be applied to 1.20.1. A new 1.20.1 table and serializer codec set must be taken from that version's vanilla source.
+  - The item serializer uses modern `Stack`/component data, whereas 1.20.1 metadata item values use the older item-stack/NBT wire format. Component-based items and `ResolvableProfile` skin patch fields are not direct 1.20.1 equivalents.
+  - Particle IDs and payload shapes use current `minecraft:particle_type` order; numeric IDs and data-bearing particle variants must be regenerated for 1.20.1. Unknown IDs are dangerous because the decoder cannot know how many bytes to skip; it stops the metadata list rather than recovering subsequent entries.
+  - Components as NBT and simple primitives are useful concepts, but exact metadata serializer values, optional sentinels, registry IDs and nested NBT need target-specific codecs.
+  - The negative mod-particle sentinel is a Starling extension and cannot be sent to ordinary vanilla 1.20.1 servers. Keep it strictly outside vanilla wire data or omit it from the target path.
+- Decision: **reuse the generic metadata-list mechanism and primitive codecs**, but **replace serializer IDs, value codecs, particle IDs/data, item/profile handling and registry bindings** with a 1.20.1-specific implementation. Do not share the current numeric serializer table.
+- Dependencies / cross-references: `packets/play.rs::SetEntityData`; `buf`; `item::{Slot,Stack,Template}`; `packets/login::Property`; `Tag`; `registry` particle/entity/block/item IDs; `MOD_PARTICLE_ID`.
+- Follow-up checks: extract 1.20.1 `EntityDataSerializers` registry order and serializer read/write methods; create exhaustive version-specific metadata and particle fixtures; verify unknown-ID handling and metadata termination against vanilla.
+- Completion state: complete source/test review; no metadata, particle or 1.20.1 wire tests were executed.
