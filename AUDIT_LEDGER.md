@@ -2030,3 +2030,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: SDL scancode definitions, winit keyboard backend, VanillaOptionsTableExporter, language resource keys, keybinding options UI.
 - Follow-up checks: استخراج جدول 1.20.1 با oracle؛ تعیین mapping جدا برای winit/Android/SDL؛ بررسی layoutهای non-US و physical-vs-logical key naming.
 - Completion state: complete source review; no tests or build were run.
+
+
+
+### 86. crates/horizon-client-input/src/keybinds.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: c1544a14f48e79ad2bd40ac30c5c732a4eb1545e.
+- Size: 26,043 bytes; 626 lines; complete source fetched in consecutive ranges 1–400 and 401–626.
+- Coverage: lines 1–626, complete.
+- Purpose: فهرست key mappings، default/category/toggle metadata، ذخیره و بازیابی bindingها، ترجمه physical key به actions و رفتار keybindها در container UI.
+- Implementation / logic: MAPPINGS جدول ordered شامل mapping name/default/category است؛ CATEGORIES ترتیب دسته‌ها و is_toggle برخی keyها را مشخص می‌کند. KEYS resource keyهای کیبورد را به winit KeyCode وصل می‌کند. key_code/key_name تبدیل دوطرفه دارند؛ keyboard_keys کلیدهای F را جلوتر می‌آورد. mouse_name/mouse_button نگاشت mouse buttonها را می‌دهند. learn_layout در Android no-op و روی سایر platformها با winit event و key_without_modifiers layout label را یاد می‌گیرد. KeyBinds مقادیر را در BTreeMap ذخیره، conflicts و defaults را تشخیص، همه bindingهای هم‌کلید را پیدا و از physical keys به vanilla-default actions translate می‌کند. Debug mappings از translate کنار گذاشته می‌شوند تا با F3-modifier رفتار مستقل داشته باشند. container_mouse_key و container_hotbar_key اولویت swap-offhand و hotbar را برای container screens مدل می‌کنند.
+- Findings: جدول MAPPINGS با defaultها و categoryهای 26.3 است و چند action اضافه‌شده در نسخه جدید (مانند friends/quickActions و debug bindings) دارد؛ باید با Options.keyMappings 1.20.1 تطبیق داده شود. KEYS subset از key names است؛ mapping ناشناخته در key_code None می‌دهد و translate برای physical KeyCode بدون name همان physical code را عبور می‌دهد. mouse_button فقط Left/Right/Middle/Back/Forward را decode می‌کند، در حالی‌که mouse_name برای Other هم نام می‌سازد؛ round-trip برای buttonهای 6+ تضمین نیست. set فقط mappingهای ثبت‌شده را قبول می‌کند ولی key string را validate نمی‌کند. کلیدهای default جابه‌جا‌شده inert می‌شوند و mappings متعدد می‌توانند با یک physical input همزمان trigger شوند. Files include tests for rebinding, conflicts, default-action removal, container priority and display names; none were run.
+- RustChunk relevance: بسیار مرتبط برای keyboard/mouse/touch/gamepad action mapping و حفظ vanilla gameplay semantics حتی وقتی کاربر keybind سفارشی دارد. روش normalize کردن input به default action ids می‌تواند game logic را مستقل از physical keys کند.
+- 1.20.1 implications: mapping catalogue، category order، toggles، mouse behavior و persistence schema باید از Options 1.20.1 استخراج شوند. Vanilla game code باید با logical actions تغذیه شود نه direct physical keys. Android touchscreen buttons نیز باید به همان action identifiers برسند، نه این‌که key names مصنوعی در ورودی OS جا زده شوند.
+- Decision: **KeyBinds abstraction و translate-to-action قابل اقتباس؛ MAPPINGS/KEYS و container behavior نیازمند بازتولید/تطبیق با 1.20.1 هستند**.
+- Dependencies / cross-references: winit KeyCode/MouseButton and KeyEvent; horizon_client_core::key_display; SDL/translation key names; Options.keyMappings ordering; screen container hotbar checks; debug_keys physical key handling.
+- Follow-up checks: مقایسه exact mapping list با 1.20.1; تست keyboard layouts, unknown key persistence, mouse Other IDs, duplicate bindings, focus loss and Android touch action routing.
+- Completion state: complete source review; tests/build not executed.
