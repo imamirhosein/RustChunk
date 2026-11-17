@@ -619,3 +619,28 @@
 - Dependencies / cross-references: `tools/port_ledger.py`; `tools/vanilla_map.py`; `tools/port_map/*.tsv`; `tools/lab.py`; local Minecraft JAR and decompiled sources; `tools/parity.py`; Java parity oracles; Rust crates and doc comments; `tools/test_*_parity.py`.
 - Follow-up checks: inspect `tools/port_ledger.py`, `tools/vanilla_map.py`, the verdict-map schema, class/method inventory generator and parity runner; then evaluate whether mapping-aware 1.20.1 bytecode can feed a trustworthy adapted ledger.
 - Completion state: complete document review; no ledger build, bytecode scan, gap report, harness or branch check was run.
+
+
+### 29. `docs/parity-workflow.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `45ab857edfa8662e62d30d0a87bfaa8dac798433`.
+- Size: 23,390 bytes; 182 lines; fetched in one complete range.
+- Coverage: lines 1–182, complete.
+- Purpose: describes Starling/Horizon's differential parity runner, dependency tracing, caching, multi-host scheduling, test isolation, change-based harness selection, flaky-test gates and integration workflow.
+- Runner and test architecture:
+  - `tools/parity.py` executes named or dependency-selected harnesses, can run all from scratch, force fresh vanilla oracle runs, repeat tests and run on multiple hosts.
+  - A tracer captures Python harness modules, Java oracle/source dependencies, read repository files and Rust probe dep-info; cached passes remain valid only while all dependency fingerprints, pinned vanilla artifacts and toolchains remain unchanged.
+  - `parity_shim.py` records/replays Java/Javac oracle output and named input file contents, with a stated caveat that files written outside the named paths are not tracked.
+  - Rust probes are consolidated into per-crate probe binaries; optional Rust scopes narrow dependencies only when the declared scope is closed. Reachability selection is approximate and falls back to all linked sources when uncertain or over budget.
+  - Harnesses use scratch game/launcher/XDG homes, explicit game environments and virtual-screen modes. Remote runners have distinct trust, CPU/memory and host-exclusion boundaries; remote results are not CI results.
+  - The gate runs public-tree validation, formatting, Clippy, Rust/Python tests and affected parity harnesses; new/changed harnesses must pass three consecutive runs to address flakiness. Worktree integration gates the combined branch and can bisect failures.
+  - The workflow separates deterministic component fixtures from player-facing LAN/integration checks. Skipped cases are not counted as passes; named-only suites are not selected automatically.
+- Version boundary and limitations:
+  - Harnesses and Java oracles in this system compare against the repository-pinned Minecraft 26.3 artifacts. The described tooling and reported test counts do not demonstrate behavior against Minecraft 1.20.1.
+  - Parity coverage is only as broad as each oracle, fixture, Rust scope and dependency graph. The document explicitly warns that narrow fixtures do not become complete game launches, that skip outcomes are not passes, and that some caches cannot observe all external writes.
+- RustChunk relevance: critical as a quality-control pattern for any attempt to port Starling to 1.20.1. A version-matched vanilla oracle and isolated deterministic fixtures can prevent silent drift across protocol, worldgen, save, renderer and gameplay code. Dependency-aware test selection may also make a large port manageable, but it must never suppress necessary full audits.
+- 1.20.1 implications: every vanilla oracle, fixture baseline, generated reference and cached pass must be regenerated or revalidated for 1.20.1. Reusing cached 26.3 oracle outputs would invalidate the port audit. Toolchain and JDK selection must also follow the 1.20.1 target rather than the current 26.3/JDK 25 assumptions.
+- Decision: **adaptable** for differential testing, dependency fingerprinting, repeat/flake gates, deterministic scene fixtures and staged integration; **rewrite/version-adapt required** for a 1.20.1 vanilla oracle, fixtures, baselines, toolchains and expected data. Do not treat the existing 26.3 pass count as evidence of 1.20.1 parity.
+- Dependencies / cross-references: `tools/parity.py`; `tools/parity_shim.py`; `tools/parity_reach.py`; `tools/gate.py`; `tools/parity_main.py`; `tools/supervise.py`; `tools/parity_hosts.json`; `lab.game_env`; Rust probe crates; Java oracle sources under `mods/horizon`; `.local/parity-runner/`; `shared-local/` and `PARITY_SHARED`.
+- Follow-up checks: inspect parity runner, oracle shim, host scheduler, cache key/fingerprint logic, scope closure/reachability, baseline format and gate integration. Then construct a separate 1.20.1 oracle fixture matrix; never blend results from distinct Minecraft versions.
+- Completion state: complete document review; no test, runner, cache, host, gate, harness, or integration command was executed.
