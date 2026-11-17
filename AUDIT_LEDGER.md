@@ -1452,3 +1452,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: AndroidManifest.xml, packaging/android/native/java_launcher.c, tools/build_android_exporters.py, crates/horizon-prepare, cargo-ndk, Android SDK/NDK/JDK.
 - Follow-up checks: بررسی AndroidManifest.xml، NativeActivity lifecycle، CI و crate horizon-android؛ تعیین NativeActivity یا Activity/JNI اختصاصی؛ build APK و تست ARM64 بعداً لازم است.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 10. `packaging/lowbudget/make.py`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `f226619fcac0e0d1d61e75273d29e0f5772bc36d`.
+- Size: 12,852 bytes; 257 lines; full source fetched.
+- Coverage: lines 1–257, complete.
+- Purpose: تولید resource pack گرافیکی سبک و دست‌ساز برای منوهای Starling در زمان آماده‌سازی بازی.
+- Implementation / logic: با Pillow و hand.py بافت دکمه‌ها، اسلایدرها، فیلد متن، scroller، پس‌زمینه منو، جداکننده‌ها و پنج نسخه فونت bitmap را به صورت PNG/JSON تولید می‌کند. خروجی packaging/lowbudget/pack است؛ pack.mcmeta، فونت default، lang en_us و skin.json نیز تولید می‌شوند. تولید با seedهای ثابت و ابعاد GUI تعریف‌شده انجام می‌شود.
+- Findings: ابزار تولید asset است، نه کد اجرایی بازی. خروجی به resource locations و schemaهای GUI/font نسل 26.3 وابسته است؛ pack_format=97 است. به Pillow و hand.py وابسته است و خروجی قبلی را پاک و دوباره تولید می‌کند.
+- RustChunk relevance: ایده asset pipeline و پوسته اختصاصی کم‌حجم UI قابل اقتباس است؛ خود skin و نام فایل‌ها ارزش انتقال مستقیم ندارند.
+- 1.20.1 implications: Minecraft 1.20.1 از pack_format و schemaهای متفاوت resource pack استفاده می‌کند؛ pack_format=97 و GUI nine-slice فعلی را نباید در 1.20.1 استفاده کرد. برای RustChunk ابتدا UI پایه/vanilla assets و قالب 1.20.1 حفظ شود؛ این skin تزئینی است و مانع اجرای بازی نیست.
+- Decision: **unnecessary برای هسته بازی؛ ایده pipeline تولید asset قابل اقتباس**.
+- Dependencies / cross-references: packaging/lowbudget/hand.py, strings.json, resource-pack GUI/font schema, Pillow.
+- Follow-up checks: در صورت ساخت UI سفارشی، schema resource pack نسخه 1.20.1 بررسی و خروجی جداگانه نسخه‌بندی شود.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
