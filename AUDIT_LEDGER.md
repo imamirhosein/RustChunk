@@ -2081,3 +2081,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: winit ModifiersState/KeyCode; keybinds KeyBinds; keymapping ToggleKeys; Android key event bridge; controller agent/touch synthesized input.
 - Follow-up checks: تست interleaving of real modifier events during hold/restore، IME/Android modifier state، focus loss و key cancellation؛ بررسی keybindings که به Shift/Control themselves rebound شده‌اند.
 - Completion state: complete source review; tests/build not executed.
+
+
+
+### 89. crates/horizon-client-input/src/mouse.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 7e60b81c16afed63139f36ec416bd1a4f0791c57.
+- Size: 19,239 bytes; 568 lines; complete source fetched in consecutive ranges 1–400 and 401–568.
+- Coverage: lines 1–568, complete.
+- Purpose: camera mouse-look, pointer delta accumulation, sensitivity curve, cinematic smoothing, invert/scoping behavior, scroll-wheel processing, spectator flight-speed scroll and macOS Control-click emulation.
+- Implementation / logic: SmoothDouble accumulates target/remaining deltas with half-step smoothing; java_signum preserves signed zero/NaN semantics. ScrollWheelHandler accumulates fractional X/Y wheel offsets, resets accumulator on direction reversal and emits whole steps. Rotation implements Entity.turn with 0.15 degree/count and pitch clamp. MouseLook collects relative deltas while grabbed or absolute position deltas otherwise; ignores first motion after reset, aggregates per frame, optionally applies smooth-camera or scoping sensitivity, then inversion. sensitivity_scales uses (s*0.6F+0.2F)^3 and sens*8. on_scroll supports discrete wheel events and wheel sensitivity. Additional helpers invert degrees to mouse counts, cosine easing, center pointer after grab state transition and preserve Control-click-as-right-click through release.
+- Findings: implementation is explicitly version 26.3. The sensitivity multiplication uses Java float constants widened to f64 to reproduce exact rounding; yaw/pitch are converted back to f32 before turn. smooth camera uses elapsed frame time and retains residual movement across later frames. Scroll fraction handling and direction reset matter for high-resolution touchpads. next_selection repeatedly wraps selected index but assumes limit > 0; limit 0 would loop indefinitely and should be guarded at call boundary or helper. mouse_position_after_grab_change divides by scale without checking zero/non-finite scale. macOS Control-click state is captured at press and retained to release even if Control key state changes. Tests cover vanilla sensitivity formula, scoping/inversion, inverse motion, cinematic smoothing, fractional scroll, pointer centering and Control-click. Tests not run.
+- RustChunk relevance: valuable for accurate camera and scrolling on desktop, and for using relative deltas/virtual mouse-look from touch/gamepad/agent input; sensitivity consistency impacts multiplayer aiming and view direction.
+- 1.20.1 implications: all sensitivity/cinematic behavior should be compared to the 1.20.1 MouseHandler/Entity.turn source rather than assumed compatible. Android generally uses touch-look rather than OS mouse grab; keep a platform-independent accumulated-delta API and place sensitivity/gesture handling in platform adapter. Pointer center semantics only apply when a real pointer grab changes.
+- Decision: **core mouse delta aggregation, sensitivity curve and scroll accumulation are adaptable; 1.20.1 constants and platform-specific grab semantics require verification**.
+- Dependencies / cross-references: winit pointer events, MouseHandler/Entity.turn behavior, sensitivity/smoothCamera/invertMouseX/invertMouseY/scoping options, spectator abilities, window DPI scale and macOS Control-click option.
+- Follow-up checks: verify 1.20.1 exact mouse sensitivity and smoothing; guard positive scroll limit and nonzero scale; compare Android touch-look conversion and DPI/rotation with game coordinate space.
+- Completion state: complete source review; no tests/build/input-device runs executed.
