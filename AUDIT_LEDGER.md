@@ -1548,3 +1548,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Horizon Android control engine, touch presets, input routing, TextMirror/IME, Android UI.
 - Follow-up checks: بررسی event routing/lifecycle ورودی Android؛ طراحی input abstraction RustChunk و تست touch + physical keyboard.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 16. `docs/android-accounts.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `253bcebee21e4962b4f317f6a6d1c61d5078e9b9`.
+- Size: 4,483 bytes; 76 lines; full source fetched.
+- Coverage: lines 1–76, complete.
+- Purpose: شرح profile selection، Microsoft device-code login، Ely.by، offline identity، ذخیره امن و skin per profile.
+- Implementation / logic: metadata در accounts/accounts.json؛ refresh/access tokens در Android Keystore-backed sealed store؛ password و 2FA ذخیره نمی‌شوند. Microsoft با device-code، Ely.by با endpoint خودش و Offline با نام 1..16 ASCII تعریف شده. انتخاب profile و skin per profile و upload Microsoft skin شرح داده شده.
+- Findings: Offline فقط singleplayer/LAN/offline-mode server است و online authentication نیست. Ely.by مالکیت Minecraft و Microsoft session نمی‌دهد. Microsoft نیازمند Java entitlement است. token storage و UUID/provider semantics امنیتی/نسخه‌ای‌اند.
+- RustChunk relevance: برای launcher/account architecture مفید؛ اجرای اولیه 1.20.1 می‌تواند offline profile و سرورهای offline-mode را اول پیاده کند. این سند auth protocol 1.20.1 را کامل نمی‌کند.
+- 1.20.1 implications: offline profile باید UUID/handshake مطابق 1.20.1 تولید کند؛ این bypass آنلاین‌مود نیست. Online-mode بعداً Microsoft auth رسمی، profile key/chat signing و token storage می‌خواهد. Ely.by اجباری نیست.
+- Decision: **adaptable (profile abstraction و Keystore pattern)؛ provider/API implementation version- and service-specific**.
+- Dependencies / cross-references: Microsoft device-code OAuth, Ely.by endpoints, Android Keystore, offline UUID/profile and skin files.
+- Follow-up checks: بررسی offline UUID و login flow 1.20.1؛ بعداً Microsoft device-code و profile key lifecycle؛ secrets در log/ledger نیاید.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
