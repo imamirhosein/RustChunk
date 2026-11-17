@@ -64,6 +64,23 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
         with self.assertRaisesRegex(PrepareError, "predicates must be booleans"):
             summarize_heightmap_facts(facts, expected_states=3)
 
+    def test_cross_checks_block_names_and_state_descriptions_against_registry_facts(self):
+        registry = [
+            ["minecraft:air", True, False, "Block{minecraft:air}", "minecraft:air"],
+            ["minecraft:stone", False, False, "Block{minecraft:stone}", "minecraft:stone"],
+            ["minecraft:oak_leaves", False, False, "Block{minecraft:oak_leaves}", "minecraft:oak_leaves"],
+        ]
+        report = summarize_heightmap_facts(
+            valid_facts(), expected_states=3, registry_states=registry
+        )
+        self.assertEqual(report["block_state_count"], 3)
+
+        registry[1][3] = "Block{minecraft:dirt}"
+        with self.assertRaisesRegex(PrepareError, "does not align"):
+            summarize_heightmap_facts(
+                valid_facts(), expected_states=3, registry_states=registry
+            )
+
     def test_rejects_malformed_rows(self):
         facts = valid_facts()
         facts["states"][1] = [1, "minecraft:stone"]
