@@ -866,3 +866,24 @@
 - Dependencies / cross-references: `adapter.rs`; `tools/generate_packet_id_adapter.py`; 26.2 and 26.3 `packets.json` reports; `State`; `Direction`; `PROTOCOL_VERSION`; packet codecs and connection state machine.
 - Follow-up checks: inspect the generator and packet report format, then derive/verify a full 1.20.1 packet inventory and real handshake/login/play flow. Add payload-level tests; do not use this file as a compatibility shim.
 - Completion state: complete generated-file review; no generator, packet table test, protocol connection or network interoperability run was performed.
+
+
+### 39. `crates/horizon-protocol/src/packets/handshake.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `1686adb23f2e9d06e9c1b24637fb3fa906eedad8`.
+- Size: 988 bytes; 39 lines; fetched in one complete range, including test.
+- Coverage: lines 1–39, complete.
+- Purpose: defines the clientbound? No: the client-to-server handshake packet (`ClientIntentionPacket`) and intent constants.
+- Wire structure:
+  - Fields are protocol number as VarInt, hostname as a bounded string (`StrN<255>`), port as unsigned short, and intent as VarInt.
+  - Current intent constants are STATUS=1, LOGIN=2 and TRANSFER=3. A single `Intention` packet is registered in the Handshake state's serverbound packet enum.
+  - The unit test encodes protocol 777, localhost:25565, login intent and checks the leading packet ID and protocol VarInt bytes; a packet round-trip is also asserted. Test not executed.
+- RustChunk relevance: high. This packet is the initial point where a client selects protocol version and asks a server for status or login; it is central to connecting a native client to a matching Minecraft Java server.
+- 1.20.1 implications:
+  - The core field ordering and VarInt/port/string structure is likely largely reusable, but the protocol number must be the 1.20.1 value and the accepted intent set must match that protocol's handshake exactly.
+  - `TRANSFER=3` is a later protocol feature and must not be advertised/sent to a 1.20.1 server unless its handshake implementation explicitly supports it. The exact 1.20.1 packet ID and maximum host string interpretation should be confirmed against a version-matched reference.
+  - A handshake packet alone cannot establish compatibility: status/login/configuration/play packet IDs, encryption/compression, registry negotiation and packet payload schemas must also match.
+- Decision: **mostly adaptable** for the basic handshake field codec; **version-gate protocol constant and intent options** for 1.20.1. Do not carry forward protocol 777 or later-only transfer semantics.
+- Dependencies / cross-references: `buf::StrN`; `UShort`; `VarInt`; `packet!`; `packet_enum!`; `ids::handshake::serverbound`; `State::Handshake`; protocol connection startup; `adapter.rs`.
+- Follow-up checks: inspect the connection state machine and generated IDs; verify 1.20.1 handshake bytes against an authoritative protocol specification and a vanilla 1.20.1 server.
+- Completion state: complete source/test review; no packet encoding test, handshake or network connection was executed.
