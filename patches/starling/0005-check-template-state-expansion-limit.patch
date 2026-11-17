@@ -1,0 +1,72 @@
+diff --git a/crates/horizon-client/src/mod_content.rs b/crates/horizon-client/src/mod_content.rs
+--- a/crates/horizon-client/src/mod_content.rs
++++ b/crates/horizon-client/src/mod_content.rs
+@@ -438,3 +438,12 @@ fn combinations(
+     Ok(combos)
+ }
+ 
++fn block_state_count(block: &str, template_states: usize, combinations: usize) -> Result<u32> {
++    let count = (template_states as u64)
++        .checked_mul(combinations as u64)
++        .ok_or_else(|| format!("{block}: block state count overflows"))?;
++    if count > MAX_STATES as u64 {
++        return Err(format!("{block}: {count} block states, more than the {MAX_STATES} a world can hold").into());
++    }
++    Ok(count as u32)
++}
++
+ /// Puts a declared state property's values on one of a block's state rows.
+@@ -1055,3 +1064,21 @@ impl Plan {
+                 let combos = combinations(&decl.state_properties, &decl.default_state)
+                     .map_err(|e| format!("{}: {e}", decl.id))?;
++                // Bound the full template-state × declared-property product before
++                // matching defaults or allocating the expanded order, shapes and rows.
++                let count = block_state_count(&decl.id, states.len(), combos.len())?;
++                let projected_next = next.saturating_add(count);
++                if projected_next > MAX_STATES {
++                    let mut by_mod: BTreeMap<&str, u32> = BTreeMap::new();
++                    for b in &blocks {
++                        *by_mod
++                            .entry(&b.decl.id[..b.decl.id.find(':').unwrap_or(0)])
++                            .or_default() += (b.rename.states.len() as u32)
++                                .saturating_mul(b.rename.fanout);
++                    }
++                    *by_mod
++                        .entry(&decl.id[..decl.id.find(':').unwrap_or(0)])
++                        .or_default() += count;
++                    let list: Vec<String> =
++                        by_mod.iter().map(|(m, n)| format!("{m} {n}")).collect();
++                    return Err(format!(
++                        "{projected_next} block states, more than the {MAX_STATES} a world can hold ({} in the game; \
++                         the mods: {})",
++                        names.len(),
++                        list.join(", ")
++                    )
++                    .into());
++                }
+                 // A `default_state` key the block itself declares is its own,
+@@ -1143,4 +1170,2 @@ impl Plan {
+-                let count =
+-                    u32::try_from(states.len() as u64 * combos.len() as u64).unwrap_or(u32::MAX);
+-                next = next.saturating_add(count);
++                next = projected_next;
+                 rename.states = states;
+diff --git a/crates/horizon-client/src/mod_content_tests.rs b/crates/horizon-client/src/mod_content_tests.rs
+--- a/crates/horizon-client/src/mod_content_tests.rs
++++ b/crates/horizon-client/src/mod_content_tests.rs
+@@ -675,6 +675,18 @@ fn refuses_more_states_than_a_world_holds() {
+     fs::remove_dir_all(scratch).unwrap();
+ }
+ 
++#[test]
++fn checks_template_state_cross_product_before_expansion() {
++    assert_eq!(block_state_count("ruby:block", 64, 256).unwrap(), 16_384);
++    let error = block_state_count("ruby:block", 1_296, 810)
++        .unwrap_err()
++        .to_string();
++    assert!(error.contains("1049760 block states"), "{error}");
++    assert!(error.contains("more than the 1048576 a world can hold"), "{error}");
++}
++
+ #[test]
+ fn builds_past_sixteen_bit_states() {
