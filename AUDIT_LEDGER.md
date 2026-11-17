@@ -2234,3 +2234,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: gamepad::{Button,GlyphStyle}; ui_theme::{Ui,Face,color}; language keys horizon.osk.* and gui.done; focused UI text field caller and gamepad focus navigation.
 - Follow-up checks: بررسی callers که Output را به focused field می‌برند؛ برای Android native IME composition/cursor/selection/RTL و input connection را جدا ممیزی کن؛ در صورت port، بررسی locale layout و طول codepoint/UTF-16.
 - Completion state: complete source review; no tests/build or Android IME session was run.
+
+
+
+### 98. crates/horizon-client/src/android_control_keyboard.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 6c8ae28734715a89fd3af69c5f77a2c7afb579ac.
+- Size: 451 lines; complete source fetched in consecutive ranges 1–400 and 401–451.
+- Coverage: lines 1–451, complete.
+- Purpose: نسخهٔ Android control editor از on-screen keyboard مخصوص کنترلر، با touch hit-testing و امکان خروجی hardware KeyCode برای editorهایی که key binding می‌گیرند.
+- Implementation / logic: فایل header می‌گوید کد از Horizon Android با MIT adaptation آمده و THIRD_PARTY_NOTICES.md و LICENSE باید بررسی شوند. Layout ثابت LETTERS/SYMBOLS مشابه OSK با پنج ردیف 10 واحدی است. Keyboard focus row/col، shift، caps و symbol mode را نگه می‌دارد. step با D-pad حرکت و wrap می‌کند؛ press کاراکتر، Backspace، Enter و mode changes را تولید می‌کند. برخلاف osk.rs، Output علاوه بر Text/Backspace/Enter/Close یک Key(KeyCode) دارد. Button mapping controller شامل South/West/North/Start/East، shift، layer و D-pad است. touch(width,height,at_top,p) همان هندسه draw را با مقادیر ثابت 554×268 و key cellها hit-test می‌کند و press را اجرا می‌کند. draw صفحه‌کلید را با android_control_theme می‌سازد و controller button hints را نمایش می‌دهد.
+- Findings: این فایل از نظر keyboard state و navigation تقریباً تکرار osk.rs است اما برای Android control configuration editor با hit-test لمسی و خروجی KeyCode توسعه یافته. Geometry مربوط به touch به اعداد ثابت draw وابسته است؛ تغییر UNIT/GAP/KEY_H یا ابعاد layout باید در touch hit-test هم همزمان اعمال شود. صفحه‌کلید QWERTY/Latin ثابت است و IME/native composition یا locale-specific input ندارد. Output::Key(KeyCode) فقط hardware key identity را می‌دهد و character text را از آن تعیین نمی‌کند؛ caller باید آن را در editor context درست تفسیر کند. Header attribution به Horizon Android/MIT تصریح شده؛ هر انتقال کد باید LICENSE و THIRD_PARTY_NOTICES را رعایت کند. Tests touch rectangles، row width، navigation، shift/caps، symbol mode و output mapping را دارند؛ اجرا نشده‌اند.
+- RustChunk relevance: برای control/layout editor اندروید و remapping keybindها قابل توجه است، نه برای core gameplay. می‌تواند یک fallback برای انتخاب کلیدهای فیزیکی/مجازی در editor باشد؛ برای تایپ آزاد متن همچنان Android IME مناسب‌تر است.
+- 1.20.1 implications: این لایه protocol-agnostic است و 1.20.1 packet stack را تغییر نمی‌دهد. RustChunk می‌تواند برای touch control editor یک keyboard overlay ساده نگه دارد، اما نباید به‌جای IME سیستم یا locale text input عمل کند. KeyCode mapping باید با winit/platform adapter و 1.20.1 KeyMapping names تطبیق داده شود.
+- Decision: **اختیاری برای Android control editor؛ touch hit-test/output design قابل اقتباس، keyboard layout تکراری و Latin-only است؛ attribution/license لازم است**.
+- Dependencies / cross-references: winit::keyboard::KeyCode; gamepad::{Button,GlyphStyle}; android_control_theme::{Ui,Face,color}; Android control editor text/key binding fields; LICENSE and THIRD_PARTY_NOTICES.md.
+- Follow-up checks: بررسی مصرف‌کننده Output::Key و Text؛ یکپارچه کردن duplicate OSK logic در design RustChunk؛ validate geometry values against actual touch event scaling; بررسی license attribution before copying.
+- Completion state: complete source review; no tests/build or Android editor interaction was run.
