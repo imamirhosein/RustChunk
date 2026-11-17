@@ -2013,3 +2013,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Minecraft.handleKeybinds, MultiPlayerGameMode startAttack/startDestroyBlock/releaseUsingItem, hitResult/pick lifecycle, screen set/release key mappings, player item-use state.
 - Follow-up checks: تطبیق دقیق vanilla 1.20.1 input tick ordering؛ سنجش overflow/capacity، focus loss، touch cancel و چند tap قبل از tick؛ بررسی server acknowledgements برای همزمانی break و use.
 - Completion state: complete source review; no tests or gameplay/server run were executed.
+
+
+
+### 85. crates/horizon-client-input/src/key_names.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: c6ba9d634bf247c73ba80a5e8f11b23a2c0b7599.
+- Size: 9,297 bytes; 265 lines; complete file fetched.
+- Coverage: lines 1–265, complete.
+- Purpose: جداول نگاشت SDL scancode و mouse button ID به translation keyهای Minecraft برای نمایش نام کلیدها در UI.
+- Implementation / logic: فایل صریحاً می‌گوید جداول InputConstants نسخه 26.3 از VanillaOptionsTableExporter تولید شده‌اند. KEYBOARD شامل scancodeهای SDL و key.keyboard.* localization keys است؛ MOUSE شامل شماره دکمه‌های 1 تا 8 و key.mouse.* است.
+- Findings: داده‌ها static/generated هستند و هیچ logic runtime یا platform conversion ندارند. Scancode به keycode و character text یکی نیست؛ layout و locale صفحه‌کلید می‌تواند label و actual typed character را از هم جدا کند. جدول شامل کلیدهای نادر، بین‌المللی، keypad، media و Android soft keys است. چون منبع، exporter نسخه 26.3 است، حتی اگر بسیاری از نام‌ها پایدار باشند، کامل بودن و naming/version parity با 1.20.1 تضمین نیست. Tests در فایل دیده نمی‌شوند؛ هیچ تستی اجرا نشده است.
+- RustChunk relevance: نگاشت قابل ترجمه برای صفحه تنظیمات keybind، نمایش نام کلیدهای فیزیکی، mouse buttons و keyboard UI مفید است.
+- 1.20.1 implications: 1.20.1 translation keys و key enumeration باید از نسخه هدف استخراج شود؛ کپی کل جدول 26.3 می‌تواند کلیدهای بعدی را اضافه کند یا کلیدهای موردنیاز را جا بیندازد. SDL scancodeها فقط اگر backend SDL واقعاً در RustChunk استفاده شود مبنا هستند؛ winit و Android ممکن است mapping دیگری داشته باشند.
+- Decision: داده‌های مشابه قابل تولید/اقتباس؛ این جدول 26.3 باید برای 1.20.1 بازتولید شود.
+- Dependencies / cross-references: SDL scancode definitions, winit keyboard backend, VanillaOptionsTableExporter, language resource keys, keybinding options UI.
+- Follow-up checks: استخراج جدول 1.20.1 با oracle؛ تعیین mapping جدا برای winit/Android/SDL؛ بررسی layoutهای non-US و physical-vs-logical key naming.
+- Completion state: complete source review; no tests or build were run.
