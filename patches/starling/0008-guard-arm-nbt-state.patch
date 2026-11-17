@@ -1,0 +1,83 @@
+diff --git a/crates/horizon-client/src/game/arms.rs b/crates/horizon-client/src/game/arms.rs
+--- a/crates/horizon-client/src/game/arms.rs
++++ b/crates/horizon-client/src/game/arms.rs
+@@ -15,1 +15,2 @@
+ const RANGE: f64 = 5.0;
++const MAX_ARM_POINTS: usize = 512;
+@@ -81,10 +82,11 @@
+         let points = match tag.get("Points") {
+             Some(Tag::List(list)) => list
+                 .iter()
++                .take(MAX_ARM_POINTS)
+                 .map(|p| Point {
+                     pos: [int(p, "X"), int(p, "Y"), int(p, "Z")],
+                     output: int(p, "Out") != 0,
+                 })
+                 .collect(),
+             _ => Vec::new(),
+         };
+@@ -97,2 +99,2 @@
+-            progress: float("Progress"),
+-            rate: float("Rate"),
++            progress: finite_clamp(float("Progress"), 0.0, 1.0),
++            rate: finite_clamp(float("Rate"), 0.0, 0.25),
+@@ -132,3 +134,7 @@
+ }
+ 
++fn point_position(points: &[Point], index: i32) -> Option<[i32; 3]> {
++    points.get(usize::try_from(index).ok()?).map(|point| point.pos)
++}
++
+ /// `tickMovementProgress`: what an arm gains a tick at `speed`.
+@@ -135,5 +141,9 @@
+ fn rate(speed: f32) -> f32 {
+     speed.abs().min(256.0) / 1024.0
+ }
+ 
++fn finite_clamp(value: f32, min: f32, max: f32) -> f32 {
++    if value.is_finite() { value.clamp(min, max) } else { min }
++}
++
+ /// `ArmAngleTarget`: the angles an arm at `arm` reaches `target` with, its claw facing `claw`.
+@@ -490,1 +500,1 @@
+-        let progress = a.progress_after((now - e.since) as f32);
++        let progress = a.progress_after(now.saturating_sub(e.since) as f32);
+@@ -529,1 +539,1 @@
+-                let at = usize::try_from(a.target).ok().map(|t| points[t].pos);
++                let at = point_position(&points, a.target);
+@@ -544,1 +554,1 @@
+-                let at = usize::try_from(a.target).ok().map(|t| points[t].pos);
++                let at = point_position(&points, a.target);
+@@ -559,1 +569,1 @@
+-                let start = usize::try_from(a.last_input + 1).unwrap_or(0);
++                let start = usize::try_from(a.last_input.saturating_add(1)).unwrap_or(0);
+@@ -594,1 +604,1 @@
+-                let start = usize::try_from(a.last_output + 1).unwrap_or(0);
++                let start = usize::try_from(a.last_output.saturating_add(1)).unwrap_or(0);
+@@ -631,2 +641,26 @@
+     }
++
++    #[test]
++    fn saved_arm_state_is_bounded_and_indices_are_checked() {
++        let points = std::iter::repeat(Tag::compound([
++            ("X", Tag::Int(1)),
++            ("Y", Tag::Int(2)),
++            ("Z", Tag::Int(3)),
++            ("Out", Tag::Int(0)),
++        ]))
++        .take(MAX_ARM_POINTS + 7)
++        .collect();
++        let tag = Tag::compound([
++            ("Points", Tag::List(points)),
++            ("Progress", Tag::Float(f32::NAN.to_bits())),
++            ("Rate", Tag::Float(f32::INFINITY.to_bits())),
++        ]);
++        let state = ArmState::read(Some(&tag));
++        assert_eq!(state.points.len(), MAX_ARM_POINTS);
++        assert_eq!(state.progress, 0.0);
++        assert_eq!(state.rate, 0.0);
++        assert_eq!(point_position(&state.points, 0), Some([1, 2, 3]));
++        assert_eq!(point_position(&state.points, i32::MAX), None);
++        assert_eq!(point_position(&state.points, -1), None);
++    }
+ }
