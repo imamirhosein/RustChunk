@@ -1708,3 +1708,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: protocol Reader/Writer; horizon:quiet_commands custom payload registration; docs/mods.md command.run-quiet; server command dispatcher and player permissions.
 - Follow-up checks: در آینده caller server را برای mod id trust، per-player throttling، command length semantics و fallback-to-chat بررسی کن؛ فعلاً هیچ endpoint آن را implement نکن.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 66. `crates/horizon-protocol/src/servers.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `466f868fa0a1a8496d65e4e85fbee4763b5a85f1`.
+- Size: 8,679 bytes; 230 lines; full source fetched.
+- Coverage: lines 1–230, complete.
+- Purpose: خواندن، نوشتن و افزودن ورودی به `servers.dat` در فرمت NBT مشابه ServerList vanilla، به‌علاوه parse آدرس host/port.
+- Implementation / logic: ServerEntry فیلدهای name، ip، favicon base64، acceptTextures tri-state و acceptedCodeOfConduct hash را مدل می‌کند. load فایل NBT uncompressed را می‌خواند، hidden LAN/quick-play entries را از لیست نمایشی حذف و ورودی‌های بدون ip را کنار می‌گذارد. save root unnamed با Tag List `servers` می‌نویسد. prepend یک entry جدید را ابتدا قرار می‌دهد و سایر فیلدها/hidden entries ناشناخته را نگه می‌دارد. write ابتدا به dat_tmp می‌نویسد و سپس rename می‌کند. parse_address `host`, `host:port`, `[v6]:port` و default 25565 را مدیریت می‌کند.
+- Findings: از NBT JavaString/NamedTag استفاده می‌کند و در صورت خرابی فایل load به empty list برمی‌گرداند، اما prepend در صورت خرابی error می‌دهد و فایل را دست‌نخورده نگه می‌دارد. save کل لیست را بازنویسی و unknown fields را حذف می‌کند؛ prepend برای preservation طراحی شده است. parser bracketed IPv6 و unbracketed multi-colon host را جدا می‌کند. Tests roundtrip، hidden/unknown field preservation، damaged-file safety و address parsing دارند؛ اجرا نشده‌اند.
+- RustChunk relevance: ساختار `servers.dat` و حفظ تنظیمات سرور/فهرست در launcher برای RustChunk قابل استفاده و بسیار مرتبط است.
+- 1.20.1 implications: باید با schema دقیق Minecraft 1.20.1 و defaults همان نسخه cross-check شود؛ فیلدهای `acceptedCodeOfConduct` ممکن است 26.3-only باشند. NBT root/list keys و ServerData address behavior را با نسخه هدف oracle کن. فایل را نباید هنگام parse failure با empty data overwrite کرد. rename replacement behavior باید روی Android/Linux/Windows بررسی شود.
+- Decision: **adaptable با تأیید schema و filesystem semantics نسخه 1.20.1**.
+- Dependencies / cross-references: horizon_world::nbt::{read_named,write_named,Tag,JavaString}; local game server list screen; server status favicon and server resource pack preference.
+- Follow-up checks: بررسی callers save/prepend و server list UI؛ مقایسه کامل `servers.dat` vanilla 1.20.1 شامل فیلدها و رفتار malformed file؛ تست rename اتمیک روی Android.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
