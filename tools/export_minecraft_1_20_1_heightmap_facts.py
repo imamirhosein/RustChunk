@@ -55,6 +55,7 @@ def run(command: list[str], log_path: Path, what: str) -> None:
 def summarize_heightmap_facts(
     facts: dict,
     expected_states: int,
+    registry_states: list | None = None,
 ) -> dict:
     if not isinstance(facts, dict):
         raise PrepareError("Heightmap facts root must be a JSON object")
@@ -95,6 +96,20 @@ def summarize_heightmap_facts(
             raise PrepareError(f"Heightmap facts row {expected_id} has no state description")
         if not isinstance(motion, bool) or not isinstance(no_leaves, bool):
             raise PrepareError(f"Heightmap facts row {expected_id} predicates must be booleans")
+        if registry_states is not None:
+            if len(registry_states) != expected_states:
+                raise PrepareError(
+                    "Block facts and heightmap facts have different state counts"
+                )
+            registry_row = registry_states[expected_id]
+            if not isinstance(registry_row, list) or len(registry_row) < 4:
+                raise PrepareError(
+                    f"Block registry facts row {expected_id} is malformed"
+                )
+            if block_name != registry_row[0] or state_description != registry_row[3]:
+                raise PrepareError(
+                    f"Heightmap state {expected_id} does not align with the block registry facts"
+                )
         motion_count += int(motion)
         no_leaves_count += int(no_leaves)
 
@@ -166,14 +181,25 @@ def export(args) -> dict:
         raise PrepareError(f"Heightmap exporter produced invalid JSON: {exc}") from exc
 
     lock = load_target_lock()["minecraft"]
+    registry_facts_path = work_dir / "block-facts" / "facts.json"
+    try:
+        registry_facts = json.loads(registry_facts_path.read_text(encoding="utf-8"))
+        registry_states = registry_facts["states"]
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
+        raise PrepareError(
+            f"Missing or malformed 1.20.1 block-registry facts at {registry_facts_path}: {exc}"
+        ) from exc
+
     report = summarize_heightmap_facts(
         facts,
         expected_states=lock["expected_block_state_count"],
+        registry_states=registry_states,
     )
     report.update({
         "facts_sha256": sha256(facts_path),
         "facts_bytes": facts_path.stat().st_size,
         "exporter_sha256": sha256(SOURCE),
+        "block_registry_facts_sha256": sha256(registry_facts_path),
         "client_jar_sha1": lock["downloads"]["client"],
         "server_jar_sha1": lock["downloads"]["server"],
         "private_facts_path": "heightmap-facts/heightmap-facts.json",
