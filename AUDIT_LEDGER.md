@@ -1724,3 +1724,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_world::nbt::{read_named,write_named,Tag,JavaString}; local game server list screen; server status favicon and server resource pack preference.
 - Follow-up checks: بررسی callers save/prepend و server list UI؛ مقایسه کامل `servers.dat` vanilla 1.20.1 شامل فیلدها و رفتار malformed file؛ تست rename اتمیک روی Android.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 67. `crates/horizon-protocol/src/text.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `cc44430fb66aadfa39ac018108bcf454bf1bbcf4`.
+- Size: 7,829 bytes; 220 lines; full source fetched.
+- Coverage: lines 1–220, complete.
+- Purpose: تبدیل ComponentSerialization متنی دریافتی در قالب NBT به متن ساده و resolve کردن translate keyها با جدول زبان.
+- Implementation / logic: plain/append رشته literal، اعداد primitive، listها، `{text:...}`، wrapper خالی key، translate + with + fallback، keybind، selector، score.name و extra را باز می‌کند. recursion بعد از depth 32 متوقف می‌شود. format_java از `%s`, `%n$s` و `%%` پشتیبانی می‌کند. helperهای literal و translatable Tag می‌سازند.
+- Findings: این پیاده‌سازی برای استخراج plain text است، نه rendering کامل component: style/color/click/hover/insertion/font و بیشتر semanticsها کنار گذاشته می‌شوند؛ selector resolve واقعی نمی‌شود و score فقط name را می‌نویسد. unknown translate با fallback یا خود key نمایش داده می‌شود. فرمت placeholderهای پشتیبانی‌نشده ممکن است به شکل جزئی/خالی باقی بماند. Tests translate arguments mixed NBT wrappers، ordered/sequential placeholders، percent escape و extra را پوشش می‌دهند؛ اجرا نشده‌اند.
+- RustChunk relevance: برای status/chat text display fallback در RustChunk کاربرد دارد، اما جایگزین text component renderer واقعی نیست.
+- 1.20.1 implications: 1.20.1 chat components از codec/packet representations آن نسخه و JSON/NBT forms مشخص همان protocol استفاده می‌کنند؛ این NBT component conversion و ترجمه‌ها باید با دقیق‌ترین serialization هدف تطبیق داده شوند. برای signed chat، فقط flatten کردن برای نمایش کافی نیست و نباید payload امضا‌شده را normalize کند. UI باید rich component tree را مستقل نگه دارد.
+- Decision: **adaptable فقط برای fallback plain-text؛ rich component parser/renderer نسخه 1.20.1 باید جدا نوشته شود**.
+- Dependencies / cross-references: horizon_world::nbt::{JavaString,Tag}; language `en_us.json`; protocol chat/status packet handling and UI chat renderer.
+- Follow-up checks: مقایسه component serialization و TranslatableContents 1.20.1؛ تست selectors, score, style inheritance, nested extras, malformed arguments و signed chat rendering.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
