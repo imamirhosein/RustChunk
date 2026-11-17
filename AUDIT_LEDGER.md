@@ -940,3 +940,26 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `horizon-core::version`; `adapter`; `attachment_sync`; `buf`; `chunk`; `connection`; `crypto`; `entity_data`; `frame`; `ids`; `item`; `mod_list`; `mod_net`; `packets`; `registry`; `resolver`; `rsa`; `secure_chat`; `servers`; `text`.
 - Follow-up checks: inspect each public module, especially connection state transitions, packet payload codecs, registry sync, chunk data, item wire encoding, entity metadata, encryption and server-list/status handling; validate against 1.20.1 protocol data.
 - Completion state: complete source review; no build, test or live protocol exchange was run.
+
+
+### 42. `crates/horizon-protocol/src/ids.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `892b6af9a53c105ad663c56c07db9fe3714a61b8`.
+- Size: 22,066 bytes; 590 lines; fetched in consecutive ranges 1–400 and 401–590.
+- Coverage: lines 1–590, complete; both ranges returned the same blob SHA.
+- Purpose: generated packet-ID constants and ID-to-name tables for every connection state/direction of Minecraft Java protocol 777 (26.3).
+- Findings:
+  - File header states it is generated from the vanilla data generator's packet report by `tools/generate_packet_ids.py`; the file must not be edited manually.
+  - Defines Handshake serverbound, Status both directions, Login both directions, Configuration both directions and Play both directions. No Handshake clientbound packet table is defined.
+  - Enumerates 21 clientbound and 10 serverbound Configuration packets, 144 clientbound Play packets and 69 serverbound Play packets, in addition to the smaller earlier-state tables. IDs include later-version packets such as cookies, transfers, post effects, data components-era interactions, dialogs, code of conduct, waypoints and modern chat/session fields.
+  - `NAMES` arrays are parallel to numeric IDs and power `name(state, direction, id)`. Invalid states/directions/negative or out-of-range IDs return `None`.
+  - The module imports the common `State` and `Direction`, so all protocol consumers share this single generated ID namespace.
+- RustChunk relevance: critical. These IDs determine packet framing/dispatch and every packet enum's encoding/decoding. This is a completely version-specific generated artifact.
+- 1.20.1 implications:
+  - No numeric ID from this file can be presumed valid for 1.20.1. It belongs to protocol 777 and contains packet kinds absent from 1.20.1; older protocol also uses a different login/configuration/play split and packet catalog.
+  - A 1.20.1 port needs a fresh, authoritative packet report/ID inventory and version-specific generated constants and names, plus code changes for packet types that were added/removed or structurally different.
+  - The generator's input format and ability to obtain packet data from a 1.20.1 mapped JAR must be validated; the current import workflow refuses mapped releases. Do not manually renumber this table or mechanically offset IDs.
+- Decision: **do not reuse data**; **regenerate entirely for 1.20.1** using a verified 1.20.1 vanilla report. The generator pattern and `name()` lookup API are adaptable, provided all packet consumers switch atomically to coherent version-specific definitions.
+- Dependencies / cross-references: `tools/generate_packet_ids.py`; vanilla datagen `packets.json`; `State`; `Direction`; packet enums in `packets/*.rs`; `adapter.rs`; protocol probes; `horizon-core::version`.
+- Follow-up checks: inspect the generator and packet report schema, all consumers of numeric constants and `NAMES`, and the handshake/login/configuration transitions for 1.20.1. Confirm whether a unified `Configuration` state is even valid for the target version.
+- Completion state: complete source review; no packet report generation, protocol tests, codegen or network interoperability run was performed.
