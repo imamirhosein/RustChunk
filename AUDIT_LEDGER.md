@@ -1740,3 +1740,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_world::nbt::{JavaString,Tag}; language `en_us.json`; protocol chat/status packet handling and UI chat renderer.
 - Follow-up checks: مقایسه component serialization و TranslatableContents 1.20.1؛ تست selectors, score, style inheritance, nested extras, malformed arguments و signed chat rendering.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 68. `crates/horizon-protocol/src/crypto/blocks.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `308a80a73022b3fa23bdcded18679ab33a912493`.
+- Size: 7,623 bytes; 208 lines; full source fetched.
+- Coverage: lines 1–208, complete.
+- Purpose: primitive AES-128 block encryption و fast CFB8 encrypt برای رمزنگاری اتصال Minecraft.
+- Implementation / logic: Blocks یک AES-128 key schedule نگه می‌دارد و encrypt_block، cfb8_encrypt و encrypt_lanes ارائه می‌کند. در AArch64 با compile-time target_feature=aes از ARMv8 AESE/AESMC intrinsics در pipeline هشت block استفاده می‌شود؛ سایر targetها از RustCrypto aes با lane batch 32 و شتاب runtime AES-NI در x86/x86_64 استفاده می‌کنند. CFB8 هر byte را با AES(register) XOR می‌کند و ciphertext را به انتهای 16-byte shift register می‌افزاید.
+- Findings: بخش ARM64 تنها کد unsafe این crate است و safety بر این فرض بنا شده که `target_feature=aes` به CPUهای همان binary تضمین شده باشد؛ build target flags باید با حداقل دستگاه واقعی هماهنگ باشد. در صورت فعال کردن AES feature برای همه ARM64های منتشرشده، دستگاه فاقد crypto extension ممکن است غیرقابل اجرا باشد. Key schedule سفارشی دارای SBOX lookup جدولی با index مشتق از key است؛ timing/cache side-channel آن باید بررسی شود. fallback به crate vetted وابسته است. این فایل تست مستقلی نشان نمی‌دهد؛ الگوریتم واقعی و vectorها باید در سطح wrapper/crypto crate آزمایش شوند.
+- RustChunk relevance: برای رمزنگاری login connection مهم است؛ Android ARM64 می‌تواند از hardware AES سود ببرد، اما feature detection و امنیت از benchmark مهم‌تر است.
+- 1.20.1 implications: Minecraft 1.20.1 نیز بعد از online-mode login encryption مبتنی بر AES/CFB8 دارد، بنابراین CFB8 semantics و key/IV handling احتمالاً از این primitive قابل اقتباس‌اند، نه این‌که بی‌تست کپی شود. Runtime ARM64 feature dispatch به جای فرض compile-time AES برای توزیع گسترده Android امن‌تر است. Offline mode به این رمزنگاری server login نیاز ندارد.
+- Decision: **الگوریتم CFB8 قابل اقتباس؛ backend سفارشی ARM AES فقط پس از security review و dispatch ایمن قابل استفاده**.
+- Dependencies / cross-references: protocol::crypto.rs, aes crate, ARMv8 AES/NEON intrinsics, RustCrypto AES, target CPU feature configuration.
+- Follow-up checks: بررسی build target flags برای Android arm64-v8a و قابلیت crypto extension دستگاه‌ها؛ تست NIST AES vectors و CFB8 known-answer vectors؛ مقایسه با RustCrypto constant-time backend و ارزیابی SBOX key schedule.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
