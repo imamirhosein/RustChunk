@@ -58,7 +58,7 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
         self.assertEqual(report["leaves_block_count"], 1)
         self.assertEqual(report["leaves_state_count"], 1)
         self.assertEqual(report["motion_blocking_state_count"], 2)
-        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 3)
+        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 2)
         self.assertEqual(report["motion_blocking_excluded_by_no_leaves_count"], 0)
         self.assertEqual(
             report["no_leaves_predicate_validation"],
@@ -199,7 +199,7 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
             block_tags_bundle=valid_tags(),
         )
         self.assertEqual(report["motion_blocking_state_count"], 3)
-        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 2)
+        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 3)
 
     def test_rejects_motion_blocking_java_predicate_mismatch(self):
         facts = valid_facts()
