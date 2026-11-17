@@ -709,3 +709,28 @@
 - Dependencies / cross-references: `horizon_prepare::Options`; `artifacts::Lock`; `prepare_with_progress`; `add_assets`; `compile_exporters`; `check`; `launch_api`; `research-lock.json`; `horizon-resources.json`; launcher Launch API.
 - Follow-up checks: inspect `java.rs`, `artifacts.rs`, `lib.rs`, exporters, output manifest/stamping, and the precise 1.20.1 version metadata/JDK requirement. Confirm whether the preparer's asset path expects 26.3-only layouts.
 - Completion state: complete source and test review; no preparation, Java invocation, asset import, build or test was executed.
+
+
+### 33. `crates/horizon-prepare/src/java.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `b33229cbf56d422449a8c62672b27cd706fb9b97`.
+- Size: 21,900 bytes; 609 lines; fetched in consecutive ranges 1–400 and 401–609.
+- Coverage: lines 1–609, complete; both ranges returned the same blob SHA; unit tests included.
+- Purpose: discovers/provisions Java tools, applies memory options, builds platform classpaths and runs Java/Javac processes used by vanilla exporters and datagen.
+- Java discovery and execution:
+  - A caller can inject a `Supplied` Java/Javac pair and environment through a process-wide `OnceLock`. The module comments identify Starling on Android as the case where ordinary system Java is unavailable and the app supplies its private runtime.
+  - Discovery order is supplied runtime, `JAVA_HOME`, JDKs found through `PATH`, macOS `java_home`, launcher/Minecraft-provided homes, then common JDK installation directories. It validates tool versions by invoking `-version`, handles Java 8's `1.8` format and avoids pairing a standalone old `java` with a different JDK's `javac`.
+  - `find` requires `javac` and `java`; `find_runtime` only requires `java` for precompiled exporters. Both accept a requested major from the pinned lock and currently accept versions greater than or equal to it.
+  - `javac` invokes `--release <major> -proc:none`; Java commands use short-batch options `-XX:TieredStopAtLevel=1` and `-XX:+UseSerialGC`. Each process has a one-hour timeout, null stdin and combined output to a log.
+  - Android 32-bit alone uses `SMALL_ANDROID` and reads `/proc/meminfo` to cap exporter heaps at 384 or 512 MiB. Android 64-bit does not activate this cap. Requested heap sizes are clamped only when larger than the computed maximum.
+  - It resolves launcher-managed Java runtimes, including macOS bundle layout, and normalizes Windows verbatim drive paths.
+- Android/RustChunk relevance: very high. This is evidence Starling's **resource preparation** can launch Java from an app-private runtime on Android; it does not mean the Rust game itself runs in a JVM. The supplied runtime hook is likely important when preparing 1.20.1 resources on a phone.
+- 1.20.1 implications:
+  - The required Java major is supplied by `research-lock.json`; the current comments and surrounding docs use Java 25 for 26.3. The exact 1.20.1 Java requirement must be read from its official version metadata and pinned independently (do not assume 25).
+  - This module's minimum-version check can select a newer runtime than requested. Compatibility of a newer JDK with the historic Minecraft 1.20.1 data generator/exporter and decompiler needs verification; an exact Java 17 runtime may be a safer baseline if 1.20.1 metadata says 17.
+  - Android 64-bit devices such as the Galaxy A22 do not receive the 32-bit heap cap in this implementation; its 6 GB class memory profile still requires measured heap choices and careful coexistence with the renderer. The 384/512 MiB rules apply only to 32-bit Android.
+  - `javac --release` requires a compiler capable of the selected release target. Exporter source compatibility and dependencies must also be checked for the older 1.20.1 Java toolchain.
+- Decision: **adaptable** for Android-supplied Java, JDK discovery, controlled batch execution and timeout handling; **version/toolchain policy changes and device-specific memory validation required** for 1.20.1. No claim is made that the game engine needs Java at runtime; Java here supports vanilla exporters/data prep.
+- Dependencies / cross-references: `research-lock.json` Java major; `Supplied`/`supply`; `find`/`find_runtime`; `horizon-prepare` `Options.java_home`; `horizon-prepare/src/lib.rs`; `artifacts.rs`; exporter compilation and vanilla datagen; Android launcher runtime provisioning.
+- Follow-up checks: inspect the source of runtime provisioning and `artifacts.rs` to verify major selection; confirm 1.20.1's version JSON/JDK baseline; inspect the Java exporter compile path; measure heap/time on Android ARM64 and ensure no unbounded concurrent JVMs.
+- Completion state: complete source and unit-test review; tests and actual Java/Javac commands were not executed.
