@@ -154,6 +154,36 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
         with self.assertRaisesRegex(PrepareError, "BlockTags.LEAVES membership disagrees"):
             self.summarize(facts)
 
+    def test_fluid_remains_motion_blocking_even_when_state_is_in_leaves_tag(self):
+        facts = valid_facts()
+        facts["states"].append([
+            3,
+            "minecraft:oak_leaves",
+            "Block{minecraft:oak_leaves}[waterlogged=true]",
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+        ])
+        registry = valid_registry()
+        registry.append([
+            "minecraft:oak_leaves",
+            False,
+            True,
+            "Block{minecraft:oak_leaves}[waterlogged=true]",
+            {"id": "minecraft:oak_leaves", "properties": {"waterlogged": "true"}},
+        ])
+        report = summarize_heightmap_facts(
+            facts,
+            expected_states=4,
+            registry_states=registry,
+            block_tags_bundle=valid_tags(),
+        )
+        self.assertEqual(report["motion_blocking_state_count"], 3)
+        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 2)
+
     def test_rejects_both_java_predicate_mismatches(self):
         facts = valid_facts()
         facts["states"][1][7] = False
