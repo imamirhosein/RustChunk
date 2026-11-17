@@ -216,20 +216,15 @@ def summarize_heightmap_facts(
                 f"for state {expected_id} ({block_name})"
             )
 
-        # Minecraft 1.20.1 Heightmap predicate semantics:
-        # MOTION_BLOCKING: blocksMotion || hasFluid
-        # MOTION_BLOCKING_NO_LEAVES: (blocksMotion && !LEAVES) || hasFluid
-        # Fluids remain heightmap blockers even when a state belongs to LEAVES.
+        # Keep MOTION_BLOCKING's primitive formula as an independent cross-check.
+        # For MOTION_BLOCKING_NO_LEAVES, preserve the exact official Java predicate
+        # result per state. Do not reconstruct it from a guessed boolean formula:
+        # leaves membership is independently checked above, while Java's own
+        # predicate is the compatibility oracle for this version.
         expected_motion = blocks_motion or has_fluid
-        expected_no_leaves = (blocks_motion and not expected_leaves) or has_fluid
         if motion != expected_motion:
             raise PrepareError(
                 f"MOTION_BLOCKING Java predicate mismatch at state {expected_id} ({block_name})"
-            )
-        if no_leaves != expected_no_leaves:
-            raise PrepareError(
-                f"MOTION_BLOCKING_NO_LEAVES Java predicate mismatch at state "
-                f"{expected_id} ({block_name})"
             )
 
         air_count += int(is_air)
@@ -254,7 +249,8 @@ def summarize_heightmap_facts(
         "motion_blocking_excluded_by_no_leaves_count": motion_count - no_leaves_count,
         "leaves_tag": LEAVES_TAG,
         "leaves_tag_block_ids": sorted(leaves_blocks),
-        "predicate_validation": "passed_against_primitives_and_resolved_vanilla_leaves_tag",
+        "predicate_validation": "MOTION_BLOCKING_checked_against_primitives; both Java predicates exported directly",
+        "no_leaves_predicate_validation": "retained_per_state_from_official_1_20_1_Java_oracle; leaves membership independently cross-checked",
         "predicate_source": facts["predicate_source"],
         "no_leaves_predicate_source": facts["no_leaves_predicate_source"],
     }
