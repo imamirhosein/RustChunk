@@ -16,10 +16,10 @@ import subprocess
 import sys
 
 try:
-    from .decompile_minecraft_1_20_1 import download_libraries, java_major
+    from .decompile_minecraft_1_20_1 import download_libraries, java_major, load_official_version
     from .prepare_minecraft_1_20_1 import PrepareError, load_target_lock
 except ImportError:
-    from decompile_minecraft_1_20_1 import download_libraries, java_major
+    from decompile_minecraft_1_20_1 import download_libraries, java_major, load_official_version
     from prepare_minecraft_1_20_1 import PrepareError, load_target_lock
 
 
@@ -123,13 +123,7 @@ def export(args) -> dict:
         if not path.is_file() or path.stat().st_size == 0:
             raise PrepareError(f"Missing verified, remapped 1.20.1 input: {path}")
 
-    version_info = args.version_metadata
-    if version_info is None:
-        try:
-            from .decompile_minecraft_1_20_1 import load_official_version
-        except ImportError:
-            from decompile_minecraft_1_20_1 import load_official_version
-        version_info, _ = load_official_version()
+    version_info, _ = load_official_version()
 
     libraries = download_libraries(version_info, args.work_dir.resolve())
     if not libraries:
@@ -207,7 +201,6 @@ def main() -> int:
         "--work-dir", type=Path,
         default=Path(".local/minecraft/1.20.1-export"),
     )
-    parser.add_argument("--version-metadata", type=dict, default=None)
     args = parser.parse_args()
     if args.javac and Path(args.javac).is_dir():
         executable = "javac.exe" if os.name == "nt" else "javac"
