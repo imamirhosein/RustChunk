@@ -1021,3 +1021,23 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `horizon_world::nbt`; `Reader`; `Writer`; `Codec`; `packet!`; `frame`; packet modules; `chunk.rs`; `item.rs`; `entity_data.rs`; NBT quota and Java's FriendlyByteBuf/ByteBufCodecs.
 - Follow-up checks: compare each specialized codec's source behavior with 1.20.1 vanilla methods; inspect NBT read/write and packet decode strictness; add a 1.20.1 golden-byte corpus for boundary and malformed inputs.
 - Completion state: complete source/macro/test review; no codec tests or 1.20.1 byte comparison was run.
+
+
+### 45. `crates/horizon-protocol/src/frame.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `243a07c87fe0de3ba5bcbf405cc8ebe7faab2bfc`.
+- Size: 9,473 bytes; 254 lines; fetched as a complete file, including tests.
+- Coverage: lines 1–254, complete.
+- Purpose: implements Minecraft's VarInt21 packet-length framing and zlib compression/decompression above the negotiated threshold.
+- Protocol behavior:
+  - Maximum frame payload is `(1<<21)-1` bytes; the length prefix must fit in at most three VarInt bytes and zero-length frames are rejected.
+  - With compression disabled, frame content is the packet body. With compression enabled below threshold, the content begins with uncompressed-length VarInt 0 followed by raw body. At/above threshold it begins with the declared uncompressed length followed by zlib-compressed bytes.
+  - Maximum uncompressed packet size is 8,388,608 bytes. Decoder rejects negative lengths, uncompressed payloads below threshold, declared sizes above maximum, malformed zlib streams, wrong decoded length and streams that do not terminate cleanly.
+  - `Inflater` resets and reuses a zlib decompressor between frames. Noncanonical but legal VarInt encodings are read by the VarInt parser rather than rejected solely for width.
+- Tests read: uncompressed/compressed round trips, below/at-threshold boundary, malformed size and stream length, reusable inflater after invalid frames, and noncanonical prefix handling. Not executed.
+- RustChunk relevance: high. This is generic transport framing and compression infrastructure shared beneath Minecraft packet schemas.
+- 1.20.1 implications: packet framing, VarInt21 and zlib compression are core Java Edition wire mechanics that are likely reusable for 1.20.1, but the exact uncompressed-size cap, threshold semantics, handling of malformed/noncanonical prefixes and error behavior should be checked against the 1.20.1 NetworkCompression/PacketDecoder implementation. It does not solve differences in packet IDs or packet bodies.
+- Decision: **likely reusable with targeted parity verification**. Keep framing separate from version-specific packet codecs and add 1.20.1 boundary vectors before trusting interoperability.
+- Dependencies / cross-references: `buf::Reader`; `buf::write_varint`; `connection.rs`; `Inflater`; `flate2` zlib; packet-size limits.
+- Follow-up checks: verify Java 1.20.1 VarInt21FrameDecoder/LengthFieldPrepender and CompressionDecoder/Encoder edge behavior, including empty frames and declared-size limits; test actual compressed traffic with vanilla 1.20.1.
+- Completion state: complete source/test review; tests and actual packet framing/compression were not run.
