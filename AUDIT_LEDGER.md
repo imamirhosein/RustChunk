@@ -2047,3 +2047,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: winit KeyCode/MouseButton and KeyEvent; horizon_client_core::key_display; SDL/translation key names; Options.keyMappings ordering; screen container hotbar checks; debug_keys physical key handling.
 - Follow-up checks: مقایسه exact mapping list با 1.20.1; تست keyboard layouts, unknown key persistence, mouse Other IDs, duplicate bindings, focus loss and Android touch action routing.
 - Completion state: complete source review; tests/build not executed.
+
+
+
+### 87. crates/horizon-client-input/src/keymapping.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 5f4388d90d1524b3a5923a2e45b2f2d5576b0b82.
+- Size: 11,388 bytes; 308 lines; complete file fetched.
+- Coverage: lines 1–308, complete.
+- Purpose: state runtime برای key mappingهای held/click/toggle و رفتار آن‌ها هنگام باز و بسته شدن screen، key repeat، controller toggle و respawn.
+- Implementation / logic: KeyState وضعیت is_down، click_count، release-by-screen، toggle option، keyboard origin و pad_toggled را نگه می‌دارد. set_down در حالت ToggleKeyMapping با option فعال، press را به flip تبدیل می‌کند و release عادی را نادیده می‌گیرد؛ در حالت hold مقدار مستقیم است. click/consume_click صف edgeهای کلیک را مدیریت می‌کنند. should_set_on_ingame_focus و release/reset/restore چرخه screen را مدل می‌کنند. ToggleKeys چهار slot برای sneak، sprint، attack و use دارد و key actionها Press/Repeat/Release، mouse button، pad toggle، screen open/close و respawn را مدیریت می‌کند.
+- Findings: screen-open در این model ورودی press را block می‌کند اما release را می‌پذیرد تا کلید stuck نماند. Toggle state با shouldRestore و keyboard source کنترل می‌شود؛ pad_toggled یک extension Horizon است که toggle-sneak controller را حتی با option خاموش به شکل toggle رفتار می‌دهد. ToggleKeys::key برای Repeat نیز click count اضافه می‌کند، پس باید رفتار winit repeat با vanilla event handling هم‌تراز باشد. click_count از نوع i32 و بدون saturation است و فشار event زیاد می‌تواند overflow ایجاد کند. Tests screen lifecycle، toggle/hold، pad toggle و respawn را مدل می‌کنند؛ اجرا نشده‌اند.
+- RustChunk relevance: مهم برای کنترل‌های لمسی، gamepad و keyboard؛ مدل state از رها نشدن sneak/use/attack هنگام باز شدن منو جلوگیری می‌کند. می‌توان physical events را به key-action state تبدیل و gameplay layer را از hardware جدا نگه داشت.
+- 1.20.1 implications: vanilla 1.20.1 ToggleKeyMapping و KeyMapping behavior باید با سورس هدف تطبیق داده شود؛ چهار mapping و pad-specific toggle extension را به‌عنوان حقیقت نسخه 1.20.1 فرض نکن. در Android باید pointer cancel/focus loss و controller disconnect نیز به Release/cleanup ترجمه شوند.
+- Decision: **state machine پایه قابل اقتباس؛ pad toggle و event/screen semantics باید با 1.20.1/Android implementation تطبیق داده شوند**.
+- Dependencies / cross-references: Options toggleKeySneak/toggleKeySprint/toggleKeyAttack/toggleKeyUse; KeyMapping and ToggleKeyMapping; input event dispatch; winit keyboard/mouse events; controller toggle-sneak extension.
+- Follow-up checks: تطبیق دقیق 1.20.1 KeyMapping/ToggleKeyMapping; بررسی repeat semantics، focus loss، pointer cancel، controller disconnect و click counter bounds.
+- Completion state: complete source review; no tests or build were run.
