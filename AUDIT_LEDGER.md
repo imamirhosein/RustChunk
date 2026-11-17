@@ -1252,3 +1252,26 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `component` table; `Component`; `Stack`; `Slot`; `DelimitedSlot`; `Template`; `HashedSlot`; `WirePatch`; `custom.rs`; `hash.rs`; `skip.rs`; `buf`; `registry`; `packets/play.rs` item-bearing packets; `packets/recipes.rs`; `entity_data.rs`.
 - Follow-up checks: inspect `hash.rs`, `skip.rs`, `custom.rs` and Play packet consumers. Then source 1.20.1 FriendlyByteBuf/ItemStack read/write semantics and implement byte-golden tests for empty/ordinary/enchanted/damaged/named/potion/book/container/map/banner/shulker stacks; verify container clicks and creative slot packets with vanilla 1.20.1.
 - Completion state: complete source and unit-test review; no item codec tests, 1.20.1 serialization, network interaction or game session was run.
+
+
+### 54. `crates/horizon-protocol/src/item/custom.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `1ae7bd8166a692f4ccbefd1d9e2ec0d76ab4d06b`.
+- Size: 6,301 bytes; 189 lines; fetched as a complete file.
+- Coverage: lines 1–189, complete.
+- Purpose: internal extension for registering and negotiating custom namespaced data-component types in the modern item data-component system.
+- Implementation:
+  - A process-wide `OnceLock` stores a starting numeric ID and sorted custom component names. `install` verifies a nonnegative/non-overflowing ID range, validates namespaced identifiers and forbids the `minecraft` namespace, sorts names, rejects duplicates and can run only once.
+  - Provides numeric ID↔name lookup and enumerates installed custom component entries.
+  - `validate` rejects NBT End, enforces network NBT quota/parse behavior, and checks that a value survives disk-NBT save/reload without normalization changes (including NaN/negative-zero canonicalization).
+  - `permitted` recursively scans a Stack's added/removed component IDs, nested stack lists, tooltip hidden IDs and selected raw nested-stack component payloads. It disallows custom components unless the connection has negotiated them; if no custom types are installed it allows ordinary stacks.
+  - Documentation explicitly says this is an internal transport seam, not a native-mod API.
+- RustChunk relevance: low for the active 1.20.1 milestone. It shows how Starling extends modern component registries without colliding with vanilla IDs, but the entire feature assumes the newer data-component item model.
+- 1.20.1 implications:
+  - Minecraft 1.20.1 predates item data components and this 26.3 custom component registry mechanism. There is no equivalent component-ID namespace to install in its normal vanilla item-stack wire format.
+  - The recursive scanner's assumptions (`Stack.added`, `Stack.removed`, `Template`, component constants, TooltipDisplay and modern nested component payloads) are inseparable from the modern `item.rs` model. It cannot be adapted by changing `first` or names.
+  - NBT canonicalization checks and strict identifier validation are general safety concepts that may be useful elsewhere, but the custom data-component negotiation itself should not be inserted into a vanilla 1.20.1 protocol flow.
+- Decision: **unnecessary for the current 1.20.1 vanilla protocol milestone**. Defer or omit this feature until a future item extension design exists; reuse only generic NBT validation ideas if required by a separate 1.20.1 feature.
+- Dependencies / cross-references: `item.rs` component registry and Stack model; `Component::Stacks`; `Template`; `horizon_world::identifier`; network NBT APIs and `NBT_QUOTA`; registry `SyncedNames`; negotiation state.
+- Follow-up checks: inspect whether any current client startup path unconditionally calls `custom::install`, and ensure the future 1.20.1 branch does not require component negotiation or custom-component metadata to complete login or item decoding.
+- Completion state: complete source review; no custom component registration, NBT validation, negotiation or protocol test was run.
