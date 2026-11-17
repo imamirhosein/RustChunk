@@ -919,3 +919,24 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Native Rust mods, Java mod loaders and Forge integration are not blockers for the first 1.20.1 milestone. Their relevance can be reassessed only after the base 1.20.1 client is working.
 - From this point, classify each file by whether it is reusable, version-specific, requires rewrite, or unnecessary for the **Rust-native 1.20.1 port**. Prioritize the observed current blocker: `horizon-prepare/src/artifacts.rs` deliberately rejects manifests with client/server mappings; then audit the protocol, datagen/exporters, data schemas, engine behavior and platform/runtime integration.
 
+
+
+### 41. `crates/horizon-protocol/src/lib.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `c0fc01d304ed13ce5541b6cc2415c3c33deec2a5`.
+- Size: 2,546 bytes; 85 lines; fetched as a complete file.
+- Coverage: lines 1–85, complete.
+- Purpose: crate root and public API surface for the native Minecraft Java Edition protocol implementation.
+- Findings:
+  - Describes itself as the protocol implementation for whichever version is pinned in `horizon_core::version`; the package manifest and current generated constants resolve that to Java 26.3/protocol 777.
+  - Exposes primitive codecs, packet framing, compression/encryption, typed packet modules and auxiliary synchronization/mod transport functionality. Client and future server share the crate.
+  - Denies unsafe Rust crate-wide, except the dedicated ARMv8 AES-intrinsic module's local allowance.
+  - Defines exactly five connection states: Handshake, Status, Login, Configuration and Play; directions are Clientbound and Serverbound.
+  - `PROTOCOL_VERSION` aliases `horizon_core::version::PROTOCOL_VERSION`; `GAME_VERSION` aliases the core vanilla version. The protocol crate therefore inherits the core version pin rather than owning an independent version selection.
+  - Defines one string-backed protocol error with explicit timeout and end-of-stream classifications and conversion from I/O errors.
+- RustChunk relevance: critical; this is the top-level network API shared by the client. It shows a central design dependency on one global `horizon-core` version, while older-server compatibility is layered separately.
+- 1.20.1 implications: simply changing core version constants would cause this crate to advertise a new protocol number while leaving packet definitions and all supporting schemas at 26.3. The crate root exposes modules for registries, items, entity data, chunks and packets which must be independently version-reconciled; protocol-state availability and transitions also need verification against 1.20.1.
+- Decision: **adaptable** as the central protocol crate structure, shared state/direction/error model and safe Rust module boundaries; **substantial version-specific adaptation required** across nearly every exposed module. Keep version ownership centralized only if all modules select coherent 1.20.1 schemas.
+- Dependencies / cross-references: `horizon-core::version`; `adapter`; `attachment_sync`; `buf`; `chunk`; `connection`; `crypto`; `entity_data`; `frame`; `ids`; `item`; `mod_list`; `mod_net`; `packets`; `registry`; `resolver`; `rsa`; `secure_chat`; `servers`; `text`.
+- Follow-up checks: inspect each public module, especially connection state transitions, packet payload codecs, registry sync, chunk data, item wire encoding, entity metadata, encryption and server-list/status handling; validate against 1.20.1 protocol data.
+- Completion state: complete source review; no build, test or live protocol exchange was run.
