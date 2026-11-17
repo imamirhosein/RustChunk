@@ -59,6 +59,7 @@ No findings are promoted to confirmed solely from the old conversational summari
 | CAND-005 | Other previously mentioned files | Unverified | Reconstruct evidence before making claims |
 | CAND-006 | `integrated.rs` / `world_loading.rs`: save folder is joined to `current_dir()/saves` before any visible component validation; `WorldRequest::new` also directly joins it | Potential, unverified | Trace all `open_integrated` callers and world-list folder provenance; inspect path validation at the true boundary before classifying |
 | CAND-007 | `interactions.rs`: remote metadata floats for hitbox width/height are accepted without finite/nonnegative validation | Potential, unverified | Trace packet decoder and `ray_box`/AABB behavior for NaN, infinity, negative, and extreme values |
+| CAND-008 | `jigsaw_blocks.rs`: packet-supplied `levels` is forwarded as `JigsawQuery.max_depth` without a local bound | Potential, unverified | Trace protocol type, `VanillaTerrain::jigsaw_pieces`, and JigsawConfig depth/placement caps; determine whether a malicious permitted guest can force excessive generation |
 
 ## Session log
 
@@ -214,4 +215,13 @@ Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do no
 - Entire file fetched and reviewed: lines 1–131.
 - Total: 131 lines. Blob SHA: `52072f7aaca615cfb8f699fb808cb751d17766a0`.
 - Result: no confirmed defect found in the reviewed particle/model selection, remote equipment-break handling, or break-sound resolution paths.
+- No source code changed; only the audit ledger was updated. No build/test claimed.
+
+
+### 2026-11-17 — file #7: jigsaw_blocks.rs
+
+- Source: pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Entire file fetched and reviewed: lines 1–142.
+- Total: 142 lines. Blob SHA: `4085e80887fb73f5bcf3095dae495a2285d13b7e`.
+- Result: permission checks require creative mode and permission level 2 before guest jigsaw edits/generation. Packet `levels` is passed to the jigsaw query without a local clamp; recorded as CAND-008 pending review of downstream caps and protocol constraints. No confirmed issue yet.
 - No source code changed; only the audit ledger was updated. No build/test claimed.
