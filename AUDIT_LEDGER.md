@@ -1083,3 +1083,28 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `ids::status`; `buf::Str`; `buf::Long`; `packets::Empty`; status response builder; `Connection` and server list ping code.
 - Follow-up checks: inspect status packet construction/server-list code and protocol version reporting; compare JSON and status/ping flow with a vanilla 1.20.1 server.
 - Completion state: complete source/test review; no status ping or 1.20.1 server connection was run.
+
+
+### 48. `crates/horizon-protocol/src/packets/configuration.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `48976429f92dd61b7c0c5a85377e2dec69be1f71`.
+- Size: 13,382 bytes; 354 lines; fetched as a complete file, including all tests.
+- Coverage: lines 1–354, complete.
+- Purpose: defines packet codecs for the modern Minecraft Configuration state: registry synchronization, tags/features, custom payloads, keepalive/ping, resource packs, cookies, known packs, transfer, server links and dialogs/code-of-conduct; also defines client-information and response packets.
+- Main packet structures:
+  - Cookie request/response, custom payload, NBT disconnect, keepalive, integer ping/pong, registry entries with optional NBT and registry data lists.
+  - Resource-pack pop/push with UUID, URL/hash/required flag/optional NBT prompt; cookies; transfer host/port; enabled features; registry tags with VarInt ID arrays; known-pack selection.
+  - Later configuration features include code-of-conduct text, server links (known ID or custom NBT label), show-dialog NBT and custom dialog click action with a length-prefixed NBT payload capped at 65,536 bytes.
+  - `ClientInformation` has language, view distance, chat visibility/colors, skin part bitfield, main-hand, text filtering, server-listing permission and particle status. Clientbound/serverbound enums route through the 26.3 configuration IDs.
+- Tests read: all packet round trips, main-hand values, tag/registry optional data, known packs, links, dialogs and click-action payload's exact encoded shape (`None` emits a length followed by End tag). Tests not executed.
+- RustChunk relevance: critical as evidence of substantial modern protocol schema, but the file as a whole is not the right state/module layout for Minecraft 1.20.1.
+- 1.20.1 implications:
+  - Minecraft Java 1.20.1 does not have the separate post-login Configuration connection state introduced in later protocol generations. This module's state machine placement is therefore structurally incompatible with the target.
+  - Modern cookies, known-pack negotiation, update-enabled-features, transfer, dialogs, custom click actions, code-of-conduct, server links and post-26.x configuration packet set must not be sent to a 1.20.1 server.
+  - Registry data, tags, client information, resource-pack requests, custom payloads and keepalives may still be needed in 1.20.1, but several are carried in different connection phases and can have different packet IDs and body shapes. For example, dimension/biome registry data belongs to older login/join-game-era structures rather than this modern generic Configuration registry synchronization packet.
+  - Current `ClientInformation` includes modern fields (notably listing permission and particle status) and uses newer codec assumptions; its 1.20.1 predecessor must be reconstructed field-by-field from that version's vanilla client/server classes.
+  - NBT, identifiers, lists and UUID primitive codecs can be reused selectively, but all packet structs/enums and their routing should be versioned separately.
+- Decision: **do not reuse this module as a 1.20.1 Configuration state**. Extract only genuinely shared packet/data structures and primitive codecs; design 1.20.1 Status/Login/Play packets and move any compatible configuration-like messages into their historically correct state.
+- Dependencies / cross-references: `ids::configuration`; `buf` codecs; `Tag`; `packets::Empty`; `packet!`/`packet_enum!`; `registry.rs`; `item.rs`; `connection.rs`; `State::Configuration`.
+- Follow-up checks: inspect current login and play codecs, registry/chunk login payloads and state-transition handling; compare exact 1.20.1 clientbound Login/Join Game, Update Tags, Client Settings, Resource Pack, Keep Alive and Plugin Message structures against vanilla 1.20.1.
+- Completion state: complete source/test review; no round-trip tests or 1.20.1 packet capture/interoperability run was performed.
