@@ -1484,3 +1484,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Minecraft version manifest, client/server jars, Vineflower, jadx-headless-mcp, Java runtime manifests and checksums.
 - Follow-up checks: دریافت manifest رسمی 1.20.1 و hashها؛ تعیین ابزار decompile/export و JDK لازم؛ ساخت lock مستقل RustChunk.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 12. `roadmap/starling.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `a3742a8f994dd266355428b1621747f642d36e76`.
+- Size: 12,976 bytes; 188 lines; full source fetched.
+- Coverage: lines 1–188, complete.
+- Purpose: شرح وضعیت کنونی، کارهای بعدی و مسیرهای توسعه Starling به عنوان پورت Android از Horizon.
+- Implementation / logic: کارها را Now/Next/Later دسته‌بندی می‌کند: نصب و sign-in، آماده‌سازی فایل‌ها روی گوشی، keyboard/IME، updates، touch controls، skins، shader packs، plugin-server visuals، تنظیمات موبایل، secure chat، gamepad و LAN. وضعیت تکمیل‌شده و باقی‌مانده با جزئیات implementation و نسخه‌ها ذکر شده است.
+- Findings: Starling پورت Android از Horizon 26.3 است و از فایل‌های رسمی 26.3 و Java 25 برای آماده‌سازی روی دستگاه استفاده می‌کند. برخی قابلیت‌ها کامل نیستند (secure chat برای سرورهای enforce کننده، کنترلر فیزیکی، LAN/invites و تعدادی packet/visual behavior). عددهای FPS و زمان setup گزارش شرایط خاص‌اند، نه تضمین.
+- RustChunk relevance: برای فهم دامنه مهندسی Android، UX، lifecycle، ورودی لمسی، shader و اولویت multiplayer مفید است؛ roadmap مستندات وضعیت است، نه کد قابل اجرا.
+- 1.20.1 implications: برای RustChunk باید roadmap جداگانه بر اساس 1.20.1 تعریف شود. هر مورد باید به subsystem و acceptance test وصل باشد؛ قابلیت‌های Starling را نباید فرضاً در 1.20.1 موجود دانست. هدف فعلی اجرای پایه Java 1.20.1 است؛ Forge deferred است.
+- Decision: **reference-only؛ roadmap نسخه‌محور و غیرقابل انتقال مستقیم**.
+- Dependencies / cross-references: Starling Android account/setup, touch controls, shader pack, native mods, diagnostics and Horizon parity documentation.
+- Follow-up checks: ساخت roadmap RustChunk پس از ممیزی هسته؛ معیارهای boot، world load، render، controls و vanilla server join ثبت شود.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
