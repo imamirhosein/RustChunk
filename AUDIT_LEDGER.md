@@ -1275,3 +1275,27 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `item.rs` component registry and Stack model; `Component::Stacks`; `Template`; `horizon_world::identifier`; network NBT APIs and `NBT_QUOTA`; registry `SyncedNames`; negotiation state.
 - Follow-up checks: inspect whether any current client startup path unconditionally calls `custom::install`, and ensure the future 1.20.1 branch does not require component negotiation or custom-component metadata to complete login or item decoding.
 - Completion state: complete source review; no custom component registration, NBT validation, negotiation or protocol test was run.
+
+
+### 55. `crates/horizon-protocol/src/packets/recipes.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `dcbe5ffa0e1e81369a5c9e163eb0e24676a6dd9e`.
+- Size: 19,442 bytes; 634 lines; fetched in consecutive ranges 1–400 and 401–634.
+- Coverage: lines 1–634, complete; both ranges returned the same blob SHA; tests read.
+- Purpose: codecs for the modern recipe book display system, including recursive slot displays, recipe display variants, recipe book add/remove/settings, ghost recipes and place-recipe requests.
+- Implementation:
+  - `HolderSet` represents either a named registry tag or a list of item registry IDs.
+  - `SlotDisplay` models empty/fuel/potion/component-filtered/item/item-stack/tag/dyed/smithing-trim/remainder/composite display nodes, with a nesting guard of 32 levels.
+  - `RecipeDisplay` has five variants: shapeless, shaped, furnace, stonecutter and smithing. Shaped display validates that width×height equals ingredient count.
+  - Recipe book add entries carry display ID, display payload, group, recipe-book category registry ID, optional ingredient requirements and flags. Separate codecs encode recipe display removals, four recipe-book (open/filtering) states, ghost recipe display and serverbound place-recipe (container/display ID/use-max).
+  - The module's header explicitly states it encodes the 26.3 `minecraft:recipe_display` and `minecraft:slot_display` registries in their current ID order.
+- Tests read: round trip for shaped display, tag and item stack, nested smithing display, trimming, component-filter and composite structures; not executed.
+- RustChunk relevance: moderate for recipe UI/network planning, but high version mismatch. The Rust game may still need a recipe-book UI, yet these are modern protocol-specific display payloads, not the historic recipe representation.
+- 1.20.1 implications:
+  - The current wire model depends on later `recipe_display` and `slot_display` registries, their IDs, and modern display-specific variants such as `OnlyWithComponent`, `WithRemainder`, and richer registry-holder trim representations. They cannot be sent to 1.20.1.
+  - The 1.20.1 recipe-book packet format uses the older recipe book packet model and recipe identifiers/collections rather than this modern display tree. Its add/remove/settings/ghost/place semantics must be reconstructed from the target version's vanilla packet classes.
+  - `HolderSet`, generic recursive display nodes and primitive codecs may be useful domain structures for a future renderer/recipe UI, but the current `Stack` reference itself uses the modern data-component item format; it must not leak into legacy item wire encoding.
+- Decision: **rewrite the recipe networking codecs for 1.20.1**. Retain only generic codec patterns and possibly recipe UI concepts after translating them into the older recipe model. Treat current recipe display/slot display IDs as unusable target-version data.
+- Dependencies / cross-references: `item::{Stack,Template}`; `buf::{Codec,Reader,Writer}`; `horizon_world::nbt::Tag`; `packets/play.rs` recipe book variants; `ids::play`; recipe and item registries; `recipe_display`/`slot_display` data.
+- Follow-up checks: inspect 1.20.1 serverbound/clientbound recipe-book packet classes and serializers; trace recipe definitions, ingredient encoding and recipe identifiers; implement and compare legacy recipe-book add/remove/settings/ghost/place packets against a vanilla 1.20.1 oracle.
+- Completion state: complete source/test review; no tests, packet traces or 1.20.1 recipe-book interoperability run was performed.
