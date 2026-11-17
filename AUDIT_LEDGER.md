@@ -909,3 +909,13 @@
 - Dependencies / cross-references: `ids::login`; `buf` codecs; `crypto`; `packets::Empty`; login connection state machine; encryption/compression negotiation; authentication/offline UUID generation; `adapter.rs`.
 - Follow-up checks: inspect `connection.rs`, crypto and status packets; verify the precise 1.20.1 Login Start, Encryption Request/Response, Plugin Request/Response, Set Compression, Login Success and Disconnect packet structures and phase transition against a real 1.20.1 server.
 - Completion state: complete source and test review; no packet test, login, encryption exchange, compression negotiation or server interoperability run was performed.
+
+
+## Scope correction — 2026-11-17
+The active RustChunk target is Minecraft Java Edition **1.20.1 implemented through the Rust-native Starling/Horizon architecture**. Forge is explicitly deferred and is not an acceptance requirement for the current phase.
+- The first batch's older Forge-oriented wording and any conclusion framed as suitability/unsuitability for Forge 1.20.1 must not be used as the current project decision. Those entries remain in the audit history but are superseded for scope purposes by this correction.
+- The current job is to determine how to adapt the 26.3-pinned Rust game implementation so it implements and runs the 1.20.1 Java Edition rules, data, resource formats, world behavior and network protocol. It is not to run the Java Minecraft client or provide a Forge runtime in this phase.
+- Java code/JARs may still be used locally as version-matched research/oracle/export tooling; that does not change the goal into a JVM game runtime. The Rust engine is the implementation under review.
+- Native Rust mods, Java mod loaders and Forge integration are not blockers for the first 1.20.1 milestone. Their relevance can be reassessed only after the base 1.20.1 client is working.
+- From this point, classify each file by whether it is reusable, version-specific, requires rewrite, or unnecessary for the **Rust-native 1.20.1 port**. Prioritize the observed current blocker: `horizon-prepare/src/artifacts.rs` deliberately rejects manifests with client/server mappings; then audit the protocol, datagen/exporters, data schemas, engine behavior and platform/runtime integration.
+
