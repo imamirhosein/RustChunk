@@ -1676,3 +1676,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon:mod_list, protocol Reader/Writer, game/mods.rs LOCAL setter, configuration custom payload, docs/mods.md and content identity checks.
 - Follow-up checks: بعداً مرور کد server/client dispatch این channel و content_identity.rs؛ در نسخه 1.20.1 ابتدا Configuration packet IDs/handshake vanilla را جدا تکمیل کن.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 64. `crates/horizon-protocol/src/mod_net.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `75ba8b153b477f80b18d9b5e9943fafd8584c2ce`.
+- Size: 4,833 bytes; 148 lines; full source fetched.
+- Coverage: lines 1–148, complete.
+- Purpose: Codec پیام‌های دلخواه میان نیمه server و client یک Horizon native mod در Play state.
+- Implementation / logic: کانال اصلی horizon:mod_net است و payload شامل string channel به شکل mod_id:name و byte array داده است. Channel id و namespace بازی minecraft/horizon ممنوع‌اند؛ mod id و name هرکدام تا 64 byte و با character allowlist متفاوت validate می‌شوند. data تا 30,000 byte است؛ encode channel و cap را پیش از serialization چک می‌کند و decoder channel، byte array و trailing bytes را کنترل می‌کند. توضیح بالای ماژول می‌گوید server در configuration با پیام خالی پشتیبانی را اعلام می‌کند و client پیام‌ها را در Play می‌فرستد.
+- Findings: این لایه فقط شکل wire و channel syntax را اعتبارسنجی می‌کند؛ authorization، rate limiting (32 msg/tick per player mentioned in docs) و بررسی اینکه mod واقعاً نصب است در caller/dispatcher قرار دارند. `MAX_DATA=30,000` از سقف payload 32,767 پایین‌تر تنظیم شده. Channel split_once باعث رد colon اضافه در name از طریق character allowlist می‌شود. Tests round-trip، channel allowlist، max data و trailing bytes را پوشش می‌دهند؛ اجرا نشده‌اند.
+- RustChunk relevance: برای آینده پیام‌های بین ماژول‌های client/server قابل مطالعه است، ولی یک extension channel مختص Horizon است، نه Minecraft Java vanilla.
+- 1.20.1 implications: Minecraft 1.20.1 custom payload packet دارد، اما این کانال `horizon:mod_net` و framing مربوطه بخشی از protocol رسمی بازی نیست. در core client، custom payload IDs و registration باید مطابق protocol 1.20.1 باشند؛ فعلاً این channel را حذف/غیرفعال نگه دار تا اتصال vanilla بی‌دلیل دستکاری نشود.
+- Decision: **unnecessary برای فاز پایه؛ codec design و strict validation قابل اقتباس برای پروتکل extension آینده**.
+- Dependencies / cross-references: protocol Reader/Writer; custom payload packet schemas in packets/configuration.rs and packets/play.rs; native mod net hooks; docs/native-mods.md API 40.
+- Follow-up checks: در ممیزی net integration بعداً caller-side rate limit, mod identity and server/client direction enforcement بررسی شود.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
