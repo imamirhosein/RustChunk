@@ -86,17 +86,17 @@ jobs:
             --prepared-dir .local/minecraft/1.20.1-remap \
             --work-dir .local/minecraft/1.20.1-export
 
+      - name: Export 1.20.1 vanilla block tags from verified client/server JARs
+        run: |
+          python tools/export_minecraft_1_20_1_block_tags.py \
+            --prepared-dir .local/minecraft/1.20.1-remap \
+            --work-dir .local/minecraft/1.20.1-export
+
       - name: Export exact 1.20.1 heightmap predicates for every block state
         run: |
           python tools/export_minecraft_1_20_1_heightmap_facts.py \
             --java "$JAVA_HOME_17_X64/bin/java" \
             --javac "$JAVA_HOME_17_X64/bin/javac" \
-            --prepared-dir .local/minecraft/1.20.1-remap \
-            --work-dir .local/minecraft/1.20.1-export
-
-      - name: Export 1.20.1 vanilla block tags from verified client/server JARs
-        run: |
-          python tools/export_minecraft_1_20_1_block_tags.py \
             --prepared-dir .local/minecraft/1.20.1-remap \
             --work-dir .local/minecraft/1.20.1-export
 
