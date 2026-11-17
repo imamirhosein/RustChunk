@@ -1352,3 +1352,33 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `crypto.rs`; `secure_chat.rs`; `packets/login.rs`; `packets/play.rs` chat/session packets; `rsa::SignatureHash`; `getrandom`; SHA-1/SHA-256; `Cfb8`; service-signed profile public keys.
 - Follow-up checks: inspect `secure_chat.rs` and authentication call sites; determine 1.20.1's exact signed-chat/profile-key requirements, key sizes and trust chain; review private-key timing behavior, malformed DER handling and maximum key lengths; consider replacing private operations with a vetted crypto crate.
 - Completion state: complete source/test review; no RSA key generation, private operation, login exchange, signature verification test or security assessment was executed.
+
+
+### 58. `crates/horizon-protocol/src/secure_chat.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `1c54eab44c70e4f1467e855d089efef51c8a4038`.
+- Size: 41,559 bytes; 1,076 lines; fetched in consecutive ranges 1–400, 401–800 and 801–1,076.
+- Coverage: lines 1–1,076, complete; all three ranges returned the same blob SHA; all validation, chain, last-seen and cache tests read.
+- Purpose: implements modern secure-chat profile-key validation, message-signature payload construction, per-player signed message chains, incoming message validation, last-seen acknowledgement tracking, signature cache compression and local chat signing.
+- Implementation:
+  - A profile key contains expiry, DER public key and Mojang services signature. `signed_by` validates SHA1withRSA over profile UUID + expiry + public-key bytes; expiry and an 8-hour grace period are modeled separately.
+  - `ChatSession::validate` parses the X.509 key and checks service signature. `data()` builds the modern player-info session tuple.
+  - `signed_payload` constructs a versioned binary message payload from a version marker, sender UUID, session UUID, chain index, salt, timestamp in epoch seconds, UTF-8 content length/content and last-seen signatures.
+  - `Chain` verifies incoming signatures using SHA256withRSA, validates sequence/order/timestamp and expires or breaks the chain on invalid content/signature/order. Unsigned fallback depends on secure-chat enforcement.
+  - `MessageValidator` supports accept-unsigned, reject-all and key-based modes; key-based validation checks expiry/grace, message signature and that a message repeats the last accepted one or descends from the same sender/session chain.
+  - Java `Arrays.hashCode(byte[])` and `LastSeenMessages.computeChecksum` behavior are reproduced. `LastSeenValidator` tracks pending messages and checks the 20-bit window, offset, acknowledgement validity and optional checksum.
+  - `SignatureCache` maintains 128 recent signatures, packs known signatures by cache index and otherwise includes the full 256-byte signature.
+  - `Encoder` signs the next local message chain link with SHA256withRSA and emits a fixed-size signature when the private key can produce one.
+  - `LastSeenTracker` tracks the client's last 20 accepted/hidden/deleted messages and emits acknowledgement bitsets, offsets and checksums.
+- Tests read: payload field byte layout and timestamp flooring; unsigned/enforced chain handling; checksum behavior; window bounds and invalid acknowledgements; packed signature cache; signing/decoding interop; last-seen tracker and validator agreement including holes; known external service/chat signature vectors; key expiry/grace and broken-chain behavior. Not executed.
+- RustChunk relevance: high for an eventual normal 1.20.1 multiplayer experience, since secure chat and profile public keys existed before 1.20.1. However, this code is a modern 26.3 implementation and is not a wire-compatible 1.20.1 chat subsystem without adaptation.
+- 1.20.1 implications:
+  - RSA/SHA1 profile-key trust validation, SHA256withRSA message signature verification, 256-byte signatures and the general principle of tracking last-seen signed messages are potentially relevant to 1.20.1.
+  - The current signed payload explicitly includes a modern version marker, sender/session UUIDs and indexed chain link, while the Play packets in this tree carry modern chat/session updates, last-seen update structure, chat acknowledgement and signed argument data. The 1.20.1 message signature payload and packet sequence must be derived from that version's vanilla code; the current payload bytes cannot simply be reused.
+  - Current LastSeen update is `(offset, 3-byte 20-bit acknowledged mask, checksum)` and signature caching uses a modern packed format. Validate the exact 1.20.1 representation/window semantics before sharing these structures.
+  - Current Login/Play/session packet structures for initializing chat keys differ across protocol generations. The key service payload may retain a common shape, but the session registration and message-chain lifecycle must be version-specific.
+  - The 5-minute server message expiry and 8-hour key expiry grace are hardcoded from the current vanilla implementation; they must be checked against 1.20.1's corresponding constants and not copied without verification.
+- Decision: **adapt selected cryptographic primitives and abstract concepts**, but **rewrite 1.20.1 signed payload, login/player-info key exchange, chain protocol, last-seen updates and packet integration** from target-version vanilla. Keep modern 26.3 state machine isolated from the 1.20.1 path.
+- Dependencies / cross-references: `rsa::{RsaPrivateKey,RsaPublicKey,SignatureHash}`; `packets::play::LastSeenUpdate`; modern Login/Play chat packets; profile public key/session; chat message signing; `crypto.rs`.
+- Follow-up checks: inspect `packets/play.rs` chat structs and `packets/login.rs` against exact 1.20.1 source; establish profile key signature payload, message signing payload, session/index behavior, last-seen window, acknowledgement and enforcement modes using a 1.20.1 oracle/server.
+- Completion state: complete source/test review; no signature validation, chat signing, secure-chat session, or vanilla 1.20.1 message exchange was run.
