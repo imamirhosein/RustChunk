@@ -1057,7 +1057,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - `Empty` is a zero-field packet codec. Test-only `round_trip` reads the ID prefix and validates typed round-trip behavior.
 - RustChunk relevance: high. This macro is the central mechanism joining packet IDs to body codecs; its version correctness depends on the IDs and packet structs registered in each state.
 - 1.20.1 implications:
-  - Macro architecture is version-neutral, but the current module layout assumes a separate Configuration state and modern packet variants. Minecraft 1.20.1's connection phase model needs to be confirmed before retaining this state set.
+  - Macro architecture is version-neutral, but the current module layout assumes a separate Configuration state and modern packet variants. Minecraft Java 1.20.1 has no separate post-login Configuration connection state; the target uses Handshake, Status, Login and Play, so this module's Configuration enum must be excluded and its compatible packets relocated to their 1.20.1 phases.
   - The unknown fallback is useful for resilience, but unknown packets cannot be semantically processed, and passing them through does not guarantee compatibility with protocol feature negotiation or required packet handling.
   - Strict trailing-byte rejection should be tested against actual 1.20.1 serializers/decoders to ensure no valid packet uses padding or intentionally ignored trailing fields.
 - Decision: **adaptable** as typed-packet macro and unknown-packet representation; **regenerate/reorganize state-specific enums and IDs** for 1.20.1. Preserve strict decode guarantees only where the reference client does so.
@@ -1922,7 +1922,7 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `cd942aa7e095bc545b9100da5f933f54e45c2198`.
 - Size: 17,547 bytes; 473 lines; full source fetched.
-- Coverage: lines 1–400 and 401–474, complete.
+- Coverage: lines 1–400 and 401–473, complete.
 - Purpose: تصمیم‌گیری درباره retry اتصال multiplayer قطع‌شده و برنامه‌ریزی backoff، با جلوگیری از retry برای kick/ban/refusalهای دائمی.
 - Implementation / logic: Tracker آدرس، player name، LAN flag، شمار تلاش‌ها و زمان join موفق را نگه می‌دارد. پنج retry با تأخیرهای 5/10/20/40/60 ثانیه دارد؛ اتصال پایدار حداقل 60 ثانیه شمارنده را reset می‌کند. `allowed` ابتدا disconnect translation key را با prefix table دسته‌بندی می‌کند؛ در نبود key به English keyword scan متوسل می‌شود. Kicks, bans, whitelist, incompatible/outdated, invalid session, online mode refusals و multiplayer disabled retry نمی‌شوند؛ timeout, shutdown, full server, slow login و auth server downtime retry می‌شوند. Retry همان آدرس، نام و نوع LAN را حفظ می‌کند.
 - Findings: جداسازی status key از متن localized صحیح‌تر است چون server messages می‌تواند به زبان‌های مختلف resolve شود؛ متن fallback فقط برای literal/OS errors است و ممکن است برای زبان‌های غیرانگلیسی کافی نباشد. Classification keys شامل Horizon-specific keys و auth errors است، پس باید با کلیدهای دقیق target version sync شود. آدرس عوض شود attempts reset می‌شود؛ kick یا exhausted attempts tracker را reset و address را فراموش می‌کند. Tests classification/localized keys/backoff/stable session/address reset را دارند؛ اجرا نشده‌اند.
@@ -1938,7 +1938,7 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `61695a6de4b0db492d100ad8d44f52ce9acb0421`.
 - Size: 21,263 bytes; 644 lines; full source fetched.
-- Coverage: lines 1–400 and 401–645, complete.
+- Coverage: lines 1–400 and 401–644, complete.
 - Purpose: مدیریت prompt دریافت resource pack از server، download status، فعال‌سازی در بالای resource packs کاربر، reload منابع، حذف و ارسال status پاسخ به server.
 - Implementation / logic: مدل state دو بخشی برای Download (Requested/Pending/Done) و Activation (Inactive/Pending/Active) و Removal reason دارد. Prompt سه حالته Pending/Allowed/Declined از تنظیم `servers.dat acceptTextures` می‌آید. `push` و `push_local` pack را با UUID ثبت و pack قبلی با همان ID را replace می‌کند. `tick` درخواست downloadها را صادر می‌کند و فقط پس از اتمام downloadها reload ترتیب‌دار ایجاد می‌کند. callbackهای `downloaded` و `reloaded` state را جلو می‌برند؛ failure reload یک recovery reload برای بازگرداندن packهای قبلاً active انجام می‌دهد. Status action codeها 0 تا 7 هستند؛ URL check در این فایل فقط scheme http/https را بررسی و SHA-1 را فقط در صورت 40 رقم hex فعال می‌کند.
 - Findings: مدیریت state/recovery نسبت به download و resource reload جدا شده و callback-driven است. در failure یک pack، بقیه packهای همان batch discard می‌شوند؛ در failure اولین resource reload، packهای قبلاً فعال دوباره بارگذاری می‌شوند و اگر recovery هم fail شود server packs باقی نمی‌مانند. `valid_url` parser کامل URL نیست و فقط prefix scheme را می‌سنجد؛ SSRF/redirect/path checks باید در download backend انجام شوند. SHA-1 absent یا malformed یعنی integrity check وجود ندارد. `SUCCESSFULLY_LOADED`, `DECLINED`, `FAILED_DOWNLOAD`, `ACCEPTED`, `DOWNLOADED`, `INVALID_URL`, `FAILED_RELOAD`, `DISCARDED` مدل 26.3 را نشان می‌دهد. آزمون‌های state transitions, recovery, pack replacement/status order و URL/SHA1 parsing موجودند؛ اجرا نشده‌اند. فایل 645 خط است و به دو بازه 1–400 و 401–645 کامل تقسیم شد.
