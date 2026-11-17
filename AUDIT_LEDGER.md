@@ -1580,3 +1580,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Android ApplicationExitInfo, logger/panic reporter, performance recorder, BuildId/symbol artifacts and resource installer.
 - Follow-up checks: بررسی logger/panic hook/Android activity؛ تعریف log/performance schema؛ تست force-stop/low-memory/renderer failure و ZIP redaction.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 18. `docs/native-mods.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `8236ea99847bdfb5d4f64679565e8d96e7527440`.
+- Size: 328,421 bytes; 3,049 lines; full source fetched.
+- Coverage: lines 1–3049, complete.
+- Purpose: مرجع جامع معماری native mods در Horizon: Rust mixin bundles، hook API، data files، trait API، server/client hooks، entities، rendering، world helpers و build/trust model.
+- Implementation / logic: فایل 3049 خطی شامل bundle manifest و horizon-mixins injection model، pinning به revision یا hook API، helper crates و post-build، conditional data/recipe filters/loot extensions، data staging، mod API و Host/Level hosts، attachments، render hooks، server gameplay helpers و صدها API hook تا شماره 359، build pipeline، Rust toolchain، cache، trust، multiplayer و dedicated server export است.
+- Findings: Native mods کد Rust غیر sandbox شده‌اند و در executable ادغام می‌شوند؛ نیازمند trust صریح‌اند. Build روی commit دقیق Horizon و horizon-mixins انجام می‌شود و وابستگی mod crate به Cargo.lock upstream محدود است. Hook/trait API به مدل داخلی 26.3 (Game/Level, data components, registries, packet/render pipeline) وابسته‌اند. برخی APIها draft/pending یا not-yet هستند؛ سند placeholder و تفاوت‌های تاریخی نیز دارد. این سیستم mod framework است، نه خود engine یا راه اجرای مستقیم Minecraft Java.
+- RustChunk relevance: برای فهم Rust source hooks و subsystem APIs مفید است؛ اما RustChunk در مرحله فعلی به native-mod framework نیاز ندارد. کپی آن پیش از playable 1.20.1 هسته را منحرف می‌کند.
+- 1.20.1 implications: hook signatures، API numbers، structs و helpers تا 26.3 قابل انتقال مستقیم به 1.20.1 نیستند. اگر بعداً mod API لازم شد، ابتدا game core 1.20.1 و public abstraction ثابت شود؛ سپس hook catalog مستقل با contract versioning ساخته شود. Native mods روی دستگاه trust/security boundary مهمی ایجاد می‌کنند. هدف فعلی Forge deferred است و این سند مبنای Forge compatibility نیست.
+- Decision: **unnecessary برای فاز پایه؛ فقط مفاهیم hook catalog, versioned contracts, extension points و trust برای آینده reference/adaptable**.
+- Dependencies / cross-references: horizon-mixins, native-hooks.json, native-hook-fragments, horizon_client::mod_api, native data and Horizon game internals.
+- Follow-up checks: فعلاً پیاده‌سازی یا port نکن. پس از playable، نیاز واقعی به mod API و threat model جدا تعیین شود.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
