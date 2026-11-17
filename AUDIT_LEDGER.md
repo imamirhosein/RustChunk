@@ -2251,3 +2251,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: winit::keyboard::KeyCode; gamepad::{Button,GlyphStyle}; android_control_theme::{Ui,Face,color}; Android control editor text/key binding fields; LICENSE and THIRD_PARTY_NOTICES.md.
 - Follow-up checks: بررسی مصرف‌کننده Output::Key و Text؛ یکپارچه کردن duplicate OSK logic در design RustChunk؛ validate geometry values against actual touch event scaling; بررسی license attribution before copying.
 - Completion state: complete source review; no tests/build or Android editor interaction was run.
+
+
+
+### 99. crates/horizon-client/src/android_control_text.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 47fdcbe32fa87df752346b5bb7dc3cb42306edd1.
+- Size: 79 lines; complete file fetched.
+- Coverage: lines 1–79, complete.
+- Purpose: کوتاه‌سازی توضیحات catalog برای fit شدن در عرض مشخص UI، با احتساب ellipsis و kerning.
+- Implementation / logic: fit روی char_indices به صورت یک گذر حرکت می‌کند و advance(previous,current) را برای glyphهای متن محاسبه می‌کند. در هر موقعیت، پیشاپیش عرض سه نقطه را با kerning مربوط به آخرین glyph اندازه می‌گیرد؛ آخرین UTF-8 byte index که prefix + "..." داخل width جا شود نگه داشته می‌شود. اگر کل متن fit شود همان را برمی‌گرداند؛ اگر نه substring تا بهترین مرز character به‌همراه سه نقطه یا رشته خالی برمی‌گرداند. Complexity خطی است و callback advance دقیقاً 4 بار برای هر character فراخوانی می‌شود.
+- Findings: تابع از byte indexهای char_indices استفاده می‌کند؛ بنابراین slicing در مرز UTF-8 امن است و تست‌ها mixed Latin/Cyrillic/CJK/emoji را پوشش می‌دهند. محاسبه dots با آخرین character واقعی prefix انجام می‌شود تا kerning ellipsis را رعایت کند. در صورت width منفی/بسیار کوچک و نبود حتی یک prefix همراه سه نقطه، خروجی empty است. فایل فقط generic text fitting است؛ shaping پیچیده، ligatures، bidi، grapheme clusters یا line wrapping را انجام نمی‌دهد و به callback advance برای metric واقعی glyphها متکی است. Header انتساب MIT adaptation از Horizon Android را ثبت کرده؛ attribution و notice باید حفظ شود. تست مقایسه با الگوریتم quadratic قدیمی، Unicode/kerning و تعداد callbackها را دارد؛ اجرا نشده است.
+- RustChunk relevance: برای fit کردن labelهای UI، توضیحات گزینه‌ها و نام resourceها روی عرض محدود موبایل مفید است؛ الگوریتم ساده و مستقل از Minecraft protocol است.
+- 1.20.1 implications: ارتباطی با packet یا gameplay ندارد. باید از font metrics/rendering backend خود RustChunk برای advance استفاده شود؛ برای متن‌های راست‌به‌چپ، shaping یا grapheme-level cuts باید از text layout engine واقعی استفاده شود، نه این helper.
+- Decision: **helper خطی قابل اقتباس برای label ساده؛ برای متن rich/RTL یا shaping جایگزین text layout engine نیست؛ MIT attribution لازم است**.
+- Dependencies / cross-references: font advance callback; UI catalog description rendering; UTF-8 Rust str slicing; THIRD_PARTY_NOTICES.md and LICENSE.
+- Follow-up checks: بررسی caller/فونت metric منبع؛ در RustChunk از truncation در مرز grapheme برای emoji ترکیبی و متن RTL اطمینان حاصل کن.
+- Completion state: complete source review; no tests or build were run.
