@@ -1772,3 +1772,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: hash_ops.rs, item.rs::{Component,Stack,WirePatch,Hashed}, registry name lookup, packets/play.rs ItemStack encoders and vanilla DataComponent Codec definitions.
 - Follow-up checks: مقایسه کامل item stack codec و NBT layout نسخه 1.20.1 با vanilla oracle؛ تمام ارجاعات HashedPatchMap را از scope نسخه پایه خارج نگه دار.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
+
+
+### 70. `crates/horizon-protocol/src/item/hash/exact.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `4441e7f6b52c4fa86add35c4cc8c56c40bb26539`.
+- Size: 6,955 bytes; 171 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–171, complete.
+- Purpose: Hash کردن exact component predicates و predicateهای تو در تو داخل داده NBT، به‌ویژه container و bundle contents.
+- Implementation / logic: یک Shape برای هر component تعریف می‌کند که booleanها، boolean listها و فیلدهای حاوی ItemStack را مشخص می‌کند؛ سپس درخت NBT را می‌پیماید و به HashOps تبدیل می‌کند. `components()` کلیدهای namespaced component را می‌خواند، کلیدهای `!` را به empty map hash تبدیل می‌کند و مقدارهای glint override را به Boolean تبدیل می‌کند. `predicate()` نیز booleanهای predicate-level و nested stack components را با shape مناسب hash می‌کند.
+- Findings: به DataComponentExactPredicate.CODEC و DataComponentPredicateهای 26.3 وابسته است. NBT به تنهایی boolean را از byte تشخیص نمی‌دهد، بنابراین shape metadata hand-maintained است و اگر Codec جدیدی اضافه شود این جدول باید تکمیل شود. نام component باید در قالب minecraft namespace باشد؛ componentهایی که persistent codec ندارند قابل hash نیستند. هیچ packet framing ندارد؛ جزئی از hashed item component logic است.
+- RustChunk relevance: فقط برای درک predicateهای آیتم نسل جدید و خطر تفاوت bool/byte در NBT مفید است.
+- 1.20.1 implications: Vanilla 1.20.1 predicates و item NBT با مدل Data Components 26.3 یکی نیستند؛ این `Shape` table و HashOps mapping را استفاده نکن. اگر 1.20.1 item predicates یا loot predicates لازم شد، باید از codec/serializer و ساختار واقعی 1.20.1 استخراج شوند.
+- Decision: **version-specific و unnecessary برای هسته 1.20.1؛ predicate parsing هدف نسخه باید جدا rewrite شود**.
+- Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs PREDICATE_BOOLS, HashOps, NBT Compound/Tag, DataComponentPredicate/ExactPredicate codecs.
+- Follow-up checks: هنگام طراحی loot/item predicates نسخه 1.20.1، NBT matching semantics و تفاوت exact/partial predicates را جدا بررسی کن.
+- Completion state: complete source review; no tests or runtime interoperability were executed.
