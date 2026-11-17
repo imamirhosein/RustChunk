@@ -1820,3 +1820,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs, item/hash/exact.rs, item/skip.rs, HashOps, Item::Component::Raw, registry name tables, vanilla 26.3 StreamCodec and persistent Codec.
 - Follow-up checks: برای 1.20.1 از Vanilla StreamCodec/packet schema همان نسخه ItemStack و NBT را ثبت کن؛ golden vectors برای هر item form بساز و unknown/trailing field behavior را دقیق مشخص کن.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
+
+
+### 73. `crates/horizon-protocol/src/item/skip.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `aa436cc31e7add4f2bfd21a45c9128fd417b44f2`.
+- Size: 14,017 bytes; 426 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–426, complete.
+- Purpose: مصرف دقیق byte stream برای Data Componentهایی که Horizon معنای داخلی‌شان را decode نمی‌کند، تا خواندن بقیه ItemStack از هم نپاشد.
+- Implementation / logic: یک dispatch table بر اساس DataComponents registry order نسخه 26.3 دارد. بسته به نوع component، helper مناسب VarInt، float، identifier، NBT، list، optional، holder/holderSet، sound، template، block predicate، attribute modifier، food/consumable، tool، equippable، blocks attacks، kinetic weapon، potion effect و firework را دقیقاً consume می‌کند. برای مواردی که stream codec ندارند، NBT persistent codec را می‌خواند. kind ناشناخته به خطا می‌رسد.
+- Findings: فایل به‌شدت critical است زیرا item data در format فعلی length prefix جدا برای هر component ندارد؛ اگر skip طول اشتباه مصرف کند، تمام componentهای بعدی و packetهای بعدی misaligned می‌شوند. در عین حال unknown kind واقعاً قابل skip عمومی نیست و فوراً خطا می‌دهد. جدول kind IDs و اشکال nested component، holder encoding و registry order همگی 26.3 هستند. فایل در دو بازه متوالی 1–400 و 401–426 کامل خوانده شد؛ تست مستقل در این فایل دیده نشد.
+- RustChunk relevance: الگوی دفاعی مهمی دارد: برای داده‌های ناشناخته، تنها زمانی از روی stream عبور کن که codec length/schema دقیقش معلوم باشد؛ در غیر این صورت اتصال را به‌جای حدس زدن رد کن.
+- 1.20.1 implications: Minecraft 1.20.1 قبل از Data Components است و این component registry/network format را ندارد. این skip table نباید استفاده شود. برای نسخه هدف باید serializer قدیمی ItemStack (item registry ID, count, optional NBT) و حدود NBT آن پیاده شود؛ تنها الگوی «هرگز طول نامعلوم را حدس نزن» قابل انتقال است.
+- Decision: **نسخه‌محور و برای 1.20.1 unnecessary؛ legacy ItemStack decoder باید جدا rewrite شود**.
+- Dependencies / cross-references: item.rs Component/Template/Reader, buf::Reader, horizon_world NBT, packet slot/item readers and 26.3 DataComponents registry order.
+- Follow-up checks: در ممیزی packet/item 1.20.1، مسیرهای empty/non-empty Slot و NBT limits/terminator را از vanilla source استخراج و malformed NBT tests بنویس.
+- Completion state: complete source review; no tests or runtime interoperability were executed.
