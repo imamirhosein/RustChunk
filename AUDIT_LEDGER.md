@@ -1756,3 +1756,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: protocol::crypto.rs, aes crate, ARMv8 AES/NEON intrinsics, RustCrypto AES, target CPU feature configuration.
 - Follow-up checks: بررسی build target flags برای Android arm64-v8a و قابلیت crypto extension دستگاه‌ها؛ تست NIST AES vectors و CFB8 known-answer vectors؛ مقایسه با RustCrypto constant-time backend و ارزیابی SBOX key schedule.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 69. `crates/horizon-protocol/src/item/hash.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `966f8860587406f7e8468398532da0b33cbc1be3`.
+- Size: 29,855 bytes; 851 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–851, complete.
+- Purpose: تولید representation و hash componentهای patch شده در ItemStack مطابق `HashedPatchMap.create` و `HashedStack.create` نسخه 26.3.
+- Implementation / logic: Trait `Names` شناسه‌های registry را به resource identifier تبدیل می‌کند. کد component از wire representation و نوع داخلی آن، شکل Codec را بازسازی و با HashOps/CRC32C hash می‌کند. Componentهای nested مثل enchantment map، StackTemplate، potion، کتاب، fireworks، banner patterns، trim، custom model data و tooltip display مسیرهای جدا دارند. اگر نام registry یا codec form قابل بازسازی نباشد، component hash نمی‌شود. `Hashed::create` برای added components hash می‌سازد و removed IDs را نگه می‌دارد؛ در صورت وجود raw wire patch، ابتدا همان را decode می‌کند تا patch واقعی ارسالی حفظ شود.
+- Findings: وابستگی مستقیم به `DataComponentType`، شناسه‌های registry نسخه 26.3 و Codecهای modern است. hash، SHA یا hash فایل نیست؛ خروجی CRC32C از شکل Codec است. componentهای ناشناخته/بدون نام بی‌صدا از added hash حذف می‌شوند و طبق توضیح بالاسری ممکن است سرور slot را resync کند. مجموعه تست‌ها برای ده‌ها component مقدار hash تولیدشده توسط vanilla 26.3 را ثابت می‌کند؛ تست‌ها در این ممیزی اجرا نشده‌اند.
+- RustChunk relevance: برای شناخت semantics انتقال patch آیتم در نسل جدید Horizon مفید است، اما RustChunk 1.20.1 به این Data Component system نیاز ندارد.
+- 1.20.1 implications: Minecraft 1.20.1 قبل از 1.20.5 Item Data Components است؛ item stack آن نسخه از item ID/count و NBT tag سنتی استفاده می‌کند. این فایل و hashed patch protocol نباید port شود. برای وضعیت آیتم‌ها باید legacy ItemStack serialization و NBT 1.20.1 مستقل پیاده شود؛ در صورت نیاز به digest، semantics و الگوریتم جدا و صریح تعریف شود.
+- Decision: **version-specific؛ برای 1.20.1 غیرقابل استفاده و unnecessary؛ مسیر ItemStack+NBT باید rewrite شود**.
+- Dependencies / cross-references: hash_ops.rs, item.rs::{Component,Stack,WirePatch,Hashed}, registry name lookup, packets/play.rs ItemStack encoders and vanilla DataComponent Codec definitions.
+- Follow-up checks: مقایسه کامل item stack codec و NBT layout نسخه 1.20.1 با vanilla oracle؛ تمام ارجاعات HashedPatchMap را از scope نسخه پایه خارج نگه دار.
+- Completion state: complete source review; no tests or runtime interoperability were executed.
