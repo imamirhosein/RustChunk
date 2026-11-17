@@ -1564,3 +1564,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Microsoft device-code OAuth, Ely.by endpoints, Android Keystore, offline UUID/profile and skin files.
 - Follow-up checks: بررسی offline UUID و login flow 1.20.1؛ بعداً Microsoft device-code و profile key lifecycle؛ secrets در log/ledger نیاید.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 17. `docs/android-diagnostics.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `f4d250d2449634f2f6ef8125ebdc2a6a4b021365`.
+- Size: 5,782 bytes; 97 lines; full source fetched.
+- Coverage: lines 1–97, complete.
+- Purpose: شرح diagnostics UI، performance recording، crash/exit history و export ZIP در Android.
+- Implementation / logic: ثبت یک‌ثانیه‌ای frame/CPU/GPU durations، phases، slow frames، memory/thermal/queue counters، GPU pass timers و percentileها. ZIP شامل tail logها، crash reports، session checkpoints، ApplicationExitInfo، traces و performance JSONL است. Recovery window مستقل از renderer log را preview/export می‌کند؛ installer atomic publish/rollback و lock دارد.
+- Findings: performance recording پیش‌فرض خاموش است و GPU timestamp فقط با پشتیبانی معتبر است؛ نبود timestamp صفر نیست. Export سقف‌دار و account/world/config را حذف می‌کند، اما log third-party ممکن است داده خصوصی داشته باشد. session بدون clean-exit لزوماً crash نیست. BuildId برای symbolication لازم است.
+- RustChunk relevance: برای پایداری Android و حل crash/black-screen و افت FPS مفید؛ diagnostics مستقل از renderer حتی در failure game library کمک می‌کند.
+- 1.20.1 implications: RustChunk به recovery مستقل از game renderer، bounded logs، crash marker، Android exit info و BuildId/symbol artifacts نیاز دارد. سقف‌ها با memory budget دستگاه و privacy دوباره تعیین شوند.
+- Decision: **adaptable؛ جزئیات API و counters باید با RustChunk بازنویسی شوند**.
+- Dependencies / cross-references: Android ApplicationExitInfo, logger/panic reporter, performance recorder, BuildId/symbol artifacts and resource installer.
+- Follow-up checks: بررسی logger/panic hook/Android activity؛ تعریف log/performance schema؛ تست force-stop/low-memory/renderer failure و ZIP redaction.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
