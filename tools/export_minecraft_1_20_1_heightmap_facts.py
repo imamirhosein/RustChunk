@@ -209,12 +209,11 @@ def summarize_heightmap_facts(
             )
 
         # Minecraft 1.20.1 Heightmap predicate semantics:
-        # MOTION_BLOCKING: !air && (blocksMotion || hasFluid)
-        # MOTION_BLOCKING_NO_LEAVES: !air && ((blocksMotion && !LEAVES) || hasFluid)
-        expected_motion = (not is_air) and (blocks_motion or has_fluid)
-        expected_no_leaves = (
-            not is_air and ((blocks_motion and not expected_leaves) or has_fluid)
-        )
+        # MOTION_BLOCKING: blocksMotion || hasFluid
+        # MOTION_BLOCKING_NO_LEAVES: (blocksMotion && !LEAVES) || hasFluid
+        # Fluids remain heightmap blockers even when a state belongs to LEAVES.
+        expected_motion = blocks_motion or has_fluid
+        expected_no_leaves = (blocks_motion and not expected_leaves) or has_fluid
         if motion != expected_motion:
             raise PrepareError(
                 f"MOTION_BLOCKING Java predicate mismatch at state {expected_id} ({block_name})"
