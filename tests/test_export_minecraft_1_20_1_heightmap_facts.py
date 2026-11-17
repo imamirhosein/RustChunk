@@ -5,6 +5,7 @@ from tools.prepare_minecraft_1_20_1 import PrepareError
 from tools.export_minecraft_1_20_1_heightmap_facts import (
     resolve_block_tag,
     summarize_heightmap_facts,
+    write_resolved_leaves_tag,
 )
 
 
@@ -63,6 +64,22 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
             report["predicate_validation"],
             "passed_against_primitives_and_resolved_vanilla_leaves_tag",
         )
+
+    def test_writes_resolved_leaves_tag_as_parseable_json(self):
+        import tempfile
+        from pathlib import Path
+
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "leaves-tag-input.json"
+            write_resolved_leaves_tag(
+                path,
+                {"minecraft:oak_leaves", "minecraft:birch_leaves"},
+            )
+            self.assertEqual(
+                json.loads(path.read_text(encoding="utf-8")),
+                ["minecraft:birch_leaves", "minecraft:oak_leaves"],
+            )
+            self.assertTrue(path.read_text(encoding="utf-8").endswith("\n"))
 
     def test_resolves_nested_block_tags(self):
         self.assertEqual(
