@@ -461,3 +461,22 @@
 - Decision: **adaptable** as the porting methodology (version pinning, provenance/hash verification, generated constants/tables, data diffs, oracle mapping, parity gates and ranked blockers); **rewrite/substantial adaptation required** for the current tooling and historical 1.20.1 input. Do not treat the 26.2→26.3 results as evidence of 1.20.1 compatibility.
 - Follow-up checks: inspect `horizon-prepare` and its Java invocation, JAR extraction, asset export and data generation; inspect the generated version-constant and packet-ID pipeline; inspect `horizon-protocol`'s version adapter and packet tables; inspect datafix/world-data loading; inspect the code's pinned Java version and build toolchain; then independently verify 1.20.1's official version metadata, mappings, protocol, data version and formats before designing the port.
 - Completion state: complete document review; no version-port script, download, decompilation, generator, parity harness, candidate build or release switch was executed.
+
+
+### 22. `docs/versioning.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `261f462e35f6797c97b4108e8572734ecdf4326a`.
+- Size: 12,096 bytes; 149 lines; fetched in one complete range (1–400 returned all 149 lines).
+- Coverage: lines 1–149, complete.
+- Purpose: documents Horizon application release numbering and migration from dated game tags to SemVer, including separate game/launcher release streams, nightly ranking, update bridges for old installs, and irreversible release-channel transitions.
+- Important distinction: this file versions Horizon builds and launcher releases; it does not specify the Minecraft Java version embedded in the game build. The Minecraft game version is pinned independently (e.g. by `research-lock.json`, covered in `docs/version-ports.md`).
+- Mechanics and constraints:
+  - Game and launcher use distinct SemVer tags/streams; the game since 2026-10-28 ships Nightlies only, while launcher tags remain on a SemVer line.
+  - Release workflows inject build versions through environment variables and check executable-reported versions; Cargo package versions are not necessarily the final release version.
+  - Legacy installs require bridge releases because old clients compare tag strings/numbers with incompatible ordering rules. Some migration steps and tags are explicitly irreversible.
+  - Release sequencing depends on release-train automation, stable/latest promotion rules, old launcher/server updater behavior and external fleet/Kira consumers.
+- RustChunk relevance: low for the current Minecraft 1.20.1 engine port. It is useful only if RustChunk later adopts a similar separate SemVer policy for its launcher/application releases and needs safe upgrades from old launcher versions. It must not be mistaken for a mechanism to select, download or run Minecraft 1.20.1.
+- Decision: **unnecessary** for the 1.20.1 game-engine port; **adaptable** as an optional launcher/application release-management pattern. No need to reproduce Horizon's historical bridge tags or its release workflow.
+- Dependencies / cross-references: `.github/release-line.txt`; `.github/workflows/release.yml`; `.github/workflows/launcher.yml`; `tools/release_train.py`; `crates/horizon-server/src/update.rs`; `launcher/src/backend.rs`; `release-flow.md`; website release ordering and external updater consumers.
+- Follow-up checks: none required for the Minecraft 1.20.1 compatibility investigation; revisit only when RustChunk's own update and release policy is designed.
+- Completion state: complete document review; no release, tag, workflow, update or migration command was executed.
