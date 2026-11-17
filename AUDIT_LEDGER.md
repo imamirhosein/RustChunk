@@ -1948,3 +1948,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: server_packs::download submodule, ServerboundResourcePackPacket actions, servers.dat acceptTextures, pack reload scheduler, local resourcepack source and resource reload callbacks.
 - Follow-up checks: ممیزی کامل `server_packs/download.rs` و zip/resource manager؛ تطبیق packet status enum با 1.20.1؛ بررسی URL redirects, TLS, file size, archive traversal, SHA-1 policy و حفظ user pack priority.
 - Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
+
+
+### 81. `crates/horizon-client-input/src/lib.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `f65082b645f15fbb73de046d0e1a459da7874087`.
+- Size: 497 bytes; 16 lines; complete file fetched.
+- Coverage: lines 1–16, complete.
+- Purpose: ریشه crate ورودی کلاینت؛ مشخص می‌کند لایه ورودی کدام subsystemها را ارائه می‌کند.
+- Implementation / logic: crate از ابتدا `forbid(unsafe_code)` را اعمال می‌کند و ماژول‌های clipboard، gamepad، input state، input mode، interaction input، key names، keybinds، keymapping، modifiers، mouse و window را public می‌کند. توضیح فایل می‌گوید horizon-client این ماژول‌ها را با مسیرهای قدیمی خود re-export می‌کند.
+- Findings: فایل صرفاً module surface و سیاست unsafe را تعریف می‌کند و خود هیچ event loop یا input mapping اجرا نمی‌کند. وابستگی‌های واقعی، backendها و تنظیمات در ماژول‌های فرزند هستند. ممنوعیت unsafe در این crate به dependencyهای خارجی یا crateهای دیگر گسترش ندارد.
+- RustChunk relevance: مرزبندی یک crate مستقل برای دریافت input و جدا کردن آن از gameplay و UI الگوی مفیدی است، به‌خصوص برای نگهداری backendهای Android و desktop.
+- 1.20.1 implications: معماری کلی مستقل از پروتکل Minecraft است؛ نام ماژول‌ها و APIهای Horizon را عیناً فرض نکن. RustChunk باید input abstraction کوچک و پلتفرم‌محور داشته باشد و بعد آن را به actionهای بازی متصل کند.
+- Decision: **ساختار crate قابل اقتباس؛ کد این فایل خودش صرفاً مرجع سازمان‌دهی است**.
+- Dependencies / cross-references: `crates/horizon-client/Cargo.toml`, `client_lib.rs` re-exports, and child modules listed above.
+- Follow-up checks: public API هر ماژول، feature gates پلتفرمی و backendهای واقعی Android/desktop در فایل‌های بعدی همین نوبت بررسی شوند.
+- Completion state: complete source review; no tests or build were run.
