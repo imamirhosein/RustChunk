@@ -85,7 +85,7 @@ Source ordering: recursive Git tree returned by GitHub for `starling-client/star
 | 6 | `crates/horizon-client/src/game/item_use.rs` | Complete (historical; no blob SHA recorded) |
 | 7 | `crates/horizon-client/src/game/jigsaw_blocks.rs` | Pending |
 | 8 | `crates/horizon-client/src/game/jigsaw_edit.rs` | Complete (1–332; SHA `119e3cea3187755fc3926f5f00d0fcbe793fee50`) |
-| 9 | `crates/horizon-client/src/game/jukebox.rs` | Pending |
+| 9 | `crates/horizon-client/src/game/jukebox.rs` | Complete (1–411; SHA `03d2f5852cab025beb0364116b7b4a4dfd6788f5`) |
 | 10 | `crates/horizon-client/src/game/key_focus.rs` | Pending |
 | 11 | `crates/horizon-client/src/game/kinetic_machines.rs` | Pending |
 | 12 | `crates/horizon-client/src/game/kinetics.rs` | Pending |
@@ -234,3 +234,12 @@ Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do no
 - Total: 332 lines. Blob SHA: `119e3cea3187755fc3926f5f00d0fcbe793fee50`.
 - Result: UI slider clamps generation depth to 0–20; identifier validation and packet ordering (set block then generate) are explicit. No confirmed defect found in this file. This does not resolve CAND-008's server-side/downstream depth-bound question.
 - No source code changed; only the audit ledger was updated. No build/test claimed.
+
+
+### 2026-11-17 — file #9: jukebox.rs
+
+- Source: pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Entire file fetched and reviewed: lines 1–411.
+- Total: 411 lines. Blob SHA: `03d2f5852cab025beb0364116b7b4a4dfd6788f5`.
+- Result: no confirmed defect found in record insertion/ejection, song lifecycle, level-event registry lookup, parrot notification, redstone/comparator signal or audio cleanup in the reviewed code. No test execution is claimed.
+- No source code changed; only the audit ledger was updated.
