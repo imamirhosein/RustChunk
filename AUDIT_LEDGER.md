@@ -644,3 +644,21 @@
 - Dependencies / cross-references: `tools/parity.py`; `tools/parity_shim.py`; `tools/parity_reach.py`; `tools/gate.py`; `tools/parity_main.py`; `tools/supervise.py`; `tools/parity_hosts.json`; `lab.game_env`; Rust probe crates; Java oracle sources under `mods/horizon`; `.local/parity-runner/`; `shared-local/` and `PARITY_SHARED`.
 - Follow-up checks: inspect parity runner, oracle shim, host scheduler, cache key/fingerprint logic, scope closure/reachability, baseline format and gate integration. Then construct a separate 1.20.1 oracle fixture matrix; never blend results from distinct Minecraft versions.
 - Completion state: complete document review; no test, runner, cache, host, gate, harness, or integration command was executed.
+
+
+### 30. `crates/horizon-prepare/Cargo.toml`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `edc8c6e78c7698980a70b3f7b2e90344f5eec99f`.
+- Size: 792 bytes; 26 lines; fetched in one complete range.
+- Coverage: lines 1–26, complete.
+- Purpose: declares the `horizon-prepare` Rust package, dependencies, target-specific filesystem crates and executable entry point.
+- Dependency findings:
+  - Rust 2021 package; package-level dependencies include CRC32, regex, SHA-1, SHA-256 and ZIP/deflate support. These fit local archive parsing, integrity checks and asset/JAR preparation rather than containing a Java game runtime.
+  - Android target includes `rustix` with filesystem support; Linux/macOS use `libc`. This indicates the preparer crate has an Android compilation path at the manifest level, but it does not establish that the full client/game engine or all its runtime dependencies are Android-ready.
+  - No networking, game logic, OpenGL/Vulkan renderer, Java VM or Forge loader dependency is declared here. The Java runtime is invoked by the preparation implementation and must be inspected separately.
+- RustChunk relevance: moderate-to-high as a compact reference for a native Rust resource-preparation tool that can target Android and perform SHA-1/SHA-256 verification and archive extraction.
+- 1.20.1 implications: the dependency set itself is largely version-neutral, but the actual expected files, hashes, archive layout, data-generator invocation and generated outputs are determined in source code and repository pins. Updating only this manifest would not add 1.20.1 support.
+- Decision: **adaptable** as a resource-preparer dependency pattern; **no direct version-port decision** can be made from the manifest alone.
+- Dependencies / cross-references: `crates/horizon-prepare/src/main.rs`; `java.rs`; `artifacts.rs`; `lib.rs`; `check.rs`; root Cargo workspace; `research-lock.json`.
+- Follow-up checks: inspect the preparer's command flow, Java version selection, expected official launcher files, archive verification, exporters, and resource version stamp; separately confirm Android runtime feasibility.
+- Completion state: complete manifest review; no Cargo resolution, build, target compilation or dependency audit was executed.
