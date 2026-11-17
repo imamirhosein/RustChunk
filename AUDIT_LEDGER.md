@@ -1964,3 +1964,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: `crates/horizon-client/Cargo.toml`, `client_lib.rs` re-exports, and child modules listed above.
 - Follow-up checks: public API هر ماژول، feature gates پلتفرمی و backendهای واقعی Android/desktop در فایل‌های بعدی همین نوبت بررسی شوند.
 - Completion state: complete source review; no tests or build were run.
+
+
+### 82. `crates/horizon-client-input/src/input.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `f8b2c10b7f3576c5853274ffb09b25bad7a83621`.
+- Size: 3,690 bytes; 112 lines; complete file fetched.
+- Coverage: lines 1–112, complete.
+- Purpose: محاسبه جهت حرکت از کلیدهای چهارگانه، اعمال ضریب‌های حرکت و shortcut خروج سیستم‌عامل.
+- Implementation / logic: keyboard_direction برای forward/back/left/right impulseهای -1/0/1 می‌سازد و بردار قطری را normalize می‌کند. modify_input برای ورودی غیرصفر ضریب پایه 0.98 و سپس item-use و sneak multipliers را اعمال می‌کند. square_movement بردار را با فرمول Java-style محدودسازی سرعت normalize می‌کند و عمداً NaN را مانند Math.min منتشر می‌کند. is_quit_shortcut_down روی macOS از Super+Q و در بقیه سیستم‌ها از Alt+F4 استفاده می‌کند.
+- Findings: comment صریحاً مدل 26.3 را اعلام و sprint eligibility/pose/input lifecycle را خارج از scope می‌گذارد. حرکت صفر قبل از multipliers برمی‌گردد؛ NaN در Rust f32::min و Java Math.min رفتار متفاوت دارند و نویسنده آن را جبران کرده است. Tests فقط shortcut platform را بررسی می‌کنند؛ movement math tests در این فایل دیده نمی‌شود و هیچ تستی اجرا نشده است.
+- RustChunk relevance: جهت‌گیری کلیدها، diagonal normalization و movement scalar semantics جزء ورودی player و gameplay core هستند؛ منطق باید مستقل از winit و منبع event باقی بماند.
+- 1.20.1 implications: الگوریتم حرکت باید با LocalPlayer/Input 1.20.1 oracle شود؛ ضرایب حرکت، item use, sneak, riding و sprint ممکن است در نسخه هدف تفاوت داشته باشند. Shortcutهای desktop برای Android ضروری نیستند و باید از platform abstraction بیایند.
+- Decision: **بردار نرمال‌سازی و ایده multiplier قابل اقتباس؛ ضرایب و منطق lifecycle باید با 1.20.1 بازبینی شوند**.
+- Dependencies / cross-references: winit KeyCode/ModifiersState; LocalPlayer.modifyInput semantics; key event state provider; sprint/pose/riding lifecycle not implemented here.
+- Follow-up checks: مقایسه تابع movement input با vanilla 1.20.1؛ یافتن محل محاسبه item_use/sneaking؛ بررسی NaN/infinite input و تست‌های diagonal/analog controller.
+- Completion state: complete source review; no tests or build were run.
