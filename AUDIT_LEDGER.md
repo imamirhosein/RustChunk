@@ -1788,3 +1788,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs PREDICATE_BOOLS, HashOps, NBT Compound/Tag, DataComponentPredicate/ExactPredicate codecs.
 - Follow-up checks: هنگام طراحی loot/item predicates نسخه 1.20.1، NBT matching semantics و تفاوت exact/partial predicates را جدا بررسی کن.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
+
+
+### 71. `crates/horizon-protocol/src/item/hash/gameplay.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `a2a248ff0c2a6ad12211c86a2667fcecebb9089c`.
+- Size: 24,029 bytes; 621 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–621, complete.
+- Purpose: بازسازی Codec-form و hash کردن componentهای gameplay آیتم بر اساس byte stream و registry names.
+- Implementation / logic: برای componentهایی مثل UseEffects، AttributeModifiers، Food، Consumable، UseCooldown، DamageResistant/Repairable، Tool، Weapon، Equippable، DeathProtection، BlocksAttacks، Piercing/KineticWeapon، SwingAnimation، Jukebox و Banner/trim-related data مسیرهای specialized دارد. Registry references با Names حل می‌شوند؛ enum IDs به StringRepresentable نام‌ها تبدیل می‌شوند؛ فیلدهای default طبق optionalFieldOf از hash حذف می‌شوند؛ sound و holder forms و BlockPredicate هم به شکل Codec map ساخته می‌شوند.
+- Findings: کد بر اساس IDهای ثابت DataComponents نسل 26.3 dispatch می‌کند. بسیاری از decoder helperها از Option استفاده می‌کنند؛ malformed stream، unsupported enum یا registry ID بی‌نام به None تبدیل می‌شود. Default values دقیق Codec در hash معنا دارند و omission اشتباه باعث mismatch. Componentهای جدید و legacy ItemStack را با هم قاطی نمی‌کند؛ اصلاً مسیر 1.20.1 نیست.
+- RustChunk relevance: این بخش به‌روشنی نشان می‌دهد 26.3 آیتم‌ها چه metadata رفتاری را در componentها نگه می‌دارد؛ برای فهرست تفاوت‌های معماری مفید است.
+- 1.20.1 implications: در 1.20.1 رفتار آیتم‌ها و metadata عمدتاً از ItemStack NBT، item class/registry و سرور کد می‌آید، نه از این Data Component schemas. برای RustChunk پایه نباید این codec map را port کرد؛ در صورت نیاز به همان gameplay semantics باید خواندن/نوشتن NBT و item behavior نسخه 1.20.1 مستقل پیاده شود.
+- Decision: **version-specific و برای 1.20.1 غیرقابل استفاده؛ implementation legacy نیاز به rewrite**.
+- Dependencies / cross-references: item/hash.rs, item/hash/raw.rs, item/hash/exact.rs, HashOps, Reader, Registry Names, modern component stream codecs.
+- Follow-up checks: از source 1.20.1، ItemStack, FoodProperties, AttributeModifiers و item-specific NBT را جدا استخراج و golden vectors مستقل تهیه کن.
+- Completion state: complete source review; no tests or runtime interoperability were executed.
