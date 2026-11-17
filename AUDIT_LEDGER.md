@@ -165,3 +165,33 @@
 - **Decision:** **adaptable** for matrix builds, preview/release separation, signing discipline, symbols, and release gating; **rewrite required** for RustChunk package IDs, supported ABIs, secrets, branch policy, toolchain versions, and Forge/JVM packaging.
 - **Follow-up checks:** inspect build/release scripts and actual CI history; verify signing behavior and package IDs; inspect environment protection and tag rulesets; assess whether RustChunk needs all four ABIs or only ARM64/ARMv7.
 - **Completion state:** complete workflow source review; execution and security settings not independently tested.
+
+### 9. packaging/android/build_apk.py
+- **Source SHA:** 3c215d5875d364e215ade3eeafbe55bd81238ab9
+- **Size:** 381 lines; 17,919 characters; full file fetched and read.
+- **Coverage:** lines 1–381, complete in one fetch (under the 400-line threshold).
+- **Purpose/content:** main Python APK build/packaging orchestrator. It compiles the Rust Android NativeActivity library, builds small native Java/Javac launcher executables, prepares runtime assets, compiles Java Activities to DEX, links Android resources, assembles and aligns the APK, signs/verifies it, and optionally zips or installs it.
+- **Important build configuration:** application ID io.github.juanluci.starling; release name/version 0.8.0/code 13; dev and preview use distinct application-ID suffixes and labels; min SDK 26, target SDK 35, compile platform 36, build-tools 35.0.0, NDK 28.2.13676358, Java major 25. Four ABI mappings cover ARM64, ARMv7, x86 and x86_64.
+- **Build pipeline / implementation details:**
+  - build_library() adds NDK/SDK environment variables, records Git commit/dirty state in build env when available, adds 16-KB-page and SHA-1 BuildId linker flags, then runs cargo ndk ... build -p horizon-android with selected profile and ABI.
+  - build_launchers() compiles native/java_launcher.c twice (java and JAVAC variants) for the selected ABI and includes the matching NDK libc++_shared.so.
+  - assets() runs tools/build_android_exporters.py; packages research pins, exporter source/test Java classes and built exporter classes into prepare-kit.zip; copies diagnostic fonts; deterministically zips the setup skin and Starling Visuals shader pack; also copies the visuals ZIP beside the APK for release publishing.
+  - compile_java() compiles Android Java sources with javac --release 8, archives classes, and invokes D8 with min API 26.
+  - link_resources() substitutes package/label placeholders into the manifest, changes a Vulkan feature declaration to optional for non-default ABI, creates icon/theme resources, extracts dark palette constants from a Rust source file with regex, compiles and links via aapt2. Debuggable mode is enabled when no release keystore env is present.
+  - add_code() inserts DEX and native libraries under lib/<abi>/, compressed so Android extracts them at install.
+  - sign() uses a supplied keystore or generates a local debug key, signs with apksigner and runs apksigner verification.
+  - CLI options include profile, no-build, install, zip, keep-symbols, library-only, dev/preview, and ABI.
+- **Dependencies / references:** Android SDK tools (aapt2, d8, zipalign, apksigner, adb); NDK clang/llvm-strip/C++ runtime; Rust/Cargo/cargo-ndk; JDK javac/keytool; AndroidManifest.xml, Java Activity sources, native/java_launcher.c, tools/build_android_exporters.py, research-lock.json, exporter Java source and bundle, fonts/theme crate, icons, lowbudget pack, shaderpack, diagnostics docs, and Git metadata. The script's referenced helper/source files require their own audit.
+- **RustChunk relevance:** extremely high. It provides the concrete bridge between a Rust Android native library and a distributable Android app, including ABI mapping, SDK/NDK discovery, 16-KB page alignment, build-ID symbols, DEX integration, application variants, asset bundling, APK alignment and signing. Its approach demonstrates how a Rust game core can be hosted in Android's NativeActivity while Java handles Android system integration.
+- **Major target mismatch:** this pipeline packages a native Horizon 26.3 implementation plus preparation Java tools; it does not bundle a Java Edition 1.20.1 client runtime or Forge. It cannot be copied as-is for the Forge requirement. RustChunk may instead need a Java runtime distribution/management layer, Forge installation/mod libraries, and an Android activity/JNI layer that launches the JVM, unless the project changes its compatibility goal.
+- **Potential issues / items to verify:**
+  - JDK/NDK/SDK versions and all package constants are Starling-specific; README/CONTRIBUTING also mention Rust 1.90 although Cargo.toml sets MSRV 1.85.
+  - link_resources() performs a literal manifest string replacement for non-ARM64 Vulkan requirement; verify against AndroidManifest.xml and test each ABI.
+  - assets() includes exporter inputs/bytecode but README says Minecraft jars/assets are not packaged; inspect generated contents and exporter bundle to confirm there is no player-owned game code/data leakage.
+  - sign()'s release/debug behavior depends on environment variables and CI protection; no build/sign command was executed in this audit.
+  - zip_folder() fixes timestamps and sorts files for repeatability, but archive reproducibility should still be tested across host platforms.
+  - --dev and --preview are not declared mutually exclusive; current precedence chooses dev if both are supplied. --library-only stops before APK packaging as designed.
+  - Script assumes all expected source/resource files exist; its missing SDK checks are explicit, but some later missing inputs surface as lower-level exceptions.
+- **Decision:** **adaptable** as an APK orchestration pattern; **rewrite required** for RustChunk's Java/Forge/JVM packaging route and desired ABI/version support. Keep asset/legal boundaries and symbol/signing ideas.
+- **Follow-up checks:** inspect native/java_launcher.c, Android manifest and Activities, exporter helper and manifests, install/update code, and release assets; verify all ABI outputs and exact Android package identity; map required runtime files for Forge 1.20.1.
+- **Completion state:** complete script review; helper scripts, referenced sources and actual build results remain pending.
