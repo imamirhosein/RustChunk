@@ -1325,3 +1325,30 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `crypto::blocks`; `LANES`; `getrandom`; `sha1`; `horizon-protocol::connection::enable_encryption`; `rsa.rs`; `packets/login.rs`; authentication/session service; offline account identity.
 - Follow-up checks: inspect `blocks.rs` and `rsa.rs`; trace the 1.20.1 Encryption Request/Response sequence and signed server hash inputs against vanilla; verify ARM64 Android AES backend and OS RNG availability.
 - Completion state: complete source/test review; no crypto test, login exchange, RNG probe or ARM64 device test was executed.
+
+
+### 57. `crates/horizon-protocol/src/rsa.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `479f4d64254b8037f4ef49fee0314dedd564a242`.
+- Size: 35,306 bytes; 834 lines; fetched in consecutive ranges 1–400, 401–800 and 801–834.
+- Coverage: lines 1–834, complete; all three ranges returned the same blob SHA; all RSA/DER/prime/signature tests read.
+- Purpose: pure-Rust RSA key parsing, public-key encryption, private-key decryption/signing, PKCS#1 v1.5 signature verification, Montgomery modular arithmetic and RSA key-pair generation.
+- Implementation:
+  - Custom arbitrary-width positive integers are represented as little-endian 32-bit limbs. Operations include big-endian conversion, multiplication, small multiply/add, division by a small integer, compare/subtract and bit access.
+  - Montgomery multiplication/exponentiation implements modular exponentiation for odd RSA moduli.
+  - A minimal DER parser decodes SubjectPublicKeyInfo X.509 RSA public keys, PKCS#8 private keys and bare PKCS#1 private keys. It accepts the rsaEncryption OID and validates minimum modulus size/oddness.
+  - `RsaPublicKey::encrypt` implements RSAES-PKCS1-v1_5 with random nonzero type-2 padding; `verify` implements RSASSA-PKCS1-v1_5 for SHA-1 and SHA-256 by checking the expected encoded DigestInfo block.
+  - `RsaPrivateKey` can parse keys, generate RSA key pairs (Miller-Rabin with 40 rounds; public exponent 65537), decrypt PKCS#1 v1.5 blocks and sign SHA-1/SHA-256 messages. Signing checks its own output with the public verifier before returning it.
+  - Public keys are encoded as X.509 SubjectPublicKeyInfo. The test support includes 1024-bit and 2048-bit DER vectors and known OpenSSL signatures.
+- Tests read: Montgomery small-number vectors, X.509 key parsing, PKCS#1 encryption/decryption and random padding, generated-key DER round trips, primality checks, OpenSSL SHA-256 signature validation, SHA-1/SHA-256 signature generation parity, PKCS#8 and PKCS#1 key parsing. Not executed.
+- RustChunk relevance: high. RSA is used in online-mode login (encrypting the shared secret/challenge with the server key) and in signed-chat/profile-key validation and signing. The exact subfeatures required depend on the 1.20.1 account/authentication mode.
+- 1.20.1 implications:
+  - RSA/PKCS#1 v1.5, X.509 public key parsing, SHA-1/SHA-256 DigestInfo and PKCS#8 chat-key parsing are not tied to protocol 777 and are potentially reusable for 1.20.1 login and secure-chat support.
+  - Packet placement, required key sizes, key trust chain, encryption request/response and signed-chat message format are version-specific and must be wired through the 1.20.1 Login/Play state, not the modern packet schemas.
+  - Pure-Rust private exponentiation uses variable-time control flow (square-and-multiply branches on exponent bits) and big-integer arithmetic not designed as constant-time cryptography. Private-key decryption/signing should not be exposed to hostile timing observations without a security review; a vetted constant-time cryptographic implementation may be preferable for production.
+  - The DER helper returns trailing input slices, while some nested parsers ignore them. Exact strictness/trailing-byte rejection and bounds should be fuzzed; malformed public/private key input is attacker-controlled in login/profile verification paths.
+  - Key generation is substantial custom cryptographic code. The client generally needs to consume a server public key and a service-issued profile key; generating a server key pair is not required merely to connect to a server.
+- Decision: **cryptographic standards and data model are adaptable**, but **version-specific login/chat wiring and security review required**. Prefer vetted constant-time implementations for private operations where feasible; do not treat test vectors as a complete security audit.
+- Dependencies / cross-references: `crypto.rs`; `secure_chat.rs`; `packets/login.rs`; `packets/play.rs` chat/session packets; `rsa::SignatureHash`; `getrandom`; SHA-1/SHA-256; `Cfb8`; service-signed profile public keys.
+- Follow-up checks: inspect `secure_chat.rs` and authentication call sites; determine 1.20.1's exact signed-chat/profile-key requirements, key sizes and trust chain; review private-key timing behavior, malformed DER handling and maximum key lengths; consider replacing private operations with a vetted crypto crate.
+- Completion state: complete source/test review; no RSA key generation, private operation, login exchange, signature verification test or security assessment was executed.
