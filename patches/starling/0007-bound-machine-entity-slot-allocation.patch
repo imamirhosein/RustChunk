@@ -1,0 +1,53 @@
+diff --git a/crates/horizon-client/src/game/machine_entities.rs b/crates/horizon-client/src/game/machine_entities.rs
+--- a/crates/horizon-client/src/game/machine_entities.rs
++++ b/crates/horizon-client/src/game/machine_entities.rs
+@@ -9,6 +9,16 @@ use horizon_world::nbt::Tag;
+ use horizon_world::nbt::Tag;
++
++/// NBT item slots are encoded as an unsigned byte. Never allocate more slots than
++/// that encoding can address, even when a remote block entity supplies a hostile Size.
++const MAX_MACHINE_SLOTS: usize = u8::MAX as usize + 1;
++
++fn bounded_slot_count(requested: i64, minimum: usize) -> usize {
++    let minimum = minimum.min(MAX_MACHINE_SLOTS);
++    usize::try_from(requested)
++        .unwrap_or(minimum)
++        .clamp(minimum, MAX_MACHINE_SLOTS)
++}
+@@ -111,7 +121,7 @@ impl MachineEntity {
+             Some(Tag::Long(v)) => *v,
+             _ => 0,
+         };
+-        let size = (int(tag, "Size") as usize).max(slots);
++        let size = bounded_slot_count(int(tag, "Size"), slots);
+@@ -230,7 +240,7 @@ pub(super) fn held_items(tag: &Tag) -> Vec<Option<ItemStack>> {
+     let size = match tag.get("Size") {
+-        Some(Tag::Int(v)) => (*v).max(0) as usize,
++        Some(Tag::Int(v)) => bounded_slot_count(i64::from(*v), 0),
+         _ => 0,
+     };
+@@ -281,6 +291,26 @@ mod tests {
+         assert!(!is_machine_tag(&pot));
+     }
++
++    #[test]
++    fn hostile_machine_slot_sizes_cannot_trigger_unbounded_allocations() {
++        let huge_long = Tag::compound([("Size", Tag::Long(i64::MAX))]);
++        assert_eq!(MachineEntity::read(&huge_long, 9, 0).items.len(), MAX_MACHINE_SLOTS);
++
++        let negative = Tag::compound([("Size", Tag::Long(-1))]);
++        assert_eq!(MachineEntity::read(&negative, 9, 0).items.len(), 9);
++
++        let huge_int = Tag::compound([
++            ("Size", Tag::Int(i32::MAX)),
++            ("Items", Tag::List(Vec::new())),
++        ]);
++        assert_eq!(held_items(&huge_int).len(), MAX_MACHINE_SLOTS);
++
++        let negative_int = Tag::compound([
++            ("Size", Tag::Int(-1)),
++            ("Items", Tag::List(Vec::new())),
++        ]);
++        assert!(held_items(&negative_int).is_empty());
++    }
+ }
