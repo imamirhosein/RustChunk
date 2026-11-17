@@ -1516,3 +1516,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Horizon differential test harnesses, README project status, subsystem implementations and known issues.
 - Follow-up checks: طراحی test matrix 1.20.1 و vanilla oracle؛ برای هر subsystem baseline و known-gap ثبت شود؛ ادعای parity تنها بعد از اجرای تست‌های RustChunk مجاز است.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 14. `docs/android-armv7.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `17cfb5fe88d6dceff4a5df1a73ba83f17ef06aa4`.
+- Size: 6,621 bytes; 111 lines; full source fetched.
+- Coverage: lines 1–111, complete.
+- Purpose: توضیح ماتریس ABIهای Android و تغییرات خاص ARMv7/دستگاه‌های محدود.
+- Implementation / logic: سند build/release جداگانه ARM64، ARMv7، x86 و x86_64 را شرح می‌دهد؛ محدودیت runtime جاوا در x86، fallback منابع آماده، GLES fallbackها، محدودیت texture array و atlas، arena growth، native mod ABI، heap و اجرای sequential preparation را ثبت می‌کند.
+- Findings: CPU ABI به‌تنهایی تضمین سازگاری GPU نیست. ARMv7 به Android 8+ و Java 25 ARM32 pinned نیاز دارد؛ آماده‌سازی 32-bit sequential و heap cap 512MiB/384MiB است. Android GLES مسیر fallback متفاوت دارد و Vulkan برای برخی ABIها optional است. محدودیت‌ها و نتایج test در سند مختص build خاص‌اند.
+- RustChunk relevance: الگوی Android RustChunk، جداسازی ABI از GPU capabilities، مدیریت حافظه و fallback renderer را نشان می‌دهد؛ مقادیر heap و shader transformations باید از موتور و نسخه هدف استخراج شوند.
+- 1.20.1 implications: دستگاه هدف ARM64 Mali-G52 MC2 است؛ مسیر اولویت‌دار arm64-v8a است. باید OpenGL ES 3.x و Vulkan capability واقعی بررسی شود و fallback بدون فرض BASE_VERTEX/texture-array limits طراحی شود. اگر RustChunk ابزار Java را روی گوشی اجرا نکند، heap Java 32-bit موضوعیت ندارد.
+- Decision: **adaptable با بازطراحی برای renderer و memory model RustChunk**.
+- Dependencies / cross-references: packaging/android/build_apk.py ABI matrix, Android renderer/GLES/Vulkan paths, Java preparation and memory limits.
+- Follow-up checks: ممیزی Android backend و GPU features؛ تست روی Mali-G52؛ اندازه‌گیری memory peaks و texture/array limits؛ x86/ARMv7 فعلاً اولویت نیستند.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
