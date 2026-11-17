@@ -662,3 +662,26 @@
 - Dependencies / cross-references: `crates/horizon-prepare/src/main.rs`; `java.rs`; `artifacts.rs`; `lib.rs`; `check.rs`; root Cargo workspace; `research-lock.json`.
 - Follow-up checks: inspect the preparer's command flow, Java version selection, expected official launcher files, archive verification, exporters, and resource version stamp; separately confirm Android runtime feasibility.
 - Completion state: complete manifest review; no Cargo resolution, build, target compilation or dependency audit was executed.
+
+
+### 31. `crates/horizon-prepare/src/check.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `ae95ea85ea4298334dbd0ee7f2c38d9b914fb59c`.
+- Size: 10,928 bytes; 279 lines; fetched in one complete range.
+- Coverage: lines 1–279, complete, including all unit tests.
+- Purpose: implements the `horizon-prepare --check` resource validation path and its stamp lifecycle, and identifies optional resource groups that need separate preparation commands.
+- Behavior:
+  - Reads the root `research-lock.json`, then checks `horizon-resources.json` for the expected schema and exact pinned Minecraft version string.
+  - Requires a `horizon-prepare.json` stamp whose `output_version` matches the current preparer's `OUTPUT_VERSION`.
+  - Checks presence of built-in packs, six valid non-placeholder square title-panorama PNG faces plus overlay, Unifont zip, language metadata and sounds metadata.
+  - Preparation removes the stamp before writing and stamps only after completion. A missing/old stamp or mismatching Minecraft version leads to a suggested full prepare command.
+  - The implementation expressly does not run Java or inspect the game files during `--check`; it tests file presence and version stamps, not resource contents. Its tests cover missing folders, complete resources, per-extra gaps, invalid panorama dimensions, stamp removal and lock waiting.
+- RustChunk relevance: high for a safe and repeatable local resource-preparation flow and for understanding how a launcher decides whether resources need rebuilding. The separation between core required data and optional user-asset-dependent extras is reusable.
+- 1.20.1 implications:
+  - The strict equality check against `lock.version` correctly prevents a directory prepared for 26.3 from being treated as current for 1.20.1, assuming RustChunk pins the target independently.
+  - `SCHEMA` and `OUTPUT_VERSION` track the preparer's own layout/tool version, not the Minecraft data version; these should remain distinct from the Minecraft version pin.
+  - Existence and stamp checks do not prove the actual data is 1.20.1-compatible or intact. The export/manifest/hash process must provide the authoritative content checks; this file alone is not a data-integrity boundary.
+- Decision: **adaptable** as a preparation-completeness/stamp/version guard. It is mostly version-agnostic; exact 1.20.1 support depends on the manifest, lock reader, exporters, resources and checks in other modules.
+- Dependencies / cross-references: `research-lock.json`; `artifacts::Lock`; `OUTPUT_VERSION`; `SCHEMA`; `horizon-resources.json`; `horizon-prepare.json`; `missing_extras`; launcher backend completion checks; resource commands `packs`, `panorama`, `fonts`, `languages`, `sounds`.
+- Follow-up checks: inspect `main.rs`, `lib.rs`, `artifacts.rs`, the manifest writer and resource exporter implementations to verify that the stamp and Minecraft version are written only after all mandatory 1.20.1 artifacts are verified.
+- Completion state: complete source and unit-test review; unit tests were read but not executed.
