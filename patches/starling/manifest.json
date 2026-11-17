@@ -6,5 +6,6 @@
     "0003-lock-world-before-upgrade-and-migration.patch",
     "0004-bound-mod-package-reads.patch",
     "0005-check-template-state-expansion-limit.patch"
-  ]
+  ],
+  "series_revision": 6
 }
