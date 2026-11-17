@@ -1,14 +1,14 @@
 diff --git a/crates/horizon-client/src/game/world_loading.rs b/crates/horizon-client/src/game/world_loading.rs
 --- a/crates/horizon-client/src/game/world_loading.rs
 +++ b/crates/horizon-client/src/game/world_loading.rs
-@@ -101,2 +101,5 @@ impl WorldRequest {
+@@ -101,3 +101,6 @@ impl WorldRequest {
          let name = name.as_deref();
          let create = create.as_ref();
 +        // Hold the world lock before recovery fallback, data fixing or layout migration:
 +        // a second process must not mutate the same save while this open is preparing it.
 +        let session_lock = horizon_client::save::SessionLock::acquire(&save_root)?;
          // openWorldLoadLevelData: level data that does not read is RecoverWorldDataScreen's to
-@@ -140,4 +143,3 @@ impl WorldRequest {
+@@ -139,5 +142,4 @@ impl WorldRequest {
          }
          horizon_client::save::upgrade_older_world_with(&save_root, upgrade)?;
          horizon_client::save::migrate_legacy(&save_root)?;
