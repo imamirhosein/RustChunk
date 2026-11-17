@@ -963,3 +963,32 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `tools/generate_packet_ids.py`; vanilla datagen `packets.json`; `State`; `Direction`; packet enums in `packets/*.rs`; `adapter.rs`; protocol probes; `horizon-core::version`.
 - Follow-up checks: inspect the generator and packet report schema, all consumers of numeric constants and `NAMES`, and the handshake/login/configuration transitions for 1.20.1. Confirm whether a unified `Configuration` state is even valid for the target version.
 - Completion state: complete source review; no packet report generation, protocol tests, codegen or network interoperability run was performed.
+
+
+### 43. `crates/horizon-protocol/src/connection.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `a7e1d30600b073eecf7aa26d0ccb4b25ec5ee539`.
+- Size: 27,464 bytes; 744 lines; fetched in consecutive ranges 1–400 and 401–744.
+- Coverage: lines 1–744, complete; both ranges returned the same blob SHA; all unit tests read.
+- Purpose: implements the byte transport and framed Minecraft packet connection, including TCP and in-process memory pipes, optional AES/CFB8 encryption, VarInt21 framing, zlib threshold compression, split reader/writer and connection counters.
+- Transport behavior:
+  - `Pipe` is a thread-safe in-memory duplex byte channel with close notification, optional read timeout and clone semantics; it supports vanilla-style LocalChannel communication between an integrated server and local player.
+  - `Stream` abstracts TCP and Pipe. A `Connection` keeps paired stream handles for separate read and write sides, can be split into `ConnReader`/`ConnWriter`, and can be closed through a `Closer`.
+  - TCP connect resolves all socket addresses, puts IPv4 first to match Java's default address preference, and uses a 250 ms stagger between attempts so another address can race while the first is pending. The first successful socket wins; reported failure uses the first attempted address's error.
+  - `connect_server_with_address` applies the SRV resolver and returns the resolved host/port for a login handshake; status callers may preserve the original address separately.
+- Packet framing and crypto:
+  - Reader incrementally buffers incomplete frames, parses frame headers, inflates compressed payloads and decodes a VarInt packet ID plus payload. Empty compressed frames are skipped, matching the documented vanilla decoder behavior.
+  - Encryption uses AES/CFB8 both directions with the shared 16-byte secret as key and IV. If encrypted bytes were read past a plain packet before encryption is enabled, the buffered tail is decrypted at activation.
+  - Compression threshold is shared by reader/writer; negative values disable it. Writer frames packet bodies, optionally compresses, encrypts and writes; raw unframed APIs exist for legacy server-list ping behavior.
+  - Counters track sent/received packets and bytes; read timeout and EOF map to explicit protocol error classifications.
+- Unit tests read: IPv4-first selection and IPv6 fallback, fast fallback from dead address, deterministic error reporting, silent peer timeout/EOF, TCP compression+encryption, in-memory pipe packet exchange/close, packet sizes from one byte through 200 KB, pipe timeout/drop semantics, encrypted bytes buffered before activation and empty compressed-frame handling. Not executed.
+- RustChunk relevance: very high. The transport/framing/encryption primitives are broadly reusable beneath a version-specific packet layer and offer an integrated-server in-memory transport.
+- 1.20.1 implications:
+  - TCP, socket resolution, raw streams, most AES/CFB8, packet-length framing and threshold compression are likely reusable protocol infrastructure, subject to parity verification with 1.20.1's packet limits and compression behavior.
+  - This implementation uses the 26.3-era crate's `frame` API and packet assumptions. 1.20.1 connection phase handling (login success/transition directly to Play versus modern Configuration) must be implemented above it; transport alone does not make the packet stream compatible.
+  - CFB8 key exchange and enabling point depend on the 1.20.1 login sequence. The connection primitive can likely support the older flow, but exact ordering and encryption boundary must be verified against a real server.
+  - Address racing and SRV behavior are launcher/client features rather than Minecraft-version-specific gameplay, but the precise DNS behavior should be compared to the target client/version.
+- Decision: **largely adaptable** as transport and packet framing infrastructure; **verify and adapt boundaries** for 1.20.1 frame/compression rules, crypto activation and connection-state orchestration. Do not confuse the in-memory Pipe with remote server networking.
+- Dependencies / cross-references: `frame`; `crypto::Cfb8`; `buf::Reader`; `resolver`; `State` consumers; login packet flow; `ConnReader`; `ConnWriter`; `Closer`; `Counters`.
+- Follow-up checks: inspect `frame.rs`, `crypto.rs`, `resolver.rs`, login/connection state machine and packet size limits; validate handshake/login/encryption/compression with a vanilla 1.20.1 server.
+- Completion state: complete source and test review; no connection unit tests or real TCP server interoperability were run.
