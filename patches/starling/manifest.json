@@ -5,7 +5,8 @@
     "0002-fix-native-command-permission-conflict.patch",
     "0003-lock-world-before-upgrade-and-migration.patch",
     "0004-bound-mod-package-reads.patch",
-    "0005-check-template-state-expansion-limit.patch"
+    "0005-check-template-state-expansion-limit.patch",
+    "0006-validate-kinetic-input-bounds.patch"
   ],
-  "series_revision": 6
+  "series_revision": 7
 }
