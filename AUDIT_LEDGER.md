@@ -1836,3 +1836,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: item.rs Component/Template/Reader, buf::Reader, horizon_world NBT, packet slot/item readers and 26.3 DataComponents registry order.
 - Follow-up checks: در ممیزی packet/item 1.20.1، مسیرهای empty/non-empty Slot و NBT limits/terminator را از vanilla source استخراج و malformed NBT tests بنویس.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
+
+
+### 74. `crates/horizon-client/src/chunk_io.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `9613b3b265c39f7f97e6ec4aa7e8ec1a249a2f93`.
+- Size: 5,730 bytes; 166 lines; full source fetched.
+- Coverage: lines 1–166, complete.
+- Purpose: جمع‌آوری خطاهای load/save chunk از threadهای مختلف و تبدیل آن‌ها به toastهای UI در thread پنجره.
+- Implementation / logic: گزارش load/save خطاها را log می‌کند، از save::low_disk_space برای بررسی فضای ذخیره‌سازی استفاده می‌کند و در Mutex سراسری Pending، پرچم کمبود فضا و جدیدترین مختصات chunk ناموفق از هر نوع را نگه می‌دارد. `take()` با std::mem::take صف را اتمیک تخلیه می‌کند. تابع‌های toast متن ترجمه‌شده و مختصات chunk را می‌سازند. پیام کمبود فضای دیسک از سرور نیز به همان صف اضافه می‌شود.
+- Findings: چون فقط آخرین chunk هر نوع نگهداری می‌شود، خطاهای پشت‌سرهم به‌صورت گروهی خلاصه می‌شوند نه به تعداد کامل. پرچم low_disk_space تا زمان take sticky است. Mutex poison با into_inner بازیابی می‌شود. کد فقط گزارش و UI است و خودش chunk persistence را انجام نمی‌دهد. تست‌ها newest-failure، sticky warning و زمان نمایش toast را بررسی می‌کنند؛ اجرا نشده‌اند.
+- RustChunk relevance: برای پایداری ذخیره دنیا در Android مفید است: خطای I/O و کمبود فضا باید از thread ذخیره‌سازی به UI منتقل شود بدون اینکه thread بازی toast بسازد.
+- 1.20.1 implications: مفهوم گزارش asynchronous به 1.20.1 وابسته نیست و قابل اقتباس است، اما ترجمه‌ها/پیام‌ها و جای اتصال به ServerChunkCache باید با client/server engine جدید نوشته شود. RustChunk باید low-storage warning و failure reporting را بدون مسدود کردن tick/render thread طراحی کند.
+- Decision: **adaptable؛ کد فعلی به سیستم save/toast Horizon وابسته است و باید بازنویسی شود**.
+- Dependencies / cross-references: horizon_client::save::low_disk_space, toasts::SystemToast, lang translation keys, HUD rgba, world region/chunk I/O and server writer thread.
+- Follow-up checks: ممیزی save.rs و region writer؛ مشخص کردن thread ownership، failure propagation، retry policy و مسیر اندروید storage permissions/space.
+- Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
