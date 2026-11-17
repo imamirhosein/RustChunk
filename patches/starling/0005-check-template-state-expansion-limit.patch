@@ -1,7 +1,7 @@
 diff --git a/crates/horizon-client/src/mod_content.rs b/crates/horizon-client/src/mod_content.rs
 --- a/crates/horizon-client/src/mod_content.rs
 +++ b/crates/horizon-client/src/mod_content.rs
-@@ -438,3 +438,12 @@ fn combinations(
+@@ -438,4 +438,14 @@ fn combinations(
      Ok(combos)
  }
  
@@ -16,7 +16,7 @@ diff --git a/crates/horizon-client/src/mod_content.rs b/crates/horizon-client/sr
 +}
 +
  /// Puts a declared state property's values on one of a block's state rows.
-@@ -1055,3 +1064,21 @@ impl Plan {
+@@ -1055,3 +1065,28 @@ impl Plan {
                  let combos = combinations(&decl.state_properties, &decl.default_state)
                      .map_err(|e| format!("{}: {e}", decl.id))?;
 +                // Bound the full template-state × declared-property product before
@@ -45,7 +45,7 @@ diff --git a/crates/horizon-client/src/mod_content.rs b/crates/horizon-client/sr
 +                    .into());
 +                }
                  // A `default_state` key the block itself declares is its own,
-@@ -1143,4 +1170,2 @@ impl Plan {
+@@ -1143,5 +1178,3 @@ impl Plan {
 -                let count =
 -                    u32::try_from(states.len() as u64 * combos.len() as u64).unwrap_or(u32::MAX);
 -                next = next.saturating_add(count);
@@ -54,8 +54,7 @@ diff --git a/crates/horizon-client/src/mod_content.rs b/crates/horizon-client/sr
 diff --git a/crates/horizon-client/src/mod_content_tests.rs b/crates/horizon-client/src/mod_content_tests.rs
 --- a/crates/horizon-client/src/mod_content_tests.rs
 +++ b/crates/horizon-client/src/mod_content_tests.rs
-@@ -675,6 +675,18 @@ fn refuses_more_states_than_a_world_holds() {
-     fs::remove_dir_all(scratch).unwrap();
+@@ -708,4 +708,14 @@ fn refuses_more_states_than_a_world_holds() {
  }
  
 +#[test]
