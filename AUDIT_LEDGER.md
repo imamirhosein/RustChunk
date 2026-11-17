@@ -992,3 +992,32 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `frame`; `crypto::Cfb8`; `buf::Reader`; `resolver`; `State` consumers; login packet flow; `ConnReader`; `ConnWriter`; `Closer`; `Counters`.
 - Follow-up checks: inspect `frame.rs`, `crypto.rs`, `resolver.rs`, login/connection state machine and packet size limits; validate handshake/login/encryption/compression with a vanilla 1.20.1 server.
 - Completion state: complete source and test review; no connection unit tests or real TCP server interoperability were run.
+
+
+### 44. `crates/horizon-protocol/src/buf.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `4b82513417a34119abc2d23f7517d5b83377835e`.
+- Size: 22,954 bytes; 724 lines; fetched in consecutive ranges 1–400 and 401–724.
+- Coverage: lines 1–724, complete; both ranges returned the same blob SHA; all tests and macros read.
+- Purpose: generic wire-level buffer readers/writers and typed `Codec` building blocks modeled on Minecraft's FriendlyByteBuf, VarInt/VarLong, ByteBufCodecs and StreamCodec composition.
+- Implemented primitives and structures:
+  - Bounded Reader over packet bytes with big-endian signed/unsigned integers, floats, booleans, VarInt/VarLong, byte arrays, UTF-8 strings capped by Java UTF-16 code units, UUIDs, NBT, variable/fixed long arrays and remaining-byte access.
+  - Writer for corresponding primitives, VarInts, strings/byte arrays, UUID, network NBT and long arrays. `write_varint` and `varint_size` are exported helpers.
+  - Typed codecs include Bool/Byte/UByte/Short/UShort/Int/Long/Float/Double/VarInt/VarLong/Uuid, bounded strings and bytes, Rest, Nbt, Longs, List, Opt, OptVarInt, integer/double vectors, packed BlockPos/ChunkPos/SectionPos, BitSet and low-precision velocity vectors (`LpVec3`).
+  - The `packet!` macro generates a Rust packet struct and a field-order codec by composing primitive/typed codecs. Packet structs derive Clone/Debug/PartialEq.
+  - Network NBT read uses a 2 MiB quota. Writer emits a zero/End tag if the NBT writer cannot encode a tag within its configured default limits.
+- Behavior/tests read:
+  - VarInt/VarLong examples include negative and boundary values and overlong encodings; string tests cover UTF-8 byte length versus Java UTF-16 character count; positions test packed bit fields and negative boundaries.
+  - BitSet writes omit trailing zero bytes; low-precision velocity codec quantizes, sanitizes NaN and clamps large values; angle packing mirrors Mth pack/unpack.
+  - Tests cover list/optional/UUID round trips and representative position/codec examples. Tests read but not executed.
+- RustChunk relevance: critical reusable foundation. Most primitive encodings are protocol mechanics independent of Minecraft version and are suitable for an older-version adapter, provided exact vanilla behavior is revalidated.
+- 1.20.1 implications:
+  - Big-endian fixed-width values, VarInt/VarLong, UUID, UTF-8, basic lists/options and many packed positions are likely reusable. String limits and Java UTF-16 counting are also broadly applicable.
+  - `LpVec3`, section/position codecs and NBT wire representation must be checked against 1.20.1's exact method/packet usages; no assumption that 26.3's newer packet fields share these codecs is safe.
+  - NBT itself remains a core 1.20.1 wire type, but integration with 26.3-specific `horizon_world::nbt` semantics, quota accounting and root-name/list changes should be verified against 1.20.1's NbtIo implementation.
+  - Modern data-component/item payloads introduced after 1.20.1 must not be carried back into the old item wire model just because generic codecs compile.
+  - Writer length/count casts are not uniformly validated before emitting VarInt counts; callers/codecs must enforce their own bounds where vanilla does. The protocol parser should also ensure packet payloads are fully consumed at the right decode boundary.
+- Decision: **largely adaptable** for primitive codecs and macro composition; **method-by-method validation and selective replacement required** for special packed/vector/NBT codecs and version-specific structures.
+- Dependencies / cross-references: `horizon_world::nbt`; `Reader`; `Writer`; `Codec`; `packet!`; `frame`; packet modules; `chunk.rs`; `item.rs`; `entity_data.rs`; NBT quota and Java's FriendlyByteBuf/ByteBufCodecs.
+- Follow-up checks: compare each specialized codec's source behavior with 1.20.1 vanilla methods; inspect NBT read/write and packet decode strictness; add a 1.20.1 golden-byte corpus for boundary and malformed inputs.
+- Completion state: complete source/macro/test review; no codec tests or 1.20.1 byte comparison was run.
