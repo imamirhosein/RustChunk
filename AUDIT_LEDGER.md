@@ -195,3 +195,22 @@
 - **Decision:** **adaptable** as an APK orchestration pattern; **rewrite required** for RustChunk's Java/Forge/JVM packaging route and desired ABI/version support. Keep asset/legal boundaries and symbol/signing ideas.
 - **Follow-up checks:** inspect native/java_launcher.c, Android manifest and Activities, exporter helper and manifests, install/update code, and release assets; verify all ABI outputs and exact Android package identity; map required runtime files for Forge 1.20.1.
 - **Completion state:** complete script review; helper scripts, referenced sources and actual build results remain pending.
+
+### 10. packaging/lowbudget/make.py
+- **Source SHA:** f226619fcac0e0d1d61e75273d29e0f5772bc36d
+- **Size:** 257 lines; 12,852 characters; full file fetched and read.
+- **Coverage:** complete in one fetch.
+- **Purpose/content:** generates Starling's temporary low-budget setup resource pack with Pillow. It supplies the app's setup/menu appearance before the user's own game files and resources are prepared.
+- **Generated assets and mechanics:**
+  - Chalk/graphite aesthetic with fixed palette, 4x texture scaling, multiple button takes, hand-drawn edges, grain, scribble fills, pressed/disabled variants, and nine-slice metadata.
+  - Generates button, slider, slider-handle, text-field and scroller textures; tiled paper-like menu backgrounds; header/footer separators.
+  - Generates five hand-lettered bitmap font sheets using hand.py, a default Minecraft font JSON plus four Starling font variants, and Starling variant metadata.
+  - Imports local strings.json to create the en_us language file; writes a pack.mcmeta with pack_format 97 and Starling skin metadata.
+  - Deletes and recreates the output pack directory on each run, then emits the output path.
+- **Dependencies / references:** Python standard library (json/math/random/shutil/pathlib), Pillow image APIs, local hand.py and strings.json; output path packaging/lowbudget/pack. build_apk.py packages the generated folder as lowbudget.zip.
+- **RustChunk relevance:** low for game performance/runtime, but useful as an example of generating a small bootstrapping UI/resource theme without shipping Minecraft assets. A separate early-start UI theme can help make setup usable before full game resources exist.
+- **Version/compatibility warning:** generated filenames, namespace, language keys, font provider schema, pack metadata and resource-pack formats are tailored to Starling's 26.3 target. They cannot be assumed compatible with the 1.20.1 resource-pack format or Forge's pack-loading lifecycle without adapting and testing.
+- **Potential issues / verification points:** this script was inspected but not run; the generated pack was not validated in-game. It relies on Pillow and imported hand.py behavior, neither of which is part of this file's implementation. Image-noise determinism should be tested rather than inferred from seeding Python's random module. Rebuilding destroys the previous generated output directory, as expected for a derived artifact but worth guarding if RustChunk's output path could contain user data.
+- **Decision:** **unnecessary** for the core Rust/Forge engine; **adaptable** only if RustChunk needs a pre-game setup theme or generated placeholder UI pack. Rewrite pack schema and resource identifiers for Minecraft 1.20.1.
+- **Follow-up checks:** inspect hand.py and strings.json if setup theme is in scope; inspect pack output and test its compatibility with Minecraft 1.20.1; verify build_apk.py's ZIP integration.
+- **Completion state:** complete generator source review; output generation and runtime visual behavior untested.
