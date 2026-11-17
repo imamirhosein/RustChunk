@@ -799,3 +799,25 @@
 - Dependencies / cross-references: `artifacts.rs`; `java.rs`; `exporters.rs`; `sounds.rs`; `survival.rs`; `worker.rs`; `pool.rs`; `pyjson.rs`; `mods/horizon/src/test/java/dev/horizonlab/parity`; `horizon-world`; `horizon-assets`; `horizon-client`; `research-lock.json`; `horizon-resources.json`; `output-versions.txt`.
 - Follow-up checks: inspect `exporters.rs`, `survival.rs`, `sounds.rs`, `worker.rs`, `pool.rs`, build-time source hashing; inspect the Java parity oracle classes actually compiled; compare 1.20.1's `version.json`, datagen reports, registries, item model and worldgen JSON with the current generated resource contract; design a separate resource schema for 1.20.1 where necessary.
 - Completion state: complete source and test review; no exporter compilation, JVM process, data generation, resource extraction, preparation, build or test was executed.
+
+
+### 36. `crates/horizon-protocol/Cargo.toml`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `377b6d997e84642646aca16b3762485ff14b73ff`.
+- Size: 1,108 bytes; 36 lines; fetched in one complete range.
+- Coverage: lines 1–36, complete.
+- Purpose: defines the native Rust crate implementing the Minecraft Java Edition network protocol for Horizon.
+- Dependency and version findings:
+  - Package description explicitly says Minecraft Java Edition 26.3, protocol version 777. This makes the crate's current protocol target unambiguously 26.3.
+  - Depends on `horizon-core` and `horizon-world`, so protocol code also relies on shared version constants and world types/data structures.
+  - Uses zlib compression, JSON serialization, OS randomness, SHA-1, SHA-256/RSA-related signature handling and AES for connection encryption. Windows additionally depends on `ipconfig` for SRV redirect support.
+  - Defines dedicated Cargo examples/probe targets for protocol and item wire behavior; it has no Java runtime or Forge dependency.
+- RustChunk relevance: critical for a native Rust client intended to connect to ordinary Minecraft Java servers. This is a real protocol implementation, not a bridge to a Java process.
+- 1.20.1 implications:
+  - The crate description and current protocol adapter are 26.3/protocol 777. Minecraft Java 1.20.1 uses a different protocol generation; all state/direction packet IDs, packet layouts, login/configuration/play sequence, registries, entity metadata, chunk payloads, chat/security and compression/encryption behavior need a 1.20.1-specific implementation or adapter.
+  - Dependencies are largely version-agnostic primitives, but `horizon-world` and `horizon-core` bind the crate to versioned world/data/protocol constants. Reusing these dependency declarations alone does not create 1.20.1 compatibility.
+  - The README-style package description should be updated only after source code and tests have a genuine version-aware implementation; changing the wording is not a port.
+- Decision: **adaptable** at the transport/serialization/cryptography library level; **rewrite/introduce a 1.20.1 protocol adapter** and reconcile shared core/world types. Protocol 777 must not be reused for 1.20.1.
+- Dependencies / cross-references: `horizon-core`; `horizon-world`; protocol `adapter.rs`; packet modules; compression, crypto, login and connection handling; `protocol_probe`; `item_wire_probe`; vanilla protocol report/packet-ID generation.
+- Follow-up checks: inspect `adapter.rs` and its version modules, packet ID table and packet bodies for handshake/login/configuration/play, then compare against an authoritative 1.20.1 protocol schema and a real vanilla 1.20.1 server handshake.
+- Completion state: complete manifest review; no Cargo build, dependency resolution, packet probe, network connection or server test was run.
