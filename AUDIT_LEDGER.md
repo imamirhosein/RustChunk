@@ -79,7 +79,7 @@ Source ordering: recursive Git tree returned by GitHub for `starling-client/star
 | 1 | `crates/horizon-client/src/game/input_trace.rs` | Complete (historical; no blob SHA recorded) |
 | 2 | `crates/horizon-client/src/game/integrated.rs` | Complete (1–1330; SHA `baedd4a77d6b62dc337158bbaf451f8689cb040b`) |
 | 3 | `crates/horizon-client/src/game/interactions.rs` | Complete (1–133; SHA `ddf1d967eb21ee7f1673434439aaadd431a7e334`) |
-| 4 | `crates/horizon-client/src/game/item_draw.rs` | Pending |
+| 4 | `crates/horizon-client/src/game/item_draw.rs` | Complete (1–682; SHA `19776b1660bfe859d1737c9476c7db3a5ddc3489`) |
 | 5 | `crates/horizon-client/src/game/item_particles.rs` | Pending |
 | 6 | `crates/horizon-client/src/game/item_use.rs` | Complete (historical; no blob SHA recorded) |
 | 7 | `crates/horizon-client/src/game/jigsaw_blocks.rs` | Pending |
@@ -196,4 +196,13 @@ Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do no
 - Entire file fetched and reviewed: lines 1–133 (single complete fetch).
 - Blob SHA: `ddf1d967eb21ee7f1673434439aaadd431a7e334`.
 - Result: normal hitbox geometry and vehicle-position update are straightforward; two synced floats are assigned without validation. Recorded as CAND-007 pending verification of protocol input handling and ray/AABB robustness. No confirmed exploit or crash established.
+- No source code changed; only the audit ledger was updated. No build/test claimed.
+
+
+### 2026-11-17 — file #4: item_draw.rs
+
+- Source: pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Entire file fetched and reviewed in consecutive ranges: 1–180, 181–360, 361–540, 541–682.
+- Total: 682 lines. Blob SHA: `19776b1660bfe859d1737c9476c7db3a5ddc3489`.
+- Result: no confirmed defect established in this pass. Reviewed item environment values, date formatter, use-duration derivation, item resolution, GPU/CPU submission and dropped-item culling. Potential numeric edge cases in pack-derived bundle fullness/use duration were not established as defects and are not promoted to findings.
 - No source code changed; only the audit ledger was updated. No build/test claimed.
