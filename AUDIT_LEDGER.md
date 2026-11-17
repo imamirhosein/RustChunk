@@ -480,3 +480,30 @@
 - Dependencies / cross-references: `.github/release-line.txt`; `.github/workflows/release.yml`; `.github/workflows/launcher.yml`; `tools/release_train.py`; `crates/horizon-server/src/update.rs`; `launcher/src/backend.rs`; `release-flow.md`; website release ordering and external updater consumers.
 - Follow-up checks: none required for the Minecraft 1.20.1 compatibility investigation; revisit only when RustChunk's own update and release policy is designed.
 - Completion state: complete document review; no release, tag, workflow, update or migration command was executed.
+
+
+### 23. `docs/world-data.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `59b6049b77df9e7c1faa1c545a6707cb3d234446`.
+- Size: 9,261 bytes; 147 lines; fetched in one complete range.
+- Coverage: lines 1–147, complete.
+- Purpose: describes the implemented portion of Horizon's Rust world/save layer: region files, NBT, chunk palettes, block-state registry identities, saved tick lists, DataFixer upgrades and a small fluid-state adapter.
+- Hard version boundary:
+  - The document explicitly pins implementation to Minecraft Java 26.3 and DataVersion 5023. It states chunk access requires 5023 and registry data is exported from the pinned vanilla version.
+  - Worldgen, lighting, networking and rendering are not implemented by this crate; scheduled tick callbacks are also not implemented. It is not a complete game/world engine.
+  - The implementation imports 35,723 block-state identities/defaults; it expressly does not import block implementations, collision/outline shapes or behavior.
+- Storage behavior and reported validation:
+  - NBT supports all tag types, named/unnamed roots, Java modified UTF-8 edge cases and 26.3 heterogeneous list wrappers; it applies explicit application limits and documents canonicalization differences.
+  - Region support includes gzip, zlib, uncompressed and LZ4-java block framing, with validation of headers, lengths, sector overlap, external chunks and negative-coordinate chunk math.
+  - Paletted sections handle block and biome arrays, uniform sections, packed words, registry-resolved numeric state IDs and compaction.
+  - Data migration applies file-level and level.dat fixes, then server DataFixers across chunks, entities, POI, players and related save files. Documentation claims server fixes are ported from 1.8 onward, while client-file fixes are not. This is a save migration capability, not implementation of old-version gameplay.
+  - Test scope is synthetic and differential against vanilla classes/JARs. It does not establish full generated-world lifecycle, playable integration or performance improvement.
+- RustChunk relevance: very high for understanding which layer Starling has actually implemented and for planning save compatibility. Its region/NBT/Anvil palette code may be a useful implementation reference. The DataFixer work suggests that reading/upgrading older saves is a separately handled subsystem; however, it does not prove that the game logic, registries, worldgen or runtime can execute at 1.20.1.
+- 1.20.1 implications:
+  - 1.20.1 data version and registry/state IDs differ from 26.3. Direct use of the 26.3 registry export or DATA_VERSION=5023 would misinterpret 1.20.1 data unless a version-aware data path is introduced.
+  - DataFixers should be used in the correct direction and for the intended operation. The documented pipeline upgrades old worlds toward the pinned 26.3 schema; it is not a downgrade path and cannot be assumed to preserve semantics when targeting 1.20.1.
+  - NBT and Anvil container mechanics are more reusable than the game-specific schema, but 26.3 list-wrapper/canonicalization assumptions and all block-state identities need comparison against 1.20.1 vanilla.
+- Dependencies / cross-references: `crates/horizon-world`; its `datafix`, `nbt`, `region`, `chunk`, `registry` and fluid modules; `horizon-prepare` registry exporter; local vanilla oracle; `tools/test_datafix_parity.py`; world/tick/fluid parity suites; docs/block-state-codecs.md and docs/scheduled-ticks.md.
+- Decision: **adaptable** for generic NBT/Anvil/palette mechanics and the methodology of DataFixer parity; **rewrite/version-gate required** for registries, DataVersion, block-state tables, chunk schema and any 1.20.1 world semantics. The crate itself is not evidence of a complete playable 1.20.1 engine.
+- Follow-up checks: inspect `horizon-world/Cargo.toml`, `nbt.rs`, `region.rs`, `chunk.rs`, `registry.rs`, the DataFixer implementation and its version schema; inspect generated 26.3 registry artifacts and how `horizon-prepare` produces them. Compare actual 1.20.1 data version, registry exports, palettes, DataFixer schemas and world fixtures.
+- Completion state: complete document review; no world tool, DataFixer, world conversion, vanilla oracle or parity suite was run.
