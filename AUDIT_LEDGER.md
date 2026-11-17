@@ -2064,3 +2064,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Options toggleKeySneak/toggleKeySprint/toggleKeyAttack/toggleKeyUse; KeyMapping and ToggleKeyMapping; input event dispatch; winit keyboard/mouse events; controller toggle-sneak extension.
 - Follow-up checks: تطبیق دقیق 1.20.1 KeyMapping/ToggleKeyMapping; بررسی repeat semantics، focus loss، pointer cancel، controller disconnect و click counter bounds.
 - Completion state: complete source review; no tests or build were run.
+
+
+
+### 88. crates/horizon-client-input/src/modifiers.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: f5e183660f04ceabc63923e5c4ddcfa5f0daae65.
+- Size: 8,020 bytes; 232 lines; complete file fetched.
+- Coverage: lines 1–232, complete.
+- Purpose: همگام نگه داشتن modifier bitهای OS با physical key set و تولید موقت modifier برای agent/controller shift-click.
+- Implementation / logic: set_key کلیدهای left/right هر modifier را در HashSet ثبت/حذف و bit مربوط را تنها وقتی هیچ‌یک از دو سمت held نیست خاموش می‌کند. hold وضعیت قبلی physical key و modifier bit را ذخیره و modifier را synthetic فعال می‌کند؛ restore state قبلی را برمی‌گرداند. reconcile وقتی OS modifier bit خاموش شده ولی physical keys هنوز held هستند، keyها را پاک و اگر کلید به sneak/sprint rebound شده و controller hold فعال نیست، ToggleKeys را Release می‌کند.
+- Findings: این ماژول تفاوت بین OS-level modifier state و برنامه‌وار نگه‌داشتن physical keys را جبران می‌کند؛ نگه‌داشتن سمت راست هنگام release سمت چپ صریحاً مدیریت می‌شود. reconcile با KeyBinds current binding را چک می‌کند تا loss of SHIFT به اشتباه sneak را release نکند اگر sneak روی کلید دیگری rebound شده است؛ pad-held و toggle options هم preserve می‌شوند. hold/restore مقدار aggregate bit را snapshot می‌کند؛ اگر در فاصله بین آن‌ها یک modifier event مستقل برسد، restore می‌تواند snapshot قدیمی را بازگرداند، بنابراین این API باید برای clickهای کوتاه و synchronous استفاده شود یا با state token دقیق‌تر تکمیل گردد. Tests modifiers left/right، synthetic hold/restore و lost-release/rebinding/pad cases را پوشش می‌دهند؛ اجرا نشده‌اند.
+- RustChunk relevance: برای Android modifier reconstruction و macro/controller-generated input مفید است؛ جلوگیری از sticky modifier و accidental sneak/sprint release در gameplay مهم است.
+- 1.20.1 implications: semantics ToggleKeys باید با نسخه هدف بررسی شود؛ خود reconciliation و physical key set بیشتر platform input concerns هستند. روی Android که winit modifier events ممکن است ناقص باشند باید source واقعی key down/up و focus loss را مبنا گذاشت، نه صرفاً bit field.
+- Decision: **modifier reconciliation و paired-key logic قابل اقتباس؛ snapshot restore باید synchronous/serial تضمین شود و با 1.20.1 key lifecycle تست شود**.
+- Dependencies / cross-references: winit ModifiersState/KeyCode; keybinds KeyBinds; keymapping ToggleKeys; Android key event bridge; controller agent/touch synthesized input.
+- Follow-up checks: تست interleaving of real modifier events during hold/restore، IME/Android modifier state، focus loss و key cancellation؛ بررسی keybindings که به Shift/Control themselves rebound شده‌اند.
+- Completion state: complete source review; tests/build not executed.
