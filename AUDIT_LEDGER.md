@@ -1222,3 +1222,33 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `packets/play.rs::SetEntityData`; `buf`; `item::{Slot,Stack,Template}`; `packets/login::Property`; `Tag`; `registry` particle/entity/block/item IDs; `MOD_PARTICLE_ID`.
 - Follow-up checks: extract 1.20.1 `EntityDataSerializers` registry order and serializer read/write methods; create exhaustive version-specific metadata and particle fixtures; verify unknown-ID handling and metadata termination against vanilla.
 - Completion state: complete source/test review; no metadata, particle or 1.20.1 wire tests were executed.
+
+
+### 53. `crates/horizon-protocol/src/item.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `37ee9ee60dbcea5170b6a63105d901a93eb17a08`.
+- Size: 72,127 bytes; 2,006 lines; fetched in consecutive ranges 1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–2,000 and 2,001–2,006.
+- Coverage: lines 1–2,006, complete; all six ranges returned the same blob SHA; all codecs, helpers and unit tests read.
+- Purpose: implements the current 26.3 network ItemStack data-component patch format, optional/delimited item slots, item-stack templates, hashed inventory synchronization and many typed/opaque component codecs.
+- Core wire model:
+  - Declares 122 `minecraft:data_component_type` IDs (0–121) in 26.3 registry order. The list includes component types that did not exist in 1.20.1, such as item model, use/weapon/equipment/attack range, death protection, block transformers, many mob variant components, sign text and newer entity/animal-related components.
+  - A current non-empty `Slot` is encoded as count VarInt, item registry ID VarInt, number of added components, number of removed component IDs, then each component ID/value and removed ID. Empty is count 0.
+  - `DelimitedSlot` uses the modern component patch with each positive component value length-prefixed, intended for untrusted/forward-compatible creative-slot input. `Template` serializes nested item stacks with item/count followed by data-component counts/values.
+  - `HashedSlot` is a separate modern format: presence boolean, item/count, added component IDs with 32-bit hashes, and removed component IDs. `WirePatch` preserves original patch bytes for untouched stacks and can query/decode a stored patch.
+  - Nested stacks are bounded to depth 64. Bundles, charged projectiles, containers, pot decorations and use remainder can recursively contain stack templates.
+- Component codec coverage:
+  - `Component` models simple integer/unit/bool/text/NBT/identifier/lore/enchantments, potion data, profiles/skin patches, custom model data, tooltip display, writable/written books, nested stacks, fireworks, lodestone trackers, trims, stew effects, instruments, banner patterns and painting variants.
+  - Many other 26.3 components are read with `skip.rs` and preserved as raw bytes; custom component types can be represented as NBT via `custom` support. Unknown component IDs are errors because their body length is not known in this non-delimited format.
+  - Specialized readers include registry-holder IDs, potion effects/name, component profile, filters on book content, fireworks, adventure predicates, tool/weapon/consumable/equippable data, container contents, sign text, entity/block data, etc. Several are kept opaque to preserve byte identity.
+- Tests read: empty and common stack round trips; potion/firework/book/bundle/charged-projectile/profile/trim/banner/instrument components; raw component preservation; unknown component refusal; hash/patch-related behavior; nesting limits; item-specific equipment and consumable/tool/weapon payloads; painting direct-vs-reference cases. Tests not executed.
+- Critical 1.20.1 finding:
+  - Minecraft 1.20.1 predates the data-component item overhaul (introduced in the 1.20.5 line). Its wire `Slot` representation is the older presence/item ID/count/optional-NBT stack format, not this count-first modern component patch.
+  - Therefore `Slot`, `DelimitedSlot`, `Template`, `HashedSlot`, `WirePatch`, `Stack` component collections and the whole 122-ID component registry cannot be reused as the 1.20.1 item wire model.
+  - 1.20.1 item metadata lives in NBT tags with older semantics; container clicks/creative slots/merchant offers/advancement icons/equipment/chunk block entities must use the old slot codec wherever they carry items. The new hashed-stack synchronization model is also later-version protocol behavior and must not be emitted to 1.20.1.
+  - The generic concepts of item ID/count, NBT preservation, nested item containers, book pages, potion metadata, enchantments, trims and custom data may still be needed by the game, but need translation to the target's older NBT structure and older registry IDs, not modern component IDs.
+  - Registry-dependent component payloads and item stack hashes depend on modern registry ordering. Reusing their numbers or hash calculation against 1.20.1 would misinterpret items.
+- RustChunk relevance: **critical / blocking for item, inventory and interaction networking**. This is an explicit structural incompatibility, not a small compatibility gap. The project needs a dedicated 1.20.1 item stack codec and item metadata model before normal inventory, crafting, containers and item use can interoperate.
+- Decision: **do not adapt current item.rs by editing component IDs**. Implement a separate legacy 1.20.1 ItemStack/NBT codec and version-specific inventory synchronization. Reuse the safe Reader/Writer, NBT library, nesting protections and selected semantic helper concepts only where matching 1.20.1 behavior is demonstrated. Keep modern item components for a future 1.20.5+ version, not in the 1.20.1 path.
+- Dependencies / cross-references: `component` table; `Component`; `Stack`; `Slot`; `DelimitedSlot`; `Template`; `HashedSlot`; `WirePatch`; `custom.rs`; `hash.rs`; `skip.rs`; `buf`; `registry`; `packets/play.rs` item-bearing packets; `packets/recipes.rs`; `entity_data.rs`.
+- Follow-up checks: inspect `hash.rs`, `skip.rs`, `custom.rs` and Play packet consumers. Then source 1.20.1 FriendlyByteBuf/ItemStack read/write semantics and implement byte-golden tests for empty/ordinary/enchanted/damaged/named/potion/book/container/map/banner/shulker stacks; verify container clicks and creative slot packets with vanilla 1.20.1.
+- Completion state: complete source and unit-test review; no item codec tests, 1.20.1 serialization, network interaction or game session was run.
