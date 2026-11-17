@@ -576,3 +576,23 @@
 - Dependencies / cross-references: root LICENSE and CONTRIBUTING.md; THIRD_PARTY_NOTICES.md; `tools/check_public_tree.py`; `.github/workflows/ci.yml`; `.github/workflows/release.yml`; `crates/horizon-release-sign`; `horizon-prepare`; research-lock.json; docs/security.md; docs/mods.md and docs/native-mods.md.
 - Follow-up checks: inspect the actual legal notices and the preparation/checksum implementation; verify Minecraft 1.20.1 ownership/manifest handling and local data-generation support independently. No reliance should be placed solely on this summary page for legal conclusions.
 - Completion state: complete document review; no license review beyond this document, checksum verification, build, release or asset import was performed in this file review.
+
+
+### 27. `docs/decompilation-status.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `80d39be68e65a2abe57d3da350a63a7ed7979d0a`.
+- Size: 2,958 bytes; 37 lines; fetched in one complete range.
+- Coverage: lines 1–37, complete.
+- Purpose: records the scope and limitations of the local decompilation of pinned Minecraft 26.3 client/server JARs, plus a second query path using REA/JADX against bytecode.
+- Verified 26.3 snapshot:
+  - The document says it was verified 2026-10-03 with official 26.3 artifacts, Vineflower 1.12.0 and OpenJDK 25.
+  - It reports client coverage of 11,383 classes / 98,739 methods / 7,301 expected and emitted Java files, and dedicated server coverage of 7,762 classes / 72,269 methods / 5,037 files, with zero missing files or detected failed-decompilation markers.
+  - Third-party JARs were references only; runtime/native libraries and original build environment were not recovered. The full source/report outputs stay local and gitignored.
+  - It explicitly warns that emitted-file coverage and absence of detected markers do not prove semantic correctness or rebuildability; original bytecode and differential harnesses remain the behavior reference.
+- Bytecode query tooling: REA/JADX can inspect classes, methods, callers, overloads, bridge methods and lambda call sites where Vineflower text is ambiguous. Tool versions are pinned; both routes are reading aids, not substitutes for bytecode/oracle verification.
+- RustChunk relevance: high for selecting a reliable research workflow for a historical 1.20.1 target. 1.20.1-era JARs are from a different mapping/deobfuscation regime than the modern unobfuscated 26.3 assumption in the version-port design; therefore class-name mapping, remapping and decompiler quality become key risks.
+- 1.20.1 implications: the counts and exact Vineflower/REA pipeline in this file apply only to 26.3. They do not establish complete 1.20.1 coverage, readable symbol names, successful decompilation, or an ability to rebuild Mojang's original client. We must separately verify 1.20.1's mapping artifacts, official version manifest, client/server JARs, Java baseline, and whether mappings/obfuscation can be applied to both sides consistently.
+- Decision: **adaptable** as a bytecode research/decompilation workflow and as a warning to validate coverage; **rewrite/adapt required** for the 1.20.1 mapping and toolchain inputs. Decompilation is an analysis tool, not a route to redistribute or directly execute recovered Java source.
+- Dependencies / cross-references: `tools/lab.py`; `tools/rea_vanilla.py`; `research-lock.json`; Vineflower; REA/JADX; `.local/minecraft/26.3/sources/`; local class inventories and coverage reports; `docs/version-ports.md`.
+- Follow-up checks: inspect `tools/lab.py` and `tools/rea_vanilla.py`; inspect the actual 1.20.1 manifest's client/server mapping fields and JAR hashes; assess a remapped class inventory and decompiler report for 1.20.1 before depending on class-based diffing.
+- Completion state: complete document review; no JAR decompilation, bytecode query, mapping application or build was executed.
