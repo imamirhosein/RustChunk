@@ -1407,3 +1407,28 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `resolver::dns`; `NAME_SERVERS`; `dns::system_name_servers`; `dns::query_srv`; `connection::connect_server`; `connect_server_with_address`; Android activity/network DNS callback.
 - Follow-up checks: inspect `resolver/dns.rs`, DNS response parsing, retry/timeout and name-server selection; verify 1.20.1 server redirect behavior against vanilla. Confirm Android integration fetches DNS servers from the current active network without stale caching.
 - Completion state: complete source/test review; no live DNS query, SRV lookup, Android DNS callback or connection test was run.
+
+
+### 60. `crates/horizon-protocol/src/resolver/dns.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `3266607c4cd93ae6210918d679960b9253d9841a`.
+- Size: 13,214 bytes; 357 lines; fetched as a complete file.
+- Coverage: lines 1–357, complete, including all parser and local DNS integration tests.
+- Purpose: small synchronous DNS client for Minecraft SRV discovery, modeled on the Java JNDI resolver behavior described in its module header.
+- Implementation:
+  - Uses SRV type 33/IN queries with recursion desired. Generates a random 16-bit transaction ID and encodes an absolute DNS name with label and total-name length bounds.
+  - Name-server discovery: Unix reads `nameserver` lines from `/etc/resolv.conf`; Windows enumerates active adapters via `ipconfig` and filters scoped link/site-local IPv6 values; other targets return no default servers. Android is expected to supply live active-network DNS servers through the callback in `resolver.rs`.
+  - Queries configured servers sequentially, one UDP attempt per server with a 1-second timeout. If UDP response is truncated, retries the same server over length-prefixed TCP. A malformed response or server failure advances to the next configured server.
+  - DNS response parsing checks transaction ID, response flag, truncation and response code; NXDOMAIN is treated as no redirect. It skips the question section and walks answer records until the first SRV answer, returning the first record's target/port as the selected endpoint.
+  - Compressed domain-name pointers must point backwards and are bounded to 128 iterations to prevent loops; label data must be valid UTF-8. TCP framing uses the DNS two-byte length prefix.
+- Tests read: exact recursive SRV query bytes, first SRV answer selection, empty/NXDOMAIN behavior, malformed/short/wrong-ID/forward-pointer replies, truncated UDP detection, Unix resolver parsing, Windows scoped IPv6 filtering, sequential name-server fallback and UDP-truncated→TCP-complete retry using local sockets. Not executed.
+- RustChunk relevance: high for Android and desktop server discovery. It has no dependency on a particular Minecraft protocol version and is a compact cross-platform SRV implementation, with an explicit Android DNS injection seam.
+- 1.20.1 implications:
+  - DNS SRV discovery for Minecraft server addresses is a client networking behavior independent of packet IDs; the implementation can likely be reused unchanged if 1.20.1 client behavior matches the documented rule (SRV for default port 25565, not explicit alternate ports or IP literals).
+  - The Android callback is particularly important: relying only on `/etc/resolv.conf` may not represent the active Android network. It must be wired to current system DNS servers and updated when connectivity changes.
+  - First-answer selection and the one-try-per-server timeout policy are intended to match the JNDI client, but DNS implementations and SRV priorities/weights can differ; confirm the desired vanilla behavior rather than adding random load balancing or selecting an arbitrary record.
+  - The parser does not implement DNSSEC; SRV results remain unauthenticated DNS data, as is typical for this client discovery path. Transport to the redirected server still needs the normal Minecraft connection/security policy.
+- Decision: **largely reusable/adaptable** for 1.20.1, including query, UDP/TCP fallback and platform DNS-source abstraction. Verify parser edge behavior and Android active-network wiring; no protocol-version-specific rewrite is indicated by this file.
+- Dependencies / cross-references: `resolver.rs`; `getrandom`; `ipconfig` on Windows; `std::net::{UdpSocket,TcpStream}`; `NAME_SERVERS`; `SERVER_TIMEOUT`; SRV query target `_minecraft._tcp`.
+- Follow-up checks: inspect Android network integration that calls `set_name_servers`; validate DNS timeouts and malformed response handling on Android; run resolver comparisons and a real SRV-enabled 1.20.1 server connection. Review whether DNS answer owner name/class/priority/weight handling is sufficiently faithful to the Java resolver.
+- Completion state: complete source/test review; no DNS query, TCP fallback test, Android resolver call or live SRV resolution was executed.
