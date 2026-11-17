@@ -1612,3 +1612,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: packaging/android/mod_build_server.py, mod_build_sandbox.sh, mod_build_gateway.py, NativeMods.java, build.yml and versions.json.
 - Follow-up checks: هیچ پیاده‌سازی فعلی. در صورت نیاز آینده، threat model و provenance/signature design قبل از build server؛ hash به تنهایی authenticity/trust نیست.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 20. `docs/mods.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `6b6c04640da7292c3a4a60217347d5acd487ebd1`.
+- Size: 30,871 bytes; 493 lines; full source fetched.
+- Coverage: lines 1–493, complete.
+- Purpose: مستندات مدل دوگانه content mods (.hmod) و native mods (.hnmod)، ساخت/اعتبارسنجی، data registries و قابلیت‌های content.
+- Implementation / logic: نصب و فعال‌سازی mods، manifest و namespace ownership، side=both/client/server و content consistency handshake را توضیح می‌دهد. Content files می‌توانند block/item/state properties/shapes/components, crafting remainder, creative tabs, mob effects, entity types, menu types, tags, structures, biome modifiers و native extension data تعریف کنند. Native mods به horizon-mixins و code build متصل‌اند. Registry signing/hash و publishing نیز پوشش داده می‌شود.
+- Findings: Content mod عمدتاً روی registry/resource/data schemas و component system نسخه 26.3 است. سند صریحاً Java Fabric/NeoForge JAR code را اجرا نمی‌کند؛ فقط data/assets قابل حمل هستند. Item component patches و registry structures 26.3-specific هستند؛ tags/biome modifiers و menu/network schemas نیز ممکن است با 1.20.1 متفاوت باشند. Native mods در mod list handshake فعلی حضور کامل ندارند.
+- RustChunk relevance: برای شناخت جداسازی data-only mod از executable code و مفاهیم namespace, integrity, client/server content parity مفید است؛ mod loader برای RustChunk خارج از هدف پایه فعلی است.
+- 1.20.1 implications: 1.20.1 از item data components استفاده نمی‌کند؛ آیتم‌ها عمدتاً ItemStack + NBT و registry IDs/data pack format همان نسخه دارند. اگر آینده content pack support لازم شد schemaهای 1.20.1 باید مبنا باشند و data pack/resource pack از Java mod bytecode جدا شود. فعلاً روی world/registries vanilla 1.20.1 تمرکز شود.
+- Decision: **unnecessary برای فاز پایه؛ مفاهیم content/code separation و namespace validation قابل اقتباس در آینده**.
+- Dependencies / cross-references: horizon-mod.toml, content registries, .hmod/.hnmod formats, modpack/resource-pack pipeline and native-mod docs.
+- Follow-up checks: فعلاً mod framework نساز. بعد از playable client، resource/data pack 1.20.1 را جداگانه بررسی و compatibility scope را تعیین کن.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
