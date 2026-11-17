@@ -596,3 +596,26 @@
 - Dependencies / cross-references: `tools/lab.py`; `tools/rea_vanilla.py`; `research-lock.json`; Vineflower; REA/JADX; `.local/minecraft/26.3/sources/`; local class inventories and coverage reports; `docs/version-ports.md`.
 - Follow-up checks: inspect `tools/lab.py` and `tools/rea_vanilla.py`; inspect the actual 1.20.1 manifest's client/server mapping fields and JAR hashes; assess a remapped class inventory and decompiler report for 1.20.1 before depending on class-based diffing.
 - Completion state: complete document review; no JAR decompilation, bytecode query, mapping application or build was executed.
+
+
+### 28. `docs/port-ledger.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `4251e0bf526660edf64ac59e3ed4131528139517`.
+- Size: 11,611 bytes; 147 lines; fetched in one complete range.
+- Coverage: lines 1–147, complete.
+- Purpose: describes a method-level mapping ledger that correlates vanilla Java methods/bytecode calls with Rust functions, source spans, known gaps and parity harnesses.
+- Matching model:
+  - The builder reads the official pinned game JAR for exact bytecode call targets/constants/IDs and local decompiled client/server Java sources for line-level source references. It writes derived reports locally, not into the repository.
+  - Mapping confidence levels include explicit `port` doc comments, name/class matches, manually curated verdict-map rows, mentions, linked callees, structural state similarity, rare-constant/ID inference, trivial methods and missing methods.
+  - It detects possible seam/client/drift/class/callee/stale/map/unported gaps. The document stresses a gap is a lead that must be checked against both Java and Rust code, not a verdict.
+  - Parity harnesses are cross-linked to method mappings, but a mapped method is not considered behaviorally proven merely because a Rust location was found. Uncovered method pairs can be ranked for new tests.
+  - Branch checking compares changed Rust files with the baseline and lists new/closed gaps; test code, fixtures, probes and examples are excluded from being counted as ports.
+- RustChunk relevance: critical as a method-level port-completeness methodology. Moving a substantial Java-version-specific Rust implementation toward 1.20.1 requires a traceable mapping from each 1.20.1 vanilla method to its Rust implementation, an explicit verdict when no direct method is needed, and parity evidence for behavior. This method ledger complements the class-level map in the version-port pipeline.
+- 1.20.1 implications and caveats:
+  - The existing method ledger is designed around the current pinned 26.3 game and 26.3 Java class/method names. It cannot simply be rebuilt using 26.3 source and claim 1.20.1 coverage.
+  - 1.20.1 class/method names and bytecode differ materially, particularly due to the older obfuscation/mapping regime. A reliable 1.20.1 input requires mapping-aware JARs/decompilation and a new vanilla source oracle; class and method matches must be recalculated rather than carried over by names.
+  - Structural and inferred matches can be false positives. Every important inferred mapping must be manually verified and backed by tests; test reachability does not automatically establish complete lifecycle coverage.
+- Decision: **adaptable** as a core audit tool/concept (method mapping, verdict map, gap taxonomy and harness reachability); **rewrite/version-adapt required** for historical 1.20.1 JAR/mappings and its different Java API. The ledger is a planning/coverage instrument, not a game engine feature.
+- Dependencies / cross-references: `tools/port_ledger.py`; `tools/vanilla_map.py`; `tools/port_map/*.tsv`; `tools/lab.py`; local Minecraft JAR and decompiled sources; `tools/parity.py`; Java parity oracles; Rust crates and doc comments; `tools/test_*_parity.py`.
+- Follow-up checks: inspect `tools/port_ledger.py`, `tools/vanilla_map.py`, the verdict-map schema, class/method inventory generator and parity runner; then evaluate whether mapping-aware 1.20.1 bytecode can feed a trustworthy adapted ledger.
+- Completion state: complete document review; no ledger build, bytecode scan, gap report, harness or branch check was run.
