@@ -84,7 +84,7 @@ Source ordering: recursive Git tree returned by GitHub for `starling-client/star
 | 5 | `crates/horizon-client/src/game/item_particles.rs` | Complete (1–131; SHA `52072f7aaca615cfb8f699fb808cb751d17766a0`) |
 | 6 | `crates/horizon-client/src/game/item_use.rs` | Complete (historical; no blob SHA recorded) |
 | 7 | `crates/horizon-client/src/game/jigsaw_blocks.rs` | Pending |
-| 8 | `crates/horizon-client/src/game/jigsaw_edit.rs` | Pending |
+| 8 | `crates/horizon-client/src/game/jigsaw_edit.rs` | Complete (1–332; SHA `119e3cea3187755fc3926f5f00d0fcbe793fee50`) |
 | 9 | `crates/horizon-client/src/game/jukebox.rs` | Pending |
 | 10 | `crates/horizon-client/src/game/key_focus.rs` | Pending |
 | 11 | `crates/horizon-client/src/game/kinetic_machines.rs` | Pending |
@@ -224,4 +224,13 @@ Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do no
 - Entire file fetched and reviewed: lines 1–142.
 - Total: 142 lines. Blob SHA: `4085e80887fb73f5bcf3095dae495a2285d13b7e`.
 - Result: permission checks require creative mode and permission level 2 before guest jigsaw edits/generation. Packet `levels` is passed to the jigsaw query without a local clamp; recorded as CAND-008 pending review of downstream caps and protocol constraints. No confirmed issue yet.
+- No source code changed; only the audit ledger was updated. No build/test claimed.
+
+
+### 2026-11-17 — file #8: jigsaw_edit.rs
+
+- Source: pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Entire file fetched and reviewed: lines 1–332.
+- Total: 332 lines. Blob SHA: `119e3cea3187755fc3926f5f00d0fcbe793fee50`.
+- Result: UI slider clamps generation depth to 0–20; identifier validation and packet ordering (set block then generate) are explicit. No confirmed defect found in this file. This does not resolve CAND-008's server-side/downstream depth-bound question.
 - No source code changed; only the audit ledger was updated. No build/test claimed.
