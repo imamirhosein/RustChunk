@@ -1884,3 +1884,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_protocol::packets::play::{MovePlayer*,PlayerPosition,relative}, horizon_core::geometry::Vec3, local player tick/input, teleport acknowledgement path.
 - Follow-up checks: بررسی packet dispatchهای MovePlayer و ClientboundPlayerPosition در نسخه 1.20.1؛ تهیه trace مقایسه‌ای vanilla برای stationary heartbeat هر 20 tick، onGround/collision flags و relative velocity rotation.
 - Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
+
+
+### 77. `crates/horizon-client/src/client_lib.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `a9b81a864c5d4e80d198d77479b19ceeffcf0f32`.
+- Size: 5,581 bytes; 188 lines; full source fetched.
+- Coverage: lines 1–188, complete.
+- Purpose: ریشه crate کلاینت که game modules، Android input/control، renderer، shared core، items، commands و server-side integrations را به صورت public module surface سازمان‌دهی می‌کند.
+- Implementation / logic: Crate-level `forbid(unsafe_code)` اعمال می‌کند، self crate را با نام horizon_client alias می‌کند، تعداد زیادی module داخلی را pub می‌کند و subsystemهای crates دیگر را با `pub use` re-export می‌کند؛ بخش بزرگی از renderer/UI/resources از horizon_client_render، geometry/game core از horizon_client_core، ورودی از horizon_client_input، command و item services از crates جدا می‌آیند. فایل خودش منطق بازی را اجرا نمی‌کند؛ ساختار API/import را فراهم می‌کند.
+- Findings: این فایل یک ماژول‌فهرست/aggregation root است؛ حجم و نام moduleها نمایانگر جدایی subsystemهای Starling/Horizon است اما به‌تنهایی architecture runtime یا boot flow را اثبات نمی‌کند. بسیاری از re-exportها از crateهای مستقل می‌آیند و dependency graph واقعی در Cargo manifests/workspace مشخص می‌شود. `forbid(unsafe_code)` فقط همین crate را محدود می‌کند؛ نه الزاماً dependencyهای دیگر را.
+- RustChunk relevance: برای استخراج ساختار subsystemها و جلوگیری از monolith در RustChunk مفید است؛ implementation یا فهرست public API را نمی‌توان عیناً کپی کرد.
+- 1.20.1 implications: RustChunk نیازمند crate boundaries متناسب با هسته 1.20.1 و Android platform است. ابتدا core protocol/registries/world model، renderer/input/platform و game loop را مستقل نگه دار؛ re-export عمومی را بعد از تثبیت API انجام بده. این فایل به 1.20.1 protocol خاصی وابسته نیست، اما نام‌ها و module content Horizon-specific هستند.
+- Decision: **reference/adaptable برای سازمان‌دهی crate؛ کد runtime مستقیمی برای port ندارد**.
+- Dependencies / cross-references: Cargo workspace manifests, horizon-client-render, horizon-client-core, horizon-client-input, horizon-command, horizon-items, horizon-server-files and modules declared in this root.
+- Follow-up checks: بررسی Cargo.tomlهای workspace و entry point/Game loop که این crate را مصرف می‌کند؛ تعیین minimal RustChunk crate graph پیش از انتقال subsystemها.
+- Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
