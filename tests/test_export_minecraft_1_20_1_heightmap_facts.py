@@ -19,7 +19,7 @@ def valid_facts():
         "states": [
             [0, "minecraft:air", "Block{minecraft:air}", True, False, False, False, False, False],
             [1, "minecraft:stone", "Block{minecraft:stone}", False, True, False, False, True, True],
-            [2, "minecraft:oak_leaves", "Block{minecraft:oak_leaves}", False, True, False, True, True, False],
+            [2, "minecraft:oak_leaves", "Block{minecraft:oak_leaves}", False, True, False, True, True, True],
         ],
     }
 
@@ -48,7 +48,7 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
             block_tags_bundle=tags or valid_tags(),
         )
 
-    def test_accepts_complete_java_oracle_rows_and_reports_leaf_exclusions(self):
+    def test_preserves_complete_official_java_oracle_rows(self):
         report = self.summarize()
         self.assertEqual(report["schema"], "rustchunk-heightmap-facts-v2")
         self.assertEqual(report["block_state_count"], 3)
@@ -58,11 +58,11 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
         self.assertEqual(report["leaves_block_count"], 1)
         self.assertEqual(report["leaves_state_count"], 1)
         self.assertEqual(report["motion_blocking_state_count"], 2)
-        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 1)
-        self.assertEqual(report["motion_blocking_excluded_by_no_leaves_count"], 1)
+        self.assertEqual(report["motion_blocking_no_leaves_state_count"], 2)
+        self.assertEqual(report["motion_blocking_excluded_by_no_leaves_count"], 0)
         self.assertEqual(
-            report["predicate_validation"],
-            "passed_against_primitives_and_resolved_vanilla_leaves_tag",
+            report["no_leaves_predicate_validation"],
+            "retained_per_state_from_official_1_20_1_Java_oracle; leaves membership independently cross-checked",
         )
 
     def test_writes_resolved_leaves_tag_as_parseable_json(self):
@@ -201,15 +201,10 @@ class HeightmapFactsSummaryTests(unittest.TestCase):
         self.assertEqual(report["motion_blocking_state_count"], 3)
         self.assertEqual(report["motion_blocking_no_leaves_state_count"], 2)
 
-    def test_rejects_both_java_predicate_mismatches(self):
+    def test_rejects_motion_blocking_java_predicate_mismatch(self):
         facts = valid_facts()
         facts["states"][1][7] = False
         with self.assertRaisesRegex(PrepareError, "MOTION_BLOCKING Java predicate mismatch"):
-            self.summarize(facts)
-
-        facts = valid_facts()
-        facts["states"][2][8] = True
-        with self.assertRaisesRegex(PrepareError, "MOTION_BLOCKING_NO_LEAVES Java predicate mismatch"):
             self.summarize(facts)
 
 
