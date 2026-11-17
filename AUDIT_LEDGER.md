@@ -2217,3 +2217,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: embedded assets/bedrock-touch.json; ureq HTTP client; SHA-1 Git blob hashing; PNG encoder/decoder; horizon_client::hud decode helpers and touch_sprite_names; resource packs and Starling texture namespace.
 - Follow-up checks: بررسی manifest content/revision/license و policy توزیع assetها؛ در صورت اقتباس محدودیت اندازه/تعداد، redirect/TLS policy و validation marker-to-files را اضافه کن.
 - Completion state: complete source review; no network fetch or ignored integration test was run.
+
+
+
+### 97. crates/horizon-client/src/osk.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: b494059445a3b6ae5db6afcd1e159d6cf226899d.
+- Size: 417 lines; complete source fetched in consecutive ranges 1–400 and 401–417.
+- Coverage: lines 1–417, complete.
+- Purpose: صفحه‌کلید مجازی Horizon برای کنترلر در حالت focus navigation، با خروجی ساده برای تایپ در text field فعال.
+- Implementation / logic: دو layout ثابت LETTERS و SYMBOLS با پنج row و مجموع عرض 10 key units وجود دارند. Keyboard state شامل row/col، symbols، one-shot shift و caps lock است. D-pad در row با wrap حرکت می‌کند و در بالا/پایین به کلیدی می‌رود که مرکز افقی نزدیک‌تری دارد. press روی Char، Space، Backspace و Done به Output::Text/Backspace/Enter تبدیل می‌شود؛ Shift و Layer فقط state صفحه‌کلید را تغییر می‌دهند. Button mapping در gamepad شامل South=press، West=backspace، North=space، Start=enter، East=close، LeftStick/LeftTrigger=shift و bumperها=symbol layer است. draw با UI theme خودش، کلیدهای focused/lit و hint labels را برای glyph style کنترلر render می‌کند.
+- Findings: این یک QWERTY virtual keyboard اختصاصی برای controller navigation است، نه Android IME. layout حروف ثابت و لاتین است و تنها چند حرف accented مثل é/è/à/ç/ù/ü/ö/ä/ß/ñ در symbol layer دارد؛ input method، composition، prediction، locale layouts، Unicode IME events و clipboard integration در این فایل وجود ندارند. Output API به caller واگذار می‌کند که متن را به focused field اعمال کند؛ validation و طول مجاز فیلد در این ماژول نیست. Shift یک‌بارمصرف است و Shift دوبار caps lock و بار سوم unlock می‌کند. تست‌ها row widths، navigation wrap، shift/caps، symbols و output button mapping را پوشش می‌دهند؛ اجرا نشده‌اند.
+- RustChunk relevance: در صورت افزودن gamepad navigation به launcher یا in-game UI، یک fallback keyboard controller-side مفید است؛ ولی برای گوشی با صفحه لمسی نباید جای کیبورد native Android را بگیرد.
+- 1.20.1 implications: پروتکل Minecraft به این UI وابسته نیست. RustChunk 1.20.1 باید متن واردشده را از Android IME/commitText و composing text بگیرد؛ virtual keyboard مذکور تنها optional controller fallback پس از text-field focus است. خروجی باید به TextField/Sign/Book/Chat behavior نسخه 1.20.1 برسد، نه مستقیماً raw chat packet.
+- Decision: **برای هسته gameplay 1.20.1 غیرضروری؛ optional gamepad OSK fallback قابل اقتباس، Android IME باید مسیر اصلی باشد**.
+- Dependencies / cross-references: gamepad::{Button,GlyphStyle}; ui_theme::{Ui,Face,color}; language keys horizon.osk.* and gui.done; focused UI text field caller and gamepad focus navigation.
+- Follow-up checks: بررسی callers که Output را به focused field می‌برند؛ برای Android native IME composition/cursor/selection/RTL و input connection را جدا ممیزی کن؛ در صورت port، بررسی locale layout و طول codepoint/UTF-16.
+- Completion state: complete source review; no tests/build or Android IME session was run.
