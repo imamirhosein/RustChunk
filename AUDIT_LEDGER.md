@@ -1064,3 +1064,22 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `buf::Codec`; `Reader`; `Writer`; `ids.rs`; packet modules; `State`; `Direction`; `packet!`; `round_trip` tests.
 - Follow-up checks: compare the generated macro's strictness and enum routing with Minecraft 1.20.1's connection dispatch; map packet modules to the target's actual states and typed packet catalog.
 - Completion state: complete source/macro/test-helper review; no macro expansion, protocol tests or packet exchange was run.
+
+
+### 47. `crates/horizon-protocol/src/packets/status.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `7df73880febd4e9f9548d93b469e69b2f414ae8d`.
+- Size: 1,314 bytes; 51 lines; fetched as a complete file, including tests.
+- Coverage: lines 1–51, complete.
+- Purpose: defines server-list Status state packets: status JSON response and ping/pong timestamp exchange.
+- Packet bodies:
+  - Clientbound `StatusResponse` contains one UTF-8 string encoded with the general `Str` codec (the status JSON document).
+  - Clientbound `PongResponse` and serverbound `PingRequest` use one signed 64-bit timestamp (`Long`).
+  - Serverbound `StatusRequest` is an empty packet. Typed packet IDs are read from `ids::status`.
+  - Tests round-trip all four packet forms, including a negative timestamp. Tests read but not executed.
+- RustChunk relevance: moderate-to-high. Status ping is a useful minimal first connectivity test before attempting login; the body shapes are simple and mostly stable across Java Edition versions.
+- 1.20.1 implications: The general status JSON string and ping/pong long bodies are likely reusable, but packet IDs must come from the 1.20.1 status packet table. Status JSON's `version.name` and `version.protocol` must report the actual target version/protocol, not 26.3. Server list favicon, sample players, secure-chat/previews or other JSON fields may differ and should be treated as data rather than hardcoded current-version assumptions.
+- Decision: **body codecs largely adaptable**; **IDs and response metadata must be version-specific** for 1.20.1.
+- Dependencies / cross-references: `ids::status`; `buf::Str`; `buf::Long`; `packets::Empty`; status response builder; `Connection` and server list ping code.
+- Follow-up checks: inspect status packet construction/server-list code and protocol version reporting; compare JSON and status/ping flow with a vanilla 1.20.1 server.
+- Completion state: complete source/test review; no status ping or 1.20.1 server connection was run.
