@@ -507,3 +507,34 @@
 - Decision: **adaptable** for generic NBT/Anvil/palette mechanics and the methodology of DataFixer parity; **rewrite/version-gate required** for registries, DataVersion, block-state tables, chunk schema and any 1.20.1 world semantics. The crate itself is not evidence of a complete playable 1.20.1 engine.
 - Follow-up checks: inspect `horizon-world/Cargo.toml`, `nbt.rs`, `region.rs`, `chunk.rs`, `registry.rs`, the DataFixer implementation and its version schema; inspect generated 26.3 registry artifacts and how `horizon-prepare` produces them. Compare actual 1.20.1 data version, registry exports, palettes, DataFixer schemas and world fixtures.
 - Completion state: complete document review; no world tool, DataFixer, world conversion, vanilla oracle or parity suite was run.
+
+
+### 24. `docs/native-client.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `51d9245e4d9d4a7b467004d6c07db10d59065d51`.
+- Size: 54,334 bytes; 857 lines; fetched in consecutive ranges 1–400, 401–800 and 801–857.
+- Coverage: lines 1–857, complete; all three ranges returned the same blob SHA.
+- Purpose: documents the Rust-native playable client, its setup and resource preparation, implemented gameplay/rendering slices, agent-control API, operating-system target, and extensive scoped Java-parity evidence.
+- Version and platform constraints:
+  - The client is explicitly a Rust rewrite targeting Minecraft Java Edition 26.3 and consumes the matching prepared resources/data. It does not directly execute Minecraft's Java client.
+  - Source preparation requires current stable Rust (1.90+), JDK 25 and the user's own official 26.3 client/server files; data and assets are exported locally and kept private. The preparer and all generated resources are version-stamped and verified against repository pins.
+  - The documented playable target is Linux x86-64 with an NVIDIA GPU/Vulkan. macOS and Windows are stated out of scope for this client; Android/ARM64 is not claimed as a supported target in this document.
+- Implemented functionality described:
+  - A worker-based chunk streamer; chunk lighting and model meshing; block models, blockstates and biome tints; water/lava rendering; day/sky/fog timeline; item models; mining/tool hardness; loot tables, placement, crafting; Anvil saving/reloading; selected player movement, health, hunger, sprint/crouch and attribute logic.
+  - The `horizon-ctl` interface supports observation, movement and actions, widgets/options, screenshots and an MCP stdio service. This is an agent-control layer, not the Minecraft multiplayer protocol itself.
+  - The client uses data exported from the pinned client and server JARs, including resource models, collision shapes, registries, loot, recipes and other runtime resources. Generic engine code and vanilla-derived version data are intertwined through preparation and generated resources.
+- Explicit incomplete areas and qualification of the word playable:
+  - Full authoritative player tick and LocalPlayer lifecycle are incomplete; entity-dependent scene queries, full entity lifecycle, death/respawn, vehicles, effects, item use, network broadcasts and the complete client/server tick remain unfinished.
+  - World-generation integration is not established by this document; many scene/physics comparisons are controlled fixtures and use empty equipment/no nearby entities or other restricted actor domains.
+  - Neighbor updates, block drops, block-entity lifecycle, audiovisual playback and networking still need consumers in the described client. A mesh refresh currently rebuilds the scene and explicitly claims no performance improvement.
+  - Render/model tests validate data decoding, CPU geometry or renderer startup; pixel parity, hardware performance and physical-GPU validation on target devices remain separate. Linux llvmpipe smoke checks are not evidence of Android/Mali performance.
+  - The document's own scope statements repeatedly distinguish parity of a narrowly controlled adapter from complete gameplay parity.
+- RustChunk relevance: extremely high for architecture and project-goal evaluation. It proves Starling contains a substantial native Rust reimplementation, not merely a themed launcher, but it also shows this reimplementation is a large and still incomplete Minecraft 26.3 port. Existing control/gameplay pieces can guide component boundaries and test design; they do not provide a drop-in Android Minecraft 1.20.1 runtime.
+- 1.20.1 / device implications:
+  - The client has pinned 26.3 assumptions in resources, components, registry IDs, models, assets, physics rules and vanilla oracles. Porting to 1.20.1 requires a version-matched dataset and code/API reconciliation throughout these components, not just changing a constant.
+  - Running on Galaxy A22 ARM64/Mali is outside the platform/performance evidence in this document. Vulkan/NVIDIA/Linux-only constraints mean Android integration, renderer/backend, ABI, memory behavior and GPU support must be audited separately; no mobile support should be inferred from the Android launcher or other Android documentation.
+  - This page does not show server multiplayer support in the client; an MCP/agent control socket is not a Minecraft server connection. The network implementation must be examined separately.
+- Dependencies / cross-references: `horizon-client`; `horizon-prepare`; `horizon-assets`; `horizon-world`; `horizon-client-core`; `.local/horizon-client/26.3`; `research-lock.json`; `horizon-ctl`; `tools/test_native_scene_collision.py`; scene motion/health/hunger/sprint/crouch parity harnesses; model/blockstate/animation parity tests; `docs/rust-parity.md`; `docs/graphics.md`; Android and renderer-specific docs.
+- Decision: **adaptable** as a Rust-native client architecture, resource-preparation design, scoped Java-oracle methodology and module decomposition; **major rewrite/version adaptation required** for 1.20.1 semantics and Android ARM64/Mali deployment. The current client is neither a ready-made 1.20.1 client nor proven Android game runtime.
+- Follow-up checks: inspect `horizon-client` crate entry point, launch/render loop, `horizon-prepare` resource exporters, version constants, renderer backend/platform features, networking/protocol integration, worldgen/game loop and unfinished client lifecycle; inspect Android packaging and compare actual ABIs/GPU backend requirements. Verify 1.20.1 Java oracle/resources and differential tests separately.
+- Completion state: complete document review; no client build, gameplay session, renderer, Java oracle, test suite, Android package or hardware performance run was executed in this audit.
