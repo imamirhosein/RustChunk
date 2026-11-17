@@ -1532,3 +1532,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: packaging/android/build_apk.py ABI matrix, Android renderer/GLES/Vulkan paths, Java preparation and memory limits.
 - Follow-up checks: ممیزی Android backend و GPU features؛ تست روی Mali-G52؛ اندازه‌گیری memory peaks و texture/array limits؛ x86/ARMv7 فعلاً اولویت نیستند.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 15. `docs/android-controls.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `bde1e376a8910d910a93566c492fca1413f5eaec`.
+- Size: 4,558 bytes; 79 lines; full source fetched.
+- Coverage: lines 1–79, complete.
+- Purpose: مستندسازی کنترل لمسی، layout editor، virtual pointer، keyboard/gamepad و مسیر متن در Starling.
+- Implementation / logic: MCPE و GoyControl، presetهای مستقل، ویرایش/resize/style/binding، joystick و D-pad، sensitivity/gyro، hold/toggle، inventory gestures، input profile و Auto/Touch/Keyboard/Mouse/Controller شرح داده شده‌اند. TextMirror/IME و focus reporting به game text events متصل‌اند.
+- Findings: به Horizon Android control engine و Starling UI/state paths وابسته است. layoutهای قدیمی خودکار import نمی‌شوند؛ TextMirror همه widgetها را پوشش نمی‌دهد و custom widgets باید focus/text events را پیاده کنند.
+- RustChunk relevance: الگوی تعامل لمسی و جداسازی ورودی از game logic برای RustChunk مفید است؛ کد و presetها به APIهای Horizon وابسته‌اند.
+- 1.20.1 implications: برای پایه 1.20.1 ابتدا look/move/jump/sneak/attack/use/inventory با ورودی native Android؛ preset editor پیشرفته بعد از playable. keyboard/IME و لمس با UI نسخه هدف تست شوند.
+- Decision: **adaptable (الگو و requirements)؛ کد و فرمت preset version/platform-specific**.
+- Dependencies / cross-references: Horizon Android control engine, touch presets, input routing, TextMirror/IME, Android UI.
+- Follow-up checks: بررسی event routing/lifecycle ورودی Android؛ طراحی input abstraction RustChunk و تست touch + physical keyboard.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
