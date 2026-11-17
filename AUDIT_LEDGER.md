@@ -1692,3 +1692,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: protocol Reader/Writer; custom payload packet schemas in packets/configuration.rs and packets/play.rs; native mod net hooks; docs/native-mods.md API 40.
 - Follow-up checks: در ممیزی net integration بعداً caller-side rate limit, mod identity and server/client direction enforcement بررسی شود.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 65. `crates/horizon-protocol/src/quiet.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `dcf48dbee8b5b628aa7cc25e9f03a4eeb4c63238`.
+- Size: 5,465 bytes; 167 lines; full source fetched.
+- Coverage: lines 1–167, complete.
+- Purpose: ساخت و parse بسته‌های batch command که native mod client از طریق کانال اختصاصی به Horizon server می‌فرستد تا با مجوز خود player و بدون chat feedback اجرا شود.
+- Implementation / logic: کانال horizon:quiet_commands است. Batch شامل mod_id و خطوط command بدون slash است. encode حداکثر 256 خط در هر payload و حداکثر 256 کاراکتر در هر خط را اعمال می‌کند، خطوط را به چند payload با سقف 32767 byte تقسیم و ترتیب را حفظ می‌کند. decode mod id، count و lines را با سقف‌های متناظر می‌خواند و trailing bytes را رد می‌کند. توضیح ماژول می‌گوید سرور پشتیبانی را در configuration با payload خالی اعلام می‌کند و کلاینت روی سرورهای دیگر به chat command برمی‌گردد.
+- Findings: این فایل فقط wire framing است؛ بررسی مجاز بودن mod_id، احراز هویت player، permission، rate limit و command dispatch در server handler لازم است. encode mod_id را صرفاً truncate می‌کند و allowlist/namespace syntax اینجا ندارد. تعداد و طول خط محدودند و size محاسبه‌شده با UTF-8 byte length است. batch خالی payload تولید نمی‌کند. Tests batching، splitting by MAX_LINES/bytes، truncation و malformed count/string/trailing bytes را پوشش می‌دهند؛ اجرا نشده‌اند.
+- RustChunk relevance: مفهوم batch packet و bounded payload useful است، اما command execution channel مختص Horizon است و برای vanilla client ضروری نیست.
+- 1.20.1 implications: در protocol 1.20.1 vanilla command execution از chat/command packet معمول خودش می‌آید؛ `horizon:quiet_commands` جزء پروتکل رسمی نیست. پیاده‌سازی چنین channelی قبل از vanilla login/play connection، سازگاری را خراب یا سطح حمله را زیاد می‌کند. اگر آینده افزونه داخلی لازم شد، باید capability negotiation و server-side auth/rate-limit مستقل داشته باشد.
+- Decision: **unnecessary برای فاز پایه؛ batching/cap checks برای extension protocol آینده قابل اقتباس**.
+- Dependencies / cross-references: protocol Reader/Writer; horizon:quiet_commands custom payload registration; docs/mods.md command.run-quiet; server command dispatcher and player permissions.
+- Follow-up checks: در آینده caller server را برای mod id trust، per-player throttling، command length semantics و fallback-to-chat بررسی کن؛ فعلاً هیچ endpoint آن را implement نکن.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
