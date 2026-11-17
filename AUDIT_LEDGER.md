@@ -1660,3 +1660,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_world::nbt::Tag; crates horizon-protocol::item/hash.rs and modern Data Component codecs/HashedPatchMap; Guava HashOps reference.
 - Follow-up checks: هنگام port کردن ItemStack 1.20.1، کلاً Data Component hash path را کنار بگذار؛ مقایسه جداگانه‌ای با serialization و NBT همان نسخه انجام شود.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 63. `crates/horizon-protocol/src/mod_list.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `9fc777efbe513d3bd4576f7df8c554b1e657384c`.
+- Size: 11,594 bytes; 349 lines; full source fetched.
+- Coverage: lines 1–349, complete.
+- Purpose: کد فهرست و handshake سازگاری content modها بین سرور و کلاینت Horizon هنگام ورود به world.
+- Implementation / logic: کانال horizon:mod_list در configuration phase دوطرفه است؛ server list را می‌فرستد و client فهرست خودش را برمی‌گرداند. Entry شامل id، version، اختیاری بودن SHA-256 فایل و Side (Both/Server/Client) است. LOCAL OnceLock، فهرست local mods را یک‌بار set می‌کند؛ set_local مرتب و truncate می‌کند. shared فقط Both mods را ارسال می‌کند. compare فهرست‌های Both را از نظر presence، version و در صورت داشتن هر دو hash از نظر SHA-256 مقایسه می‌کند و Difference.reason پیام refuse با حداکثر شش اسم در هر گروه می‌سازد. Codec cap 128 entries، متن 64 و strict trailing bytes دارد.
+- Findings: Client-only و server-only mod intentionally join compatibility را block نمی‌کنند. Folder dev mods بدون file hash صرفاً با version تطبیق می‌یابند. encode فهرست را در 128 و رشته‌ها را در 64 char بی‌صدا قطع می‌کند، درحالی‌که set_local هم truncate می‌کند؛ بنابراین mod ID/version بیش‌ازحد طولانی یا تعداد زیاد می‌تواند بی‌سر‌و‌صدا اطلاعاتش را از دست بدهد. compare بر id برابر است و uniqueness/namespace conflict را در این فایل enforce نمی‌کند. تست‌های role separation, round-trip, caps, order independence, mismatches, folder dev و truncated reason وجود دارند؛ اجرا نشده‌اند.
+- RustChunk relevance: الگوی خوبی برای content identity compatibility در شبکه‌های modded و hash-based mod parity است؛ خود Horizon mod side semantics خارج از vanilla 1.20.1 و خارج از فاز پایه RustChunk هستند.
+- 1.20.1 implications: سرور vanilla 1.20.1 چنین custom handshake ندارد و vanilla clients پیام horizon:mod_list را نمی‌شناسند. RustChunk باید ابتدا vanilla handshake/login/play را پیاده کند، نه اینکه این کانال را در جریان استاندارد وارد کند. اگر بعداً modded sessions لازم شد، handshake باید opt-in و سازگار با کلاینت‌های vanilla باشد.
+- Decision: **unnecessary برای هسته vanilla 1.20.1؛ مفهوم file-hash parity برای آینده قابل اقتباس**.
+- Dependencies / cross-references: horizon:mod_list, protocol Reader/Writer, game/mods.rs LOCAL setter, configuration custom payload, docs/mods.md and content identity checks.
+- Follow-up checks: بعداً مرور کد server/client dispatch این channel و content_identity.rs؛ در نسخه 1.20.1 ابتدا Configuration packet IDs/handshake vanilla را جدا تکمیل کن.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
