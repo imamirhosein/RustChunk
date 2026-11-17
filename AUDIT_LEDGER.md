@@ -57,6 +57,7 @@ No findings are promoted to confirmed solely from the old conversational summari
 | CAND-003 | `cosmetics.rs` texture dimensions / RGBA length | Potential, unverified | Review full file and texture parsing/validation |
 | CAND-004 | `command_minecarts.rs` permission and entity conversion | Potential, unverified | Review full file and trust boundary |
 | CAND-005 | Other previously mentioned files | Unverified | Reconstruct evidence before making claims |
+| CAND-006 | `integrated.rs` / `world_loading.rs`: save folder is joined to `current_dir()/saves` before any visible component validation; `WorldRequest::new` also directly joins it | Potential, unverified | Trace all `open_integrated` callers and world-list folder provenance; inspect path validation at the true boundary before classifying |
 
 ## Session log
 
@@ -75,7 +76,7 @@ Source ordering: recursive Git tree returned by GitHub for `starling-client/star
 | # | File | Status |
 |---:|---|---|
 | 1 | `crates/horizon-client/src/game/input_trace.rs` | Complete (historical; no blob SHA recorded) |
-| 2 | `crates/horizon-client/src/game/integrated.rs` | Pending |
+| 2 | `crates/horizon-client/src/game/integrated.rs` | Complete (1–1330; SHA `baedd4a77d6b62dc337158bbaf451f8689cb040b`) |
 | 3 | `crates/horizon-client/src/game/interactions.rs` | Pending |
 | 4 | `crates/horizon-client/src/game/item_draw.rs` | Pending |
 | 5 | `crates/horizon-client/src/game/item_particles.rs` | Pending |
@@ -176,3 +177,13 @@ Source ordering: recursive Git tree returned by GitHub for `starling-client/star
 | 100 | `crates/horizon-client/src/game/native_world_edit.rs` | Pending |
 
 Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do not advance beyond this list until all 100 rows are complete or explicitly blocked.
+
+
+### 2026-11-17 — file #2: integrated.rs
+
+- Source: `starling-client/starling`, pinned commit `5432370d573642041585c69b40fb045b27133488`.
+- Entire file fetched and reviewed in consecutive ranges: 1–180, 181–360, 361–540, 541–720, 721–900, 901–1080, 1081–1260, 1261–1330.
+- Total: 1,330 lines. Blob SHA: `baedd4a77d6b62dc337158bbaf451f8689cb040b`.
+- Result: no confirmed defect established in this pass. One path-boundary concern is recorded as CAND-006 and must be resolved by tracing callers and validation before closing it.
+- Dependency cross-check: `world_loading.rs` lines 1–180 show `WorldRequest::new` directly joins the supplied folder to `current_dir()/saves`; that snippet alone does not establish exploitability because caller provenance is not yet traced.
+- No source code changed; only the audit ledger was updated. No build/test claimed.
