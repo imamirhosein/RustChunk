@@ -1980,3 +1980,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: winit KeyCode/ModifiersState; LocalPlayer.modifyInput semantics; key event state provider; sprint/pose/riding lifecycle not implemented here.
 - Follow-up checks: مقایسه تابع movement input با vanilla 1.20.1؛ یافتن محل محاسبه item_use/sneaking؛ بررسی NaN/infinite input و تست‌های diagonal/analog controller.
 - Completion state: complete source review; no tests or build were run.
+
+
+### 83. `crates/horizon-client-input/src/input_mode.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `24dc84c50a2abe43ef0391c3f649c191ef2a7233`.
+- Size: 5,349 bytes; 148 lines; complete file fetched.
+- Coverage: lines 1–148, complete.
+- Purpose: تعیین mode ورودی Touch/Pad/KeyboardMouse و تشخیص keyboard فیزیکی Android در برابر virtual keyboard و کلیدهای سیستمی.
+- Implementation / logic: InputMode::first پلتفرم‌هایی را که touch ورودی اصلی است با Touch شروع می‌کند. after در گوشی با آخرین ورودی mode را عوض می‌کند، اما در touch-laptop بعد از نخستین لمس، حالت Touch را حفظ می‌کند. android_keyboard از Android keycode allowlist، device != virtual keyboard، scan_code != 0 و منبع غیر gamepad برای تشخیص تایپ فیزیکی استفاده می‌کند. held_modifiers با بررسی مجموعه کلیدهای فشرده، SHIFT/CONTROL/ALT/SUPER را بازسازی می‌کند؛ توضیح فایل می‌گوید Android modifier change را از winit دریافت نمی‌کند.
+- Findings: تشخیص فیزیکی بودن keyboard بر allowlist عددی Android keycodes و source/device metadata متکی است و با تغییر API/device drivers نیاز به اعتبارسنجی دارد. منطق mode روی touch-laptop و phone عمداً متفاوت است. held_modifiers state را از کلیدهای held محاسبه می‌کند؛ correctness به key-up/cancel/focus-loss event handling وابسته است. Tests برای mode transitions، physical-vs-virtual keyboard و modifier aggregation موجودند؛ اجرا نشده‌اند.
+- RustChunk relevance: مستقیم برای Galaxy/Android touchscreen، keyboard فیزیکی و gamepad مهم است؛ از mode detection می‌توان برای انتخاب touch overlay و جلوگیری از اشتباه گرفتن OS navigation keys با تایپ استفاده کرد.
+- 1.20.1 implications: مستقل از protocol، ولی باید در RustChunk Android backend بر اساس Android NDK/Java key event codes و winit integration نسخه مورد استفاده بازبینی شود. allowlist فعلی را بدون تأیید platform SDK کپی نکن؛ focus loss و key cancellation را در lifecycle سراسری مدیریت کن.
+- Decision: **طراحی mode switching و بازسازی modifier قابل اقتباس؛ Android keycode/source allowlist باید برای دستگاه‌های هدف validate شود**.
+- Dependencies / cross-references: winit KeyCode/ModifiersState; `crate::gamepad::android::from_pad`; Android key event source/device/scan-code mapping; touch overlay and keyboard event dispatch.
+- Follow-up checks: بررسی Android input event bridge، key-up/focus-loss cleanup، device-specific scan codes و دستگاه‌های HID/gamepad واقعی.
+- Completion state: complete source review; no tests or device input tests were run.
