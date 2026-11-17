@@ -1,13 +1,13 @@
 diff --git a/crates/horizon-mods/src/manifest.rs b/crates/horizon-mods/src/manifest.rs
 --- a/crates/horizon-mods/src/manifest.rs
 +++ b/crates/horizon-mods/src/manifest.rs
-@@ -28,6 +28,8 @@ const RESERVED_NAMESPACES: [&str; 3] = ["minecraft", "c", "horizon"];
+@@ -28,3 +28,5 @@ const RESERVED_NAMESPACES: [&str; 3] = ["minecraft", "c", "horizon"];
  pub const STORAGE_DIR: &str = ".horizon-mod-data";
 +/// The biggest manifest a mod may ship.
 +const MAX_MANIFEST: u64 = 1 << 20;
  /// The biggest `mod.wasm` a mod may ship.
  const MAX_WASM: u64 = 32 << 20;
-@@ -395,6 +397,18 @@ pub struct Package {
+@@ -395,3 +397,16 @@ pub struct Package {
      pub wasm: Option<Vec<u8>>,
  }
 +
@@ -24,7 +24,7 @@ diff --git a/crates/horizon-mods/src/manifest.rs b/crates/horizon-mods/src/manif
 +}
 +
  impl Package {
-@@ -402,30 +416,40 @@ impl Package {
+@@ -402,33 +417,34 @@ impl Package {
      /// code, and content `assets/` and `data/`) or a folder holding the same.
      pub fn read(path: &Path) -> Result<Self, String> {
          let (toml, wasm) = if path.is_dir() {
@@ -76,7 +76,7 @@ diff --git a/crates/horizon-mods/src/manifest.rs b/crates/horizon-mods/src/manif
 -            return Err(format!("{WASM} is over {} MiB", MAX_WASM >> 20));
 -        }
          let manifest = Manifest::parse(&toml)?;
-@@ -555,6 +579,18 @@ mod tests {
+@@ -555,8 +571,18 @@ mod tests {
  name = "Coordinates HUD"
  version = "0.1.0"
  api = "0.1"
