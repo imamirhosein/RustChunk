@@ -1500,3 +1500,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: Starling Android account/setup, touch controls, shader pack, native mods, diagnostics and Horizon parity documentation.
 - Follow-up checks: ساخت roadmap RustChunk پس از ممیزی هسته؛ معیارهای boot، world load، render، controls و vanilla server join ثبت شود.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 13. `docs/horizon-parity.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `4783c14f65966eb407b51f89cea5c847c9758bf7`.
+- Size: 5,249 bytes; 39 lines; full source fetched.
+- Coverage: lines 1–39, complete.
+- Purpose: ثبت گزارش parity ادعایی Horizon با vanilla در نسخه‌ای که Starling روی آن ساخته شده است.
+- Implementation / logic: جدول subsystemها برای game loop، assets/resources، protocol/multiplayer، chunk palettes، meshing، rendering، lighting، worldgen، saves/DataFixer، entities/physics، inventory/UI و audio امتیاز می‌دهد. روش امتیازدهی، differential harnessها و known issues را توضیح می‌دهد.
+- Findings: سند مدعی 100% parity در محدوده 281 harness تا 2026-10-13 روی Linux و Mac است؛ تصریح می‌کند 100% فقط پوشش مقایسه harness است، نه تضمین عدم تفاوت کامل. known gaps شامل نبود Microsoft sign-in در Horizon، آنلاین‌مود نشدن، skins HTTPS، pack icons، hotbar keys و tooltip attribute lines است. نتایج به Horizon 26.3/26.2 مربوط‌اند.
+- RustChunk relevance: روش differential testing، دسته‌بندی subsystemها و نگهداری known gaps ارزشمند است؛ درصد parity و تست‌ها به RustChunk یا 1.20.1 تعمیم‌پذیر نیست.
+- 1.20.1 implications: RustChunk باید معیار parity مختص 1.20.1 و golden tests مستقل بسازد. Protocol, chunks, resource loading, rendering, save format و DataFixer باید با نسخه 1.20.1 سنجیده شوند. ادعای 100% upstream مدرک سازگاری 1.20.1 نیست.
+- Decision: **adaptable (روش audit/test)؛ داده‌ها و امتیازهای parity version-specific و غیرقابل انتقال**.
+- Dependencies / cross-references: Horizon differential test harnesses, README project status, subsystem implementations and known issues.
+- Follow-up checks: طراحی test matrix 1.20.1 و vanilla oracle؛ برای هر subsystem baseline و known-gap ثبت شود؛ ادعای parity تنها بعد از اجرای تست‌های RustChunk مجاز است.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
