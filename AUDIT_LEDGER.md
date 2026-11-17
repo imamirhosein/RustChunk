@@ -1596,3 +1596,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon-mixins, native-hooks.json, native-hook-fragments, horizon_client::mod_api, native data and Horizon game internals.
 - Follow-up checks: فعلاً پیاده‌سازی یا port نکن. پس از playable، نیاز واقعی به mod API و threat model جدا تعیین شود.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 19. `docs/starling-native-mods.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `d84abf4d4497bea2c4ef343287825256bce16477`.
+- Size: 9,246 bytes; 121 lines; full source fetched.
+- Coverage: lines 1–121, complete.
+- Purpose: توضیح فرایند ساخت native modهای Horizon روی build server برای Android و تعویض shared library در APK.
+- Implementation / logic: کاربر .hnmod را import می‌کند؛ سرویس یا GitHub runner با horizon-mixins روی source commit pinned بازی build می‌کند؛ library با SHA-256 برمی‌گردد و در next start از طریق StarlingActivity/NativeMods.java جایگزین library اصلی می‌شود. Build service job queue/cache/rate limits دارد؛ build sandbox شبکه و فایل‌های میزبان را محدود می‌کند؛ custom build server نیز قابل تنظیم است. Permission extraction برای microphone و safety checks توصیف شده.
+- Findings: Build service کامپایل mod code را از گوشی به سرور منتقل می‌کند و APK را تغییر نمی‌دهد؛ library برگشتی با hash بررسی می‌شود، اما hash فقط integrity است نه اعتماد به code. فایل .hnmod و source به build service ارسال می‌شوند. Native mod در زمان اجرا دسترسی کامل بازی/دستگاه دارد و build server جای trust را نمی‌گیرد. مسیر به Horizon 26.3، mixin tool، APK ABI و Starling-specific names متصل است.
+- RustChunk relevance: برای تصمیم آینده RustChunk درباره remote build و hot-swappable native libraries مرجع معماری/امنیتی است؛ برای اجرای پایه 1.20.1 لازم نیست.
+- 1.20.1 implications: RustChunk فعلاً نباید remote build service یا dynamic native library replacement اضافه کند. اگر mod compile on-device سنگین بود، remote build می‌تواند مطرح شود، اما source privacy، untrusted build scripts/macros، sandbox، artifact provenance، ABI matching و code trust باید حل شوند. artifact باید دقیقاً ABI/NDK/toolchain منطبق باشد.
+- Decision: **unnecessary برای فاز پایه؛ build-service و security model صرفاً reference آینده**.
+- Dependencies / cross-references: packaging/android/mod_build_server.py, mod_build_sandbox.sh, mod_build_gateway.py, NativeMods.java, build.yml and versions.json.
+- Follow-up checks: هیچ پیاده‌سازی فعلی. در صورت نیاز آینده، threat model و provenance/signature design قبل از build server؛ hash به تنهایی authenticity/trust نیست.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
