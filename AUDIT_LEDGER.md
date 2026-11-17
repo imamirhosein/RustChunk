@@ -1644,3 +1644,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_world::attachments::{AttachmentSync,Holder}, horizon_world::nbt, protocol::{Reader,Writer}; docs/native-mods.md, server attachment hook/sync lifecycle.
 - Follow-up checks: بعداً بررسی client attachment cache lifecycle و سرور dispatcher؛ برای RustChunk core فقط NBT network bounds و trailing-byte policy را در design notes نگه دار.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
+
+
+### 62. `crates/horizon-protocol/src/hash_ops.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `98b3f143740726279bf85846863ea74b5cc468dd`.
+- Size: 13,130 bytes; 353 lines; full source fetched.
+- Coverage: lines 1–353, complete.
+- Purpose: پیاده‌سازی HashOps و Guava CRC32C برای ساخت hash canonical از مقدار codec-encoded data componentها.
+- Implementation / logic: CRC32C با جدول Castagnoli تولید می‌شود. HashOps برای انواع primitive، string بر مبنای UTF-16، boolean، empty/map/list، byte/int/long array، list و map byte-tag مشخص می‌سازد. مقادیر primitive little-endian هستند؛ map entries بر اساس unsigned key hash سپس value hash مرتب می‌شوند؛ list ترتیب را حفظ می‌کند. from_nbt ساختارهای NBT را به HashOps می‌برد و در bool_keys مقدار byte را به Boolean codec hash تبدیل می‌کند. RecordHash فیلدهای اختیاری را حذف و بقیه را مثل map hash می‌کند.
+- Findings: این hash، hash ساده raw NBT یا SHA-256 نیست؛ دقیقاً representation یک Codec در HashOps 26.3 است و برای HashedPatchMap/Data Components استفاده می‌شود. float/double با raw bits می‌روند؛ strings طول UTF-16 و واحدهای UTF-16 دارند؛ اشتباه در نوع codec یا boolean fieldها نتیجه را عوض می‌کند. تست استاندارد CRC32C، primitive byte payload، ordering map/list، NBT conversion و نمونه values چاپ‌شده توسط vanilla 26.3 را assert می‌کند؛ اجرا نشده‌اند.
+- RustChunk relevance: برای فهم اینکه packet item components مدرن چگونه hashهای componentها را انتقال می‌دهد، مهم است؛ به هسته vanilla 1.20.1 قابل استفاده مستقیم نیست.
+- 1.20.1 implications: 1.20.1 قبل از Data Components و HashedStack این نسل است؛ این implementation را نباید برای ItemStack/NBT hash یا integrity در 1.20.1 فرض کرد. اگر یک hash canonical در RustChunk لازم باشد باید بر اساس serializer/هدف دقیق تعریف شود؛ برای integrity فایل‌ها SHA-256 یا الگوریتم صریح مناسب است، نه این CRC32C.
+- Decision: **version-specific و برای protocol 1.20.1 نامناسب؛ فقط به‌عنوان مرجع پیاده‌سازی Codec-hash نسل جدید**.
+- Dependencies / cross-references: horizon_world::nbt::Tag; crates horizon-protocol::item/hash.rs and modern Data Component codecs/HashedPatchMap; Guava HashOps reference.
+- Follow-up checks: هنگام port کردن ItemStack 1.20.1، کلاً Data Component hash path را کنار بگذار؛ مقایسه جداگانه‌ای با serialization و NBT همان نسخه انجام شود.
+- Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
