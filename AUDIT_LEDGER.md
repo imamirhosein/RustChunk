@@ -1382,3 +1382,28 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `rsa::{RsaPrivateKey,RsaPublicKey,SignatureHash}`; `packets::play::LastSeenUpdate`; modern Login/Play chat packets; profile public key/session; chat message signing; `crypto.rs`.
 - Follow-up checks: inspect `packets/play.rs` chat structs and `packets/login.rs` against exact 1.20.1 source; establish profile key signature payload, message signing payload, session/index behavior, last-seen window, acknowledgement and enforcement modes using a 1.20.1 oracle/server.
 - Completion state: complete source/test review; no signature validation, chat signing, secure-chat session, or vanilla 1.20.1 message exchange was run.
+
+
+### 59. `crates/horizon-protocol/src/resolver.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `f9ed010aa125f0588894d55e9cf2615a6f3d4635`.
+- Size: 7,040 bytes; 209 lines; fetched as a complete file, including tests.
+- Coverage: lines 1–209, complete.
+- Purpose: resolves Minecraft server addresses, including the standard `_minecraft._tcp` SRV redirect for the default port, then resolves the target host to socket addresses.
+- Implementation:
+  - SRV lookup is attempted only for port 25565 and hostnames that are not IP literals or `localhost`. Query name is `_minecraft._tcp.<host>.`, avoiding a duplicate trailing dot for fully qualified names.
+  - An SRV result replaces both the host and port for login connection. It deliberately performs no second SRV query for the target and does not fall back to the original host if the redirected target cannot resolve.
+  - If no SRV record/query result is available, the original host/port is used for normal address resolution. Explicit non-default ports and IP literals bypass SRV.
+  - `server_redirect` returns the selected host/port without resolving socket addresses, for display/use by server-list or launcher-facing code.
+  - `NAME_SERVERS` can be supplied once through a callback. On Android the source is designed to query the active network's DNS servers from the Android activity on each lookup, so Wi-Fi/mobile network changes are reflected. Without a callback, the DNS module finds system name servers.
+- Tests read: redirect and explicit port behavior; target resolution with no original hostname lookup; missing record fallback; IP/localhost bypass; FQDN trailing dot; no fallback from an SRV target that fails to resolve; direct literal TCP connection. Not executed.
+- RustChunk relevance: high for real multiplayer connectivity and especially useful on Android, where DNS configuration may not be exposed through a normal `resolv.conf` path.
+- 1.20.1 implications:
+  - Minecraft Java SRV discovery on the default server port is a long-standing client behavior and is likely reusable for 1.20.1. It is independent of packet schema/version numbers.
+  - The login handshake must carry the resolved target host and port, while the UI/status display may preserve the originally entered hostname; this code explicitly separates that concern.
+  - Android's active-network DNS provider hook is highly relevant to a native Android client; it must be connected to the actual Android network APIs and refreshed on network changes.
+  - The DNS packet implementation and resolver timeout/error policy live in `resolver/dns.rs`, which still needs full review. Correct SRV parsing and DNS response validation are essential; never trust DNS target names as packet payload instructions.
+- Decision: **largely adaptable/reusable** for 1.20.1 and Android. Keep the SRV selection rules and injected DNS provider; verify target-version behavior and ensure the Android host supplies current DNS servers.
+- Dependencies / cross-references: `resolver::dns`; `NAME_SERVERS`; `dns::system_name_servers`; `dns::query_srv`; `connection::connect_server`; `connect_server_with_address`; Android activity/network DNS callback.
+- Follow-up checks: inspect `resolver/dns.rs`, DNS response parsing, retry/timeout and name-server selection; verify 1.20.1 server redirect behavior against vanilla. Confirm Android integration fetches DNS servers from the current active network without stale caching.
+- Completion state: complete source/test review; no live DNS query, SRV lookup, Android DNS callback or connection test was run.
