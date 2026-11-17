@@ -1,10 +1,7 @@
 diff --git a/crates/horizon-client/src/game/machine_entities.rs b/crates/horizon-client/src/game/machine_entities.rs
 --- a/crates/horizon-client/src/game/machine_entities.rs
 +++ b/crates/horizon-client/src/game/machine_entities.rs
-@@ -10,1 +10,12 @@
- use super::{Game, spill};
- use horizon_client::items::ItemStack;
- use horizon_client::kinetics::{KineticPart, Machine};
+@@ -10,2 +10,13 @@
  use horizon_world::nbt::Tag;
  
 +/// NBT item slots are encoded as an unsigned byte. Never allocate more slots than
@@ -18,7 +15,7 @@ diff --git a/crates/horizon-client/src/game/machine_entities.rs b/crates/horizon
 +        .clamp(minimum, MAX_MACHINE_SLOTS)
 +}
 +
-@@ -116,3 +127,3 @@
+@@ -114,5 +125,5 @@
              Some(Tag::Long(v)) => *v,
              _ => 0,
          };
