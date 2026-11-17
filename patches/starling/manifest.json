@@ -3,6 +3,7 @@
   "patches": [
     "0001-rust-test-1.20.1-block-tags.patch",
     "0002-fix-native-command-permission-conflict.patch",
-    "0003-lock-world-before-upgrade-and-migration.patch"
+    "0003-lock-world-before-upgrade-and-migration.patch",
+    "0004-bound-mod-package-reads.patch"
   ]
 }
