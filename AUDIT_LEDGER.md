@@ -58,6 +58,7 @@ No findings are promoted to confirmed solely from the old conversational summari
 | CAND-004 | `command_minecarts.rs` permission and entity conversion | Potential, unverified | Review full file and trust boundary |
 | CAND-005 | Other previously mentioned files | Unverified | Reconstruct evidence before making claims |
 | CAND-006 | `integrated.rs` / `world_loading.rs`: save folder is joined to `current_dir()/saves` before any visible component validation; `WorldRequest::new` also directly joins it | Potential, unverified | Trace all `open_integrated` callers and world-list folder provenance; inspect path validation at the true boundary before classifying |
+| CAND-007 | `interactions.rs`: remote metadata floats for hitbox width/height are accepted without finite/nonnegative validation | Potential, unverified | Trace packet decoder and `ray_box`/AABB behavior for NaN, infinity, negative, and extreme values |
 
 ## Session log
 
@@ -77,7 +78,7 @@ Source ordering: recursive Git tree returned by GitHub for `starling-client/star
 |---:|---|---|
 | 1 | `crates/horizon-client/src/game/input_trace.rs` | Complete (historical; no blob SHA recorded) |
 | 2 | `crates/horizon-client/src/game/integrated.rs` | Complete (1–1330; SHA `baedd4a77d6b62dc337158bbaf451f8689cb040b`) |
-| 3 | `crates/horizon-client/src/game/interactions.rs` | Pending |
+| 3 | `crates/horizon-client/src/game/interactions.rs` | Complete (1–133; SHA `ddf1d967eb21ee7f1673434439aaadd431a7e334`) |
 | 4 | `crates/horizon-client/src/game/item_draw.rs` | Pending |
 | 5 | `crates/horizon-client/src/game/item_particles.rs` | Pending |
 | 6 | `crates/horizon-client/src/game/item_use.rs` | Complete (historical; no blob SHA recorded) |
@@ -186,4 +187,13 @@ Batch count: 100. Complete: 2 (historical confirmation only). Pending: 98. Do no
 - Total: 1,330 lines. Blob SHA: `baedd4a77d6b62dc337158bbaf451f8689cb040b`.
 - Result: no confirmed defect established in this pass. One path-boundary concern is recorded as CAND-006 and must be resolved by tracing callers and validation before closing it.
 - Dependency cross-check: `world_loading.rs` lines 1–180 show `WorldRequest::new` directly joins the supplied folder to `current_dir()/saves`; that snippet alone does not establish exploitability because caller provenance is not yet traced.
+- No source code changed; only the audit ledger was updated. No build/test claimed.
+
+
+### 2026-11-17 — file #3: interactions.rs
+
+- Source: pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Entire file fetched and reviewed: lines 1–133 (single complete fetch).
+- Blob SHA: `ddf1d967eb21ee7f1673434439aaadd431a7e334`.
+- Result: normal hitbox geometry and vehicle-position update are straightforward; two synced floats are assigned without validation. Recorded as CAND-007 pending verification of protocol input handling and ray/AABB robustness. No confirmed exploit or crash established.
 - No source code changed; only the audit ledger was updated. No build/test claimed.
