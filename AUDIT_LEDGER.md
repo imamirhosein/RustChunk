@@ -1140,3 +1140,30 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `ids::play`; `buf`; `chunk::{ChunkData,LightData,Paletted}`; `entity_data`; `item::{Component,Slot,Stack,Hashed}`; `packets::configuration`; `packets::login::Property`; `packets::recipes`; `horizon-world::nbt`; `registry`; connection state machine and vanilla packet reports.
 - Follow-up checks: inspect `chunk.rs`, `entity_data.rs`, `item.rs`, `registry.rs`, `packets/recipes.rs` and `packets/play.rs` consumers; obtain 1.20.1 serverbound/clientbound packet schemas and mappings; create separate 1.20.1 golden traces for login, join game, chunk load/light, inventory, entity metadata, movement, chat and common interactions.
 - Completion state: complete source/test review; the numerous unit tests were read but not executed, and no 1.20.1 packet capture, server connection or byte-level comparison was performed.
+
+
+### 50. `crates/horizon-protocol/src/chunk.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `f961b1b230dd57f05532844869db6a4c755166aa`.
+- Size: 18,283 bytes; 522 lines; fetched in consecutive ranges 1–400 and 401–522.
+- Coverage: lines 1–522, complete; both ranges returned the same blob SHA; all tests read.
+- Purpose: packet codecs and data structures for serialized chunk columns/sections, block and biome palettes, heightmaps, block entities, and sky/block light layers.
+- Implemented structures:
+  - `Paletted` represents a registry-ID palette plus bit-packed storage. It has strategy-specific local/global palette thresholds for blocks and 4×4×4 biomes, packed long access, conversion from flat values, and safe handling of storage bit widths.
+  - `Section` stores non-empty block count, a separate fluid count, block-state palette and biome palette.
+  - `ChunkData` stores a collection of heightmap type IDs and packed long arrays, a length-prefixed section byte buffer, and block entity position/type/NBT records. Helpers serialize/deserialize sections by a caller-supplied count and global block/biome bit widths.
+  - `LightData` stores four bitsets (sky/block present and empty masks) and arrays of 2048-byte light layers. Helper expands those masks into per-section optional sky/block arrays; nibble lookup reads low/high nibbles.
+  - Bit storage packs `64/bits` values per long without crossing word boundaries; blocks contain 4096 entries and biome containers 64.
+- Tests read: optimized palette construction matches the slow reference; bit storage, block/biome palette thresholds and global widths; invalid bit widths; chunk section/heightmap/block-entity round trips; light mask/layer/nibble interpretation. Tests not executed.
+- RustChunk relevance: extremely high. This is a direct network-to-world boundary for receiving terrain and lighting. Incorrect chunk codec means corrupt/invisible terrain regardless of the renderer's performance.
+- 1.20.1 implications:
+  - Paletted block/biome container concepts, 4096/64 entry sizes, per-long packing and the general sky/block light mask model are likely reusable, but exact palette bit thresholds, registry global widths and IDs must match 1.20.1.
+  - The current section codec includes both `non_empty` and `fluids` short counters. 1.20.1's historical section wire structure must be confirmed directly; do not assume the additional fluid count is present.
+  - The current `Heightmaps` wire codec is a count of numeric type IDs and long arrays. 1.20.1 chunk packet heightmaps use the older NBT compound representation rather than this newer typed list format; that field requires a distinct 1.20.1 codec.
+  - `ChunkData` section buffer shape, included biome containers, block entity info and section count depend on 1.20.1's dimension/build-height and registry rules. Current caller-supplied global widths and section counts must be derived from target version data.
+  - Light layer masks are conceptually similar across releases, but mask bit indexing, trust-edges behavior, sky dimension rules, light section count and packet envelope must be checked against the target client/server.
+  - Current code is bound to modern 26.3 registry IDs and resource exports. Matching serialized numeric palette values without a 1.20.1 registry is unsafe.
+- Decision: **adapt the palette/storage and light primitives**, but **rewrite the chunk packet envelope, section structure, heightmap format and registry integration** for 1.20.1. Keep a dedicated version-specific chunk decoder rather than a shared struct with unchecked modern fields.
+- Dependencies / cross-references: `buf::{BitSet,Longs,Bytes,VarInt}`; `horizon_world::nbt::Tag`; `packets::play::{LevelChunkWithLight,ChunksBiomes,LightUpdate}`; registry state/biome widths; world section dimensions; renderer chunk loader.
+- Follow-up checks: inspect `registry.rs`, `packets/play.rs` chunk packet call sites and `horizon-world` palette representation; compare against 1.20.1 `LevelChunkPacketData`, `LevelChunkSection`, `Heightmap` and `ClientboundLightUpdatePacket` serializers, including actual captures for overworld/nether/end and negative/minimum-height chunks.
+- Completion state: complete source/test review; tests, generated chunk packets and live 1.20.1 terrain/light reception were not run.
