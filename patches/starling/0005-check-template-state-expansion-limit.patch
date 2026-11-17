@@ -45,7 +45,7 @@ diff --git a/crates/horizon-client/src/mod_content.rs b/crates/horizon-client/sr
 +                    .into());
 +                }
                  // A `default_state` key the block itself declares is its own,
-@@ -1143,5 +1178,3 @@ impl Plan {
+@@ -1143,4 +1178,2 @@ impl Plan {
 -                let count =
 -                    u32::try_from(states.len() as u64 * combos.len() as u64).unwrap_or(u32::MAX);
 -                next = next.saturating_add(count);
