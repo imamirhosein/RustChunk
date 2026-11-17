@@ -1167,3 +1167,32 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `buf::{BitSet,Longs,Bytes,VarInt}`; `horizon_world::nbt::Tag`; `packets::play::{LevelChunkWithLight,ChunksBiomes,LightUpdate}`; registry state/biome widths; world section dimensions; renderer chunk loader.
 - Follow-up checks: inspect `registry.rs`, `packets/play.rs` chunk packet call sites and `horizon-world` palette representation; compare against 1.20.1 `LevelChunkPacketData`, `LevelChunkSection`, `Heightmap` and `ClientboundLightUpdatePacket` serializers, including actual captures for overworld/nether/end and negative/minimum-height chunks.
 - Completion state: complete source/test review; tests, generated chunk packets and live 1.20.1 terrain/light reception were not run.
+
+
+### 51. `crates/horizon-protocol/src/registry.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `6d7d528ac789dc0d99420d4197c515302b9331e8`.
+- Size: 11,388 bytes; 311 lines; fetched as a complete file, including tests.
+- Coverage: lines 1–311, complete.
+- Purpose: stores built-in and server-synchronized registries, bidirectional name/ID lookup, synchronized registry data/tags and dimension properties used by the client/protocol.
+- Built-in registry handling:
+  - Parses the vanilla data generator `registries.json` report; for each registry it reads each entry's `protocol_id` and builds parallel names and reverse name→ID lookup.
+  - Searches for the report beside prepared resources or in development datagen output.
+  - `SyncedNames` resolves names first from built-in registries, then dynamic server-synced registries, then optional custom component names when a modern custom component registry was confirmed.
+- Dynamic registry handling:
+  - Accepts modern Configuration `RegistryData` packets and preserves entry names plus optional NBT data in arrival order; reverse lookup uses that order as the assigned ID.
+  - Stores dialog registry tags from modern `UpdateTags` packets and a peer-confirmed custom-component-registry flag.
+  - Exposes name/ID/data/length queries and a `DimensionType` parser that reads min_y, height, logical_height, has_skylight and modern default_clock data from synchronized NBT.
+  - Vanilla defaults are hardcoded for Nether (0..256, no skylight, no clock), End (0..256, skylight and End clock) and other names (Overworld-like -64..320, skylight/Overworld clock). Section count is height/16. `ceil_log2` computes bits needed for a global palette.
+- Tests read: parses built-in protocol IDs, dynamic registry arrival order, derives dimension vertical range/skylight/default clock, and checks ceil-log2 boundaries. Not executed.
+- RustChunk relevance: critical. Registry IDs define the meaning of item/entity/block/biome/effect/sound IDs in packets and chunk palettes; wrong registries can make otherwise well-formed packets semantically invalid.
+- 1.20.1 implications:
+  - The built-in report is pinned to 26.3 and must be regenerated from a 1.20.1 vanilla reference. Every numeric ID used in packets, palettes, particles, entities, item stacks, sounds, argument parsers and attributes must follow 1.20.1 registry ordering.
+  - The current dynamic registry design expects `RegistryData` packets in a separate Configuration state. 1.20.1 does not have that state; its dimension codec/registry information is delivered in the older Login/Join Game path (with later tags delivered in Play). The source and data model must be adapted to populate registries from those older packet structures.
+  - Current custom component registry and dialog tags are modern 26.3 concepts and must not be required for 1.20.1. Components and dialog lookups need to be removed or version-gated in the target path.
+  - `default_clock` is a modern dimension data feature, not a 1.20.1 dimension field. Basic min_y/height/logical_height/has_skylight handling is conceptually relevant, but the exact target dimension NBT schema and defaults must be sourced from 1.20.1.
+  - A fallback `DimensionType::vanilla` that treats every unknown dimension as Overworld can silently misread modded/custom dimensions; the custom 1.20.1 dimension codec must be read rather than relying on this default.
+- Decision: **adaptable** as registry name/ID lookup and data-storage architecture; **rebuild registry inputs and rewire dynamic registry acquisition** for 1.20.1's Login/Play packet flow. Exclude modern dialog/component/default-clock semantics from the target.
+- Dependencies / cross-references: `registries.json`; `packets::configuration::{RegistryData,UpdateTags}`; `item::Names`; `item::custom`; `horizon-world::nbt`; `packets/play.rs`; `chunk.rs`; `horizon-prepare` datagen; `horizon-core::version`.
+- Follow-up checks: inspect `Join Game`/login packet in the target version and data-driven dimension registry serialization; map all 1.20.1 built-in network registry reports; ensure no modern-only registry IDs leak into item/chunk/entity packet decoding.
+- Completion state: complete source/test review; no registry reports, dynamic packets, 1.20.1 world registry or protocol tests were run.
