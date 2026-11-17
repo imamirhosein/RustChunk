@@ -11,6 +11,8 @@ on:
       - "tools/minecraft_1_20_1_lock.json"
       - "tools/export_minecraft_1_20_1_block_facts.py"
       - "tools/java/Vanilla1201BlockFactsExporter.java"
+      - "tools/export_minecraft_1_20_1_heightmap_facts.py"
+      - "tools/java/Vanilla1201HeightmapFactsExporter.java"
       - "tools/export_minecraft_1_20_1_block_tags.py"
       - "tools/export_minecraft_1_20_1_fluid_tags.py"
       - "tests/**"
@@ -23,6 +25,8 @@ on:
       - "tools/minecraft_1_20_1_lock.json"
       - "tools/export_minecraft_1_20_1_block_facts.py"
       - "tools/java/Vanilla1201BlockFactsExporter.java"
+      - "tools/export_minecraft_1_20_1_heightmap_facts.py"
+      - "tools/java/Vanilla1201HeightmapFactsExporter.java"
       - "tools/export_minecraft_1_20_1_block_tags.py"
       - "tools/export_minecraft_1_20_1_fluid_tags.py"
       - "tests/**"
@@ -82,6 +86,14 @@ jobs:
             --prepared-dir .local/minecraft/1.20.1-remap \
             --work-dir .local/minecraft/1.20.1-export
 
+      - name: Export exact 1.20.1 heightmap predicates for every block state
+        run: |
+          python tools/export_minecraft_1_20_1_heightmap_facts.py \
+            --java "$JAVA_HOME_17_X64/bin/java" \
+            --javac "$JAVA_HOME_17_X64/bin/javac" \
+            --prepared-dir .local/minecraft/1.20.1-remap \
+            --work-dir .local/minecraft/1.20.1-export
+
       - name: Export 1.20.1 vanilla block tags from verified client/server JARs
         run: |
           python tools/export_minecraft_1_20_1_block_tags.py \
@@ -132,6 +144,7 @@ jobs:
           path: |
             .local/minecraft/1.20.1-remap/audit-report.json
             .local/minecraft/1.20.1-export/block-facts/block-facts-report.json
+            .local/minecraft/1.20.1-export/heightmap-facts/heightmap-facts-report.json
             .local/minecraft/1.20.1-export/block-tags/block-tags-report.json
             .local/minecraft/1.20.1-export/fluid-tags/fluid-tags-report.json
           include-hidden-files: true
