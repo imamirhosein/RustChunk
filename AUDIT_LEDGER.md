@@ -1399,9 +1399,6 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Completion state: complete source/test review; no DNS query, TCP fallback test, Android resolver call or live SRV resolution was executed.
 
 
-## Audit ledger integrity note — 2026-11-18
-A post-batch verification found that the first-batch source-file numbers 9–20 (`packaging/android/build_apk.py` through `docs/mods.md`) are still present only under `Pending first batch (selected order)` and do not have individual completed review entries in this ledger. The earlier conversational report that all 20 first-batch files had been individually recorded is therefore not supported by the current ledger. They are **not counted as fully documented audit entries** until their contents are re-reviewed (or their existing findings are recovered and recorded with verifiable coverage). The current ledger contains detailed completed entries 1–8 and 21–60: 48 individual file records. This note does not assert that those 12 files were never read; it records that this repository artifact cannot presently prove their full review and findings.
-
 ### 61. `crates/horizon-protocol/src/attachment_sync.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `532c3854124c11910f9a1cc3e44f59e25e03a184`.
@@ -2001,13 +1998,6 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_protocol connection/packets/crypto/rsa/registry/text/servers; horizon_auth AuthSession/session join; horizon_friends relay; content_identity and mod_list custom channels; lod_net; reconnect reason classifier; client event polling and game-thread packet handling; resource-pack/dialog/code-of-conduct UI.
 - Follow-up checks: ممیزی AuthSession/join_server و DNS/SRV/Connection connect methods؛ استخراج exact 1.20.1 handshake/login encryption/compression/keep-alive/configuration/registry/resource-pack packet vectors؛ اصلاح spawn failure handling و bounded event queue؛ تعیین packet decode fatal/skippable policy؛ تست reconfiguration races، disconnect/cancel on Android و thread shutdown.
 - Completion state: complete source review; no tests, build, live server connection, online authentication or Android network run was executed.
-
-
-## Audit ledger correction — 2026-11-18 (supersedes the earlier integrity note)
-
-A fresh structural check of the current ledger found one detailed source-review section for every unique file number 1–100. Each number has a source SHA, a coverage statement and a completion-state record. The first-batch numbers 9–20 are not missing: their detailed records are present twice (once in the earlier first-batch section and again later in the ledger), which is why the earlier integrity note incorrectly described them as pending. That earlier note is outdated and must not be used to mark files 9–20 incomplete. The duplicate entries are retained as history; no source file was changed as part of this correction.
-
-This check verifies the current ledger's documented coverage metadata. It does not independently prove that builds, tests, runtime sessions, or per-file commit history were performed; those claims remain limited to what each entry explicitly records.
 
 
 ## 100-file checkpoint review — 2026-11-18
