@@ -538,3 +538,22 @@
 - Decision: **adaptable** as a Rust-native client architecture, resource-preparation design, scoped Java-oracle methodology and module decomposition; **major rewrite/version adaptation required** for 1.20.1 semantics and Android ARM64/Mali deployment. The current client is neither a ready-made 1.20.1 client nor proven Android game runtime.
 - Follow-up checks: inspect `horizon-client` crate entry point, launch/render loop, `horizon-prepare` resource exporters, version constants, renderer backend/platform features, networking/protocol integration, worldgen/game loop and unfinished client lifecycle; inspect Android packaging and compare actual ABIs/GPU backend requirements. Verify 1.20.1 Java oracle/resources and differential tests separately.
 - Completion state: complete document review; no client build, gameplay session, renderer, Java oracle, test suite, Android package or hardware performance run was executed in this audit.
+
+
+### 25. `docs/architecture.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `838ff3bcf985a689c0732ccb9e80deb89ed4d4b8`.
+- Size: 10,769 bytes; 69 lines; fetched in one complete range.
+- Coverage: lines 1–69, complete.
+- Purpose: an index of the 40 most frequently changed feature areas over a 30-day window, showing their source modules, crate locations and related parity checks.
+- Architecture facts:
+  - The executable `horizon-client` is a thin entry point; gameplay and reusable library code are split across `horizon-client`, `horizon-client-lib` and supporting crates.
+  - World persistence and DataFixers sit in `horizon-world` and client save modules; world generation and server simulation span `horizon-world` and `horizon-client`; multiplayer networking is split between game remote/LAN code and `horizon-protocol`.
+  - Rendering, input, registries/items, commands, assets, launcher and mods have separate crates/modules. The table maps game loop, worldgen, network, renderer, chunks, physics, player, inventory, mobs, audio and many more systems to focused tests.
+  - The document recommends asking the parity runner for affected harnesses rather than relying on historical test counts. It notes the reusable probe library does not compile all gameplay code, so a source file's dep-info alone can miss relevant harnesses.
+- RustChunk relevance: high as a map for selecting the actual source files to inspect and for understanding cross-crate boundaries. It helps avoid treating Starling as a single monolith or assuming the launcher alone contains the game implementation.
+- 1.20.1 implications: this index identifies the subsystems that must be version-audited, but does not describe their Minecraft version compatibility, runtime feature completeness or 1.20.1 behavior. The 40-area history is a recent churn map (through 2026-10-23), not a version-port plan and not an exhaustive list of every dependency.
+- Decision: **adaptable** as an audit/navigation map and modular architecture reference; **insufficient by itself** to establish 1.20.1 support. No implementation decision should be made from this index without reading the actual referenced source and versioned data.
+- Dependencies / cross-references: `crates/horizon-client`; `crates/horizon-client-lib`; `crates/horizon-world`; `crates/horizon-protocol`; `crates/horizon-client-render`; `crates/horizon-client-input`; `crates/horizon-client-core`; `crates/horizon-command`; `crates/horizon-items`; `tools/parity.py`; the harnesses named in the table; `AGENTS.md`.
+- Follow-up checks: use the map to guide source-level audits of startup/resource loading, game loop, worldgen, save/load, packet processing, renderer and launcher integration; run no harness until its environment and 1.20.1 oracle are confirmed.
+- Completion state: complete document review; no test selection, build or parity command was executed.
