@@ -51,3 +51,14 @@
 19. `docs/starling-native-mods.md`
 20. `docs/mods.md`
 
+
+### 2. `LICENSE`
+- **Source SHA:** `e959a076e9fa4b8c1fcf990b2253a935da5bb5f4`
+- **Size:** 22 lines; full file fetched and read.
+- **Coverage:** complete; no chunks omitted.
+- **Purpose/content:** standard MIT license text. It attributes the copyright to Ludovic Marie and Horizon contributors (2026), grants broad rights to use, modify, distribute, sublicense, and sell the licensed software, requires retaining the notice, and disclaims warranties and liability.
+- **Dependencies / scope:** this file is the repository's top-level license declaration. It does not enumerate third-party dependency licenses or independently grant rights to Minecraft/Mojang assets. The README explicitly limits MIT coverage to original project work; `THIRD_PARTY_NOTICES.md` is the next source for component-specific attribution.
+- **RustChunk relevance:** critical due-diligence input before copying or adapting code. MIT is permissive, but the copyright notice and license text must be retained for substantial copied portions; dependencies and upstream code may have separate obligations.
+- **Limitations:** a root MIT license alone does not establish the license of every vendored/generated/resource file or third-party dependency. Do not infer that game assets, Minecraft binaries, or third-party libraries are covered.
+- **Decision:** **adaptable** as a licensing model reference; copying Starling/Horizon code requires preserving notices and checking each dependency's actual license. Minecraft files remain outside this license scope.
+- **Completion state:** complete license-text review; third-party notices and dependency metadata still require separate review.
