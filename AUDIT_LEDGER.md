@@ -1041,3 +1041,26 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `buf::Reader`; `buf::write_varint`; `connection.rs`; `Inflater`; `flate2` zlib; packet-size limits.
 - Follow-up checks: verify Java 1.20.1 VarInt21FrameDecoder/LengthFieldPrepender and CompressionDecoder/Encoder edge behavior, including empty frames and declared-size limits; test actual compressed traffic with vanilla 1.20.1.
 - Completion state: complete source/test review; tests and actual packet framing/compression were not run.
+
+
+### 46. `crates/horizon-protocol/src/packets/mod.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `4ef8ac21adafb7f10770ad867cbe5873471ed108`.
+- Size: 3,119 bytes; 88 lines; fetched as a complete file, including macro/test helper.
+- Coverage: lines 1–88, complete.
+- Purpose: declares packet modules and provides the `packet_enum!` macro that generates typed packet enums for each connection state/direction.
+- Findings:
+  - Modules cover Configuration, Handshake, Login, Play, Recipes and Status.
+  - `packet_enum!` generates an enum with modeled packet variants and an `Unknown(id, raw_payload)` fallback. `id()` maps typed variants to generated numeric constants; `encode()` writes VarInt packet ID followed by the type's codec body.
+  - Typed decode constructs a `Reader`, decodes the matching struct and rejects any unconsumed payload bytes. This is intended to reproduce vanilla's rejection of oversized packet bodies.
+  - Unknown packet IDs are preserved as raw payload without attempting typed parsing, so unsupported packet bodies can be retained and potentially forwarded.
+  - `Empty` is a zero-field packet codec. Test-only `round_trip` reads the ID prefix and validates typed round-trip behavior.
+- RustChunk relevance: high. This macro is the central mechanism joining packet IDs to body codecs; its version correctness depends on the IDs and packet structs registered in each state.
+- 1.20.1 implications:
+  - Macro architecture is version-neutral, but the current module layout assumes a separate Configuration state and modern packet variants. Minecraft 1.20.1's connection phase model needs to be confirmed before retaining this state set.
+  - The unknown fallback is useful for resilience, but unknown packets cannot be semantically processed, and passing them through does not guarantee compatibility with protocol feature negotiation or required packet handling.
+  - Strict trailing-byte rejection should be tested against actual 1.20.1 serializers/decoders to ensure no valid packet uses padding or intentionally ignored trailing fields.
+- Decision: **adaptable** as typed-packet macro and unknown-packet representation; **regenerate/reorganize state-specific enums and IDs** for 1.20.1. Preserve strict decode guarantees only where the reference client does so.
+- Dependencies / cross-references: `buf::Codec`; `Reader`; `Writer`; `ids.rs`; packet modules; `State`; `Direction`; `packet!`; `round_trip` tests.
+- Follow-up checks: compare the generated macro's strictness and enum routing with Minecraft 1.20.1's connection dispatch; map packet modules to the target's actual states and typed packet catalog.
+- Completion state: complete source/macro/test-helper review; no macro expansion, protocol tests or packet exchange was run.
