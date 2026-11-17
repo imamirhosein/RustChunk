@@ -1468,3 +1468,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: packaging/lowbudget/hand.py, strings.json, resource-pack GUI/font schema, Pillow.
 - Follow-up checks: در صورت ساخت UI سفارشی، schema resource pack نسخه 1.20.1 بررسی و خروجی جداگانه نسخه‌بندی شود.
 - Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
+
+
+### 11. `research-lock.json`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `719c266401fe962746965fb33c07abbb91f8a656`.
+- Size: 3,244 bytes; 70 lines; full source fetched.
+- Coverage: lines 1–70, complete.
+- Purpose: قفل نسخه‌ها و checksumهای ورودی پژوهش/استخراج داده Starling.
+- Implementation / logic: Minecraft 26.3 manifest SHA-1 و manifest/asset-indexهای پذیرفته‌شده، client/server jar hash و Java major 25 را ثبت می‌کند. نسخه/URL/SHA-256 ابزارهای Vineflower و jadx-headless-mcp و نسخه rea-agents نیز مشخص است. Runtimeهای قدیمی Java 8/16/17 برای ساخت datafix sample worlds ثبت شده‌اند.
+- Findings: فایل pin محور و به 26.3 و Java 25 متصل است. manifestهای republish شده توضیح داده شده‌اند که برخی فقط assetIndex متفاوت دارند. runtimeهای Java قدیمی صرفاً برای sample worlds/datafix پژوهش‌اند.
+- RustChunk relevance: الگوی داشتن manifest lock مستقل برای ورودی‌های 1.20.1، mappingها، ابزار decompile/export و checksumها قابل استفاده است. مقادیر موجود قابل استفاده نیستند.
+- 1.20.1 implications: باید lock جدید مخصوص 1.20.1 ساخته شود: manifest و client/server jar، asset index، libraries، JDK ابزار پژوهشی، mappings رسمی/قابل اعتماد و checksum دقیق هر ورودی. داده‌های 26.3 نباید وارد registries نسخه 1.20.1 شوند. ابزار Java می‌تواند oracle/exporter توسعه باشد، نه موتور runtime.
+- Decision: **version-specific؛ الگوی pin/checksum قابل اقتباس، تمام داده‌های نسخه‌ای باید جایگزین شوند**.
+- Dependencies / cross-references: Minecraft version manifest, client/server jars, Vineflower, jadx-headless-mcp, Java runtime manifests and checksums.
+- Follow-up checks: دریافت manifest رسمی 1.20.1 و hashها؛ تعیین ابزار decompile/export و JDK لازم؛ ساخت lock مستقل RustChunk.
+- Completion state: complete source review and ledger repair; no build, runtime test, device test or external service test was run.
