@@ -291,6 +291,17 @@ def export(args) -> dict:
         shutil.rmtree(classes_dir)
     classes_dir.mkdir(parents=True, exist_ok=True)
     facts_path = output_dir / "heightmap-facts.json"
+    leaves_tag_input_path = output_dir / "leaves-tag-input.json"
+    known_blocks = {
+        row[0]
+        for row in registry_states
+        if isinstance(row, list) and row and isinstance(row[0], str)
+    }
+    leaves_blocks = resolve_block_tag(LEAVES_TAG, block_tags_bundle, known_blocks)
+    leaves_tag_input_path.write_text(
+        json.dumps(sorted(leaves_blocks), indent=2) + "\\n",
+        encoding="utf-8",
+    )
 
     javac = args.javac
     if not Path(javac).is_file():
@@ -308,7 +319,7 @@ def export(args) -> dict:
         [
             args.java, "-Xmx2G", "-classpath",
             classpath([classes_dir, client_jar, server_jar, *libraries]),
-            MAIN_CLASS, str(facts_path),
+            MAIN_CLASS, str(facts_path), str(leaves_tag_input_path),
         ],
         output_dir / "export.log",
         "Running the 1.20.1 heightmap facts exporter",
@@ -332,6 +343,7 @@ def export(args) -> dict:
         "exporter_sha256": sha256(SOURCE),
         "block_registry_facts_sha256": sha256(registry_facts_path),
         "block_tags_bundle_sha256": sha256(block_tags_path),
+        "resolved_leaves_tag_input_sha256": sha256(leaves_tag_input_path),
         "client_jar_sha1": lock["downloads"]["client"],
         "server_jar_sha1": lock["downloads"]["server"],
         "private_facts_path": "heightmap-facts/heightmap-facts.json",
