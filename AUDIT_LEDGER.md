@@ -12,6 +12,7 @@
 ## Completed files
 
 ### 1. `README.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `3cd9d680757217774270f477ecbfc9c80563e39f`
 - **Size:** 146 lines; 17,521 characters; full file fetched and read.
 - **Coverage:** lines 1–146, complete. No chunks omitted.
@@ -51,8 +52,10 @@
 19. `docs/starling-native-mods.md`
 20. `docs/mods.md`
 
+- 1.20.1 implications: this README documents Starling as a 26.3 Android port and is a requirements map only. It is not evidence that its current assets, runtime, registries, or features match 1.20.1; every version-dependent claim must be revalidated against the 1.20.1 target.
 
 ### 2. `LICENSE`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `e959a076e9fa4b8c1fcf990b2253a935da5bb5f4`
 - **Size:** 22 lines; full file fetched and read.
 - **Coverage:** complete; no chunks omitted.
@@ -63,7 +66,10 @@
 - **Decision:** **adaptable** as a licensing model reference; copying Starling/Horizon code requires preserving notices and checking each dependency's actual license. Minecraft files remain outside this license scope.
 - **Completion state:** complete license-text review; third-party notices and dependency metadata still require separate review.
 
+- 1.20.1 implications: the MIT license is version-independent, but it covers only the licensed project code; it does not grant rights to Minecraft 1.20.1 binaries/assets or third-party dependencies. Preserve notices for any code actually reused.
+
 ### 3. `THIRD_PARTY_NOTICES.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `825d4bb50daf691d9049b3d4cfdbc62dbc285ec2`
 - **Size:** 300 lines; 20,016 characters; full file fetched and read.
 - **Coverage:** lines 1–300, complete.
@@ -85,7 +91,10 @@
 - **Follow-up checks:** compare notices against `Cargo.toml`/`Cargo.lock` and actual vendored directories; inspect all referenced license files; trace the Create asset fetch; inspect JDK archive acquisition/checksum code; validate Mojang touch assets are never bundled; identify which Horizon Android adaptations exist in current Starling tree and their exact source diffs.
 - **Completion state:** complete review of the notice document; individual licenses, code, and runtime distribution mechanisms remain open audits.
 
+- 1.20.1 implications: license obligations do not change with Minecraft version. Any RustChunk reuse must trace the exact source file and dependency to its own license; Minecraft 1.20.1 and Mojang assets remain separately governed.
+
 ### 4. `CONTRIBUTING.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `b326f21b72a3fb5e6d10601b1ec0697070400c5d`
 - **Size:** 48 lines; 5,087 characters; full file fetched and read.
 - **Coverage:** complete; no chunks omitted.
@@ -103,7 +112,10 @@
 - **Follow-up checks:** inspect the named build and check scripts; inspect the repository's game/Android workspace boundaries; verify which tests and linters are actually run in CI; compare Starling's license policy with actual third-party notices for consistency.
 - **Completion state:** complete guide review; referenced scripts and source modules not yet validated.
 
+- 1.20.1 implications: the contribution guide describes a 26.3-oriented toolchain and Horizon/Starling split. Its process ideas may transfer, but the target game version, Java resource preparation, build tools and RustChunk architecture must be specified independently for 1.20.1.
+
 ### 5. `Cargo.toml`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `fb4a4a7d703c8ed35973c1690382d7ea2059d0eb`
 - **Size:** 121 lines; 4,893 characters; full file fetched and read.
 - **Coverage:** complete workspace manifest; no chunks omitted.
@@ -123,7 +135,10 @@
 - **Follow-up checks:** inspect member crate manifests, Android NativeActivity source and JNI/NDK integration; verify `third_party` patch diffs and removal conditions; inspect toolchain files and CI to explain Rust 1.85 vs 1.90; map which crates are needed for Starling's phone app versus optional server/tools.
 - **Completion state:** complete root manifest review; dependency graph and crate internals remain pending.
 
+- 1.20.1 implications: workspace members, feature boundaries and dependency patches are built around the 26.3 implementation. The manifest is an architecture reference, not a 1.20.1-compatible workspace to copy wholesale; only crates proven version-neutral should be considered.
+
 ### 6. `Cargo.lock`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `5f5a3e785ef55cb1e4ae408b7d4a2a1368e07754`
 - **Size:** 5,510 newline-terminated lines (5,511 entries when splitting on the final newline); 132,369 characters; 541 package records; 498 crates.io registry package source entries; no Git-source package entries; lock format version 4.
 - **Coverage:** fetched and read sequentially in consecutive chunks: 1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–2,000, 2,001–2,400, 2,401–2,800, 2,801–3,200, 3,201–3,600, 3,601–4,000, 4,001–4,400, 4,401–4,800, 4,801–5,200, and 5,201–5,510. The file ends with a newline. No intended ranges skipped.
@@ -137,7 +152,10 @@
 - **Follow-up checks:** inspect per-crate manifests and Cargo features to identify the Android build graph; verify patched vendor crates and licenses; map which deps are needed for renderer/input/auth/archive/Forge integration; check minimum toolchain and MSRV; assess whether any existing Rust library can interoperate with a retained Java/Forge runtime.
 - **Completion state:** complete lockfile inventory review; feature activation, Android-specific resolution and runtime dependency necessity remain pending.
 
+- 1.20.1 implications: this lockfile pins the current Starling/Horizon dependency graph, not a validated RustChunk 1.20.1 graph. Re-resolve and test only the dependencies selected for RustChunk; do not copy this lockfile as a compatibility mechanism.
+
 ### 7. `.gitignore`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `29d00d0368c76edd3115dbca57ce0901e55860a9`
 - **Size:** 42 lines; 760 characters; full file fetched and read.
 - **Coverage:** complete.
@@ -149,7 +167,10 @@
 - **Follow-up checks:** inspect `tools/check_public_tree.py`, hooks and CI to see how they complement ignore rules; examine actual Starling asset/prepared-resource directories and packaging behavior.
 - **Completion state:** complete ignore-rule review; enforcement implementation remains pending.
 
+- 1.20.1 implications: ignore rules are independent of protocol version, but must be adapted to RustChunk's own resource, save, mod and build paths. They do not prove that private Minecraft data is excluded from all commits; CI/public-tree checks are still needed.
+
 ### 8. `.github/workflows/android.yml`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `3638a951d8489e040d9a37d22dab86526a6bf4e8`
 - **Size:** 191 lines; 9,829 characters; full workflow fetched and read.
 - **Coverage:** complete, including both APK and release jobs.
@@ -165,6 +186,8 @@
 - **Decision:** **adaptable** for matrix builds, preview/release separation, signing discipline, symbols, and release gating; **rewrite required** for RustChunk package IDs, supported ABIs, secrets, branch policy, toolchain versions, and Forge/JVM packaging.
 - **Follow-up checks:** inspect build/release scripts and actual CI history; verify signing behavior and package IDs; inspect environment protection and tag rulesets; assess whether RustChunk needs all four ABIs or only ARM64/ARMv7.
 - **Completion state:** complete workflow source review; execution and security settings not independently tested.
+
+- 1.20.1 implications: the workflow builds the current Starling 26.3 app with its own Android SDK/NDK/JDK and ABI matrix. RustChunk needs its own 1.20.1 resource-preparation and runtime pipeline; copying this workflow would not supply a compatible game client.
 
 ### 9. packaging/android/build_apk.py
 - **Source SHA:** 3c215d5875d364e215ade3eeafbe55bd81238ab9
@@ -2293,6 +2316,7 @@ A fresh structural check of the current ledger found one detailed source-review 
 
 This check verifies the current ledger's documented coverage metadata. It does not independently prove that builds, tests, runtime sessions, or per-file commit history were performed; those claims remain limited to what each entry explicitly records.
 ### 1. `README.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `3cd9d680757217774270f477ecbfc9c80563e39f`
 - **Size:** 146 lines; 17,521 characters; full file fetched and read.
 - **Coverage:** lines 1–146, complete. No chunks omitted.
@@ -2332,8 +2356,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 19. `docs/starling-native-mods.md`
 20. `docs/mods.md`
 
+- 1.20.1 implications: this README documents Starling as a 26.3 Android port and is a requirements map only. It is not evidence that its current assets, runtime, registries, or features match 1.20.1; every version-dependent claim must be revalidated against the 1.20.1 target.
 
 ### 2. `LICENSE`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `e959a076e9fa4b8c1fcf990b2253a935da5bb5f4`
 - **Size:** 22 lines; full file fetched and read.
 - **Coverage:** complete; no chunks omitted.
@@ -2344,7 +2370,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Decision:** **adaptable** as a licensing model reference; copying Starling/Horizon code requires preserving notices and checking each dependency's actual license. Minecraft files remain outside this license scope.
 - **Completion state:** complete license-text review; third-party notices and dependency metadata still require separate review.
 
+- 1.20.1 implications: the MIT license is version-independent, but it covers only the licensed project code; it does not grant rights to Minecraft 1.20.1 binaries/assets or third-party dependencies. Preserve notices for any code actually reused.
+
 ### 3. `THIRD_PARTY_NOTICES.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `825d4bb50daf691d9049b3d4cfdbc62dbc285ec2`
 - **Size:** 300 lines; 20,016 characters; full file fetched and read.
 - **Coverage:** lines 1–300, complete.
@@ -2366,7 +2395,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Follow-up checks:** compare notices against `Cargo.toml`/`Cargo.lock` and actual vendored directories; inspect all referenced license files; trace the Create asset fetch; inspect JDK archive acquisition/checksum code; validate Mojang touch assets are never bundled; identify which Horizon Android adaptations exist in current Starling tree and their exact source diffs.
 - **Completion state:** complete review of the notice document; individual licenses, code, and runtime distribution mechanisms remain open audits.
 
+- 1.20.1 implications: license obligations do not change with Minecraft version. Any RustChunk reuse must trace the exact source file and dependency to its own license; Minecraft 1.20.1 and Mojang assets remain separately governed.
+
 ### 4. `CONTRIBUTING.md`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `b326f21b72a3fb5e6d10601b1ec0697070400c5d`
 - **Size:** 48 lines; 5,087 characters; full file fetched and read.
 - **Coverage:** complete; no chunks omitted.
@@ -2384,7 +2416,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Follow-up checks:** inspect the named build and check scripts; inspect the repository's game/Android workspace boundaries; verify which tests and linters are actually run in CI; compare Starling's license policy with actual third-party notices for consistency.
 - **Completion state:** complete guide review; referenced scripts and source modules not yet validated.
 
+- 1.20.1 implications: the contribution guide describes a 26.3-oriented toolchain and Horizon/Starling split. Its process ideas may transfer, but the target game version, Java resource preparation, build tools and RustChunk architecture must be specified independently for 1.20.1.
+
 ### 5. `Cargo.toml`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `fb4a4a7d703c8ed35973c1690382d7ea2059d0eb`
 - **Size:** 121 lines; 4,893 characters; full file fetched and read.
 - **Coverage:** complete workspace manifest; no chunks omitted.
@@ -2404,7 +2439,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Follow-up checks:** inspect member crate manifests, Android NativeActivity source and JNI/NDK integration; verify `third_party` patch diffs and removal conditions; inspect toolchain files and CI to explain Rust 1.85 vs 1.90; map which crates are needed for Starling's phone app versus optional server/tools.
 - **Completion state:** complete root manifest review; dependency graph and crate internals remain pending.
 
+- 1.20.1 implications: workspace members, feature boundaries and dependency patches are built around the 26.3 implementation. The manifest is an architecture reference, not a 1.20.1-compatible workspace to copy wholesale; only crates proven version-neutral should be considered.
+
 ### 6. `Cargo.lock`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `5f5a3e785ef55cb1e4ae408b7d4a2a1368e07754`
 - **Size:** 5,510 newline-terminated lines (5,511 entries when splitting on the final newline); 132,369 characters; 541 package records; 498 crates.io registry package source entries; no Git-source package entries; lock format version 4.
 - **Coverage:** fetched and read sequentially in consecutive chunks: 1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–2,000, 2,001–2,400, 2,401–2,800, 2,801–3,200, 3,201–3,600, 3,601–4,000, 4,001–4,400, 4,401–4,800, 4,801–5,200, and 5,201–5,510. The file ends with a newline. No intended ranges skipped.
@@ -2418,7 +2456,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Follow-up checks:** inspect per-crate manifests and Cargo features to identify the Android build graph; verify patched vendor crates and licenses; map which deps are needed for renderer/input/auth/archive/Forge integration; check minimum toolchain and MSRV; assess whether any existing Rust library can interoperate with a retained Java/Forge runtime.
 - **Completion state:** complete lockfile inventory review; feature activation, Android-specific resolution and runtime dependency necessity remain pending.
 
+- 1.20.1 implications: this lockfile pins the current Starling/Horizon dependency graph, not a validated RustChunk 1.20.1 graph. Re-resolve and test only the dependencies selected for RustChunk; do not copy this lockfile as a compatibility mechanism.
+
 ### 7. `.gitignore`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `29d00d0368c76edd3115dbca57ce0901e55860a9`
 - **Size:** 42 lines; 760 characters; full file fetched and read.
 - **Coverage:** complete.
@@ -2430,7 +2471,10 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Follow-up checks:** inspect `tools/check_public_tree.py`, hooks and CI to see how they complement ignore rules; examine actual Starling asset/prepared-resource directories and packaging behavior.
 - **Completion state:** complete ignore-rule review; enforcement implementation remains pending.
 
+- 1.20.1 implications: ignore rules are independent of protocol version, but must be adapted to RustChunk's own resource, save, mod and build paths. They do not prove that private Minecraft data is excluded from all commits; CI/public-tree checks are still needed.
+
 ### 8. `.github/workflows/android.yml`
+- Source repository/ref: `starling-client/starling` / `starling`.
 - **Source SHA:** `3638a951d8489e040d9a37d22dab86526a6bf4e8`
 - **Size:** 191 lines; 9,829 characters; full workflow fetched and read.
 - **Coverage:** complete, including both APK and release jobs.
@@ -2446,6 +2490,8 @@ This check verifies the current ledger's documented coverage metadata. It does n
 - **Decision:** **adaptable** for matrix builds, preview/release separation, signing discipline, symbols, and release gating; **rewrite required** for RustChunk package IDs, supported ABIs, secrets, branch policy, toolchain versions, and Forge/JVM packaging.
 - **Follow-up checks:** inspect build/release scripts and actual CI history; verify signing behavior and package IDs; inspect environment protection and tag rulesets; assess whether RustChunk needs all four ABIs or only ARM64/ARMv7.
 - **Completion state:** complete workflow source review; execution and security settings not independently tested.
+
+- 1.20.1 implications: the workflow builds the current Starling 26.3 app with its own Android SDK/NDK/JDK and ABI matrix. RustChunk needs its own 1.20.1 resource-preparation and runtime pipeline; copying this workflow would not supply a compatible game client.
 
 ### 9. packaging/android/build_apk.py
 - **Source SHA:** 3c215d5875d364e215ade3eeafbe55bd81238ab9
