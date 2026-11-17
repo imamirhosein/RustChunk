@@ -109,6 +109,14 @@ def resolve_block_tag(
     return resolved
 
 
+def write_resolved_leaves_tag(path: Path, leaves_blocks: set[str]) -> None:
+    """Write the resolved block identifiers as valid UTF-8 JSON."""
+    path.write_text(
+        json.dumps(sorted(leaves_blocks), indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def summarize_heightmap_facts(
     facts: dict,
     expected_states: int,
@@ -298,10 +306,7 @@ def export(args) -> dict:
         if isinstance(row, list) and row and isinstance(row[0], str)
     }
     leaves_blocks = resolve_block_tag(LEAVES_TAG, block_tags_bundle, known_blocks)
-    leaves_tag_input_path.write_text(
-        json.dumps(sorted(leaves_blocks), indent=2) + "\\n",
-        encoding="utf-8",
-    )
+    write_resolved_leaves_tag(leaves_tag_input_path, leaves_blocks)
 
     javac = args.javac
     if not Path(javac).is_file():
