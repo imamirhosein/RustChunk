@@ -1996,3 +1996,20 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: winit KeyCode/ModifiersState; `crate::gamepad::android::from_pad`; Android key event source/device/scan-code mapping; touch overlay and keyboard event dispatch.
 - Follow-up checks: بررسی Android input event bridge، key-up/focus-loss cleanup، device-specific scan codes و دستگاه‌های HID/gamepad واقعی.
 - Completion state: complete source review; no tests or device input tests were run.
+
+
+
+### 84. crates/horizon-client-input/src/interaction_input.rs
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 9457726434ea4fc943047a9d2351428846595c01.
+- Size: 8,959 bytes; 276 lines; complete file fetched.
+- Coverage: lines 1–276, complete.
+- Purpose: صف‌کردن clickهای Attack/Use/Pick بین event و tick و اجرای آن‌ها با ترتیب مشابه Minecraft.handleKeybinds.
+- Implementation / logic: InteractionInput تعداد click هر سه دکمه را نگه می‌دارد. tick صف را drain، hit result همان tick را pin می‌کند، اگر item واقعاً در حال استفاده باشد clickها را discard و در صورت رها شدن use آن را release می‌کند؛ در غیر این صورت attackها، سپس useها و pickها را اجرا می‌کند. بعد use held را با use_delay بررسی و continue_attack را اجرا می‌کند و hit result را آزاد می‌سازد. use_on_target اول entity یا block را امتحان و اگر consumed نشد item را fallback می‌کند. release_on_screen_open مسیرهایی را مدل می‌کند که باز شدن بعضی screenها use را همان لحظه آزاد می‌کند.
+- Findings: حفظ یک hit result طی کل tick یک رفتار مهم است؛ چند کلیک در یک tick نباید بعد از تغییر بلوک، مجدداً crosshair target متفاوتی دریافت کنند. منطق تمایز بین item-use فعال و quick click به lifecycle دقیق start/release وابسته است. ترتیب Attack → Use → Pick، discard هنگام active use و continue_attack بعد از instant attack مهم‌اند. شمارنده‌ها u32 هستند و press با ++ می‌تواند در input storm overflow کند؛ در debug build overflow ممکن است panic بدهد. Tests پنج سناریوی ترتیب click، use release، delay/digging و shared hit result را مدل می‌کنند؛ اجرا نشده‌اند.
+- RustChunk relevance: بسیار مهم برای موبایل و دسکتاپ؛ tapهای کوتاه ممکن است بین tickها رخ دهند و نباید گم شوند. جداسازی input edge buffering از gameplay tick الگوی مناسبی برای RustChunk است.
+- 1.20.1 implications: comments و names به 26.3 اشاره دارند؛ رفتار باید با Minecraft.handleKeybinds, startUseItem, MultiPlayerGameMode و hitResult نسخه 1.20.1 تطبیق داده شود. این logic عمدتاً gameplay lifecycle است نه wire protocol، ولی نتایج آن به packetهای interaction/break/use تبدیل می‌شوند؛ ترتیب و cancellation باید با سرور 1.20.1 آزمایش شود.
+- Decision: الگوی tick-buffering و stable hit result قابل اقتباس؛ lifecycle و edge cases باید با کد نسخه 1.20.1 بازنویسی/اعتبارسنجی شوند.
+- Dependencies / cross-references: Minecraft.handleKeybinds, MultiPlayerGameMode startAttack/startDestroyBlock/releaseUsingItem, hitResult/pick lifecycle, screen set/release key mappings, player item-use state.
+- Follow-up checks: تطبیق دقیق vanilla 1.20.1 input tick ordering؛ سنجش overflow/capacity، focus loss، touch cancel و چند tap قبل از tick؛ بررسی server acknowledgements برای همزمانی break و use.
+- Completion state: complete source review; no tests or gameplay/server run were executed.
