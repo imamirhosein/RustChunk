@@ -87,7 +87,7 @@
 
 ### 4. `CONTRIBUTING.md`
 - **Source SHA:** `b326f21b72a3fb5e6d10601b1ec0697070400c5d`
-- **Size:** 1 lines; full file fetched and read.
+- **Size:** 48 lines; 5,087 characters; full file fetched and read.
 - **Coverage:** complete; no chunks omitted.
 - **Purpose/content:** defines the boundary between changes for Horizon (shared game logic) and Starling (Android-specific app/integration), developer setup, device-testing expectations, source/license policy, PR checks, and public-tree hygiene.
 - **Key architecture/process rules:**
@@ -105,7 +105,7 @@
 
 ### 5. `Cargo.toml`
 - **Source SHA:** `fb4a4a7d703c8ed35973c1690382d7ea2059d0eb`
-- **Size:** 1 lines; full file fetched and read.
+- **Size:** 121 lines; 4,893 characters; full file fetched and read.
 - **Coverage:** complete workspace manifest; no chunks omitted.
 - **Purpose/content:** defines a large Rust workspace, shared package metadata, Clippy lint allowances, four local crates.io patches, and development/release/iteration build profiles.
 - **Workspace structure observed:**
@@ -139,7 +139,7 @@
 
 ### 7. `.gitignore`
 - **Source SHA:** `29d00d0368c76edd3115dbca57ce0901e55860a9`
-- **Size:** 1 lines; full file fetched and read.
+- **Size:** 42 lines; 760 characters; full file fetched and read.
 - **Coverage:** complete.
 - **Purpose/content:** excludes build output and caches (`.local/`, `target/`, Python caches/venvs); downloaded/decompiled game material and private profiling files (`*.jar`, `*.class`, JFR/heap profiles, decompiled folders, Minecraft/assets/run/logs/dist); runtime-generated game data (options, debug profiles, servers.dat, touch layout, resource packs, mod data, saves/backups/screenshots/crash reports); and release exporter output.
 - **Cross references:** aligns with README/CONTRIBUTING claims that game files and prepared resources stay local and must not be committed; ignores the `.local` resource-preparation cache and `exporters` release-only bundle.
@@ -151,7 +151,7 @@
 
 ### 8. `.github/workflows/android.yml`
 - **Source SHA:** `3638a951d8489e040d9a37d22dab86526a6bf4e8`
-- **Size:** 1 lines; full workflow fetched and read.
+- **Size:** 191 lines; 9,829 characters; full workflow fetched and read.
 - **Coverage:** complete, including both APK and release jobs.
 - **Purpose/content:** GitHub Actions pipeline that builds four Android ABIs, produces preview/release APK artifacts and native symbol artifacts, and publishes a tagged release after all matrix builds succeed.
 - **Triggers / targets:** pushes to `android`, `starling`, or `integration`; pull requests opened/synchronized/reopened; manual dispatch with `keep_symbols`, `release_key`, and optional native-mod IDs. Matrix covers ARM64, ARMv7, x86 and x86_64 Android targets.
@@ -924,8 +924,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 41. `crates/horizon-protocol/src/lib.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `c0fc01d304ed13ce5541b6cc2415c3c33deec2a5`.
-- Size: 2,546 bytes; 85 lines; fetched as a complete file.
-- Coverage: lines 1–85, complete.
+- Size: 2,546 bytes; 87 lines; fetched as a complete file.
+- Coverage: lines 1–87, complete.
 - Purpose: crate root and public API surface for the native Minecraft Java Edition protocol implementation.
 - Findings:
   - Describes itself as the protocol implementation for whichever version is pinned in `horizon_core::version`; the package manifest and current generated constants resolve that to Java 26.3/protocol 777.
@@ -1046,8 +1046,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 46. `crates/horizon-protocol/src/packets/mod.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `4ef8ac21adafb7f10770ad867cbe5873471ed108`.
-- Size: 3,119 bytes; 88 lines; fetched as a complete file, including macro/test helper.
-- Coverage: lines 1–88, complete.
+- Size: 3,119 bytes; 87 lines; fetched as a complete file, including macro/test helper.
+- Coverage: lines 1–87, complete.
 - Purpose: declares packet modules and provides the `packet_enum!` macro that generates typed packet enums for each connection state/direction.
 - Findings:
   - Modules cover Configuration, Handshake, Login, Play, Recipes and Status.
@@ -1069,8 +1069,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 47. `crates/horizon-protocol/src/packets/status.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `7df73880febd4e9f9548d93b469e69b2f414ae8d`.
-- Size: 1,314 bytes; 51 lines; fetched as a complete file, including tests.
-- Coverage: lines 1–51, complete.
+- Size: 1,314 bytes; 50 lines; fetched as a complete file, including tests.
+- Coverage: lines 1–50, complete.
 - Purpose: defines server-list Status state packets: status JSON response and ping/pong timestamp exchange.
 - Packet bodies:
   - Clientbound `StatusResponse` contains one UTF-8 string encoded with the general `Str` codec (the status JSON document).
@@ -1172,8 +1172,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 51. `crates/horizon-protocol/src/registry.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `6d7d528ac789dc0d99420d4197c515302b9331e8`.
-- Size: 11,388 bytes; 311 lines; fetched as a complete file, including tests.
-- Coverage: lines 1–311, complete.
+- Size: 11,388 bytes; 310 lines; fetched as a complete file, including tests.
+- Coverage: lines 1–310, complete.
 - Purpose: stores built-in and server-synchronized registries, bidirectional name/ID lookup, synchronized registry data/tags and dimension properties used by the client/protocol.
 - Built-in registry handling:
   - Parses the vanilla data generator `registries.json` report; for each registry it reads each entry's `protocol_id` and builds parallel names and reverse name→ID lookup.
@@ -1257,8 +1257,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 54. `crates/horizon-protocol/src/item/custom.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `1ae7bd8166a692f4ccbefd1d9e2ec0d76ab4d06b`.
-- Size: 6,301 bytes; 189 lines; fetched as a complete file.
-- Coverage: lines 1–189, complete.
+- Size: 6,301 bytes; 188 lines; fetched as a complete file.
+- Coverage: lines 1–188, complete.
 - Purpose: internal extension for registering and negotiating custom namespaced data-component types in the modern item data-component system.
 - Implementation:
   - A process-wide `OnceLock` stores a starting numeric ID and sorted custom component names. `install` verifies a nonnegative/non-overflowing ID range, validates namespaced identifiers and forbids the `minecraft` namespace, sorts names, rejects duplicates and can run only once.
@@ -1633,8 +1633,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 61. `crates/horizon-protocol/src/attachment_sync.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `532c3854124c11910f9a1cc3e44f59e25e03a184`.
-- Size: 7,213 bytes; 213 lines; full source fetched.
-- Coverage: lines 1–213, complete.
+- Size: 7,213 bytes; 212 lines; full source fetched.
+- Coverage: lines 1–212, complete.
 - Purpose: تعریف پیام شبکه‌ای برای همگام‌سازی مقادیر synced attachment متعلق به native mod از سرور Horizon به کلاینت‌های ناظر holder.
 - Implementation / logic: کانال clientbound برابر horizon:attachment_sync است. پیام holder kind و شناسه/موقعیت آن، پرچم replace و لیست تغییرات namespace/name/value را حمل می‌کند. انواع holder شامل Entity، Player، BlockEntity، Chunk و Level هستند. value به CompoundTag در قالب NBT network تبدیل می‌شود؛ None با Tag::End به معنی حذف است. payload حداکثر 1 MiB و نام‌ها حداکثر 256 UTF-16 unit هستند. Decoder count را به bytes باقی‌مانده محدود و trailing bytes را رد می‌کند.
 - Findings: کد مسیر compact و versioned-by-kind دارد و هیچ پیام clientbound به serverbound ندارد. encoder unknown holder را رد می‌کند، اما تغییرات خالی/نام‌های namespace یا syntax شناسه را از نظر محتوا اعتبارسنجی نمی‌کند. replace semantics یعنی کل cache synced holder در client پیش از اعمال delta پاک می‌شود. تست‌ها round-trip پنج نوع holder، removal، payload cap، name cap، NBT depth و trailing bytes را پوشش می‌دهند؛ اجرا نشده‌اند.
@@ -1649,8 +1649,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 62. `crates/horizon-protocol/src/hash_ops.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `98b3f143740726279bf85846863ea74b5cc468dd`.
-- Size: 13,130 bytes; 353 lines; full source fetched.
-- Coverage: lines 1–353, complete.
+- Size: 13,130 bytes; 352 lines; full source fetched.
+- Coverage: lines 1–352, complete.
 - Purpose: پیاده‌سازی HashOps و Guava CRC32C برای ساخت hash canonical از مقدار codec-encoded data componentها.
 - Implementation / logic: CRC32C با جدول Castagnoli تولید می‌شود. HashOps برای انواع primitive، string بر مبنای UTF-16، boolean، empty/map/list، byte/int/long array، list و map byte-tag مشخص می‌سازد. مقادیر primitive little-endian هستند؛ map entries بر اساس unsigned key hash سپس value hash مرتب می‌شوند؛ list ترتیب را حفظ می‌کند. from_nbt ساختارهای NBT را به HashOps می‌برد و در bool_keys مقدار byte را به Boolean codec hash تبدیل می‌کند. RecordHash فیلدهای اختیاری را حذف و بقیه را مثل map hash می‌کند.
 - Findings: این hash، hash ساده raw NBT یا SHA-256 نیست؛ دقیقاً representation یک Codec در HashOps 26.3 است و برای HashedPatchMap/Data Components استفاده می‌شود. float/double با raw bits می‌روند؛ strings طول UTF-16 و واحدهای UTF-16 دارند؛ اشتباه در نوع codec یا boolean fieldها نتیجه را عوض می‌کند. تست استاندارد CRC32C، primitive byte payload، ordering map/list، NBT conversion و نمونه values چاپ‌شده توسط vanilla 26.3 را assert می‌کند؛ اجرا نشده‌اند.
@@ -1665,8 +1665,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 63. `crates/horizon-protocol/src/mod_list.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `9fc777efbe513d3bd4576f7df8c554b1e657384c`.
-- Size: 11,594 bytes; 349 lines; full source fetched.
-- Coverage: lines 1–349, complete.
+- Size: 11,594 bytes; 348 lines; full source fetched.
+- Coverage: lines 1–348, complete.
 - Purpose: کد فهرست و handshake سازگاری content modها بین سرور و کلاینت Horizon هنگام ورود به world.
 - Implementation / logic: کانال horizon:mod_list در configuration phase دوطرفه است؛ server list را می‌فرستد و client فهرست خودش را برمی‌گرداند. Entry شامل id، version، اختیاری بودن SHA-256 فایل و Side (Both/Server/Client) است. LOCAL OnceLock، فهرست local mods را یک‌بار set می‌کند؛ set_local مرتب و truncate می‌کند. shared فقط Both mods را ارسال می‌کند. compare فهرست‌های Both را از نظر presence، version و در صورت داشتن هر دو hash از نظر SHA-256 مقایسه می‌کند و Difference.reason پیام refuse با حداکثر شش اسم در هر گروه می‌سازد. Codec cap 128 entries، متن 64 و strict trailing bytes دارد.
 - Findings: Client-only و server-only mod intentionally join compatibility را block نمی‌کنند. Folder dev mods بدون file hash صرفاً با version تطبیق می‌یابند. encode فهرست را در 128 و رشته‌ها را در 64 char بی‌صدا قطع می‌کند، درحالی‌که set_local هم truncate می‌کند؛ بنابراین mod ID/version بیش‌ازحد طولانی یا تعداد زیاد می‌تواند بی‌سر‌و‌صدا اطلاعاتش را از دست بدهد. compare بر id برابر است و uniqueness/namespace conflict را در این فایل enforce نمی‌کند. تست‌های role separation, round-trip, caps, order independence, mismatches, folder dev و truncated reason وجود دارند؛ اجرا نشده‌اند.
@@ -1681,8 +1681,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 64. `crates/horizon-protocol/src/mod_net.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `75ba8b153b477f80b18d9b5e9943fafd8584c2ce`.
-- Size: 4,833 bytes; 148 lines; full source fetched.
-- Coverage: lines 1–148, complete.
+- Size: 4,833 bytes; 147 lines; full source fetched.
+- Coverage: lines 1–147, complete.
 - Purpose: Codec پیام‌های دلخواه میان نیمه server و client یک Horizon native mod در Play state.
 - Implementation / logic: کانال اصلی horizon:mod_net است و payload شامل string channel به شکل mod_id:name و byte array داده است. Channel id و namespace بازی minecraft/horizon ممنوع‌اند؛ mod id و name هرکدام تا 64 byte و با character allowlist متفاوت validate می‌شوند. data تا 30,000 byte است؛ encode channel و cap را پیش از serialization چک می‌کند و decoder channel، byte array و trailing bytes را کنترل می‌کند. توضیح بالای ماژول می‌گوید server در configuration با پیام خالی پشتیبانی را اعلام می‌کند و client پیام‌ها را در Play می‌فرستد.
 - Findings: این لایه فقط شکل wire و channel syntax را اعتبارسنجی می‌کند؛ authorization، rate limiting (32 msg/tick per player mentioned in docs) و بررسی اینکه mod واقعاً نصب است در caller/dispatcher قرار دارند. `MAX_DATA=30,000` از سقف payload 32,767 پایین‌تر تنظیم شده. Channel split_once باعث رد colon اضافه در name از طریق character allowlist می‌شود. Tests round-trip، channel allowlist، max data و trailing bytes را پوشش می‌دهند؛ اجرا نشده‌اند.
@@ -1697,8 +1697,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 65. `crates/horizon-protocol/src/quiet.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `dcf48dbee8b5b628aa7cc25e9f03a4eeb4c63238`.
-- Size: 5,465 bytes; 167 lines; full source fetched.
-- Coverage: lines 1–167, complete.
+- Size: 5,465 bytes; 166 lines; full source fetched.
+- Coverage: lines 1–166, complete.
 - Purpose: ساخت و parse بسته‌های batch command که native mod client از طریق کانال اختصاصی به Horizon server می‌فرستد تا با مجوز خود player و بدون chat feedback اجرا شود.
 - Implementation / logic: کانال horizon:quiet_commands است. Batch شامل mod_id و خطوط command بدون slash است. encode حداکثر 256 خط در هر payload و حداکثر 256 کاراکتر در هر خط را اعمال می‌کند، خطوط را به چند payload با سقف 32767 byte تقسیم و ترتیب را حفظ می‌کند. decode mod id، count و lines را با سقف‌های متناظر می‌خواند و trailing bytes را رد می‌کند. توضیح ماژول می‌گوید سرور پشتیبانی را در configuration با payload خالی اعلام می‌کند و کلاینت روی سرورهای دیگر به chat command برمی‌گردد.
 - Findings: این فایل فقط wire framing است؛ بررسی مجاز بودن mod_id، احراز هویت player، permission، rate limit و command dispatch در server handler لازم است. encode mod_id را صرفاً truncate می‌کند و allowlist/namespace syntax اینجا ندارد. تعداد و طول خط محدودند و size محاسبه‌شده با UTF-8 byte length است. batch خالی payload تولید نمی‌کند. Tests batching، splitting by MAX_LINES/bytes، truncation و malformed count/string/trailing bytes را پوشش می‌دهند؛ اجرا نشده‌اند.
@@ -1713,8 +1713,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 66. `crates/horizon-protocol/src/servers.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `466f868fa0a1a8496d65e4e85fbee4763b5a85f1`.
-- Size: 8,679 bytes; 230 lines; full source fetched.
-- Coverage: lines 1–230, complete.
+- Size: 8,679 bytes; 229 lines; full source fetched.
+- Coverage: lines 1–229, complete.
 - Purpose: خواندن، نوشتن و افزودن ورودی به `servers.dat` در فرمت NBT مشابه ServerList vanilla، به‌علاوه parse آدرس host/port.
 - Implementation / logic: ServerEntry فیلدهای name، ip، favicon base64، acceptTextures tri-state و acceptedCodeOfConduct hash را مدل می‌کند. load فایل NBT uncompressed را می‌خواند، hidden LAN/quick-play entries را از لیست نمایشی حذف و ورودی‌های بدون ip را کنار می‌گذارد. save root unnamed با Tag List `servers` می‌نویسد. prepend یک entry جدید را ابتدا قرار می‌دهد و سایر فیلدها/hidden entries ناشناخته را نگه می‌دارد. write ابتدا به dat_tmp می‌نویسد و سپس rename می‌کند. parse_address `host`, `host:port`, `[v6]:port` و default 25565 را مدیریت می‌کند.
 - Findings: از NBT JavaString/NamedTag استفاده می‌کند و در صورت خرابی فایل load به empty list برمی‌گرداند، اما prepend در صورت خرابی error می‌دهد و فایل را دست‌نخورده نگه می‌دارد. save کل لیست را بازنویسی و unknown fields را حذف می‌کند؛ prepend برای preservation طراحی شده است. parser bracketed IPv6 و unbracketed multi-colon host را جدا می‌کند. Tests roundtrip، hidden/unknown field preservation، damaged-file safety و address parsing دارند؛ اجرا نشده‌اند.
@@ -1729,8 +1729,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 67. `crates/horizon-protocol/src/text.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `cc44430fb66aadfa39ac018108bcf454bf1bbcf4`.
-- Size: 7,829 bytes; 220 lines; full source fetched.
-- Coverage: lines 1–220, complete.
+- Size: 7,829 bytes; 219 lines; full source fetched.
+- Coverage: lines 1–219, complete.
 - Purpose: تبدیل ComponentSerialization متنی دریافتی در قالب NBT به متن ساده و resolve کردن translate keyها با جدول زبان.
 - Implementation / logic: plain/append رشته literal، اعداد primitive، listها، `{text:...}`، wrapper خالی key، translate + with + fallback، keybind، selector، score.name و extra را باز می‌کند. recursion بعد از depth 32 متوقف می‌شود. format_java از `%s`, `%n$s` و `%%` پشتیبانی می‌کند. helperهای literal و translatable Tag می‌سازند.
 - Findings: این پیاده‌سازی برای استخراج plain text است، نه rendering کامل component: style/color/click/hover/insertion/font و بیشتر semanticsها کنار گذاشته می‌شوند؛ selector resolve واقعی نمی‌شود و score فقط name را می‌نویسد. unknown translate با fallback یا خود key نمایش داده می‌شود. فرمت placeholderهای پشتیبانی‌نشده ممکن است به شکل جزئی/خالی باقی بماند. Tests translate arguments mixed NBT wrappers، ordered/sequential placeholders، percent escape و extra را پوشش می‌دهند؛ اجرا نشده‌اند.
@@ -1745,8 +1745,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 68. `crates/horizon-protocol/src/crypto/blocks.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `308a80a73022b3fa23bdcded18679ab33a912493`.
-- Size: 7,623 bytes; 208 lines; full source fetched.
-- Coverage: lines 1–208, complete.
+- Size: 7,623 bytes; 207 lines; full source fetched.
+- Coverage: lines 1–207, complete.
 - Purpose: primitive AES-128 block encryption و fast CFB8 encrypt برای رمزنگاری اتصال Minecraft.
 - Implementation / logic: Blocks یک AES-128 key schedule نگه می‌دارد و encrypt_block، cfb8_encrypt و encrypt_lanes ارائه می‌کند. در AArch64 با compile-time target_feature=aes از ARMv8 AESE/AESMC intrinsics در pipeline هشت block استفاده می‌شود؛ سایر targetها از RustCrypto aes با lane batch 32 و شتاب runtime AES-NI در x86/x86_64 استفاده می‌کنند. CFB8 هر byte را با AES(register) XOR می‌کند و ciphertext را به انتهای 16-byte shift register می‌افزاید.
 - Findings: بخش ARM64 تنها کد unsafe این crate است و safety بر این فرض بنا شده که `target_feature=aes` به CPUهای همان binary تضمین شده باشد؛ build target flags باید با حداقل دستگاه واقعی هماهنگ باشد. در صورت فعال کردن AES feature برای همه ARM64های منتشرشده، دستگاه فاقد crypto extension ممکن است غیرقابل اجرا باشد. Key schedule سفارشی دارای SBOX lookup جدولی با index مشتق از key است؛ timing/cache side-channel آن باید بررسی شود. fallback به crate vetted وابسته است. این فایل تست مستقلی نشان نمی‌دهد؛ الگوریتم واقعی و vectorها باید در سطح wrapper/crypto crate آزمایش شوند.
@@ -1761,8 +1761,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 69. `crates/horizon-protocol/src/item/hash.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `966f8860587406f7e8468398532da0b33cbc1be3`.
-- Size: 29,855 bytes; 851 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–851, complete.
+- Size: 29,855 bytes; 850 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–850, complete.
 - Purpose: تولید representation و hash componentهای patch شده در ItemStack مطابق `HashedPatchMap.create` و `HashedStack.create` نسخه 26.3.
 - Implementation / logic: Trait `Names` شناسه‌های registry را به resource identifier تبدیل می‌کند. کد component از wire representation و نوع داخلی آن، شکل Codec را بازسازی و با HashOps/CRC32C hash می‌کند. Componentهای nested مثل enchantment map، StackTemplate، potion، کتاب، fireworks، banner patterns، trim، custom model data و tooltip display مسیرهای جدا دارند. اگر نام registry یا codec form قابل بازسازی نباشد، component hash نمی‌شود. `Hashed::create` برای added components hash می‌سازد و removed IDs را نگه می‌دارد؛ در صورت وجود raw wire patch، ابتدا همان را decode می‌کند تا patch واقعی ارسالی حفظ شود.
 - Findings: وابستگی مستقیم به `DataComponentType`، شناسه‌های registry نسخه 26.3 و Codecهای modern است. hash، SHA یا hash فایل نیست؛ خروجی CRC32C از شکل Codec است. componentهای ناشناخته/بدون نام بی‌صدا از added hash حذف می‌شوند و طبق توضیح بالاسری ممکن است سرور slot را resync کند. مجموعه تست‌ها برای ده‌ها component مقدار hash تولیدشده توسط vanilla 26.3 را ثابت می‌کند؛ تست‌ها در این ممیزی اجرا نشده‌اند.
@@ -1777,8 +1777,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 70. `crates/horizon-protocol/src/item/hash/exact.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `4441e7f6b52c4fa86add35c4cc8c56c40bb26539`.
-- Size: 6,955 bytes; 171 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–171, complete.
+- Size: 6,955 bytes; 170 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–170, complete.
 - Purpose: Hash کردن exact component predicates و predicateهای تو در تو داخل داده NBT، به‌ویژه container و bundle contents.
 - Implementation / logic: یک Shape برای هر component تعریف می‌کند که booleanها، boolean listها و فیلدهای حاوی ItemStack را مشخص می‌کند؛ سپس درخت NBT را می‌پیماید و به HashOps تبدیل می‌کند. `components()` کلیدهای namespaced component را می‌خواند، کلیدهای `!` را به empty map hash تبدیل می‌کند و مقدارهای glint override را به Boolean تبدیل می‌کند. `predicate()` نیز booleanهای predicate-level و nested stack components را با shape مناسب hash می‌کند.
 - Findings: به DataComponentExactPredicate.CODEC و DataComponentPredicateهای 26.3 وابسته است. NBT به تنهایی boolean را از byte تشخیص نمی‌دهد، بنابراین shape metadata hand-maintained است و اگر Codec جدیدی اضافه شود این جدول باید تکمیل شود. نام component باید در قالب minecraft namespace باشد؛ componentهایی که persistent codec ندارند قابل hash نیستند. هیچ packet framing ندارد؛ جزئی از hashed item component logic است.
@@ -1793,8 +1793,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 71. `crates/horizon-protocol/src/item/hash/gameplay.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `a2a248ff0c2a6ad12211c86a2667fcecebb9089c`.
-- Size: 24,029 bytes; 621 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–621, complete.
+- Size: 24,029 bytes; 620 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–620, complete.
 - Purpose: بازسازی Codec-form و hash کردن componentهای gameplay آیتم بر اساس byte stream و registry names.
 - Implementation / logic: برای componentهایی مثل UseEffects، AttributeModifiers، Food، Consumable، UseCooldown، DamageResistant/Repairable، Tool، Weapon، Equippable، DeathProtection، BlocksAttacks، Piercing/KineticWeapon، SwingAnimation، Jukebox و Banner/trim-related data مسیرهای specialized دارد. Registry references با Names حل می‌شوند؛ enum IDs به StringRepresentable نام‌ها تبدیل می‌شوند؛ فیلدهای default طبق optionalFieldOf از hash حذف می‌شوند؛ sound و holder forms و BlockPredicate هم به شکل Codec map ساخته می‌شوند.
 - Findings: کد بر اساس IDهای ثابت DataComponents نسل 26.3 dispatch می‌کند. بسیاری از decoder helperها از Option استفاده می‌کنند؛ malformed stream، unsupported enum یا registry ID بی‌نام به None تبدیل می‌شود. Default values دقیق Codec در hash معنا دارند و omission اشتباه باعث mismatch. Componentهای جدید و legacy ItemStack را با هم قاطی نمی‌کند؛ اصلاً مسیر 1.20.1 نیست.
@@ -1809,8 +1809,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 72. `crates/horizon-protocol/src/item/hash/raw.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `252f61fadd02d10945cd40f31470c3c89d4b2287`.
-- Size: 53,132 bytes; 1,156 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–1156, complete.
+- Size: 53,132 bytes; 1,155 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–1,155, complete.
 - Purpose: بازسازی Codec hash از stream bytes برای Data Componentهایی که Horizon به‌صورت Component::Raw نگه می‌دارد.
 - Implementation / logic: Readerهای component stream را می‌خوانند و شکل persistent Codec را می‌سازند: registry references به resource IDs تبدیل می‌شوند؛ NBT typed entity data با id درست بازسازی می‌شود؛ Profile, potion tail, trim/instrument/banner holders, container contents, pot decorations, bees و sign text مسیرهای مستقل دارند. تابع `code` بر اساس kind IDهای نسخه 26.3 dispatch می‌کند و در انتها باقی‌ماندن byteها را رد می‌کند. همراه فایل آزمون‌های بزرگ golden-vector هستند که stream hex و hashهای چاپ‌شده توسط vanilla 26.3 را مقایسه می‌کنند.
 - Findings: هم کد و هم جدول‌های registry/test fixture به ترتیب ID و Codec نسخه 26.3 وابسته‌اند. بعضی مسیرها به component modules دیگر fallback می‌کنند. هر component ناشناخته یا malformed/بدون registry name مقدار None می‌دهد؛ raw bytes به تنهایی برای ساخت hash کافی نیست. آزمون‌ها componentهای زیادی را پوشش می‌دهند ولی در این ممیزی اجرا نشده‌اند. فایل 1,156 خط است و در سه بازه متوالی 1–400، 401–800 و 801–1156 کامل خوانده شد.
@@ -1825,8 +1825,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 73. `crates/horizon-protocol/src/item/skip.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `aa436cc31e7add4f2bfd21a45c9128fd417b44f2`.
-- Size: 14,017 bytes; 426 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–426, complete.
+- Size: 14,017 bytes; 425 lines; full source fetched in consecutive ranges of at most 400 lines.
+- Coverage: lines 1–425, complete.
 - Purpose: مصرف دقیق byte stream برای Data Componentهایی که Horizon معنای داخلی‌شان را decode نمی‌کند، تا خواندن بقیه ItemStack از هم نپاشد.
 - Implementation / logic: یک dispatch table بر اساس DataComponents registry order نسخه 26.3 دارد. بسته به نوع component، helper مناسب VarInt، float، identifier، NBT، list، optional، holder/holderSet، sound، template، block predicate، attribute modifier، food/consumable، tool، equippable، blocks attacks، kinetic weapon، potion effect و firework را دقیقاً consume می‌کند. برای مواردی که stream codec ندارند، NBT persistent codec را می‌خواند. kind ناشناخته به خطا می‌رسد.
 - Findings: فایل به‌شدت critical است زیرا item data در format فعلی length prefix جدا برای هر component ندارد؛ اگر skip طول اشتباه مصرف کند، تمام componentهای بعدی و packetهای بعدی misaligned می‌شوند. در عین حال unknown kind واقعاً قابل skip عمومی نیست و فوراً خطا می‌دهد. جدول kind IDs و اشکال nested component، holder encoding و registry order همگی 26.3 هستند. فایل در دو بازه متوالی 1–400 و 401–426 کامل خوانده شد؛ تست مستقل در این فایل دیده نشد.
@@ -1841,8 +1841,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 74. `crates/horizon-client/src/chunk_io.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `9613b3b265c39f7f97e6ec4aa7e8ec1a249a2f93`.
-- Size: 5,730 bytes; 166 lines; full source fetched.
-- Coverage: lines 1–166, complete.
+- Size: 5,730 bytes; 165 lines; full source fetched.
+- Coverage: lines 1–165, complete.
 - Purpose: جمع‌آوری خطاهای load/save chunk از threadهای مختلف و تبدیل آن‌ها به toastهای UI در thread پنجره.
 - Implementation / logic: گزارش load/save خطاها را log می‌کند، از save::low_disk_space برای بررسی فضای ذخیره‌سازی استفاده می‌کند و در Mutex سراسری Pending، پرچم کمبود فضا و جدیدترین مختصات chunk ناموفق از هر نوع را نگه می‌دارد. `take()` با std::mem::take صف را اتمیک تخلیه می‌کند. تابع‌های toast متن ترجمه‌شده و مختصات chunk را می‌سازند. پیام کمبود فضای دیسک از سرور نیز به همان صف اضافه می‌شود.
 - Findings: چون فقط آخرین chunk هر نوع نگهداری می‌شود، خطاهای پشت‌سرهم به‌صورت گروهی خلاصه می‌شوند نه به تعداد کامل. پرچم low_disk_space تا زمان take sticky است. Mutex poison با into_inner بازیابی می‌شود. کد فقط گزارش و UI است و خودش chunk persistence را انجام نمی‌دهد. تست‌ها newest-failure، sticky warning و زمان نمایش toast را بررسی می‌کنند؛ اجرا نشده‌اند.
@@ -1857,8 +1857,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 75. `crates/horizon-client/src/content_identity.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `52f14173b4b52bb0d679b050859071bdcccd6579`.
-- Size: 10,466 bytes; 254 lines; full source fetched.
-- Coverage: lines 1–254, complete.
+- Size: 10,466 bytes; 253 lines; full source fetched.
+- Coverage: lines 1–253, complete.
 - Purpose: محاسبه fingerprint برای ترتیب block-state registry و registryهای اضافه‌شده توسط content mods تا اتصال کلاینت ناسازگار قبل از دریافت network IDs رد شود.
 - Implementation / logic: از facts.json فهرست state rows را می‌خواند و برای هر state فقط id و properties را به JSON canonical-like serialization تبدیل و طول و bytes را به SHA-256 وارد می‌کند. در صورت وجود registries.json، Builtin report را parse می‌کند و فقط mod entries غیر minecraft از item, mob_effect, entity_type و menu را به ترتیب network id به hash chain اضافه می‌کند. در صورت ثبت custom NBT components، نام/type IDها و مقدار defaultها نیز در fingerprint وارد می‌شوند. Result با OnceLock<Mutex<HashMap<PathBuf,hash>>> بر اساس resource root cache می‌شود.
 - Findings: این fingerprint برای مدل registry modded Horizon طراحی شده و کانال `horizon:block_registry`/marker `horizon-content-blocks` دارد؛ پیام channel negotiation و disconnect handler در فایل‌های دیگر است. hash به ترتیب stateها، property values، registry IDs/names، component IDs و defaults حساس است. cache بر مبنای PathBuf است و تغییر فایل همان root را تا عمر process منعکس نمی‌کند؛ اگر root mutable باشد stale می‌شود. خطای خواندن/JSON facts خطا می‌دهد، اما نبود یا read-error registries.json با `if let Ok` مثل ریشه block-only رفتار می‌شود. این هش برای 1.20.1 طراحی نشده.
@@ -1873,8 +1873,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 76. `crates/horizon-client/src/player_sync.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `0d116535bbf9ee082ee028ba2490981a57e5f262`.
-- Size: 5,037 bytes; 136 lines; full source fetched.
-- Coverage: lines 1–136, complete.
+- Size: 5,037 bytes; 135 lines; full source fetched.
+- Coverage: lines 1–135, complete.
 - Purpose: محاسبه packet حرکت/چرخش player به سرور بر اساس baseline آخرین update و تبدیل velocity هنگام teleport با relative flags.
 - Implementation / logic: PositionSender آخرین position، yaw/pitch، onGround، collision و tick reminder را نگه می‌دارد. هر update اگر فاصله squared بیش از 2e-4² باشد یا reminder به 20 tick برسد position را می‌فرستد؛ ترکیب moved+rotated، position-only، rotation-only یا status-only packet انتخاب می‌شود. `told_rotation` برای look که در packet دیگری مثل teleport acknowledgement فرستاده شده نگه داشته می‌شود تا update بعدی در صورت تفاوت دوباره ارسال شود. `teleport_velocity` ابتدا velocity را با delta rotation نسبی rotate می‌کند و سپس deltaهای X/Y/Z را بر اساس bit flags جمع یا جایگزین می‌کند.
 - Findings: این یک stateful packet scheduler است و اگر baseline پس از teleport/packetهای خارج از مسیر synchronize نشود، move packet می‌تواند skip یا تکرار شود. آستانه position و هر-20-tick reminder از vanilla رفتار هدف گرفته شده‌اند و باید دقیق با کد 1.20.1 تأیید شوند. `told_rotation` برای feature steering/free direction سفارشی Starling اضافه شده و لزوماً vanilla لازم ندارد. تست ارائه‌شده یک regression برای changed look after teleport است؛ اجرا نشده.
@@ -1889,8 +1889,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 77. `crates/horizon-client/src/client_lib.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `a9b81a864c5d4e80d198d77479b19ceeffcf0f32`.
-- Size: 5,581 bytes; 188 lines; full source fetched.
-- Coverage: lines 1–188, complete.
+- Size: 5,581 bytes; 187 lines; full source fetched.
+- Coverage: lines 1–187, complete.
 - Purpose: ریشه crate کلاینت که game modules، Android input/control، renderer، shared core، items، commands و server-side integrations را به صورت public module surface سازمان‌دهی می‌کند.
 - Implementation / logic: Crate-level `forbid(unsafe_code)` اعمال می‌کند، self crate را با نام horizon_client alias می‌کند، تعداد زیادی module داخلی را pub می‌کند و subsystemهای crates دیگر را با `pub use` re-export می‌کند؛ بخش بزرگی از renderer/UI/resources از horizon_client_render، geometry/game core از horizon_client_core، ورودی از horizon_client_input، command و item services از crates جدا می‌آیند. فایل خودش منطق بازی را اجرا نمی‌کند؛ ساختار API/import را فراهم می‌کند.
 - Findings: این فایل یک ماژول‌فهرست/aggregation root است؛ حجم و نام moduleها نمایانگر جدایی subsystemهای Starling/Horizon است اما به‌تنهایی architecture runtime یا boot flow را اثبات نمی‌کند. بسیاری از re-exportها از crateهای مستقل می‌آیند و dependency graph واقعی در Cargo manifests/workspace مشخص می‌شود. `forbid(unsafe_code)` فقط همین crate را محدود می‌کند؛ نه الزاماً dependencyهای دیگر را.
@@ -1905,8 +1905,8 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 78. `crates/horizon-client/src/heartbeat.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `9f3f3a5a69aa8db7ca24ac9986b3ba8148c33dba`.
-- Size: 2,697 bytes; 75 lines; full source fetched.
-- Coverage: lines 1–75, complete.
+- Size: 2,697 bytes; 74 lines; full source fetched.
+- Coverage: lines 1–74, complete.
 - Purpose: ارسال ping دوره‌ای ناشناس به telemetry backend برای شمارنده تعداد بازیکنان Horizon و وضعیت باز بودن LAN/friends world.
 - Implementation / logic: پس از start شدن خود client (نه dedicated server/benchmark/automated run)، اگر telemetry endpoint موجود و heartbeat غیرفعال نشده باشد، thread مستقل Heartbeat ساخته می‌شود. یک session ID تصادفی فقط در حافظه تولید و همراه version و LAN flag در Ping فرستاده می‌شود. فاصله پیش‌فرض از live::INTERVAL می‌آید؛ خطا باعث exponential backoff تا 600 ثانیه و log یک‌باره می‌شود. تغییر LAN flag با AtomicBool ذخیره و thread با unpark برای ارسال زودهنگام بیدار می‌شود.
 - Findings: این قابلیت خارج از gameplay/network protocol Minecraft است و صرفاً telemetry محصول Horizon است. فعال بودن به endpoint و دو opt-out mechanism محیطی وابسته است. session identifier در حافظه نگهداری می‌شود، ولی thread loop پایان/stop hook در همین فایل دیده نمی‌شود. ارسال از thread جداست تا tick/render block نشود.
@@ -1921,7 +1921,7 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 79. `crates/horizon-client/src/reconnect.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `cd942aa7e095bc545b9100da5f933f54e45c2198`.
-- Size: 17,547 bytes; 474 lines; full source fetched.
+- Size: 17,547 bytes; 473 lines; full source fetched.
 - Coverage: lines 1–400 and 401–474, complete.
 - Purpose: تصمیم‌گیری درباره retry اتصال multiplayer قطع‌شده و برنامه‌ریزی backoff، با جلوگیری از retry برای kick/ban/refusalهای دائمی.
 - Implementation / logic: Tracker آدرس، player name، LAN flag، شمار تلاش‌ها و زمان join موفق را نگه می‌دارد. پنج retry با تأخیرهای 5/10/20/40/60 ثانیه دارد؛ اتصال پایدار حداقل 60 ثانیه شمارنده را reset می‌کند. `allowed` ابتدا disconnect translation key را با prefix table دسته‌بندی می‌کند؛ در نبود key به English keyword scan متوسل می‌شود. Kicks, bans, whitelist, incompatible/outdated, invalid session, online mode refusals و multiplayer disabled retry نمی‌شوند؛ timeout, shutdown, full server, slow login و auth server downtime retry می‌شوند. Retry همان آدرس، نام و نوع LAN را حفظ می‌کند.
@@ -1937,7 +1937,7 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 ### 80. `crates/horizon-client/src/server_packs.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `61695a6de4b0db492d100ad8d44f52ce9acb0421`.
-- Size: 21,263 bytes; 645 lines; full source fetched.
+- Size: 21,263 bytes; 644 lines; full source fetched.
 - Coverage: lines 1–400 and 401–645, complete.
 - Purpose: مدیریت prompt دریافت resource pack از server، download status، فعال‌سازی در بالای resource packs کاربر، reload منابع، حذف و ارسال status پاسخ به server.
 - Implementation / logic: مدل state دو بخشی برای Download (Requested/Pending/Done) و Activation (Inactive/Pending/Active) و Removal reason دارد. Prompt سه حالته Pending/Allowed/Declined از تنظیم `servers.dat acceptTextures` می‌آید. `push` و `push_local` pack را با UUID ثبت و pack قبلی با همان ID را replace می‌کند. `tick` درخواست downloadها را صادر می‌کند و فقط پس از اتمام downloadها reload ترتیب‌دار ایجاد می‌کند. callbackهای `downloaded` و `reloaded` state را جلو می‌برند؛ failure reload یک recovery reload برای بازگرداندن packهای قبلاً active انجام می‌دهد. Status action codeها 0 تا 7 هستند؛ URL check در این فایل فقط scheme http/https را بررسی و SHA-1 را فقط در صورت 40 رقم hex فعال می‌کند.
