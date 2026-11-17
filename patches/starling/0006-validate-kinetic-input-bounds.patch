@@ -1,0 +1,72 @@
+diff --git a/crates/horizon-mods/src/content.rs b/crates/horizon-mods/src/content.rs
+--- a/crates/horizon-mods/src/content.rs
++++ b/crates/horizon-mods/src/content.rs
+@@ -1308,11 +1308,12 @@
+     if p.shape.as_ref().is_some_and(|boxes| {
+         boxes.is_empty()
++            || boxes.len() > 16
+             || boxes.iter().any(|b| {
+                 b.iter().any(|v| !(-16.0..=32.0).contains(v)) || (0..3).any(|i| b[i] >= b[i + 3])
+             })
+     }) {
+         return Err(
+-            "shape is boxes [x1, y1, z1, x2, y2, z2] in sixteenths, -16 to 32, each \
++            "shape is 1 to 16 boxes [x1, y1, z1, x2, y2, z2] in sixteenths, -16 to 32, each \
+                     from its least corner to its greatest"
+                 .into(),
+         );
+@@ -1323,15 +1324,23 @@
+     if let Some(k) = &file.kinetic {
+         if !k.rpm.is_finite() || k.rpm.abs() > 256.0 {
+             return Err("kinetic rpm is a number from -256 to 256".into());
+         }
+-        let model = |m: &Option<String>| {
+-            m.as_deref().is_none_or(|m| {
+-                m.split_once(':')
+-                    .is_some_and(|(ns, p)| !ns.is_empty() && !p.is_empty())
+-            })
+-        };
+-        if !model(&k.half) || !model(&k.extra) || !model(&k.head) || !model(&k.pole) {
++        if !k.stress.is_finite() || k.stress < 0.0 || !k.capacity.is_finite() || k.capacity < 0.0 {
++            return Err("kinetic stress and capacity are finite numbers, 0 or more".into());
++        }
++        let model = |m: &str| namespaced_id(m);
++        if [
++            k.half.as_deref(),
++            k.extra.as_deref(),
++            k.head.as_deref(),
++            k.pole.as_deref(),
++        ]
++        .into_iter()
++        .flatten()
++        .any(|m| !model(m))
++            || k.models.iter().any(|m| !model(m))
++        {
+             return Err(
+-                "kinetic half, extra, head and pole name models as <namespace>:<path>".into(),
++                "kinetic half, extra, head, pole and models are namespaced model ids".into(),
+             );
+         }
+@@ -1996,6 +2005,9 @@
+         assert!(
+             block(r#"{"template":"minecraft:iron_chain","kinetic":{"part":"motor","rpm":300}}"#)
+                 .is_err()
+         );
++        assert!(block(r#"{"template":"minecraft:iron_chain","kinetic":{"part":"motor","stress":-1}}"#).is_err());
++        assert!(block(r#"{"template":"minecraft:iron_chain","kinetic":{"part":"motor","capacity":-1}}"#).is_err());
++        assert!(block(r#"{"template":"minecraft:iron_chain","kinetic":{"part":"motor","models":["not-a-model"]}}"#).is_err());
+         assert!(block(r#"{"template":"minecraft:oak_log","kinetic":{"part":"gearbox","half":"shaft_half"}}"#).is_err());
+         assert!(block(r#"{"template":"minecraft:lightning_rod","kinetic":{"part":"crank","extra_facing":"in"}}"#).is_err());
+@@ -2011,7 +2023,12 @@
+         assert_eq!(
+             shaped.blocks[0].properties.shape.as_ref().map(Vec::len),
+             Some(2)
+         );
++        let boxes = std::iter::repeat("[0,0,0,16,16,16]")
++            .take(17)
++            .collect::<Vec<_>>()
++            .join(",");
++        assert!(block(&format!(r#"{{"template":"minecraft:oak_log","properties":{{"shape":[{boxes}]}}}}"#)).is_err());
+         assert!(
+             block(r#"{"template":"minecraft:oak_log","properties":{"shape":[[0,0,0,16,40,16]]}}"#)
+                 .is_err()
