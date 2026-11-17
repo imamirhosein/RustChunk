@@ -734,3 +734,34 @@
 - Dependencies / cross-references: `research-lock.json` Java major; `Supplied`/`supply`; `find`/`find_runtime`; `horizon-prepare` `Options.java_home`; `horizon-prepare/src/lib.rs`; `artifacts.rs`; exporter compilation and vanilla datagen; Android launcher runtime provisioning.
 - Follow-up checks: inspect the source of runtime provisioning and `artifacts.rs` to verify major selection; confirm 1.20.1's version JSON/JDK baseline; inspect the Java exporter compile path; measure heap/time on Android ARM64 and ensure no unbounded concurrent JVMs.
 - Completion state: complete source and unit-test review; tests and actual Java/Javac commands were not executed.
+
+
+### 34. `crates/horizon-prepare/src/artifacts.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `69f47232438e887e8960db27ce22aba91f775c71`.
+- Size: 66,697 bytes; 1,650 lines; fetched in consecutive ranges 1–400, 401–800, 801–1,200, 1,201–1,600 and 1,601–1,650.
+- Coverage: lines 1–1,650, complete; all five ranges returned the same blob SHA; all unit-test code was reviewed.
+- Purpose: validates, locates, imports and reuses the player's official Minecraft version manifest, client/server JARs, client libraries and server-bundled libraries into `.local/minecraft/<version>`.
+- Lock and manifest model:
+  - `Lock::read` obtains the Minecraft version, `java_major`, SHA pins and accepted republished-manifest/asset-index hashes from `research-lock.json`; validates the version identifier against path traversal; and resolves the version-specific local directory.
+  - The imported manifest must have the exact pinned version ID, client/server SHA-1 values and a Java major matching the lock. Mojang-republished manifest hashes can be explicitly allow-listed.
+  - If an alternate launcher rewrites Mojang's JSON, it is rejected unless the repository already has an accepted Mojang manifest copy. The error explains how to obtain the original manifest. This prevents trusting launcher-specific metadata as a substitute for the pinned official manifest.
+- Launcher discovery and files:
+  - Reads official launcher layout, ATLauncher layout, CurseForge's official-launcher Install folder, and instance folders whose parent launcher can be found. It supports explicitly named inputs for custom launchers and Prism's alternative Maven path for native classifiers.
+  - Maps OS names and architecture aliases (including ARM64), applies the version JSON's library `rules`, filters x64/ARM native classifier variants, and skips only selected optional Netty native transports when absent. Other missing libraries fail.
+  - All manifest/bundle paths pass `safe_relative`; absolute paths, backslashes, `..` and Windows drive-style paths are rejected. Library artifacts are checked against SHA-1; inner server bundle entries and libraries use SHA-256.
+- Server JAR handling:
+  - Accepts a supplied player-downloaded server JAR and verifies its pinned SHA-1. If it contains `META-INF/versions.list`, the implementation expects exactly one bundled server whose ID equals the lock, extracts the inner game JAR and server libraries, and checks their SHA-256 values against the bundle lists. If it lacks the bundler marker, it treats the supplied JAR as the server game itself.
+  - Writes class inventories for client and server and a `prepared.json` inventory of the copied jars/libraries. It does not ship these JARs in the release.
+- Reuse and integrity:
+  - Every invocation can reuse previously imported files only after validating manifest, client/server JAR hashes, inner server JAR hash and server/client library hashes. It can repair missing import metadata and reuse a verified sibling version tree while skipping corrupted siblings.
+  - The extensive tests construct synthetic ZIP/bundle fixtures for corruption, wrong target pins, alternate launcher layouts, changed manifests, absent optional Netty transports, path traversal and ARM-vs-x64 native selection. These tests were read, not executed.
+- Critical 1.20.1 blocker:
+  - `import` explicitly rejects any version manifest containing `downloads.client_mappings` or `downloads.server_mappings` with the message that the workflow targets unobfuscated releases and older releases need a remapping stage.
+  - Minecraft Java 1.20.1 belongs to the historical obfuscated/mapped release regime; this path therefore cannot be assumed to import 1.20.1 successfully as written. A mapping/remapping stage or a carefully verified mapped-JAR strategy is required before inventory, exporters, class indexing and parity oracles can work with stable class/method names.
+  - The import process otherwise appears designed to support version-specific checksums and data, but its server bundle assumptions, library classifiers and manifest rules must be validated against the actual 1.20.1 manifest and server archive, rather than inferred from the newer 26.3 example.
+- RustChunk relevance: **critical**. This is the main gate between the user's legitimately installed Minecraft files and the native Rust data preparation pipeline. It identifies a concrete incompatibility with the current 1.20.1 goal, not a hypothetical concern: the current code deliberately refuses mapped releases.
+- Decision: **major adaptation required** for 1.20.1. Reuse the secure path handling, checksum verification, manifest validation, explicit user-provided game files and local-only artifact storage; replace or extend the blanket mappings rejection with a verified 1.20.1 remapping workflow and version-aware handling of libraries/server bundling.
+- Dependencies / cross-references: `research-lock.json`; `Lock`; `GameFiles`; `Inputs`; `game_files`; `import_manifest`; `import`; `unpack_server`; `client_library_artifacts`; `safe_relative`; `launcher_library`; `verify`; `client_libraries`; `inventory`; `files::Import`; ZIP helpers; `pool::map`; `.local/minecraft/<version>`.
+- Follow-up checks: inspect `lib.rs`/`java.rs` and all exporter consumers; verify the actual 1.20.1 version JSON's mappings, SHA pins, Java major, libraries and server archive; determine the mapping namespace needed by Java oracles and Rust-source correspondence; test client and server remapping independently and record source/output hashes.
+- Completion state: complete source and unit-test review; no actual game artifacts were imported, checksum-verified, unpacked or remapped, and no tests/build were run.
