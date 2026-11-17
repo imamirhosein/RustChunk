@@ -7,7 +7,8 @@
     "0004-bound-mod-package-reads.patch",
     "0005-check-template-state-expansion-limit.patch",
     "0006-validate-kinetic-input-bounds.patch",
-    "0007-bound-machine-entity-slot-allocation.patch"
+    "0007-bound-machine-entity-slot-allocation.patch",
+    "0008-guard-arm-nbt-state.patch"
   ],
-  "series_revision": 11
+  "series_revision": 12
 }
