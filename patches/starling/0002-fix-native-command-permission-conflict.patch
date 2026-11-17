@@ -1,7 +1,7 @@
 diff --git a/crates/horizon-client/src/game/native_server.rs b/crates/horizon-client/src/game/native_server.rs
 --- a/crates/horizon-client/src/game/native_server.rs
 +++ b/crates/horizon-client/src/game/native_server.rs
-@@ -125,21 +125,31 @@ pub(super) fn command_tree(
+@@ -125,23 +125,41 @@ pub(super) fn command_tree(
          if vanilla(&nodes[0].0) {
              problems.push(format!("`{}`: vanilla has /{}", command.usage, nodes[0].0));
              continue;
@@ -50,7 +50,7 @@ diff --git a/crates/horizon-client/src/game/native_server.rs b/crates/horizon-cl
              if runnable {
                  entry["executable"] = true.into();
              }
-@@ -1188,6 +1198,25 @@ mod tests {
+@@ -1188,5 +1206,23 @@ mod tests {
          assert_eq!(set["permissions"]["permission"]["level"], "gamemasters");
      }
  
