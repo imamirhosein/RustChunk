@@ -1916,3 +1916,19 @@ A post-batch verification found that the first-batch source-file numbers 9–20 
 - Dependencies / cross-references: horizon_telemetry::live::{session_id,INTERVAL,Ping,send}, telemetry::version, telemetry endpoint config, LAN/friends world lifecycle.
 - Follow-up checks: هیچ port لازم نیست؛ در صورت اضافه شدن telemetry در آینده، بررسی privacy notice, consent, disable switch, shutdown lifecycle و داده‌های دقیق ارسالی.
 - Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
+
+
+### 79. `crates/horizon-client/src/reconnect.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `cd942aa7e095bc545b9100da5f933f54e45c2198`.
+- Size: 17,547 bytes; 474 lines; full source fetched.
+- Coverage: lines 1–400 and 401–474, complete.
+- Purpose: تصمیم‌گیری درباره retry اتصال multiplayer قطع‌شده و برنامه‌ریزی backoff، با جلوگیری از retry برای kick/ban/refusalهای دائمی.
+- Implementation / logic: Tracker آدرس، player name، LAN flag، شمار تلاش‌ها و زمان join موفق را نگه می‌دارد. پنج retry با تأخیرهای 5/10/20/40/60 ثانیه دارد؛ اتصال پایدار حداقل 60 ثانیه شمارنده را reset می‌کند. `allowed` ابتدا disconnect translation key را با prefix table دسته‌بندی می‌کند؛ در نبود key به English keyword scan متوسل می‌شود. Kicks, bans, whitelist, incompatible/outdated, invalid session, online mode refusals و multiplayer disabled retry نمی‌شوند؛ timeout, shutdown, full server, slow login و auth server downtime retry می‌شوند. Retry همان آدرس، نام و نوع LAN را حفظ می‌کند.
+- Findings: جداسازی status key از متن localized صحیح‌تر است چون server messages می‌تواند به زبان‌های مختلف resolve شود؛ متن fallback فقط برای literal/OS errors است و ممکن است برای زبان‌های غیرانگلیسی کافی نباشد. Classification keys شامل Horizon-specific keys و auth errors است، پس باید با کلیدهای دقیق target version sync شود. آدرس عوض شود attempts reset می‌شود؛ kick یا exhausted attempts tracker را reset و address را فراموش می‌کند. Tests classification/localized keys/backoff/stable session/address reset را دارند؛ اجرا نشده‌اند.
+- RustChunk relevance: به UX اتصال و تحمل قطع اینترنت در Android کمک می‌کند؛ implementation نسبتاً مستقل از نسخه protocol است.
+- 1.20.1 implications: برای 1.20.1 disconnect Component keys و auth flow باید از vanilla 1.20.1 گرفته شود؛ 26.3 translation keys یا Horizon offline-mode refusal assumptions را عیناً کپی نکن. اتصال تازه نباید برای kick/ban/invalid session به صورت خودکار loop شود. سیاست retry باید reason code را تا حد ممکن از component/key بگیرد، نه فقط text search.
+- Decision: **منطق backoff قابل اقتباس؛ classification table و integration با login/disconnect 1.20.1 باید rewrite/verify شود**.
+- Dependencies / cross-references: net.rs disconnect/auth result, multiplayer connection lifecycle, localized component/translation keys, server list selected address, Retry UI scheduler.
+- Follow-up checks: پس از ممیزی net/login، تمام 1.20.1 disconnect reason keys، online-mode/session failures و server shutdown cases را map کن؛ بررسی کن intentional disconnect/cancel retry را پاک کند.
+- Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
