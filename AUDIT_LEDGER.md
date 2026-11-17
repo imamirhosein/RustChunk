@@ -1299,3 +1299,29 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: `item::{Stack,Template}`; `buf::{Codec,Reader,Writer}`; `horizon_world::nbt::Tag`; `packets/play.rs` recipe book variants; `ids::play`; recipe and item registries; `recipe_display`/`slot_display` data.
 - Follow-up checks: inspect 1.20.1 serverbound/clientbound recipe-book packet classes and serializers; trace recipe definitions, ingredient encoding and recipe identifiers; implement and compare legacy recipe-book add/remove/settings/ghost/place packets against a vanilla 1.20.1 oracle.
 - Completion state: complete source/test review; no tests, packet traces or 1.20.1 recipe-book interoperability run was performed.
+
+
+### 56. `crates/horizon-protocol/src/crypto.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `540aeb5eb9fb078b7e114dd211fc73f3711829d3`.
+- Size: 11,763 bytes; 327 lines; fetched as a complete file.
+- Coverage: lines 1–327, complete, including tests.
+- Purpose: implements Minecraft connection AES/CFB8 encryption, secure random shared-secret generation, signed Java SHA-1 server hashes, offline-mode UUIDs and UUID formatting.
+- Implementation:
+  - `Cfb8` wraps the crate's AES-128 forward cipher with a 16-byte shift register; encryption/decryption preserve stream state across calls. It documents Minecraft's use of the shared secret as both key and IV.
+  - Decryption uses parallel AES block lanes while preserving the byte-by-byte CFB8 register semantics.
+  - `random_bytes` uses the OS cryptographic RNG; `generate_secret` returns a random 16-byte AES key.
+  - `java_hex_digest` interprets a digest as a signed two's-complement BigInteger and formats lower-case hexadecimal exactly like Java, including negative values and no leading zeros.
+  - `server_hash` computes SHA-1 over ISO-8859-1 server ID bytes (unrepresentable Unicode replaced with '?'), shared secret and encoded server public key.
+  - Includes an internal MD5 implementation and `offline_uuid` using the Java name-based UUID v3 algorithm over `OfflinePlayer:<name>`; sets version and IETF variant bits. `uuid_string` formats the 8-4-4-4-12 UUID string.
+- Tests read: FIPS-197 AES-128 vector; NIST CFB8 vector across split updates; AES lanes compared with single-block and Rust aes crate; CFB8 decryption against one-byte reference under different read cuts; signed Java hash vectors for Notch/jeb_/simon; RNG secrets differ; MD5 and offline UUID vectors. Not executed.
+- RustChunk relevance: high and largely version-independent. These are foundational cryptographic and identity primitives needed by Java Edition login, with an offline UUID helper for offline-mode identity.
+- 1.20.1 implications:
+  - AES-128/CFB8, secure random 16-byte secret, SHA-1 server hash and Java-compatible signed hexadecimal formatting are longstanding Java Edition connection mechanisms and are likely reusable, subject to confirming the exact 1.20.1 encryption exchange ordering and encoding.
+  - Offline UUID v3 derivation is a general Minecraft Java convention and is likely reusable for offline-mode player identity. It is not equivalent to Microsoft authentication and does not grant online-mode access.
+  - The newer client protocol's login packet flow may differ, but the low-level CFB8 primitive remains independent of whether the login packets use older or newer packet IDs.
+  - The AES implementation relies on hardware/architecture-aware internals (`blocks.rs`); the ARM64 Android target needs actual performance/correctness validation. This file itself does not establish the safety of every platform backend.
+- Decision: **largely adaptable/reusable** for 1.20.1 cryptographic primitives and offline UUID derivation. Keep key exchange and login state ordering version-specific; audit platform AES backend separately.
+- Dependencies / cross-references: `crypto::blocks`; `LANES`; `getrandom`; `sha1`; `horizon-protocol::connection::enable_encryption`; `rsa.rs`; `packets/login.rs`; authentication/session service; offline account identity.
+- Follow-up checks: inspect `blocks.rs` and `rsa.rs`; trace the 1.20.1 Encryption Request/Response sequence and signed server hash inputs against vanilla; verify ARM64 Android AES backend and OS RNG availability.
+- Completion state: complete source/test review; no crypto test, login exchange, RNG probe or ARM64 device test was executed.
