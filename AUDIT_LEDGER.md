@@ -214,3 +214,22 @@
 - **Decision:** **unnecessary** for the core Rust/Forge engine; **adaptable** only if RustChunk needs a pre-game setup theme or generated placeholder UI pack. Rewrite pack schema and resource identifiers for Minecraft 1.20.1.
 - **Follow-up checks:** inspect hand.py and strings.json if setup theme is in scope; inspect pack output and test its compatibility with Minecraft 1.20.1; verify build_apk.py's ZIP integration.
 - **Completion state:** complete generator source review; output generation and runtime visual behavior untested.
+
+### 11. research-lock.json
+- **Source SHA:** 719c266401fe962746965fb33c07abbb91f8a656
+- **Size:** 70 lines; complete JSON document fetched and read.
+- **Coverage:** complete; no ranges omitted.
+- **Purpose/content:** machine-readable pin set for the exact Minecraft research/preparation inputs and supporting analysis tools/runtime artifacts.
+- **Pinned data:**
+  - Minecraft version 26.3; primary and accepted republished version-manifest SHA-1 values; accepted asset-index SHA-1 values; note explaining that certain republished JSONs differ only in asset-index selection; client and server JAR SHA-1 values; Java major 25.
+  - Vineflower 1.12.0 release URL and SHA-256.
+  - rea-agents package version 6.4.0.
+  - jadx-headless-mcp 0.7.1 release URL and SHA-256.
+  - Mojang Java runtime manifests/checksums used by tools/datafix_worlds.py for old server jars/sample worlds: Linux legacy/alpha/beta/gamma and macOS ARM64 gamma, with stated fallback to gamma when a component is absent.
+- **Dependencies / cross-references:** build_apk.py places this file in the phone-side preparation kit; README describes prepared resources checked against these pins; exporter/build tooling consumes it; datafix_worlds.py uses the listed runtimes for sample datafix worlds. Actual consumers and validation logic still need inspection.
+- **RustChunk relevance:** very high as a pattern for separating mutable external metadata from source code and pinning downloaded inputs by cryptographic digest. RustChunk needs a comparable manifest for Minecraft 1.20.1, Forge artifacts, Java runtimes, native libraries and any tools used to construct a reproducible profile.
+- **Version/compatibility warning:** every Minecraft checksum here is for 26.3, not 1.20.1; these values are unusable as RustChunk's source-of-truth for 1.20.1. The listed JDK major 25 is also Starling's exporter/preparation requirement, not evidence that Forge 1.20.1 should run on Java 25 (Forge/Minecraft 1.20.1 normally needs a compatible Java 17 runtime; verify exact Forge requirements before implementation).
+- **Security / reliability notes:** checksums let consumers detect unexpected content changes only if the expected digest itself is obtained/trusted. SHA-1 remains in Mojang's lock fields and is weaker than SHA-256 for collision resistance; use SHA-256 where the upstream metadata provides it, and preserve the official manifest chain where it does not. Release URLs plus hashes are more robust than URLs alone. This document contains no actual game binaries/assets or license grants.
+- **Decision:** **essential** as a concept for external-input pinning and deterministic preparation; **rewrite required** for RustChunk's 1.20.1/Forge artifacts, supported platforms and Java runtime requirements.
+- **Follow-up checks:** inspect every reader of research-lock.json, verify how the hashes are checked and how republished manifests are handled; map Mojang metadata for 1.20.1 and Forge installer/profile dependencies; inspect runtime download verification and cache lifecycle.
+- **Completion state:** complete lockfile-document review; verification consumers and exact 1.20.1 pins remain pending.
