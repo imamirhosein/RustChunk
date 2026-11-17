@@ -887,3 +887,25 @@
 - Dependencies / cross-references: `buf::StrN`; `UShort`; `VarInt`; `packet!`; `packet_enum!`; `ids::handshake::serverbound`; `State::Handshake`; protocol connection startup; `adapter.rs`.
 - Follow-up checks: inspect the connection state machine and generated IDs; verify 1.20.1 handshake bytes against an authoritative protocol specification and a vanilla 1.20.1 server.
 - Completion state: complete source/test review; no packet encoding test, handshake or network connection was executed.
+
+
+### 40. `crates/horizon-protocol/src/packets/login.rs`
+- Source repository/ref: `starling-client/starling` / `starling`.
+- Source SHA: `3e494a6a9d5a1336fe1231aaaba7967ba86914d7`.
+- Size: 4,588 bytes; 134 lines; fetched in one complete range, including tests.
+- Coverage: lines 1–134, complete.
+- Purpose: defines packet body codecs and state-specific enums for the current protocol's Login state.
+- Packet structures present:
+  - Property, GameProfile (UUID, 16-character name and property list), Disconnect, Hello (server ID, public key, challenge, authenticate flag), LoginFinished (profile plus a session UUID), Compression, CustomQuery, and CookieRequest.
+  - Serverbound messages include ServerHello (name and UUID), encryption Key (key and challenge bytes), CustomQueryAnswer, LoginAcknowledged and CookieResponse.
+  - Packet IDs are imported from the generated `ids::login` tables; codecs use VarInt, UUID, bounded strings, byte arrays, optional values, identifiers and rest-of-packet payloads.
+  - Tests round-trip the packet variants and check trailing-byte rejection and player-name length validation. The tests were read, not executed.
+- RustChunk relevance: critical. Login is required for both offline and authenticated Java Edition server connections; its packet bodies and phase transitions must be compatible even before the client can enter Play.
+- 1.20.1 implications:
+  - This file is for the current 26.3 protocol and includes later login-era features such as cookie requests/responses and a separate login acknowledgement, as well as a LoginFinished body carrying a session UUID. These must not be assumed to exist in 1.20.1.
+  - The 1.20.1 login state uses its own Login Start/Encryption Response/Plugin Request-Response/Set Compression/Login Success or Disconnect forms and a different transition into play; exact IDs, field order, bounds, optionality and session/profile fields must come from a 1.20.1 protocol reference or vanilla oracle.
+  - A 1.20.1 port needs to reconcile offline identity and online authentication behavior with that older handshake/login flow. Merely mapping packet IDs while retaining these current packet bodies will produce wire-incompatible messages.
+- Decision: **reuse low-level codecs and cryptographic primitives only where protocol semantics match**; **rewrite the Login state packet set and connection transition for 1.20.1**. Do not expose current cookie/acknowledgement/session fields to the 1.20.1 adapter by default.
+- Dependencies / cross-references: `ids::login`; `buf` codecs; `crypto`; `packets::Empty`; login connection state machine; encryption/compression negotiation; authentication/offline UUID generation; `adapter.rs`.
+- Follow-up checks: inspect `connection.rs`, crypto and status packets; verify the precise 1.20.1 Login Start, Encryption Request/Response, Plugin Request/Response, Set Compression, Login Success and Disconnect packet structures and phase transition against a real 1.20.1 server.
+- Completion state: complete source and test review; no packet test, login, encryption exchange, compression negotiation or server interoperability run was performed.
