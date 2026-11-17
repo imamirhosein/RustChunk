@@ -24,7 +24,7 @@ diff --git a/crates/horizon-mods/src/manifest.rs b/crates/horizon-mods/src/manif
 +}
 +
  impl Package {
-@@ -407,33 +422,34 @@ impl Package {
+@@ -408,33 +422,34 @@ impl Package {
      /// content, `assets/` and `data/`) or a folder holding the same.
      pub fn read(path: &Path) -> Result<Self, String> {
          let (toml, wasm) = if path.is_dir() {
