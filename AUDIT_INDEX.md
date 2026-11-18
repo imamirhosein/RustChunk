@@ -221,7 +221,37 @@
 | 174 | `benchmarks/model-state-parse-2026-10-14.md` | Adaptable; Reference | Shared parse reuse gives a scoped synthetic 1.306× result; validate 1.20.1 and A22. |
 | 175 | `benchmarks/overlay-real-packs-2026-10-15.json` | Adaptable; Reference | Cache-hit/cold overlay methodology; pack schema is 26.3 and licenses remain separate. |
 
-## Part 9 — Entries 201–225
+## Part 9 — Entries 176–200
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 176 | `benchmarks/perf/horizon-m4pro-1080p-rd16.json` | Reference; Version-specific | Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with… |
+| 177 | `benchmarks/perf/horizon-m4pro-1080p-rd32.json` | Reference; Version-specific | Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with… |
+| 178 | `benchmarks/perf/horizon-m4pro-1080p-rd8.json` | Reference; Version-specific | Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with… |
+| 179 | `benchmarks/perf/horizon-win-9800x3d-5080-rd16.json` | Reference; Version-specific | Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with… |
+| 180 | `benchmarks/perf/horizon-win-9800x3d-5080-rd32.json` | Reference; Version-specific | Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with… |
+| 181 | `benchmarks/perf/horizon-win-9800x3d-5080-rd8.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 182 | `benchmarks/perf/macmini-m4pro-loaded-2026-11-01.md` | Reference; Version-specific | The report explicitly says it is not a fair player comparison: system contention differs; vanilla draws 14% fewer… |
+| 183 | `benchmarks/perf/vanilla-m4pro-1080p-rd16.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 184 | `benchmarks/perf/vanilla-m4pro-1080p-rd32.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 185 | `benchmarks/perf/vanilla-m4pro-1080p-rd8.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 186 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd16.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 187 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd32.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 188 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd8.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 189 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd16.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 190 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd32.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 191 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd8.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 192 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd16.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 193 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd32.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 194 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd8.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 195 | `benchmarks/perf/windows-9800x3d-5080-2026-10-29.md` | Reference; Version-specific | Better controlled than the loaded Mac report, but RD16 has a weaker external-load check. The report also identifies… |
+| 196 | `benchmarks/rust-active-effect-tick-2026-10-07/scoped-parity.json` | Reference; Version-specific | Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded… |
+| 197 | `benchmarks/rust-active-effects-2026-10-07/scoped-parity.json` | Reference; Version-specific | Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded… |
+| 198 | `benchmarks/rust-anchor-2026-10-06/scoped-parity.json` | Reference; Version-specific | Client/server reference records have matching output hashes, but the `references` records do not include an… |
+| 199 | `benchmarks/rust-attribute-health-2026-10-07/scoped-parity.json` | Reference; Version-specific | Client/server reference records have matching output hashes, but the `references` records do not include an… |
+| 200 | `benchmarks/rust-attribute-map-queries-2026-10-07/scoped-parity.json` | Reference; Version-specific | Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded… |
+
+## Part 10 — Entries 201–225
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -251,7 +281,7 @@
 | 224 | `benchmarks/rust-block-push-2026-10-07/scoped-parity.json` | Adaptable algorithmic test; Version-specific collision data | 26.3؛ collision shapes/entity selections کنترل‌شده‌اند؛ live entity indexing و teleport/network behavior خارج scope است |
 | 225 | `benchmarks/rust-block-state-codec-2026-10-06/scoped-parity.json` | Adaptable codec structure; Version-specific registry schema | 26.3؛ registry metadata از دو JAR آمده؛ warning text و lifecycle/complete material codecs pending |
 
-## Part 10 — Entries 226–250
+## Part 11 — Entries 226–250
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -281,7 +311,7 @@
 | 249 | `benchmarks/rust-collision-2026-10-05/scoped-parity.json` | Reference/Adaptable primitive tests; Version-specific | نسخه 26.3؛ uncached states و entity-context در این manifest پشتیبانی نمی‌شوند |
 | 250 | `benchmarks/rust-collision-context-2026-10-06/scoped-parity.json` | Adaptable context tests; Version-specific entity semantics | 26.3؛ entity lifecycle، inventory mutation بعد از capture، minecart experimental contexts و live movement pending |
 
-## Part 11 — Entries 251–275
+## Part 12 — Entries 251–275
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -311,7 +341,7 @@
 | 274 | `benchmarks/rust-effect-sync-2026-10-07/synced-bytes-regression.json` | Adaptable state-sync test; Version-specific serializer IDs | 26.3؛ heterogeneous serializer maps، entity schema/network codecs و complete item-use flow خارج scope است |
 | 275 | `benchmarks/rust-effect-sync-2026-10-07/synced-floats-regression.json` | Adaptable state-sync test; Version-specific serializer IDs | 26.3؛ سایر serializers، type mismatch handling، wire codecs و player absorption integration pending |
 
-## Part 12 — Entries 276–300
+## Part 13 — Entries 276–300
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
