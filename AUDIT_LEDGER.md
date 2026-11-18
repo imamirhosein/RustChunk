@@ -2020,8 +2020,3 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source hash/coverage verification is not a substitute for executed tests. No build, automated test suite, Android device run, or live Minecraft server connection was performed during this checkpoint.
 
 
-- Re-fetched all 100 source paths from `starling-client/starling` at ref `starling`. Every source SHA matched the SHA recorded in its retained audit entry.
-- Rechecked recorded source line counts and coverage metadata. Corrected the inaccurate line counts for entries 4, 5, 7, 8, 41, 46, 47, 51, 54 and 61–80; corrected the final chunk ranges for entries 79 and 80.
-- The previous ledger contained a duplicate full 1–100 set and duplicate short records for files 9–20. This checkpoint keeps one canonical entry for each file number 1–100 and removes the redundant copies and the obsolete pending/integrity notes.
-- Rechecked key claims against source for `artifacts.rs`, `play.rs`, `item.rs`, `touch.rs` and `net.rs`. The network entry now correctly records that 1.20.1 has no separate Configuration state.
-- Source hash/coverage verification is not a substitute for executed tests. No build, automated test suite, Android device run, or live Minecraft server connection was performed during this checkpoint.
