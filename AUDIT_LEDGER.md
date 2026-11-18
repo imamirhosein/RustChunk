@@ -16,13 +16,6 @@
 - Starling is pinned to Minecraft Java 26.3. Its version-specific game rules, assets, registries, world formats and packet schemas must be reconciled with 1.20.1; changing a version string is not a port.
 - Minecraft Java 1.20.1 uses protocol 763 and has Handshake, Status, Login and Play states. It does **not** have the separate post-login Configuration state introduced in later protocol generations.
 
-## Current project scope — authoritative
-
-- The current RustChunk milestone is a **Rust-native Minecraft Java Edition 1.20.1 client**, adapted from the Starling/Horizon Rust architecture. It is not a JVM launcher in this phase.
-- **Forge support is deferred** until the vanilla 1.20.1 base client works; do not use old Forge-oriented wording in early audit entries as the current product requirement.
-- Starling is pinned to Minecraft Java 26.3. Its version-specific game rules, assets, registries, world formats and packet schemas must be reconciled with 1.20.1; changing a version string is not a port.
-- Minecraft Java 1.20.1 uses protocol 763 and has Handshake, Status, Login and Play states. It does **not** have the separate post-login Configuration state introduced in later protocol generations.
-
 ## Completed files
 
 ### 1. `README.md`
@@ -879,7 +872,7 @@
 - Source SHA: `1686adb23f2e9d06e9c1b24637fb3fa906eedad8`.
 - Size: 988 bytes; 39 lines; fetched in one complete range, including test.
 - Coverage: lines 1–39, complete.
-- Purpose: defines the clientbound? No: the client-to-server handshake packet (`ClientIntentionPacket`) and intent constants.
+- Purpose: defines the client-to-server handshake packet (`ClientIntentionPacket`) and intent constants.
 - Wire structure:
   - Fields are protocol number as VarInt, hostname as a bounded string (`StrN<255>`), port as unsigned short, and intent as VarInt.
   - Current intent constants are STATUS=1, LOGIN=2 and TRANSFER=3. A single `Intention` packet is registered in the Handshake state's serverbound packet enum.
@@ -2026,8 +2019,6 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Rechecked key claims against source for `artifacts.rs`, `play.rs`, `item.rs`, `touch.rs` and `net.rs`. In particular, the networking entry now explicitly records that 1.20.1 has no separate Configuration state.
 - Source hash/coverage verification is not a substitute for executed tests. No build, automated test suite, Android device run, or live Minecraft server connection was performed during this checkpoint.
 
-
-## 100-file checkpoint review — 2026-11-18
 
 - Re-fetched all 100 source paths from `starling-client/starling` at ref `starling`. Every source SHA matched the SHA recorded in its retained audit entry.
 - Rechecked recorded source line counts and coverage metadata. Corrected the inaccurate line counts for entries 4, 5, 7, 8, 41, 46, 47, 51, 54 and 61–80; corrected the final chunk ranges for entries 79 and 80.
