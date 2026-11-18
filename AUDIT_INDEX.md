@@ -730,3 +730,28 @@
 | 598 | `crates/horizon-client-core/src/snbt.rs` | Adaptable serialization utilities; verify exact output | Hash iteration order is heuristic/insertion-based; exact formatting requires a pinned Java 1.20.1 oracle. |
 | 599 | `crates/horizon-client-core/src/sound_source.rs` | Adaptable registry table; validate 1.20.1 list | Small static table; verify target ordering and server/client use sites rather than importing blindly. |
 | 600 | `crates/horizon-client-core/src/text.rs` | Highly adaptable text engine; rewrite event/schema compatibility | The 824-line implementation includes newer event/object fields; `open_file` is explicitly restricted to locally-created text, never server/LAN text. Rebuild 1.20.1 component schema and preserve this trust boundary. |
+
+## Part 26 — Entries 601–620
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 601 | `crates/horizon-client-core/src/uuid.rs` | Highly adaptable utility; strict-test parser | Parser accepts any hyphen placement if 32 hex digits remain; compare exact Java 1.20.1 behavior. |
+| 602 | `crates/horizon-client-core/src/who.rs` | Reusable local discriminator only | Mob runtime IDs are scoped/reusable; not persistent identity. |
+| 603 | `crates/horizon-client-render/examples/compositor.rs` | Adapt compositor smoke-test pattern | Desktop wgpu/winit example only; no Android surface lifecycle or device validation. |
+| 604 | `crates/horizon-client-render/examples/pack_load_bench.rs` | Adapt benchmark harness; replace fixtures | Synthetic packs and test ZIP shortcuts do not represent real 1.20.1 resource packs. |
+| 605 | `crates/horizon-client-render/src/android_controls.rs` | Optional Android UX reference | Horizon-specific touch behaviors; rebind item actions and validate multi-touch on Android. |
+| 606 | `crates/horizon-client-render/src/android_controls/custom.rs` | Optional custom-button layer | GoyControl/MCPE modes are product-specific; verify pointer/key ownership and release paths. |
+| 607 | `crates/horizon-client-render/src/android_controls/editor.rs` | Optional layout-editor reference | US/ASCII key capture and save/error behavior need international keyboard and persistence tests. |
+| 608 | `crates/horizon-client-render/src/android_controls/layout.rs` | Reuse schema-validation patterns only | Fourteen-slot profile schema and presets are Horizon-specific; create a RustChunk-owned versioned schema. |
+| 609 | `crates/horizon-client-render/src/assets.rs` | High-value asset architecture; rebuild target data | Pinned 26.3 registry, tags, facts and assets cannot be mixed with 1.20.1. |
+| 610 | `crates/horizon-client-render/src/atlas_sources.rs` | Strongly adaptable atlas logic | Verify each sprite source codec against 1.20.1 and harden malformed image/path inputs. |
+| 611 | `crates/horizon-client-render/src/audio.rs` | Audio architecture reference; defer replacement | Large OpenAL-style replacement needs 1.20.1 sound semantics and real Android output tests. |
+| 612 | `crates/horizon-client-render/src/auth.rs` | Security-sensitive reference; reimplement | Handwritten timestamp parser accepts impossible calendar dates; verify 1.20.1 services and token handling. |
+| 613 | `crates/horizon-client-render/src/ban_notice.rs` | Adapt parsing/UI pattern | Moderation JSON and translation keys must match 1.20.1; fail-closed defaults need explicit tests. |
+| 614 | `crates/horizon-client-render/src/bidi.rs` | Valuable RTL rendering reference | Arabic/Persian shaping, Unicode data and styled mixed-direction text need Java 1.20.1 golden tests. |
+| 615 | `crates/horizon-client-render/src/biome.rs` | High-value algorithms; rebuild 1.20.1 registry | Biome IDs/attributes are 26.3-specific; parser casts/count ranges and empty table need hardening. |
+| 616 | `crates/horizon-client-render/src/block_edit.rs` | Adapt strict bulk-edit algorithm only | It bypasses normal block-entity, neighbor, path and light side effects; callers must explicitly handle them. |
+| 617 | `crates/horizon-client-render/src/block_entities.rs` | High-value lifecycle reference | Reproduce 1.20.1 ticker promotion/order and chunk-load lifecycle; fastutil order is observable. |
+| 618 | `crates/horizon-client-render/src/block_entity_anim.rs` | Adapt animation state patterns | Rebuild 1.20.1 ticker catalog and client/server event behavior; later entity states are included. |
+| 619 | `crates/horizon-client-render/src/block_entity_cem.rs` | Optional OptiFine/EMF CEM feature | Not vanilla core; model catalog and supported parts must be scoped to 1.20.1. |
+| 620 | `crates/horizon-client-render/src/block_entity_render.rs` | Renderer architecture; rebuild target models/catalog | Model states/assets are 26.3; separate dynamic render, static cache and target-version entity model data. |
