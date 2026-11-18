@@ -2479,3 +2479,352 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Extended `AUDIT_INDEX.md` to all 120 reviewed files, split into five parts of 25, 25, 25, 25 and 20 entries.
 - Risks recorded for follow-up include the render chunk section-index/min_y relationship, SNBT typed-array invalid-value behavior, registry hash stability assumptions, region-file failure recovery and Android hard-link support, native-mod permission validation, and finite numeric bounds in horizon-ctl.
 - Tests found in source were read but not run. No Cargo build, APK build, Android device run, filesystem fault-injection, parity probe or live Minecraft connection was executed.
+
+### 121. `crates/horizon-client/src/entry.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 7bc456b6ffdc89d055d8428db37dc371d5c44233.
+- Size: 246 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–246, complete; no gaps between ranges.
+- Purpose: Shared desktop/Android startup orchestration, including early hook installation, logging/crash setup, platform arguments and runtime launch.
+- Implementation / logic: Installs trait mods before lower-level services can invoke them; configures allocator and startup telemetry; reads desktop arguments or Android-supplied arguments; selects game home, player directory or dedicated-server folder. It initializes logging/crash/RAM-limit services, runs the post-log platform callback, installs native renderers and world/client hooks, adjusts Unix open-file limits when possible, then enters the game runtime. It classifies usage versus runtime errors, flushes logs and uses platform-specific shutdown.
+- Findings: Startup ordering is essential because several global hook registries are one-shot. Android arguments come from the Activity bridge, not OS argv. Dedicated-server setup is not needed by an initial client-only release. File-limit adjustment is best-effort. No local tests exist.
+- RustChunk relevance: High as a bootstrap-order and error-lifecycle reference.
+- 1.20.1 implications: Structure is reusable, but Horizon mod hooks, telemetry and server branches are product-specific. RustChunk should initialize only its platform, 1.20.1 resources/registries, diagnostics and game runtime.
+- Decision: Adaptable as startup architecture; mod integration and server branches require redesign or omission for vanilla 1.20.1.
+- Dependencies / cross-references: crash, game runtime, logging, RAM limit, mod_api, allocator, telemetry, native renderer, world/client hooks, Android args/finish bridge and Unix file limits.
+- Follow-up checks: Map every side effect to RustChunk; decide which initializers are one-shot; test arguments, error classification, Android lifecycle, shutdown and file-descriptor needs.
+- RustChunk implementation mapping: Candidate for executable/bootstrap module, not protocol or renderer.
+- Evidence required before adoption: Desktop/Android launch, duplicate-init, argument and shutdown tests; proof all required 1.20.1 resources are initialized before use.
+- Completion state: Complete source review; no RustChunk implementation, compile or runtime launch was performed.
+
+### 122. `crates/horizon-client/src/android.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 546c37dc4c03642b6bb3f95bfae21a7183ab1ea4.
+- Size: 1,386 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–1,386 in consecutive ranges 1–300, 301–550, 551–800, 801–1,050, 1,051–1,134 and 1,135–1,386, complete; no gaps between ranges.
+- Purpose: Android NativeActivity/JNI bridge for storage, lifecycle, input, IME, sensors, clipboard, file picking, links, native-library loading, system statistics and frame scheduling.
+- Implementation / logic: Retains AndroidApp/JNI/activity handles and one-shot process arguments. Provides private/shared folder selection and migration helpers; maps Android key, motion, pointer and gamepad events into client input; maintains mouse state and a bounded event queue; mirrors text-field/IME composition and selection; exposes clipboard, file picker, folder opening, browser links and file hooks. It handles vibration, gyroscope, DNS, foreground-work hooks, optional native-mod library loading, heap/thermal probes, Android Performance Hint Manager and native-window frame-rate requests. Startup configures environment/platform hooks, diagnostics, preparation/account resume and input before entering the game. Shutdown finishes the Activity then terminates the process because the event loop cannot be recreated in place.
+- Findings: Large unsafe FFI/JNI boundary with object-lifetime and thread-affinity assumptions. Correctness depends on Android-owned lifetimes, valid JNI attachment, native-window lifetime and a single process event loop. Newer Android APIs are dynamically resolved and may be absent. Shared-storage migration needs interruption/retry testing. Mouse/controller state must reset on focus loss, pause, pointer cancel and device removal. Native-mod loading is not Forge. No device run was performed.
+- RustChunk relevance: Very high for Android NativeActivity, IME, touch, sensors, clipboard, storage and lifecycle integration.
+- 1.20.1 implications: Mostly protocol-independent, but input must feed 1.20.1 movement/interaction. Remove Starling-specific telemetry, accounts, native mods and folder assumptions unless RustChunk independently needs them.
+- Decision: Highly relevant as an Android architecture reference; implement a smaller RustChunk bridge with explicit unsafe/JNI review and device validation.
+- Dependencies / cross-references: android-activity/winit, JNI, input/touch/gamepad, platform hooks, diagnostics, storage helpers, NativeMods Java bridge, system stats, account/preparer and Android packaging.
+- Follow-up checks: Audit unsafe blocks/JNI signatures; trace Activity/surface lifecycle; test IME/RTL, multi-touch cancel, controller disconnect, storage migration, symbol fallbacks and thermal/frame-rate APIs.
+- RustChunk implementation mapping: Candidate for platform/android module; port required services only, not native-mod loading/account renewal by default.
+- Evidence required before adoption: Android ABI/API compile, repeated launch/close, lifecycle, touch/IME/controller/clipboard/storage tests and real-device frame pacing checks.
+- Completion state: Complete source review; no APK build, JNI compile, device test or Android performance measurement was run.
+
+### 123. `crates/horizon-client/src/diagnostics.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 543befa72bfae5d207397fd3558144e88b7c2ce9.
+- Size: 606 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–606 in consecutive ranges 1–300, 301–400, 401–480, 481–567 and 568–606, complete; no gaps between ranges.
+- Purpose: Bounded local crash/startup diagnostics and explicit diagnostic ZIP export, separated from opt-in performance recording.
+- Implementation / logic: Stores session JSON with build/device/ABI/start phase/clean-exit/context and previous-session data; writes updates through a bounded sync-channel worker so disk operations stay off the frame thread. Heartbeat uses nonblocking lock/send operations. It supports checkpoints, handled/fatal errors, flush, previous-unclean detection and summaries. A redactor removes selected credential terms, URLs, addresses, private paths and domains. Explicit export allowlists logs/crash/performance/exit summaries, limits file count and size, keeps complete JSONL rows, summarizes binary tombstones, writes a manifest and retains three archives. Tests cover redaction, archive limits, JSONL, worker/heartbeat and exit labels.
+- Findings: The bounded async design is useful, but redaction is best-effort pattern filtering, not a guarantee arbitrary log text is safe. New token formats or paths can evade it. JSON persistence uses temp plus rename without visible fsync. Worker send/write failures are often ignored to avoid blocking the frame thread, so diagnostics may be incomplete. Archive metadata overhead should be checked against the exact cap. Tests were read but not run.
+- RustChunk relevance: High for a mobile client needing crash/OOM/thermal/GPU diagnostics without blocking rendering.
+- 1.20.1 implications: Protocol-independent. Replace Starling identifiers/Android exit integration and define RustChunk privacy, retention, export contents and consent.
+- Decision: Adaptable diagnostics architecture; redaction, durability and Android exit collection need security/privacy review.
+- Dependencies / cross-references: serde_json, zip, logging, crash metadata, performance records, tombstone summarizer, Android exit reports and share provider.
+- Follow-up checks: Fuzz redaction; test symlinks, duplicate names, malformed JSONL, concurrent writers and archive limits; decide on fsync; document exactly what leaves the device.
+- RustChunk implementation mapping: Candidate for separate diagnostics subsystem called by startup, renderer, memory monitor and Android recovery; not Minecraft protocol or gameplay.
+- Evidence required before adoption: Redaction tests, interrupted-write tests, bounded-memory log-flood tests and Android crash/low-memory integration tests; inspect exports before sharing.
+- Completion state: Complete source review; tests were read but not run; no export or Android crash test was performed.
+
+### 124. `crates/horizon-client-render/src/chunk_map.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 484bd96756d5d21493e879a10abd2146c793d5b4.
+- Size: 386 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–386, complete; no gaps between ranges.
+- Purpose: Resident chunk-column membership map with version tokens and a bounded change journal for consumers caching loaded chunk keys.
+- Implementation / logic: Stores chunk coordinates to Arc<Chunk>, tracks fresh columns and uses an AtomicU64 revision source. Insert/remove update membership revision only when membership changes; replacing payload under an existing key does not. A 256-entry VecDeque retains recent Added/Removed deltas. deltas_since returns changes only when the revision belongs to the map and remains in the retained window; otherwise consumers rebuild. clear records Reset; fresh-key helpers track chunks awaiting entity placement. It implements LightWorld through resident chunks. Tests cover interleaved maps, expired history, reset and fresh-key behavior.
+- Findings: Separates membership changes from payload/light updates and avoids repeated full key scans. The bounded journal falls back to rebuild when history is incomplete. Revision wrap is not explicitly guarded. Fresh-key iteration follows fast-hash order and is not persistent/deterministic across runs.
+- RustChunk relevance: High for thousands of loaded chunks at long render distances; deltas can reduce per-tick work for rendering, streaming and lighting.
+- 1.20.1 implications: Structure is version-independent, but membership should be dimension/level-scoped and follow packet load/unload, dimension transition and reset, not in-place block edits.
+- Decision: Adaptable as resident chunk membership bookkeeping; revision lifetime, reset semantics and ordering assumptions need tests.
+- Dependencies / cross-references: Chunk, fast hash map/set, Arc, LightWorld, streaming, mesh workers and entity placement.
+- Follow-up checks: Trace delta consumers; test revision wrap or use map-local generation tokens; test dimension reset/load-unload races; compare journal replay with full snapshots under bursts.
+- RustChunk implementation mapping: Candidate for world/chunk_store membership bookkeeping and notifications to meshing/streaming workers; not packet decoding or persisted identity.
+- Evidence required before adoption: Property tests against full snapshots, stress beyond 256 changes, dimension/reset tests and benchmarks with thousands of chunks.
+- Completion state: Complete source review; tests were read but not run; no compile, concurrency stress or render-distance benchmark was performed.
+
+### 125. `crates/horizon-client-render/src/mesher.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: a5aff352590f344ef169db790386b7256e6ece4f.
+- Size: 2,028 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–2,028 in consecutive ranges 1–350, 351–700, 701–1,050, 1,051–1,200, 1,201–1,400, 1,401–1,550, 1,551–1,750 and 1,751–2,028, complete; no gaps between ranges.
+- Purpose: Main block-section mesher converting resident chunk states, baked models, biome tints and light into GPU terrain geometry.
+- Implementation / logic: Defines compact vertex layouts (fixed-point UVs, atlas layer, light and packed color/HDR/fluid flags), SectionMesh buffers/bounds and per-state MeshTables. MeshTables derive state facts from registry/model/render assets: solidity, permeability, shade/emission, tints, block entities, fluids, face occlusion and animated layers. Padded loads a section plus two-block borders from a 3x3 chunk neighborhood; MeshScratch reuses per-worker buffers. Meshing performs hidden-cell/visibility flood fills, gathers block-entity/light references, tessellates fluids, loads baked models, applies offsets and neighbor culling, optional leaf culling and AO, samples biome colors, applies connected textures/overlays, splits compact-CTM faces and writes solid/translucent vertices.
+- Findings: Highly version/asset-coupled renderer. Registry IDs directly index MeshTables, so mismatched facts can produce wrong states. Padded borders/missing-neighbor behavior affect AO/fluid seams, requiring neighbor mesh invalidation on chunk arrival/unload. Mesh vertex buffers can grow substantially even if worker scratch is bounded. Custom HDR/material flags in vertex alpha are Horizon shader conventions, not vanilla semantics. Tests cover UV packing, visibility, tint, leaves, fluids and geometry; not run.
+- RustChunk relevance: Critical. Meshing controls chunk correctness and CPU/RAM use at long render distances. Border sampling, scratch reuse, compact vertices, visibility flood fill and separate solid/translucent buffers are valuable leads.
+- 1.20.1 implications: Rebuild state facts from 1.20.1 block definitions, model JSON, render shapes, light, biome colors, fluids and assets. Verify dimension section ranges, AO/culling, offsets and fluid geometry. Exclude 26.3 names, HDR, Fusion and OptiFine integrations from vanilla baseline unless deliberately added as optional support.
+- Decision: Essential rendering subsystem concept; reimplement against 1.20.1 model/registry/biome/light/shader data rather than copy as-is.
+- Dependencies / cross-references: Chunk/Section/chunk_map; BlockFacts/MeshTables; baked model catalog; biome zoom; FaceVisibility; fluid/leaf culling; lighting.rs; connected textures; wgpu terrain shaders.
+- Follow-up checks: Build minimal 1.20.1 cube/slab/stair/fluid mesher; golden vertex/image captures; test neighbor arrival/unload and border seams; compare visibility flood fill; profile allocations/mesh size on Android.
+- RustChunk implementation mapping: Candidate for render/chunk_mesher after chunk decoding, registry and model baking; emits GPU geometry, not packet decoding or chunk persistence.
+- Evidence required before adoption: 1.20.1 golden fixtures for blocks/models/fluids, pixel/vertex parity, neighbor tests, malformed-resource handling and Android CPU/RAM/GPU benchmarks.
+- Completion state: Complete source review; tests were inspected but not run; no compile, shader build, visual comparison or GPU execution was performed.
+
+### 126. `crates/horizon-client-render/src/mesher/lighting.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 84677087b5f715bb67274480ec6db061749cabfa.
+- Size: 507 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–507, complete; no gaps between ranges.
+- Purpose: Per-vertex block/sky light, directional face shade and ambient-occlusion calculations for baked model quads, including partial faces.
+- Implementation / logic: Packs block/sky values into light coordinates; handles emissive blocks, per-quad emission, max/smooth blending, cardinal face shade, gray/scale operations and Java-compatible integer narrowing. An adjacency table defines corner sampling for six faces. Quad geometry is classified as partial/cubic; flat lighting samples the block or neighbor; AO samples corners/diagonals/permeable states and weights partial faces. Tests cover sample fallback, blending, float-floor parity, color math, emission and face sampling.
+- Findings: Small arithmetic/remapping changes can create visible seams. gray contains a platform-specific x86-64 floor workaround and needs ARM64 validation. weighted_blend intentionally narrows/masks values; clamping would alter parity. AO requires padded block/light neighbors and correct state facts. Tests were read but not run.
+- RustChunk relevance: Critical subcomponent affecting smooth light, AO, partial models and mobile visual quality.
+- 1.20.1 implications: Verify exact 1.20.1 BlockModelLighter, ModelBlockRenderer, LightCoordsUtil and Mth arithmetic. 26.3 model facts and shader packing are not presumed identical.
+- Decision: Highly adaptable as algorithm reference; constants, state facts, float narrowing and shader packing need 1.20.1 parity tests and ARM64 validation.
+- Dependencies / cross-references: mesher Info/Padded; baked ModelQuad geometry; block/sky light; emission/permeability/solid/shade properties; terrain vertex and shader lightmap.
+- Follow-up checks: Compare helpers with 1.20.1 source; golden AO vectors for six faces/partial shapes; test negative geometry, emissive blocks and missing-neighbor borders.
+- RustChunk implementation mapping: Candidate for render/lighting helpers called by chunk mesher; keep GPU packing distinct from stored/network light representation.
+- Evidence required before adoption: 1.20.1 golden vectors for flat/AO/light/emission and visual parity on Android ARM64; verify CPU output against shader decoding.
+- Completion state: Complete source review; tests were read but not run; no oracle, ARM64 math or shader test was performed.
+
+### 127. `crates/horizon-client-render/src/world.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 3bd8f012e2597e6be18d980e11ee894f62ee7fc2.
+- Size: 634 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–634, complete; no gaps between ranges.
+- Purpose: Resident client-world state joining chunk storage with remesh/relight queues, block entities, weather, height queries and gameplay bookkeeping.
+- Implementation / logic: DirtySections stores section bit masks by column. World owns dimension shape, ChunkMap, random state, revision, air ID, dirty geometry/light, light edits, loaded chunks/entities, modified columns, block-entity tickers, POIs, clocks/weather and optional network/path logs. set uses Arc copy-on-write; on change it updates block-entity/watch/path/network logs, marks affected sections in the 3x3x3 AO neighborhood and queues incremental light edits or marks nearby columns for relighting. Queries provide heightmaps, block/light reads, palette-assisted may_hold, tickers and saved lock-code retention.
+- Findings: More than a passive chunk store: it combines renderer state with some simulation bookkeeping. Dirty propagation is optimized, but wrong dimension min_y/section/border math can leave stale mesh/light. Attachments, watched writes and mod-specific fields are not needed in minimal vanilla. Tests cover dirty-neighborhood marking and may_hold; not run.
+- RustChunk relevance: Very high for coordinating loaded chunks, renderer invalidation, light recomputation and gameplay notifications without rescanning every tick.
+- 1.20.1 implications: Preserve storage/render/gameplay separation, but derive dimension layouts, heightmaps, block entities, POIs and weather from 1.20.1. Keep Horizon attachment/native-mod tracking out of vanilla base.
+- Decision: Adaptable as resident-world orchestration; ownership and invalidation should be simplified and verified against 1.20.1.
+- Dependencies / cross-references: Chunk/ColumnLayout/LevelShape; ChunkMap/SectionMask; BlockStateId/NBT; light engine/streaming; block-entity manager; biome/POI/heightmaps; game loop.
+- Follow-up checks: Draw state-ownership graph; test block writes at chunk/section corners and min/max Y; compare dirty propagation to brute-force 3x3x3; compare incremental/full relight; test unload while jobs run.
+- RustChunk implementation mapping: Candidate for world/resident_world coordinating loaded chunks, dirty mesh sections, light updates and reads; packets/interactions call explicit methods.
+- Evidence required before adoption: 1.20.1 Overworld/Nether/End tests, property-based dirty-region tests, incremental/full-light equality and multi-thread load/unload tests plus Android profiles.
+- Completion state: Complete source review; embedded tests were read but not run; no world integration or relight execution was performed.
+
+### 128. `crates/horizon-client-render/src/chunk/block_entity.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 9f50876e831d035f10430918a04b9c0ad94ae7af.
+- Size: 755 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–755, complete; no gaps between ranges.
+- Purpose: Plain client-side data models for block entities stored in chunks; behavior lives in separate feature systems.
+- Implementation / logic: Defines typed models for chest, furnace, brewing, signs, jukebox, beacon, lectern, sculk, banners, crafter, spawner, beehive, command block, campfire, skull, end gateway and later entities. Uses ItemStack/NBT/Text/UUID types from shared crates. ModBlockEntity stores ID, saved NBT, item slots and menu data; its revision changes on mutable dereference, clones get new identities, and update-tag merges replace only supplied changed keys. Additional models describe mod containers, fluid tanks and energy buffers. Embedded tests check revision changes and idempotent update-tag merging.
+- Findings: Plain-data/behavior separation is sound, but the enum mixes 1.20-era types with later trial-spawner/vault/shelf/creaking-heart and native-mod entities. It is not a clean 1.20.1 type list. Revision increments on mutable dereference even if no change; a retained mutable reference can be changed repeatedly without another revision. merge_update_tag is partial merge, not whole-compound replacement. Tests cover only mod entity revisions; not run.
+- RustChunk relevance: High for separating block-entity payloads from rendering/behavior. Typed models can optimize common entities while preserving unknown NBT.
+- 1.20.1 implications: Derive exact entity types/fields from 1.20.1 save and update-packet behavior. Keep newer/unknown entities opaque only under an explicit preservation policy; keep Forge/modded data out of vanilla base.
+- Decision: Adaptable as typed-data architecture; enum/extension types must be rebuilt for 1.20.1 and revision semantics made safer.
+- Dependencies / cross-references: client-core Text/Who; items ItemStack/BannerLayer; horizon-world NBT/SculkSpreader; block entity manager/tickers; renderers/gameplay; native mod API.
+- Follow-up checks: Enumerate 1.20.1 block entity types/packet fields; inspect save/load and unknown-tag preservation; consider immutable snapshots or mutation guards; verify signs/inventories/update tags.
+- RustChunk implementation mapping: Candidate for world/block_entities typed data plus separate renderer lookup; ticking/interaction belongs to gameplay.
+- Evidence required before adoption: 1.20.1 fixtures for each supported type, NBT round trips, update-tag merge/replace, unknown-type retention and mutation revision tests.
+- Completion state: Complete source review; embedded tests were read but not run; no serializer, renderer or gameplay integration was built.
+
+### 129. `crates/horizon-world/src/compression.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: d1cd863c212a9e4b29c313f79f8c109fc9ce88bc.
+- Size: 363 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–363 in consecutive ranges 1–200 and 201–363, complete; no gaps between ranges.
+- Purpose: Compression/decompression codecs used by Anvil region records, including lz4-java block framing.
+- Implementation / logic: Maps compression IDs 1–4 to Gzip, Zlib, None and Lz4. Decode accepts a maximum output size and can append to an existing Vec. Gzip uses MultiGzDecoder, Zlib uses streaming Decompress and detects no-progress/truncated streams, and None checks the size limit. LZ4 expects LZ4Block framing (not LZ4 frame), validates methods/lengths, checks xxHash32 with Java seed/mask and implements Java fast block token/end behavior. Encoder emits 65,536-byte raw/compressed blocks and a terminator. Tests compare Java-LZ4 cases and cover round trips, limits and corruption.
+- Findings: Output budgets and checksums are valuable for untrusted world files. LZ4 framing is lz4-java block stream, not generic LZ4 frame. Zlib returns at StreamEnd without visibly requiring all input consumed; Gzip accepts concatenated members; LZ4 returns at a terminator without visibly rejecting following bytes. The presence of ID 4 here does not prove vanilla 1.20.1 accepts it. Tests read but not run.
+- RustChunk relevance: High for region files and protection from decompression bombs/corrupt data.
+- 1.20.1 implications: Confirm exact 1.20.1 Anvil compression IDs/header/trailing-byte behavior. Implement vanilla-required codecs first; optional modded compression must be explicit. Coordinate decompression budgets with NBT limits.
+- Decision: Adaptable as bounded compression layer; LZ4 variant and codec-ID table require version verification.
+- Dependencies / cross-references: flate2; lz4_flex; xxhash-rust; RegionFile/ChunkRecord; NBT limits; Anvil region header.
+- Follow-up checks: Compare IDs with 1.20.1 RegionFile; collect real fixtures; test truncated header/payload, checksum mismatch, trailing garbage, concatenated gzip and exact-limit boundaries.
+- RustChunk implementation mapping: Candidate for world/region_compression below chunk NBT; separate from network packet compression.
+- Evidence required before adoption: Byte-for-byte 1.20.1 region fixtures, decompression-bomb/fuzz tests and Android ARM64 benchmarks.
+- Completion state: Complete source review; embedded tests were read but not run; no compression corpus, fuzzing, build or Android benchmark was performed.
+
+### 130. `crates/horizon-world/src/datafix/mod.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: a3dfa02f5e19ad1368fa8b6b448c0dd19dc45a8c.
+- Size: 386 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–386 in consecutive ranges 1–200 and 201–386, complete; no gaps between ranges.
+- Purpose: DataFixerUpper orchestration for migrating older world/entity/player/item data into current Starling/Horizon 26.3 schema.
+- Implementation / logic: Defines schema types and version-keyed fix registry; stores last-read record remainder so unknown fields can survive rewrites; applies read hooks, ordered fixes and write hooks; exposes updates for chunks, entity/POI tags, player, hotbar and saved data. Chunk fixes receive dimension/generator context. Item/name hooks normalize historical forms. CURRENT comes from Horizon DATA_VERSION; OLDEST_SUPPORTED is -1.
+- Findings: Architecture is useful, but each fix/key/schema targets 26.3. A read hook converts older ItemStacks to Data Components at a later key, which must never run in a live 1.20.1 client. update_chunk_to attaches temporary context and removes it after normal return; panic cleanup is not guaranteed. Equal-key fix order matters. OLDEST_SUPPORTED=-1 is not proof every old world is recoverable.
+- RustChunk relevance: Useful only if older-save import/upgrade is required; not needed for connecting or loading a current 1.20.1 world.
+- 1.20.1 implications: 1.20.1 is the target schema, not 26.3. Any migration must implement the chain to DataVersion 3465 with correct schemas; never apply 26.3 component/registry transformations to 1.20.1 saves.
+- Decision: Reference for migration architecture only; current 26.3 fix pipeline is unsuitable for base and must be independently versioned if legacy imports are required.
+- Dependencies / cross-references: schema; dynamic NBT helpers; block_state_data/chunk_flatten/chunk_leaves; fix modules; items; files; world_upgrader; NBT Tag; DATA_VERSION.
+- Follow-up checks: Define import version matrix; obtain exact 1.20.1 DFU chain; test unknown-field preservation/idempotence and panic/I/O recovery; separate options migrations from world data.
+- RustChunk implementation mapping: Not needed in live client path; future offline world/data migration tool only.
+- Evidence required before adoption: Real source/target fixtures, exact 1.20.1 DFU chain evidence, unknown-tag round trips and interrupted-migration recovery.
+- Completion state: Complete source review; no migration execution or fault-injection test was performed.
+
+### 131. `crates/horizon-world/src/datafix/block_state_data.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 9d5f578abeee550ea0d95876015760a4ad41bd5e.
+- Size: 200 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–200, complete; no gaps between ranges.
+- Purpose: Generated lookup table converting pre-1.13 legacy block IDs/data into flattened block-state identities during DataFixer migrations.
+- Implementation / logic: Models name plus sorted properties and NBT tags. A OnceLock loads block_state_data.txt, recording state instances, a 4096-entry legacy ID/data map, defaults and lookups from historical name/property forms to flattened states. Helpers expose legacy tag/name/ID conversions.
+- Findings: Historical migration data, not the 1.20.1 runtime registry. ID range, order and fallbacks are specific to pre-1.13 conversion. include_str creates a compile-time dependency on generated data. Invalid/out-of-range IDs have different fallback behavior by helper. No local tests are defined.
+- RustChunk relevance: Low for first milestone; relevant only if importing very old worlds.
+- 1.20.1 implications: 1.20.1 already uses flattened states. Do not use this table for runtime registry IDs, packets, palettes or meshing.
+- Decision: Unnecessary for 1.20.1 base; retain only as historical migration reference if pre-1.13 import becomes a requirement.
+- Dependencies / cross-references: block_state_data.txt; generator script; chunk_flatten.rs; DataFixer schema; NBT; legacy 1.12 arrays.
+- Follow-up checks: Decide if pre-1.13 import is in scope; review table provenance/license and generator; if adopted test defaults and invalid-ID fallbacks.
+- RustChunk implementation mapping: No live-client use; possible dependency of an offline legacy-save converter.
+- Evidence required before adoption: Explicit pre-1.13 import requirement, verified data provenance/license and representative migration fixtures.
+- Completion state: Complete source review; no generator or migration test was run.
+
+### 132. `crates/horizon-world/src/datafix/chunk_flatten.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 671fc9f73231ce256a2ce49c623605666d1932e2.
+- Size: 772 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–772 in consecutive ranges 1–250, 251–500 and 501–772, complete; no gaps between ranges.
+- Purpose: Historical ChunkPalettedStorageFix upgrading 1.12-era chunk arrays into flattened palettes and migrating block-entity state into block states.
+- Implementation / logic: Builds legacy state tables from block_state_data, adds lookup maps for doors, beds, banners, skulls, pots and note blocks, reads old Blocks bytes plus Data/Add nibbles, reconstructs numeric ID/data, applies neighbor/virtual-block fixes, converts each 4096-cell section to a palette and packed BlockStates long array, removes legacy arrays and writes UpgradeData.
+- Findings: Specialized ancient-world migration, not a current chunk decoder. It assumes historical section range/count and legacy IDs; mappings/order depend on generated 1.12/1.13 data. Not a 1.20.1 palette parser. No test module is present.
+- RustChunk relevance: Very low for first milestone; migration case study only.
+- 1.20.1 implications: 1.20.1 chunks are already palette-based with dimension-dependent vertical sections; legacy arrays do not describe current packets or saves.
+- Decision: Unnecessary for 1.20.1 runtime; keep only if pre-1.13 world import becomes explicit.
+- Dependencies / cross-references: block_state_data.rs; generated table; DataFixer schema/fixes; NBT helpers; legacy 1.12 arrays and TileEntities.
+- Follow-up checks: Decide legacy import matrix; if required compare with vanilla ChunkPalettedStorageFix and test special mappings/output.
+- RustChunk implementation mapping: No role in chunk decode/store/renderer; standalone legacy-save import only.
+- Evidence required before adoption: Agreed legacy-save matrix, oracle migration fixtures, special mapping tests and safe new-copy output.
+- Completion state: Complete source review; no migration test/build/conversion was run.
+
+### 133. `crates/horizon-world/src/datafix/world_upgrader.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 45e4545fbbd9d252c0d116842a4aa8544399a092.
+- Size: 598 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–598 in consecutive ranges 1–300 and 301–598, complete; no gaps between ranges.
+- Purpose: Background Optimize World worker scanning region/entity/POI files across dimensions and optionally rewriting chunks/caches.
+- Implementation / logic: Enumerates vanilla/custom dimensions, locates region files and chunk positions; processes entity, POI and chunk data; reports progress/cancellation; applies DataFixer and tag modifiers; rewrites changed records using Zlib. Recreate mode writes to sibling new_ folders and replaces originals only after successful conversion. Optional cache erasure removes heightmaps, light-on flag and section light arrays. Worker thread catches panics and updates status.
+- Findings: Recreate mode avoids replacing originals until region conversion succeeds, but remove/rename failures need recovery tests. Non-recreate mode can rewrite earlier chunks before a later failure. Thread spawn errors are discarded with .ok(), potentially leaving progress with no worker. Unreadable regions are logged/skipped. Fixer/current version is 26.3-specific.
+- RustChunk relevance: Optional future world-maintenance tool, not needed for current-world loading or multiplayer.
+- 1.20.1 implications: Never run this 26.3 upgrader on RustChunk 1.20.1 worlds. Any 1.20.1 upgrader needs its own source/target matrix. First milestone should load/save same-version data without forward conversion.
+- Decision: Unnecessary for first 1.20.1 milestone; transactional background conversion is a future-tool pattern only.
+- Dependencies / cross-references: datafix/mod.rs/files.rs/progress.rs; RegionFile/ChunkRecord; compression/NBT; dimension/generator metadata; Optimize World UI.
+- Follow-up checks: Review world_upgrader_tests.rs/files.rs; fault-inject temp write/sync/remove/rename; report spawn failure; define cancellation/backup/recovery; only add if older-save import is in scope.
+- RustChunk implementation mapping: No live world-loop role; future world/tools/optimize_world job only.
+- Evidence required before adoption: 1.20.1 save fixtures, crash-safe region replacement tests, cancellation/thread-start failure tests and a user-visible recovery policy.
+- Completion state: Complete source review; referenced tests were not run; no world upgrade or filesystem fault injection was performed.
+
+### 134. `crates/horizon-world/src/datafix/tests.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 99d813dd216dac35908374ba1696fc47f7569a0f.
+- Size: 81 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–81, complete; no gaps between ranges.
+- Purpose: Representative DataFixer tests for no-op current data and selected migrations from 1.20-era saves into newer 26.3 schema.
+- Implementation / logic: Parses SNBT and checks current chunk data unchanged, 1.20 ItemStacks converted into Data Components, legacy Level fields moved into newer difficulty/game-rule/spawn structures, and historical block-state tags rewritten. The ItemStack fixture uses DataVersion 3465.
+- Findings: Tests document migrations to 26.3, not correctness of the live 1.20.1 serializer. Component output is unsuitable for 1.20.1 runtime. The limited cases do not prove full DFU parity. Tests were read but not run.
+- RustChunk relevance: Useful test-design pattern: compact SNBT fixtures and assertions over nested fields make migrations auditable.
+- 1.20.1 implications: Preserve 1.20.1 ItemStack/Level structures. Only an optional migration tool should apply a chain whose target is 1.20.1.
+- Decision: Reference-only for migration-test structure; expected 26.3 output is not a 1.20.1 oracle.
+- Dependencies / cross-references: datafix/mod.rs; dynamic helpers; SNBT parser; DataVersion 3465 fixture; ItemStack/Level/block-state fixes.
+- Follow-up checks: Create no-op round-trip fixtures from genuine 1.20.1 worlds; compare migration outputs with target-version vanilla DFU.
+- RustChunk implementation mapping: Methodology for future world/datafix_1_20_1 tests only; not live runtime conversion.
+- Evidence required before adoption: Canonical 1.20.1 fixture files with hashes, no-op round-trip tests and target-version migration golden outputs.
+- Completion state: Complete test-source review; tests were read but not run; no migration oracle was executed.
+
+### 135. `crates/horizon-world/examples/probe/datafix_world.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: f2e119d42e9d911e8993ddf1fd0162a766c412a2.
+- Size: 55 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–55, complete; no gaps between ranges.
+- Purpose: CLI parity probe copying a world folder and running DataFixer conversion on the copy.
+- Implementation / logic: Accepts input world, output world and optional target DataVersion. Removes an existing output directory recursively, copies input while skipping session.lock, then calls upgrade_band for a target or upgrade_world for current conversion. Prints resulting version or failure/usage code.
+- Findings: Test tool, not runtime loader. Removing an existing output path is unsafe for user-facing defaults; caller must guarantee it is disposable and distinct from source. Copy is recursive but not an atomic directory transaction and has no backup recovery. Default target is 26.3.
+- RustChunk relevance: Low shipped-client value; useful as offline migration regression harness.
+- 1.20.1 implications: Do not run against 1.20.1 saves unless target/fixer chain are specifically 1.20.1. Normal opening should not rewrite data to 26.3.
+- Decision: Unnecessary in production; adaptable as development-only runner with safer destination safeguards.
+- Dependencies / cross-references: horizon-world datafix/files; upgrade_band/upgrade_world; NBT; parity scripts; world fixtures.
+- Follow-up checks: Inspect upgrade_band; reject source/destination equality or ancestry; use temp output and safe publish; preserve fixture copies.
+- RustChunk implementation mapping: Possible host-side world_migration_probe only; never auto-run on world open.
+- Evidence required before adoption: Source overwrite protection tests, repeatability on copied 1.20.1 fixtures and semantic oracle comparison.
+- Completion state: Complete source review; executable was not run and no world folder was copied or changed.
+
+### 136. `crates/horizon-client/examples/probe/dispatch.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 8754e944d96be5f133bfcd522cb715c79e3a562c.
+- Size: 50 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–50, complete; no gaps between ranges.
+- Purpose: Shared dispatcher and argument adapter for the single client parity-probe binary.
+- Implementation / logic: A probes macro generates name-to-module dispatch and main; invokes the chosen probe, converts Termination to ExitCode and strips the probe name so each module sees an individual-example interface. Provides String and OsString iterators.
+- Findings: Test harness only. Argument removal assumes probe name is argv index 1 and invocation goes through the dispatcher. Single-binary compilation may reduce repeated linking, but actual tests/expected values live in child probes. No probe was run.
+- RustChunk relevance: Useful if many integration/parity examples make separate client binaries expensive to link.
+- 1.20.1 implications: Dispatcher is reusable, but probe logic and expected results must target 1.20.1.
+- Decision: Adaptable as development-only test harness utility; no production dependency.
+- Dependencies / cross-references: client probe main.rs; probe modules; ExitCode/Termination; parity scripts/oracle harness.
+- Follow-up checks: Verify Cargo registration and APK exclusion; test empty/unknown names and OsString paths; version-label fixtures.
+- RustChunk implementation mapping: Candidate for tools/client_probe in workspace, not Android client binary.
+- Evidence required before adoption: CI probe on 1.20.1 fixtures and build-time comparison showing a single-binary benefit.
+- Completion state: Complete source review; no probe build, invocation or parity run was performed.
+
+### 137. `crates/horizon-world/examples/probe/dispatch.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 80b875eef798f920c989730c36bb382c30321d8f.
+- Size: 41 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–41, complete; no gaps between ranges.
+- Purpose: Shared dispatcher for the horizon-world parity-probe binary.
+- Implementation / logic: A probes macro generates module dispatch and main, strips probe name from arguments, and prints usage/exit code 2 for unknown names. Exposes String arguments only, unlike client dispatcher which also exposes OsString.
+- Findings: Harness plumbing only; it does not prove world-generation, region or NBT tests passed. String-only paths may be insufficient for non-UTF8 filesystem names.
+- RustChunk relevance: Useful if many world/NBT/chunk fixtures need one compiled probe.
+- 1.20.1 implications: Dispatcher is version-independent, but probes/fixtures must target 1.20.1 and stay out of release APK.
+- Decision: Adaptable as development/test harness only; not shipping runtime.
+- Dependencies / cross-references: world probe main/modules; Cargo example; CI/parity scripts.
+- Follow-up checks: Test no/unknown args, non-UTF8 paths, exit-code propagation and release-target exclusion.
+- RustChunk implementation mapping: Candidate for host-side world_probe Cargo example; never game-loop invoked.
+- Evidence required before adoption: CI for representative 1.20.1 NBT/chunk/worldgen probes and proof it is not linked into Android release.
+- Completion state: Complete source review; no probe executable or tests were run.
+
+### 138. `crates/horizon-world/examples/probe/chunk_dump.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 11725bc709ed1d79d613e66c575c6be593e3e9a8.
+- Size: 506 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–506 in consecutive ranges 1–250 and 251–506, complete; no gaps between ranges.
+- Purpose: Host-side whole-chunk world-generation parity dumper for blocks, quart biomes, block entities, scheduled ticks and postprocessing metadata.
+- Implementation / logic: Loads registry from facts.json, canonicalizes NBT, loads folder datapacks, optionally synthesizes old chunks for blending, then creates an OverworldGenerator from seed/dimension. Environment options select decoration order, terrain/structures/full phases, structure scans/pieces, saved starts, datapacks, old chunks and isolated decoration. It generates target rectangle plus margin/neighborhood, decorates in controlled order and emits stable dumps of state IDs, quart biomes, block rows, block-entity NBT, block/fluid ticks and postprocessing marks.
+- Findings: Strong oracle method because it compares more than screenshots. This is not live renderer or network chunk decoder. registry() leaks a Registry Box for process lifetime; acceptable for short probe but not library code. Canonical output casts float/double values to integers, potentially losing fractions. Datapack/saved-start behavior is probe-specific. No probe was run.
+- RustChunk relevance: High only if local/integrated world generation is implemented; multiplayer-first chunk decode/render is higher priority.
+- 1.20.1 implications: Retarget resources, registries, worldgen, RNG, dimensions and expected output to 1.20.1; do not reuse 26.3 facts/dumps. Test local generation separately from server-delivered chunks.
+- Decision: Adaptable as host-side worldgen parity tool; current generator/resources/fixtures are 26.3-specific.
+- Dependencies / cross-references: horizon-world generator; horizon-core position/random; BlockRegistry; facts.json/worldgen resources; BlendingData; datapack overrides; ProtoChunk; oracle scripts.
+- Follow-up checks: Replace lossy float/double canonicalization; test resource pinning/order-sensitive decoration; create 1.20.1 seed/dimension fixtures; separate generated-chunk from network chunk tests.
+- RustChunk implementation mapping: Development-only worldgen_probe; no first-milestone multiplayer role.
+- Evidence required before adoption: Matching 1.20.1 dumps across seeds/dimensions, decoration-order fixtures, block-entity/tick parity and CI with pinned resources.
+- Completion state: Complete source review; no generator execution, oracle comparison or benchmark was performed.
+
+### 139. `crates/horizon-core/src/no_ai.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: 18b3de0f2a11da736931e93c9a327490a68b20b9.
+- Size: 98 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–98, complete; no gaps between ranges.
+- Purpose: Persistent opt-out switch disabling Horizon AI/agent-control surfaces across game and launcher.
+- Implementation / logic: Reads noAi:true from horizon-extras.txt beside options.txt; missing file means off. with() rewrites only this key while retaining other lines. set() writes when enabling, does not create an absent file when disabling and propagates write errors. check() returns a fixed refusal when enabled. Tests cover parsing, line preservation and default-off behavior.
+- Findings: Product/agent safety control only, unrelated to Minecraft gameplay/protocol. Simple line parser and direct fs::write rather than atomic replacement; interruption can truncate settings. is_on treats unreadable/missing data as off, so read failure is not fail-closed. Tests read but not run.
+- RustChunk relevance: Low for initial client; relevant only if RustChunk later has agent-control or remote automation.
+- 1.20.1 implications: No effect on vanilla compatibility, chunk rendering or Forge. Do not import merely because Starling has it.
+- Decision: Unnecessary for vanilla 1.20.1 base; retain as reference only if developer/agent control is introduced.
+- Dependencies / cross-references: horizon-extras.txt; launcher settings; horizon-ctl/MCP; agent-control docs.
+- Follow-up checks: No port now; future automation needs capability scopes, authentication, per-action confirmation and atomic settings.
+- RustChunk implementation mapping: No shipping game module; possible future devtools preference only.
+- Evidence required before adoption: Explicit agent-control requirement, security review, cross-process consistency and fail-closed tests.
+- Completion state: Complete source review; tests read but not run; no settings or automation interface were changed.
+
+### 140. `crates/horizon-core/src/random/worldgen.rs`
+- Source repository/ref: starling-client/starling / starling.
+- Source SHA: aa16ab2492e194ef9b2d0dd0c76b0a199a1c25f8.
+- Size: 204 lines; complete source file fetched and reviewed.
+- Coverage: lines 1–204, complete; no gaps between ranges.
+- Purpose: Adapts legacy and Xoroshiro random sources to Minecraft world-generation bit-sampling and call-count semantics.
+- Implementation / logic: A sealed WorldgenSource exposes version-specific bit extraction for LegacyRandom and XoroshiroRandom. WorldgenRandom supports wrapped Java-style nextBits/nextInt(bound)/nextLong/nextFloat/nextDouble/boolean/Gaussian with call counting, or plain mode delegating to the source for fork/positional streams. It implements decoration, feature, large-feature and salted-large-feature seed formulas; a positional adapter wraps streams and slime_chunk_random handles legacy slime seed mixing.
+- Findings: Deterministic world generation depends on exact RNG, call sequence, bit extraction, overflow, fork semantics and Gaussian cache. set_seed does not clear the adapter Gaussian cache (documented as matching native behavior); plain mode delegates methods rather than applying wrapper behavior, so wrong wrapping changes output. No local test module; parity tests live elsewhere and were not run.
+- RustChunk relevance: Critical only if RustChunk generates terrain/features locally. Multiplayer-first client does not need it to receive/render server chunks.
+- 1.20.1 implications: Verify exact 1.20.1 LegacyRandom/Xoroshiro selection, seed formulas, positional forks, call counts and Gaussian cache. Do not assume 26.3 call sites/constants apply.
+- Decision: Adaptable RNG architecture; exact source selection and worldgen semantics need 1.20.1 validation/versioning.
+- Dependencies / cross-references: horizon-core random LegacyRandom/XoroshiroRandom/PositionalRandom; BlockPos; biome/noise/carver/structure/feature/decorate; chunk_dump probe.
+- Follow-up checks: Trace RNG use in 1.20.1 worldgen; add known-answer tests for bounds, forks, negative coordinates, Gaussian cache and call counts; compare chunk dumps across dimensions/seeds.
+- RustChunk implementation mapping: Not needed for remote multiplayer-only first milestone; candidate for worldgen/random if integrated/local generation is added later.
+- Evidence required before adoption: 1.20.1 oracle vectors for each RNG entry point and matching biome/terrain/structure/decoration output over positive/negative coordinates and multiple seeds.
+- Completion state: Complete source review; no RNG vectors, worldgen oracle, benchmark or build was executed.
+
+## Batch checkpoint — entries 121–140 — 2026-11-18
+
+- Completed full source reviews for entries 121–140. All 20 source paths and blob SHAs were obtained from the pinned Starling source snapshot.
+- Long files were read in consecutive ranges without gaps: Android bridge (1,386), diagnostics (606), mesher (2,028), world state (634), block-entity data (755), DataFixer orchestration (386), legacy chunk flattening (772), world upgrader (598) and chunk dump probe (506).
+- Every entry includes an explicit RustChunk implementation mapping and evidence-required-before-adoption field, separating production client needs from optional migration tools, product tooling and test-only probes.
+- Main architectural leads: Android platform bridge, bounded/asynchronous diagnostics, chunk membership deltas, worker-oriented section meshing/lighting, resident-world invalidation, typed block-entity data and bounded region compression.
+- Explicit exclusions from vanilla 1.20.1 first milestone: Starling 26.3 DataFixer output, pre-1.13 block-state flattening, Optimize World migration UI, Starling no-AI/agent switch, Horizon native-mod block entities and Starling product-specific native-mod loading.
+- Tests present in source were read but not executed. No Cargo build, RustChunk code change, Android APK/device test, shader/render run, migration, worldgen probe or live Minecraft connection was performed.
