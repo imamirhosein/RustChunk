@@ -1043,35 +1043,35 @@
 | 897 | `crates/horizon-client/assets/touch/custom_star_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; star glyph pressed state; 8-bit RGBA, 24×24. |
 | 898 | `crates/horizon-client/assets/touch/debug.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; debug control default state; 8-bit RGBA, 24×24. |
 | 899 | `crates/horizon-client/assets/touch/debug_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; debug control pressed state; 8-bit RGBA, 24×24. |
-| 900 | `crates/horizon-client/assets/touch/dpad_down.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 901 | `crates/horizon-client/assets/touch/dpad_down_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 902 | `crates/horizon-client/assets/touch/dpad_left.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 903 | `crates/horizon-client/assets/touch/dpad_left_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 904 | `crates/horizon-client/assets/touch/dpad_middle.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 905 | `crates/horizon-client/assets/touch/dpad_right.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 906 | `crates/horizon-client/assets/touch/dpad_right_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 907 | `crates/horizon-client/assets/touch/dpad_up.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 908 | `crates/horizon-client/assets/touch/dpad_up_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 909 | `crates/horizon-client/assets/touch/drop.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 910 | `crates/horizon-client/assets/touch/drop_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 911 | `crates/horizon-client/assets/touch/inventory.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 912 | `crates/horizon-client/assets/touch/inventory_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 913 | `crates/horizon-client/assets/touch/jump.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 914 | `crates/horizon-client/assets/touch/jump_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 915 | `crates/horizon-client/assets/touch/offhand.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 916 | `crates/horizon-client/assets/touch/offhand_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 917 | `crates/horizon-client/assets/touch/pause.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 918 | `crates/horizon-client/assets/touch/pause_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 919 | `crates/horizon-client/assets/touch/pick.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 920 | `crates/horizon-client/assets/touch/pick_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 921 | `crates/horizon-client/assets/touch/players.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 922 | `crates/horizon-client/assets/touch/players_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 923 | `crates/horizon-client/assets/touch/sneak.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 924 | `crates/horizon-client/assets/touch/sneak_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 925 | `crates/horizon-client/assets/touch/stick.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 926 | `crates/horizon-client/assets/touch/stick_knob.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 927 | `crates/horizon-client/assets/touch/use.png` | Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied. | PNG binary content not inspected; SHA and byte size recorded only. |
-| 928 | `crates/horizon-client/assets/touch/use_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
+| 900 | `crates/horizon-client/assets/touch/dpad_down.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad down default state; 8-bit RGBA, 24×24. |
+| 901 | `crates/horizon-client/assets/touch/dpad_down_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad down pressed state; 8-bit RGBA, 24×24. |
+| 902 | `crates/horizon-client/assets/touch/dpad_left.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad left default state; 8-bit RGBA, 24×24. |
+| 903 | `crates/horizon-client/assets/touch/dpad_left_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad left pressed state; 8-bit RGBA, 24×24. |
+| 904 | `crates/horizon-client/assets/touch/dpad_middle.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad center default state; 8-bit RGBA, 24×24. |
+| 905 | `crates/horizon-client/assets/touch/dpad_right.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad right default state; 8-bit RGBA, 24×24. |
+| 906 | `crates/horizon-client/assets/touch/dpad_right_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad right pressed state; 8-bit RGBA, 24×24. |
+| 907 | `crates/horizon-client/assets/touch/dpad_up.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad up default state; 8-bit RGBA, 24×24. |
+| 908 | `crates/horizon-client/assets/touch/dpad_up_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; D-pad up pressed state; 8-bit RGBA, 24×24. |
+| 909 | `crates/horizon-client/assets/touch/drop.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; drop-item control default state; 8-bit RGBA, 24×24. |
+| 910 | `crates/horizon-client/assets/touch/drop_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; drop-item control pressed state; 8-bit RGBA, 24×24. |
+| 911 | `crates/horizon-client/assets/touch/inventory.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; inventory control default state; 8-bit RGBA, 24×24. |
+| 912 | `crates/horizon-client/assets/touch/inventory_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; inventory control pressed state; 8-bit RGBA, 24×24. |
+| 913 | `crates/horizon-client/assets/touch/jump.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; jump control default state; 8-bit RGBA, 24×24. |
+| 914 | `crates/horizon-client/assets/touch/jump_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; jump control pressed state; 8-bit RGBA, 24×24. |
+| 915 | `crates/horizon-client/assets/touch/offhand.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; offhand control default state; 8-bit RGBA, 24×24. |
+| 916 | `crates/horizon-client/assets/touch/offhand_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; offhand control pressed state; 8-bit RGBA, 24×24. |
+| 917 | `crates/horizon-client/assets/touch/pause.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; pause control default state; 8-bit RGBA, 24×24. |
+| 918 | `crates/horizon-client/assets/touch/pause_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; pause control pressed state; 8-bit RGBA, 24×24. |
+| 919 | `crates/horizon-client/assets/touch/pick.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; pick control default state; 8-bit RGBA, 24×24. |
+| 920 | `crates/horizon-client/assets/touch/pick_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; pick control pressed state; 8-bit RGBA, 24×24. |
+| 921 | `crates/horizon-client/assets/touch/players.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; players-list control default state; 8-bit RGBA, 24×24. |
+| 922 | `crates/horizon-client/assets/touch/players_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; players-list control pressed state; 8-bit RGBA, 24×24. |
+| 923 | `crates/horizon-client/assets/touch/sneak.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; sneak control default state; 8-bit RGBA, 24×24. |
+| 924 | `crates/horizon-client/assets/touch/sneak_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; sneak control pressed state; 8-bit RGBA, 24×24. |
+| 925 | `crates/horizon-client/assets/touch/stick.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; joystick base default state; 8-bit RGBA, 48×48. |
+| 926 | `crates/horizon-client/assets/touch/stick_knob.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; joystick knob default state; 8-bit RGBA, 24×24. |
+| 927 | `crates/horizon-client/assets/touch/use.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; use-item control default state; 8-bit RGBA, 24×24. |
+| 928 | `crates/horizon-client/assets/touch/use_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; use-item control pressed state; 8-bit RGBA, 24×24. |
 | 929 | `crates/horizon-client/build.rs` | Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied. | Windows branches do not directly solve Android Gradle/NDK packaging. |
 | 930 | `crates/horizon-client/examples/chunk_load_bench.rs` | Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied. | Synthetic fixtures/newer asset version and desktop timing are not Galaxy A22 performance evidence. |
 | 931 | `crates/horizon-client/examples/collision_bench.rs` | Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied. | Synthetic query mix may not represent real movement/world geometry. |
