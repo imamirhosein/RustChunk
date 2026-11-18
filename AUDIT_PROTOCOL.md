@@ -19,6 +19,15 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 - Each file must be inspected completely before moving on. For long files, read consecutive sections of at most 400 lines until the end of that file.
 - If a source file cannot be read completely, record the exact limitation and do not mark it as fully reviewed.
 
+## Ledger file layout
+
+- Entries 1–400: `AUDIT_LEDGER_1_400.md`.
+- Entries 401–600: `AUDIT_LEDGER_401_600.md`.
+- Entries 601–800: `AUDIT_LEDGER_601_800.md`.
+- Entries 801–1000: `AUDIT_LEDGER_801_1000.md`.
+- `AUDIT_INDEX.md` is the navigation/decision summary; keep its ledger links and entry ranges synchronized with every continuation file.
+- Name every future continuation `AUDIT_LEDGER_<first>_<last>.md` using its exact inclusive entry range; do not use an unqualified ledger filename.
+
 ## Ledger and evidence
 
 - Every entry must contain all 15 standard fields:
@@ -47,7 +56,7 @@ Before reporting a batch complete:
 - Verify exactly 200 new sequential entry numbers.
 - Verify no duplicate source paths against every previous entry.
 - Verify all 15 fields are present for every new entry.
-- Append all entries to `AUDIT_LEDGER_601_800.md` (or the next continuation ledger) and the matching rows to `AUDIT_INDEX.md`.
+- Append all entries to the ledger file matching the audited entry range (use the range-specific naming convention above) and the matching rows to `AUDIT_INDEX.md`.
 - Re-read both files and verify numbering, path agreement, missing rows and duplicate rows.
 - Only then report the completed range and stop at the batch boundary.
 

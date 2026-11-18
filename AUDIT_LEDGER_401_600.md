@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`.
 - Target repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
-- Continuation of `AUDIT_LEDGER.md` (entries 1–400); numbering and audit standard are unchanged.
+- Continuation of [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md) (entries 1–400); numbering and audit standard are unchanged.
 
 ### 401. `benchmarks/rust-noise-2026-10-05/scoped-parity.json`
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
@@ -3414,4 +3414,4 @@
 - Mod/server separation: entries 520–542 include Horizon mod authoring, native hooks, server anti-cheat and bot tooling. `.hmod`/`.hnmod` are Horizon formats, not Forge JARs; these functions are deferred or excluded from the vanilla client milestone.
 - Rendering/client-core relevance: entries 543–600 include CPU model/animation/blockstate/item-model code and NBT/text/scoreboard/registry modules. These are useful architectural references, but 26.3 resource registries, components, particles/effects/potions, block entities and save semantics must be rebuilt for 1.20.1.
 - Verification boundary: no upstream tests were rerun; no RustChunk build/APK was made; no server was joined; no Forge mod was loaded; no Galaxy A22 test or performance measurement was performed.
-- Storage: entries 1–400 in `AUDIT_LEDGER.md` remain untouched. This continuation is stored in `AUDIT_LEDGER_401_600.md` and linked from the index because the existing ledger exceeds the content retrieval limit.
+- Storage: entries 1–400 remain in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); this file stores entries 401–600 and is linked from [AUDIT_INDEX.md](AUDIT_INDEX.md).
