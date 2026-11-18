@@ -5885,3 +5885,1714 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Evidence gaps: parity manifests 205, 272 and 273 omit a top-level `rust_output_sha256`. Their client/server reference objects do carry matching output hashes, but the manifest does not provide an explicit aggregate Rust-output digest to link them. Entry 267 has no explicit `minecraft` field and relies on its pinned manifest hash. Entries 201–202 are process-memory reports rather than parity output manifests.
 - Memory comparison: the paired report records median RSS changing from 175,820 to 12,848 KiB in the default case (−92.69%), and 175,800 to 29,076 KiB in the four-active-attributes case (−83.46%). These are whole-process Linux RSS readings for the stated synthetic workload, not Android memory or full-game measurements.
 - Verification boundary: this batch review did not rerun upstream tests, build RustChunk, run an APK, connect to a server or measure the target device. The manifest scopes and their explicit exclusions remain in force.
+
+### 301. `benchmarks/rust-fluid-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `534f7a6f49cb0698cf20f140d50ba51a4a7cb8ec`.
+- Size: 20047 bytes; 186 lines.
+- Coverage: Complete JSON; 186 lines.
+- Purpose: FluidState.CODEC and all 37 fluid states.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Decodes/encodes object-only IDs, lenient properties, defaults and legacy conversion; compares identity, amount, falling/source/full flags, heights and ordered surface/camera queries.
+- Findings: Registered state inventory is from 26.3; fluid spreading, live world binding and gameplay are absent.
+- RustChunk relevance: Potential design/test input for world/fluid; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable codec/query tests; rebuild all version data.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/fluid; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 302. `benchmarks/rust-fluid-box-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5ea4774dc6cfc5ef7ffb1315d8947bbfd5ce69dd`.
+- Size: 26403 bytes; 239 lines.
+- Coverage: Complete JSON; 239 lines.
+- Purpose: Entity fluid interaction box.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests Entity.getFluidInteractionBox and boat passenger box adjustment, including clipping at waterline, bounds normalization, nulls, mutations and failures.
+- Findings: Passenger lifecycle and actual live boat/world integration are controlled or absent.
+- RustChunk relevance: Potential design/test input for entity/fluid; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable geometry/callback tests; rewrite vehicle semantics.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/fluid; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 303. `benchmarks/rust-fluid-flow-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `90ab6bf07d254a0466d480672dc55a8df593b4d4`.
+- Size: 26090 bytes; 236 lines.
+- Coverage: Complete JSON; 236 lines.
+- Purpose: Fluid flow vectors.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises actual FluidState.getFlow/FlowingFluid.getFlow across registered states, neighbor order, tags, ice guard, falling-wall deflection and vector normalization.
+- Findings: World registry/provider binding, propagation and spreading are not covered.
+- RustChunk relevance: Potential design/test input for world/fluid; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable flow algorithm tests; rebuild registry/tag fixtures.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/fluid; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 304. `benchmarks/rust-fluid-occupancy-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `21b64632475dca272dcd1d73412d644d7b275648`.
+- Size: 26099 bytes; 236 lines.
+- Coverage: Complete JSON; 236 lines.
+- Purpose: Liquid occupancy scan.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Compares LevelReader.containsAnyLiquid and native block scanning over ProtoChunk palettes, inclusive bounds, height limits and palette changes.
+- Findings: Resident snapshots are controlled; live entity collision composition and world integration remain open.
+- RustChunk relevance: Potential design/test input for world/chunk-fluid; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable chunk-scan tests; port 1.20.1 storage rules.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/chunk-fluid; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 305. `benchmarks/rust-fluid-shape-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `75d8b18c9cb0f8ac303a9e497ab106d26f3778f6`.
+- Size: 24802 bytes; 224 lines.
+- Coverage: Complete JSON; 224 lines.
+- Purpose: Fluid voxel shapes and cache.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests registered FluidState.getShape and first-query caches, query order, aliases, geometry and cache behavior after errors.
+- Findings: Fluid propagation, immersion and ray/world binding are outside scope.
+- RustChunk relevance: Potential design/test input for world/fluid-shapes; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable cache and shape tests; rebuild fluid states.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/fluid-shapes; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 306. `benchmarks/rust-food-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5226956f0b1fd34b74bd93f75741d1d4ab292640`.
+- Size: 26921 bytes; 244 lines.
+- Coverage: Complete JSON; 244 lines.
+- Purpose: FoodData behavior.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Covers eating, hunger predicates, exhaustion, regeneration/starvation thresholds, difficulty and tick arithmetic.
+- Findings: Player damage/health services, consumables, persistence and complete player tick are not integrated.
+- RustChunk relevance: Potential design/test input for entity/player-food; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable food-state tests; rewrite player tick integration.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/player-food; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 307. `benchmarks/rust-food-properties-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `e533393d12a39245c2fa9fde541cfbab89be3d16`.
+- Size: 32452 bytes; 289 lines.
+- Coverage: Complete JSON; 289 lines.
+- Purpose: FoodProperties.onConsume.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Uses real FoodData and both random-source types; checks player class selection, sounds, callbacks, RNG state and mutation failures.
+- Findings: Sound playback, concrete consumable dispatch, particles/effects and full use lifecycle are omitted.
+- RustChunk relevance: Potential design/test input for item/consumables; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable consumption callback tests; rebuild item registry integration.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/consumables; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 308. `benchmarks/rust-food-storage-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `be5db181a1c3babb61358fb2a9035331b3313544`.
+- Size: 27077 bytes; 245 lines.
+- Coverage: Complete JSON; 245 lines.
+- Purpose: FoodData NBT persistence.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests readAdditionalSaveData/addAdditionalSaveData, NBT numeric types, missing/wrong defaults, coercion, overflow and round trips.
+- Findings: Only FoodData fields are covered; complete player save lifecycle and other fields are outside scope.
+- RustChunk relevance: Potential design/test input for world/save-player; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable persistence tests; rewrite 1.20.1 NBT semantics.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/save-player; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 309. `benchmarks/rust-free-space-2026-10-07/collision-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `74cdc1534f0eab429d9e26148cd5af7d167524db`.
+- Size: 27765 bytes; 255 lines.
+- Coverage: Complete JSON; 255 lines.
+- Purpose: CollisionGetter.noCollision regression.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises lazy BlockCollisions over registered states and resident ProtoChunk sections, then entity and border shapes in short-circuit order.
+- Findings: Entity lists, border conditions and chunk snapshots are controlled; full live entity indexing is absent.
+- RustChunk relevance: Potential design/test input for physics/collision; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable collision regression; rebuild world/query integration.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/collision; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 310. `benchmarks/rust-free-space-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `2d901545f594d2c8b537e95ee66bc8fda4a6a9ab`.
+- Size: 27629 bytes; 255 lines.
+- Coverage: Complete JSON; 255 lines.
+- Purpose: Entity.isFree composition.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes offset AABB, block/entity/border noCollision and liquid-presence scan across boundaries and failure cases.
+- Findings: Chunk generation, live entity indexing and complete gameplay are not represented.
+- RustChunk relevance: Potential design/test input for physics/entity-clearance; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable composition tests; rewrite version-specific shapes.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/entity-clearance; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 311. `benchmarks/rust-generation-ticks-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `7cce5eb4ec9123c16162ec739bbf8f9108492842`.
+- Size: 9622 bytes; 111 lines.
+- Coverage: Complete JSON; 111 lines.
+- Purpose: ProtoChunk tick scheduling.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests saved/scheduled tick deduplication, ordering, delays/priorities, scheduledTicks copies and proto-to-level promotion.
+- Findings: This records queue behavior, not execution of actual block/fluid ticks or complete generation.
+- RustChunk relevance: Potential design/test input for world/tick-scheduler; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable scheduler design; rewrite 1.20.1 tick lifecycle.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/tick-scheduler; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 312. `benchmarks/rust-geometry-2026-10-05/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9efcea4a4bce0dfe3f4f74d88524167b4651c856`.
+- Size: 4995 bytes; 74 lines.
+- Coverage: Complete JSON; 74 lines.
+- Purpose: Vector/AABB and voxel geometry.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Covers selected Vec3/AABB arithmetic, quantized trig, rotations, look directions, ray traversal, bounded block iteration and voxel-grid operations.
+- Findings: Selected operations are tested in isolation; not a full world collision or camera pipeline.
+- RustChunk relevance: Potential design/test input for math/geometry; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable geometry algorithms/tests; verify float semantics for target toolchain.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: math/geometry; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 313. `benchmarks/rust-geometry-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `1dbed368bd7d2aef4600f7fd762c55fa34a79609`.
+- Size: 9371 bytes; 111 lines.
+- Coverage: Complete JSON; 111 lines.
+- Purpose: Expanded geometry operations.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Adds swept visits, voxel-grid bounds, greedy boxes, ray hits, closest points, floor-height selection, quantization and Boolean shape joins.
+- Findings: Only selected primitives and controlled cases; complete collision/shape consumers are not included.
+- RustChunk relevance: Potential design/test input for math/geometry; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable geometry tests; rebuild target-specific behavior.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: math/geometry; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 314. `benchmarks/rust-ground-support-2026-10-07/scan-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `42bde44e118a958827c8f4af60e861995a965691`.
+- Size: 23566 bytes; 212 lines.
+- Coverage: Complete JSON; 212 lines.
+- Purpose: BlockCollisions scan regression.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Checks native cursor/selection order, chunk reuse, provider retries, face/edge/corner filtering, shape identity, early termination and failures.
+- Findings: Controlled providers and contexts; registered 1.20.1 shapes, live loading and full entity movement remain untested.
+- RustChunk relevance: Potential design/test input for physics/block-collisions; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable collision scan tests; rewrite world providers.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/block-collisions; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 315. `benchmarks/rust-ground-support-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `2bc36cba6c3cf0f4ba7c082e219224cae91e8f24`.
+- Size: 24929 bytes; 242 lines.
+- Coverage: Complete JSON; 242 lines.
+- Purpose: Ground-support selection.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests findSupportingBlock, checkSupportingBlock and setOnGroundWithMovement overloads over sequential query snapshots and failure mutations.
+- Findings: No top-level Rust output digest is present; provider/registry integration is controlled.
+- RustChunk relevance: Potential design/test input for physics/ground-support; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable support-query cases; evidence gap for direct parity.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/ground-support; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 316. `benchmarks/rust-height-provider-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5419d587f4b2b59391c72c2912f01a15084148bd`.
+- Size: 16227 bytes; 153 lines.
+- Coverage: Complete JSON; 153 lines.
+- Purpose: HeightProvider codecs and samples.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises all four vertical-anchor kinds, constant/uniform/biased/trapezoid/weighted providers, random interleaving, bounds and malformed inputs.
+- Findings: Warning logs and complete generation placement are excluded; 26.3 codec data is version-specific.
+- RustChunk relevance: Potential design/test input for worldgen/height-provider; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable provider algorithms; rebuild codecs and registries.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/height-provider; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 317. `benchmarks/rust-heightmap-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `83cda8c9d9479a806238a12595a95f0ffaf16a20`.
+- Size: 12042 bytes; 127 lines.
+- Coverage: Complete JSON; 127 lines.
+- Purpose: Heightmap types and storage.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests six heightmap kinds, block flags/predicates, ProtoChunk insertion/removal, rescans, priming and packed words.
+- Findings: Imported air/fluid facts do not port block behavior; full chunk lifecycle and generation are not covered.
+- RustChunk relevance: Potential design/test input for world/chunk-heightmap; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable packed-heightmap tests; rebuild 1.20.1 state table.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/chunk-heightmap; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 318. `benchmarks/rust-interaction-shape-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c665ad18389f564719b01bc6a6ed7e3ca211235b`.
+- Size: 25396 bytes; 228 lines.
+- Coverage: Complete JSON; 228 lines.
+- Purpose: Registered interaction shapes.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests empty, cauldron, composter, hopper and scaffolding shapes, canonical identity/aliases and clipWithInteractionOverride.
+- Findings: Shape table belongs to 26.3; world ray binding and complete gameplay are excluded.
+- RustChunk relevance: Potential design/test input for world/block-shapes; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable shape abstraction; rewrite registry/shape table.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: world/block-shapes; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 319. `benchmarks/rust-inventory-pickup-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3e75026593cdfb9202f9a0981e8ec46049e0f8b8`.
+- Size: 30814 bytes; 275 lines.
+- Coverage: Complete JSON; 275 lines.
+- Purpose: Inventory.add and remaining-space lookup.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises selected/offhand/ordinary slots, component-sensitive stack matching, damaged copies, source aliases and virtual callbacks.
+- Findings: Pickup entities, menus, networking, arbitrary overrides and full item components are not included.
+- RustChunk relevance: Potential design/test input for entity/inventory; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable inventory algorithms; rebuild ItemStack model.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/inventory; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 320. `benchmarks/rust-inventory-tick-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `bdfa02202172953b381dfbc6cbdff61305eb0fbb`.
+- Size: 30897 bytes; 276 lines.
+- Coverage: Complete JSON; 276 lines.
+- Purpose: Inventory/equipment/item ticking.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes Inventory.tick, EntityEquipment.tick and ItemStack.inventoryTick with callbacks, mutation and client/server differences.
+- Findings: Concrete registered item effects and the enclosing player/world tick are pending.
+- RustChunk relevance: Potential design/test input for entity/inventory-tick; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable tick-order tests; rewrite 1.20.1 item lifecycle.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/inventory-tick; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 321. `benchmarks/rust-inventory-use-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3805afb96a351cf7eae899e89ac009d3b0a10fee`.
+- Size: 31402 bytes; 280 lines.
+- Coverage: Complete JSON; 280 lines.
+- Purpose: LivingEntity item-use ticking.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests item-use countdown/update/release/stop behavior with actual player inventory, equipment and synchronized-data structures.
+- Findings: Does not cover full start-use path, concrete consumable effects, packet delivery or complete Player.tick.
+- RustChunk relevance: Potential design/test input for entity/item-use; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable lifecycle sequencing; rebuild item-use states.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/item-use; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 322. `benchmarks/rust-inventory-use-start-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `16e35f18cffc105cab76ac548206ee2c34aedbb9`.
+- Size: 31488 bytes; 280 lines.
+- Coverage: Complete JSON; 280 lines.
+- Purpose: Starting item use.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Covers startUsingItem, selected equipment, packet construction and controlled hand/effect queries.
+- Findings: Packet delivery, combat effects and full tick/network lifecycle are outside scope.
+- RustChunk relevance: Potential design/test input for network/item-use; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable input-to-use flow; rewrite packet and item schema.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: network/item-use; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 323. `benchmarks/rust-item-after-use-2026-10-07/remainder-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `74a67f0f422dac8a5bb3bec81668b83166c65fa0`.
+- Size: 32233 bytes; 287 lines.
+- Coverage: Complete JSON; 287 lines.
+- Purpose: UseRemainder regression.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests remainder component conversion, templates, validation, empty/infinite cases and item remainder policy.
+- Findings: Actual item insertion/drop, full component codec and concrete use effects remain outside scope.
+- RustChunk relevance: Potential design/test input for item/components; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable regression suite; rebuild component schema.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/components; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 324. `benchmarks/rust-item-after-use-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9558230af50dfa4369c98dd3553172c36317e804`.
+- Size: 32412 bytes; 287 lines.
+- Coverage: Complete JSON; 287 lines.
+- Purpose: ItemStack.finishUsingItem.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises finishUsingItem and use-remainder/cooldown behavior with controlled handlers and failure paths.
+- Findings: Concrete consumables, complete inventory transactions and whole item-use lifecycle are not covered.
+- RustChunk relevance: Potential design/test input for item/use; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable item-use tests; reimplement 1.20.1 semantics.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/use; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 325. `benchmarks/rust-item-blocking-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d833adda97cb1f8ef429ed351fd636b7b2231ddf`.
+- Size: 29185 bytes; 262 lines.
+- Coverage: Complete JSON; 262 lines.
+- Purpose: Blocking with an item.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests LivingEntity.applyItemBlocking, stats/durability hooks and undamageable stacks.
+- Findings: Real damageable item components, full combat and death flow are not integrated.
+- RustChunk relevance: Potential design/test input for entity/combat; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable blocking algorithm; rebuild item/damage rules.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/combat; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 326. `benchmarks/rust-item-cooldowns-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `dcd0027e3145d6b5ecf16830a6c4012c5e87c84e`.
+- Size: 32098 bytes; 286 lines.
+- Coverage: Complete JSON; 286 lines.
+- Purpose: Item cooldowns.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests ItemCooldowns and UseCooldown hashing, updates, tick expiry and callback mutations.
+- Findings: Network synchronization and complete player/item lifecycle are absent.
+- RustChunk relevance: Potential design/test input for item/cooldown; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable cooldown state machine; rewrite protocol integration.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/cooldown; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 327. `benchmarks/rust-item-durability-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8d22d334942a773a249fa9f19f8e3545f6f60ea6`.
+- Size: 29538 bytes; 264 lines.
+- Coverage: Complete JSON; 264 lines.
+- Purpose: Item durability.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Covers ItemStack damage predicates, clamping, writes, overflow/wrap cases and hurt/break dispatch.
+- Findings: Full component codecs, enchantments and complete gameplay are not covered.
+- RustChunk relevance: Potential design/test input for item/durability; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable durability tests; rebuild 1.20.1 component definitions.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/durability; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 328. `benchmarks/rust-item-particles-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a988a401477762be0d25dd77311e63c27865c009`.
+- Size: 32436 bytes; 290 lines.
+- Coverage: Complete JSON; 290 lines.
+- Purpose: Item particle dispatch.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests particle spawn requests, item-template snapshots, random states and callbacks.
+- Findings: Particle queues/rendering, sound/effects integration and real gameplay are outside scope.
+- RustChunk relevance: Potential design/test input for render/particles; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable event/request model; rebuild particle registry.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/particles; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 329. `benchmarks/rust-item-stack-storage-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c663d8efd4c7bb04ea683fb300682b8c817f129f`.
+- Size: 30450 bytes; 271 lines.
+- Coverage: Complete JSON; 271 lines.
+- Purpose: ItemStack storage operations.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests copy/split/grow/shrink/transmute/consume, patching, canonical empty values and alias behavior.
+- Findings: Component codecs, menu transactions, equipment synchronization and full use flow are not included.
+- RustChunk relevance: Potential design/test input for item/stack; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable value semantics; rebuild ItemStack for 1.20.1.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/stack; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 330. `benchmarks/rust-item-template-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `836a562310aa69c6fad44cc096a1b9708fc21640`.
+- Size: 31560 bytes; 281 lines.
+- Coverage: Complete JSON; 281 lines.
+- Purpose: ItemStackTemplate.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests template construction, create/apply patches and strict manifest validation.
+- Findings: Does not exercise every component codec or complete containers and use lifecycle.
+- RustChunk relevance: Potential design/test input for item/templates; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable template validation; rewrite component registry.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: item/templates; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 331. `benchmarks/rust-item-use-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a89b5038f2c1d7f1c086f698131d3f343bcf2745`.
+- Size: 29284 bytes; 263 lines.
+- Coverage: Complete JSON; 263 lines.
+- Purpose: LivingEntity item-use timer.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests actual item-use fields, timers and update/stop callbacks with controlled handlers.
+- Findings: Start-use path, synchronized flags, concrete consumables and full lifecycle remain pending.
+- RustChunk relevance: Potential design/test input for entity/item-use; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable lifecycle tests; rebind to 1.20.1 entity tick.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/item-use; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 332. `benchmarks/rust-item-use-catalog-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `597c4d1bdf654ca98103e6e667bdb7b1c55ff3ce`.
+- Size: 30138 bytes; 270 lines.
+- Coverage: Complete JSON; 270 lines.
+- Purpose: Built-in item-use catalog.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Imports/tests 1,658 built-in item identities and selected components.
+- Findings: Import is 26.3-specific; other component codecs, inventory, enchantments and use effects remain unverified.
+- RustChunk relevance: Potential design/test input for registry/items; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference catalog only; rebuild from 1.20.1 registries.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: registry/items; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 333. `benchmarks/rust-item-use-lifecycle-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `6e5d815657ed57810bb56eeec56331507758e2a5`.
+- Size: 29836 bytes; 266 lines.
+- Coverage: Complete JSON; 266 lines.
+- Purpose: Item-use lifecycle.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises private LivingEntity tick/update/completion/release/stop methods with controlled handlers.
+- Findings: Starting use, actual synchronized flags, concrete consumables, remainders and complete tick are incomplete.
+- RustChunk relevance: Potential design/test input for entity/item-use; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable lifecycle sequencing; rewrite against 1.20.1.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/item-use; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 334. `benchmarks/rust-item-use-start-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5f6b29136e7ec6e8abc835db7e5a19d18fde21b5`.
+- Size: 29857 bytes; 267 lines.
+- Coverage: Complete JSON; 267 lines.
+- Purpose: Starting item use and equipment sync.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests actual startUsingItem and equipment synchronization/packet construction.
+- Findings: Transport, wire encoding, persistent data and server/client lifecycle are not exercised.
+- RustChunk relevance: Potential design/test input for network/item-use; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable dispatch tests; rewrite protocol and inventory sync.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: network/item-use; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 335. `benchmarks/rust-java-hash-map-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `1febffe0db0d9d5594d7092b762540f525b07b13`.
+- Size: 31948 bytes; 284 lines.
+- Coverage: Complete JSON; 284 lines.
+- Purpose: Java HashMap behavior.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests JDK HashMap default construction and operations, collisions, tree bins and iterator behavior.
+- Findings: JDK collection parity is not game logic; JDK version/platform semantics must not be assumed.
+- RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference only; use Rust-native collections where justified.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 336. `benchmarks/rust-java-identity-map-2026-10-07/cooldown-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a366c8128655d7b8116012c55f029b6287d31742`.
+- Size: 33037 bytes; 294 lines.
+- Coverage: Complete JSON; 294 lines.
+- Purpose: Cooldown map regression.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Uses Java map/cooldown behavior to check identity/hash and timing interactions.
+- Findings: This is a Java/JDK regression context, not a complete in-game cooldown lifecycle.
+- RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference regression; validate only required semantics.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 337. `benchmarks/rust-java-identity-map-2026-10-07/ordered-map-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9afee5bd6b8a9184c5101d7a0125526c647d6a3e`.
+- Size: 33119 bytes; 294 lines.
+- Coverage: Complete JSON; 294 lines.
+- Purpose: Ordered-map regression.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Checks ordered identity-map/list/cursor behavior under Java collection operations.
+- Findings: It is a JDK implementation comparison, not Minecraft feature parity.
+- RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference regression; avoid copying JDK internals blindly.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 338. `benchmarks/rust-java-identity-map-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `88cc3b000cb1c30659559994c0b595fe788e6c33`.
+- Size: 33475 bytes; 297 lines.
+- Coverage: Complete JSON; 297 lines.
+- Purpose: Identity-map scoped parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Compares iteration/copy/tree/list/cursor behavior using process-provided identityHashCode values.
+- Findings: No top-level rust_output_sha256; JAR references have one matching output digest, but process identity inputs remain environment-dependent.
+- RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable collection tests; evidence gap for aggregate Rust output.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 339. `benchmarks/rust-liquid-collision-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `cd4618a832fd213730fc2e71a675a4327a630220`.
+- Size: 22434 bytes; 205 lines.
+- Coverage: Complete JSON; 205 lines.
+- Purpose: Liquid block collision.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests LiquidBlock collision contexts over water/lava state families and above-fluid conditions.
+- Findings: Does not implement entity movement or fluid propagation in a live world.
+- RustChunk relevance: Potential design/test input for physics/fluid-collision; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable collision cases; rebuild fluid registry and shapes.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/fluid-collision; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 340. `benchmarks/rust-live-attribute-health-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `01a4aacd643bf2abad54c998fc4b8ad4d1089a22`.
+- Size: 35075 bytes; 310 lines.
+- Coverage: Complete JSON; 310 lines.
+- Purpose: Live attribute health.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes live attribute suppliers with LivingEntity/Player health and FoodData under controlled absorption/starvation states.
+- Findings: Live refresh paths and complete damage/player tick are not fully integrated.
+- RustChunk relevance: Potential design/test input for entity/attributes-health; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable attribute/health composition; rewrite 1.20.1 attributes.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/attributes-health; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 341. `benchmarks/rust-live-attribute-updates-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `673c6f65009aebda08b3f646aaa2e587a8ade470`.
+- Size: 36202 bytes; 320 lines.
+- Coverage: Complete JSON; 320 lines.
+- Purpose: Live attribute updates.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests LivingEntity attribute notifications, recalculation/refresh, effects, suppliers and pending queues.
+- Findings: No top-level Rust output digest; client/server reference outputs differ, so not a single equivalent aggregate.
+- RustChunk relevance: Potential design/test input for entity/attributes; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable notification ordering; evidence gap and rewrite queue ownership.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/attributes; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 342. `benchmarks/rust-live-attributes-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8e25ecd874064d446286229e0b404cd903bac277`.
+- Size: 35773 bytes; 318 lines.
+- Coverage: Complete JSON; 318 lines.
+- Purpose: Live attributes.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests DefaultAttributes, modifier instances, caches, dirty state and sync queues.
+- Findings: No top-level Rust output digest; client/server outputs differ; complete entity supplier lifecycle remains open.
+- RustChunk relevance: Potential design/test input for entity/attributes; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable data model; rebuild 1.20.1 attribute registry.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/attributes; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 343. `benchmarks/rust-live-player-combat-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `180de664552a9a338fe5a3ab999455f5d5f85016`.
+- Size: 36009 bytes; 316 lines.
+- Coverage: Complete JSON; 316 lines.
+- Purpose: Live player combat.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises ServerPlayer hurt/damage with armor/resistance/health/FoodData and controlled effects/requests.
+- Findings: Several knockback, criterion, source and world lifecycle consumers remain controlled; output has separate Rust/live hashes.
+- RustChunk relevance: Potential design/test input for entity/combat; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable combat composition; full server lifecycle rewrite required.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/combat; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 344. `benchmarks/rust-live-upgrade-region-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d752388e38e1fb3cd17bc52e4caacdac295f3b8f`.
+- Size: 26139 bytes; 220 lines.
+- Coverage: Complete JSON; 220 lines.
+- Purpose: Feature upgrade region.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests FeaturePlacer/configured features with fill layers and ProtoChunk-backed region proxy, writes, flags, heights and RNG.
+- Findings: Proxy is not a real WorldGenRegion; complete chunks/worldgen, POI, light and postprocessing are pending.
+- RustChunk relevance: Potential design/test input for worldgen/region; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable region harness; rewrite version-specific worldgen.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/region; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 345. `benchmarks/rust-living-air-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a4adb3c4a8c63b2512da4c13f5a7f8a656a9f6a8`.
+- Size: 25130 bytes; 227 lines.
+- Coverage: Complete JSON; 227 lines.
+- Purpose: LivingEntity air travel.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests travelInAir and movement calculations, climbing, speed attributes and controlled inputs.
+- Findings: Full Player.travel and live effects/world providers are not integrated.
+- RustChunk relevance: Potential design/test input for physics/living-entity; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable physics equations; rewrite player/entity hooks.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/living-entity; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 346. `benchmarks/rust-living-damage-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d88ddb88936c8e9c6c00e8e3a4b32bd0e713a05a`.
+- Size: 27688 bytes; 249 lines.
+- Coverage: Complete JSON; 249 lines.
+- Purpose: LivingEntity damage.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests actuallyHurt behavior, absorption, health/stat/exhaustion and damage callback ordering.
+- Findings: Damage service composition and full world/player lifecycle remain controlled.
+- RustChunk relevance: Potential design/test input for entity/damage; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable damage-state tests; rebuild damage sources/attributes.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/damage; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 347. `benchmarks/rust-living-fall-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `2a923a02307f33d76a3c94fe93d163ebb76b7e44`.
+- Size: 24143 bytes; 217 lines.
+- Coverage: Complete JSON; 217 lines.
+- Purpose: Fall damage calculation.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Covers fall distance, grace/reset, climb state, safe-fall and impulse/damage calculations.
+- Findings: Actual world landing callbacks, enchantment hooks and complete damage application are not included.
+- RustChunk relevance: Potential design/test input for physics/fall; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable numeric/callback tests; rewrite block/entity hooks.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/fall; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 348. `benchmarks/rust-living-fluid-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `7f4ce3c577a0be4acf105c92945cbfb70f04063b`.
+- Size: 25189 bytes; 228 lines.
+- Coverage: Complete JSON; 228 lines.
+- Purpose: LivingEntity fluid movement.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests water/lava travel, fluid escape and ridden buoyancy with controlled movement inputs.
+- Findings: Fluid propagation, full vehicle logic and playable world integration remain pending.
+- RustChunk relevance: Potential design/test input for physics/fluid-movement; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable fluid physics tests; rebuild tags and movement.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/fluid-movement; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 349. `benchmarks/rust-living-health-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d417a3261ef5ab1398d3ed6cc811d24c0ccba440`.
+- Size: 27359 bytes; 246 lines.
+- Coverage: Complete JSON; 246 lines.
+- Purpose: LivingEntity health state.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests health/absorption, synchronized float fields, equality, mutation and error paths.
+- Findings: Full registered attribute binding, damage sources and complete player lifecycle are not covered.
+- RustChunk relevance: Potential design/test input for entity/health; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable health storage tests; rebuild entity schema.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/health; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 350. `benchmarks/rust-living-hurt-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `78aed88c383b3993cb479c412e61477b93c4ebca`.
+- Size: 28380 bytes; 255 lines.
+- Coverage: Complete JSON; 255 lines.
+- Purpose: LivingEntity hurtServer.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests server hurt dispatch and receivers with callback controls.
+- Findings: Totems, criteria, blocking, source service and enclosing server tick are not fully integrated.
+- RustChunk relevance: Potential design/test input for entity/damage; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable server damage flow; rewrite version-specific hooks.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/damage; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 351. `benchmarks/rust-living-landing-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `df4192da2ce5ce0db176c8065c5281a33fa88b2e`.
+- Size: 24923 bytes; 226 lines.
+- Coverage: Complete JSON; 226 lines.
+- Purpose: LivingEntity.checkFallDamage.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Exercises base Entity fall handling and LivingEntity callbacks, mutation/failure order, particles and climb cleanup.
+- Findings: Full fluid immersion, enchantment hooks, particles rendering and Player/world integration remain pending.
+- RustChunk relevance: Potential design/test input for physics/fall; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable fall-damage composition; rebuild 1.20.1 block hooks.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/fall; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 352. `benchmarks/rust-living-motion-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5860939d5114599dd482546428336590c9884e90`.
+- Size: 25388 bytes; 229 lines.
+- Coverage: Complete JSON; 229 lines.
+- Purpose: LivingEntity motion.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests jump power/boost, gravity, liquid input, air drag and delta movement.
+- Findings: Live overrides, effects and complete Player/entity integration are not included.
+- RustChunk relevance: Potential design/test input for physics/movement; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable movement formulas; rewrite against 1.20.1 physics.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/movement; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 353. `benchmarks/rust-material-condition-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9843a46c61bb46154fa0923e941419edaef3b793`.
+- Size: 17022 bytes; 146 lines.
+- Coverage: Complete JSON; 146 lines.
+- Purpose: Material rule conditions.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests hole/steep/Y/water/stone-depth/vertical-gradient/noise/biome/temp and negated predicates with contexts/random.
+- Findings: Caller-owned context/data and complete worldgen registry/encoding are not included.
+- RustChunk relevance: Potential design/test input for worldgen/material-rules; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable rule engine tests; rebuild 1.20.1 rule data.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/material-rules; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 354. `benchmarks/rust-material-extension-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `96b4091584e85aa4b851dcab9085d16067d0ef4f`.
+- Size: 13945 bytes; 135 lines.
+- Coverage: Complete JSON; 135 lines.
+- Purpose: Material extension functions.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests exported eroded-badlands/frozen-ocean extension paths and terrain/noise/write traces.
+- Findings: Thresholds and callbacks are controlled; does not establish complete biome or chunk generation.
+- RustChunk relevance: Potential design/test input for worldgen/material-extensions; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable extension architecture; rewrite biome/worldgen data.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/material-extensions; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 355. `benchmarks/rust-material-rule-library-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `4f0d1c51aedafa743880695bebe193ba10d6627e`.
+- Size: 15223 bytes; 150 lines.
+- Coverage: Complete JSON; 150 lines.
+- Purpose: Material rule library.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Checks bundled registries for five material rule types, seeded noise sources and contexts.
+- Findings: Encoding, reload, registry validation and full generated worlds are not covered.
+- RustChunk relevance: Potential design/test input for worldgen/material-rules; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable registry/rule design; rebuild target-specific rules.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/material-rules; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 356. `benchmarks/rust-material-stage-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `eb6e129f8afb32df2b4dd944c74d3a157c757c1c`.
+- Size: 20109 bytes; 181 lines.
+- Coverage: Complete JSON; 181 lines.
+- Purpose: Material surface stage.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests MaterialSystem.buildSurface/topMaterial on ProtoChunk pre-light using bundled rules, RNG and bounded biome neighborhoods.
+- Findings: Only bounded 3x3 biome input and generated terrain fixtures; full chunk/biome pipeline is absent.
+- RustChunk relevance: Potential design/test input for worldgen/surface; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable surface-stage test; rewrite 1.20.1 surface rules.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/surface; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 357. `benchmarks/rust-material-surface-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `13c1637ed62128978eded0a9d253f4d04f2e5432`.
+- Size: 11905 bytes; 119 lines.
+- Coverage: Complete JSON; 119 lines.
+- Purpose: Material surface bands.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests generateBands/clay bands and associated random sampling.
+- Findings: Full rule evaluation, extensions, generation stages and chunk integration remain pending.
+- RustChunk relevance: Potential design/test input for worldgen/surface; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable deterministic terrain subroutine; rebuild target data.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/surface; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 358. `benchmarks/rust-model-baking-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `967425995dc3dc04be9fcc8c2f53d14af667ddb4`.
+- Size: 3562 bytes; 46 lines.
+- Coverage: Complete JSON; 46 lines.
+- Purpose: Model FaceBakery.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests cube geometry, cuts, UVs and transforms in client model baking.
+- Findings: No atlas packing, blockstate transform integration, shader/pixel or GPU parity.
+- RustChunk relevance: Potential design/test input for render/model-baking; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable geometry tests; rewrite renderer interfaces.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/model-baking; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 359. `benchmarks/rust-model-resolution-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5b18ce2cf416c515457ba9cf7423952eb3464576`.
+- Size: 3260 bytes; 43 lines.
+- Coverage: Complete JSON; 43 lines.
+- Purpose: Block model resolution.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Resolves bundled model parents, aliases and material references.
+- Findings: Does not cover quad baking, blockstate variants, atlas, lighting or visual parity.
+- RustChunk relevance: Potential design/test input for render/model-resources; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable dependency resolution; rebuild 1.20.1 model resources.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/model-resources; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 360. `benchmarks/rust-movement-emission-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `6d0994a6c90d10ae7fe05f3dbdf00e0fd8aef23c`.
+- Size: 24366 bytes; 220 lines.
+- Coverage: Complete JSON; 220 lines.
+- Purpose: Movement sound/emission.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests movement sound/event dispatch, step arithmetic and callback ordering.
+- Findings: Does not play audio or connect to a live player movement loop.
+- RustChunk relevance: Potential design/test input for entity/movement-events; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable event-request model; rebuild sound/tag registry.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/movement-events; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 361. `benchmarks/rust-movement-registry-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `038fb976ee3321b91b7d80cfa5caf3a65224b26b`.
+- Size: 24279 bytes; 221 lines.
+- Coverage: Complete JSON; 221 lines.
+- Purpose: Movement registry data.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Imports movement coefficients/tags for registered blocks and verifies state lookups.
+- Findings: 26.3 coefficients/tags are not 1.20.1 data; does not prove live player movement.
+- RustChunk relevance: Potential design/test input for registry/movement; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference data schema; regenerate from 1.20.1 registries.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: registry/movement; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 362. `benchmarks/rust-movement-support-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `b2d933324970541a7edebb3e33f7df1c84807dfc`.
+- Size: 23423 bytes; 212 lines.
+- Coverage: Complete JSON; 212 lines.
+- Purpose: Entity support positions.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests support-position helpers, jump/speed-related lookups and controlled block providers.
+- Findings: Not an integrated Player movement loop; target block/attribute registries differ.
+- RustChunk relevance: Potential design/test input for physics/ground-support; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable helper tests; rebuild world collision binding.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/ground-support; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 363. `benchmarks/rust-native-attribute-updates-2026-10-07/input-scene.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `ed147775d0197b7183b00ae7e3dcb2806cb16aca`.
+- Size: 45944 bytes; 355 lines.
+- Coverage: Complete JSON; 355 lines.
+- Purpose: Attribute/sprint input scene.
+- Dependencies / cross-references: Client-JAR/source/input fingerprints; input scene is not a runnable game or independent acceptance result.
+- Implementation / logic: Defines a controlled LocalPlayer sprint/crouch scene with source maps, inputs and client references.
+- Findings: No aggregate Rust output hash; scene manifest is an input description, not an acceptance result.
+- RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference input fixture; regenerate for 1.20.1.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 364. `benchmarks/rust-native-attribute-updates-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8515fa33d9c6b61563b607b96d8dcd9080be4a44`.
+- Size: 48085 bytes; 837 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-837.
+- Purpose: Attribute-update interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Runs a resident native scene with walk/crouch/sprint controls and diagnostics; records 1,101 frames, 9 chunks and 10,919 scene blocks.
+- Findings: Linux x86_64 Vulkan llvmpipe CPU renderer; default actor/scene smoke only, not game, GPU performance or Android evidence.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only; not a performance benchmark.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 365. `benchmarks/rust-native-attribute-updates-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c90c95514558638dd395dbaeda2af78c5fdee018`.
+- Size: 45451 bytes; 361 lines.
+- Coverage: Complete JSON; 361 lines.
+- Purpose: Attribute PlayerMotion parity scene.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Stores PlayerMotion and compares travel/jump/move/aiStep, position, velocity, bounds, collision and attributes.
+- Findings: No top-level Rust output digest despite reference data; fluids/effects/inventory/network and full Player tick are omitted.
+- RustChunk relevance: Potential design/test input for physics/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable movement parity scope; evidence and integration gates remain.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 366. `benchmarks/rust-native-attribute-updates-2026-10-07/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `f36e9eea3c61b839d89d55ed4aa8e04a03e6f2c1`.
+- Size: 47706 bytes; 817 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-817.
+- Purpose: Attribute-update startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Records startup/culling/model selection in 9 resident chunks, with 30-frame bounded run.
+- Findings: CPU llvmpipe scene only; startup snapshot cannot demonstrate playable game, Android FPS or native pixel parity.
+- RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 367. `benchmarks/rust-native-blockstate-client-2026-10-06/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `e058faef8d0b09001ce9c207210759187ce8ad20`.
+- Size: 32519 bytes; 662 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-662.
+- Purpose: Blockstate-client startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Visually inspects rotated stairs/slabs, anvil, fence/gate, bars, amethyst and grindstone model states.
+- Findings: Linux llvmpipe software renderer; no native pixel comparison or hardware FPS.
+- RustChunk relevance: Potential design/test input for render/blockstates; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable visual inspection checklist; rebuild 1.20.1 assets.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/blockstates; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 368. `benchmarks/rust-native-chunk-models-2026-10-06/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `38986e1759ac5d8770407e0e9dc3fae1db82878d`.
+- Size: 33249 bytes; 677 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-677.
+- Purpose: Chunk-model startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Inspects resident terrain and model gallery; visual run reports 81 chunks and 84,647 model blocks.
+- Findings: Linux llvmpipe and private screenshots; not Android GPU/frame pacing or whole-world loading evidence.
+- RustChunk relevance: Potential design/test input for render/chunk-models; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference rendering smoke only; no hardware performance claim.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/chunk-models; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 369. `benchmarks/rust-native-crouch-2026-10-07/input-scene.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c8da2835c444d61e47120f625f36ecc65fb7736b`.
+- Size: 45310 bytes; 353 lines.
+- Coverage: Complete JSON; 353 lines.
+- Purpose: Crouch/sprint input scene.
+- Dependencies / cross-references: Client-JAR/source/input fingerprints; input scene is not a runnable game or independent acceptance result.
+- Implementation / logic: Defines LocalPlayer sprint and crouch order, input, pose-dependent dimensions and movement callbacks.
+- Findings: Controlled scene and query gates; full client/server tick, effects, vehicles and network are omitted.
+- RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference input fixture; regenerate against 1.20.1.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 370. `benchmarks/rust-native-crouch-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d0c131f9688a52f9ff98e3aacf255310b4bacea4`.
+- Size: 48100 bytes; 835 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-835.
+- Purpose: Crouch interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Runs held/released crouch input in resident scene; records 1,232 frames and 9 chunks, pose change and grounded actor.
+- Findings: Linux llvmpipe; only 8 cm recorded walk, no fluid/other poses/full client lifecycle or Android device result.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 371. `benchmarks/rust-native-crouch-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3d2f0c2f32fab9a5db800b551f9990fe49d3f5bb`.
+- Size: 44622 bytes; 357 lines.
+- Coverage: Complete JSON; 357 lines.
+- Purpose: Crouch PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Combines local crouch selection, input slowdown, pose dimensions and PlayerMotion queries.
+- Findings: Does not prove full LocalPlayer tick, GUI settings persistence, network or full gameplay.
+- RustChunk relevance: Potential design/test input for physics/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable input/movement tests; integrate 1.20.1 entity state.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 372. `benchmarks/rust-native-crouch-2026-10-07/sprint-input.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c0d44eda141f4a2ab2e1cea896e848b509f5ff07`.
+- Size: 2870 bytes; 30 lines.
+- Coverage: Complete JSON; 30 lines.
+- Purpose: Crouch sprint-input fixture.
+- Dependencies / cross-references: Client-JAR/source/input fingerprints; input scene is not a runnable game or independent acceptance result.
+- Implementation / logic: Tests KeyboardInput and LocalPlayer.aiStep prefix for sprint requests, timer, key combinations and eligibility queries.
+- Findings: No full parent movement, complete client tick, GUI persistence, networking or gameplay parity.
+- RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable key-state tests; regenerate 1.20.1 input rules.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 373. `benchmarks/rust-native-crouch-2026-10-07/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `e5c205a880cc6ea43925bc8f9ad4f4dfdc5f4f9d`.
+- Size: 47583 bytes; 816 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-816.
+- Purpose: Crouch startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Bounded startup and render snapshot with crouch scene assets and native model selection.
+- Findings: 30-frame CPU llvmpipe startup; no active movement, game lifecycle or hardware FPS claim.
+- RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 374. `benchmarks/rust-native-health-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5736ca654d42e4cec9884d6bf81614048c59ee44`.
+- Size: 46984 bytes; 813 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-813.
+- Purpose: Health interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Walk/jump smoke scene applies one recorded 9-point landing hit; health reaches 11 and diagnostics show recovery state.
+- Findings: Linux llvmpipe resident scene; death/drop/respawn, full hunger and device performance are not tested.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference gameplay smoke only; not acceptance.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 375. `benchmarks/rust-native-health-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `62dee41cac15f0e44885d7f00e4745b583a28bb7`.
+- Size: 42707 bytes; 353 lines.
+- Coverage: Complete JSON; 353 lines.
+- Purpose: Health PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes PlayerMotion with fall damage, hurt dispatch, health/absorption and FoodData tick under controlled scene operations.
+- Findings: Full Player.tick, inventory/equipment, freezing, packets and death/drop/respawn services remain outside scope.
+- RustChunk relevance: Potential design/test input for entity/player-state; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable integrated method test; rebuild 1.20.1 damage/food flow.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/player-state; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 376. `benchmarks/rust-native-health-2026-10-07/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `75884ba27c62d536029147cede89ca3a340557bf`.
+- Size: 46685 bytes; 796 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-796.
+- Purpose: Health startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Captures bounded startup/model scene plus selection and culling counts.
+- Findings: No player lifecycle or movement; Linux llvmpipe CPU renderer only.
+- RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 377. `benchmarks/rust-native-hunger-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `74bddddb28862e4e5b0ba8ae0c84cb6477eddc5a`.
+- Size: 47235 bytes; 815 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-815.
+- Purpose: Hunger interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Resident scene checks health recovery, FoodData values and one landing request over 42 movement ticks.
+- Findings: Elapsed wall time is not simulation time; complete enclosing ticks, item use, death lifecycle and GPU/device evidence are absent.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 378. `benchmarks/rust-native-hunger-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `25d36f41c0f478bee367b8fadd7dfe75b96f08ed`.
+- Size: 43430 bytes; 354 lines.
+- Coverage: Complete JSON; 354 lines.
+- Purpose: Hunger PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes movement/fall and food state/tick with controlled difficulty, regeneration and starvation inputs.
+- Findings: No complete outer Player.tick, item-use path, full death/drop/respawn or device integration.
+- RustChunk relevance: Potential design/test input for entity/player-state; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable player-state tests; rewrite tick orchestration.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/player-state; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 379. `benchmarks/rust-native-landing-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c28b0d8fa63458835a291b8d2a9c063a0c7273d7`.
+- Size: 46499 bytes; 803 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-803.
+- Purpose: Landing interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Records grounded landing and a single 9-point damage request in resident scene.
+- Findings: Damage request is not applied to health; Linux CPU scene only, no full gameplay or device acceptance.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 380. `benchmarks/rust-native-landing-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `83a1b46c466bac36cc1974de2a564cff424e3d11`.
+- Size: 41234 bytes; 351 lines.
+- Coverage: Complete JSON; 351 lines.
+- Purpose: Landing PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes fall checks, registered fallOn/bounceOn, damage requests, health/FoodData and clock/statistics operations.
+- Findings: Controlled scene excludes many world callbacks, packet acceptance, full player tick and complete death flow.
+- RustChunk relevance: Potential design/test input for physics/player-landing; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable end-to-end fixture design; rewrite world services.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/player-landing; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 381. `benchmarks/rust-native-model-client-2026-10-06/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `77e26f46ab2a201d4c813d853135325d160fad86`.
+- Size: 4673 bytes; 97 lines.
+- Coverage: Complete JSON; 97 lines.
+- Purpose: Model-client startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Inspects twelve gallery models and animation frames; includes image-difference bounds for lantern.
+- Findings: Pre-final interactive view differs from final fingerprints; CPU llvmpipe only, no gameplay or complete pixel parity.
+- RustChunk relevance: Potential design/test input for render/model-client; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference visual QA only; not device performance evidence.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/model-client; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 382. `benchmarks/rust-native-motion-tick-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d5d2b249c7d87e122ed4793caad517d3f1ba8d0c`.
+- Size: 39641 bytes; 346 lines.
+- Coverage: Complete JSON; 346 lines.
+- Purpose: Native motion tick parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Compares stored PlayerMotion travel/jump/move and LivingEntity.aiStep state over resident chunks and attributes.
+- Findings: No full Player.aiStep/tick, local input, freezing, health/damage or complete gameplay claim.
+- RustChunk relevance: Potential design/test input for physics/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable method-level parity tests; add missing tick lifecycle.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 383. `benchmarks/rust-native-movement-statistics-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `489198f7b931291d7c49abff498c07a1d351735f`.
+- Size: 47174 bytes; 815 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-815.
+- Purpose: Movement-statistics interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Resident scene records walking, health, food and exhaustion; 3,770 frames over 82 movement ticks.
+- Findings: Linux llvmpipe; sprint/full gameplay and Android hardware FPS are not established.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 384. `benchmarks/rust-native-movement-statistics-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `6d1467a0be65e4824950141a5e0d312ae214039b`.
+- Size: 44066 bytes; 355 lines.
+- Coverage: Complete JSON; 355 lines.
+- Purpose: Movement-statistics PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes Player.aiStep, travel, movement, fall damage and ServerPlayer.checkMovementStatistics.
+- Findings: Still excludes complete client/server packet acceptance, inventory/effects and full Player.tick.
+- RustChunk relevance: Potential design/test input for entity/movement-statistics; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable composed movement/statistics tests; rebuild 1.20.1 server loop.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/movement-statistics; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 385. `benchmarks/rust-native-scene-collision-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8a3ecb5757a34c546fd328b7ddcad9464175866f`.
+- Size: 46097 bytes; 781 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-781.
+- Purpose: Scene-collision interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Resident renderer smoke for collision scene with 4,065 frames and 9 chunks.
+- Findings: No gameplay simulation; Vulkan llvmpipe CPU adapter, not target GPU or Android FPS.
+- RustChunk relevance: Potential design/test input for render/scene-collision; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/scene-collision; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 386. `benchmarks/rust-native-scene-collision-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `caaca236eae79ee26ddbc80f190f2421433e5ae3`.
+- Size: 39950 bytes; 369 lines.
+- Coverage: Complete JSON; 369 lines.
+- Purpose: Scene-collision parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Uses Assets loader/TestWorld resident chunks for collision shapes, Entity.collide, step resolution and noCollision across both scene sizes.
+- Findings: No aggregate Rust output hash; no gravity, tick schedule, fluid/entity gameplay or pixel renderer parity.
+- RustChunk relevance: Potential design/test input for physics/collision; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable collision test fixtures; evidence gap for output digest.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/collision; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 387. `benchmarks/rust-native-scene-collision-2026-10-07/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `ff9d59fbcc7b4d23b59138b6ac074ec8722ecc27`.
+- Size: 45763 bytes; 777 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-777.
+- Purpose: Scene-collision startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Captures scene culling/model-selection and bounded renderer startup.
+- Findings: 30-frame CPU llvmpipe snapshot; not a performance benchmark or playable game proof.
+- RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 388. `benchmarks/rust-native-scene-motion-2026-10-07/collision-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8aaf74a8867e1092afe924196a90c31bc240e5ab`.
+- Size: 40061 bytes; 370 lines.
+- Coverage: Complete JSON; 370 lines.
+- Purpose: Scene-motion collision regression.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Runs native collision shapes and Entity.collide step resolution over positions, boundaries and controlled resident chunks.
+- Findings: Collision adapter only; does not establish live player travel, gravity, tick, fluids or full gameplay.
+- RustChunk relevance: Potential design/test input for physics/collision; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable boundary regression; integrate in target world.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/collision; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 389. `benchmarks/rust-native-scene-motion-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `14ca5cc7b6fe0329676d6c44bec8fbfecf8930e3`.
+- Size: 39228 bytes; 346 lines.
+- Coverage: Complete JSON; 346 lines.
+- Purpose: Scene-motion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Compares PlayerMotion position/velocity/bounds/collision/support over resident chunks with exact numeric bits.
+- Findings: Fluids, vehicles, effects, crouch, landing/damage, audio and network consumers remain controlled; no full player tick.
+- RustChunk relevance: Potential design/test input for physics/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable method-level motion tests; add excluded integrations separately.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 390. `benchmarks/rust-native-scene-motion-2026-10-07/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `84ce0445bc52ea74e45949e1dbae848663f16a4d`.
+- Size: 45874 bytes; 778 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-778.
+- Purpose: Scene-motion startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Captures native model/terrain scene, selection and culling in bounded startup run.
+- Findings: Linux llvmpipe CPU renderer only; no visual pixel parity or Android device measurement.
+- RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 391. `benchmarks/rust-native-sprint-2026-10-07/double-tap-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `fe2fe58d28f866e0b1b0fa01c32645f4dbb7ee5d`.
+- Size: 47510 bytes; 822 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-822.
+- Purpose: Sprint double-tap smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Interactive resident-scene run verifies sprint toggling after double-tap, 1,373 cm sprint distance and 111 movement ticks.
+- Findings: Linux llvmpipe; focus pauses walking, and full pose/fluid/effect/item-use/network lifecycle is outside scope.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 392. `benchmarks/rust-native-sprint-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `2e0fb7a5eb81639168e992727648b4669479808b`.
+- Size: 44177 bytes; 356 lines.
+- Coverage: Complete JSON; 356 lines.
+- Purpose: Sprint PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes LocalPlayer.aiStep sprint logic, input, movement attributes, PlayerMotion and controlled FoodData/exhaustion.
+- Findings: No complete outer client/server tick, GUI persistence, effects, inventory, networking or full gameplay.
+- RustChunk relevance: Potential design/test input for entity/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable composed sprint tests; rebuild player state for 1.20.1.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 393. `benchmarks/rust-native-sprint-2026-10-07/sprint-input.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `22cf6e0ab47de491b791956193f7117426fd8fb8`.
+- Size: 2870 bytes; 30 lines.
+- Coverage: Complete JSON; 30 lines.
+- Purpose: Sprint input fixture.
+- Dependencies / cross-references: Client-JAR/source/input fingerprints; input scene is not a runnable game or independent acceptance result.
+- Implementation / logic: Tests KeyboardInput and LocalPlayer.aiStep sprint start/stop requests, key states, timer, food thresholds and double taps.
+- Findings: Setter records requests; actual parent movement, GUI options and network lifecycle are separate.
+- RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable input state machine tests; regenerate 1.20.1 controls.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 394. `benchmarks/rust-native-sprint-2026-10-07/sprint-key-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `240093d03edbd3a3bf5aa35a754312c586ed9e4d`.
+- Size: 47547 bytes; 822 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-822.
+- Purpose: Sprint-key interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Resident scene smoke reports 5,773 frames, 173 movement ticks and 1,948 cm sprint distance.
+- Findings: Linux llvmpipe; no fluid/effect/item-use/client-server lifecycle, native pixel or A22 performance claim.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 395. `benchmarks/rust-native-sprint-2026-10-07/sprint-scene.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `f56b583de8b9c0bbeeb8976809e707e54c70c60f`.
+- Size: 44789 bytes; 352 lines.
+- Coverage: Complete JSON; 352 lines.
+- Purpose: Sprint scene parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Composes actual client sprint decision prefix, modifyInput, server actor movement, exhaustion and hunger.
+- Findings: Raw shift is recorded but crouch is unbound; effects/equipment/vehicles/fluids, complete ticks and networking remain excluded.
+- RustChunk relevance: Potential design/test input for entity/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable sprint integration tests; rewrite target controls.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: entity/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 396. `benchmarks/rust-native-walking-2026-10-07/interactive-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `35fb818b9478223cc8cb37d0697a9fa6109805aa`.
+- Size: 46550 bytes; 804 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-800, 801-804.
+- Purpose: Walking interactive smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Resident scene records grounded movement and jump, 6,816 frames and 207 movement ticks.
+- Findings: Linux llvmpipe development scene; no full gameplay, native pixel parity or device acceptance.
+- RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference smoke evidence only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 397. `benchmarks/rust-native-walking-2026-10-07/local-input.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `312e328026a7c7b04e050732683ed939daf954af`.
+- Size: 2235 bytes; 28 lines.
+- Coverage: Complete JSON; 28 lines.
+- Purpose: Walking local-input fixture.
+- Dependencies / cross-references: Client-JAR/source/input fingerprints; input scene is not a runnable game or independent acceptance result.
+- Implementation / logic: Compares KeyboardInput.tick and LocalPlayer.modifyInput for 128 key combinations, gates, multipliers and float edge cases.
+- Findings: Does not establish full LocalPlayer tick, input remapping, sprint eligibility, pose/camera or network lifecycle.
+- RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable input math tests; rebuild 1.20.1 controls.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 398. `benchmarks/rust-native-walking-2026-10-07/scene-motion.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3d3a8bffbc4ae6515934006f0846749dc90faff2`.
+- Size: 40141 bytes; 348 lines.
+- Coverage: Complete JSON; 348 lines.
+- Purpose: Walking PlayerMotion parity.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Compares PlayerMotion and LocalPlayer.aiStep/travel with resident chunks, attributes, movement and input reference.
+- Findings: Full Player.tick, inventory/equipment ticks, freezing, health/damage and network consumers are not covered.
+- RustChunk relevance: Potential design/test input for physics/player-motion; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable motion tests; integrate missing 1.20.1 player lifecycle.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: physics/player-motion; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 399. `benchmarks/rust-native-walking-2026-10-07/startup-smoke.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `85d8ee9f8f3a94e3b2c8bf64a0cc4545cf3f02fd`.
+- Size: 46209 bytes; 785 lines.
+- Coverage: Complete JSON, consecutive chunks: 1-400, 401-785.
+- Purpose: Walking startup smoke.
+- Dependencies / cross-references: Executable/source fingerprints and resource-manifest SHA; private screenshots are not repository artifacts.
+- Implementation / logic: Captures bounded startup/model scene with native selection and culling; 30-frame run.
+- Findings: Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence.
+- RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Reference renderer smoke only.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### 400. `benchmarks/rust-neighbor-spread-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a281b076f7c71891653c5daadf1b89ffe5a2e035`.
+- Size: 22619 bytes; 204 lines.
+- Coverage: Complete JSON; 204 lines.
+- Purpose: Random neighbor spread feature.
+- Dependencies / cross-references: Pinned 26.3 source/fixture and JAR references are evidence inputs, not runtime dependencies.
+- Implementation / logic: Tests codecs and placement order, X/Y/Z sampling, candidate/neighbor states, six-direction masks, early exit, providers and random modes.
+- Findings: Actual chunks, neighbor callbacks and complete feature/world generation are pending.
+- RustChunk relevance: Potential design/test input for worldgen/neighbor-spread; current rustchunk-engine is JNI-oriented and has no playable native game module.
+- Decision: **Adaptable worldgen algorithm tests; rebuild 1.20.1 block-state/feature data.**
+- 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
+- Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
+- RustChunk implementation mapping: Future RustChunk subsystem: worldgen/neighbor-spread; no current game-runtime implementation is established by this file.
+- Evidence required before adoption: Require pinned 1.20.1 Java oracle, independent Rust output hash, reproducible CI and real integration; Android gates where relevant.
+- Completion state: Full artifact reviewed and recorded; no build, test, server session or Android device run in this audit.
+
+### Batch verification — entries 301–400 (2026-11-18)
+
+- Selection: the pinned recursive Starling tree is complete (5,749 nodes; 4,968 file blobs). These are the 100 consecutive blob paths immediately after entry 300 in the pinned tree; they are distinct from entries 1–300.
+- Provenance/structure: all 100 selected paths exist in the pinned tree and their recorded SHAs are the exact Git blob SHAs. All 100 artifacts were fetched and parsed as JSON. Every ledger entry records exactly one of each of the 15 audit fields.
+- Long-file coverage: every artifact over 400 lines was read in consecutive chunks of at most 400 lines; ranges are recorded per entry. The remaining artifacts were fetched and parsed in full.
+- Version scope: the parity manifests and native scenes target Minecraft 26.3, not 1.20.1. Most use Linux x86_64, OpenJDK 25 and Rust 1.99. No result here is a RustChunk 1.20.1 build, test, Android APK, A22 benchmark or Forge compatibility proof.
+- Evidence gaps: entry 315 has no top-level `rust_output_sha256`; entry 338 has no top-level aggregate Rust output digest; entries 341–342 have no top-level output digest and their two reference output hashes differ. Input-scene and smoke artifacts are not parity acceptance results.
+- Renderer boundary: the visual/interactive smoke reports use Vulkan `llvmpipe` CPU rendering on Linux. They demonstrate controlled scene execution and inspection only, not Android GPU performance, real-device frame pacing, native pixel parity or full gameplay.
+- Feature boundary: the fluid, food, inventory, item-use, movement, collision, attribute, health, worldgen and model tests cover selected methods and controlled providers. Their explicit exclusions remain outstanding; they do not combine into a complete playable Minecraft client.
+- Verification boundary: this was a source/manifest review only. No upstream tests were rerun, no RustChunk build was run, no server was joined, and no target-device test or performance benchmark was executed.
