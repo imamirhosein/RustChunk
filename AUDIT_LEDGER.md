@@ -2825,6 +2825,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Completed full source reviews for entries 121–140. All 20 source paths and blob SHAs were obtained from the pinned Starling source snapshot.
 - Long files were read in consecutive ranges without gaps: Android bridge (1,386), diagnostics (606), mesher (2,028), world state (634), block-entity data (755), DataFixer orchestration (386), legacy chunk flattening (772), world upgrader (598) and chunk dump probe (506).
 - Every entry includes an explicit RustChunk implementation mapping and evidence-required-before-adoption field, separating production client needs from optional migration tools, product tooling and test-only probes.
+- Extended AUDIT_INDEX.md to 140 sequential rows in six sections of 25, 25, 25, 25, 25 and 15 entries.
 - Main architectural leads: Android platform bridge, bounded/asynchronous diagnostics, chunk membership deltas, worker-oriented section meshing/lighting, resident-world invalidation, typed block-entity data and bounded region compression.
 - Explicit exclusions from vanilla 1.20.1 first milestone: Starling 26.3 DataFixer output, pre-1.13 block-state flattening, Optimize World migration UI, Starling no-AI/agent switch, Horizon native-mod block entities and Starling product-specific native-mod loading.
 - Tests present in source were read but not executed. No Cargo build, RustChunk code change, Android APK/device test, shader/render run, migration, worldgen probe or live Minecraft connection was performed.
