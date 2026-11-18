@@ -1002,47 +1002,47 @@
 | 856 | `crates/horizon-client/assets/horizon/lang/tr_tr.json` | Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency. | Incomplete localization; Turkish I/İ casing needs correct case mapping. |
 | 857 | `crates/horizon-client/assets/horizon/lang/uk_ua.json` | Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency. | Partial localization and plural QA needed. |
 | 858 | `crates/horizon-client/assets/horizon/lang/zh_cn.json` | Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency. | Partial localization; CJK font fallback/width are relevant. |
-| 859 | `crates/horizon-client/assets/touch/attack.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 860 | `crates/horizon-client/assets/touch/attack_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 861 | `crates/horizon-client/assets/touch/camera.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 862 | `crates/horizon-client/assets/touch/camera_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 863 | `crates/horizon-client/assets/touch/chat.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 864 | `crates/horizon-client/assets/touch/chat_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 865 | `crates/horizon-client/assets/touch/command.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 866 | `crates/horizon-client/assets/touch/command_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 867 | `crates/horizon-client/assets/touch/custom_apple.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 868 | `crates/horizon-client/assets/touch/custom_apple_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 869 | `crates/horizon-client/assets/touch/custom_blank.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 870 | `crates/horizon-client/assets/touch/custom_check.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 871 | `crates/horizon-client/assets/touch/custom_check_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 872 | `crates/horizon-client/assets/touch/custom_cross.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 873 | `crates/horizon-client/assets/touch/custom_cross_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 874 | `crates/horizon-client/assets/touch/custom_crown.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 875 | `crates/horizon-client/assets/touch/custom_crown_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 876 | `crates/horizon-client/assets/touch/custom_fire.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 877 | `crates/horizon-client/assets/touch/custom_fire_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 878 | `crates/horizon-client/assets/touch/custom_flag.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 879 | `crates/horizon-client/assets/touch/custom_flag_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 880 | `crates/horizon-client/assets/touch/custom_heart.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 881 | `crates/horizon-client/assets/touch/custom_heart_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 882 | `crates/horizon-client/assets/touch/custom_home.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 883 | `crates/horizon-client/assets/touch/custom_home_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 884 | `crates/horizon-client/assets/touch/custom_music.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 885 | `crates/horizon-client/assets/touch/custom_music_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 886 | `crates/horizon-client/assets/touch/custom_pickaxe.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 887 | `crates/horizon-client/assets/touch/custom_pickaxe_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 888 | `crates/horizon-client/assets/touch/custom_plus.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 889 | `crates/horizon-client/assets/touch/custom_plus_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 890 | `crates/horizon-client/assets/touch/custom_potion.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 891 | `crates/horizon-client/assets/touch/custom_potion_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 892 | `crates/horizon-client/assets/touch/custom_shield.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 893 | `crates/horizon-client/assets/touch/custom_shield_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 894 | `crates/horizon-client/assets/touch/custom_skull.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 895 | `crates/horizon-client/assets/touch/custom_skull_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 896 | `crates/horizon-client/assets/touch/custom_star.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 897 | `crates/horizon-client/assets/touch/custom_star_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 898 | `crates/horizon-client/assets/touch/debug.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
-| 899 | `crates/horizon-client/assets/touch/debug_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
+| 859 | `crates/horizon-client/assets/touch/attack.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; attack control default state; 8-bit RGBA, 24×24. |
+| 860 | `crates/horizon-client/assets/touch/attack_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; attack control pressed state; 8-bit RGBA, 24×24. |
+| 861 | `crates/horizon-client/assets/touch/camera.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; camera control default state; 8-bit RGBA, 24×24. |
+| 862 | `crates/horizon-client/assets/touch/camera_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; camera control pressed state; 8-bit RGBA, 24×24. |
+| 863 | `crates/horizon-client/assets/touch/chat.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; chat control default state; 8-bit RGBA, 24×24. |
+| 864 | `crates/horizon-client/assets/touch/chat_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; chat control pressed state; 8-bit RGBA, 24×24. |
+| 865 | `crates/horizon-client/assets/touch/command.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; command control default state; 8-bit RGBA, 24×24. |
+| 866 | `crates/horizon-client/assets/touch/command_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; command control pressed state; 8-bit RGBA, 24×24. |
+| 867 | `crates/horizon-client/assets/touch/custom_apple.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; custom apple glyph default state; 8-bit RGBA, 24×24. |
+| 868 | `crates/horizon-client/assets/touch/custom_apple_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; custom apple glyph pressed state; 8-bit RGBA, 24×24. |
+| 869 | `crates/horizon-client/assets/touch/custom_blank.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; blank customizable tile default state; 8-bit RGBA, 24×24. |
+| 870 | `crates/horizon-client/assets/touch/custom_check.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; check glyph default state; 8-bit RGBA, 24×24. |
+| 871 | `crates/horizon-client/assets/touch/custom_check_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; check glyph pressed state; 8-bit RGBA, 24×24. |
+| 872 | `crates/horizon-client/assets/touch/custom_cross.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; cross glyph default state; 8-bit RGBA, 24×24. |
+| 873 | `crates/horizon-client/assets/touch/custom_cross_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; cross glyph pressed state; 8-bit RGBA, 24×24. |
+| 874 | `crates/horizon-client/assets/touch/custom_crown.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; crown glyph default state; 8-bit RGBA, 24×24. |
+| 875 | `crates/horizon-client/assets/touch/custom_crown_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; crown glyph pressed state; 8-bit RGBA, 24×24. |
+| 876 | `crates/horizon-client/assets/touch/custom_fire.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; fire glyph default state; 8-bit RGBA, 24×24. |
+| 877 | `crates/horizon-client/assets/touch/custom_fire_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; fire glyph pressed state; 8-bit RGBA, 24×24. |
+| 878 | `crates/horizon-client/assets/touch/custom_flag.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; flag glyph default state; 8-bit RGBA, 24×24. |
+| 879 | `crates/horizon-client/assets/touch/custom_flag_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; flag glyph pressed state; 8-bit RGBA, 24×24. |
+| 880 | `crates/horizon-client/assets/touch/custom_heart.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; heart glyph default state; 8-bit RGBA, 24×24. |
+| 881 | `crates/horizon-client/assets/touch/custom_heart_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; heart glyph pressed state; 8-bit RGBA, 24×24. |
+| 882 | `crates/horizon-client/assets/touch/custom_home.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; home glyph default state; 8-bit RGBA, 24×24. |
+| 883 | `crates/horizon-client/assets/touch/custom_home_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; home glyph pressed state; 8-bit RGBA, 24×24. |
+| 884 | `crates/horizon-client/assets/touch/custom_music.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; music glyph default state; 8-bit RGBA, 24×24. |
+| 885 | `crates/horizon-client/assets/touch/custom_music_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; music glyph pressed state; 8-bit RGBA, 24×24. |
+| 886 | `crates/horizon-client/assets/touch/custom_pickaxe.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; pickaxe glyph default state; 8-bit RGBA, 24×24. |
+| 887 | `crates/horizon-client/assets/touch/custom_pickaxe_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; pickaxe glyph pressed state; 8-bit RGBA, 24×24. |
+| 888 | `crates/horizon-client/assets/touch/custom_plus.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; plus glyph default state; 8-bit RGBA, 24×24. |
+| 889 | `crates/horizon-client/assets/touch/custom_plus_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; plus glyph pressed state; 8-bit RGBA, 24×24. |
+| 890 | `crates/horizon-client/assets/touch/custom_potion.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; potion glyph default state; 8-bit RGBA, 24×24. |
+| 891 | `crates/horizon-client/assets/touch/custom_potion_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; potion glyph pressed state; 8-bit RGBA, 24×24. |
+| 892 | `crates/horizon-client/assets/touch/custom_shield.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; shield glyph default state; 8-bit RGBA, 24×24. |
+| 893 | `crates/horizon-client/assets/touch/custom_shield_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; shield glyph pressed state; 8-bit RGBA, 24×24. |
+| 894 | `crates/horizon-client/assets/touch/custom_skull.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; skull glyph default state; 8-bit RGBA, 24×24. |
+| 895 | `crates/horizon-client/assets/touch/custom_skull_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; skull glyph pressed state; 8-bit RGBA, 24×24. |
+| 896 | `crates/horizon-client/assets/touch/custom_star.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; star glyph default state; 8-bit RGBA, 24×24. |
+| 897 | `crates/horizon-client/assets/touch/custom_star_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; star glyph pressed state; 8-bit RGBA, 24×24. |
+| 898 | `crates/horizon-client/assets/touch/debug.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; debug control default state; 8-bit RGBA, 24×24. |
+| 899 | `crates/horizon-client/assets/touch/debug_pressed.png` | Visual asset candidate; licensing and runtime-reference checks pending. | Inspected PNG pixels; debug control pressed state; 8-bit RGBA, 24×24. |
 | 900 | `crates/horizon-client/assets/touch/dpad_down.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
 | 901 | `crates/horizon-client/assets/touch/dpad_down_pressed.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
 | 902 | `crates/horizon-client/assets/touch/dpad_left.png` | **Metadata-only; do not approve reuse yet.** | PNG binary content not inspected; SHA and byte size recorded only. |
