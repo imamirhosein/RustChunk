@@ -2413,9 +2413,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 101. `crates/horizon-client-core/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 8809a5216455ace851044f69a633e8adaabbc576.
-- Size: 15 lines; complete file fetched and read.
-- Coverage: lines 1–15, complete; no chunks omitted.
+- Source SHA: `8809a5216455ace851044f69a633e8adaabbc576`.
+- Size: 14 logical lines; 460 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–14, complete; no chunks omitted.
 - Purpose: Cargo manifest for the lowest-level client-core crate, which owns client text, NBT/SNBT, translations, scoreboard, boss bars, game rules, identifiers, registries, particle/sound tables, and related data utilities.
 - Implementation / logic: Declares package horizon-client-core, version 0.1.0, workspace edition/license, and Rust 1.90 minimum. Its only direct dependencies are the sibling horizon-world crate and serde_json with raw_value support. Workspace lints are inherited. The crate boundary and public module surface are defined separately in src/lib.rs (reviewed as entry 114).
 - Findings: This is intentionally a very small dependency layer: it does not directly depend on winit, wgpu, a Java runtime, network transport, or Forge. Its reliance on horizon-world means the supposedly low-level client types still inherit the world crate's NBT, registry and version-pinning decisions. The manifest does not state which game version the data APIs represent; that is determined by the implementation and generated resources, not by the package version 0.1.0.
@@ -2430,9 +2430,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 102. `crates/horizon-client-input/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 4ac6be76c312a1ef612a207c73db5236c898a633.
-- Size: 27 lines; complete file fetched and read.
-- Coverage: lines 1–27, complete; no chunks omitted.
+- Source SHA: `4ac6be76c312a1ef612a207c73db5236c898a633`.
+- Size: 26 logical lines; 864 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–26, complete; no chunks omitted.
 - Purpose: Cargo manifest for the client input crate: key bindings/names, mouse, controllers, clipboard and window/input options.
 - Implementation / logic: Declares horizon-client-core as its local core dependency, winit 0.30.13, horizon-theme and PNG for the window icon, plus optional horizon-dualsense behind the controllers feature. Desktop-only clipboard integration uses arboard under cfg(not(target_os = android)); the manifest comment says Android uses the platform clipboard through clipboard.rs. The controllers feature enables only the optional DualSense crate at this layer.
 - Findings: The separation gives platform input a distinct crate, but winit and the platform conditionals are still significant implementation choices. There is no single Android controller backend dependency in this manifest; Android-specific event translation is implemented in child source modules. The optional feature controls DualSense effects here, while the higher-level client manifest also controls gilrs/controller discovery. A build with inconsistent feature forwarding between the client and input crates could therefore produce partial controller support. This file contains no tests.
@@ -2447,9 +2447,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 103. `crates/horizon-client-lib/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 9f290d8f6b156871e5f599801aebdd2c60d87f53.
-- Size: 232 lines; complete file fetched and read.
-- Coverage: lines 1–232, complete; no chunks omitted.
+- Source SHA: `9f290d8f6b156871e5f599801aebdd2c60d87f53`.
+- Size: 231 logical lines; 9,557 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–231, complete; no chunks omitted.
 - Purpose: Manifest for horizon-client-lib, the reusable client systems library, control tool, and parity-probe host. It deliberately points its library target at ../horizon-client/src/client_lib.rs rather than a conventional src/lib.rs.
 - Implementation / logic: Disables automatic bins, examples and tests, then explicitly declares the library path, horizon-ctl binary, numerous benchmarks/probes/examples and integration-test targets. The dependency graph spans client-core/input/render, world, protocol, assets, items, commands, threads, shaders, HDR, theme, MCP, server files, server anticheat/chat filter, friends, narrator, telemetry, account sign-in, preparation and mod-index infrastructure. Wgpu is configured with Vulkan/Metal/WGSL and naga IR; platform-specific Windows DX12 and non-macOS GLES variants are added. Default features enable audio and controllers; audio forwards to render, and controllers forward to gilrs, DualSense and input. A separate rng-trace feature propagates into horizon-core.
 - Findings: The package is a broad integration layer, not a small pure client library. It includes dependencies whose responsibilities also serve a dedicated server or launcher (server files, anticheat, chat filtering, preparation and MCP), which can enlarge the graph and make feature auditing important. Some native platform dependencies are conditionally compiled, but actual APK inclusion cannot be inferred from this manifest alone. The unusual library path and disabled Cargo auto-discovery mean that adding files under examples/tests does not automatically register them; the explicit target list must be maintained. Default features pull audio and controller stacks unless consumers opt out. The manifest's wgpu version and shader capabilities are generation-specific. This is a dependency declaration, not evidence that every listed subsystem is active at runtime.
@@ -2464,9 +2464,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 104. `crates/horizon-client-render/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: d340024b704df413438f51c7d70fe36ce5e7f328.
-- Size: 82 lines; complete file fetched and read.
-- Coverage: lines 1–82, complete; no chunks omitted.
+- Source SHA: `d340024b704df413438f51c7d70fe36ce5e7f328`.
+- Size: 81 logical lines; 3,679 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–81, complete; no chunks omitted.
 - Purpose: Manifest for the client world-data/rendering/screens layer, described as chunks, meshing, light, streaming, renderer, HUD, menus and settings, with gameplay kept above it.
 - Implementation / logic: Depends on client-core/input, world, protocol, assets, commands, items, shaders, theme, threads, HDR, cosmetics and related UI/render crates. Uses wgpu 30.0.1, winit 0.30.13, naga with WGSL/GLSL/HLSL output, glam, bytemuck, fonts, ZIP/JSON, image and compression libraries. Audio is optional through cpal and the audio feature; test-support is a separate feature. Windows adds DX12 and junction support; non-macOS targets add GLES; Unix adds rustix.
 - Findings: The manifest is broad for a rendering crate: it includes world, protocol, item, command and telemetry dependencies, so the package boundary is not equivalent to a standalone graphics backend. The declared backends imply Vulkan/Metal as primary options, Windows DX12, and GLES on non-macOS targets; the exact backend selected at runtime is implemented elsewhere. The feature graph needs to stay aligned with horizon-client-lib and horizon-client, especially audio and test-support. Package-level description says gameplay does not reach into this crate; that layering claim should be checked through actual imports rather than assumed from Cargo metadata. This file contains no tests.
@@ -2481,9 +2481,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 105. `crates/horizon-client/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 1d575779193dbc9aa41adad2e08d243097bf1409.
-- Size: 163 lines; complete file fetched and read.
-- Coverage: lines 1–163, complete; no chunks omitted.
+- Source SHA: `1d575779193dbc9aa41adad2e08d243097bf1409`.
+- Size: 162 logical lines; 8,360 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–162, complete; no chunks omitted.
 - Purpose: Manifest for the native Horizon game executable and the gameplay/startup crate; it registers the horizon-client binary and the client integration tests.
 - Implementation / logic: Declares horizon-client-lib with default features disabled, and separately includes client-core/input/render plus assets, items, world, protocol, server/shared services, shaders, mods, telemetry, narrator and related crates. Android adds winit's android-native-activity feature, JNI 0.21.1 and starling-catalog. Windows adds URI handling, DX12 and winresource build support; macOS adds objc2 AppKit/Foundation; non-macOS targets add GLES. Default features enable audio/controllers and forward those into client-lib/input/render; optional allocator, RNG-trace and Windows heap features are declared. The binary path is src/main.rs; three explicit integration tests are registered.
 - Findings: This crate is the native executable/platform-entry boundary, while much reusable functionality is delegated to horizon-client-lib. Dependencies are repeated across the executable and library manifests, so feature alignment and duplicate target-conditional declarations need to be maintained. Android is implemented as a NativeActivity/winit + JNI path, not a conventional Java Activity wrapper in this Cargo manifest. The manifest declares many Horizon server/mod/telemetry features as dependencies even though feature flags may disable some code paths; only a target-specific dependency/build graph can prove what lands in an APK. The minimum Rust version comes from the workspace and is not independently pinned here. No Java Forge/FML runtime is declared.
@@ -2498,9 +2498,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 106. `crates/horizon-world/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 0eb0442297cdb05372808e97a8a9e287ae3cd7ba.
-- Size: 36 lines; complete file fetched and read.
-- Coverage: lines 1–36, complete; no chunks omitted.
+- Source SHA: `0eb0442297cdb05372808e97a8a9e287ae3cd7ba`.
+- Size: 35 logical lines; 1,115 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–35, complete; no chunks omitted.
 - Purpose: Manifest for horizon-world, the vanilla world-data layer covering NBT, regions, chunk storage, registries and world-generation parity utilities.
 - Implementation / logic: Declares library dependencies on libm pinned to 0.2.16, log, serde/serde_json, SHA-2, postcard 1.1.3, horizon-core, flate2 with zlib-rs/runtime detection, lz4_flex with checked safe codecs, and xxhash-rust with xxh32. Registers horizon-world and horizon-worldgen-parity binaries plus the world_probe example whose source is reviewed as entry 120. Workspace lints are inherited.
 - Findings: The manifest avoids direct graphics/windowing dependencies and is a clean data/world layer in the dependency graph. The serialization/compression primitives are broadly reusable, but actual DataVersion, chunk section, registry, tick and worldgen schemas are fixed by source constants and generated data elsewhere. The package includes production binaries and a large parity probe target, so a library-only consumer must be deliberate about Cargo target selection. No tests are declared explicitly here; tests may still be embedded in module source files.
@@ -2515,9 +2515,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 107. `packaging/android/java/io/github/juanluci/starling/NativeMods.java`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 30d7c46dc06572c0708a75ffa9227a8a86e26b05.
-- Size: 183 lines; complete file fetched and read.
-- Coverage: lines 1–183, complete; no chunks omitted.
+- Source SHA: `30d7c46dc06572c0708a75ffa9227a8a86e26b05`.
+- Size: 182 logical lines; 7,392 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–182, complete; no chunks omitted.
 - Purpose: Android Java bridge for selecting and managing downloaded Horizon native-mod builds, tracking first-frame startup failures, exposing mod-requested Android permissions, and selecting a remote native build server.
 - Implementation / logic: Uses the app-private files/native directory. chosen() reads the current build key, rejects empty keys, slash-containing keys and keys beginning with a dot, verifies the library exists, checks the requested game version against the build's for file, and checks an APK-install stamp against the build's apk file. It then counts starts and moves the build aside after two starts without a first-frame confirmation. started() clears the counter. permissions() reads build.json and groups each mod ID by requested permission in insertion order; permissionsDeclined/declinePermissions store the user's choice. failed() sets the build aside with a notice. isBuildServer() checks an HTTPS host/optional-port regex; chooseBuildServer() stores or removes the configured address. Small metadata files use best-effort UTF-8 read/write helpers.
 - Findings: The selected native library is tied to both game version and exact APK lastUpdateTime, which prevents loading a build made for another install even when versionName/versionCode match. The two-start guard provides a rollback path after native crashes before first frame. Permission requests are sourced from build.json, not independently derived in this Java layer; malformed JSON becomes an empty permission set. The permission names/mod IDs are not allowlisted here, so the Activity/requesting code must validate supported Android permission identifiers and explain the mapping to the user. Build-server validation is regex-based: it restricts to HTTPS host syntax but does not fully validate DNS labels, IPv6, port range or URL parsing. Metadata writes are non-atomic and silently ignore I/O errors; a lost/corrupt starts or notice file can affect rollback/UX. The key rejects slash and leading-dot forms but does not visibly validate a strict generated-key alphabet; build key creation and app-private path trust need to be checked. This file manages Horizon Rust native-mod libraries, not Java Forge/FML mod loading.
@@ -2532,9 +2532,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 108. `packaging/android/native_mod_permissions.py`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: b043eccdf8fa7ec2ce0e1412dfc8c356180382e9.
-- Size: 58 lines; complete file fetched and read.
-- Coverage: lines 1–58, complete; no chunks omitted.
+- Source SHA: `b043eccdf8fa7ec2ce0e1412dfc8c356180382e9`.
+- Size: 57 logical lines; 2,255 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–57, complete; no chunks omitted.
 - Purpose: Build-time source scanner that guesses which Android permissions a native mod needs, then feeds the permission list into the build metadata consumed by NativeMods.java.
 - Implementation / logic: Defines one permission rule, microphone, as a compiled regular expression matching source/API markers for CPAL input streams/devices, AAudio input direction, OpenSL ES recording and Android AudioRecord/MediaRecorder. Scans Rust, C/C++, header, Java and Kotlin files recursively under each supplied mod folder in sorted path order. Reads source as UTF-8 with replacement for invalid bytes, records matching permission names in a set and stops early when every configured permission has been found. The CLI prints each folder and its sorted permission list or a dash.
 - Findings: This is a heuristic text search, not a compiler, call-graph or permission analysis. It can miss aliased/wrapped/dynamically invoked APIs and can report false positives from comments, dead code, vendored samples or unrelated source files. It only knows the microphone permission today; new permission types require additional patterns and manifest/runtime request wiring. It does not check whether the Android permission is declared in the APK manifest, whether a mod actually executes the code path, or whether the user granted the permission. File read errors are not handled explicitly beyond replacement decoding; no tests are included in this file.
@@ -2549,15 +2549,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 109. `crates/horizon-client-render/src/chunk.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 923a2a0832b84ae93a03c431d1288cb70443400b.
-- Size: 1,076 lines; complete file fetched in consecutive ranges 1–400, 401–600, 601–800 and 801–1,076.
-- Coverage: lines 1–1,076, complete; the initially large middle response was re-fetched in smaller consecutive ranges to ensure no gap.
+- Source SHA: `923a2a0832b84ae93a03c431d1288cb70443400b`.
+- Size: 1,075 logical lines; 42,084 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–1,075, complete; the initially large middle response was re-fetched in smaller consecutive ranges to ensure no gap.
 - Purpose: Resident client-render chunk/column data model, including packed block and biome palettes, shared sections, block/sky light, heightmaps, block entities, saved entities, structures and memory accounting.
 - Implementation / logic: Defines block-palette width strategy and a process-wide configurable block bit width, shares uniform sections through Arc, and uses copy-on-write for mutations. A ColumnLayout describes min Y and section count. Section stores block and biome PalettedContainers plus a Light value that can be uniform or packed. Chunk stores coordinates, min_y, Arc sections, lazily initialized WORLD_SURFACE and MOTION_BLOCKING heightmaps, light/fresh/generated flags, block entities/names, post-processing positions, saved extras, entities, structure references and starts. Index helpers map local block/section/biome coordinates. set() mutates via Arc::make_mut and invalidates cached heightmaps only when a write could change a relevant column height; replace_blocks() rebuilds storage and resets both heightmap caches. The module also tracks unique/shared allocation sizes in ColumnCensus.
 - Findings: The resident representation is optimized for memory and mutation sharing, not a serialized protocol model. Heightmap correctness depends on all section writes passing through the invalidating methods. The section_blocks() helper computes its index from global MIN_Y rather than the chunk's stored min_y; because Chunk supports arbitrary ColumnLayout, callers using non-default layouts need validation that this mapping is intentional. Light outside a column returns zero below min_y and full sky above max_y. Biome lookup clamps quart Y to the column. The global block-bit strategy is mutable process-wide and should not change while existing containers rely on it. Shared Arc sections reduce memory until writes trigger copy-on-write, so memory reports must distinguish shared and unique allocations. The module includes modern world-height/layout and registry assumptions; no tests were executed as part of this audit.
 - RustChunk relevance: Very high for mobile memory use. Uniform-section sharing, packed palettes, Arc copy-on-write, cached heightmaps and explicit memory census are useful approaches for large render distances on constrained devices.
 - 1.20.1 implications: The underlying chunk/section/palette concepts are reusable, but section count/min_y, biome container dimensions, light encoding, palette bit widths, heightmap predicates and block/biome IDs must match the actual 1.20.1 dimension and protocol rules. In particular, do not assume the same vertical layout for Overworld, Nether and End; validate each dimension's min_y and height. Chunk packet decoding and save NBT must be version-specific and remain separate from this resident cache.
-- Decision: Highly adaptable as a memory-efficient resident chunk representation; global layout, section indexing, light/heightmap semantics and registry data require validation or rewrite for 1.20.1.
+- Decision: Adaptable; Rewrite required — Highly adaptable as a memory-efficient resident chunk representation; global layout, section indexing, light/heightmap semantics and registry data require validation or rewrite for 1.20.1.
 - Dependencies / cross-references: horizon-world palette/storage and registry types; ColumnLayout; Light; BlockStateId; horizon-client-render chunk map, mesher, lighting and streaming; MIN_Y; memory diagnostics.
 - Follow-up checks: Trace every caller of section_blocks() and test custom min_y layouts; compare dimension section ranges and heightmap predicates with 1.20.1; test concurrent read/COW mutation rules; verify cache invalidation for every block mutation path; benchmark memory and lookup costs on Android ARM64.
 - RustChunk implementation mapping: Maps to the future resident render-chunk representation and chunk-streaming worker interfaces described in `docs/STARLING_1_20_1_ENGINE_MAP.md`; no corresponding RustChunk runtime struct exists yet.
@@ -2566,9 +2566,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 110. `crates/horizon-world/src/chunk.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 9272a3460116dad42ac378cd9f4c76a390fdca4a.
-- Size: 999 lines; complete file fetched in five consecutive ranges: 1–200, 201–400, 401–600, 601–800 and 801–999.
-- Coverage: lines 1–999, complete; no chunks omitted.
+- Source SHA: `9272a3460116dad42ac378cd9f4c76a390fdca4a`.
+- Size: 998 logical lines; 37,808 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–998, complete; no chunks omitted.
 - Purpose: World-storage chunk primitives: NBT palette containers, saved chunk metadata/ticks, block-state descriptors, and runtime packed BlockSection storage. The file explicitly says these operations do not execute block behavior, lighting, heightmaps, neighbor updates or scheduled ticks.
 - Implementation / logic: PalettedContainer reads/writes palette and packed-long-array NBT, validates palette indexes, preserves unrelated extra compound fields and can compact storage. BlockState converts between names/properties and NBT. ChunkData validates chunk xPos/zPos, exact DATA_VERSION, section list and duplicate section Y, and reads/writes saved block/fluid ticks constrained to the chunk. BlockSection maps registry BlockStateIds to a compact palette with per-slot counts, a free list, last-lookup cache and PackedStorage; set() grows/reuses palette IDs, fill_run() writes vertical runs and counts added air-to-non-air transitions, and compact() rebuilds first-use palette order. Embedded tests compare optimized state operations with a baseline over randomized edit streams and cover palette growth/collapse, invalid data and freed-slot reuse.
 - Findings: This is storage-level machinery, not a complete gameplay chunk or a data-fixer. ChunkData rejects any DataVersion other than the crate's exact constant and does not convert older chunk formats; 1.20.1 saves therefore cannot be assumed to load. Section Y is stored as an NBT Byte and conversion to i8 explicitly rejects values outside that range. Palette storage validates data lengths/indices, while unrelated NBT fields are retained for round-trip preservation. BlockSection state IDs are tied to the loaded BlockRegistry order. fill_run() optimizes a top-down contiguous write and updates counts; its returned air count is important to callers and must be cross-checked against the exact caller traversal. Tests are extensive but were read only, not run.
@@ -2583,9 +2583,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 111. `crates/horizon-world/src/nbt.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: b27bf4fda2c50ec7b81adb316aa0d12359e2dc56.
-- Size: 1,152 lines; complete file fetched in consecutive ranges 1–200, 201–400, 401–600, 601–800, 801–1,000 and 1,001–1,152.
-- Coverage: lines 1–1,152, complete; an omitted portion of the first large response was fetched separately as lines 601–800.
+- Source SHA: `b27bf4fda2c50ec7b81adb316aa0d12359e2dc56`.
+- Size: 1,151 logical lines; 41,802 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–1,151, complete; an omitted portion of the first large response was fetched separately as lines 601–800.
 - Purpose: Java Edition NBT and SNBT implementation for file and network payloads, with lossless UTF-16 strings, streaming list reads, resource-specific limits and version-generation mixed-list wrappers.
 - Implementation / logic: JavaString stores UTF-16 code units, including unpaired surrogates. Tag models all standard NBT tag types and stores float/double bit patterns. Reader validates byte, node and depth limits; decodes Java modified UTF-8; handles named-file roots and unnamed network roots; keeps the last duplicate compound key; and can stream selected lists through a visitor rather than retaining their elements. Limits differ for defaults, large state tables, saved data and structure templates. Writer separates disk and network behavior: oversized modified-UTF strings become empty on disk but are rejected for network output; disk NaNs are canonicalized while network output preserves the bit pattern. SNBT parser handles compounds, lists, typed arrays, quoted/bare strings, booleans and suffixed numbers, with a depth cap of 512. Tests cover UTF behavior, mixed-list wrappers, duplicate keys, NaN handling, streaming, truncation, limits and SNBT.
 - Findings: This is a broad and security-sensitive parser/writer. The mixed-list wrapper convention unwraps one-entry compounds whose key is empty; it is described as a 26.3 behavior and must not be treated as an unconditional property of every 1.20.1 NBT list, where normal NBT list elements remain homogeneous. The saved-data limits allow up to 1 GiB and unlimited nodes, trading memory protection for compatibility with large vanilla/modded saves; callers must still constrain decompressed input and allocate budgets deliberately. SNBT typed-array conversion uses a helper that maps nonnumeric tag variants to zero rather than producing an error; verify this against vanilla TagParser semantics before reusing it. The parser returns consumed byte length rather than requiring the entire input to be consumed, so callers must decide whether trailing text is permitted. Tests exist in the file but were not executed.
@@ -2600,9 +2600,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 112. `crates/horizon-world/src/region.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 2e6e7f9a7f69ac3b0d2c3edb15a392d12f1c119c.
-- Size: 538 lines; complete file fetched in consecutive ranges 1–200, 201–400 and 401–538.
-- Coverage: lines 1–538, complete; no chunks omitted.
+- Source SHA: `2e6e7f9a7f69ac3b0d2c3edb15a392d12f1c119c`.
+- Size: 537 logical lines; 19,588 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–537, complete; no chunks omitted.
 - Purpose: Anvil region-file reader, in-place writer/clearer and non-overwriting exporter, including external chunk files (.mcc).
 - Implementation / logic: Uses 4,096-byte sectors and an 8 KiB header with 1,024 chunk slots. Parses r.<x>.<z>.mca paths and validates region coordinates. RegionFile reads offset/timestamp tables, tracks allocated sectors, reads inline or external compressed chunk records, allocates first-fit free sector runs, writes chunks, clears entries and syncs data. Chunk payloads are compressed NBT with a 64 MiB compressed-size cap. RegionWriter writes a whole replacement region to a temporary sibling, syncs it, then publishes it with a non-overwriting hard link; Drop removes temporary/unpublished output and external files on failure. Export preserves untouched compressed records/timestamps and applies explicit overrides/deletions.
 - Findings: The sector/header layout is the conventional Anvil shape, so this module is less coupled to gameplay than the chunk serializer. The reader intentionally accepts short headers as zero-filled and drops certain invalid offsets; a full sector-overlap/range consistency audit is not visible in this file. An offset whose first sector begins exactly at EOF is not dropped by the greater-than check and will fail later when the payload is read; verify whether this matches the intended vanilla recovery policy. In-place writes allocate new sectors before freeing old ones, but errors after external-file publication or during header update can leave orphaned data or an in-memory state requiring reopen/recovery. RegionWriter relies on hard-link publication, which must be verified on the Android target filesystem. No unit-test module is present in this file.
@@ -2617,9 +2617,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 113. `crates/horizon-world/src/registry.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: be511976b7379dedf755f7570f5869ffeae4ce45.
-- Size: 312 lines; complete file fetched and read.
-- Coverage: lines 1–312, complete; no chunks omitted.
+- Source SHA: `be511976b7379dedf755f7570f5869ffeae4ce45`.
+- Size: 311 logical lines; 12,161 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–311, complete; no chunks omitted.
 - Purpose: Runtime block-state registry and validated per-state fact tables, binding names/properties and default states to version-pinned numeric IDs.
 - Implementation / logic: BlockRegistry loads NBT or streamed facts.json, validates DATA_VERSION, ordered states and defaults, shares property strings to reduce allocation, and stores state lookups by a 64-bit hash with a collision fallback map. It exposes ID/state/default lookup, property value enumeration and strict resolution that fills omitted default properties. BlockTable checks that a fact table's states match the registry in exact ID order; BlockTableFile streams and verifies root/direct-child states lists so very large tables are not materialized as complete NBT trees.
 - Findings: Registry IDs are positional and tied to the exact generated data order; using an otherwise similar registry with a different order corrupts every ID-based chunk, packet and fact table. The facts.json representation and DATA_VERSION are exporter-specific and must be regenerated together. The in-memory index uses Rust DefaultHasher and explicitly assumes stable keys across processes; its algorithm is not a persistence format and Rust does not promise DefaultHasher's implementation across compiler releases. Hash collisions are handled by the fallback map, but determinism should not be relied upon across Rust versions. BlockTableFile streams the logical state list but still reads the entire file into a byte vector first, so memory pressure remains proportional to compressed/uncompressed table size. No unit-test module is present in this file.
@@ -2634,9 +2634,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 114. `crates/horizon-client-core/src/lib.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 4c4231359c562a86d53c87cb3ca91b7fbda82e7b.
-- Size: 29 lines; complete file fetched and read.
-- Coverage: lines 1–29, complete; no chunks omitted.
+- Source SHA: `4c4231359c562a86d53c87cb3ca91b7fbda82e7b`.
+- Size: 28 logical lines; 867 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–28, complete; no chunks omitted.
 - Purpose: Public module root for the low-level client-core crate.
 - Implementation / logic: Forbids unsafe code and exposes modules for block-entity NBT, boss bars, text components, fastutil ordering, game rules, identifiers, key display, language tables, NBT paths/values, particles, patterns, potions, registries, scoreboard, SNBT, sound sources, text, UUIDs and name/player helpers. Defines a common Result alias over boxed dynamic errors. The module-level comment describes this layer as below commands and gameplay and says horizon-client re-exports the old module paths.
 - Findings: The file is an API surface and module index only; it does not implement these subsystems or prove their version compatibility. The public modules are broad, so changing an internal module or moving a type can be a downstream API break. The generic boxed error alias is convenient but loses some compile-time error specificity at crate boundaries. No tests are present in this root file.
@@ -2651,9 +2651,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 115. `crates/horizon-client-render/src/lib.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 4abc362410c18ceb8723f0ed6f33e330c525f807.
-- Size: 155 lines; complete file fetched and read.
-- Coverage: lines 1–155, complete; no chunks omitted.
+- Source SHA: `4abc362410c18ceb8723f0ed6f33e330c525f807`.
+- Size: 154 logical lines; 3,653 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–154, complete; no chunks omitted.
 - Purpose: Public module root for the client rendering/world-presentation/screens crate.
 - Implementation / logic: Forbids unsafe code, declares a large public module surface for assets, atlases, audio, auth UI, bidi, biome, block/entity rendering, chunks, meshing, light, LOD, models, fonts, HUD, menus, packs, particles, resource streaming, UI, world presentation and related features. Keeps sprite_cache private. Re-exports horizon_world::json_folder, Result and selected modules/types from horizon-client-core, horizon-client-input, horizon-command and horizon-items. Adds Android controls and keypad modules.
 - Findings: This is a large aggregation root, with many modules exposed publicly; it does not itself establish which are actually reachable in the running renderer. The comment states gameplay builds on this crate and that nothing here reaches gameplay, but this architectural claim must be checked through imports because the manifest includes protocol/world/command dependencies. Re-exporting numerous foreign modules creates a broad compatibility surface and may couple UI to lower-level crate names. No tests are included in this file.
@@ -2668,9 +2668,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 116. `crates/horizon-client/examples/probe/main.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 09cc5bca60ce394bcfd1ce3c3bd46475dc003ef3.
-- Size: 210 lines; complete file fetched and read.
-- Coverage: lines 1–210, complete; no chunks omitted.
+- Source SHA: `09cc5bca60ce394bcfd1ce3c3bd46475dc003ef3`.
+- Size: 209 logical lines; 5,525 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–209, complete; no chunks omitted.
 - Purpose: Central registry/entry point for the horizon-client parity-probe executable, replacing many individually linked example binaries.
 - Implementation / logic: Aliases horizon-client-lib as horizon_client, imports a shared dispatch module and declares fixture/probe modules for audio, camera, input, world rendering, block/entity behavior, menus, inventories, chat, lighting, particles, text, options, sounds and many other client features. A probes! macro registers the executable probe names. The header explains that parity harness scripts invoke the selected probe as if it were an individual example and that one binary avoids repeatedly linking the large client crate.
 - Findings: This file mostly lists modules; individual probe implementations and fixture logic live in the child modules and dispatch.rs. The parity harness explicitly excludes this registry file from its dependency fingerprint so adding a new probe does not rerun unrelated harness preparation. The module list and probe names are evidence of the 26.3 behavior surface Starling tests, not evidence that those features already work or pass tests. No probes are executed by merely compiling or reading this file.
@@ -2685,9 +2685,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 117. `crates/horizon-client/src/bin/horizon-ctl/main.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: b20c846daf1a9e830063d7c94dc96f927d527c3c.
-- Size: 695 lines; complete file fetched and read in two consecutive ranges: 1–400 and 401–695.
-- Coverage: lines 1–695, complete; the second range includes the full test module.
+- Source SHA: `b20c846daf1a9e830063d7c94dc96f927d527c3c`.
+- Size: 694 logical lines; 25,323 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–694, complete; the second range includes the full test module.
 - Purpose: Command-line control client for a running Horizon game, scripts and MCP/agent workflows, communicating with the game's local/remote control socket.
 - Implementation / logic: Defines structured failures/exit codes for game errors, usage, unreachable connection and no-AI denial. Client connects through horizon_client::control::connect, reads newline-delimited JSON replies, caches the socket in Session and reconnects after unreachable errors. Session routes CLI commands to local command handlers or wire messages, supports launch/wait-ready, entity interaction, held keys, logs/crash reports, screenshots, scripts, absolute file paths and MCP service mode. split_line implements shell-like quoting, escapes and comments. The executable supports global socket/timeout/pretty flags, human-readable output for logs/help, script keep-going behavior and no-AI refusal. Embedded tests cover log tail/crash selection, command-line splitting, unreachable games, no-AI restrictions and screenshot path handling.
 - Findings: The control socket is a separate automation interface, not the Minecraft server protocol. It provides powerful scripted and MCP control of the running game, so the no-AI gate and command dispatcher are a meaningful security boundary. Numeric arguments use f64 parsing and pass values into Duration::from_secs_f64 in timeout/sleep/hold/wait paths; non-finite or out-of-range values should be rejected before conversion to avoid a panic. The script loop silently breaks on an input read error rather than reporting it, which can make a truncated script appear successful. Remote screenshot payloads are base64-decoded and written to the requested path; path and payload size policy should be reviewed in the transport layer. The file contains tests but they were read, not executed.
@@ -2702,9 +2702,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 118. `crates/horizon-client/src/lib.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 3699d714d7f5684c82f9401eee44f07cd291c0b2.
-- Size: 14 lines; complete file fetched and read.
-- Coverage: lines 1–14, complete; no chunks omitted.
+- Source SHA: `3699d714d7f5684c82f9401eee44f07cd291c0b2`.
+- Size: 13 logical lines; 415 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–13, complete; no chunks omitted.
 - Purpose: Library root for the gameplay/startup crate above the reusable client library.
 - Implementation / logic: Re-exports horizon-client-lib public items, aliases the current crate as horizon_client, exposes entry, game, mod_api, diagnostics and performance modules, and includes the Android module only on Android. The crate forbids unsafe code on non-Android targets but deliberately does not apply that crate-level prohibition on Android, where JNI/native-activity hooks may need unsafe interoperability.
 - Findings: This is a thin composition boundary rather than the runtime entry point itself. The conditional unsafe policy is a security-sensitive exception: Android-specific unsafe code must remain tightly scoped and reviewed, while all other targets retain the prohibition. Re-exporting the entire client library creates a broad and potentially unstable public surface. No tests are included in this root.
@@ -2719,9 +2719,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 119. `crates/horizon-client/src/main.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: ed5f7f5c16a4d8c90cdc8cf9e3985f3ef14eee7f.
-- Size: 20 lines; complete file fetched and read.
-- Coverage: lines 1–20, complete; no chunks omitted.
+- Source SHA: `ed5f7f5c16a4d8c90cdc8cf9e3985f3ef14eee7f`.
+- Size: 19 logical lines; 792 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–19, complete; no chunks omitted.
 - Purpose: Minimal executable entry point for the Horizon native Minecraft Java 26.3 client.
 - Implementation / logic: Forbids unsafe code, selects horizon_threads::Allocator as the global allocator unless system-allocator or alloc-census is active, and selects CensusAllocator when alloc-census is enabled without system-allocator. Embeds the 27-byte MOD_API_LEVEL marker from horizon_mods::api_level::MARK so the launcher can inspect the mod API level without running the game. main() keeps the marker alive with black_box and delegates startup to horizon_client::entry::main().
 - Findings: The file intentionally contains almost no game logic; startup, Android activity callbacks and the runtime are elsewhere. Allocator selection is compile-feature-dependent and can materially affect memory profiling/performance; the 27-byte array length also constrains the mod API marker's compile-time representation. The source comment explicitly pins this executable to Minecraft Java 26.3. No tests are present in this file.
@@ -2736,9 +2736,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 120. `crates/horizon-world/examples/probe/main.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 56dbc88433ffb014d86a70186685a2f3dc55d4fb.
-- Size: 365 lines; complete file fetched and read.
-- Coverage: lines 1–365, complete; no chunks omitted.
+- Source SHA: `56dbc88433ffb014d86a70186685a2f3dc55d4fb`.
+- Size: 364 logical lines; 10,169 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–364, complete; no chunks omitted.
 - Purpose: Central module registry for the horizon-world parity-probe executable, combining a large set of world, storage, entity, block, movement and world-generation fixtures into one binary.
 - Implementation / logic: Imports a shared dispatch macro and an args helper, defines shared support modules for common data, decoration storage, placement queries and shapes, then declares and registers roughly 170 probe/fixture modules. The list spans effects, attributes, biome/chunk/worldgen, block state/collision/support/survival, entities, fluids, inventory/items, player travel/combat, structures, ticks, world borders, ray queries and deterministic random behavior. The header explains that one probe binary avoids repeatedly instantiating/linking the crate's generic-heavy code in many separate examples.
 - Findings: Like the client probe registry (entry 116), this file mostly enumerates modules; the actual assertions, input fixtures and output formats are in child modules and dispatch.rs. It includes datafix_world, chunk dumps and many version-specific parity fixtures, but the list alone does not prove any test has passed. Building this example can still be expensive because it links a large set of probes, though it is designed to reduce repeated builds across separate examples. The module list is a testing inventory, not production world runtime code.
@@ -2770,9 +2770,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 121. `crates/horizon-client/src/entry.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 7bc456b6ffdc89d055d8428db37dc371d5c44233.
-- Size: 246 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–246, complete; no gaps between ranges.
+- Source SHA: `7bc456b6ffdc89d055d8428db37dc371d5c44233`.
+- Size: 245 logical lines; 9,374 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–245, complete; no gaps between ranges.
 - Purpose: Shared desktop/Android startup orchestration, including early hook installation, logging/crash setup, platform arguments and runtime launch.
 - Implementation / logic: Installs trait mods before lower-level services can invoke them; configures allocator and startup telemetry; reads desktop arguments or Android-supplied arguments; selects game home, player directory or dedicated-server folder. It initializes logging/crash/RAM-limit services, runs the post-log platform callback, installs native renderers and world/client hooks, adjusts Unix open-file limits when possible, then enters the game runtime. It classifies usage versus runtime errors, flushes logs and uses platform-specific shutdown.
 - Findings: Startup ordering is essential because several global hook registries are one-shot. Android arguments come from the Activity bridge, not OS argv. Dedicated-server setup is not needed by an initial client-only release. File-limit adjustment is best-effort. No local tests exist.
@@ -2787,15 +2787,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 122. `crates/horizon-client/src/android.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 546c37dc4c03642b6bb3f95bfae21a7183ab1ea4.
-- Size: 1,386 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–1,386 in consecutive ranges 1–300, 301–550, 551–800, 801–1,050, 1,051–1,134 and 1,135–1,386, complete; no gaps between ranges.
+- Source SHA: `546c37dc4c03642b6bb3f95bfae21a7183ab1ea4`.
+- Size: 1,385 logical lines; 50,991 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–1,385 in consecutive ranges 1–300, 301–550, 551–800, 801–1,050, 1,051–1,134 and 1,135–1,385, complete; no gaps between ranges.
 - Purpose: Android NativeActivity/JNI bridge for storage, lifecycle, input, IME, sensors, clipboard, file picking, links, native-library loading, system statistics and frame scheduling.
 - Implementation / logic: Retains AndroidApp/JNI/activity handles and one-shot process arguments. Provides private/shared folder selection and migration helpers; maps Android key, motion, pointer and gamepad events into client input; maintains mouse state and a bounded event queue; mirrors text-field/IME composition and selection; exposes clipboard, file picker, folder opening, browser links and file hooks. It handles vibration, gyroscope, DNS, foreground-work hooks, optional native-mod library loading, heap/thermal probes, Android Performance Hint Manager and native-window frame-rate requests. Startup configures environment/platform hooks, diagnostics, preparation/account resume and input before entering the game. Shutdown finishes the Activity then terminates the process because the event loop cannot be recreated in place.
 - Findings: Large unsafe FFI/JNI boundary with object-lifetime and thread-affinity assumptions. Correctness depends on Android-owned lifetimes, valid JNI attachment, native-window lifetime and a single process event loop. Newer Android APIs are dynamically resolved and may be absent. Shared-storage migration needs interruption/retry testing. Mouse/controller state must reset on focus loss, pause, pointer cancel and device removal. Native-mod loading is not Forge. No device run was performed.
 - RustChunk relevance: Very high for Android NativeActivity, IME, touch, sensors, clipboard, storage and lifecycle integration.
 - 1.20.1 implications: Mostly protocol-independent, but input must feed 1.20.1 movement/interaction. Remove Starling-specific telemetry, accounts, native mods and folder assumptions unless RustChunk independently needs them.
-- Decision: Highly relevant as an Android architecture reference; implement a smaller RustChunk bridge with explicit unsafe/JNI review and device validation.
+- Decision: Adaptable; Reference — Highly relevant as an Android architecture reference; implement a smaller RustChunk bridge with explicit unsafe/JNI review and device validation.
 - Dependencies / cross-references: android-activity/winit, JNI, input/touch/gamepad, platform hooks, diagnostics, storage helpers, NativeMods Java bridge, system stats, account/preparer and Android packaging.
 - Follow-up checks: Audit unsafe blocks/JNI signatures; trace Activity/surface lifecycle; test IME/RTL, multi-touch cancel, controller disconnect, storage migration, symbol fallbacks and thermal/frame-rate APIs.
 - RustChunk implementation mapping: Candidate for platform/android module; port required services only, not native-mod loading/account renewal by default.
@@ -2804,9 +2804,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 123. `crates/horizon-client/src/diagnostics.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 543befa72bfae5d207397fd3558144e88b7c2ce9.
-- Size: 606 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–606 in consecutive ranges 1–300, 301–400, 401–480, 481–567 and 568–606, complete; no gaps between ranges.
+- Source SHA: `543befa72bfae5d207397fd3558144e88b7c2ce9`.
+- Size: 605 logical lines; 25,497 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–605 in consecutive ranges 1–300, 301–400, 401–480, 481–567 and 568–605, complete; no gaps between ranges.
 - Purpose: Bounded local crash/startup diagnostics and explicit diagnostic ZIP export, separated from opt-in performance recording.
 - Implementation / logic: Stores session JSON with build/device/ABI/start phase/clean-exit/context and previous-session data; writes updates through a bounded sync-channel worker so disk operations stay off the frame thread. Heartbeat uses nonblocking lock/send operations. It supports checkpoints, handled/fatal errors, flush, previous-unclean detection and summaries. A redactor removes selected credential terms, URLs, addresses, private paths and domains. Explicit export allowlists logs/crash/performance/exit summaries, limits file count and size, keeps complete JSONL rows, summarizes binary tombstones, writes a manifest and retains three archives. Tests cover redaction, archive limits, JSONL, worker/heartbeat and exit labels.
 - Findings: The bounded async design is useful, but redaction is best-effort pattern filtering, not a guarantee arbitrary log text is safe. New token formats or paths can evade it. JSON persistence uses temp plus rename without visible fsync. Worker send/write failures are often ignored to avoid blocking the frame thread, so diagnostics may be incomplete. Archive metadata overhead should be checked against the exact cap. Tests were read but not run.
@@ -2821,9 +2821,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 124. `crates/horizon-client-render/src/chunk_map.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 484bd96756d5d21493e879a10abd2146c793d5b4.
-- Size: 386 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–386, complete; no gaps between ranges.
+- Source SHA: `484bd96756d5d21493e879a10abd2146c793d5b4`.
+- Size: 385 logical lines; 13,867 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–385, complete; no gaps between ranges.
 - Purpose: Resident chunk-column membership map with version tokens and a bounded change journal for consumers caching loaded chunk keys.
 - Implementation / logic: Stores chunk coordinates to Arc<Chunk>, tracks fresh columns and uses an AtomicU64 revision source. Insert/remove update membership revision only when membership changes; replacing payload under an existing key does not. A 256-entry VecDeque retains recent Added/Removed deltas. deltas_since returns changes only when the revision belongs to the map and remains in the retained window; otherwise consumers rebuild. clear records Reset; fresh-key helpers track chunks awaiting entity placement. It implements LightWorld through resident chunks. Tests cover interleaved maps, expired history, reset and fresh-key behavior.
 - Findings: Separates membership changes from payload/light updates and avoids repeated full key scans. The bounded journal falls back to rebuild when history is incomplete. Revision wrap is not explicitly guarded. Fresh-key iteration follows fast-hash order and is not persistent/deterministic across runs.
@@ -2838,9 +2838,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 125. `crates/horizon-client-render/src/mesher.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: a5aff352590f344ef169db790386b7256e6ece4f.
-- Size: 2,028 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–2,028 in consecutive ranges 1–350, 351–700, 701–1,050, 1,051–1,200, 1,201–1,400, 1,401–1,550, 1,551–1,750 and 1,751–2,028, complete; no gaps between ranges.
+- Source SHA: `a5aff352590f344ef169db790386b7256e6ece4f`.
+- Size: 2,027 logical lines; 84,402 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–2,027 in consecutive ranges 1–350, 351–700, 701–1,050, 1,051–1,200, 1,201–1,400, 1,401–1,550, 1,551–1,750 and 1,751–2,027, complete; no gaps between ranges.
 - Purpose: Main block-section mesher converting resident chunk states, baked models, biome tints and light into GPU terrain geometry.
 - Implementation / logic: Defines compact vertex layouts (fixed-point UVs, atlas layer, light and packed color/HDR/fluid flags), SectionMesh buffers/bounds and per-state MeshTables. MeshTables derive state facts from registry/model/render assets: solidity, permeability, shade/emission, tints, block entities, fluids, face occlusion and animated layers. Padded loads a section plus two-block borders from a 3x3 chunk neighborhood; MeshScratch reuses per-worker buffers. Meshing performs hidden-cell/visibility flood fills, gathers block-entity/light references, tessellates fluids, loads baked models, applies offsets and neighbor culling, optional leaf culling and AO, samples biome colors, applies connected textures/overlays, splits compact-CTM faces and writes solid/translucent vertices.
 - Findings: Highly version/asset-coupled renderer. Registry IDs directly index MeshTables, so mismatched facts can produce wrong states. Padded borders/missing-neighbor behavior affect AO/fluid seams, requiring neighbor mesh invalidation on chunk arrival/unload. Mesh vertex buffers can grow substantially even if worker scratch is bounded. Custom HDR/material flags in vertex alpha are Horizon shader conventions, not vanilla semantics. Tests cover UV packing, visibility, tint, leaves, fluids and geometry; not run.
@@ -2855,15 +2855,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 126. `crates/horizon-client-render/src/mesher/lighting.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 84677087b5f715bb67274480ec6db061749cabfa.
-- Size: 507 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–507, complete; no gaps between ranges.
+- Source SHA: `84677087b5f715bb67274480ec6db061749cabfa`.
+- Size: 506 logical lines; 17,980 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–506, complete; no gaps between ranges.
 - Purpose: Per-vertex block/sky light, directional face shade and ambient-occlusion calculations for baked model quads, including partial faces.
 - Implementation / logic: Packs block/sky values into light coordinates; handles emissive blocks, per-quad emission, max/smooth blending, cardinal face shade, gray/scale operations and Java-compatible integer narrowing. An adjacency table defines corner sampling for six faces. Quad geometry is classified as partial/cubic; flat lighting samples the block or neighbor; AO samples corners/diagonals/permeable states and weights partial faces. Tests cover sample fallback, blending, float-floor parity, color math, emission and face sampling.
 - Findings: Small arithmetic/remapping changes can create visible seams. gray contains a platform-specific x86-64 floor workaround and needs ARM64 validation. weighted_blend intentionally narrows/masks values; clamping would alter parity. AO requires padded block/light neighbors and correct state facts. Tests were read but not run.
 - RustChunk relevance: Critical subcomponent affecting smooth light, AO, partial models and mobile visual quality.
 - 1.20.1 implications: Verify exact 1.20.1 BlockModelLighter, ModelBlockRenderer, LightCoordsUtil and Mth arithmetic. 26.3 model facts and shader packing are not presumed identical.
-- Decision: Highly adaptable as algorithm reference; constants, state facts, float narrowing and shader packing need 1.20.1 parity tests and ARM64 validation.
+- Decision: Adaptable; Reference — Highly adaptable as algorithm reference; constants, state facts, float narrowing and shader packing need 1.20.1 parity tests and ARM64 validation.
 - Dependencies / cross-references: mesher Info/Padded; baked ModelQuad geometry; block/sky light; emission/permeability/solid/shade properties; terrain vertex and shader lightmap.
 - Follow-up checks: Compare helpers with 1.20.1 source; golden AO vectors for six faces/partial shapes; test negative geometry, emissive blocks and missing-neighbor borders.
 - RustChunk implementation mapping: Candidate for render/lighting helpers called by chunk mesher; keep GPU packing distinct from stored/network light representation.
@@ -2872,9 +2872,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 127. `crates/horizon-client-render/src/world.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 3bd8f012e2597e6be18d980e11ee894f62ee7fc2.
-- Size: 634 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–634, complete; no gaps between ranges.
+- Source SHA: `3bd8f012e2597e6be18d980e11ee894f62ee7fc2`.
+- Size: 633 logical lines; 27,042 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–633, complete; no gaps between ranges.
 - Purpose: Resident client-world state joining chunk storage with remesh/relight queues, block entities, weather, height queries and gameplay bookkeeping.
 - Implementation / logic: DirtySections stores section bit masks by column. World owns dimension shape, ChunkMap, random state, revision, air ID, dirty geometry/light, light edits, loaded chunks/entities, modified columns, block-entity tickers, POIs, clocks/weather and optional network/path logs. set uses Arc copy-on-write; on change it updates block-entity/watch/path/network logs, marks affected sections in the 3x3x3 AO neighborhood and queues incremental light edits or marks nearby columns for relighting. Queries provide heightmaps, block/light reads, palette-assisted may_hold, tickers and saved lock-code retention.
 - Findings: More than a passive chunk store: it combines renderer state with some simulation bookkeeping. Dirty propagation is optimized, but wrong dimension min_y/section/border math can leave stale mesh/light. Attachments, watched writes and mod-specific fields are not needed in minimal vanilla. Tests cover dirty-neighborhood marking and may_hold; not run.
@@ -2889,9 +2889,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 128. `crates/horizon-client-render/src/chunk/block_entity.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 9f50876e831d035f10430918a04b9c0ad94ae7af.
-- Size: 755 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–755, complete; no gaps between ranges.
+- Source SHA: `9f50876e831d035f10430918a04b9c0ad94ae7af`.
+- Size: 754 logical lines; 26,927 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–754, complete; no gaps between ranges.
 - Purpose: Plain client-side data models for block entities stored in chunks; behavior lives in separate feature systems.
 - Implementation / logic: Defines typed models for chest, furnace, brewing, signs, jukebox, beacon, lectern, sculk, banners, crafter, spawner, beehive, command block, campfire, skull, end gateway and later entities. Uses ItemStack/NBT/Text/UUID types from shared crates. ModBlockEntity stores ID, saved NBT, item slots and menu data; its revision changes on mutable dereference, clones get new identities, and update-tag merges replace only supplied changed keys. Additional models describe mod containers, fluid tanks and energy buffers. Embedded tests check revision changes and idempotent update-tag merging.
 - Findings: Plain-data/behavior separation is sound, but the enum mixes 1.20-era types with later trial-spawner/vault/shelf/creaking-heart and native-mod entities. It is not a clean 1.20.1 type list. Revision increments on mutable dereference even if no change; a retained mutable reference can be changed repeatedly without another revision. merge_update_tag is partial merge, not whole-compound replacement. Tests cover only mod entity revisions; not run.
@@ -2906,9 +2906,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 129. `crates/horizon-world/src/compression.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: d1cd863c212a9e4b29c313f79f8c109fc9ce88bc.
-- Size: 363 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–363 in consecutive ranges 1–200 and 201–363, complete; no gaps between ranges.
+- Source SHA: `d1cd863c212a9e4b29c313f79f8c109fc9ce88bc`.
+- Size: 362 logical lines; 13,045 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–362 in consecutive ranges 1–200 and 201–362, complete; no gaps between ranges.
 - Purpose: Compression/decompression codecs used by Anvil region records, including lz4-java block framing.
 - Implementation / logic: Maps compression IDs 1–4 to Gzip, Zlib, None and Lz4. Decode accepts a maximum output size and can append to an existing Vec. Gzip uses MultiGzDecoder, Zlib uses streaming Decompress and detects no-progress/truncated streams, and None checks the size limit. LZ4 expects LZ4Block framing (not LZ4 frame), validates methods/lengths, checks xxHash32 with Java seed/mask and implements Java fast block token/end behavior. Encoder emits 65,536-byte raw/compressed blocks and a terminator. Tests compare Java-LZ4 cases and cover round trips, limits and corruption.
 - Findings: Output budgets and checksums are valuable for untrusted world files. LZ4 framing is lz4-java block stream, not generic LZ4 frame. Zlib returns at StreamEnd without visibly requiring all input consumed; Gzip accepts concatenated members; LZ4 returns at a terminator without visibly rejecting following bytes. The presence of ID 4 here does not prove vanilla 1.20.1 accepts it. Tests read but not run.
@@ -2923,9 +2923,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 130. `crates/horizon-world/src/datafix/mod.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: a3dfa02f5e19ad1368fa8b6b448c0dd19dc45a8c.
-- Size: 386 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–386 in consecutive ranges 1–200 and 201–386, complete; no gaps between ranges.
+- Source SHA: `a3dfa02f5e19ad1368fa8b6b448c0dd19dc45a8c`.
+- Size: 385 logical lines; 14,157 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–385 in consecutive ranges 1–200 and 201–385, complete; no gaps between ranges.
 - Purpose: DataFixerUpper orchestration for migrating older world/entity/player/item data into current Starling/Horizon 26.3 schema.
 - Implementation / logic: Defines schema types and version-keyed fix registry; stores last-read record remainder so unknown fields can survive rewrites; applies read hooks, ordered fixes and write hooks; exposes updates for chunks, entity/POI tags, player, hotbar and saved data. Chunk fixes receive dimension/generator context. Item/name hooks normalize historical forms. CURRENT comes from Horizon DATA_VERSION; OLDEST_SUPPORTED is -1.
 - Findings: Architecture is useful, but each fix/key/schema targets 26.3. A read hook converts older ItemStacks to Data Components at a later key, which must never run in a live 1.20.1 client. update_chunk_to attaches temporary context and removes it after normal return; panic cleanup is not guaranteed. Equal-key fix order matters. OLDEST_SUPPORTED=-1 is not proof every old world is recoverable.
@@ -2940,9 +2940,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 131. `crates/horizon-world/src/datafix/block_state_data.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 9d5f578abeee550ea0d95876015760a4ad41bd5e.
-- Size: 200 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–200, complete; no gaps between ranges.
+- Source SHA: `9d5f578abeee550ea0d95876015760a4ad41bd5e`.
+- Size: 199 logical lines; 6,459 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–199, complete; no gaps between ranges.
 - Purpose: Generated lookup table converting pre-1.13 legacy block IDs/data into flattened block-state identities during DataFixer migrations.
 - Implementation / logic: Models name plus sorted properties and NBT tags. A OnceLock loads block_state_data.txt, recording state instances, a 4096-entry legacy ID/data map, defaults and lookups from historical name/property forms to flattened states. Helpers expose legacy tag/name/ID conversions.
 - Findings: Historical migration data, not the 1.20.1 runtime registry. ID range, order and fallbacks are specific to pre-1.13 conversion. include_str creates a compile-time dependency on generated data. Invalid/out-of-range IDs have different fallback behavior by helper. No local tests are defined.
@@ -2957,9 +2957,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 132. `crates/horizon-world/src/datafix/chunk_flatten.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 671fc9f73231ce256a2ce49c623605666d1932e2.
-- Size: 772 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–772 in consecutive ranges 1–250, 251–500 and 501–772, complete; no gaps between ranges.
+- Source SHA: `671fc9f73231ce256a2ce49c623605666d1932e2`.
+- Size: 771 logical lines; 26,705 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–771 in consecutive ranges 1–250, 251–500 and 501–771, complete; no gaps between ranges.
 - Purpose: Historical ChunkPalettedStorageFix upgrading 1.12-era chunk arrays into flattened palettes and migrating block-entity state into block states.
 - Implementation / logic: Builds legacy state tables from block_state_data, adds lookup maps for doors, beds, banners, skulls, pots and note blocks, reads old Blocks bytes plus Data/Add nibbles, reconstructs numeric ID/data, applies neighbor/virtual-block fixes, converts each 4096-cell section to a palette and packed BlockStates long array, removes legacy arrays and writes UpgradeData.
 - Findings: Specialized ancient-world migration, not a current chunk decoder. It assumes historical section range/count and legacy IDs; mappings/order depend on generated 1.12/1.13 data. Not a 1.20.1 palette parser. No test module is present.
@@ -2974,9 +2974,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 133. `crates/horizon-world/src/datafix/world_upgrader.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 45e4545fbbd9d252c0d116842a4aa8544399a092.
-- Size: 598 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–598 in consecutive ranges 1–300 and 301–598, complete; no gaps between ranges.
+- Source SHA: `45e4545fbbd9d252c0d116842a4aa8544399a092`.
+- Size: 597 logical lines; 21,025 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–597 in consecutive ranges 1–300 and 301–597, complete; no gaps between ranges.
 - Purpose: Background Optimize World worker scanning region/entity/POI files across dimensions and optionally rewriting chunks/caches.
 - Implementation / logic: Enumerates vanilla/custom dimensions, locates region files and chunk positions; processes entity, POI and chunk data; reports progress/cancellation; applies DataFixer and tag modifiers; rewrites changed records using Zlib. Recreate mode writes to sibling new_ folders and replaces originals only after successful conversion. Optional cache erasure removes heightmaps, light-on flag and section light arrays. Worker thread catches panics and updates status.
 - Findings: Recreate mode avoids replacing originals until region conversion succeeds, but remove/rename failures need recovery tests. Non-recreate mode can rewrite earlier chunks before a later failure. Thread spawn errors are discarded with .ok(), potentially leaving progress with no worker. Unreadable regions are logged/skipped. Fixer/current version is 26.3-specific.
@@ -2991,9 +2991,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 134. `crates/horizon-world/src/datafix/tests.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 99d813dd216dac35908374ba1696fc47f7569a0f.
-- Size: 81 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–81, complete; no gaps between ranges.
+- Source SHA: `99d813dd216dac35908374ba1696fc47f7569a0f`.
+- Size: 80 logical lines; 2,986 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–80, complete; no gaps between ranges.
 - Purpose: Representative DataFixer tests for no-op current data and selected migrations from 1.20-era saves into newer 26.3 schema.
 - Implementation / logic: Parses SNBT and checks current chunk data unchanged, 1.20 ItemStacks converted into Data Components, legacy Level fields moved into newer difficulty/game-rule/spawn structures, and historical block-state tags rewritten. The ItemStack fixture uses DataVersion 3465.
 - Findings: Tests document migrations to 26.3, not correctness of the live 1.20.1 serializer. Component output is unsuitable for 1.20.1 runtime. The limited cases do not prove full DFU parity. Tests were read but not run.
@@ -3008,9 +3008,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 135. `crates/horizon-world/examples/probe/datafix_world.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: f2e119d42e9d911e8993ddf1fd0162a766c412a2.
-- Size: 55 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–55, complete; no gaps between ranges.
+- Source SHA: `f2e119d42e9d911e8993ddf1fd0162a766c412a2`.
+- Size: 54 logical lines; 1,887 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–54, complete; no gaps between ranges.
 - Purpose: CLI parity probe copying a world folder and running DataFixer conversion on the copy.
 - Implementation / logic: Accepts input world, output world and optional target DataVersion. Removes an existing output directory recursively, copies input while skipping session.lock, then calls upgrade_band for a target or upgrade_world for current conversion. Prints resulting version or failure/usage code.
 - Findings: Test tool, not runtime loader. Removing an existing output path is unsafe for user-facing defaults; caller must guarantee it is disposable and distinct from source. Copy is recursive but not an atomic directory transaction and has no backup recovery. Default target is 26.3.
@@ -3025,9 +3025,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 136. `crates/horizon-client/examples/probe/dispatch.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 8754e944d96be5f133bfcd522cb715c79e3a562c.
-- Size: 50 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–50, complete; no gaps between ranges.
+- Source SHA: `8754e944d96be5f133bfcd522cb715c79e3a562c`.
+- Size: 49 logical lines; 1,616 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–49, complete; no gaps between ranges.
 - Purpose: Shared dispatcher and argument adapter for the single client parity-probe binary.
 - Implementation / logic: A probes macro generates name-to-module dispatch and main; invokes the chosen probe, converts Termination to ExitCode and strips the probe name so each module sees an individual-example interface. Provides String and OsString iterators.
 - Findings: Test harness only. Argument removal assumes probe name is argv index 1 and invocation goes through the dispatcher. Single-binary compilation may reduce repeated linking, but actual tests/expected values live in child probes. No probe was run.
@@ -3042,9 +3042,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 137. `crates/horizon-world/examples/probe/dispatch.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 80b875eef798f920c989730c36bb382c30321d8f.
-- Size: 41 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–41, complete; no gaps between ranges.
+- Source SHA: `80b875eef798f920c989730c36bb382c30321d8f`.
+- Size: 40 logical lines; 1,392 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–40, complete; no gaps between ranges.
 - Purpose: Shared dispatcher for the horizon-world parity-probe binary.
 - Implementation / logic: A probes macro generates module dispatch and main, strips probe name from arguments, and prints usage/exit code 2 for unknown names. Exposes String arguments only, unlike client dispatcher which also exposes OsString.
 - Findings: Harness plumbing only; it does not prove world-generation, region or NBT tests passed. String-only paths may be insufficient for non-UTF8 filesystem names.
@@ -3059,9 +3059,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 138. `crates/horizon-world/examples/probe/chunk_dump.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 11725bc709ed1d79d613e66c575c6be593e3e9a8.
-- Size: 506 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–506 in consecutive ranges 1–250 and 251–506, complete; no gaps between ranges.
+- Source SHA: `11725bc709ed1d79d613e66c575c6be593e3e9a8`.
+- Size: 505 logical lines; 20,775 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–505 in consecutive ranges 1–250 and 251–505, complete; no gaps between ranges.
 - Purpose: Host-side whole-chunk world-generation parity dumper for blocks, quart biomes, block entities, scheduled ticks and postprocessing metadata.
 - Implementation / logic: Loads registry from facts.json, canonicalizes NBT, loads folder datapacks, optionally synthesizes old chunks for blending, then creates an OverworldGenerator from seed/dimension. Environment options select decoration order, terrain/structures/full phases, structure scans/pieces, saved starts, datapacks, old chunks and isolated decoration. It generates target rectangle plus margin/neighborhood, decorates in controlled order and emits stable dumps of state IDs, quart biomes, block rows, block-entity NBT, block/fluid ticks and postprocessing marks.
 - Findings: Strong oracle method because it compares more than screenshots. This is not live renderer or network chunk decoder. registry() leaks a Registry Box for process lifetime; acceptable for short probe but not library code. Canonical output casts float/double values to integers, potentially losing fractions. Datapack/saved-start behavior is probe-specific. No probe was run.
@@ -3076,9 +3076,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 139. `crates/horizon-core/src/no_ai.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: 18b3de0f2a11da736931e93c9a327490a68b20b9.
-- Size: 98 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–98, complete; no gaps between ranges.
+- Source SHA: `18b3de0f2a11da736931e93c9a327490a68b20b9`.
+- Size: 97 logical lines; 3,525 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–97, complete; no gaps between ranges.
 - Purpose: Persistent opt-out switch disabling Horizon AI/agent-control surfaces across game and launcher.
 - Implementation / logic: Reads noAi:true from horizon-extras.txt beside options.txt; missing file means off. with() rewrites only this key while retaining other lines. set() writes when enabling, does not create an absent file when disabling and propagates write errors. check() returns a fixed refusal when enabled. Tests cover parsing, line preservation and default-off behavior.
 - Findings: Product/agent safety control only, unrelated to Minecraft gameplay/protocol. Simple line parser and direct fs::write rather than atomic replacement; interruption can truncate settings. is_on treats unreadable/missing data as off, so read failure is not fail-closed. Tests read but not run.
@@ -3093,9 +3093,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 140. `crates/horizon-core/src/random/worldgen.rs`
 - Source repository/ref: starling-client/starling / starling.
-- Source SHA: aa16ab2492e194ef9b2d0dd0c76b0a199a1c25f8.
-- Size: 204 lines; complete source file fetched and reviewed.
-- Coverage: lines 1–204, complete; no gaps between ranges.
+- Source SHA: `aa16ab2492e194ef9b2d0dd0c76b0a199a1c25f8`.
+- Size: 203 logical lines; 6,769 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–203, complete; no gaps between ranges.
 - Purpose: Adapts legacy and Xoroshiro random sources to Minecraft world-generation bit-sampling and call-count semantics.
 - Implementation / logic: A sealed WorldgenSource exposes version-specific bit extraction for LegacyRandom and XoroshiroRandom. WorldgenRandom supports wrapped Java-style nextBits/nextInt(bound)/nextLong/nextFloat/nextDouble/boolean/Gaussian with call counting, or plain mode delegating to the source for fork/positional streams. It implements decoration, feature, large-feature and salted-large-feature seed formulas; a positional adapter wraps streams and slime_chunk_random handles legacy slime seed mixing.
 - Findings: Deterministic world generation depends on exact RNG, call sequence, bit extraction, overflow, fork semantics and Gaussian cache. set_seed does not clear the adapter Gaussian cache (documented as matching native behavior); plain mode delegates methods rather than applying wrapper behavior, so wrong wrapping changes output. No local test module; parity tests live elsewhere and were not run.
@@ -3120,9 +3120,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 141. `.claude/skills/vanilla-parity/SKILL.md`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 4c0714d92320e0f36507b7d51855ec74f33ab5c3.
-- Size: 77 lines.
-- Coverage: lines 1–77, complete.
+- Source SHA: `4c0714d92320e0f36507b7d51855ec74f33ab5c3`.
+- Size: 76 logical lines; 4,006 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–76, complete.
 - Purpose: Agent procedure for diagnosing vanilla-parity reports through a generated port ledger and tracing vanilla methods to Rust implementations.
 - Implementation / logic: Rebuilds the ledger from the vanilla 26.3 jar/decompiled lab; uses issue/where/class/what/gaps commands; requires reading both vanilla and Rust functions because the generated map may be wrong; preserves operation order, constants, RNG draws and Java math; distinguishes integrated-server logic from client-only effects; runs ledger/map checks and area tests before PR.
 - Findings: Strong review method, especially the warning that generated mapping is a lead rather than proof and the need to check both execution paths. The jar path, tools, method map and target version are Horizon 26.3-specific. Its stated mapping error rate is a claim in this document, not independently measured here.
@@ -3137,9 +3137,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 142. `.dockerignore`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 458330c93359f503d2f949860f658ff2e82ca46b.
-- Size: 8 lines.
-- Coverage: lines 1–8, complete.
+- Source SHA: `458330c93359f503d2f949860f658ff2e82ca46b`.
+- Size: 7 logical lines; 114 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–7, complete.
 - Purpose: Excludes build output, local state, JavaScript dependencies, benchmarks, packs and mods from Docker build contexts.
 - Implementation / logic: Ignores target/, .local/, node_modules directories, benchmarks/, packs/ and mods/; the comment says the relay needs Rust sources only.
 - Findings: Useful context-size and privacy safeguard, but ignored paths may contain required inputs in another project. This file does not identify the Dockerfile or prove the relay has no dependency on excluded content.
@@ -3154,9 +3154,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 143. `.gitattributes`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 585f03f060b9faa24a5625f663c43497ca049f62.
-- Size: 12 lines.
-- Coverage: lines 1–12, complete.
+- Source SHA: `585f03f060b9faa24a5625f663c43497ca049f62`.
+- Size: 11 logical lines; 778 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–11, complete.
 - Purpose: Enforces LF line endings for byte-compared generated documentation, CSS and Rust source; marks generated Rust files for GitHub language statistics.
 - Implementation / logic: Applies text/eol=lf to selected paths and patterns, and linguist-generated to generated Rust outputs.
 - Findings: Prevents Windows autocrlf from creating false generated-file diffs. The exact path list does not prove all generated files are covered or that the generators are deterministic.
@@ -3171,9 +3171,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 144. `.githooks/pre-commit`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: abc64ac4e8daa0f4a46fa60e501dffeb5607f403.
-- Size: 12 lines.
-- Coverage: lines 1–12, complete.
+- Source SHA: `abc64ac4e8daa0f4a46fa60e501dffeb5607f403`.
+- Size: 11 logical lines; 462 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–11, complete.
 - Purpose: Pre-commit hook that finds a working Python 3 executable and runs the public-tree checker.
 - Implementation / logic: Tries python3, python, then py using a Python-version check; replaces itself with tools/check_public_tree.py on the first working interpreter; exits with an error if none is found.
 - Findings: Handles the Windows Store python3 stub and multiple Python command names. It only applies when hooks are installed and enabled; hooks can be bypassed, so CI is still required. The checker behavior is outside this wrapper.
@@ -3188,9 +3188,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 145. `.githooks/pre-push`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 375b535c0f6415f27b2524bf211b2e4d4b840ad4.
-- Size: 12 lines.
-- Coverage: lines 1–12, complete.
+- Source SHA: `375b535c0f6415f27b2524bf211b2e4d4b840ad4`.
+- Size: 11 logical lines; 473 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–11, complete.
 - Purpose: Pre-push hook that runs the public-tree checker in its pre-push mode.
 - Implementation / logic: Uses the same python3/python/py fallback as pre-commit, then executes tools/check_public_tree.py with --pre-push; errors if Python 3 cannot be found.
 - Findings: Adds a second local checkpoint before publishing. It shares the installation and bypass limitations of all local Git hooks; exact pre-push behavior is implemented by the checker, not this file.
@@ -3205,15 +3205,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 146. `.github/actionlint.yaml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: af951fe125aacb21b2a7227da9e08d4cf61ce4f6.
-- Size: 4 lines.
-- Coverage: lines 1–4, complete.
+- Source SHA: `af951fe125aacb21b2a7227da9e08d4cf61ce4f6`.
+- Size: 3 logical lines; 161 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–3, complete.
 - Purpose: Configures actionlint's recognized self-hosted-runner labels for a maintainer Mac mini.
 - Implementation / logic: Declares the horizon-game and ludovics-mac-mini labels under the self-hosted-runner configuration key.
 - Findings: Lint configuration only; it does not provision runners or secure them. Its comment says the runner holds the maintainer's Minecraft files, making runner trust and workflow routing security-sensitive.
 - RustChunk relevance: Low unless RustChunk introduces self-hosted GitHub Actions runners; otherwise GitHub-hosted runners avoid this extra boundary.
 - 1.20.1 implications: Never schedule untrusted fork code on a runner containing local 1.20.1 files, credentials or signing material.
-- Decision: Reference-only unless a self-hosted runner is introduced; rewrite labels and security assumptions.
+- Decision: Reference; Optional/future — Reference-only unless a self-hosted runner is introduced; rewrite labels and security assumptions.
 - Dependencies / cross-references: actionlint; workflows using runs-on labels; GitHub runner configuration and access policy.
 - Follow-up checks: Validate the config with the chosen actionlint version; inspect workflow triggers and runner groups before adding private runners.
 - RustChunk implementation mapping: Optional CI lint configuration only; no client code mapping.
@@ -3222,9 +3222,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 147. `.github/CODEOWNERS`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 5567eb184c61306a7e646e99bf03dd4d4c50353b.
-- Size: 17 lines.
-- Coverage: lines 1–17, complete.
+- Source SHA: `5567eb184c61306a7e646e99bf03dd4d4c50353b`.
+- Size: 16 logical lines; 1,056 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–16, complete.
 - Purpose: Assigns a maintainer as code owner for workflow, CI/release, signing, update/download and packaging paths.
 - Implementation / logic: Uses a broad .github rule and explicit paths for CI scripts, release training, signing, update server, launcher signature/backend/link files, Cargo manifests and packaging.
 - Findings: A useful ownership boundary for sensitive supply-chain code. The file comment explicitly says code-owner review applies only once branch protection requires it; CODEOWNERS alone does not enforce review or show whether bypass is possible.
@@ -3239,9 +3239,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 148. `.github/ISSUE_TEMPLATE/bug_report.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 1c0aa78a7cc60a1ff30d62c69e361bc56d7db834.
-- Size: 54 lines.
-- Coverage: lines 1–54, complete.
+- Source SHA: `1c0aa78a7cc60a1ff30d62c69e361bc56d7db834`.
+- Size: 53 logical lines; 1,717 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–53, complete.
 - Purpose: Structured player bug report capturing reproduction, phone model, Android/version context, feature area and logs.
 - Implementation / logic: Requires the report description and phone model; offers Android and Starling version inputs, a dropdown for setup/singleplayer/server/shaders/resource packs/mods/touch controls, and log attachment guidance for latest, previous and rotated logs.
 - Findings: Device and log context helps reproduce mobile problems. Android/version fields are optional, and logs can contain account, server or filesystem information; the form has no redaction/privacy warning of its own.
@@ -3256,9 +3256,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 149. `.github/ISSUE_TEMPLATE/config.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: c24e7816f4876a8d172ddf0645e97ee50e1e472f.
-- Size: 6 lines.
-- Coverage: lines 1–6, complete.
+- Source SHA: `c24e7816f4876a8d172ddf0645e97ee50e1e472f`.
+- Size: 5 logical lines; 205 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–5, complete.
 - Purpose: Keeps blank issues enabled and routes desktop/shared-game issues to Horizon's repository.
 - Implementation / logic: Sets blank_issues_enabled to true and defines a single contact link with its destination and explanation.
 - Findings: Simple issue routing can separate Android-specific and shared-game ownership, but the Horizon URL is Starling-specific and should not be copied into RustChunk without a real relationship.
@@ -3273,9 +3273,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 150. `.github/ISSUE_TEMPLATE/native-build.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: f98b500a428848fb48516388fee38e4f6ba71f9e.
-- Size: 25 lines.
-- Coverage: lines 1–25, complete.
+- Source SHA: `f98b500a428848fb48516388fee38e4f6ba71f9e`.
+- Size: 24 logical lines; 716 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–24, complete.
 - Purpose: Issue form requesting a Starling native-mod build for a specified Starling version and list of native-mod identifiers.
 - Implementation / logic: Provides an explanation that a submitted request starts a build, then requires a version and space-separated mod IDs; a separate workflow consumes the fields.
 - Findings: The form is only an input surface; it does not validate identifiers, authorize code or establish trust. The format and workflow are Starling-native-mod-specific.
@@ -3290,9 +3290,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 151. `.github/pull_request_template.md`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 8ca6fe2f50fbb91faccd29f7ff83bc090d800d92.
-- Size: 40 lines.
-- Coverage: lines 1–40, complete.
+- Source SHA: `8ca6fe2f50fbb91faccd29f7ff83bc090d800d92`.
+- Size: 39 logical lines; 1,537 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–39, complete.
 - Purpose: PR checklist for rationale, change type, vanilla reference, external code provenance, self-check evidence and screenshots.
 - Implementation / logic: Prompts for parity/bug/performance/feature/tooling/docs classification; asks for vanilla classes/methods and harness, exact external repository commit and license details, pr_ready output and before/after screenshots where visible. It also asks AI agents to disclose authorship and requests maintainer edit permission.
 - Findings: Good review and provenance prompts, but checkboxes are not enforcement. The 26.3 parity target and script names are version-specific, and a self-check block can be asserted without CI validation.
@@ -3307,9 +3307,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 152. `.github/release-line.txt`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 3b04cfb60da13a716867848ebeb2191a164887d9.
-- Size: 2 lines.
-- Coverage: lines 1–2, complete.
+- Source SHA: `3b04cfb60da13a716867848ebeb2191a164887d9`.
+- Size: 1 logical lines; 4 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–1, complete.
 - Purpose: Stores a single release-line value, currently 0.2.
 - Implementation / logic: Plain-text marker with one value; this file contains no parser or definition of the value's meaning.
 - Findings: The value alone does not show whether it means an application release line, compatibility channel, protocol generation or another selector. Assigning semantics without tracing consumers would be guesswork.
@@ -3324,15 +3324,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 153. `.github/trusted-reviewers.txt`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 7513add1f64b451e1089b40c82f37608756d04d2.
-- Size: 11 lines.
-- Coverage: lines 1–11, complete.
+- Source SHA: `7513add1f64b451e1089b40c82f37608756d04d2`.
+- Size: 10 logical lines; 863 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–10, complete.
 - Purpose: Allowlist of GitHub logins for nightly-hold selection and issue/PR triage commands.
 - Implementation / logic: Lists one login per line with comments recording who added it and when; comments define a paused marker to suspend listed reviewers while keeping the maintainer's own commands available.
 - Findings: A simple revocable allowlist, but its security depends on consuming scripts correctly enforcing membership and on protected review for changes. This file does not implement identity verification, parsing, authorization or audit logging.
 - RustChunk relevance: Only relevant if RustChunk adds repository moderation commands; it is not a Minecraft player/account allowlist.
 - 1.20.1 implications: No gameplay or protocol impact. Keep automation identities distinct from Minecraft accounts and server operator permissions.
-- Decision: Reference-only for possible future repository moderation tooling; no client need.
+- Decision: Reference; Optional/future — Reference-only for possible future repository moderation tooling; no client need.
 - Dependencies / cross-references: docs/release-flow.md; tools/ci/nightly_set.py; tools/ci/triage_command.py; CODEOWNERS; GitHub issue/PR permission scopes.
 - Follow-up checks: Inspect the consumer scripts for exact matching, bot handling, pause/revoke behavior and audit output; verify this file is owner-protected.
 - RustChunk implementation mapping: Optional repository automation config only; never part of Android app or game login.
@@ -3341,9 +3341,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 154. `.github/workflows/cancel-on-close.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 28343115f3580a9d63a0363bdc6ca5a6b37a6530.
-- Size: 32 lines.
-- Coverage: lines 1–32, complete.
+- Source SHA: `28343115f3580a9d63a0363bdc6ca5a6b37a6530`.
+- Size: 31 logical lines; 1,674 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–31, complete.
 - Purpose: Cancels queued or running workflow runs for a pull request after it is closed or merged.
 - Implementation / logic: Uses pull_request_target on closed events with actions:write; checks out no source and runs no PR code. It queries unfinished statuses, filters by branch and head repository, de-duplicates run IDs and best-effort cancels them.
 - Findings: Avoiding checkout/execution is an important pull_request_target mitigation. Matching both branch and head repository avoids collisions from same-named branches in different forks. The API request asks for at most 100 runs per status, so unusually large result sets may be incomplete.
@@ -3358,9 +3358,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 155. `.github/workflows/ci.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 84c4414e59f859b11671ab8cbc0f69a39de2e1b4.
-- Size: 97 lines.
-- Coverage: lines 1–97, complete.
+- Source SHA: `84c4414e59f859b11671ab8cbc0f69a39de2e1b4`.
+- Size: 96 logical lines; 5,393 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–96, complete.
 - Purpose: General CI for selected branch pushes and PRs, covering public-tree hygiene, Python research tooling, Rust formatting, lint and core tests.
 - Implementation / logic: Triggers on selected branches, PR changes and manual dispatch; cancels superseded PR runs; disables telemetry in tests; selects hosted or restricted self-hosted runners; detects Rust changes; checks public-tree files and PR ranges; runs Python tests, installs Rust plus system headers, caches dependencies, then runs fmt, Clippy and workspace library/binary/integration/doc tests.
 - Findings: Strong layered CI with private-game-file protection and fork PR isolation from self-hosted runners. Rust checks may be skipped when change detection says no Rust changed, while Python and public-tree checks still run. This workflow does not itself run vanilla parity, Android APK release builds or device tests. Action references use version tags, not immutable commit SHAs.
@@ -3375,15 +3375,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 156. `.github/workflows/claim-command.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 9c6ddfc290dbd8682a9b3f93fddfdb74bfcf9b73.
-- Size: 81 lines.
-- Coverage: lines 1–81, complete.
+- Source SHA: `9c6ddfc290dbd8682a9b3f93fddfdb74bfcf9b73`.
+- Size: 80 logical lines; 3,584 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–80, complete.
 - Purpose: Handles /claim and /unclaim issue comments and periodically releases old claims without a linked open PR.
 - Implementation / logic: Triggers on issue comments, schedule and manual dispatch; restricts command execution to the canonical Horizon repo; ignores bot comments; serializes by issue number; sparsely checks out main scripts/list; passes user comment data through environment variables; grants issue-write permission for claim/release operations.
 - Findings: Runs trusted main-branch scripts rather than PR code and avoids interpolating comment text into shell source. Actual command parser, reviewer authorization, linked-PR detection and stale-age logic live in Python scripts not reviewed here. Prefix filtering in YAML is not proof of secure parsing.
 - RustChunk relevance: Low for the client; optional contributor coordination only if issue traffic warrants it. It must not affect in-game permissions.
 - 1.20.1 implications: No game behavior. Keep repository moderation separate from Minecraft authentication and server operator permissions.
-- Decision: Unnecessary for the vanilla client; possible future repository automation after script review.
+- Decision: Unnecessary; Optional/future — Unnecessary for the vanilla client; possible future repository automation after script review.
 - Dependencies / cross-references: tools/ci/claim_command.py; tools/ci/nightly_set.py; .github/trusted-reviewers.txt; GitHub issue-comment/schedule events and issue APIs.
 - Follow-up checks: Inspect parser and authorization; test malformed prefixes, bots, forks, duplicate claims, stale claims with/without PRs and API rate limits.
 - RustChunk implementation mapping: No shipping module; optional GitHub contributor workflow only.
@@ -3392,15 +3392,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 157. `.github/workflows/mod-registry.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 0f252bb68206c90800fffe8a74b167c8492915de.
-- Size: 35 lines.
-- Coverage: lines 1–35, complete.
+- Source SHA: `0f252bb68206c90800fffe8a74b167c8492915de`.
+- Size: 34 logical lines; 1,179 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–34, complete.
 - Purpose: Dedicated CI for the Horizon mod-registry workspace when its crates or shared mod checks change.
 - Implementation / logic: Runs on main pushes and PRs touching the mod registry, shared mods crate or workflow; installs stable Rust with fmt/Clippy; caches the registry workspace; runs locked formatting, lint and tests.
 - Findings: Isolating a small workspace reduces unrelated CI work, but path filters must include all inputs that affect it. This does not build native mods or prove Minecraft mod compatibility.
 - RustChunk relevance: Potentially useful if RustChunk later has a separate resource/mod metadata service; not required for the vanilla client.
 - 1.20.1 implications: A future registry must distinguish data packs, resource packs, Forge mods and any Rust extension format, and identify exact 1.20.1 compatibility. This workflow establishes none of those.
-- Decision: Adaptable CI isolation pattern; the current mod-registry feature is unnecessary for the first milestone.
+- Decision: Adaptable; Unnecessary; Optional/future — Adaptable CI isolation pattern; the current mod-registry feature is unnecessary for the first milestone.
 - Dependencies / cross-references: crates/horizon-mod-registry; crates/horizon-mods; Cargo.lock; rustfmt; Clippy; test suite; GitHub path filters.
 - Follow-up checks: Inspect manifests and indirect inputs; test path-filter coverage; verify Android dependencies if this service is ever shipped on-device.
 - RustChunk implementation mapping: Future optional metadata/mod service CI only; no first-milestone game crate.
@@ -3409,9 +3409,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 158. `.github/workflows/mojang-republish.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 11c68c4437687e39eeadad92a2c7f98deca02ca0.
-- Size: 34 lines.
-- Coverage: lines 1–34, complete.
+- Source SHA: `11c68c4437687e39eeadad92a2c7f98deca02ca0`.
+- Size: 33 logical lines; 1,171 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–33, complete.
 - Purpose: Hourly detector for Mojang version-manifest republishing that changes pinned metadata not yet recorded in research-lock.json.
 - Implementation / logic: Runs hourly or manually with a dry-run input; only runs in the canonical Horizon repository; grants contents:read and issues:write; invokes a Python checker to inspect the public manifest and optionally print proposed issue changes.
 - Findings: Useful supply-chain alerting pattern for detecting upstream metadata changes that may break preparation. Behavior depends on the Python script, which was not reviewed; this workflow does not automatically update pinned hashes or establish artifact authenticity.
@@ -3426,9 +3426,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 159. `.github/workflows/native-hook-stamp.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: 3ca07a4732ac8019fbfbacfe627ec29a04d5d10d.
-- Size: 56 lines.
-- Coverage: lines 1–56, complete.
+- Source SHA: `3ca07a4732ac8019fbfbacfe627ec29a04d5d10d`.
+- Size: 55 logical lines; 1,860 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–55, complete.
 - Purpose: Opens an automation PR assigning numbers to pending native-hook API fragments after they land on main.
 - Implementation / logic: Triggers on main changes to hook fragment JSON; checks out main with history; runs a stamping script; exits if no diff; configures the GitHub bot; creates/refreshes an automation branch; commits tracked changes; pushes with force-with-lease and opens a PR. Runs only in the canonical Horizon repository with contents and pull-request write permissions.
 - Findings: Makes generated numbering reviewable and separates it from the fragment submission. Correctness depends on the fragment schema and stamping script, neither reviewed here. Force-with-lease helps branch safety but race behavior and automation ownership still need tests.
@@ -3443,15 +3443,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 160. `.github/workflows/native-mods.yml`
 - Source repository/ref: starling-client/starling / starling; audited from pinned snapshot 5432370d573642041585c69b40fb045b27133488.
-- Source SHA: d7d5bdf5d054c42c98e9f856252169badd6731bb.
-- Size: 280 lines.
-- Coverage: lines 1–280, complete.
+- Source SHA: `d7d5bdf5d054c42c98e9f856252169badd6731bb`.
+- Size: 279 logical lines; 12,594 bytes; full pinned source blob fetched and read.
+- Coverage: lines 1–279, complete.
 - Purpose: Builds Starling game-library variants with selected native mods and publishes shared libraries plus metadata as release assets.
 - Implementation / logic: Accepts issue-form or manual requests; reads version/mod identifiers from environment; normalizes IDs, validates version syntax and tag existence, checks each requested mod manifest, selects Azure VM or hosted runner, checks out tooling/source without persisted credentials, installs Android/Rust/Java build tools, builds ARM64 library variants, uploads artifacts and publishes a prerelease. Separate jobs start/deallocate the VM and attempt to keep it alive for queued builds.
 - Findings: This is a privileged native-code build-and-publish pipeline, not evidence of Forge support. It compiles selected code into a library players download; trust, build isolation, artifact integrity/signing, scoped permissions and VM cleanup are critical. The called packaging script, client downloader, signature checks and VM failure paths were not examined or executed. The dated VM transition in comments does not prove current cloud configuration.
 - RustChunk relevance: Low for the vanilla base client and high-risk for any later native extension distribution. Only isolated build-orchestration concepts may be useful; Starling's native-mod format/library replacement is not a Forge adapter.
 - 1.20.1 implications: No demonstrated 1.20.1/Forge compatibility. Do not load arbitrary native code in the first milestone. A later extension system needs its own ABI, exact build binding, signatures and explicit trust.
-- Decision: Unnecessary for the current vanilla milestone; retain as security/CI reference only if a separately approved native-extension system is designed.
+- Decision: Unnecessary; Reference; Optional/future — Unnecessary for the current vanilla milestone; retain as security/CI reference only if a separately approved native-extension system is designed.
 - Dependencies / cross-references: native-mods/ and prebuilt.txt; per-mod mixin manifests; packaging/android/native_build.sh; game/native_builds.rs; docs/starling-native-mods.md; Android NDK; cargo-ndk; Java 25; Azure OIDC/VM; GitHub Actions artifacts/releases.
 - Follow-up checks: Inspect native_build.sh, build metadata and client downloader; verify hashes/signatures, source allowlist, tag immutability, reproducibility, artifact retention and VM cleanup on cancellation/failure.
 - RustChunk implementation mapping: No current shipping component. If an extension system is approved later, reuse only high-level isolated build orchestration; independently design the format, loader, ABI, trust and signed artifact protocol.
@@ -3478,14 +3478,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 161. `.github/workflows/overlap-note.yml`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `bfa6a0446695ccaeaeda0c8b621225157488d51f`
-- Size: 44 lines; full file fetched and read.
-- Coverage: Complete; all 44 lines read.
+- Size: 43 logical lines; 1,952 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 43 lines read.
 - Purpose: Workflow that posts pull-request overlap notes for changes targeting main.
 - Implementation / logic: Uses pull_request_target and per-PR concurrency; checks out only a trusted main-branch script with persisted credentials disabled; fetches PR heads as Git objects for diff analysis; permissions are contents:read and pull-requests:write. It does not checkout or execute PR-head code.
 - Findings: The trusted-script boundary is important, but pull_request_target and optional self-hosted runner make token scope, runner isolation and untrusted diff handling security-critical. The invoked overlap script was not reviewed here; YAML alone does not prove safe behavior.
 - RustChunk relevance: Optional PR-review automation for intersecting RustChunk changes; not a client/runtime subsystem.
 - 1.20.1 implications: No Minecraft semantics. RustChunk must keep privileged workflows isolated from PR-controlled scripts and build files.
-- Decision: Adaptable; Security reference
+- Decision: Adaptable; Reference — Security reference.
 - Dependencies / cross-references: GitHub Actions event payload; trusted main-branch overlap script; GitHub PR API; optional self-hosted runner.
 - Follow-up checks: Inspect the called script, fork PR behavior, head-ref fetch and diff flags. Test opened/synchronize/reopened PRs, hostile diff paths, least-privilege token and runner isolation.
 - RustChunk implementation mapping: Possible future `.github/workflows/` review helper. No RustChunk runtime or gameplay component depends on it.
@@ -3495,8 +3495,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 162. `.github/workflows/pack-bench.yml`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `3fb1e1671d7a7faaa88fa0cb55b8427a58effbce`
-- Size: 62 lines; full file fetched and read.
-- Coverage: Complete; all 62 lines read.
+- Size: 61 logical lines; 2,548 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 61 lines read.
 - Purpose: Workflow comparing resource-pack load performance on a PR branch against the base branch.
 - Implementation / logic: Runs manually or for pack-bench path changes; installs Linux dependencies and Rust; runs a client-render pack-load benchmark on the branch, then uses a base worktree and the branch's harness against base code; publishes a summary with read-only workflow permissions.
 - Findings: Useful isolated comparison pattern, but the benchmark binary, renderer crate and test inputs are Starling-specific. YAML does not establish output equivalence or fairness of cache state.
@@ -3512,8 +3512,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 163. `.github/workflows/parity-main.yml`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `4840b98be6afec567393ff49d9f448e21a4625f5`
-- Size: 78 lines; full file fetched and read.
-- Coverage: Complete; all 78 lines read.
+- Size: 77 logical lines; 3,601 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 77 lines read.
 - Purpose: Main-branch integration workflow for changed-scope parity tests and failure bisection.
 - Implementation / logic: Runs on main pushes/manual dispatch; serializes on a persistent self-hosted macOS runner; checks out the exact commit, prepares vanilla data, calculates a last-green base, runs selected parity scopes, bisects failures, comments and uploads logs.
 - Findings: Self-hosted persistent state (`clean:false`, `.local`/target caches) risks stale or compromised evidence. Continue-on-error means release gating must explicitly interpret the result. Workflow was not executed.
@@ -3529,14 +3529,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 164. `.github/workflows/pr-labels.yml`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `d596166740105a266c8ab763321e7eb467aeda05`
-- Size: 40 lines; full file fetched and read.
-- Coverage: Complete; all 40 lines read.
+- Size: 39 logical lines; 1,965 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 39 lines read.
 - Purpose: Workflow that labels pull requests from trusted repository metadata and changed paths.
 - Implementation / logic: Uses pull_request_target but checks out workflow/script from main, not PR head. Reads event data as input and applies labels through GitHub API with contents:read and pull-requests:write; credentials are not persisted.
 - Findings: The key security rule is not executing PR code. Label mapping/API behavior is in a separate script not reviewed here; titles, body and paths remain untrusted strings.
 - RustChunk relevance: Optional RustChunk triage automation; not a game feature or evidence of a test pass.
 - 1.20.1 implications: No version dependence. Labels must describe RustChunk work and never imply compatibility or completion.
-- Decision: Adaptable; Security reference
+- Decision: Adaptable; Reference — Security reference.
 - Dependencies / cross-references: GitHub Actions; trusted main-branch label script; event payload and changed-files API.
 - Follow-up checks: Inspect script for shell injection and malformed fields; test hostile PR titles, bodies, filenames and fork events; verify label allowlist.
 - RustChunk implementation mapping: Optional workflow-only addition; no native engine code depends on labels.
@@ -3546,8 +3546,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 165. `AGENTS.md`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `2578901a07556cf0432bec11e7fbcb46ef73618c`
-- Size: 214 lines; full file fetched and read.
-- Coverage: Complete; all 214 lines read.
+- Size: 213 logical lines; 22,801 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 213 lines read.
 - Purpose: Repository-level agent/developer instructions and navigation guide for Starling's Rust-native Minecraft 26.3 codebase.
 - Implementation / logic: Requires reading CONTRIBUTING first; describes project boundaries, crate/tool navigation, coding/testing practices, licensing restrictions, private-data hygiene, source ownership and validation commands.
 - Findings: Strong governance reference, but paths, crates, version, Java/toolchain and commands are Starling-specific. License restrictions are Starling's policy, not automatically RustChunk policy. Instructions are not proof that CI/hooks enforce them.
@@ -3563,14 +3563,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 166. `bench/bench.py`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `1f463bca5b77f53ab5195c322098b8cb7df8cec8`
-- Size: 458 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–200, 201–400 and 401–458.
+- Size: 457 logical lines; 19,573 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–200, 201–400 and 401–457.
 - Purpose: Python harness for dedicated-server load benchmarks of Horizon, vanilla 26.3 and Pumpkin with optional bot clients.
 - Implementation / logic: Creates disposable runs, configures offline/creative local servers, optionally copies a prepared world, launches bots in staggered joins, waits for readiness and samples TPS/MSPT, process RSS/CPU, network bytes and join times. Produces JSON/Markdown; it is a server-load benchmark, not client FPS.
 - Findings: Process/pipe cleanup needs review: exceptional paths can leave child processes/reader threads; captured pipes can block if not drained; ps-based accounting is not a Windows implementation. Console parsing is version/locale-sensitive.
 - RustChunk relevance: Optional server stress methodology only; not needed for first single-player milestone.
 - 1.20.1 implications: Server commands, bot behavior and protocol are 26.3/Horizon/Pumpkin-specific. A later test needs protocol-763 server/bots.
-- Decision: Optional/future; Adaptable methodology
+- Decision: Adaptable; Optional/future — Server-load benchmark is not part of the client; the methodology may be adapted later with protocol-763 bots/server and process-cleanup hardening.
 - Dependencies / cross-references: Python standard library; Horizon/Pumpkin/vanilla server binaries; horizon-bots; ps; isolated worlds/logs.
 - Follow-up checks: Test timeout/crash/bot-failure cleanup; drain pipes; verify disposable world isolation, OS support, units and repeated load metrics.
 - RustChunk implementation mapping: Future developer-only tools/server_load_bench.py after RustChunk gains a protocol-763 client; current RustChunk has no native game server/network client.
@@ -3580,14 +3580,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 167. `benchmarks/entity-model-document-2026-10-14/generate_fixture.py`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `624a7abe1787406ea3d154723ac784c46714f83f`
-- Size: 29 lines; full file fetched and read.
-- Coverage: Complete; all 29 lines read.
+- Size: 31 logical lines; 1,605 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 31 logical lines re-read from the pinned blob; trailing LF not counted as an extra line.
 - Purpose: Generator for a large synthetic entity-model JSON fixture used to test shared-document loading.
 - Implementation / logic: Generates a deterministic resource-like document with boat/chest-boat, minecart, armor/player and filler layers; expands parts/quads/normals to a target file size and reports fixture shape.
-- Findings: The fixture is synthetic and includes test identifiers such as test_wood; size alone does not prove every real schema branch is represented.
+- Findings: The fixture is synthetic and includes test identifiers such as test_wood; size alone does not prove every real schema branch is represented. The caller-supplied output path is written directly, so use a disposable destination rather than an existing file.
 - RustChunk relevance: Adaptable host-side parser/model-loader stress fixture; not shipping resource data.
 - 1.20.1 implications: Model/layer structure is 26.3-specific. Generate separate 1.20.1 fixtures from official data and label synthetic extensions.
-- Decision: Adaptable; Test-only reference
+- Decision: Adaptable; Reference; Optional/future — Test-only synthetic fixture generator; adaptable as a host-side stress-fixture pattern, not as runtime resource data.
 - Dependencies / cross-references: Python JSON/path libraries; entity-model README/results; Starling model-document schema.
 - Follow-up checks: Regenerate twice and compare hashes; inspect schema branch coverage, counts/depth and real 1.20.1 compatibility.
 - RustChunk implementation mapping: Possible host-side fixture generator under RustChunk tools; no native model/resource loader exists in current workspace.
@@ -3597,8 +3597,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 168. `benchmarks/entity-model-document-2026-10-14/README.md`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `eeb8f66730ae16f36f9849475fac0ba0e2ebee29`
-- Size: 61 lines; full file fetched and read.
-- Coverage: Complete; all 61 lines read.
+- Size: 78 logical lines; 3,762 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 78 logical lines re-read from the pinned blob; trailing LF not counted as an extra line.
 - Purpose: Methodology/results for comparing repeated per-model JSON parsing with a shared parsed entity-model document.
 - Implementation / logic: Describes synthetic 2.47 MB document with 458 layers and 42 selected models; warmups, alternating order and 15 sample pairs. Equality compares parts, poses, polygons, normals, vertices and children. Reports 1434.974 ms vs 33.420 ms (~42.94×) for the isolated path.
 - Findings: Speedup is only for synthetic parsing/selection; textures, full startup and GPU are excluded. Test commands in the note were not run in this audit.
@@ -3614,14 +3614,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 169. `benchmarks/entity-model-document-2026-10-14/results.json`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `1ef0c6576a1c731871b629c57e14ead554791d57`
-- Size: 44 lines; full file fetched and read.
-- Coverage: Complete; all 44 lines read.
+- Size: 43 logical lines; 800 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 43 lines read.
 - Purpose: Raw timing samples and summary for the shared entity-model parsing experiment.
 - Implementation / logic: Stores 15 baseline timings, 15 optimized timings, three warmups, 2,473,695-byte fixture, 42 selected models, medians and approximately 42.94× computed speedup.
 - Findings: Raw values are consistent with the README medians, but there is no independent fixture SHA, tested source commit or hardware/toolchain metadata. It is not a whole-client startup/FPS result.
 - RustChunk relevance: Useful raw-sample/report schema only, not a RustChunk target.
 - 1.20.1 implications: Data belongs to Starling 26.3 and a synthetic model document.
-- Decision: Reference; Adaptable schema
+- Decision: Reference; Adaptable — Raw timings agree with README but lack independent fixture/source/hardware provenance.
 - Dependencies / cross-references: Companion README/generator; tested parser implementations; benchmark runner.
 - Follow-up checks: Any RustChunk report should include fixture/source hashes, commit, device, toolchain, cache state and independently recalculated summaries.
 - RustChunk implementation mapping: Potential future RustChunk benchmark artifact in benchmarks/ for 1.20.1 resource parsing; current engine does not consume it.
@@ -3631,14 +3631,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 170. `benchmarks/graphics/after-4080.json`
 - Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `223449dd8c1849185eb6a3f57ecf3d593ae6de6a`
-- Size: 547 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–400 and 401–547.
+- Size: 546 logical lines; 15,951 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–546.
 - Purpose: Post-change graphics benchmark report for Horizon on RTX4080 at render distances 8/16/32.
 - Implementation / logic: Records fixed-seed four-scene 12-second flights, Vulkan, 1280×720/offscreen, section counts, upload bytes, FPS and frame diagnostics; identifies commit 9006566b.
 - Findings: RD32 throughput falls sharply. At RD16 drawn_sections is zero despite nonzero upload bytes and frame activity; trace the counter semantics. Single snapshot, no repeated statistical samples.
 - RustChunk relevance: Renderer telemetry/regression-triage reference only; no reusable mobile FPS target.
 - 1.20.1 implications: Starling 26.3, RTX4080/Vulkan desktop/offscreen does not represent 1.20.1 Mali-G52/OpenGL ES.
-- Decision: Adaptable methodology; Raw values not reusable
+- Decision: Adaptable; Reference; Version-specific — RTX4080/Vulkan post-change report; RD16 drawn_sections=0 requires investigation. Reuse methodology only; raw values are not reusable.
 - Dependencies / cross-references: tools/graphics_bench.py; Horizon renderer counters; fixed world/seed; NVIDIA driver.
 - Follow-up checks: Inspect counter implementation and benchmark harness; reproduce both commits with repeated conditions; investigate RD16 zero counter.
 - RustChunk implementation mapping: Future RustChunk GPU benchmark records after native renderer exists; no RustChunk renderer currently produces these metrics.
@@ -3655,14 +3655,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 171. `benchmarks/graphics/after-lavapipe.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `946f1c27a730fff503e10b8d611d3a8e5fab35f7`
-- Size: 547 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–400 and 401–547.
+- Size: 546 logical lines; 15,881 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–546.
 - Purpose: Post-change Horizon graphics benchmark using Mesa llvmpipe/lavapipe software Vulkan.
 - Implementation / logic: Records four fixed scenes at RD8/16/32, 1600×1000, Mailbox present mode, Vulkan/llvmpipe, section/upload counters and per-flight FPS/frame metrics.
 - Findings: RD32 software rendering drops to roughly 3–5 FPS. RD16 drawn_sections is zero despite uploads and frame activity. Software Vulkan is a CPU/fallback stress test, not a physical GPU result; not directly comparable to RTX4080 due different size/present mode.
 - RustChunk relevance: Adaptable host CPU/software-render fallback stress scenario, low priority for mobile release.
 - 1.20.1 implications: Linux llvmpipe is not Samsung Mali hardware or a 1.20.1 renderer.
-- Decision: Reference; Adaptable test method
+- Decision: Adaptable; Reference; Version-specific — Software Vulkan stress data only; RD16 drawn_sections=0 and RD32 lows need context. Reuse test method only; raw values are environment-specific.
 - Dependencies / cross-references: graphics benchmark harness; Mesa llvmpipe/lavapipe; Horizon renderer counters and fixed test scene.
 - Follow-up checks: Trace zero-section metric; repeat identical runs and record CPU timings; validate fallback path separately from GPU hardware.
 - RustChunk implementation mapping: Optional host diagnostic after RustChunk renderer exists; not an Android benchmark.
@@ -3672,8 +3672,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 172. `benchmarks/graphics/baseline-4080.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `4919084242681a3cd76184f852114fe9e051bfee`
-- Size: 393 lines; full file fetched and read.
-- Coverage: Complete; all 393 lines read.
+- Size: 392 logical lines; 10,977 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 392 lines read.
 - Purpose: Pre-change Horizon graphics baseline on RTX4080.
 - Implementation / logic: Captures four-scene short flights and render distances 8/16/32 under Vulkan; linked to baseline commit 27a32cc3 with section counters, uploaded bytes and frame performance.
 - Findings: RD16/RD32 drawn-section counter is at or near zero in some scenes, so it is not yet a reliable visual-completeness metric. No repeated confidence interval data.
@@ -3689,8 +3689,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 173. `benchmarks/graphics/baseline-lavapipe.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `72ea8253ca620a940812a3faa39335b8fe923050`
-- Size: 393 lines; full file fetched and read.
-- Coverage: Complete; all 393 lines read.
+- Size: 392 logical lines; 10,978 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 392 lines read.
 - Purpose: Pre-change Horizon graphics baseline on Mesa llvmpipe/lavapipe software Vulkan.
 - Implementation / logic: Records four benchmark scenes at RD8/16/32 with software Vulkan at 1600×1000/Mailbox, FPS and renderer counters.
 - Findings: RD16/RD32 drawn-section counts are around one; this cannot be treated as a visual-completeness check. It is a historical software-render snapshot, not a physical GPU measurement.
@@ -3705,9 +3705,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 174. `benchmarks/model-state-parse-2026-10-14.md`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
-- Source SHA: `15a50e8ff7ece5a5679097f18bd76d9ed5777793c`
-- Size: 70 lines; full file fetched and read.
-- Coverage: Complete; all 70 lines read.
+- Source SHA: `15a50e8ff7ece5a567909f18bd76d9ed5777793c`c`
+- Size: 69 logical lines; 3,671 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 69 logical lines re-read from the corrected pinned blob; trailing LF not counted as an extra line.
 - Purpose: Benchmark report for reducing duplicate model-state JSON parsing with shared BTreeMap reuse.
 - Implementation / logic: Uses synthetic input with 843 block schemas and 53,952 states, warmups and 15 samples; reports 96.080 ms repeated parse vs 73.585 ms shared parse (~1.306×).
 - Findings: This isolates parse/state binding; excludes full startup, model bake, textures and GPU. Note says real-resource benefit is smaller than synthetic results.
@@ -3723,8 +3723,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 175. `benchmarks/overlay-real-packs-2026-10-15.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `f664be6c44eac16944c27ee30b0704f5f3fb2194`
-- Size: 55 lines; full file fetched and read.
-- Coverage: Complete; all 55 lines read.
+- Size: 54 logical lines; 2,441 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 54 lines read.
 - Purpose: Benchmark results/metadata for overlay lookup using three published resource packs.
 - Implementation / logic: Records environment/toolchain, 26.3 manifest, pack URLs/versions/ZIP sizes/SHA-512, asset counts and uncompressed sizes; compares original, cold overlay and cache-hit paths, with output equivalence checked outside the timing loop.
 - Findings: Only measures overlay lookup on Linux x86_64/NVMe/warm storage; not full pack load, bake, upload or rendering. Pack files are not included; third-party licensing still applies.
@@ -3740,8 +3740,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 176. `benchmarks/perf/horizon-m4pro-1080p-rd16.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `563707b4d975f5bc31e6fa1cb03e68faf3ebcebc`
-- Size: 759 lines; full file fetched and read.
-- Coverage: complete; read consecutively in lines 1–400 and 401–759.
+- Size: 758 logical lines; 10,746 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–758.
 - Purpose: Horizon 26.3 performance report at render distance 16.
 - Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Apple M4 Pro/macOS, Metal, 1920×1080 offscreen; scene-average FPS 568/333/412/357; peak RSS about 1.89 GB.
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
@@ -3757,8 +3757,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 177. `benchmarks/perf/horizon-m4pro-1080p-rd32.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `bfe22246200b7b4b02a61c345c31ff17cb0330b7`
-- Size: 759 lines; full file fetched and read.
-- Coverage: complete; read consecutively in lines 1–400 and 401–759.
+- Size: 758 logical lines; 10,772 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–758.
 - Purpose: Horizon 26.3 performance report at render distance 32.
 - Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Same M4 Pro/Metal/offscreen setup at RD32; average FPS 326/165/210/190; peak RSS about 2.54 GB.
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
@@ -3774,8 +3774,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 178. `benchmarks/perf/horizon-m4pro-1080p-rd8.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `181008314bde7caf60fef69bbd2727c69e1964e2`
-- Size: 759 lines; full file fetched and read.
-- Coverage: complete; read consecutively in lines 1–400 and 401–759.
+- Size: 758 logical lines; 10,797 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–758.
 - Purpose: Horizon 26.3 performance report at render distance 8.
 - Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Same M4 Pro/Metal/offscreen setup at RD8; average FPS 540/364/410/466; peak RSS about 1.54 GB; recorded load average is high.
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
@@ -3791,8 +3791,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 179. `benchmarks/perf/horizon-win-9800x3d-5080-rd16.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `017c9cbec6d786b71b156ea7c70e8aee2b94ab6a`
-- Size: 774 lines; full file fetched and read.
-- Coverage: complete; read consecutively in lines 1–400 and 401–774.
+- Size: 773 logical lines; 11,067 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–773.
 - Purpose: Horizon 26.3 performance report at render distance 16.
 - Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Windows 11 Ryzen 7 9800X3D/RTX5080, Vulkan, 1280×720; mean FPS 1712/2424/2201/1961; peak working set about 1.46 GB.
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
@@ -3808,8 +3808,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 180. `benchmarks/perf/horizon-win-9800x3d-5080-rd32.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `82e5776686fc2b765a58ee3d21f9ca6c07e934d8`
-- Size: 774 lines; full file fetched and read.
-- Coverage: complete; read consecutively in lines 1–400 and 401–774.
+- Size: 773 logical lines; 11,122 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–773.
 - Purpose: Horizon 26.3 performance report at render distance 32.
 - Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Same Windows/RTX5080 Vulkan setup at RD32; mean FPS 1164/1389/1189/1086; peak working set about 2.04 GB.
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
@@ -3832,8 +3832,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 181. `benchmarks/perf/horizon-win-9800x3d-5080-rd8.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `4afe983607ebf1d0f245bf15468181230af1e15b`
-- Size: 774 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–774.
+- Size: 773 logical lines; 11,057 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–773.
 - Purpose: Horizon 26.3 performance report at render distance 8.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Windows 11 Ryzen 7 9800X3D/RTX5080, Vulkan, 1280×720; average FPS 2942/3495/3346/3376; peak working set about 1.17 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
@@ -3849,8 +3849,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 182. `benchmarks/perf/macmini-m4pro-loaded-2026-11-01.md`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `9e259be38425ee498ee7da5716f6b3274558e1e6`
-- Size: 69 lines; full file fetched and read.
-- Coverage: Complete; all 69 lines read.
+- Size: 68 logical lines; 5,272 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 68 lines read.
 - Purpose: Interpretation report comparing Horizon, vanilla 26.3 and vanilla with performance mods on a heavily loaded Mac mini M4 Pro.
 - Implementation / logic: Documents three-repeat RD8/16/32 tests, four scenes, load averages 15–114 across 14 cores, offscreen rendering, actual size mismatch (Horizon 1920×1080 vs vanilla 1920×930), and startup/FPS/memory tables plus QoS/graphics differences.
 - Findings: The report explicitly says it is not a fair player comparison: system contention differs; vanilla draws 14% fewer pixels; the compare script rejects different window sizes but the table was manually produced with that guard skipped. The main value is its cautionary analysis.
@@ -3866,8 +3866,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 183. `benchmarks/perf/vanilla-m4pro-1080p-rd16.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `11e07fd5fc551d1cb4be7ae62b0893c5ff3cbdc6`
-- Size: 708 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–708.
+- Size: 707 logical lines; 9,685 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 16.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Vanilla 26.3 plus Fabric benchmark driver, M4 Pro/OpenGL/offscreen; mean FPS 45.5/23.3/51.3/44.3; peak RSS ~2.55 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
@@ -3883,8 +3883,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 184. `benchmarks/perf/vanilla-m4pro-1080p-rd32.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `40dff2a3fd0368a796344f41bb2a372922cfbbc3`
-- Size: 708 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–708.
+- Size: 707 logical lines; 9,672 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 32.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same Mac/OpenGL/offscreen setup at RD32; mean FPS 81.4/67.8/44.1/28.7; peak RSS ~2.96 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
@@ -3900,8 +3900,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 185. `benchmarks/perf/vanilla-m4pro-1080p-rd8.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `5b6895d515431c4ce4d5382db6b371b3950af492`
-- Size: 708 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–708.
+- Size: 707 logical lines; 9,703 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 8.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same Mac/OpenGL/offscreen setup at RD8; mean FPS 42.2/66.4/49.9/45.9; peak RSS ~1.88 GB; high sample variance.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
@@ -3917,8 +3917,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 186. `benchmarks/perf/vanilla-mods-m4pro-1080p-rd16.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `ffe027750cc27ffc7da36fed874144dbe6ed5fc8`
-- Size: 724 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–724.
+- Size: 723 logical lines; 10,001 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–723.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 16.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. 26.3 Fabric plus Sodium/Lithium/FerriteCore/ImmediatelyFast on M4 Pro/OpenGL/offscreen; mean FPS 46.2/61.9/75.5/35.9; peak RSS ~2.57 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
@@ -3934,8 +3934,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 187. `benchmarks/perf/vanilla-mods-m4pro-1080p-rd32.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `7d3c160902647e01a3adbce06e300b137eaf705f`
-- Size: 724 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–724.
+- Size: 723 logical lines; 10,013 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–723.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 32.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same 26.3 mod set at RD32; mean FPS 91.8/113.9/119.1/56.9; peak RSS ~4.08 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
@@ -3951,8 +3951,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 188. `benchmarks/perf/vanilla-mods-m4pro-1080p-rd8.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `eecf394e4fb02b56f7d426bc1eab0a5baa4067bc`
-- Size: 724 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–724.
+- Size: 723 logical lines; 9,978 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–723.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 8.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same 26.3 mod set at RD8; mean FPS 33.2/47.3/34.9/67.0; peak RSS ~2.02 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
@@ -3968,8 +3968,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 189. `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd16.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `36bb115554375f00b8cc5710fa1e743b62493be3`
-- Size: 707 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
+- Size: 706 logical lines; 9,727 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–706.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 16.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Windows 11 Ryzen 9800X3D/RTX5080 OpenGL with 26.3 Fabric performance mods; mean FPS 1282/1746/1815/1500; peak working set ~2.50 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
@@ -3985,8 +3985,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 190. `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd32.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `8ad8074e14af2226251e7b922867a189b0583499`
-- Size: 707 lines; full file fetched and read.
-- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
+- Size: 706 logical lines; 9,725 bytes; full pinned source blob fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–706.
 - Purpose: Vanilla Minecraft 26.3 performance report at render distance 32.
 - Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same Windows modded vanilla setup at RD32; mean FPS 926/929/1017/645; peak working set ~2.96 GB.
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
@@ -4009,8 +4009,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 191. `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd8.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `a12d6c059da2cc1ca89a49bf221534675d52e848`
-- Size: 707 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–400 and 401–707.
+- Size: 706 logical lines; 9,688 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–706.
 - Purpose: Vanilla 26.3 with Fabric performance mods benchmark report at render distance 8.
 - Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Windows 11 Ryzen 9800X3D/RTX5080 OpenGL with 26.3 Fabric performance mods; mean FPS 2104/2425/2432/2538; peak working set ~2.05 GB.
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
@@ -4026,8 +4026,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 192. `benchmarks/perf/vanilla-win-9800x3d-5080-rd16.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `4aa077830a2d9d613e6ef8d6c8b8d4f74a0af35c`
-- Size: 691 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–400 and 401–691.
+- Size: 690 logical lines; 9,441 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–690.
 - Purpose: Vanilla Minecraft 26.3 benchmark report at render distance 16.
 - Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Vanilla 26.3 plus Fabric benchmark driver on Windows 11/RTX5080 OpenGL; mean FPS 1218/1912/1861/1653; peak working set ~2.54 GB.
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
@@ -4043,8 +4043,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 193. `benchmarks/perf/vanilla-win-9800x3d-5080-rd32.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `e46e411c8ced366ee3a31e8fab862e2367173f84`
-- Size: 691 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–400 and 401–691.
+- Size: 690 logical lines; 9,454 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–690.
 - Purpose: Vanilla Minecraft 26.3 benchmark report at render distance 32.
 - Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Same Windows vanilla setup at RD32; mean FPS 882/1203/1223/815; peak working set ~2.89 GB.
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
@@ -4060,8 +4060,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 194. `benchmarks/perf/vanilla-win-9800x3d-5080-rd8.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `b2cf1f926a98f3099fdc7993055afe93b22f5db4`
-- Size: 691 lines; full file fetched and read.
-- Coverage: Complete; read in consecutive ranges 1–400 and 401–691.
+- Size: 690 logical lines; 9,413 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–690.
 - Purpose: Vanilla Minecraft 26.3 benchmark report at render distance 8.
 - Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Same Windows vanilla setup at RD8; mean FPS 2217/2457/2470/2605; peak working set ~2.12 GB.
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
@@ -4077,8 +4077,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 195. `benchmarks/perf/windows-9800x3d-5080-2026-10-29.md`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `ff1703d1a6aa4eee0a008acdef937babaa488852`
-- Size: 107 lines; full file fetched and read.
-- Coverage: Complete; all 107 lines read.
+- Size: 106 logical lines; 7,582 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 106 lines read.
 - Purpose: Detailed benchmark methodology/interpretation report comparing Horizon v0.2.97, vanilla 26.3 and vanilla with performance mods on Windows 11.
 - Implementation / logic: Documents Ryzen 7 9800X3D/RTX5080, 1280×720, fresh worlds, RD8/16/32, four scenes, three repetitions and fixed 12-second flights. It explains idle-machine screening, FPS/low-percentile, startup/chunk-load and working-set results, plus Horizon Vulkan versus vanilla OpenGL.
 - Findings: Better controlled than the loaded Mac report, but RD16 has a weaker external-load check. The report also identifies an RD32 ocean low-percentile regression despite higher averages. It remains desktop 26.3 evidence only.
@@ -4094,8 +4094,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 196. `benchmarks/rust-active-effect-tick-2026-10-07/scoped-parity.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `95b71795f212b72c098cef4a6e3d87dd77824951`
-- Size: 300 lines; full file fetched and read.
-- Coverage: Complete; all 300 lines read.
+- Size: 299 logical lines; 33,965 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 299 lines read.
 - Purpose: Scoped Java/Rust parity provenance manifest for active-effect ticking.
 - Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 4036 fixtures, 266 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: Active-effect ticking: LivingEntity.tickEffects/MobEffectInstance, effect map mutation, particles and RNG behavior, with explicit controlled callbacks and incomplete full player/entity lifecycle.
 - Findings: Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded client/server/Rust output hashes match. This manifest is not the underlying fixture corpus or complete CI log.
@@ -4111,8 +4111,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 197. `benchmarks/rust-active-effects-2026-10-07/scoped-parity.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `1fabbddc3df370f5e0bfd7da751f63aa4e4de748`
-- Size: 298 lines; full file fetched and read.
-- Coverage: Complete; all 298 lines read.
+- Size: 297 logical lines; 33,542 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 297 lines read.
 - Purpose: Scoped Java/Rust parity provenance manifest for active-effect add/remove/query.
 - Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 1266 fixtures, 264 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: Active-effect add/remove/query/blend behavior, cache/identity and callback ordering; eligibility, attribute/packet side effects and full lifecycle are outside scope.
 - Findings: Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded client/server/Rust output hashes match. This manifest is not the underlying fixture corpus or complete CI log.
@@ -4128,8 +4128,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 198. `benchmarks/rust-anchor-2026-10-06/scoped-parity.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `3444235025997c89b6272abe9e70785d1ff9db78`
-- Size: 119 lines; full file fetched and read.
-- Coverage: Complete; all 119 lines read.
+- Size: 118 logical lines; 11,727 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 118 lines read.
 - Purpose: Scoped Java/Rust parity provenance manifest for world-generation vertical anchors.
 - Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 192 fixtures, 86 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: VerticalAnchor.CODEC and WorldGenerationContext: four anchor kinds, overflow and JSON boundary cases; broader level/material-condition behavior remains pending.
 - Findings: Client/server reference records have matching output hashes, but the `references` records do not include an explicit Rust-output hash field; this manifest alone must not be described as separately hash-attested Rust parity. The file is a provenance/scope manifest, not the fixture corpus or full test log.
@@ -4145,8 +4145,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 199. `benchmarks/rust-attribute-health-2026-10-07/scoped-parity.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `5de4a377d3009cc381d20f1b0c0ee111750d59c8`
-- Size: 249 lines; full file fetched and read.
-- Coverage: Complete; all 249 lines read.
+- Size: 248 logical lines; 27,732 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 248 lines read.
 - Purpose: Scoped Java/Rust parity provenance manifest for attribute/health behavior.
 - Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 3918 fixtures, 217 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: Attributes/health/regeneration: 93 default suppliers, health and FoodData updates, starvation requests; absorption synchronization, complete damage and live gameplay remain pending.
 - Findings: Client/server reference records have matching output hashes, but the `references` records do not include an explicit Rust-output hash field; this manifest alone must not be described as separately hash-attested Rust parity. The file is a provenance/scope manifest, not the fixture corpus or full test log.
@@ -4162,8 +4162,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 200. `benchmarks/rust-attribute-map-queries-2026-10-07/scoped-parity.json`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `096656bdce94fc826b748dd792172448b623a345`
-- Size: 314 lines; full file fetched and read.
-- Coverage: Complete; all 314 lines read.
+- Size: 313 logical lines; 35,538 bytes; full pinned source blob fetched and read.
+- Coverage: Complete; all 313 lines read.
 - Purpose: Scoped Java/Rust parity provenance manifest for attribute-map queries.
 - Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 3261 fixtures, 277 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: AttributeMap query/cache/supplier behavior with FastUtil provenance, 34,531,715 reported matched lines; some entity callback/default-sync and full gameplay/platform cases remain outside scope.
 - Findings: Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded client/server/Rust output hashes match. This manifest is not the underlying fixture corpus or complete CI log.
