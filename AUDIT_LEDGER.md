@@ -2174,7 +2174,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 101. `crates/horizon-client-core/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 8809a5216455ace851044f69a633e8adaabbc576.
-- Size: 15 lines; 609 bytes; complete file fetched and read.
+- Size: 15 lines; complete file fetched and read.
 - Coverage: lines 1–15, complete; no chunks omitted.
 - Purpose: Cargo manifest for the lowest-level client-core crate, which owns client text, NBT/SNBT, translations, scoreboard, boss bars, game rules, identifiers, registries, particle/sound tables, and related data utilities.
 - Implementation / logic: Declares package horizon-client-core, version 0.1.0, workspace edition/license, and Rust 1.90 minimum. Its only direct dependencies are the sibling horizon-world crate and serde_json with raw_value support. Workspace lints are inherited. The crate boundary and public module surface are defined separately in src/lib.rs (reviewed as entry 114).
@@ -2189,7 +2189,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 102. `crates/horizon-client-input/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 4ac6be76c312a1ef612a207c73db5236c898a633.
-- Size: 27 lines; 1,156 bytes; complete file fetched and read.
+- Size: 27 lines; complete file fetched and read.
 - Coverage: lines 1–27, complete; no chunks omitted.
 - Purpose: Cargo manifest for the client input crate: key bindings/names, mouse, controllers, clipboard and window/input options.
 - Implementation / logic: Declares horizon-client-core as its local core dependency, winit 0.30.13, horizon-theme and PNG for the window icon, plus optional horizon-dualsense behind the controllers feature. Desktop-only clipboard integration uses arboard under cfg(not(target_os = android)); the manifest comment says Android uses the platform clipboard through clipboard.rs. The controllers feature enables only the optional DualSense crate at this layer.
@@ -2204,7 +2204,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 103. `crates/horizon-client-lib/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 9f290d8f6b156871e5f599801aebdd2c60d87f53.
-- Size: 232 lines; 8,527 bytes; complete file fetched and read.
+- Size: 232 lines; complete file fetched and read.
 - Coverage: lines 1–232, complete; no chunks omitted.
 - Purpose: Manifest for horizon-client-lib, the reusable client systems library, control tool, and parity-probe host. It deliberately points its library target at ../horizon-client/src/client_lib.rs rather than a conventional src/lib.rs.
 - Implementation / logic: Disables automatic bins, examples and tests, then explicitly declares the library path, horizon-ctl binary, numerous benchmarks/probes/examples and integration-test targets. The dependency graph spans client-core/input/render, world, protocol, assets, items, commands, threads, shaders, HDR, theme, MCP, server files, server anticheat/chat filter, friends, narrator, telemetry, account sign-in, preparation and mod-index infrastructure. Wgpu is configured with Vulkan/Metal/WGSL and naga IR; platform-specific Windows DX12 and non-macOS GLES variants are added. Default features enable audio and controllers; audio forwards to render, and controllers forward to gilrs, DualSense and input. A separate rng-trace feature propagates into horizon-core.
@@ -2219,7 +2219,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 104. `crates/horizon-client-render/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: d340024b704df413438f51c7d70fe36ce5e7f328.
-- Size: 82 lines; 2,985 bytes; complete file fetched and read.
+- Size: 82 lines; complete file fetched and read.
 - Coverage: lines 1–82, complete; no chunks omitted.
 - Purpose: Manifest for the client world-data/rendering/screens layer, described as chunks, meshing, light, streaming, renderer, HUD, menus and settings, with gameplay kept above it.
 - Implementation / logic: Depends on client-core/input, world, protocol, assets, commands, items, shaders, theme, threads, HDR, cosmetics and related UI/render crates. Uses wgpu 30.0.1, winit 0.30.13, naga with WGSL/GLSL/HLSL output, glam, bytemuck, fonts, ZIP/JSON, image and compression libraries. Audio is optional through cpal and the audio feature; test-support is a separate feature. Windows adds DX12 and junction support; non-macOS targets add GLES; Unix adds rustix.
@@ -2234,7 +2234,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 105. `crates/horizon-client/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 1d575779193dbc9aa41adad2e08d243097bf1409.
-- Size: 163 lines; 5,289 bytes; complete file fetched and read.
+- Size: 163 lines; complete file fetched and read.
 - Coverage: lines 1–163, complete; no chunks omitted.
 - Purpose: Manifest for the native Horizon game executable and the gameplay/startup crate; it registers the horizon-client binary and the client integration tests.
 - Implementation / logic: Declares horizon-client-lib with default features disabled, and separately includes client-core/input/render plus assets, items, world, protocol, server/shared services, shaders, mods, telemetry, narrator and related crates. Android adds winit's android-native-activity feature, JNI 0.21.1 and starling-catalog. Windows adds URI handling, DX12 and winresource build support; macOS adds objc2 AppKit/Foundation; non-macOS targets add GLES. Default features enable audio/controllers and forward those into client-lib/input/render; optional allocator, RNG-trace and Windows heap features are declared. The binary path is src/main.rs; three explicit integration tests are registered.
@@ -2249,7 +2249,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 106. `crates/horizon-world/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 0eb0442297cdb05372808e97a8a9e287ae3cd7ba.
-- Size: 36 lines; 1,205 bytes; complete file fetched and read.
+- Size: 36 lines; complete file fetched and read.
 - Coverage: lines 1–36, complete; no chunks omitted.
 - Purpose: Manifest for horizon-world, the vanilla world-data layer covering NBT, regions, chunk storage, registries and world-generation parity utilities.
 - Implementation / logic: Declares library dependencies on libm pinned to 0.2.16, log, serde/serde_json, SHA-2, postcard 1.1.3, horizon-core, flate2 with zlib-rs/runtime detection, lz4_flex with checked safe codecs, and xxhash-rust with xxh32. Registers horizon-world and horizon-worldgen-parity binaries plus the world_probe example whose source is reviewed as entry 120. Workspace lints are inherited.
@@ -2264,7 +2264,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 107. `packaging/android/java/io/github/juanluci/starling/NativeMods.java`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 30d7c46dc06572c0708a75ffa9227a8a86e26b05.
-- Size: 183 lines; 6,842 bytes; complete file fetched and read.
+- Size: 183 lines; complete file fetched and read.
 - Coverage: lines 1–183, complete; no chunks omitted.
 - Purpose: Android Java bridge for selecting and managing downloaded Horizon native-mod builds, tracking first-frame startup failures, exposing mod-requested Android permissions, and selecting a remote native build server.
 - Implementation / logic: Uses the app-private files/native directory. chosen() reads the current build key, rejects empty keys, slash-containing keys and keys beginning with a dot, verifies the library exists, checks the requested game version against the build's for file, and checks an APK-install stamp against the build's apk file. It then counts starts and moves the build aside after two starts without a first-frame confirmation. started() clears the counter. permissions() reads build.json and groups each mod ID by requested permission in insertion order; permissionsDeclined/declinePermissions store the user's choice. failed() sets the build aside with a notice. isBuildServer() checks an HTTPS host/optional-port regex; chooseBuildServer() stores or removes the configured address. Small metadata files use best-effort UTF-8 read/write helpers.
@@ -2279,7 +2279,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 108. `packaging/android/native_mod_permissions.py`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: b043eccdf8fa7ec2ce0e1412dfc8c356180382e9.
-- Size: 58 lines; 1,742 bytes; complete file fetched and read.
+- Size: 58 lines; complete file fetched and read.
 - Coverage: lines 1–58, complete; no chunks omitted.
 - Purpose: Build-time source scanner that guesses which Android permissions a native mod needs, then feeds the permission list into the build metadata consumed by NativeMods.java.
 - Implementation / logic: Defines one permission rule, microphone, as a compiled regular expression matching source/API markers for CPAL input streams/devices, AAudio input direction, OpenSL ES recording and Android AudioRecord/MediaRecorder. Scans Rust, C/C++, header, Java and Kotlin files recursively under each supplied mod folder in sorted path order. Reads source as UTF-8 with replacement for invalid bytes, records matching permission names in a set and stops early when every configured permission has been found. The CLI prints each folder and its sorted permission list or a dash.
@@ -2470,3 +2470,11 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Dependencies / cross-references: horizon-world crate; dispatch.rs; support/common; support/decoration_storage; support/placement_queries; support/shapes; all declared fixture modules; tools/parity.py; horizon-worldgen-parity; Cargo example target.
 - Follow-up checks: Inspect dispatch.rs and representative chunk/NBT/worldgen fixtures; identify how vanilla oracle outputs are generated and version-pinned; verify probes are not included in production APK; measure compile/link time and output determinism.
 - Completion state: Complete source review; no probe build, parity run, datafix test, world generation, benchmark or Android runtime execution was performed.
+
+## Batch checkpoint — entries 101–120 — 2026-11-18
+
+- Completed full source reviews for entries 101–120. All 20 paths and blob SHAs match the pinned Starling source tree snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Files longer than 400 lines were read in consecutive chunks with no gaps; the 1,076-line render chunk, 999-line world chunk, 1,152-line NBT and 695-line control CLI files received complete-range coverage.
+- Added each file's source identity, size/coverage, purpose, implementation, findings, RustChunk relevance, 1.20.1 implications, decision, dependencies, follow-up checks and completion state.
+- Risks recorded for follow-up include the render chunk section-index/min_y relationship, SNBT typed-array invalid-value behavior, registry hash stability assumptions, region-file failure recovery and Android hard-link support, native-mod permission validation, and finite numeric bounds in horizon-ctl.
+- Tests found in source were read but not run. No Cargo build, APK build, Android device run, filesystem fault-injection, parity probe or live Minecraft connection was executed.
