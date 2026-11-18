@@ -9,10 +9,9 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 - Pinned upstream ref: `starling`
 - Pinned upstream commit: `5432370d573642041585c69b40fb045b27133488`
 - Baseline RustChunk commit: `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`
-- Frozen archive branch: `archive/audit-1000-frozen-2026-11-18`
 - Original backup branch: `backup/audit-1000-unique-2026-11-18`
-- Both branches were verified at the baseline commit before QA. The archive branch was created from that exact commit and has not been modified by QA.
-- GitHub reports `protected: false` for both branches. They are treated as read-only by this audit procedure; server-enforced branch protection was not enabled by the available repository action.
+- The duplicate archive branch `archive/audit-1000-frozen-2026-11-18` was historically created from the baseline, then deleted by the repository owner; it is absent from the current branch list.
+- The original backup remains at the baseline commit `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4` and is treated as read-only by this audit procedure. GitHub reports `protected: false`; it is not server-locked.
 
 ## QA batch 1–100 — 2026-11-18
 
@@ -263,3 +262,69 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 
 - Next range: **501–600**.
 - Continue only on `starling-1.20.1-port-audit`; keep the original backup branch unchanged.
+
+
+## QA batch 501–600 — 2026-11-18
+
+### Scope and checks
+
+- Reviewed exactly 100 existing entries (501–600) on the pinned Starling snapshot `5432370d573642041585c69b40fb045b27133488`. This was a QA correction pass, not a new source-audit batch; no entry number or source path was added, removed or renumbered.
+- Verified the source tree contains 5,749 entries and is not truncated. All 100 indexed paths exist in the pinned tree; all recorded source blob SHAs and byte sizes match the corresponding pinned tree entries.
+- Verified the 100 entries are sequential, every one of the 15 required fields occurs exactly once, and all 100 Index rows match Ledger numbering and source paths.
+- Checked global uniqueness across all four ledgers (entries 1–1000): 1,000 entries and 1,000 unique source paths; no duplicate path was introduced by this batch.
+- Retrieved and validated the data artifacts: 14 benchmark/observation JSON files and 8 Horizon content-template JSON files parsed successfully; all 16 records in `runs.jsonl` parsed as individual JSON objects. All 100 source files were fetched from the pinned raw source; long files were inspected using consecutive ranges no larger than 400 lines.
+- Server benchmark files 501–510 are dedicated-server/bot measurements on Linux x86_64; they do not measure RustChunk client rendering, mobile FPS or Android ARM64 performance.
+- Files 511–518 are loader-only JSON microbenchmarks, explicitly excluding full application startup and first-frame timing; entry 519 is one Linux x86_64/OpenJDK 25 tick-state observation, not a controlled Android benchmark.
+- Entries 520–536 concern Horizon's HMOD/HNMOD tooling and templates. They are not Forge 1.20.1 mod support; only generic packaging/resource ideas may be considered after independent redesign and target-version validation.
+- Entries 538–542 are dedicated-server anti-cheat code, not client runtime code. Entries 576–582 are a synthetic server bot or server chat-moderation filter; neither is a playable client implementation.
+- Entries 543–572 cover Horizon's CPU-side asset/model decoding, blockstate, geometry, palette and item-model logic plus fixture harnesses. They can inform a native asset pipeline and differential tests, but use Minecraft 26.3 schemas/resources and do not establish GPU rendering, Android pixel parity or 1.20.1 compatibility.
+- Entries 573–575 describe benchmark reporting and hardware telemetry. The report design can inform future diagnostics; the hardware probe does not itself provide complete Android GPU/display/memory detection.
+- Entries 583–600 cover client-core state/codecs and utilities. Their architecture may be adaptable, but the catalogues, component forms, protocol integration and version-specific semantics must be rebuilt or verified against Minecraft Java 1.20.1.
+
+### Corrections made on the active audit branch
+
+1. Corrected the 22 Coverage endpoints that counted the synthetic trailing empty split element as one extra source line:
+   - 503 `server-four-way-2026-10-19/load.txt`: 801–871 → 801–870.
+   - 504 `server-four-way-2026-10-19/report-25-50.json`: 401–438 → 401–437.
+   - 510 `server-vs-pumpkin-2026-10-31.json`: 1201–1498 → 1201–1497.
+   - 513 `shared-json-five-way-20261017.json`: 401–454 → 401–453.
+   - 514 `shared-json-five-way-final-20261017.json`: 401–583 → 401–582.
+   - 518 `shared-json-variant-isolation-20261017.json`: 401–454 → 401–453.
+   - 522 `cargo-horizon-mod/src/main.rs`: 401–402 → 401–401.
+   - 540 `horizon-anticheat/src/lib.rs`: 401–427 → 401–426.
+   - 541 `horizon-anticheat/src/prediction.rs`: 401–417 → 401–416.
+   - 560 `horizon-assets/src/item_model.rs`: 1601–1757 → 1601–1756.
+   - 568 `horizon-assets/src/math.rs`: 401–579 → 401–578.
+   - 569 `horizon-assets/src/model.rs`: 401–529 → 401–528.
+   - 572 `horizon-assets/src/resolve.rs`: 401–583 → 401–582.
+   - 575 `horizon-bench/src/lib.rs`: 401–464 → 401–463.
+   - 577 `horizon-bots/src/main.rs`: 1601–1661 → 1601–1660.
+   - 580 `horizon-chat-filter/src/lib.rs`: 401–547 → 401–546.
+   - 583 `horizon-client-core/src/block_entity_nbt.rs`: 801–1002 → 801–1001.
+   - 585 `horizon-client-core/src/component.rs`: 401–716 → 401–715.
+   - 590 `horizon-client-core/src/lang.rs`: 401–648 → 401–647.
+   - 591 `horizon-client-core/src/nbt_path.rs`: 801–902 → 801–901.
+   - 597 `horizon-client-core/src/scoreboard.rs`: 1601–1613 → 1601–1612.
+   - 600 `horizon-client-core/src/text.rs`: 801–824 → 801–823.
+2. Standardized all 100 Ledger Decision labels and matching Index decision cells to the approved primary/secondary vocabulary while retaining the original descriptive assessment after the Ledger separator and keeping explanatory reasons in the Index.
+3. Reworded RustChunk relevance so server benchmarks, loader-only measurements, Horizon-only mod packaging, server anti-cheat/bot/chat-filter code, CPU asset/model utilities and client-core utilities are not misrepresented as working Android client features or Forge 1.20.1 support.
+4. Clarified entry 516's purpose/scope: it measures the asset loader, not full application startup. Clarified entry 600's line count as 823 logical lines and retained the trust boundary that `open_file` actions are only allowed in locally created text, never untrusted server/LAN text.
+
+### Verification after writes
+
+- Re-read the updated Ledger, Index and QA log from GitHub.
+- Confirmed 100 sequential entries, all 15 fields exactly once, 100/100 Ledger-to-Index path matches and 100/100 standardized decision matches.
+- Confirmed each corrected Coverage endpoint matches the canonical logical line count from its complete pinned source.
+- Confirmed all 100 source SHAs and sizes match the pinned Git tree; all 22 corrected Coverage ranges are consecutive and end at their source's final logical line.
+- The primary backup `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`. It remains procedural read-only only: GitHub reports `protected: false`. The duplicate archive branch is absent. A new consolidated backup is intentionally deferred until QA reaches 1000/1000.
+- No Rust build, unit-test suite, benchmark execution, APK build, Android device test, Minecraft client launch or multiplayer-server connection was performed.
+
+### Limits of this QA result
+
+- This is a provenance, structure, parseability, coverage and targeted scope/claim QA pass; it is not a fresh exhaustive semantic re-audit of every implementation detail, and reading a test file is not running its tests.
+- The source snapshot targets Minecraft 26.3; these entries do not prove RustChunk's Minecraft 1.20.1 vanilla, Forge, Android ARM64 or Aternos compatibility.
+
+### Next QA range
+
+- Next range: **601–700**.
+- Continue only on `starling-1.20.1-port-audit`; do not modify the original backup branch.

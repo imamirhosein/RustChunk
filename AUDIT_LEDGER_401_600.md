@@ -1714,8 +1714,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Vanilla 1–100 bot walk/explore results
 - Findings: Watchdog/broken-pipe at high counts
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference baseline**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference baseline**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1731,8 +1731,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Horizon/vanilla/Paper/Fabric+Lithium mixed tests/fairness
 - Findings: Paper fastest average MSPT in several loads; remote host involved
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark-method; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference only**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark-method; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1743,13 +1743,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `786b933b6059ed230e2f7e433cd42d618f641da2`.
 - Size: 30295 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–871.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–870.
 - Purpose: Four-way host trace.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: ThinkPad/Mac mini load trace
 - Findings: Remote bots 80–90% busy; server host spikes
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark-context; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Context only**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Context only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark-context; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1760,13 +1760,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `dacda83973971c90e5e70eb22bcf2a102e449216`.
 - Size: 10290 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–438.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–437.
 - Purpose: Four-way 25/50 results.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Horizon/vanilla/Paper/Fabric eight mixed runs
 - Findings: Paper25 28.3ms vs Horizon30.92; at50 Horizon47.83/Paper46.86/Fabric58.3; vanilla fails
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference dedicated-server metrics**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference dedicated-server metrics**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1782,8 +1782,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Single Paper 10 bot run
 - Findings: One workload slice only
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference only**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1799,8 +1799,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: 16 per-run JSONL records
 - Findings: Server workload data, not client FPS
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference dataset**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference dataset**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1816,8 +1816,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Mixed Horizon/vanilla server run method
 - Findings: Explore throughput differs; compare ticks cautiously
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark-method; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference method**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference method**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark-method; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1833,8 +1833,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Host load during remote bot runs
 - Findings: Mac bot host heavily loaded
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark-context; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Context only**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Context only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark-context; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1850,8 +1850,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Horizon/vanilla 1/10/25/50 mixed bot metrics
 - Findings: At50 Horizon MSPT higher than vanilla in run; throughput unequal
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference server data**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference server data**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1862,13 +1862,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `fd9a893f0f129d1223e1a53e13311fb257e191d7`.
 - Size: 29095 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1498.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1497.
 - Purpose: Horizon vs Pumpkin.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: 24 runs 0/20/60/100 bots, 3 repeats, EPYC7662 8vCPU pinned, OpenJDK25
 - Findings: Pumpkin faster at20, mixed60, Horizon stronger100; anti-cheat/ground disabled
-- RustChunk relevance: Potential design/test input for future RustChunk server/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference server comparison**
+- RustChunk relevance: Server-side benchmark evidence only; useful for separate server-workload methodology, not RustChunk client FPS, rendering, Android performance or 1.20.1 Forge readiness.
+- Decision: **Unnecessary; Reference; Version-specific — Reference server comparison**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1884,8 +1884,8 @@
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: JSON retain/release timings and RSS
 - Findings: Near-identical medians; negligible gain
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference only**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1901,8 +1901,8 @@
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Validation vs typed decode timing/RSS
 - Findings: Typed sample faster but higher peak RSS; loader-only
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference microbenchmark**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Reference microbenchmark**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1913,13 +1913,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `61dcb7c3dc2ceb10209f20036a48e7df70ff0a9d`.
 - Size: 9582 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–454.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–453.
 - Purpose: Shared JSON five-way.
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Baseline/shared/deferred JSON ownership variants
 - Findings: Loader-only and variant confounds
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable measurement design**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Adaptable measurement design**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1930,13 +1930,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `ce92b7b61032f9dbcb26b7391e4a0c27b6793c6a`.
 - Size: 11905 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–583.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–582.
 - Purpose: Shared JSON final.
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Repeated baseline/current/shared/deferred variants
 - Findings: Lower RSS vs baseline, but host variance and loader-only scope
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference optimization evidence**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Reference optimization evidence**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1952,8 +1952,8 @@
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Historical decode/assets measurements
 - Findings: Host/build context differs; no full startup
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Historical reference**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Historical reference**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1965,12 +1965,12 @@
 - Source SHA: `92f557b33b07d81ff52d9ff09c5cb8848971f30a`.
 - Size: 1927 bytes.
 - Coverage: Complete artifact fetched and parsed; all records inspected.
-- Purpose: Shared JSON startup microbenchmark.
+- Purpose: Shared JSON asset-loader microbenchmark (not full application startup).
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Loader startup timing/RSS over five repeats
-- Findings: High host load, not full app startup
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference only**
+- Findings: Asset loader only; high host load; excludes full application startup and first-frame timing
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1986,8 +1986,8 @@
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Five-repeat loader timing for variants
 - Findings: Outliers/load variance prevent robust winner
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference only**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -1998,13 +1998,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `e399c7ba1ec93f01f8c173e246dd1bcff2391ca3`.
 - Size: 9559 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–454.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–453.
 - Purpose: Shared JSON variant isolation.
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: Arc-key/reused sound/flags variants
 - Findings: No meaningful gain; experiments reverted
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/perf-json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Historical experiment**
+- RustChunk relevance: Loader-only Minecraft 26.3 microbenchmark evidence; useful only as a measurement-design reference after reproducing on 1.20.1 and Android. It is not full application startup or first-frame evidence.
+- Decision: **Unnecessary; Reference; Version-specific — Historical experiment**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/perf-json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2020,8 +2020,8 @@
 - Dependencies / cross-references: Pinned source/fixture artifact; upstream inputs and JAR references are evidence materials, not runtime dependencies.
 - Implementation / logic: 285 samples/10s, ~28.4 observed ticks/s and entity flags
 - Findings: One demo-world observation, not controlled benchmark
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/tick-observation; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference telemetry only**
+- RustChunk relevance: A single Linux x86_64/OpenJDK 25 tick-state observation; a narrow reference, not an Android or client-performance result.
+- Decision: **Unnecessary; Reference; Version-specific — Reference telemetry only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/tick-observation; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2037,8 +2037,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Cargo metadata for Horizon mod authoring/check CLI
 - Findings: Mod ecosystem not needed for vanilla client
-- RustChunk relevance: Potential design/test input for future RustChunk mods/tooling; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Unnecessary for first milestone**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Unnecessary for first milestone**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/tooling; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2054,8 +2054,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Checks package size/signatures/content-only/native separation
 - Findings: Native source unsandboxed and not run by registry check
-- RustChunk relevance: Potential design/test input for future RustChunk mods/validation; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer; trust concepts only**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer; trust concepts only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/validation; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2066,13 +2066,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `187f1b13f5267b360e34f4e9a0b1665462511737`.
 - Size: 15667 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–402.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–401.
 - Purpose: Mod authoring CLI.
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: new/build/run/check/registry commands/templates
 - Findings: Horizon format, not Forge/1.20.1 loader
-- RustChunk relevance: Potential design/test input for future RustChunk mods/tooling; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer; not Forge**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer; not Forge**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/tooling; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2088,8 +2088,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Build/review/check/list/release/page operations
 - Findings: Horizon mod registry; base load error can appear empty
-- RustChunk relevance: Potential design/test input for future RustChunk mods/registry; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Unnecessary for base client**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Unnecessary for base client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/registry; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2105,8 +2105,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Minimal JSON block definition
 - Findings: Horizon API 26.3-specific
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2122,8 +2122,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Default blockstate/model mapping
 - Findings: Horizon paths/conventions
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2139,8 +2139,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Horizon mod id/API/side/capability metadata
 - Findings: API0.2, not Forge
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2156,8 +2156,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Item model JSON referencing block model
 - Findings: No Forge registration
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2173,8 +2173,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Language JSON sample
 - Findings: Localization idea generic; ids/resource paths differ
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable localization only**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable localization only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2190,8 +2190,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Block loot-table JSON
 - Findings: 1.20.1 codec validation required
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable data-pack concept**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable data-pack concept**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2207,8 +2207,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Minimal cube model JSON
 - Findings: Model schema/resolution version-dependent
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable sample only**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable sample only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2224,8 +2224,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Mineable pickaxe tag entry
 - Findings: Tag path/version must be checked
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable resource idea**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable resource idea**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2241,8 +2241,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Crafting recipe JSON
 - Findings: Recipe codec/IDs need target validation
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable example**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable example**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2258,8 +2258,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Ignores generated build files
 - Findings: Generic hygiene but paths upstream-specific
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable after path rewrite**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable after path rewrite**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2275,8 +2275,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Horizon native hook dependency
 - Findings: Pinned Horizon API unrelated to Forge
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Unnecessary initially**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Unnecessary initially**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2292,8 +2292,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Horizon native mixin compatibility manifest
 - Findings: Not Forge/1.20.1 schema
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Unnecessary initially**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Unnecessary initially**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2309,8 +2309,8 @@
 - Dependencies / cross-references: Horizon mod authoring/content packaging template; upstream paths and schema are not Forge formats.
 - Implementation / logic: Rust hook entrypoint sample
 - Findings: Unsandboxed Horizon hooks, not Forge
-- RustChunk relevance: Potential design/test input for future RustChunk mods/templates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer**
+- RustChunk relevance: Horizon HMOD/HNMOD tooling or templates; not Forge 1.20.1 mod support and not part of the base-client milestone. Reuse only generic packaging ideas after independent redesign.
+- Decision: **Unnecessary; Reference; Version-specific — Defer**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/templates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2326,8 +2326,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: NativeActivity/winit/JNI and Horizon client linkage
 - Findings: Packaging pattern useful but game/package coupling needs rewrite
-- RustChunk relevance: Potential design/test input for future RustChunk android/integration; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable Android integration**
+- RustChunk relevance: Android NativeActivity/JNI package-boundary reference; RustChunk needs its own crate/app integration and ARM64 device validation. This manifest is not proof of Android readiness.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable Android integration**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is android/integration; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2343,8 +2343,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Server anti-cheat dependencies
 - Findings: Server-only, not client runtime
-- RustChunk relevance: Potential design/test input for future RustChunk server/anti-cheat; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server anti-cheat logic; outside the playable client runtime and not needed for RustChunk rendering or client networking.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/anti-cheat; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2360,8 +2360,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Per-target/tick attack event counts
 - Findings: Server validation only
-- RustChunk relevance: Potential design/test input for future RustChunk server/anti-cheat; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server anti-cheat logic; outside the playable client runtime and not needed for RustChunk rendering or client networking.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/anti-cheat; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2372,13 +2372,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `83141733efcb4af4baaff45e5f1036e189e59869`.
 - Size: 18172 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–427.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–426.
 - Purpose: Anti-cheat aggregator.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Timer/ground/prediction/combat checks and violation actions
 - Findings: Server moderation policy, not client engine
-- RustChunk relevance: Potential design/test input for future RustChunk server/anti-cheat; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server anti-cheat logic; outside the playable client runtime and not needed for RustChunk rendering or client networking.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/anti-cheat; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2389,13 +2389,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `eac5b4c4b9d78210e054a19db6b2c308c89460ad`.
 - Size: 17374 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–417.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–416.
 - Purpose: Anti-cheat prediction tracker.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Server observed movement/prediction history
 - Findings: Server authority only
-- RustChunk relevance: Potential design/test input for future RustChunk server/anti-cheat; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server anti-cheat logic; outside the playable client runtime and not needed for RustChunk rendering or client networking.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/anti-cheat; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2411,8 +2411,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Server tick cadence validation
 - Findings: Server-only detection
-- RustChunk relevance: Potential design/test input for future RustChunk server/anti-cheat; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server anti-cheat logic; outside the playable client runtime and not needed for RustChunk rendering or client networking.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/anti-cheat; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2428,8 +2428,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Resource/model handling dependencies and module boundary
 - Findings: Data/source APIs 26.3-specific
-- RustChunk relevance: Potential design/test input for future RustChunk render/assets; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable boundary; rewrite assets**
+- RustChunk relevance: A model/resource-decoding crate boundary reference; dependency and package choices must be rebuilt for RustChunk and the 1.20.1 data model.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable boundary; rewrite assets**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/assets; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2445,8 +2445,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Property schemas/state lists/selectors/multipart
 - Findings: Harness only; rebuild target registry data
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable parity harness**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable parity harness**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2462,8 +2462,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Decodes blockstate variants/multipart
 - Findings: Not runtime/GPU render
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable parser oracle**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable parser oracle**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2479,8 +2479,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Decodes cuboid JSON model
 - Findings: No atlas/parents/GPU
-- RustChunk relevance: Potential design/test input for future RustChunk render/model-data; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable fixture**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable fixture**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/model-data; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2496,8 +2496,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Item layers/PNG alpha/component prototypes and quads/transforms/tints
 - Findings: 26.3 catalog and CPU fixture; not Android GPU proof
-- RustChunk relevance: Potential design/test input for future RustChunk render/item-model; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable architecture; rebuild catalogs**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable architecture; rebuild catalogs**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/item-model; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2513,8 +2513,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Geometry positions/UV/facing/cull/material outputs
 - Findings: CPU geometry only
-- RustChunk relevance: Potential design/test input for future RustChunk render/model-baking; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable geometry oracle**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable geometry oracle**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/model-baking; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2530,8 +2530,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Weighted variants and random draw selection
 - Findings: RNG target semantics need verification
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable selection harness**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable selection harness**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2547,8 +2547,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Parent/texture/context resolution
 - Findings: No GPU/final rendering
-- RustChunk relevance: Potential design/test input for future RustChunk render/model-resolution; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable inheritance tests**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable inheritance tests**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/model-resolution; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2564,8 +2564,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Frame/tick/duration edge sampling
 - Findings: No image/atlas/GPU stage
-- RustChunk relevance: Potential design/test input for future RustChunk render/animation; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable state tests**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable state tests**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/animation; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2581,8 +2581,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Normalize geometry/transforms/faces/textures
 - Findings: Test serialization utilities only
-- RustChunk relevance: Potential design/test input for future RustChunk render/test-support; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable test support**
+- RustChunk relevance: CPU-side fixture and parity-harness pattern; useful for differential tests, not an implementation of the game renderer or GPU pipeline.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable test support**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/test-support; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2598,8 +2598,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Metadata parsing, frame sampling, dirty/draw state
 - Findings: CPU side; GPU interpolation/atlas absent
-- RustChunk relevance: Potential design/test input for future RustChunk render/animation; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable CPU logic**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable CPU logic**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/animation; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2615,8 +2615,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Cube/cuboid quads, UV/normals/face order/material/transforms
 - Findings: CPU geometry, no atlas/shader/pixel parity
-- RustChunk relevance: Potential design/test input for future RustChunk render/model-baking; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Highly adaptable; port with oracle**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Highly adaptable; port with oracle**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/model-baking; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2632,8 +2632,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Rotations/UV-lock matrices using 64 cached rotations
 - Findings: JOML/asset behavior 26.3-specific
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstate-transform; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable math; rebuild transforms**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable math; rebuild transforms**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstate-transform; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2649,8 +2649,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Variants/multipart parse preserving JSON order/duplicate keys
 - Findings: Target JSON/schema semantics need validation
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstates; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable parser**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable parser**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstates; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2666,8 +2666,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Bind selectors to property schemas/states
 - Findings: Invalid/overlap semantics need 1.20.1 oracle
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstate-bind; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable binding**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable binding**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstate-bind; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2683,8 +2683,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Weighted selection/RNG draw ordering
 - Findings: Random consumption affects appearance; re-oracle
-- RustChunk relevance: Potential design/test input for future RustChunk render/blockstate-choice; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable algorithm**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable algorithm**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/blockstate-choice; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2700,8 +2700,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Generated extrusion via PNG alpha edges/display transforms
 - Findings: BTree ordering may differ from Java HashSet; no GPU
-- RustChunk relevance: Potential design/test input for future RustChunk render/item-baking; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable CPU bake**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable CPU bake**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/item-baking; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2712,13 +2712,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `2ad862c8d0ab78a3110c5224a59e82548e346441`.
 - Size: 64502 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1600, 1601–1757.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1600, 1601–1756.
 - Purpose: Item model tree.
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Parses item nodes, 122 components and condition/select/range/special/tint
 - Findings: All component ids/selectors are 26.3 data
-- RustChunk relevance: Potential design/test input for future RustChunk render/item-model; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Architecture adaptable; rewrite data**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Architecture adaptable; rewrite data**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/item-model; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2734,8 +2734,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Enchantment/stored enchantment/tag/level predicates
 - Findings: Only selected families; rebuild component registry
-- RustChunk relevance: Potential design/test input for future RustChunk render/item-predicate; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable predicate architecture**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable predicate architecture**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/item-predicate; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2751,8 +2751,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Unknown namespaces/external nodes fall back
 - Findings: No actual mod hook execution; loader support limited
-- RustChunk relevance: Potential design/test input for future RustChunk mods/render-interop; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference future extension only**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Unnecessary; Reference; Version-specific — Reference future extension only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/render-interop; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2768,8 +2768,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Fallback/foreign model behavior and fluid container tests
 - Findings: Fallback is not mod runtime/Forge compatibility
-- RustChunk relevance: Potential design/test input for future RustChunk mods/render-interop; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable tests only**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable tests only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/render-interop; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2785,8 +2785,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Special codecs/banner/pot/player/shield metadata
 - Findings: Actual renderer elsewhere; 26.3 catalog
-- RustChunk relevance: Potential design/test input for future RustChunk render/special-items; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable schema; rebuild data**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable schema; rebuild data**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/special-items; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2802,8 +2802,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Focused defaults/modulo/display-context/fallback-tint tests
 - Findings: Not renderer acceptance
-- RustChunk relevance: Potential design/test input for future RustChunk render/item-model; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable focused tests**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable focused tests**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/item-model; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2819,8 +2819,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Custom scanner mimicking Gson parsing semantics
 - Findings: 1024-char token cap and parser edges need tests
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/json; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable only after oracle**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable only after oracle**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/json; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2836,8 +2836,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Exports animation/baking/blockstate/item/model/palette/resolve and forbids unsafe
 - Findings: Module aggregation, not client integration
-- RustChunk relevance: Potential design/test input for future RustChunk render/assets; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable boundary**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable boundary**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/assets; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2848,13 +2848,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `095a0e6f4c6a4b589630dd1a46ba2778875e0606`.
 - Size: 20000 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–579.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–578.
 - Purpose: Matrix/quaternion math.
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: JOML-like Matrix3/4 and quaternion operations/decomposition
 - Findings: f32/platform-sensitive; ARM64/Java oracle required
-- RustChunk relevance: Potential design/test input for future RustChunk math/renderer; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Highly adaptable math**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Highly adaptable math**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is math/renderer; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2865,13 +2865,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `9fc7c9d5696b4944f5b35fe77e5ee139ea6417e1`.
 - Size: 18371 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–529.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–528.
 - Purpose: Cuboid model representation.
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Geometry/parents/AO/gui lighting/textures/display transforms
 - Findings: NeoForge OBJ/composite and 26.3 data need review
-- RustChunk relevance: Potential design/test input for future RustChunk render/model-data; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable resource model**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable resource model**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/model-data; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2887,8 +2887,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: OBJ vertices/UV/materials/negative indices/n-gon triangulation
 - Findings: Optional extension/MTL not base vanilla requirement
-- RustChunk relevance: Potential design/test input for future RustChunk mods/render-interop; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Defer optional extension**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Unnecessary; Reference; Optional/future — Defer optional extension**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is mods/render-interop; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2904,8 +2904,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: ARGB palette mapping and atlas variant grouping
 - Findings: CPU utility only; no texture upload
-- RustChunk relevance: Potential design/test input for future RustChunk render/palette; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable utility**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Adaptable utility**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/palette; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2916,13 +2916,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `f3cfc23d8e61d2248639a902491736319ad0de7c`.
 - Size: 22925 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–583.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–582.
 - Purpose: ModelLibrary resolver.
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Parent/alias/overlay/missing/generated models/textures/cycle handling
 - Findings: No final GPU parity; 26.3 resource rules
-- RustChunk relevance: Potential design/test input for future RustChunk render/model-resolution; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Highly adaptable architecture**
+- RustChunk relevance: CPU-side asset/model decoding or geometry logic; algorithms may inform a 1.20.1 asset pipeline, but 26.3 schemas/resources must be rebuilt and GPU/device parity remains unproven.
+- Decision: **Adaptable; Version-specific — Highly adaptable architecture**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/model-resolution; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2938,8 +2938,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: Versioned report generation/data dependencies
 - Findings: Tooling, not gameplay
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable measurement schema**
+- RustChunk relevance: Benchmark-report and hardware-telemetry design; useful for RustChunk diagnostics, but Android hardware/GPU probing and runtime integration require separate implementation.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable measurement schema**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2955,8 +2955,8 @@
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: OS/CPU/RAM/load/process RSS/CPU; GPU/display external
 - Findings: Android needs native APIs
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/hardware; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable telemetry**
+- RustChunk relevance: Benchmark-report and hardware-telemetry design; useful for RustChunk diagnostics, but Android hardware/GPU probing and runtime integration require separate implementation.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable telemetry**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/hardware; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2967,13 +2967,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `ae70977bd30553f638431bfabfc8ce794e3cef29`.
 - Size: 16543 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–464.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–463.
 - Purpose: Benchmark report schema.
 - Dependencies / cross-references: Rust source imports, implementation and in-file tests were reviewed at the pinned commit.
 - Implementation / logic: CI95, summaries, frame percentiles/low-FPS/histograms/upload scrub
 - Findings: Upstream-specific schema; tests format logic only
-- RustChunk relevance: Potential design/test input for future RustChunk runtime/benchmark; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Adaptable report design**
+- RustChunk relevance: Benchmark-report and hardware-telemetry design; useful for RustChunk diagnostics, but Android hardware/GPU probing and runtime integration require separate implementation.
+- Decision: **Adaptable; Reference; Version-specific — Adaptable report design**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/benchmark; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -2989,8 +2989,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Dedicated-server stress bot dependencies
 - Findings: Not playable Android client
-- RustChunk relevance: Potential design/test input for future RustChunk server/bots; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client; optional QA**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client; optional QA**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/bots; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3001,13 +3001,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `cb3e60f1b90b16566f909f1b2d11b88001dd7936`.
 - Size: 64760 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1600, 1601–1661.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1600, 1601–1660.
 - Purpose: Bots harness.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Offline bot login/chunks/movement/walk/explore/fight/idle/load modes
 - Findings: Protocol26.3 and synthetic flight; not faithful human client
-- RustChunk relevance: Potential design/test input for future RustChunk server/bots; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Server QA reference only**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Server QA reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/bots; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3023,8 +3023,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Server moderation crate
 - Findings: Not client/render dependency
-- RustChunk relevance: Potential design/test input for future RustChunk server/chat-filter; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/chat-filter; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3040,8 +3040,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Moderation denylist data
 - Findings: Not needed in client; false-positive policy concern
-- RustChunk relevance: Potential design/test input for future RustChunk server/chat-filter; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/chat-filter; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3052,13 +3052,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `a52a721b01c7801f31ac7e2634bf519498271f63`.
 - Size: 17362 bytes.
-- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–547.
+- Coverage: Complete file read in consecutive chunks of at most 400 lines: 1–400, 401–546.
 - Purpose: Chat filter engine.
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Normalizes/filter scores/warn-mute-ban and logs/persists
 - Findings: Server moderation policy, not client chat rendering
-- RustChunk relevance: Potential design/test input for future RustChunk server/chat-filter; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Exclude from client**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Exclude from client**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/chat-filter; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3074,8 +3074,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Confusable/leetspeak/accent/separator/invisible-char folding
 - Findings: Language-dependent; can false-positive
-- RustChunk relevance: Potential design/test input for future RustChunk server/chat-filter; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference only**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Reference only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/chat-filter; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3091,8 +3091,8 @@
 - Dependencies / cross-references: Dedicated-server/bot/tooling artifact; host/workload/protocol context comes from the source report. Not a client runtime dependency.
 - Implementation / logic: Obfuscation/allowlist/strike/persistence/restart
 - Findings: One server policy, not general language semantics
-- RustChunk relevance: Potential design/test input for future RustChunk server/chat-filter; the current workspace does not yet implement this gameplay/rendering subsystem.
-- Decision: **Reference tests only**
+- RustChunk relevance: Dedicated-server bot or chat-moderation utility; not the playable client and not client rendering/input/network functionality.
+- Decision: **Unnecessary; Reference; Version-specific — Reference tests only**
 - 1.20.1 implications: Upstream targets Minecraft 26.3. Reconstruct 1.20.1 APIs, data, registries, assets, save schemas and protocol behavior; version-string substitution is not a port.
 - Follow-up checks: Map the equivalent 1.20.1 Java owner/API, rebuild version-correct data and fixtures, compare Java oracle and Rust output, then integrate and validate on ARM64.
 - RustChunk implementation mapping: Future destination is server/chat-filter; this upstream file is not evidence of an already implemented RustChunk runtime module.
@@ -3103,13 +3103,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `fef4e912279d4c8169033779a1fd6a140187debf`.
 - Size: 37539 bytes.
-- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1002.
+- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1001.
 - Purpose: Block-entity NBT schema conversion.
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Canonicalizes save/load data, defaults/clamps and item/slot/sign/sculk/vault/trial block-entity fields.
 - Findings: Includes 26.3-only block entities and fields; exact IDs/defaults must be rebuilt from 1.20.1.
-- RustChunk relevance: Potential architecture/test input for future RustChunk world/block-entity-save; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **High-value architecture; rewrite schema**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — High-value architecture; rewrite schema**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is world/block-entity-save; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3125,8 +3125,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Stores bar title/progress/color/style/visibility/darken/music/fog and player identifiers; NBT packing/unpacking.
 - Findings: No packet synchronization or HUD rendering; color/catalog details are 26.3-specific.
-- RustChunk relevance: Potential architecture/test input for future RustChunk client/bossbar; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable state model; rebuild target ids/colors**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable state model; rebuild target ids/colors**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is client/bossbar; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3137,13 +3137,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `d6c4774d742c80cd0d74c2a199a5e3e6edb4d159`.
 - Size: 28226 bytes.
-- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–716.
+- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–715.
 - Purpose: Text component JSON codecs.
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Converts component JSON, style/event fields and 26.3-era component content/serialization.
 - Findings: Later component forms differ from 1.20.1; not a full chat screen/renderer.
-- RustChunk relevance: Potential architecture/test input for future RustChunk client/text; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable text tree; reimplement target codecs**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable text tree; reimplement target codecs**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is client/text; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3159,8 +3159,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Imitates Java/fastutil map/set iteration order for selected observable collection paths.
 - Findings: JDK collection internals are implementation details; do not port blindly unless 1.20.1 oracle shows observable behavior.
-- RustChunk relevance: Potential architecture/test input for future RustChunk runtime/collections; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Reference regression; use Rust ordering where possible**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Reference; Version-specific — Reference regression; use Rust ordering where possible**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/collections; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3176,8 +3176,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Maps game-rule names, defaults and typed boolean/integer semantics.
 - Findings: 26.3 rule names/defaults differ; rebuild full 1.20.1 catalog.
-- RustChunk relevance: Potential architecture/test input for future RustChunk world/gamerules; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable typed model; replace data table**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable typed model; replace data table**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is world/gamerules; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3193,8 +3193,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Two helpers normalize `namespace:path`, default namespaces and validate allowed characters.
 - Findings: The helpers differ in strictness; compare each with exact 1.20.1 Identifier constructors/codecs.
-- RustChunk relevance: Potential architecture/test input for future RustChunk runtime/identifier; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable parsing; enforce target validation**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable parsing; enforce target validation**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is runtime/identifier; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3210,8 +3210,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Learns keyboard-layout symbol labels and formats key display names through SDL-style key naming.
 - Findings: SDL/US symbol tables are upstream choices; Android hardware/IME input handling needs native adaptation.
-- RustChunk relevance: Potential architecture/test input for future RustChunk input/key-display; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable presentation idea; use Android input APIs**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable presentation idea; use Android input APIs**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is input/key-display; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3222,13 +3222,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `4810da22e6771fa2dad222ad7ed5bcb5e5e8f1ec`.
 - Size: 26194 bytes.
-- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–648.
+- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–647.
 - Purpose: Localization lookup table.
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Provides language key translation/fallback lookup for client text.
 - Findings: The table is 26.3; load target 1.20.1 language assets and key names.
-- RustChunk relevance: Potential architecture/test input for future RustChunk client/localization; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable translation architecture; replace resources**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable translation architecture; replace resources**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is client/localization; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3239,13 +3239,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `9c4a0505199dfb2458c7210b71ff5bc42cb90739`.
 - Size: 30967 bytes.
-- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–902.
+- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–901.
 - Purpose: NBT path parser and mutation.
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Parses paths and implements get/count/set/remove/insert plus compound/list/array matching.
 - Findings: Path parser, array mutation and max-depth details need exact 1.20.1 Java oracle.
-- RustChunk relevance: Potential architecture/test input for future RustChunk world/nbt-path; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Highly adaptable NBT path engine; differential-test semantics**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Highly adaptable NBT path engine; differential-test semantics**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is world/nbt-path; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3261,8 +3261,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Reads NBT strings and numeric tags as integer/floating values with vanilla-like coercion.
 - Findings: Truncation, float/double conversion and wrong-type fallbacks are version-sensitive.
-- RustChunk relevance: Potential architecture/test input for future RustChunk world/nbt; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable utility; verify numeric edge cases**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable utility; verify numeric edge cases**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is world/nbt; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3278,8 +3278,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Lists particle IDs and per-type override-limiter/translucent-layer flags.
 - Findings: Includes many later particle IDs; regenerate 1.20.1 registry and rendering layers.
-- RustChunk relevance: Potential architecture/test input for future RustChunk render/particles; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Reference table layout; rebuild target catalog**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Reference table layout; rebuild target catalog**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is render/particles; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3295,8 +3295,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Implements a small Java Pattern subset for `pack.mcmeta` filter matching.
 - Findings: Groups/braces are unsupported; must preserve only verified subset semantics.
-- RustChunk relevance: Potential architecture/test input for future RustChunk resource/pack-filter; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable minimal parser with conformance tests**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable minimal parser with conformance tests**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is resource/pack-filter; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3312,8 +3312,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Defines effect categories/colors, potion recipes/durations/amplifiers, sprite keys and color mixing.
 - Findings: Contains later effects and mod registration; regenerate all 1.20.1 potion/effect data.
-- RustChunk relevance: Potential architecture/test input for future RustChunk registry/potions; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable table/lookup design; rewrite catalog**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable table/lookup design; rewrite catalog**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is registry/potions; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3329,8 +3329,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Stores registry IDs/tags, entities, items, effects, biomes, dimensions, functions, scoreboard data, datapacks and custom completions.
 - Findings: Server-provided registry state and 26.3 resource sets are version-specific; completion UI and packet lifecycle are external.
-- RustChunk relevance: Potential architecture/test input for future RustChunk client/registries; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable data model; rebuild target registry ownership**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable data model; rebuild target registry ownership**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is client/registries; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3341,13 +3341,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `191b623b0bc55127eeeb0ead1c39134bbd41462b`.
 - Size: 57539 bytes.
-- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1600, 1601–1613.
+- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–1200, 1201–1600, 1601–1612.
 - Purpose: Scoreboard/team state and NBT.
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Implements objectives/criteria, teams, scores, display slots, score holders, NBT packing and component data.
 - Findings: Criteria/stat catalog is 26.3; no full network packet synchronization or HUD integration.
-- RustChunk relevance: Potential architecture/test input for future RustChunk client/scoreboard; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **High-value state/save architecture; rebuild criteria and packets**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — High-value state/save architecture; rebuild criteria and packets**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is client/scoreboard; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3363,8 +3363,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Formats compact/pretty SNBT and handles Java number spelling and collection iteration heuristics.
 - Findings: Hash iteration order is heuristic/insertion-based; exact formatting requires a pinned Java 1.20.1 oracle.
-- RustChunk relevance: Potential architecture/test input for future RustChunk world/snbt; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable serialization utilities; verify exact output**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable serialization utilities; verify exact output**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is world/snbt; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3380,8 +3380,8 @@
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Defines the eleven built-in sound source names in vanilla ordering.
 - Findings: Small static table; verify target ordering and server/client use sites rather than importing blindly.
-- RustChunk relevance: Potential architecture/test input for future RustChunk registry/sound-sources; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Adaptable registry table; validate 1.20.1 list**
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Adaptable registry table; validate 1.20.1 list**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is registry/sound-sources; this file does not prove the subsystem is already implemented in RustChunk.
@@ -3392,13 +3392,13 @@
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
 - Source SHA: `5480570d818047e8a3fc0797bf2bbcce071c2b34`.
 - Size: 29665 bytes.
-- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–824.
+- Coverage: Complete source read in consecutive chunks of at most 400 lines: 1–400, 401–800, 801–823.
 - Purpose: Styled text and components.
 - Dependencies / cross-references: Rust source imports and related client-core modules were reviewed at the pinned commit.
 - Implementation / logic: Builds styled spans, colors/decorations, translatable templates, click/hover events, legacy `§` parsing/resolution and JSON component output.
-- Findings: The 824-line implementation includes newer event/object fields; `open_file` is explicitly restricted to locally-created text, never server/LAN text. Rebuild 1.20.1 component schema and preserve this trust boundary.
-- RustChunk relevance: Potential architecture/test input for future RustChunk client/text; the current workspace has not yet implemented this runtime subsystem.
-- Decision: **Highly adaptable text engine; rewrite event/schema compatibility**
+- Findings: The 823-line implementation includes newer event/object fields; `open_file` is explicitly restricted to locally-created text, never server/LAN text. Rebuild 1.20.1 component schema and preserve this trust boundary.
+- RustChunk relevance: Client-core state/codec utility with useful architectural patterns; exact catalogs, identifiers, schemas and protocol behavior are 26.3-specific and must be differential-tested against Java 1.20.1.
+- Decision: **Adaptable; Version-specific — Highly adaptable text engine; rewrite event/schema compatibility**
 - 1.20.1 implications: Upstream targets Minecraft 26.3; reconstruct the corresponding 1.20.1 schema, identifiers, data and Java behavior rather than copying this catalog.
 - Follow-up checks: Compare against the official 1.20.1 Java/JAR behavior, rebuild target data and fixtures, test serialization and packet/UI integration, then validate on ARM64.
 - RustChunk implementation mapping: Future destination is client/text; this file does not prove the subsystem is already implemented in RustChunk.

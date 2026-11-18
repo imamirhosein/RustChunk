@@ -614,121 +614,121 @@
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 501 | `benchmarks/server-equal-work-2026-10-17/vanilla.json` | Reference baseline | Watchdog/broken-pipe at high counts |
-| 502 | `benchmarks/server-four-way-2026-10-19/README.md` | Reference only | Paper fastest average MSPT in several loads; remote host involved |
-| 503 | `benchmarks/server-four-way-2026-10-19/load.txt` | Context only | Remote bots 80–90% busy; server host spikes |
-| 504 | `benchmarks/server-four-way-2026-10-19/report-25-50.json` | Reference dedicated-server metrics | Paper25 28.3ms vs Horizon30.92; at50 Horizon47.83/Paper46.86/Fabric58.3; vanilla fails |
-| 505 | `benchmarks/server-four-way-2026-10-19/report-paper-10.json` | Reference only | One workload slice only |
-| 506 | `benchmarks/server-four-way-2026-10-19/runs.jsonl` | Reference dataset | Server workload data, not client FPS |
-| 507 | `benchmarks/server-mixed-2026-10-18/README.md` | Reference method | Explore throughput differs; compare ticks cautiously |
-| 508 | `benchmarks/server-mixed-2026-10-18/load.txt` | Context only | Mac bot host heavily loaded |
-| 509 | `benchmarks/server-mixed-2026-10-18/mixed.json` | Reference server data | At50 Horizon MSPT higher than vanilla in run; throughput unequal |
-| 510 | `benchmarks/server-vs-pumpkin-2026-10-31.json` | Reference server comparison | Pumpkin faster at20, mixed60, Horizon stronger100; anti-cheat/ground disabled |
-| 511 | `benchmarks/shared-json-buffer-lifetime-20261017.json` | Reference only | Near-identical medians; negligible gain |
-| 512 | `benchmarks/shared-json-decoder-phases-20261017.json` | Reference microbenchmark | Typed sample faster but higher peak RSS; loader-only |
-| 513 | `benchmarks/shared-json-five-way-20261017.json` | Adaptable measurement design | Loader-only and variant confounds |
-| 514 | `benchmarks/shared-json-five-way-final-20261017.json` | Reference optimization evidence | Lower RSS vs baseline, but host variance and loader-only scope |
-| 515 | `benchmarks/shared-json-historical-20261017.json` | Historical reference | Host/build context differs; no full startup |
-| 516 | `benchmarks/shared-json-startup-20261017.json` | Reference only | High host load, not full app startup |
-| 517 | `benchmarks/shared-json-startup-followup-20261017.json` | Reference only | Outliers/load variance prevent robust winner |
-| 518 | `benchmarks/shared-json-variant-isolation-20261017.json` | Historical experiment | No meaningful gain; experiments reverted |
-| 519 | `benchmarks/tick-state-2026-10-04/live-observations.json` | Reference telemetry only | One demo-world observation, not controlled benchmark |
-| 520 | `crates/cargo-horizon-mod/Cargo.toml` | Unnecessary for first milestone | Mod ecosystem not needed for vanilla client |
-| 521 | `crates/cargo-horizon-mod/src/check.rs` | Defer; trust concepts only | Native source unsandboxed and not run by registry check |
-| 522 | `crates/cargo-horizon-mod/src/main.rs` | Defer; not Forge | Horizon format, not Forge/1.20.1 loader |
-| 523 | `crates/cargo-horizon-mod/src/registry.rs` | Unnecessary for base client | Horizon mod registry; base load error can appear empty |
-| 524 | `crates/cargo-horizon-mod/template/content/block.json` | Defer | Horizon API 26.3-specific |
-| 525 | `crates/cargo-horizon-mod/template/content/blockstate.json` | Defer | Horizon paths/conventions |
+| 501 | `benchmarks/server-equal-work-2026-10-17/vanilla.json` | Unnecessary; Reference; Version-specific | Watchdog/broken-pipe at high counts |
+| 502 | `benchmarks/server-four-way-2026-10-19/README.md` | Unnecessary; Reference; Version-specific | Paper fastest average MSPT in several loads; remote host involved |
+| 503 | `benchmarks/server-four-way-2026-10-19/load.txt` | Unnecessary; Reference; Version-specific | Remote bots 80–90% busy; server host spikes |
+| 504 | `benchmarks/server-four-way-2026-10-19/report-25-50.json` | Unnecessary; Reference; Version-specific | Paper25 28.3ms vs Horizon30.92; at50 Horizon47.83/Paper46.86/Fabric58.3; vanilla fails |
+| 505 | `benchmarks/server-four-way-2026-10-19/report-paper-10.json` | Unnecessary; Reference; Version-specific | One workload slice only |
+| 506 | `benchmarks/server-four-way-2026-10-19/runs.jsonl` | Unnecessary; Reference; Version-specific | Server workload data, not client FPS |
+| 507 | `benchmarks/server-mixed-2026-10-18/README.md` | Unnecessary; Reference; Version-specific | Explore throughput differs; compare ticks cautiously |
+| 508 | `benchmarks/server-mixed-2026-10-18/load.txt` | Unnecessary; Reference; Version-specific | Mac bot host heavily loaded |
+| 509 | `benchmarks/server-mixed-2026-10-18/mixed.json` | Unnecessary; Reference; Version-specific | At50 Horizon MSPT higher than vanilla in run; throughput unequal |
+| 510 | `benchmarks/server-vs-pumpkin-2026-10-31.json` | Unnecessary; Reference; Version-specific | Pumpkin faster at20, mixed60, Horizon stronger100; anti-cheat/ground disabled |
+| 511 | `benchmarks/shared-json-buffer-lifetime-20261017.json` | Unnecessary; Reference; Version-specific | Near-identical medians; negligible gain |
+| 512 | `benchmarks/shared-json-decoder-phases-20261017.json` | Unnecessary; Reference; Version-specific | Typed sample faster but higher peak RSS; loader-only |
+| 513 | `benchmarks/shared-json-five-way-20261017.json` | Unnecessary; Reference; Version-specific | Loader-only and variant confounds |
+| 514 | `benchmarks/shared-json-five-way-final-20261017.json` | Unnecessary; Reference; Version-specific | Lower RSS vs baseline, but host variance and loader-only scope |
+| 515 | `benchmarks/shared-json-historical-20261017.json` | Unnecessary; Reference; Version-specific | Host/build context differs; no full startup |
+| 516 | `benchmarks/shared-json-startup-20261017.json` | Unnecessary; Reference; Version-specific | Asset loader only; high host load; not full app startup or first-frame timing |
+| 517 | `benchmarks/shared-json-startup-followup-20261017.json` | Unnecessary; Reference; Version-specific | Outliers/load variance prevent robust winner |
+| 518 | `benchmarks/shared-json-variant-isolation-20261017.json` | Unnecessary; Reference; Version-specific | No meaningful gain; experiments reverted |
+| 519 | `benchmarks/tick-state-2026-10-04/live-observations.json` | Unnecessary; Reference; Version-specific | One demo-world observation, not controlled benchmark |
+| 520 | `crates/cargo-horizon-mod/Cargo.toml` | Unnecessary; Reference; Version-specific | Mod ecosystem not needed for vanilla client |
+| 521 | `crates/cargo-horizon-mod/src/check.rs` | Unnecessary; Reference; Version-specific | Native source unsandboxed and not run by registry check |
+| 522 | `crates/cargo-horizon-mod/src/main.rs` | Unnecessary; Reference; Version-specific | Horizon format, not Forge/1.20.1 loader |
+| 523 | `crates/cargo-horizon-mod/src/registry.rs` | Unnecessary; Reference; Version-specific | Horizon mod registry; base load error can appear empty |
+| 524 | `crates/cargo-horizon-mod/template/content/block.json` | Unnecessary; Reference; Version-specific | Horizon API 26.3-specific |
+| 525 | `crates/cargo-horizon-mod/template/content/blockstate.json` | Unnecessary; Reference; Version-specific | Horizon paths/conventions |
 
 ## Part 23 — Entries 526–550
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 526 | `crates/cargo-horizon-mod/template/content/horizon-mod.toml` | Defer | API0.2, not Forge |
-| 527 | `crates/cargo-horizon-mod/template/content/item.json` | Defer | No Forge registration |
-| 528 | `crates/cargo-horizon-mod/template/content/lang.json` | Adaptable localization only | Localization idea generic; ids/resource paths differ |
-| 529 | `crates/cargo-horizon-mod/template/content/loot.json` | Adaptable data-pack concept | 1.20.1 codec validation required |
-| 530 | `crates/cargo-horizon-mod/template/content/model.json` | Adaptable sample only | Model schema/resolution version-dependent |
-| 531 | `crates/cargo-horizon-mod/template/content/pickaxe.json` | Adaptable resource idea | Tag path/version must be checked |
-| 532 | `crates/cargo-horizon-mod/template/content/recipe.json` | Adaptable example | Recipe codec/IDs need target validation |
-| 533 | `crates/cargo-horizon-mod/template/gitignore` | Adaptable after path rewrite | Generic hygiene but paths upstream-specific |
-| 534 | `crates/cargo-horizon-mod/template/native/api.toml` | Unnecessary initially | Pinned Horizon API unrelated to Forge |
-| 535 | `crates/cargo-horizon-mod/template/native/horizon-mixin.toml` | Unnecessary initially | Not Forge/1.20.1 schema |
-| 536 | `crates/cargo-horizon-mod/template/native/lib.rs` | Defer | Unsandboxed Horizon hooks, not Forge |
-| 537 | `crates/horizon-android/Cargo.toml` | Adaptable Android integration | Packaging pattern useful but game/package coupling needs rewrite |
-| 538 | `crates/horizon-anticheat/Cargo.toml` | Exclude from client | Server-only, not client runtime |
-| 539 | `crates/horizon-anticheat/src/combat.rs` | Exclude from client | Server validation only |
-| 540 | `crates/horizon-anticheat/src/lib.rs` | Exclude from client | Server moderation policy, not client engine |
-| 541 | `crates/horizon-anticheat/src/prediction.rs` | Exclude from client | Server authority only |
-| 542 | `crates/horizon-anticheat/src/timer.rs` | Exclude from client | Server-only detection |
-| 543 | `crates/horizon-assets/Cargo.toml` | Adaptable boundary; rewrite assets | Data/source APIs 26.3-specific |
-| 544 | `crates/horizon-assets/examples/blockstate_binding_fixture.rs` | Adaptable parity harness | Harness only; rebuild target registry data |
-| 545 | `crates/horizon-assets/examples/blockstate_model_fixture.rs` | Adaptable parser oracle | Not runtime/GPU render |
-| 546 | `crates/horizon-assets/examples/cuboid_model_fixture.rs` | Adaptable fixture | No atlas/parents/GPU |
-| 547 | `crates/horizon-assets/examples/item_model_fixture.rs` | Adaptable architecture; rebuild catalogs | 26.3 catalog and CPU fixture; not Android GPU proof |
-| 548 | `crates/horizon-assets/examples/model_baking_fixture.rs` | Adaptable geometry oracle | CPU geometry only |
-| 549 | `crates/horizon-assets/examples/model_choice_fixture.rs` | Adaptable selection harness | RNG target semantics need verification |
-| 550 | `crates/horizon-assets/examples/model_resolution_fixture.rs` | Adaptable inheritance tests | No GPU/final rendering |
+| 526 | `crates/cargo-horizon-mod/template/content/horizon-mod.toml` | Unnecessary; Reference; Version-specific | API0.2, not Forge |
+| 527 | `crates/cargo-horizon-mod/template/content/item.json` | Unnecessary; Reference; Version-specific | No Forge registration |
+| 528 | `crates/cargo-horizon-mod/template/content/lang.json` | Adaptable; Reference; Version-specific | Localization idea generic; ids/resource paths differ |
+| 529 | `crates/cargo-horizon-mod/template/content/loot.json` | Adaptable; Reference; Version-specific | 1.20.1 codec validation required |
+| 530 | `crates/cargo-horizon-mod/template/content/model.json` | Adaptable; Reference; Version-specific | Model schema/resolution version-dependent |
+| 531 | `crates/cargo-horizon-mod/template/content/pickaxe.json` | Adaptable; Reference; Version-specific | Tag path/version must be checked |
+| 532 | `crates/cargo-horizon-mod/template/content/recipe.json` | Adaptable; Reference; Version-specific | Recipe codec/IDs need target validation |
+| 533 | `crates/cargo-horizon-mod/template/gitignore` | Adaptable; Reference; Version-specific | Generic hygiene but paths upstream-specific |
+| 534 | `crates/cargo-horizon-mod/template/native/api.toml` | Unnecessary; Reference; Version-specific | Pinned Horizon API unrelated to Forge |
+| 535 | `crates/cargo-horizon-mod/template/native/horizon-mixin.toml` | Unnecessary; Reference; Version-specific | Not Forge/1.20.1 schema |
+| 536 | `crates/cargo-horizon-mod/template/native/lib.rs` | Unnecessary; Reference; Version-specific | Unsandboxed Horizon hooks, not Forge |
+| 537 | `crates/horizon-android/Cargo.toml` | Adaptable; Reference; Version-specific | Packaging pattern useful but game/package coupling needs rewrite |
+| 538 | `crates/horizon-anticheat/Cargo.toml` | Unnecessary; Reference; Version-specific | Server-only, not client runtime |
+| 539 | `crates/horizon-anticheat/src/combat.rs` | Unnecessary; Reference; Version-specific | Server validation only |
+| 540 | `crates/horizon-anticheat/src/lib.rs` | Unnecessary; Reference; Version-specific | Server moderation policy, not client engine |
+| 541 | `crates/horizon-anticheat/src/prediction.rs` | Unnecessary; Reference; Version-specific | Server authority only |
+| 542 | `crates/horizon-anticheat/src/timer.rs` | Unnecessary; Reference; Version-specific | Server-only detection |
+| 543 | `crates/horizon-assets/Cargo.toml` | Adaptable; Reference; Version-specific | Data/source APIs 26.3-specific |
+| 544 | `crates/horizon-assets/examples/blockstate_binding_fixture.rs` | Adaptable; Reference; Version-specific | Harness only; rebuild target registry data |
+| 545 | `crates/horizon-assets/examples/blockstate_model_fixture.rs` | Adaptable; Reference; Version-specific | Not runtime/GPU render |
+| 546 | `crates/horizon-assets/examples/cuboid_model_fixture.rs` | Adaptable; Reference; Version-specific | No atlas/parents/GPU |
+| 547 | `crates/horizon-assets/examples/item_model_fixture.rs` | Adaptable; Reference; Version-specific | 26.3 catalog and CPU fixture; not Android GPU proof |
+| 548 | `crates/horizon-assets/examples/model_baking_fixture.rs` | Adaptable; Reference; Version-specific | CPU geometry only |
+| 549 | `crates/horizon-assets/examples/model_choice_fixture.rs` | Adaptable; Reference; Version-specific | RNG target semantics need verification |
+| 550 | `crates/horizon-assets/examples/model_resolution_fixture.rs` | Adaptable; Reference; Version-specific | No GPU/final rendering |
 
 ## Part 24 — Entries 551–575
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 551 | `crates/horizon-assets/examples/sprite_animation_fixture.rs` | Adaptable state tests | No image/atlas/GPU stage |
-| 552 | `crates/horizon-assets/examples/support/mod.rs` | Adaptable test support | Test serialization utilities only |
-| 553 | `crates/horizon-assets/src/animation.rs` | Adaptable CPU logic | CPU side; GPU interpolation/atlas absent |
-| 554 | `crates/horizon-assets/src/bake.rs` | Highly adaptable; port with oracle | CPU geometry, no atlas/shader/pixel parity |
-| 555 | `crates/horizon-assets/src/bake/transform.rs` | Adaptable math; rebuild transforms | JOML/asset behavior 26.3-specific |
-| 556 | `crates/horizon-assets/src/blockstate.rs` | Adaptable parser | Target JSON/schema semantics need validation |
-| 557 | `crates/horizon-assets/src/blockstate/bind.rs` | Adaptable binding | Invalid/overlap semantics need 1.20.1 oracle |
-| 558 | `crates/horizon-assets/src/blockstate/choice.rs` | Adaptable algorithm | Random consumption affects appearance; re-oracle |
-| 559 | `crates/horizon-assets/src/item_bake.rs` | Adaptable CPU bake | BTree ordering may differ from Java HashSet; no GPU |
-| 560 | `crates/horizon-assets/src/item_model.rs` | Architecture adaptable; rewrite data | All component ids/selectors are 26.3 data |
-| 561 | `crates/horizon-assets/src/item_model/component_predicate.rs` | Adaptable predicate architecture | Only selected families; rebuild component registry |
-| 562 | `crates/horizon-assets/src/item_model/foreign.rs` | Reference future extension only | No actual mod hook execution; loader support limited |
-| 563 | `crates/horizon-assets/src/item_model/foreign_tests.rs` | Adaptable tests only | Fallback is not mod runtime/Forge compatibility |
-| 564 | `crates/horizon-assets/src/item_model/special.rs` | Adaptable schema; rebuild data | Actual renderer elsewhere; 26.3 catalog |
-| 565 | `crates/horizon-assets/src/item_model/tests.rs` | Adaptable focused tests | Not renderer acceptance |
-| 566 | `crates/horizon-assets/src/json.rs` | Adaptable only after oracle | 1024-char token cap and parser edges need tests |
-| 567 | `crates/horizon-assets/src/lib.rs` | Adaptable boundary | Module aggregation, not client integration |
-| 568 | `crates/horizon-assets/src/math.rs` | Highly adaptable math | f32/platform-sensitive; ARM64/Java oracle required |
-| 569 | `crates/horizon-assets/src/model.rs` | Adaptable resource model | NeoForge OBJ/composite and 26.3 data need review |
-| 570 | `crates/horizon-assets/src/obj.rs` | Defer optional extension | Optional extension/MTL not base vanilla requirement |
-| 571 | `crates/horizon-assets/src/palette.rs` | Adaptable utility | CPU utility only; no texture upload |
-| 572 | `crates/horizon-assets/src/resolve.rs` | Highly adaptable architecture | No final GPU parity; 26.3 resource rules |
-| 573 | `crates/horizon-bench/Cargo.toml` | Adaptable measurement schema | Tooling, not gameplay |
-| 574 | `crates/horizon-bench/src/hardware.rs` | Adaptable telemetry | Android needs native APIs |
-| 575 | `crates/horizon-bench/src/lib.rs` | Adaptable report design | Upstream-specific schema; tests format logic only |
+| 551 | `crates/horizon-assets/examples/sprite_animation_fixture.rs` | Adaptable; Reference; Version-specific | No image/atlas/GPU stage |
+| 552 | `crates/horizon-assets/examples/support/mod.rs` | Adaptable; Reference; Version-specific | Test serialization utilities only |
+| 553 | `crates/horizon-assets/src/animation.rs` | Adaptable; Version-specific | CPU side; GPU interpolation/atlas absent |
+| 554 | `crates/horizon-assets/src/bake.rs` | Adaptable; Version-specific | CPU geometry, no atlas/shader/pixel parity |
+| 555 | `crates/horizon-assets/src/bake/transform.rs` | Adaptable; Version-specific | JOML/asset behavior 26.3-specific |
+| 556 | `crates/horizon-assets/src/blockstate.rs` | Adaptable; Version-specific | Target JSON/schema semantics need validation |
+| 557 | `crates/horizon-assets/src/blockstate/bind.rs` | Adaptable; Version-specific | Invalid/overlap semantics need 1.20.1 oracle |
+| 558 | `crates/horizon-assets/src/blockstate/choice.rs` | Adaptable; Version-specific | Random consumption affects appearance; re-oracle |
+| 559 | `crates/horizon-assets/src/item_bake.rs` | Adaptable; Version-specific | BTree ordering may differ from Java HashSet; no GPU |
+| 560 | `crates/horizon-assets/src/item_model.rs` | Adaptable; Version-specific | All component ids/selectors are 26.3 data |
+| 561 | `crates/horizon-assets/src/item_model/component_predicate.rs` | Adaptable; Reference; Version-specific | Only selected families; rebuild component registry |
+| 562 | `crates/horizon-assets/src/item_model/foreign.rs` | Unnecessary; Reference; Version-specific | No actual mod hook execution; loader support limited |
+| 563 | `crates/horizon-assets/src/item_model/foreign_tests.rs` | Adaptable; Reference; Version-specific | Fallback is not mod runtime/Forge compatibility |
+| 564 | `crates/horizon-assets/src/item_model/special.rs` | Adaptable; Reference; Version-specific | Actual renderer elsewhere; 26.3 catalog |
+| 565 | `crates/horizon-assets/src/item_model/tests.rs` | Adaptable; Reference; Version-specific | Not renderer acceptance |
+| 566 | `crates/horizon-assets/src/json.rs` | Adaptable; Version-specific | 1024-char token cap and parser edges need tests |
+| 567 | `crates/horizon-assets/src/lib.rs` | Adaptable; Reference; Version-specific | Module aggregation, not client integration |
+| 568 | `crates/horizon-assets/src/math.rs` | Adaptable; Version-specific | f32/platform-sensitive; ARM64/Java oracle required |
+| 569 | `crates/horizon-assets/src/model.rs` | Adaptable; Version-specific | NeoForge OBJ/composite and 26.3 data need review |
+| 570 | `crates/horizon-assets/src/obj.rs` | Unnecessary; Reference; Optional/future | Optional extension/MTL not base vanilla requirement |
+| 571 | `crates/horizon-assets/src/palette.rs` | Adaptable; Version-specific | CPU utility only; no texture upload |
+| 572 | `crates/horizon-assets/src/resolve.rs` | Adaptable; Version-specific | No final GPU parity; 26.3 resource rules |
+| 573 | `crates/horizon-bench/Cargo.toml` | Adaptable; Reference; Version-specific | Tooling, not gameplay |
+| 574 | `crates/horizon-bench/src/hardware.rs` | Adaptable; Reference; Version-specific | Android needs native APIs |
+| 575 | `crates/horizon-bench/src/lib.rs` | Adaptable; Reference; Version-specific | Upstream-specific schema; tests format logic only |
 
 ## Part 25 — Entries 576–600
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 576 | `crates/horizon-bots/Cargo.toml` | Exclude from client; optional QA | Not playable Android client |
-| 577 | `crates/horizon-bots/src/main.rs` | Server QA reference only | Protocol26.3 and synthetic flight; not faithful human client |
-| 578 | `crates/horizon-chat-filter/Cargo.toml` | Exclude from client | Not client/render dependency |
-| 579 | `crates/horizon-chat-filter/data/slurs.txt` | Exclude from client | Not needed in client; false-positive policy concern |
-| 580 | `crates/horizon-chat-filter/src/lib.rs` | Exclude from client | Server moderation policy, not client chat rendering |
-| 581 | `crates/horizon-chat-filter/src/normalise.rs` | Reference only | Language-dependent; can false-positive |
-| 582 | `crates/horizon-chat-filter/src/tests.rs` | Reference tests only | One server policy, not general language semantics |
-| 583 | `crates/horizon-client-core/src/block_entity_nbt.rs` | High-value architecture; rewrite schema | Includes 26.3-only block entities and fields; exact IDs/defaults must be rebuilt from 1.20.1. |
-| 584 | `crates/horizon-client-core/src/bossbar.rs` | Adaptable state model; rebuild target ids/colors | No packet synchronization or HUD rendering; color/catalog details are 26.3-specific. |
-| 585 | `crates/horizon-client-core/src/component.rs` | Adaptable text tree; reimplement target codecs | Later component forms differ from 1.20.1; not a full chat screen/renderer. |
-| 586 | `crates/horizon-client-core/src/fastutil_order.rs` | Reference regression; use Rust ordering where possible | JDK collection internals are implementation details; do not port blindly unless 1.20.1 oracle shows observable behavior. |
-| 587 | `crates/horizon-client-core/src/gamerules.rs` | Adaptable typed model; replace data table | 26.3 rule names/defaults differ; rebuild full 1.20.1 catalog. |
-| 588 | `crates/horizon-client-core/src/identifier.rs` | Adaptable parsing; enforce target validation | The helpers differ in strictness; compare each with exact 1.20.1 Identifier constructors/codecs. |
-| 589 | `crates/horizon-client-core/src/key_display.rs` | Adaptable presentation idea; use Android input APIs | SDL/US symbol tables are upstream choices; Android hardware/IME input handling needs native adaptation. |
-| 590 | `crates/horizon-client-core/src/lang.rs` | Adaptable translation architecture; replace resources | The table is 26.3; load target 1.20.1 language assets and key names. |
-| 591 | `crates/horizon-client-core/src/nbt_path.rs` | Highly adaptable NBT path engine; differential-test semantics | Path parser, array mutation and max-depth details need exact 1.20.1 Java oracle. |
-| 592 | `crates/horizon-client-core/src/nbt_value.rs` | Adaptable utility; verify numeric edge cases | Truncation, float/double conversion and wrong-type fallbacks are version-sensitive. |
-| 593 | `crates/horizon-client-core/src/particle_type.rs` | Reference table layout; rebuild target catalog | Includes many later particle IDs; regenerate 1.20.1 registry and rendering layers. |
-| 594 | `crates/horizon-client-core/src/pattern.rs` | Adaptable minimal parser with conformance tests | Groups/braces are unsupported; must preserve only verified subset semantics. |
-| 595 | `crates/horizon-client-core/src/potions.rs` | Adaptable table/lookup design; rewrite catalog | Contains later effects and mod registration; regenerate all 1.20.1 potion/effect data. |
-| 596 | `crates/horizon-client-core/src/registries.rs` | Adaptable data model; rebuild target registry ownership | Server-provided registry state and 26.3 resource sets are version-specific; completion UI and packet lifecycle are external. |
-| 597 | `crates/horizon-client-core/src/scoreboard.rs` | High-value state/save architecture; rebuild criteria and packets | Criteria/stat catalog is 26.3; no full network packet synchronization or HUD integration. |
-| 598 | `crates/horizon-client-core/src/snbt.rs` | Adaptable serialization utilities; verify exact output | Hash iteration order is heuristic/insertion-based; exact formatting requires a pinned Java 1.20.1 oracle. |
-| 599 | `crates/horizon-client-core/src/sound_source.rs` | Adaptable registry table; validate 1.20.1 list | Small static table; verify target ordering and server/client use sites rather than importing blindly. |
-| 600 | `crates/horizon-client-core/src/text.rs` | Highly adaptable text engine; rewrite event/schema compatibility | The 824-line implementation includes newer event/object fields; `open_file` is explicitly restricted to locally-created text, never server/LAN text. Rebuild 1.20.1 component schema and preserve this trust boundary. |
+| 576 | `crates/horizon-bots/Cargo.toml` | Unnecessary; Reference; Version-specific | Not playable Android client |
+| 577 | `crates/horizon-bots/src/main.rs` | Unnecessary; Reference; Version-specific | Protocol26.3 and synthetic flight; not faithful human client |
+| 578 | `crates/horizon-chat-filter/Cargo.toml` | Unnecessary; Reference; Version-specific | Not client/render dependency |
+| 579 | `crates/horizon-chat-filter/data/slurs.txt` | Unnecessary; Reference; Version-specific | Not needed in client; false-positive policy concern |
+| 580 | `crates/horizon-chat-filter/src/lib.rs` | Unnecessary; Reference; Version-specific | Server moderation policy, not client chat rendering |
+| 581 | `crates/horizon-chat-filter/src/normalise.rs` | Unnecessary; Reference; Version-specific | Language-dependent; can false-positive |
+| 582 | `crates/horizon-chat-filter/src/tests.rs` | Unnecessary; Reference; Version-specific | One server policy, not general language semantics |
+| 583 | `crates/horizon-client-core/src/block_entity_nbt.rs` | Adaptable; Version-specific | Includes 26.3-only block entities and fields; exact IDs/defaults must be rebuilt from 1.20.1. |
+| 584 | `crates/horizon-client-core/src/bossbar.rs` | Adaptable; Version-specific | No packet synchronization or HUD rendering; color/catalog details are 26.3-specific. |
+| 585 | `crates/horizon-client-core/src/component.rs` | Adaptable; Version-specific | Later component forms differ from 1.20.1; not a full chat screen/renderer. |
+| 586 | `crates/horizon-client-core/src/fastutil_order.rs` | Adaptable; Reference; Version-specific | JDK collection internals are implementation details; do not port blindly unless 1.20.1 oracle shows observable behavior. |
+| 587 | `crates/horizon-client-core/src/gamerules.rs` | Adaptable; Version-specific | 26.3 rule names/defaults differ; rebuild full 1.20.1 catalog. |
+| 588 | `crates/horizon-client-core/src/identifier.rs` | Adaptable; Version-specific | The helpers differ in strictness; compare each with exact 1.20.1 Identifier constructors/codecs. |
+| 589 | `crates/horizon-client-core/src/key_display.rs` | Adaptable; Version-specific | SDL/US symbol tables are upstream choices; Android hardware/IME input handling needs native adaptation. |
+| 590 | `crates/horizon-client-core/src/lang.rs` | Adaptable; Version-specific | The table is 26.3; load target 1.20.1 language assets and key names. |
+| 591 | `crates/horizon-client-core/src/nbt_path.rs` | Adaptable; Version-specific | Path parser, array mutation and max-depth details need exact 1.20.1 Java oracle. |
+| 592 | `crates/horizon-client-core/src/nbt_value.rs` | Adaptable; Version-specific | Truncation, float/double conversion and wrong-type fallbacks are version-sensitive. |
+| 593 | `crates/horizon-client-core/src/particle_type.rs` | Adaptable; Version-specific | Includes many later particle IDs; regenerate 1.20.1 registry and rendering layers. |
+| 594 | `crates/horizon-client-core/src/pattern.rs` | Adaptable; Version-specific | Groups/braces are unsupported; must preserve only verified subset semantics. |
+| 595 | `crates/horizon-client-core/src/potions.rs` | Adaptable; Version-specific | Contains later effects and mod registration; regenerate all 1.20.1 potion/effect data. |
+| 596 | `crates/horizon-client-core/src/registries.rs` | Adaptable; Version-specific | Server-provided registry state and 26.3 resource sets are version-specific; completion UI and packet lifecycle are external. |
+| 597 | `crates/horizon-client-core/src/scoreboard.rs` | Adaptable; Version-specific | Criteria/stat catalog is 26.3; no full network packet synchronization or HUD integration. |
+| 598 | `crates/horizon-client-core/src/snbt.rs` | Adaptable; Version-specific | Hash iteration order is heuristic/insertion-based; exact formatting requires a pinned Java 1.20.1 oracle. |
+| 599 | `crates/horizon-client-core/src/sound_source.rs` | Adaptable; Version-specific | Small static table; verify target ordering and server/client use sites rather than importing blindly. |
+| 600 | `crates/horizon-client-core/src/text.rs` | Adaptable; Version-specific | 823 logical lines; newer event/object fields; preserve local-only open_file trust boundary |
 
 ## Part 26 — Entries 601–620
 
