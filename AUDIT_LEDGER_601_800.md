@@ -367,11 +367,11 @@
 - Purpose: Block-entity render/cache regression suite
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Reference tests only; do not port as runtime code.
-- RustChunk relevance: Exercises vertex parity, cache invalidation, resource reloads and fallback paths for special block-entity models.
+- Findings: Exercises vertex parity, cache invalidation, resource reloads and fallback paths for special block-entity models.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reference tests only; do not port as runtime code.
-- 1.20.1 implications: Fixtures target the pinned 26.3 renderer and several tests require prepared assets or a GPU; none were run here.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for block_entity_render_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Fixtures target the pinned 26.3 renderer and several tests require prepared assets or a GPU; none were run here.
 - RustChunk implementation mapping: Fixtures target the pinned 26.3 renderer and several tests require prepared assets or a GPU; none were run here.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -384,11 +384,11 @@
 - Purpose: Optional BlueMap remote-map integration
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Defer as an optional network integration.
-- RustChunk relevance: Fetches and displays remote world-map tiles and metadata alongside the in-game world.
+- Findings: Fetches and displays remote world-map tiles and metadata alongside the in-game world.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Defer as an optional network integration.
-- 1.20.1 implications: Not vanilla functionality; remote URLs, tile protocols and map metadata are provider/version-specific and create privacy/network trust concerns.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for bluemap.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Not vanilla functionality; remote URLs, tile protocols and map metadata are provider/version-specific and create privacy/network trust concerns.
 - RustChunk implementation mapping: Not vanilla functionality; remote URLs, tile protocols and map metadata are provider/version-specific and create privacy/network trust concerns.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -401,11 +401,11 @@
 - Purpose: BlueMap endpoint discovery
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional plugin; never enable implicitly.
-- RustChunk relevance: Detects a map endpoint from server-provided or discovered information before map tile loading.
+- Findings: Detects a map endpoint from server-provided or discovered information before map tile loading.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional plugin; never enable implicitly.
-- 1.20.1 implications: Discovery must not turn arbitrary multiplayer server metadata into an unrestricted network fetch or SSRF route.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for bluemap_detect.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Discovery must not turn arbitrary multiplayer server metadata into an unrestricted network fetch or SSRF route.
 - RustChunk implementation mapping: Discovery must not turn arbitrary multiplayer server metadata into an unrestricted network fetch or SSRF route.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -418,11 +418,11 @@
 - Purpose: World-border shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Adapt shader logic only after target shader compilation.
-- RustChunk relevance: Computes the border overlay fragment colour/fade in the GPU shader.
+- Findings: Computes the border overlay fragment colour/fade in the GPU shader.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Adapt shader logic only after target shader compilation.
-- 1.20.1 implications: Shader IO and pipeline bindings are specific to Starling's renderer and its current WGSL toolchain.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for border.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Shader IO and pipeline bindings are specific to Starling's renderer and its current WGSL toolchain.
 - RustChunk implementation mapping: Shader IO and pipeline bindings are specific to Starling's renderer and its current WGSL toolchain.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -435,11 +435,11 @@
 - Purpose: World-border geometry and rendering
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Adapt geometry and lifecycle; rebuild target constants.
-- RustChunk relevance: Builds border wall/plane geometry and animation parameters for the world-border pass.
+- Findings: Builds border wall/plane geometry and animation parameters for the world-border pass.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Adapt geometry and lifecycle; rebuild target constants.
-- 1.20.1 implications: Border warning distance, interpolation and renderer pass placement must match the 1.20.1 world-border implementation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for border_render.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Border warning distance, interpolation and renderer pass placement must match the 1.20.1 world-border implementation.
 - RustChunk implementation mapping: Border warning distance, interpolation and renderer pass placement must match the 1.20.1 world-border implementation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -452,11 +452,11 @@
 - Purpose: Block-breaking overlay geometry
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Reusable algorithm with target atlas mapping.
-- RustChunk relevance: Builds destroy-stage UVs and geometry for crack overlays on models/entities.
+- Findings: Builds destroy-stage UVs and geometry for crack overlays on models/entities.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reusable algorithm with target atlas mapping.
-- 1.20.1 implications: Destroy-stage textures, stage count and model sources must come from 1.20.1 assets.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for breaking.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Destroy-stage textures, stage count and model sources must come from 1.20.1 assets.
 - RustChunk implementation mapping: Destroy-stage textures, stage count and model sources must come from 1.20.1 assets.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -469,11 +469,11 @@
 - Purpose: Brewing recipe and timing data
 - Dependencies / cross-references: Depends on target-version registries, entity/block state, random source, particle atlas and client tick ordering.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Rebuild the data model for 1.20.1; do not copy the current catalog.
-- RustChunk relevance: Resolves brewing operations, ingredient matches and brewing time from data-driven definitions/providers.
+- Findings: Resolves brewing operations, ingredient matches and brewing time from data-driven definitions/providers.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Rebuild the data model for 1.20.1; do not copy the current catalog.
-- 1.20.1 implications: The module uses newer data-driven recipe/provider structures; vanilla 1.20.1 brewing behavior and data definitions differ.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for brewing.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The module uses newer data-driven recipe/provider structures; vanilla 1.20.1 brewing behavior and data definitions differ.
 - RustChunk implementation mapping: The module uses newer data-driven recipe/provider structures; vanilla 1.20.1 brewing behavior and data definitions differ.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -486,11 +486,11 @@
 - Purpose: Camera and view transforms
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Maintains camera pose, projection and collision/interpolation inputs used by the frame.
-- Findings: High-value camera architecture; replace constants and verify math.
-- RustChunk relevance: Maintains camera pose, projection, third-person clipping, view bob, hurt and interpolation state.
+- Findings: Maintains camera pose, projection, third-person clipping, view bob, hurt and interpolation state.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value camera architecture; replace constants and verify math.
-- 1.20.1 implications: Camera transforms are sensitive to target perspective, view-bobbing, portal effects, FOV and collision rules.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for camera.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Camera transforms are sensitive to target perspective, view-bobbing, portal effects, FOV and collision rules.
 - RustChunk implementation mapping: Camera transforms are sensitive to target perspective, view-bobbing, portal effects, FOV and collision rules.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -503,11 +503,11 @@
 - Purpose: Chat state, input and rendering
 - Dependencies / cross-references: Depends on client account/session state, protocol identity, text and input handling; account providers must remain isolated.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Rebuild packet/security integration for 1.20.1; retain separable UI state patterns.
-- RustChunk relevance: Coordinates chat history, draft/composition, message display, completion and signing-related UI state.
+- Findings: Coordinates chat history, draft/composition, message display, completion and signing-related UI state.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Rebuild packet/security integration for 1.20.1; retain separable UI state patterns.
-- 1.20.1 implications: The source includes newer chat and signed-message fields; client packet lifecycle and secure-chat rules must match 1.20.1 exactly.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for chat.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The source includes newer chat and signed-message fields; client packet lifecycle and secure-chat rules must match 1.20.1 exactly.
 - RustChunk implementation mapping: The source includes newer chat and signed-message fields; client packet lifecycle and secure-chat rules must match 1.20.1 exactly.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -520,11 +520,11 @@
 - Purpose: Chat behavior regression fixtures
 - Dependencies / cross-references: Depends on client account/session state, protocol identity, text and input handling; account providers must remain isolated.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Test reference only; port selected tests after target fixtures exist.
-- RustChunk relevance: Checks chat wrapping, ordering, history, keyboard interactions and related rendering behavior.
+- Findings: Checks chat wrapping, ordering, history, keyboard interactions and related rendering behavior.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Test reference only; port selected tests after target fixtures exist.
-- 1.20.1 implications: Tests are tied to current text schema and UI behavior and were not executed.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for chat_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Tests are tied to current text schema and UI behavior and were not executed.
 - RustChunk implementation mapping: Tests are tied to current text schema and UI behavior and were not executed.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -537,11 +537,11 @@
 - Purpose: OptiFine-style Custom Item Textures rule engine
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional compatibility extension; do not include in vanilla core.
-- RustChunk relevance: Parses CIT rules and selects item texture substitutions based on stack/context properties.
+- Findings: Parses CIT rules and selects item texture substitutions based on stack/context properties.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Optional compatibility extension; do not include in vanilla core.
-- 1.20.1 implications: Rule predicates and item metadata rely on newer item-component formats; 1.20.1 item NBT/tags require a dedicated adapter.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for chunk.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Rule predicates and item metadata rely on newer item-component formats; 1.20.1 item NBT/tags require a dedicated adapter.
 - RustChunk implementation mapping: Rule predicates and item metadata rely on newer item-component formats; 1.20.1 item NBT/tags require a dedicated adapter.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -554,11 +554,11 @@
 - Purpose: CIT armor texture/render integration
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional renderer extension; defer until vanilla armor rendering is stable.
-- RustChunk relevance: Applies custom armor texture rules across equipment/model layers.
+- Findings: Applies custom armor texture rules across equipment/model layers.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Optional renderer extension; defer until vanilla armor rendering is stable.
-- 1.20.1 implications: Layer names, armor materials, component/equipment structure and model variants differ across game versions.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for block_entity.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Layer names, armor materials, component/equipment structure and model variants differ across game versions.
 - RustChunk implementation mapping: Layer names, armor materials, component/equipment structure and model variants differ across game versions.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -571,11 +571,11 @@
 - Purpose: CIT item asset loading
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Adapt bounded resource loading after 1.20.1 rules are defined.
-- RustChunk relevance: Discovers, decodes and associates custom item texture resources with matching rules.
+- Findings: Discovers, decodes and associates custom item texture resources with matching rules.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Adapt bounded resource loading after 1.20.1 rules are defined.
-- 1.20.1 implications: Resource path resolution, model layers and item metadata are version-specific; untrusted packs need size and decode limits.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for chunk_map.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Resource path resolution, model layers and item metadata are version-specific; untrusted packs need size and decode limits.
 - RustChunk implementation mapping: Resource path resolution, model layers and item metadata are version-specific; untrusted packs need size and decode limits.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -588,11 +588,11 @@
 - Purpose: CIT enchantment glint textures
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: Optional pack feature; keep separate from vanilla enchantment glint.
-- RustChunk relevance: Builds shared texture arrays and per-layer blend parameters for custom glint effects.
+- Findings: Builds shared texture arrays and per-layer blend parameters for custom glint effects.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: Optional pack feature; keep separate from vanilla enchantment glint.
-- 1.20.1 implications: Glint material and item component sources are newer; texture arrays may exceed low-end device limits.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cit.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Glint material and item component sources are newer; texture arrays may exceed low-end device limits.
 - RustChunk implementation mapping: Glint material and item component sources are newer; texture arrays may exceed low-end device limits.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -605,11 +605,11 @@
 - Purpose: Cloud mesh and animation cache
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: Reusable performance pattern; preserve exact cloud appearance.
-- RustChunk relevance: Builds cloud geometry and updates position/phase via uniforms while remaining inside a geometry cell.
+- Findings: Builds cloud geometry and updates position/phase via uniforms while remaining inside a geometry cell.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: Reusable performance pattern; preserve exact cloud appearance.
-- 1.20.1 implications: Cloud height/type, weather state and atlas inputs must match 1.20.1; this is visual-only, not world geometry.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cit_armor.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Cloud height/type, weather state and atlas inputs must match 1.20.1; this is visual-only, not world geometry.
 - RustChunk implementation mapping: Cloud height/type, weather state and atlas inputs must match 1.20.1; this is visual-only, not world geometry.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -622,11 +622,11 @@
 - Purpose: Collision query acceleration
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: High-value algorithm; adapt shape registry and movement semantics.
-- RustChunk relevance: Uses chunk-section palettes and compact shape data to avoid scanning blocks that cannot collide.
+- Findings: Uses chunk-section palettes and compact shape data to avoid scanning blocks that cannot collide.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: High-value algorithm; adapt shape registry and movement semantics.
-- 1.20.1 implications: Collision shapes, fluids, entity movement and block-state IDs are versioned; acceleration must remain conservative.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cit_assets.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Collision shapes, fluids, entity movement and block-state IDs are versioned; acceleration must remain conservative.
 - RustChunk implementation mapping: Collision shapes, fluids, entity movement and block-state IDs are versioned; acceleration must remain conservative.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -639,11 +639,11 @@
 - Purpose: Command-block editor/view state
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: UI feature may be adapted after core screen/input works.
-- RustChunk relevance: Provides command-block text/metadata and UI-facing state used by command-block screens.
+- Findings: Provides command-block text/metadata and UI-facing state used by command-block screens.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: UI feature may be adapted after core screen/input works.
-- 1.20.1 implications: Command block permissions, packet handling and NBT field names must follow 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cit_glint.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Command block permissions, packet handling and NBT field names must follow 1.20.1.
 - RustChunk implementation mapping: Command block permissions, packet handling and NBT field names must follow 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -656,11 +656,11 @@
 - Purpose: Connected-texture rule evaluation
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional resource-pack compatibility; defer from vanilla baseline.
-- RustChunk relevance: Implements OptiFine-style connected textures, predicates and neighbour-sensitive sprite selection.
+- Findings: Implements OptiFine-style connected textures, predicates and neighbour-sensitive sprite selection.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional resource-pack compatibility; defer from vanilla baseline.
-- 1.20.1 implications: CTM is not a vanilla renderer feature; rule syntax and neighbour semantics depend on the chosen compatibility target.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for clouds.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: CTM is not a vanilla renderer feature; rule syntax and neighbour semantics depend on the chosen compatibility target.
 - RustChunk implementation mapping: CTM is not a vanilla renderer feature; rule syntax and neighbour semantics depend on the chosen compatibility target.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -673,11 +673,11 @@
 - Purpose: Container screen data and rendering
 - Dependencies / cross-references: Depends on authoritative chunk state, block facts/shape occlusion, fluids, dimensions and world update lifecycle.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Reuse generic slot/UI patterns; rebuild the container catalog.
-- RustChunk relevance: Builds container content, slot layout and specialized chest/furnace-like screen states.
+- Findings: Builds container content, slot layout and specialized chest/furnace-like screen states.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reuse generic slot/UI patterns; rebuild the container catalog.
-- 1.20.1 implications: The module contains later blocks/container variants and item component assumptions absent from 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for collisions.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The module contains later blocks/container variants and item component assumptions absent from 1.20.1.
 - RustChunk implementation mapping: The module contains later blocks/container variants and item component assumptions absent from 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -690,11 +690,11 @@
 - Purpose: Crash diagnostics and redaction
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Adapt diagnostics with a strict privacy allowlist.
-- RustChunk relevance: Collects crash context and scrubs sensitive/player/server details before presenting or saving reports.
+- Findings: Collects crash context and scrubs sensitive/player/server details before presenting or saving reports.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Adapt diagnostics with a strict privacy allowlist.
-- 1.20.1 implications: The current report fields and paths are Starling-specific; sensitive auth tokens, addresses and personal data must never leak.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for command_block.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The current report fields and paths are Starling-specific; sensitive auth tokens, addresses and personal data must never leak.
 - RustChunk implementation mapping: The current report fields and paths are Starling-specific; sensitive auth tokens, addresses and personal data must never leak.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -707,11 +707,11 @@
 - Purpose: Datapack loading and lifecycle
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: High-value architecture; rebuild codecs and resources from 1.20.1.
-- RustChunk relevance: Reads datapack metadata/resources and manages reloadable data inputs.
+- Findings: Reads datapack metadata/resources and manages reloadable data inputs.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: High-value architecture; rebuild codecs and resources from 1.20.1.
-- 1.20.1 implications: Pack formats, registry data, functions and resource IDs have changed since 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for connected.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pack formats, registry data, functions and resource IDs have changed since 1.20.1.
 - RustChunk implementation mapping: Pack formats, registry data, functions and resource IDs have changed since 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -724,11 +724,11 @@
 - Purpose: Dynamic-light visual overlay
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional cosmetic feature; keep separate from gameplay light engine.
-- RustChunk relevance: Adds nearby light-source values to shader-side visual shading without changing authoritative world light.
+- Findings: Adds nearby light-source values to shader-side visual shading without changing authoritative world light.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional cosmetic feature; keep separate from gameplay light engine.
-- 1.20.1 implications: Explicitly visual-only; it does not update chunk light storage or server/gameplay calculations.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for containers.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Explicitly visual-only; it does not update chunk light storage or server/gameplay calculations.
 - RustChunk implementation mapping: Explicitly visual-only; it does not update chunk light storage or server/gameplay calculations.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -741,11 +741,11 @@
 - Purpose: Status effects and displayed effects model
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Rebuild effect and attribute registry for 1.20.1.
-- RustChunk relevance: Stores active effects, durations, modifiers and display-facing state.
+- Findings: Stores active effects, durations, modifiers and display-facing state.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Rebuild effect and attribute registry for 1.20.1.
-- 1.20.1 implications: Effect IDs, attributes, particles and newer effects are not interchangeable with 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for crash.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Effect IDs, attributes, particles and newer effects are not interchangeable with 1.20.1.
 - RustChunk implementation mapping: Effect IDs, attributes, particles and newer effects are not interchangeable with 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -758,11 +758,11 @@
 - Purpose: Ely.by authentication provider
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: Optional provider integration; isolate from vanilla auth.
-- RustChunk relevance: Routes account/session behavior through an additional third-party identity provider.
+- Findings: Routes account/session behavior through an additional third-party identity provider.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: Optional provider integration; isolate from vanilla auth.
-- 1.20.1 implications: Provider-specific response formats and service endpoints are not part of Minecraft 1.20.1 vanilla auth.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for datapack.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Provider-specific response formats and service endpoints are not part of Minecraft 1.20.1 vanilla auth.
 - RustChunk implementation mapping: Provider-specific response formats and service endpoints are not part of Minecraft 1.20.1 vanilla auth.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -775,11 +775,11 @@
 - Purpose: Entity fragment and vertex shader
 - Dependencies / cross-references: Depends on authoritative chunk state, block facts/shape occlusion, fluids, dimensions and world update lifecycle.
 - Implementation / logic: Block/sky light propagation and incremental relighting over section-neighbour regions.
-- Findings: Reuse shader concepts only after target pipeline parity.
-- RustChunk relevance: Implements entity texture, lighting, overlay, fog and special-layer rendering.
+- Findings: Implements entity texture, lighting, overlay, fog and special-layer rendering.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Reuse shader concepts only after target pipeline parity.
-- 1.20.1 implications: Vertex formats, overlay codes, material layers and shader bindings must be rebuilt from 1.20.1 renderer behavior.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for dynamic_light.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Vertex formats, overlay codes, material layers and shader bindings must be rebuilt from 1.20.1 renderer behavior.
 - RustChunk implementation mapping: Vertex formats, overlay codes, material layers and shader bindings must be rebuilt from 1.20.1 renderer behavior.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -792,11 +792,11 @@
 - Purpose: Environment attributes and dimension visuals
 - Dependencies / cross-references: Depends on target-version registries, entity/block state, random source, particle atlas and client tick ordering.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Rebuild attribute catalog and evaluation rules from 1.20.1.
-- RustChunk relevance: Resolves data-driven environmental attributes such as fog, sky, ambience and related visual/gameplay values.
+- Findings: Resolves data-driven environmental attributes such as fog, sky, ambience and related visual/gameplay values.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Rebuild attribute catalog and evaluation rules from 1.20.1.
-- 1.20.1 implications: Current definitions contain later dimension/environment attributes; do not import 26.3 registry data.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for effects.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Current definitions contain later dimension/environment attributes; do not import 26.3 registry data.
 - RustChunk implementation mapping: Current definitions contain later dimension/environment attributes; do not import 26.3 registry data.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -809,11 +809,11 @@
 - Purpose: Optional Horizon settings registry
 - Dependencies / cross-references: Depends on client account/session state, protocol identity, text and input handling; account providers must remain isolated.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Reuse separation principle; define a RustChunk-owned schema.
-- RustChunk relevance: Keeps extra renderer/mobile settings outside vanilla options.txt.
+- Findings: Keeps extra renderer/mobile settings outside vanilla options.txt.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reuse separation principle; define a RustChunk-owned schema.
-- 1.20.1 implications: Settings such as minimap, split-screen, cosmetics and agent controls are product-specific, not vanilla options.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for elyby.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Settings such as minimap, split-screen, cosmetics and agent controls are product-specific, not vanilla options.
 - RustChunk implementation mapping: Settings such as minimap, split-screen, cosmetics and agent controls are product-specific, not vanilla options.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -826,11 +826,11 @@
 - Purpose: Fast hash alias
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Use Rust's standard hasher unless profiling justifies this.
-- RustChunk relevance: Centralizes a fast non-cryptographic hasher choice for internal maps/sets.
+- Findings: Centralizes a fast non-cryptographic hasher choice for internal maps/sets.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Use Rust's standard hasher unless profiling justifies this.
-- 1.20.1 implications: Hashing is an implementation detail; never use this hash for security, persistence or protocol identity.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Hashing is an implementation detail; never use this hash for security, persistence or protocol identity.
 - RustChunk implementation mapping: Hashing is an implementation detail; never use this hash for security, persistence or protocol identity.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -843,11 +843,11 @@
 - Purpose: Fog equations and state
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Reimplement using 1.20.1 fog semantics and current RustChunk render distances.
-- RustChunk relevance: Combines fog type, distances, colours, water/lava effects and render-time parameters.
+- Findings: Combines fog type, distances, colours, water/lava effects and render-time parameters.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reimplement using 1.20.1 fog semantics and current RustChunk render distances.
-- 1.20.1 implications: Fog attributes and dimension data are newer; far-terrain handling must not hide near chunk holes.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for environment.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Fog attributes and dimension data are newer; far-terrain handling must not hide near chunk holes.
 - RustChunk implementation mapping: Fog attributes and dimension data are newer; far-terrain handling must not hide near chunk holes.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -860,11 +860,11 @@
 - Purpose: Font resource providers and glyph atlas
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: High-value font architecture; validate exact 1.20.1 provider codecs.
-- RustChunk relevance: Loads bitmap, Unihex and TTF font providers, glyph metrics and atlas data.
+- Findings: Loads bitmap, Unihex and TTF font providers, glyph metrics and atlas data.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value font architecture; validate exact 1.20.1 provider codecs.
-- 1.20.1 implications: Font providers and Unicode/font resources are versioned; Unicode shaping and glyph advances affect UI parity.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for extras.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Font providers and Unicode/font resources are versioned; Unicode shaping and glyph advances affect UI parity.
 - RustChunk implementation mapping: Font providers and Unicode/font resources are versioned; Unicode shaping and glyph advances affect UI parity.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -877,11 +877,11 @@
 - Purpose: Fusion connected-texture extension
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional compatibility extension; do not include in vanilla core.
-- RustChunk relevance: Parses a Fusion-specific model/texture rule and applies connected model conditions.
+- Findings: Parses a Fusion-specific model/texture rule and applies connected model conditions.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional compatibility extension; do not include in vanilla core.
-- 1.20.1 implications: Fusion is third-party functionality, not a vanilla format.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for fast_hash.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Fusion is third-party functionality, not a vanilla format.
 - RustChunk implementation mapping: Fusion is third-party functionality, not a vanilla format.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -894,11 +894,11 @@
 - Purpose: Main renderer and GPU frame orchestration
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Architectural reference only; do not transplant as one monolithic renderer.
-- RustChunk relevance: Owns surface/device lifecycle, render passes, terrain/entities/HUD, GPU buffers, shaders, caches and presentation.
+- Findings: Owns surface/device lifecycle, render passes, terrain/entities/HUD, GPU buffers, shaders, caches and presentation.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Architectural reference only; do not transplant as one monolithic renderer.
-- 1.20.1 implications: Contains extensive 26.3 and Horizon behavior plus API-specific branches; target mobile GPU support remains unproven.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for fog.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Contains extensive 26.3 and Horizon behavior plus API-specific branches; target mobile GPU support remains unproven.
 - RustChunk implementation mapping: Contains extensive 26.3 and Horizon behavior plus API-specific branches; target mobile GPU support remains unproven.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -911,11 +911,11 @@
 - Purpose: Adreno-specific workarounds
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Do not apply to Mali; retain only device-fingerprint-gated workarounds with evidence.
-- RustChunk relevance: Selects driver-specific GPU workarounds for Qualcomm Adreno variants.
+- Findings: Selects driver-specific GPU workarounds for Qualcomm Adreno variants.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Do not apply to Mali; retain only device-fingerprint-gated workarounds with evidence.
-- 1.20.1 implications: The user target is Mali-G52 MC2, so Adreno heuristics are not evidence for it.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for font.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The user target is Mali-G52 MC2, so Adreno heuristics are not evidence for it.
 - RustChunk implementation mapping: The user target is Mali-G52 MC2, so Adreno heuristics are not evidence for it.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -928,11 +928,11 @@
 - Purpose: Animated sprite frame selection
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Adapt core animation/mipmap logic after 1.20.1 metadata parity.
-- RustChunk relevance: Builds frame chains and animation state for atlas sprites, including mip levels.
+- Findings: Builds frame chains and animation state for atlas sprites, including mip levels.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Adapt core animation/mipmap logic after 1.20.1 metadata parity.
-- 1.20.1 implications: Animation metadata and GPU compute path may differ; compute support cannot be assumed on GLES devices.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for fusion.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Animation metadata and GPU compute path may differ; compute support cannot be assumed on GLES devices.
 - RustChunk implementation mapping: Animation metadata and GPU compute path may differ; compute support cannot be assumed on GLES devices.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -945,11 +945,11 @@
 - Purpose: Animated sprite compute shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional compute path; retain a CPU fallback.
-- RustChunk relevance: Runs the GPU part of sprite-frame update and texture copy work.
+- Findings: Runs the GPU part of sprite-frame update and texture copy work.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional compute path; retain a CPU fallback.
-- 1.20.1 implications: WGSL bindings/workgroup assumptions may not be supported or performant on GLES/Mali.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for gfx.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: WGSL bindings/workgroup assumptions may not be supported or performant on GLES/Mali.
 - RustChunk implementation mapping: WGSL bindings/workgroup assumptions may not be supported or performant on GLES/Mali.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -962,11 +962,11 @@
 - Purpose: GPU vertex/index arena allocator
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: High-value allocator design; impose Android memory caps.
-- RustChunk relevance: Allocates paged GPU memory, free lists, compaction and spill/reuse for meshes.
+- Findings: Allocates paged GPU memory, free lists, compaction and spill/reuse for meshes.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value allocator design; impose Android memory caps.
-- 1.20.1 implications: Large page sizes and spill strategies are designed for desktop-class heaps and may exceed mobile budgets.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for adreno.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Large page sizes and spill strategies are designed for desktop-class heaps and may exceed mobile budgets.
 - RustChunk implementation mapping: Large page sizes and spill strategies are designed for desktop-class heaps and may exceed mobile budgets.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -979,11 +979,11 @@
 - Purpose: Shader block-light tint grid
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader-pack hook, not the main lighting engine.
-- RustChunk relevance: Provides material/shader-pack access to block light values for custom material shading.
+- Findings: Provides material/shader-pack access to block light values for custom material shading.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader-pack hook, not the main lighting engine.
-- 1.20.1 implications: This is a shader extension; authoritative lighting remains separate.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for animate.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: This is a shader extension; authoritative lighting remains separate.
 - RustChunk implementation mapping: This is a shader extension; authoritative lighting remains separate.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -996,11 +996,11 @@
 - Purpose: Split-view compositor
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional split-screen feature; defer.
-- RustChunk relevance: Composes multiple offscreen views into one surface.
+- Findings: Composes multiple offscreen views into one surface.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional split-screen feature; defer.
-- 1.20.1 implications: Desktop winit/wgpu example does not establish Android multi-view lifecycle or input mapping.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for animate.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Desktop winit/wgpu example does not establish Android multi-view lifecycle or input mapping.
 - RustChunk implementation mapping: Desktop winit/wgpu example does not establish Android multi-view lifecycle or input mapping.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1013,11 +1013,11 @@
 - Purpose: GPU crumbling/render pipeline tests
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Test source only; no test executed.
-- RustChunk relevance: Checks destroy overlay and GPU rendering regressions.
+- Findings: Checks destroy overlay and GPU rendering regressions.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Test source only; no test executed.
-- 1.20.1 implications: GPU tests are adapter-dependent and may skip on machines without capabilities.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for arena.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: GPU tests are adapter-dependent and may skip on machines without capabilities.
 - RustChunk implementation mapping: GPU tests are adapter-dependent and may skip on machines without capabilities.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1030,11 +1030,11 @@
 - Purpose: Asynchronous GPU occlusion culling
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional optimization; enable only when adapter supports the exact path and profiling proves benefit.
-- RustChunk relevance: Reads occlusion results asynchronously and uses prior-frame visibility to skip hidden sections.
+- Findings: Reads occlusion results asynchronously and uses prior-frame visibility to skip hidden sections.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional optimization; enable only when adapter supports the exact path and profiling proves benefit.
-- 1.20.1 implications: Implementation supports selected Vulkan/Metal paths; generic GLES/Mali path may not be supported or beneficial.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for block_light.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Implementation supports selected Vulkan/Metal paths; generic GLES/Mali path may not be supported or beneficial.
 - RustChunk implementation mapping: Implementation supports selected Vulkan/Metal paths; generic GLES/Mali path may not be supported or beneficial.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1047,11 +1047,11 @@
 - Purpose: GPU occlusion compute shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Port only with a supported backend and proven conservative result.
-- RustChunk relevance: Evaluates occlusion/query results for section visibility.
+- Findings: Evaluates occlusion/query results for section visibility.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Port only with a supported backend and proven conservative result.
-- 1.20.1 implications: Compute atomics/readback and depth conventions are backend-sensitive.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for compositor.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Compute atomics/readback and depth conventions are backend-sensitive.
 - RustChunk implementation mapping: Compute atomics/readback and depth conventions are backend-sensitive.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1064,11 +1064,11 @@
 - Purpose: End sky resident geometry
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Adapt geometry residency; use 1.20.1 sky resources.
-- RustChunk relevance: Builds and retains End sky cube geometry and atlas bindings.
+- Findings: Builds and retains End sky cube geometry and atlas bindings.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Adapt geometry residency; use 1.20.1 sky resources.
-- 1.20.1 implications: Face orientation, textures and shader bindings must follow 1.20.1 resources.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for crumbling_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Face orientation, textures and shader bindings must follow 1.20.1 resources.
 - RustChunk implementation mapping: Face orientation, textures and shader bindings must follow 1.20.1 resources.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1081,11 +1081,11 @@
 - Purpose: End sky GPU parity tests
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reference tests only; not executed.
-- RustChunk relevance: Compares resident sky geometry and rendered pixels against expected behavior.
+- Findings: Compares resident sky geometry and rendered pixels against expected behavior.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reference tests only; not executed.
-- 1.20.1 implications: Tests depend on GPU and pinned newer asset details.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cull.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Tests depend on GPU and pinned newer asset details.
 - RustChunk implementation mapping: Tests depend on GPU and pinned newer asset details.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1098,11 +1098,11 @@
 - Purpose: Entity material batching
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: High-value batching pattern; keep stable order for translucent cases.
-- RustChunk relevance: Groups entity draw runs by material/overlay to reduce pipeline switches while preserving semantics.
+- Findings: Groups entity draw runs by material/overlay to reduce pipeline switches while preserving semantics.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value batching pattern; keep stable order for translucent cases.
-- 1.20.1 implications: Entity material taxonomy and render pass layering are version-specific.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cull.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Entity material taxonomy and render pass layering are version-specific.
 - RustChunk implementation mapping: Entity material taxonomy and render pass layering are version-specific.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1115,11 +1115,11 @@
 - Purpose: Entity outline renderer
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional visual feature; verify 1.20.1 glow behavior.
-- RustChunk relevance: Builds glowing entity outline masks and compositing.
+- Findings: Builds glowing entity outline masks and compositing.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional visual feature; verify 1.20.1 glow behavior.
-- 1.20.1 implications: Resolution, depth and threshold behavior are tied to current render graph.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for end_sky.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Resolution, depth and threshold behavior are tied to current render graph.
 - RustChunk implementation mapping: Resolution, depth and threshold behavior are tied to current render graph.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1132,11 +1132,11 @@
 - Purpose: Entity outline shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Shader algorithm reference only.
-- RustChunk relevance: Computes mask/edge colour for glowing entity outlines.
+- Findings: Computes mask/edge colour for glowing entity outlines.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Shader algorithm reference only.
-- 1.20.1 implications: Must match RustChunk's shader IO, depth conventions and GLES limits.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Must match RustChunk's shader IO, depth conventions and GLES limits.
 - RustChunk implementation mapping: Must match RustChunk's shader IO, depth conventions and GLES limits.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1149,11 +1149,11 @@
 - Purpose: GPU entity skinning
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Potential optimization; default to CPU until mobile parity/benefit demonstrated.
-- RustChunk relevance: Transforms entity model vertices on GPU and retains a CPU expansion fallback.
+- Findings: Transforms entity model vertices on GPU and retains a CPU expansion fallback.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Potential optimization; default to CPU until mobile parity/benefit demonstrated.
-- 1.20.1 implications: Requires compute/storage feature support and exact vertex layout compatibility.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity_batch.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires compute/storage feature support and exact vertex layout compatibility.
 - RustChunk implementation mapping: Requires compute/storage feature support and exact vertex layout compatibility.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1166,11 +1166,11 @@
 - Purpose: GPU entity skinning shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional compute backend; retain CPU path.
-- RustChunk relevance: Computes skinned entity vertex positions and normals.
+- Findings: Computes skinned entity vertex positions and normals.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional compute backend; retain CPU path.
-- 1.20.1 implications: Compute limits and floating-point precision may vary across drivers.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity_outline.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Compute limits and floating-point precision may vary across drivers.
 - RustChunk implementation mapping: Compute limits and floating-point precision may vary across drivers.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1183,11 +1183,11 @@
 - Purpose: Entity GLSL/GLES source workarounds
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Apply only by exact driver fingerprint.
-- RustChunk relevance: Lowers or rewrites generated shader source for problematic older Adreno GLES drivers.
+- Findings: Lowers or rewrites generated shader source for problematic older Adreno GLES drivers.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Apply only by exact driver fingerprint.
-- 1.20.1 implications: Workaround is aimed at legacy Adreno behavior, not a generic GLES or Mali fix.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity_outline.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Workaround is aimed at legacy Adreno behavior, not a generic GLES or Mali fix.
 - RustChunk implementation mapping: Workaround is aimed at legacy Adreno behavior, not a generic GLES or Mali fix.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1200,11 +1200,11 @@
 - Purpose: Flat/compute terrain draw path
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional optimization; gate by proven adapter/driver benchmarks.
-- RustChunk relevance: Flattens or batches section draw instances to reduce per-section draw overhead.
+- Findings: Flattens or batches section draw instances to reduce per-section draw overhead.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional optimization; gate by proven adapter/driver benchmarks.
-- 1.20.1 implications: Path relies on compute/storage/indirect draw capabilities and driver heuristics; not safe to assume Mali gains.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity_skin.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Path relies on compute/storage/indirect draw capabilities and driver heuristics; not safe to assume Mali gains.
 - RustChunk implementation mapping: Path relies on compute/storage/indirect draw capabilities and driver heuristics; not safe to assume Mali gains.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1217,11 +1217,11 @@
 - Purpose: Flatten compute shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Shader helper only; pair with a verified CPU fallback.
-- RustChunk relevance: Generates flattened draw indices from draw ranges and page tables.
+- Findings: Generates flattened draw indices from draw ranges and page tables.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Shader helper only; pair with a verified CPU fallback.
-- 1.20.1 implications: Atomics/workgroup scheduling and output bounds require backend validation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity_skin.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Atomics/workgroup scheduling and output bounds require backend validation.
 - RustChunk implementation mapping: Atomics/workgroup scheduling and output bounds require backend validation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1234,11 +1234,11 @@
 - Purpose: Frame-generation controller
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Defer; not a core Minecraft capability and risky for mobile baseline.
-- RustChunk relevance: Coordinates offscreen real frames, interpolation, presentation thread and camera/hand motion.
+- Findings: Coordinates offscreen real frames, interpolation, presentation thread and camera/hand motion.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Defer; not a core Minecraft capability and risky for mobile baseline.
-- 1.20.1 implications: FSR 3.1 implementation is a Horizon optional feature with substantial latency/memory demands.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for entity_source.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: FSR 3.1 implementation is a Horizon optional feature with substantial latency/memory demands.
 - RustChunk implementation mapping: FSR 3.1 implementation is a Horizon optional feature with substantial latency/memory demands.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1251,11 +1251,11 @@
 - Purpose: Frame interpolation pipeline
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Research reference only; do not port wholesale.
-- RustChunk relevance: Interpolates consecutive images using depth, motion vectors and optical flow.
+- Findings: Interpolates consecutive images using depth, motion vectors and optical flow.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Research reference only; do not port wholesale.
-- 1.20.1 implications: Requires compute-heavy texture pyramids and depends on depth/motion correctness; could blur chunk edges/UI.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for flat.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires compute-heavy texture pyramids and depends on depth/motion correctness; could blur chunk edges/UI.
 - RustChunk implementation mapping: Requires compute-heavy texture pyramids and depends on depth/motion correctness; could blur chunk edges/UI.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1268,11 +1268,11 @@
 - Purpose: Frame interpolation WGSL
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional shader reference; defer.
-- RustChunk relevance: Implements compute passes for depth dilation, vector fields, blending and inpainting.
+- Findings: Implements compute passes for depth dilation, vector fields, blending and inpainting.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader reference; defer.
-- 1.20.1 implications: Shader feature/precision/workgroup limits are backend-dependent.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for flatten.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Shader feature/precision/workgroup limits are backend-dependent.
 - RustChunk implementation mapping: Shader feature/precision/workgroup limits are backend-dependent.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1285,11 +1285,11 @@
 - Purpose: Object motion-vector generation
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional frame-generation support; not needed for a vanilla client.
-- RustChunk relevance: Tracks independently moving entities by ID and rasterizes motion vectors.
+- Findings: Tracks independently moving entities by ID and rasterizes motion vectors.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional frame-generation support; not needed for a vanilla client.
-- 1.20.1 implications: Entity identity, mesh changes and atlas alpha handling need 1.20.1 mapping.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for frame_gen.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Entity identity, mesh changes and atlas alpha handling need 1.20.1 mapping.
 - RustChunk implementation mapping: Entity identity, mesh changes and atlas alpha handling need 1.20.1 mapping.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1302,11 +1302,11 @@
 - Purpose: Motion-vector shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader; defer with frame generation.
-- RustChunk relevance: Renders per-entity motion vectors while respecting depth and transparent texels.
+- Findings: Renders per-entity motion vectors while respecting depth and transparent texels.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader; defer with frame generation.
-- 1.20.1 implications: Uses a frame-generation-specific coordinate and depth convention.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for interpolation.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Uses a frame-generation-specific coordinate and depth convention.
 - RustChunk implementation mapping: Uses a frame-generation-specific coordinate and depth convention.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1319,11 +1319,11 @@
 - Purpose: Optical-flow estimation
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional frame-generation research; not core client rendering.
-- RustChunk relevance: Implements multilevel luma pyramids, block matching and scene-change detection.
+- Findings: Implements multilevel luma pyramids, block matching and scene-change detection.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional frame-generation research; not core client rendering.
-- 1.20.1 implications: Large compute and storage workload; no evidence of mobile viability.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for interpolation.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Large compute and storage workload; no evidence of mobile viability.
 - RustChunk implementation mapping: Large compute and storage workload; no evidence of mobile viability.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1336,11 +1336,11 @@
 - Purpose: Optical-flow shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional GPU shader.
-- RustChunk relevance: Computes luma, histograms, multilevel searches and block vectors.
+- Findings: Computes luma, histograms, multilevel searches and block vectors.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional GPU shader.
-- 1.20.1 implications: Atomic/workgroup constraints and image formats vary by backend.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for motion.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Atomic/workgroup constraints and image formats vary by backend.
 - RustChunk implementation mapping: Atomic/workgroup constraints and image formats vary by backend.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1353,11 +1353,11 @@
 - Purpose: HDR output pipeline
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional desktop/display feature; not a priority for A22.
-- RustChunk relevance: Selects HDR10/scRGB surfaces, controls paper white/peak and maps world/HUD to HDR output.
+- Findings: Selects HDR10/scRGB surfaces, controls paper white/peak and maps world/HUD to HDR output.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional desktop/display feature; not a priority for A22.
-- 1.20.1 implications: Android HDR surface formats, metadata and display capability handling differ from this implementation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for motion.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Android HDR surface formats, metadata and display capability handling differ from this implementation.
 - RustChunk implementation mapping: Android HDR surface formats, metadata and display capability handling differ from this implementation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1370,11 +1370,11 @@
 - Purpose: HDR screenshot ICC profile
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional screenshot compatibility code.
-- RustChunk relevance: Constructs a BT.2020/PQ profile for HDR screenshot interoperability.
+- Findings: Constructs a BT.2020/PQ profile for HDR screenshot interoperability.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional screenshot compatibility code.
-- 1.20.1 implications: Colour profile and PNG cICP behavior are not gameplay or 1.20.1 concerns.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for optical_flow.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Colour profile and PNG cICP behavior are not gameplay or 1.20.1 concerns.
 - RustChunk implementation mapping: Colour profile and PNG cICP behavior are not gameplay or 1.20.1 concerns.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1387,11 +1387,11 @@
 - Purpose: HDR emission statistics
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional HDR support only.
-- RustChunk relevance: Measures sprite brightness on GPU for adaptive HDR highlight selection.
+- Findings: Measures sprite brightness on GPU for adaptive HDR highlight selection.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional HDR support only.
-- 1.20.1 implications: Depends on HDR output and GPU measurement capabilities.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for optical_flow.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Depends on HDR output and GPU measurement capabilities.
 - RustChunk implementation mapping: Depends on HDR output and GPU measurement capabilities.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1404,11 +1404,11 @@
 - Purpose: Inter-stage shader interface tests
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: High-value build-time validation; adapt for RustChunk shaders.
-- RustChunk relevance: Audits WGSL vertex/fragment interface variables against a downlevel GPU limit.
+- Findings: Audits WGSL vertex/fragment interface variables against a downlevel GPU limit.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value build-time validation; adapt for RustChunk shaders.
-- 1.20.1 implications: Limit value may depend on wgpu/backend version; current test references 15 variables and older hardware.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hdr.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Limit value may depend on wgpu/backend version; current test references 15 variables and older hardware.
 - RustChunk implementation mapping: Limit value may depend on wgpu/backend version; current test references 15 variables and older hardware.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1421,11 +1421,11 @@
 - Purpose: Late-sky pass
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Potential render optimization; target GPU tests required.
-- RustChunk relevance: Draws sky after solid terrain using far-plane depth to avoid shading covered pixels.
+- Findings: Draws sky after solid terrain using far-plane depth to avoid shading covered pixels.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Potential render optimization; target GPU tests required.
-- 1.20.1 implications: Pass order and shader-pack/portal interactions must match 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hdr_icc.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pass order and shader-pack/portal interactions must match 1.20.1.
 - RustChunk implementation mapping: Pass order and shader-pack/portal interactions must match 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1438,11 +1438,11 @@
 - Purpose: Late-sky GPU parity suite
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reference tests only; no test run.
-- RustChunk relevance: Checks late-sky shader output pixel-for-pixel against the ordinary draw order.
+- Findings: Checks late-sky shader output pixel-for-pixel against the ordinary draw order.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reference tests only; no test run.
-- 1.20.1 implications: Requires a working GPU adapter and test setup.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hdr_stats.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires a working GPU adapter and test setup.
 - RustChunk implementation mapping: Requires a working GPU adapter and test setup.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1455,11 +1455,11 @@
 - Purpose: Lightning mesh cache
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Reusable CPU/GPU cache pattern.
-- RustChunk relevance: Retains deterministic lightning bolt geometry by seed and reuses it while active.
+- Findings: Retains deterministic lightning bolt geometry by seed and reuses it while active.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reusable CPU/GPU cache pattern.
-- 1.20.1 implications: Random seed, vertex order, texture atlas UV and lightning lifetime need target 1.20.1 parity.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for inter_stage_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Random seed, vertex order, texture atlas UV and lightning lifetime need target 1.20.1 parity.
 - RustChunk implementation mapping: Random seed, vertex order, texture atlas UV and lightning lifetime need target 1.20.1 parity.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1472,11 +1472,11 @@
 - Purpose: Lightning geometry/GPU regression tests
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reference tests only; not executed.
-- RustChunk relevance: Compares retained bolt geometry, atlas sampling and GPU draw output with a pinned reference.
+- Findings: Compares retained bolt geometry, atlas sampling and GPU draw output with a pinned reference.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reference tests only; not executed.
-- 1.20.1 implications: Tests reference 26.3 LightningBoltRenderer and optional GPU adapter.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for late_sky.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Tests reference 26.3 LightningBoltRenderer and optional GPU adapter.
 - RustChunk implementation mapping: Tests reference 26.3 LightningBoltRenderer and optional GPU adapter.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1489,11 +1489,11 @@
 - Purpose: Far-terrain GPU tile visibility and upload
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: High-value architecture for RustChunk LOD, but isolate from real world simulation.
-- RustChunk relevance: Uploads/fades distant tile meshes and handles replacement by nearer tiles.
+- Findings: Uploads/fades distant tile meshes and handles replacement by nearer tiles.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value architecture for RustChunk LOD, but isolate from real world simulation.
-- 1.20.1 implications: The LOD tile grid, fade rules and source data are 26.3-specific; far tiles are deliberately not authoritative chunks.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The LOD tile grid, fade rules and source data are 26.3-specific; far tiles are deliberately not authoritative chunks.
 - RustChunk implementation mapping: The LOD tile grid, fade rules and source data are 26.3-specific; far tiles are deliberately not authoritative chunks.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1506,11 +1506,11 @@
 - Purpose: Native shader-pack material stage
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional Horizon shader-pack extension; defer from vanilla baseline.
-- RustChunk relevance: Injects a custom material shader stage into terrain shading.
+- Findings: Injects a custom material shader stage into terrain shading.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional Horizon shader-pack extension; defer from vanilla baseline.
-- 1.20.1 implications: Pack API, bindings and material identifiers are not vanilla 1.20.1 behavior.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for lightning.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pack API, bindings and material identifiers are not vanilla 1.20.1 behavior.
 - RustChunk implementation mapping: Pack API, bindings and material identifiers are not vanilla 1.20.1 behavior.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1523,11 +1523,11 @@
 - Purpose: Native shader-pack runtime object
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Optional extension only.
-- RustChunk relevance: Holds custom stages, settings and timers for Horizon's own shader-pack system.
+- Findings: Holds custom stages, settings and timers for Horizon's own shader-pack system.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension only.
-- 1.20.1 implications: This is product-specific pack API, not resource-pack parity required by vanilla.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for mod.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: This is product-specific pack API, not resource-pack parity required by vanilla.
 - RustChunk implementation mapping: This is product-specific pack API, not resource-pack parity required by vanilla.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1540,11 +1540,11 @@
 - Purpose: Native shader-pack post processing
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional extension; high complexity and untrusted shader input.
-- RustChunk relevance: Runs arbitrary multi-pass pack post effects with custom targets, bindings and history.
+- Findings: Runs arbitrary multi-pass pack post effects with custom targets, bindings and history.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension; high complexity and untrusted shader input.
-- 1.20.1 implications: Resource limits, Naga translation, dynamic targets and formats are tied to current wgpu stack.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for lod.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Resource limits, Naga translation, dynamic targets and formats are tied to current wgpu stack.
 - RustChunk implementation mapping: Resource limits, Naga translation, dynamic targets and formats are tied to current wgpu stack.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1557,11 +1557,11 @@
 - Purpose: Native renderer hook dispatch
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional mod API; defer until stable render lifecycle.
-- RustChunk relevance: Provides hook points for native mods to draw at chosen frame phases.
+- Findings: Provides hook points for native mods to draw at chosen frame phases.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional mod API; defer until stable render lifecycle.
-- 1.20.1 implications: Hook ABI, event order and mod lifecycle are custom to Horizon.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_material.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Hook ABI, event order and mod lifecycle are custom to Horizon.
 - RustChunk implementation mapping: Hook ABI, event order and mod lifecycle are custom to Horizon.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1574,11 +1574,11 @@
 - Purpose: Generated render hook interface
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional API support, not vanilla core.
-- RustChunk relevance: Defines event structs and ordered dispatch for native renderer hooks.
+- Findings: Defines event structs and ordered dispatch for native renderer hooks.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional API support, not vanilla core.
-- 1.20.1 implications: Generated API can change and depends on native mod loader contracts.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_pack.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Generated API can change and depends on native mod loader contracts.
 - RustChunk implementation mapping: Generated API can change and depends on native mod loader contracts.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1591,11 +1591,11 @@
 - Purpose: Native shader-pack shadow map
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional extension, not required for vanilla shadows.
-- RustChunk relevance: Renders depth/colour shadow maps for custom shader packs.
+- Findings: Renders depth/colour shadow maps for custom shader packs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension, not required for vanilla shadows.
-- 1.20.1 implications: Shadow camera and texture conventions are Iris/Horizon-like shader API details.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_post.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Shadow camera and texture conventions are Iris/Horizon-like shader API details.
 - RustChunk implementation mapping: Shadow camera and texture conventions are Iris/Horizon-like shader API details.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1608,11 +1608,11 @@
 - Purpose: Native shader-pack sky stage
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional custom shader feature.
-- RustChunk relevance: Allows custom sky shader stage over renderer globals.
+- Findings: Allows custom sky shader stage over renderer globals.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional custom shader feature.
-- 1.20.1 implications: Shader pack interfaces and stage ordering are custom.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_render.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Shader pack interfaces and stage ordering are custom.
 - RustChunk implementation mapping: Shader pack interfaces and stage ordering are custom.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1625,11 +1625,11 @@
 - Purpose: Section occlusion graph
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: High-value algorithm; validate against 1.20.1 VisGraph/SectionOcclusionGraph.
-- RustChunk relevance: Searches visible section connectivity from camera via open faces on a background worker, preserving last completed graph for frames.
+- Findings: Searches visible section connectivity from camera via open faces on a background worker, preserving last completed graph for frames.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value algorithm; validate against 1.20.1 VisGraph/SectionOcclusionGraph.
-- 1.20.1 implications: Connectivity rules, 60-block distant stepping and partial updates are target-version-sensitive; false culling can hide chunks.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for generated.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Connectivity rules, 60-block distant stepping and partial updates are target-version-sensitive; false culling can hide chunks.
 - RustChunk implementation mapping: Connectivity rules, 60-block distant stepping and partial updates are target-version-sensitive; false culling can hide chunks.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1642,11 +1642,11 @@
 - Purpose: Order-independent transparency renderer
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional renderer path; keep vanilla sorted transparency as fallback.
-- RustChunk relevance: Uses multi-stage depth/transmittance accumulation and final composite for translucent surfaces.
+- Findings: Uses multi-stage depth/transmittance accumulation and final composite for translucent surfaces.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional renderer path; keep vanilla sorted transparency as fallback.
-- 1.20.1 implications: Requires special float blend/attachment features and may be unavailable or slow on Mali/GLES.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_shadow.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires special float blend/attachment features and may be unavailable or slow on Mali/GLES.
 - RustChunk implementation mapping: Requires special float blend/attachment features and may be unavailable or slow on Mali/GLES.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1659,11 +1659,11 @@
 - Purpose: OIT feature pipelines
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional OIT component.
-- RustChunk relevance: Applies OIT stages to particles, weather, border, text and other non-terrain draw categories.
+- Findings: Applies OIT stages to particles, weather, border, text and other non-terrain draw categories.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional OIT component.
-- 1.20.1 implications: Pass ordering and material support are tied to Starling's renderer; no OIT device run occurred.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_sky.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pass ordering and material support are tied to Starling's renderer; no OIT device run occurred.
 - RustChunk implementation mapping: Pass ordering and material support are tied to Starling's renderer; no OIT device run occurred.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1676,11 +1676,11 @@
 - Purpose: Shader-pack block atlas conversion
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional bridge, not needed for vanilla terrain arrays.
-- RustChunk relevance: Copies sprite arrays into a 2D atlas layout expected by shader packs.
+- Findings: Copies sprite arrays into a 2D atlas layout expected by shader packs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional bridge, not needed for vanilla terrain arrays.
-- 1.20.1 implications: Atlas size and array split depend on GPU max texture limits.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for occlusion.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Atlas size and array split depend on GPU max texture limits.
 - RustChunk implementation mapping: Atlas size and array split depend on GPU max texture limits.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1693,11 +1693,11 @@
 - Purpose: Asynchronous center-depth readback
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Useful non-blocking readback pattern for optional integrations.
-- RustChunk relevance: Copies the centre depth texel through a tiny target and reads it back later without blocking the frame.
+- Findings: Copies the centre depth texel through a tiny target and reads it back later without blocking the frame.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful non-blocking readback pattern for optional integrations.
-- 1.20.1 implications: Depth formats, copy alignment and map lifetime depend on backend.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Depth formats, copy alignment and map lifetime depend on backend.
 - RustChunk implementation mapping: Depth formats, copy alignment and map lifetime depend on backend.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1710,11 +1710,11 @@
 - Purpose: Shader-pack per-draw uniforms
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader-pack bridge.
-- RustChunk relevance: Builds uniform slots for individual entity/block entity/particle draw runs.
+- Findings: Builds uniform slots for individual entity/block entity/particle draw runs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader-pack bridge.
-- 1.20.1 implications: Newer pack stage names and uniform schema do not match vanilla 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit_features.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Newer pack stage names and uniform schema do not match vanilla 1.20.1.
 - RustChunk implementation mapping: Newer pack stage names and uniform schema do not match vanilla 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1727,11 +1727,11 @@
 - Purpose: Shader-pack entity draw batches
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader pack layer.
-- RustChunk relevance: Groups entity and particle spans by pack program and falls back to Horizon draw for unclaimed spans.
+- Findings: Groups entity and particle spans by pack program and falls back to Horizon draw for unclaimed spans.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader pack layer.
-- 1.20.1 implications: Entity classifications/program stages are version-specific; can affect visible output if spans overlap.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_atlas.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Entity classifications/program stages are version-specific; can affect visible output if spans overlap.
 - RustChunk implementation mapping: Entity classifications/program stages are version-specific; can affect visible output if spans overlap.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1744,11 +1744,11 @@
 - Purpose: Shader-pack first-person hand pass
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader pack compatibility.
-- RustChunk relevance: Builds hand projection and geometry binding for shader-pack hand programs.
+- Findings: Builds hand projection and geometry binding for shader-pack hand programs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader pack compatibility.
-- 1.20.1 implications: Hand depth scaling/projection conventions are Iris-like and custom.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_center_depth.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Hand depth scaling/projection conventions are Iris-like and custom.
 - RustChunk implementation mapping: Hand depth scaling/projection conventions are Iris-like and custom.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1761,11 +1761,11 @@
 - Purpose: Shader-pack custom images and buffers
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional extension with untrusted resource allocation risk.
-- RustChunk relevance: Creates, sizes, clears, snapshots and reads back pack-owned image/storage-buffer resources.
+- Findings: Creates, sizes, clears, snapshots and reads back pack-owned image/storage-buffer resources.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension with untrusted resource allocation risk.
-- 1.20.1 implications: Formats, max image count, buffer binding and shader resource schema are custom.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_draw.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Formats, max image count, buffer binding and shader resource schema are custom.
 - RustChunk implementation mapping: Formats, max image count, buffer binding and shader resource schema are custom.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1778,11 +1778,11 @@
 - Purpose: Shader-pack post chain
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional large extension; defer wholesale.
-- RustChunk relevance: Implements shader-pack prepare/deferred/composite/final and multiple colortex buffers/history.
+- Findings: Implements shader-pack prepare/deferred/composite/final and multiple colortex buffers/history.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional large extension; defer wholesale.
-- 1.20.1 implications: Pack buffer semantics and shader translation are not vanilla and depend on 26.3-era APIs.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_entities.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pack buffer semantics and shader translation are not vanilla and depend on 26.3-era APIs.
 - RustChunk implementation mapping: Pack buffer semantics and shader translation are not vanilla and depend on 26.3-era APIs.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1795,11 +1795,11 @@
 - Purpose: Shader-pack fullscreen helper shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader helper.
-- RustChunk relevance: Provides blit/copy/downsample helpers for the pack post graph.
+- Findings: Provides blit/copy/downsample helpers for the pack post graph.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader helper.
-- 1.20.1 implications: Bindings and target formats are specific to Starling's post renderer.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_hand.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Bindings and target formats are specific to Starling's post renderer.
 - RustChunk implementation mapping: Bindings and target formats are specific to Starling's post renderer.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1812,11 +1812,11 @@
 - Purpose: Shader-pack shadow buffers
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional extension only.
-- RustChunk relevance: Maintains shadow depth and colour textures and ping-pong state for shader packs.
+- Findings: Maintains shadow depth and colour textures and ping-pong state for shader packs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension only.
-- 1.20.1 implications: Texture dimensions/clear and sampler semantics depend on pack API and target GPU.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_images.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Texture dimensions/clear and sampler semantics depend on pack API and target GPU.
 - RustChunk implementation mapping: Texture dimensions/clear and sampler semantics depend on pack API and target GPU.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1829,11 +1829,11 @@
 - Purpose: Shader-pack sky geometry
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional shader-pack integration; some geometry ideas are adaptable.
-- RustChunk relevance: Builds sky disc, sunset fan, stars and textured sun/moon inputs for pack gbuffers stages.
+- Findings: Builds sky disc, sunset fan, stars and textured sun/moon inputs for pack gbuffers stages.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional shader-pack integration; some geometry ideas are adaptable.
-- 1.20.1 implications: Star/sun resources and pack stage API differ from 1.20.1 vanilla rendering.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_post.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Star/sun resources and pack stage API differ from 1.20.1 vanilla rendering.
 - RustChunk implementation mapping: Star/sun resources and pack stage API differ from 1.20.1 vanilla rendering.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1846,11 +1846,11 @@
 - Purpose: Shader-pack custom texture upload
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional extension; resource hardening required.
-- RustChunk relevance: Maps custom pack textures and sampler declarations to GPU textures/views.
+- Findings: Maps custom pack textures and sampler declarations to GPU textures/views.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension; resource hardening required.
-- 1.20.1 implications: Format and sampler mapping are custom and rely on wgpu texture capabilities.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_post.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Format and sampler mapping are custom and rely on wgpu texture capabilities.
 - RustChunk implementation mapping: Format and sampler mapping are custom and rely on wgpu texture capabilities.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1863,11 +1863,11 @@
 - Purpose: GPU pass timing for shader packs
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Useful optional profiling architecture.
-- RustChunk relevance: Collects asynchronous timestamp query data and reports per-pass medians/distributions.
+- Findings: Collects asynchronous timestamp query data and reports per-pass medians/distributions.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful optional profiling architecture.
-- 1.20.1 implications: Timestamp query support differs across mobile GPUs; should degrade gracefully.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_shadow.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Timestamp query support differs across mobile GPUs; should degrade gracefully.
 - RustChunk implementation mapping: Timestamp query support differs across mobile GPUs; should degrade gracefully.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1880,11 +1880,11 @@
 - Purpose: Shader-pack frame uniforms
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional API mapping; rebuild fields for 1.20.1.
-- RustChunk relevance: Builds camera, player status, biome, item, weather, fog and matrix uniforms for shader packs.
+- Findings: Builds camera, player status, biome, item, weather, fog and matrix uniforms for shader packs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional API mapping; rebuild fields for 1.20.1.
-- 1.20.1 implications: Numerous fields refer to newer items/effects/biome registry and shader spec.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_sky.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Numerous fields refer to newer items/effects/biome registry and shader spec.
 - RustChunk implementation mapping: Numerous fields refer to newer items/effects/biome registry and shader spec.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1897,11 +1897,11 @@
 - Purpose: Shader-pack weather draw
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional extension; weather geometry may inform normal renderer.
-- RustChunk relevance: Converts rain/snow to pack weather vertices/textures and animation phases.
+- Findings: Converts rain/snow to pack weather vertices/textures and animation phases.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional extension; weather geometry may inform normal renderer.
-- 1.20.1 implications: Resource UV and weather animation semantics are version-sensitive.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_textures.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Resource UV and weather animation semantics are version-sensitive.
 - RustChunk implementation mapping: Resource UV and weather animation semantics are version-sensitive.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1914,11 +1914,11 @@
 - Purpose: Vertex arena page-run grouping
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Potential batching optimization; prove on target GPU.
-- RustChunk relevance: Groups solid draws by GPU arena page within distance bands to reduce bind/draw call overhead.
+- Findings: Groups solid draws by GPU arena page within distance bands to reduce bind/draw call overhead.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Potential batching optimization; prove on target GPU.
-- 1.20.1 implications: Grouping may alter tie ordering and interacts with depth/opaque rendering assumptions.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_timing.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Grouping may alter tie ordering and interacts with depth/opaque rendering assumptions.
 - RustChunk implementation mapping: Grouping may alter tie ordering and interacts with depth/opaque rendering assumptions.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1931,11 +1931,11 @@
 - Purpose: Title panorama resource loader/renderer
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: UI feature; reuse resource validation patterns.
-- RustChunk relevance: Loads six cube-map faces, validates/reduces them and draws animated title panorama.
+- Findings: Loads six cube-map faces, validates/reduces them and draws animated title panorama.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: UI feature; reuse resource validation patterns.
-- 1.20.1 implications: Panorama files/rotation and resource manager behavior must match 1.20.1 title assets.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_uniforms.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Panorama files/rotation and resource manager behavior must match 1.20.1 title assets.
 - RustChunk implementation mapping: Panorama files/rotation and resource manager behavior must match 1.20.1 title assets.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1948,11 +1948,11 @@
 - Purpose: Panorama shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Shader helper; adapt to RustChunk GUI pipeline.
-- RustChunk relevance: Projects cube texture coordinates and camera view for title panorama.
+- Findings: Projects cube texture coordinates and camera view for title panorama.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Shader helper; adapt to RustChunk GUI pipeline.
-- 1.20.1 implications: Coordinate convention and WGSL bindings are implementation-specific.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_weather.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Coordinate convention and WGSL bindings are implementation-specific.
 - RustChunk implementation mapping: Coordinate convention and WGSL bindings are implementation-specific.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1965,11 +1965,11 @@
 - Purpose: Swapchain screenshot/readback fallback
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Useful screenshot portability pattern.
-- RustChunk relevance: Renders to a readable offscreen texture when the surface cannot be copied from, then presents it.
+- Findings: Renders to a readable offscreen texture when the surface cannot be copied from, then presents it.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful screenshot portability pattern.
-- 1.20.1 implications: Surface COPY_SRC support and format behavior differ by backend.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for page_runs.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Surface COPY_SRC support and format behavior differ by backend.
 - RustChunk implementation mapping: Surface COPY_SRC support and format behavior differ by backend.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1982,11 +1982,11 @@
 - Purpose: Resident section storage and frustum walk
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: High-value architecture for chunk residency/render culling.
-- RustChunk relevance: Stores section values densely by chunk column and rejects whole columns with distance/frustum bounds.
+- Findings: Stores section values densely by chunk column and rejects whole columns with distance/frustum bounds.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value architecture for chunk residency/render culling.
-- 1.20.1 implications: Section layout, min_y and mesh bounds need exact target dimension handling.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for panorama.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Section layout, min_y and mesh bounds need exact target dimension handling.
 - RustChunk implementation mapping: Section layout, min_y and mesh bounds need exact target dimension handling.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -1999,11 +1999,11 @@
 - Purpose: GPU object/pipeline reuse cache
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Useful startup/resource reload optimization.
-- RustChunk relevance: Reuses compiled shader modules/layouts/pipelines across renderer rebuild generations.
+- Findings: Reuses compiled shader modules/layouts/pipelines across renderer rebuild generations.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful startup/resource reload optimization.
-- 1.20.1 implications: Cache keys based on Debug descriptors and handle identity must not alias changed shader inputs.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for panorama.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Cache keys based on Debug descriptors and handle identity must not alias changed shader inputs.
 - RustChunk implementation mapping: Cache keys based on Debug descriptors and handle identity must not alias changed shader inputs.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2016,11 +2016,11 @@
 - Purpose: Adreno solid terrain fast paths
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Do not apply to Mali by default; optional exact-device path.
-- RustChunk relevance: Substitutes cheaper solid/cutout pipelines on selected Adreno Vulkan devices after equivalence testing.
+- Findings: Substitutes cheaper solid/cutout pipelines on selected Adreno Vulkan devices after equivalence testing.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Do not apply to Mali by default; optional exact-device path.
-- 1.20.1 implications: Benchmarks are from named Adreno devices and the source explicitly limits applicability.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for readback.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Benchmarks are from named Adreno devices and the source explicitly limits applicability.
 - RustChunk implementation mapping: Benchmarks are from named Adreno devices and the source explicitly limits applicability.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2033,11 +2033,11 @@
 - Purpose: Solid-path GPU parity tests
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reference tests only, not executed.
-- RustChunk relevance: Compares optimized static/cutout terrain pipelines with the usual terrain output.
+- Findings: Compares optimized static/cutout terrain pipelines with the usual terrain output.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reference tests only, not executed.
-- 1.20.1 implications: Requires GPU and prepared assets; scenes reflect pinned newer renderer.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for resident.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires GPU and prepared assets; scenes reflect pinned newer renderer.
 - RustChunk implementation mapping: Requires GPU and prepared assets; scenes reflect pinned newer renderer.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2050,11 +2050,11 @@
 - Purpose: Static star geometry
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reusable optimization pattern.
-- RustChunk relevance: Builds seeded night-sky star triangles once and updates only a small rotation/brightness uniform.
+- Findings: Builds seeded night-sky star triangles once and updates only a small rotation/brightness uniform.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reusable optimization pattern.
-- 1.20.1 implications: Star distribution/seed and sky radius must match 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for reuse.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Star distribution/seed and sky radius must match 1.20.1.
 - RustChunk implementation mapping: Star distribution/seed and sky radius must match 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2067,11 +2067,11 @@
 - Purpose: Star shader
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Shader helper.
-- RustChunk relevance: Transforms star vertices and applies frame brightness.
+- Findings: Transforms star vertices and applies frame brightness.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Shader helper.
-- 1.20.1 implications: Pipeline bindings and far-plane behavior are backend-specific.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for solid_paths.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pipeline bindings and far-plane behavior are backend-specific.
 - RustChunk implementation mapping: Pipeline bindings and far-plane behavior are backend-specific.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2084,11 +2084,11 @@
 - Purpose: Asynchronous queue submission
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Experimental CPU optimization; do not enable without profiling.
-- RustChunk relevance: Hands command encoding/submission to a worker thread and preserves queue ordering around writes/readbacks.
+- Findings: Hands command encoding/submission to a worker thread and preserves queue ordering around writes/readbacks.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Experimental CPU optimization; do not enable without profiling.
-- 1.20.1 implications: Source comments describe driver-specific regressions and OS-specific performance; threaded submission can add stalls.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Source comments describe driver-specific regressions and OS-specific performance; threaded submission can add stalls.
 - RustChunk implementation mapping: Source comments describe driver-specific regressions and OS-specific performance; threaded submission can add stalls.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2101,11 +2101,11 @@
 - Purpose: Sunrise/sunset fan mesh
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: High-value algorithmic optimization for sky rendering.
-- RustChunk relevance: Builds the sky fan geometry once per frame instead of per-pixel ray/triangle search.
+- Findings: Builds the sky fan geometry once per frame instead of per-pixel ray/triangle search.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value algorithmic optimization for sky rendering.
-- 1.20.1 implications: The function computes a visual approximation tied to 1.20.1 sky colours and sun orientation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for stars.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The function computes a visual approximation tied to 1.20.1 sky colours and sun orientation.
 - RustChunk implementation mapping: The function computes a visual approximation tied to 1.20.1 sky colours and sun orientation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2118,11 +2118,11 @@
 - Purpose: GLES terrain shader helper include
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Essential only if the GLES backend is chosen; validate exact output.
-- RustChunk relevance: Provides GLSL ES-compatible sampling functions for terrain textures and mip levels.
+- Findings: Provides GLSL ES-compatible sampling functions for terrain textures and mip levels.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Essential only if the GLES backend is chosen; validate exact output.
-- 1.20.1 implications: GLES compiler/precision/array behavior varies by driver, especially Mali.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for stars.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: GLES compiler/precision/array behavior varies by driver, especially Mali.
 - RustChunk implementation mapping: GLES compiler/precision/array behavior varies by driver, especially Mali.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2135,11 +2135,11 @@
 - Purpose: Terrain shader source lowering
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Useful portability layer; make transformations narrow and tested.
-- RustChunk relevance: Keeps Vulkan WGSL unchanged while rewriting specific constructs for legacy GLES shader compilation.
+- Findings: Keeps Vulkan WGSL unchanged while rewriting specific constructs for legacy GLES shader compilation.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful portability layer; make transformations narrow and tested.
-- 1.20.1 implications: Adreno-specific workarounds and current Naga output are not generic Mali guarantees.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for submit.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Adreno-specific workarounds and current Naga output are not generic Mali guarantees.
 - RustChunk implementation mapping: Adreno-specific workarounds and current Naga output are not generic Mali guarantees.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2152,11 +2152,11 @@
 - Purpose: GPU test instance configuration
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Test harness only.
-- RustChunk relevance: Creates the GPU instance/backend set used by renderer tests.
+- Findings: Creates the GPU instance/backend set used by renderer tests.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Test harness only.
-- 1.20.1 implications: Windows/Vulkan/DX12 choices do not generalize to Android or every device.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for sunrise_fan.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Windows/Vulkan/DX12 choices do not generalize to Android or every device.
 - RustChunk implementation mapping: Windows/Vulkan/DX12 choices do not generalize to Android or every device.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2169,11 +2169,11 @@
 - Purpose: GPU timestamp timer
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Useful diagnostic architecture; not always available on mobile.
-- RustChunk relevance: Reads timestamp query data asynchronously and frees query slots when results arrive or fail.
+- Findings: Reads timestamp query data asynchronously and frees query slots when results arrive or fail.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful diagnostic architecture; not always available on mobile.
-- 1.20.1 implications: Timestamp support and query resolve semantics vary on GLES/Android.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for terrain_gles.wgsl.inc; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Timestamp support and query resolve semantics vary on GLES/Android.
 - RustChunk implementation mapping: Timestamp support and query resolve semantics vary on GLES/Android.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2186,11 +2186,11 @@
 - Purpose: Translucent quad sorter
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reusable algorithm; validate target ordering rules.
-- RustChunk relevance: Sorts translucent faces by distance while changing indices rather than moving vertices.
+- Findings: Sorts translucent faces by distance while changing indices rather than moving vertices.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reusable algorithm; validate target ordering rules.
-- 1.20.1 implications: Tie order and camera crossing rules are observable; large LOD tiles need a different point-of-view policy.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for terrain_source.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Tie order and camera crossing rules are observable; large LOD tiles need a different point-of-view policy.
 - RustChunk implementation mapping: Tie order and camera crossing rules are observable; large LOD tiles need a different point-of-view policy.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2203,11 +2203,11 @@
 - Purpose: GPU upload staging belt
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: High-value performance/memory pattern.
-- RustChunk relevance: Reuses mapped staging buffers for per-frame buffer/texture uploads rather than allocating one per write.
+- Findings: Reuses mapped staging buffers for per-frame buffer/texture uploads rather than allocating one per write.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value performance/memory pattern.
-- 1.20.1 implications: Staging buffer alignment, map lifecycle and max buffer size vary on Android.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for test_gpu.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Staging buffer alignment, map lifecycle and max buffer size vary on Android.
 - RustChunk implementation mapping: Staging buffer alignment, map lifecycle and max buffer size vary on Android.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2220,11 +2220,11 @@
 - Purpose: Multi-view camera abstraction
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional XR/split-view architecture; not needed for flat Android client.
-- RustChunk relevance: Shares camera-relative world data across one or two eye views while varying projection/rotation.
+- Findings: Shares camera-relative world data across one or two eye views while varying projection/rotation.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional XR/split-view architecture; not needed for flat Android client.
-- 1.20.1 implications: Stereo view count and offsets are not vanilla Java gameplay requirements.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for timing.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Stereo view count and offsets are not vanilla Java gameplay requirements.
 - RustChunk implementation mapping: Stereo view count and offsets are not vanilla Java gameplay requirements.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2237,11 +2237,11 @@
 - Purpose: Weather draw renderer
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Adapt vanilla weather renderer separately from pack integration.
-- RustChunk relevance: Builds and draws rain/snow quads with native and optional shader-pack paths.
+- Findings: Builds and draws rain/snow quads with native and optional shader-pack paths.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Adapt vanilla weather renderer separately from pack integration.
-- 1.20.1 implications: Sprite UVs, pass order and depth-write behavior must match 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for translucency.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Sprite UVs, pass order and depth-write behavior must match 1.20.1.
 - RustChunk implementation mapping: Sprite UVs, pass order and depth-write behavior must match 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2254,11 +2254,11 @@
 - Purpose: WGSL namespace prefix transformer
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Useful shader composition helper but optional.
-- RustChunk relevance: Extracts and prefixes top-level shader names to combine vanilla snippets with pack code safely.
+- Findings: Extracts and prefixes top-level shader names to combine vanilla snippets with pack code safely.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful shader composition helper but optional.
-- 1.20.1 implications: Parser/token rewriting must not corrupt nested scopes, comments, macros or target shader syntax.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for upload.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Parser/token rewriting must not corrupt nested scopes, comments, macros or target shader syntax.
 - RustChunk implementation mapping: Parser/token rewriting must not corrupt nested scopes, comments, macros or target shader syntax.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2271,11 +2271,11 @@
 - Purpose: World post-processing and TAA
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Potential quality/performance module; keep optional and benchmarked.
-- RustChunk relevance: Manages render resolution, FXAA/TAA history, reprojection and upscale pass.
+- Findings: Manages render resolution, FXAA/TAA history, reprojection and upscale pass.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Potential quality/performance module; keep optional and benchmarked.
-- 1.20.1 implications: History uses current camera-only motion and may ghost moving entities; scaling policy is not target default.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for view.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: History uses current camera-only motion and may ghost moving entities; scaling policy is not target default.
 - RustChunk implementation mapping: History uses current camera-only motion and may ghost moving entities; scaling policy is not target default.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2288,11 +2288,11 @@
 - Purpose: Graphics settings model
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Reuse separation of vanilla and renderer-specific settings; adapt to RustChunk-owned keys.
-- RustChunk relevance: Stores renderer/API/preset/upscaling/LOD/culling/HDR options and recovery markers.
+- Findings: Stores renderer/API/preset/upscaling/LOD/culling/HDR options and recovery markers.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reuse separation of vanilla and renderer-specific settings; adapt to RustChunk-owned keys.
-- 1.20.1 implications: API names, preset catalogs and driver workarounds are Horizon-specific; mobile crash-recovery policy needs adaptation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for weather.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: API names, preset catalogs and driver workarounds are Horizon-specific; mobile crash-recovery policy needs adaptation.
 - RustChunk implementation mapping: API names, preset catalogs and driver workarounds are Horizon-specific; mobile crash-recovery policy needs adaptation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2305,11 +2305,11 @@
 - Purpose: Graphics settings style
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: UI-only reference; no game compatibility dependency.
-- RustChunk relevance: Defines visual design tokens and draw primitives for graphics settings UI.
+- Findings: Defines visual design tokens and draw primitives for graphics settings UI.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: UI-only reference; no game compatibility dependency.
-- 1.20.1 implications: Colours/layout are Horizon branding and not required for RustChunk.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for wgsl_prefix.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Colours/layout are Horizon branding and not required for RustChunk.
 - RustChunk implementation mapping: Colours/layout are Horizon branding and not required for RustChunk.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2322,11 +2322,11 @@
 - Purpose: Graphics settings UI
 - Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
 - Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
-- Findings: Optional UI layer; defer until renderer controls stabilize.
-- RustChunk relevance: Presents pages, search, toggles/sliders and descriptions for renderer settings.
+- Findings: Presents pages, search, toggles/sliders and descriptions for renderer settings.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional UI layer; defer until renderer controls stabilize.
-- 1.20.1 implications: Settings options and dependencies are Horizon-specific; large UI logic is not vanilla parity.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for world_post.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Settings options and dependencies are Horizon-specific; large UI logic is not vanilla parity.
 - RustChunk implementation mapping: Settings options and dependencies are Horizon-specific; large UI logic is not vanilla parity.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2339,11 +2339,11 @@
 - Purpose: HDR transfer/composite shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional display feature; defer for current Android target.
-- RustChunk relevance: Maps world/GUI into HDR output and handles PQ/scRGB and calibration visuals.
+- Findings: Maps world/GUI into HDR output and handles PQ/scRGB and calibration visuals.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional display feature; defer for current Android target.
-- 1.20.1 implications: Not required for Minecraft 1.20.1 world correctness and depends on HDR output surface support.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for graphics.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Not required for Minecraft 1.20.1 world correctness and depends on HDR output surface support.
 - RustChunk implementation mapping: Not required for Minecraft 1.20.1 world correctness and depends on HDR output surface support.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2356,11 +2356,11 @@
 - Purpose: HDR calibration workflow
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional settings UI.
-- RustChunk relevance: Guides the user through black-level, peak brightness and paper-white calibration.
+- Findings: Guides the user through black-level, peak brightness and paper-white calibration.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional settings UI.
-- 1.20.1 implications: Display calibration semantics and platform UI differ; unnecessary if no HDR output.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for graphics_style.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Display calibration semantics and platform UI differ; unnecessary if no HDR output.
 - RustChunk implementation mapping: Display calibration semantics and platform UI differ; unnecessary if no HDR output.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2373,11 +2373,11 @@
 - Purpose: HDR statistics shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional HDR helper.
-- RustChunk relevance: Measures bright/opaque sprite texels for HDR threshold selection.
+- Findings: Measures bright/opaque sprite texels for HDR threshold selection.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional HDR helper.
-- 1.20.1 implications: Depends on GPU storage/compute and HDR feature.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for graphics_ui.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Depends on GPU storage/compute and HDR feature.
 - RustChunk implementation mapping: Depends on GPU storage/compute and HDR feature.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2390,11 +2390,11 @@
 - Purpose: HUD atlas and batch renderer
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: High-value UI/atlas architecture; rebuild for 1.20.1 assets.
-- RustChunk relevance: Packs GUI, font, item/block sprites and animation data into a shared atlas; emits GUI geometry batches.
+- Findings: Packs GUI, font, item/block sprites and animation data into a shared atlas; emits GUI geometry batches.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value UI/atlas architecture; rebuild for 1.20.1 assets.
-- 1.20.1 implications: Atlas budget, mod icon/skin/custom button slots and texture max sizes are Horizon-specific.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hdr.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Atlas budget, mod icon/skin/custom button slots and texture max sizes are Horizon-specific.
 - RustChunk implementation mapping: Atlas budget, mod icon/skin/custom button slots and texture max sizes are Horizon-specific.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2407,11 +2407,11 @@
 - Purpose: HUD shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Core renderer component to adapt with version-specific assets.
-- RustChunk relevance: Draws batched GUI sprites/textures and special overlays.
+- Findings: Draws batched GUI sprites/textures and special overlays.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Core renderer component to adapt with version-specific assets.
-- 1.20.1 implications: Shader bindings and atlas formats depend on RustChunk implementation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hdr_calibration.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Shader bindings and atlas formats depend on RustChunk implementation.
 - RustChunk implementation mapping: Shader bindings and atlas formats depend on RustChunk implementation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2424,11 +2424,11 @@
 - Purpose: CIT glint GUI texture layer
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional resource-pack compatibility feature.
-- RustChunk relevance: Adds OptiFine-style custom enchantment glint textures to GUI item quads.
+- Findings: Adds OptiFine-style custom enchantment glint textures to GUI item quads.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional resource-pack compatibility feature.
-- 1.20.1 implications: CIT rule/item component format reflects later data; not vanilla 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hdr_stats.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: CIT rule/item component format reflects later data; not vanilla 1.20.1.
 - RustChunk implementation mapping: CIT rule/item component format reflects later data; not vanilla 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2441,11 +2441,11 @@
 - Purpose: Shader-pack GUI text renderer
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Optional shader-pack feature.
-- RustChunk relevance: Substitutes resource pack core/text shaders for GUI text and preserves uniform/vertex layout.
+- Findings: Substitutes resource pack core/text shaders for GUI text and preserves uniform/vertex layout.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Optional shader-pack feature.
-- 1.20.1 implications: Shader uniform blocks and pack interface are custom.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hud.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Shader uniform blocks and pack interface are custom.
 - RustChunk implementation mapping: Shader uniform blocks and pack interface are custom.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2458,11 +2458,11 @@
 - Purpose: HUD element layout and draw calls
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: High-value parity architecture; rebuild state inputs for 1.20.1.
-- RustChunk relevance: Computes vanilla-like hotbar, crosshair, hearts, armour, food, vehicle health and experience draw primitives.
+- Findings: Computes vanilla-like hotbar, crosshair, hearts, armour, food, vehicle health and experience draw primitives.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value parity architecture; rebuild state inputs for 1.20.1.
-- 1.20.1 implications: Current catalogue/UI fields may include newer options and effects.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hud.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Current catalogue/UI fields may include newer options and effects.
 - RustChunk implementation mapping: Current catalogue/UI fields may include newer options and effects.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2475,11 +2475,11 @@
 - Purpose: HUD overlays, boss bars, status, titles and subtitles
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Useful rendering separation; rebuild registries and packet inputs.
-- RustChunk relevance: Builds overlays for effects, boss bars, title/subtitle, selected-item name, border, portal, vignette and other screens.
+- Findings: Builds overlays for effects, boss bars, title/subtitle, selected-item name, border, portal, vignette and other screens.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Useful rendering separation; rebuild registries and packet inputs.
-- 1.20.1 implications: Effect/bossbar IDs and overlay rules are version-sensitive.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cit_glint.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Effect/bossbar IDs and overlay rules are version-sensitive.
 - RustChunk implementation mapping: Effect/bossbar IDs and overlay rules are version-sensitive.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2492,11 +2492,11 @@
 - Purpose: Inventory effect and item display logic
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Adapt with target effect and item registries.
-- RustChunk relevance: Computes effect/slot information shown in inventory-facing UI.
+- Findings: Computes effect/slot information shown in inventory-facing UI.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Adapt with target effect and item registries.
-- 1.20.1 implications: Current effect catalog/item components include newer data forms.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_text.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Current effect catalog/item components include newer data forms.
 - RustChunk implementation mapping: Current effect catalog/item components include newer data forms.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2509,11 +2509,11 @@
 - Purpose: Java text/string semantic compatibility
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: High-value utility if exact semantics are retained.
-- RustChunk relevance: Implements Java-like string/number parsing and text operations used by renderer/UI compatibility.
+- Findings: Implements Java-like string/number parsing and text operations used by renderer/UI compatibility.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: High-value utility if exact semantics are retained.
-- 1.20.1 implications: Unicode, UTF-16 indexing, numeric syntax and Java rounding must be verified against JDK 17/21 used by target.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hud_layout.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Unicode, UTF-16 indexing, numeric syntax and Java rounding must be verified against JDK 17/21 used by target.
 - RustChunk implementation mapping: Unicode, UTF-16 indexing, numeric syntax and Java rounding must be verified against JDK 17/21 used by target.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2526,11 +2526,11 @@
 - Purpose: Jigsaw block UI and state helpers
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Specialized UI/gameplay support; target 1.20.1 field set required.
-- RustChunk relevance: Represents jigsaw block configuration/visual interaction data.
+- Findings: Represents jigsaw block configuration/visual interaction data.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Specialized UI/gameplay support; target 1.20.1 field set required.
-- 1.20.1 implications: Jigsaw NBT/packet properties and screen details may have evolved.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for hud_overlays.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Jigsaw NBT/packet properties and screen details may have evolved.
 - RustChunk implementation mapping: Jigsaw NBT/packet properties and screen details may have evolved.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2543,11 +2543,11 @@
 - Purpose: On-screen keypad/input overlay
 - Dependencies / cross-references: Depends on target-version registries, entity/block state, random source, particle atlas and client tick ordering.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional Android UX feature.
-- RustChunk relevance: Provides a virtual keypad/control interface for touch or text input.
+- Findings: Provides a virtual keypad/control interface for touch or text input.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional Android UX feature.
-- 1.20.1 implications: Not vanilla UI behavior; hardware keyboard and IME may be preferable.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for inventory_effects.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Not vanilla UI behavior; hardware keyboard and IME may be preferable.
 - RustChunk implementation mapping: Not vanilla UI behavior; hardware keyboard and IME may be preferable.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2560,11 +2560,11 @@
 - Purpose: Level loading progress and status map
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: High-value state separation; rebuild packet/status lifecycle for 1.20.1.
-- RustChunk relevance: Tracks server/client readiness, player chunk readiness, progress and loading overlays.
+- Findings: Tracks server/client readiness, player chunk readiness, progress and loading overlays.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value state separation; rebuild packet/status lifecycle for 1.20.1.
-- 1.20.1 implications: Status enum and packet event ordering must follow 1.20.1 login/respawn/chunk flow.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for java_text.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Status enum and packet event ordering must follow 1.20.1 login/respawn/chunk flow.
 - RustChunk implementation mapping: Status enum and packet event ordering must follow 1.20.1 login/respawn/chunk flow.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2577,11 +2577,11 @@
 - Purpose: World block/sky lighting engine
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Critical core system; implement against 1.20.1 light engine, not the 26.3 tables.
-- RustChunk relevance: Computes block and sky light, face occlusion and incremental relighting over resident chunks.
+- Findings: Computes block and sky light, face occlusion and incremental relighting over resident chunks.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Critical core system; implement against 1.20.1 light engine, not the 26.3 tables.
-- 1.20.1 implications: A mismatch causes dark/bright seams, chunk flicker and gameplay/visual errors; source registry facts are version-specific.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for jigsaw_block.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: A mismatch causes dark/bright seams, chunk flicker and gameplay/visual errors; source registry facts are version-specific.
 - RustChunk implementation mapping: A mismatch causes dark/bright seams, chunk flicker and gameplay/visual errors; source registry facts are version-specific.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2594,11 +2594,11 @@
 - Purpose: Far-terrain LOD sampling and selection
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: High-value architecture for distant view, but isolate from near gameplay and collision.
-- RustChunk relevance: Samples distant column data, schedules tile meshing and selects coarse tiles beyond resident chunks.
+- Findings: Samples distant column data, schedules tile meshing and selects coarse tiles beyond resident chunks.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value architecture for distant view, but isolate from near gameplay and collision.
-- 1.20.1 implications: Far tiles are explicitly outside World/simulation; algorithms/data are 26.3 and must not replace loaded chunks near player.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for keypad.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Far tiles are explicitly outside World/simulation; algorithms/data are 26.3 and must not replace loaded chunks near player.
 - RustChunk implementation mapping: Far tiles are explicitly outside World/simulation; algorithms/data are 26.3 and must not replace loaded chunks near player.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2611,11 +2611,11 @@
 - Purpose: Far-terrain disk cache
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional performance feature; adopt only after cache invalidation is proven.
-- RustChunk relevance: Stores sampled columns in append-only region files keyed by generator/build data.
+- Findings: Stores sampled columns in append-only region files keyed by generator/build data.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional performance feature; adopt only after cache invalidation is proven.
-- 1.20.1 implications: Format/build key/registry dependencies are current Starling-specific; corrupted/torn writes must not crash load.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for level_loading.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Format/build key/registry dependencies are current Starling-specific; corrupted/torn writes must not crash load.
 - RustChunk implementation mapping: Format/build key/registry dependencies are current Starling-specific; corrupted/torn writes must not crash load.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2628,11 +2628,11 @@
 - Purpose: Far-terrain greedy mesh builder
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: High-value independent mesh design; rederive from 1.20.1 block/biome/lighting data.
-- RustChunk relevance: Builds distant exposed voxel faces from sampled columns, merging faces while preserving material and UV phase.
+- Findings: Builds distant exposed voxel faces from sampled columns, merging faces while preserving material and UV phase.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value independent mesh design; rederive from 1.20.1 block/biome/lighting data.
-- 1.20.1 implications: Coarse surface simplification drops underground detail and cannot be used for collision or near chunks.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for lib.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Coarse surface simplification drops underground detail and cannot be used for collision or near chunks.
 - RustChunk implementation mapping: Coarse surface simplification drops underground detail and cannot be used for collision or near chunks.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2645,11 +2645,11 @@
 - Purpose: Rotating logs and crash-log retention
 - Dependencies / cross-references: Depends on authoritative chunk state, block facts/shape occlusion, fluids, dimensions and world update lifecycle.
 - Implementation / logic: Block/sky light propagation and incremental relighting over section-neighbour regions.
-- Findings: Adapt logging architecture to Android app storage and privacy policy.
-- RustChunk relevance: Writes game logs, rollover archives, recent ring buffer and crash reports with token redaction concerns.
+- Findings: Writes game logs, rollover archives, recent ring buffer and crash reports with token redaction concerns.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Adapt logging architecture to Android app storage and privacy policy.
-- 1.20.1 implications: File paths, rotation frequency and Android storage access differ from this implementation.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for light.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: File paths, rotation frequency and Android storage access differ from this implementation.
 - RustChunk implementation mapping: File paths, rotation frequency and Android storage access differ from this implementation.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2662,11 +2662,11 @@
 - Purpose: Menu background blur
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Optional visual optimization.
-- RustChunk relevance: Implements a separable multi-pass blur for menu backgrounds with lower-resolution software fallback.
+- Findings: Implements a separable multi-pass blur for menu backgrounds with lower-resolution software fallback.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Optional visual optimization.
-- 1.20.1 implications: Copy-source surface support and half-resolution policy vary on GLES; not gameplay critical.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for lod.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Copy-source surface support and half-resolution policy vary on GLES; not gameplay critical.
 - RustChunk implementation mapping: Copy-source surface support and half-resolution policy vary on GLES; not gameplay critical.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2679,11 +2679,11 @@
 - Purpose: Menu blur shader
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Shader helper.
-- RustChunk relevance: Performs separable box blur/downsample operations for menu background.
+- Findings: Performs separable box blur/downsample operations for menu background.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Shader helper.
-- 1.20.1 implications: Pipeline format and sampling rules require backend parity.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cache.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pipeline format and sampling rules require backend parity.
 - RustChunk implementation mapping: Pipeline format and sampling rules require backend parity.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2696,11 +2696,11 @@
 - Purpose: Fluid surface tessellation
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Critical renderer feature; reconstruct from 1.20.1 FluidRenderer and shapes.
-- RustChunk relevance: Generates liquid heights, faces, UV flow, neighbour occlusion, overlay and lighting.
+- Findings: Generates liquid heights, faces, UV flow, neighbour occlusion, overlay and lighting.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Critical renderer feature; reconstruct from 1.20.1 FluidRenderer and shapes.
-- 1.20.1 implications: Fluid data and block shapes must be target version; waterlogged states and transparent neighbours are sensitive.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for mesh.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Fluid data and block shapes must be target version; waterlogged states and transparent neighbours are sensitive.
 - RustChunk implementation mapping: Fluid data and block shapes must be target version; waterlogged states and transparent neighbours are sensitive.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2713,11 +2713,11 @@
 - Purpose: Leaf face/interior culling
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional mesher optimization with high potential gains.
-- RustChunk relevance: Builds section-local leaf-volume masks and classifies safe leaf faces for solidification/removal.
+- Findings: Builds section-local leaf-volume masks and classifies safe leaf faces for solidification/removal.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional mesher optimization with high potential gains.
-- 1.20.1 implications: Conservative unknown/open handling is essential; aggressive mode may change appearance if chunk neighbours are missing.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for logging.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Conservative unknown/open handling is essential; aggressive mode may change appearance if chunk neighbours are missing.
 - RustChunk implementation mapping: Conservative unknown/open handling is essential; aggressive mode may change appearance if chunk neighbours are missing.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2730,11 +2730,11 @@
 - Purpose: Leaf-culling regression suite
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Test/reference source; not executed.
-- RustChunk relevance: Checks leaf mode geometry, cavity faces, chunk boundaries and no-leaf equivalence.
+- Findings: Checks leaf mode geometry, cavity faces, chunk boundaries and no-leaf equivalence.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Test/reference source; not executed.
-- 1.20.1 implications: Prepared resources required for full mesher fixture.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for menu_blur.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Prepared resources required for full mesher fixture.
 - RustChunk implementation mapping: Prepared resources required for full mesher fixture.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2747,11 +2747,11 @@
 - Purpose: Terrain particle regression tests
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Reference tests only.
-- RustChunk relevance: Checks block particles use the proper particle sprite and biome tint source.
+- Findings: Checks block particles use the proper particle sprite and biome tint source.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Reference tests only.
-- 1.20.1 implications: Fixture relies on target resource model/tint catalog.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for menu_blur.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Fixture relies on target resource model/tint catalog.
 - RustChunk implementation mapping: Fixture relies on target resource model/tint catalog.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2764,11 +2764,11 @@
 - Purpose: Mesher padded-neighbour reuse tests
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Reference tests only; high-value for chunk seam correctness.
-- RustChunk relevance: Compares reused padded snapshots/light with fresh chunk geometry across section/resource reloads.
+- Findings: Compares reused padded snapshots/light with fresh chunk geometry across section/resource reloads.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reference tests only; high-value for chunk seam correctness.
-- 1.20.1 implications: Requires chunk layout and resource pack fixture; no tests run.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for mesher.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires chunk layout and resource pack fixture; no tests run.
 - RustChunk implementation mapping: Requires chunk layout and resource pack fixture; no tests run.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2781,11 +2781,11 @@
 - Purpose: Solid face bucketing/sort
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Potential CPU/GPU optimization; preserve conservative bucket for unusual faces.
-- RustChunk relevance: Groups quads by facing and emits only runs potentially visible from the camera.
+- Findings: Groups quads by facing and emits only runs potentially visible from the camera.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Potential CPU/GPU optimization; preserve conservative bucket for unusual faces.
-- 1.20.1 implications: Winding, degenerate triangles and ties must match exact 1.20.1 model geometry.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for fluid.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Winding, degenerate triangles and ties must match exact 1.20.1 model geometry.
 - RustChunk implementation mapping: Winding, degenerate triangles and ties must match exact 1.20.1 model geometry.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2798,11 +2798,11 @@
 - Purpose: Biome tint shortcut tests
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Reference tests only.
-- RustChunk relevance: Checks one-biome shortcut against full spatial tint interpolation.
+- Findings: Checks one-biome shortcut against full spatial tint interpolation.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Reference tests only.
-- 1.20.1 implications: Biome definitions/colormaps are pinned to newer game data.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for leaf_culling.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Biome definitions/colormaps are pinned to newer game data.
 - RustChunk implementation mapping: Biome definitions/colormaps are pinned to newer game data.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2815,11 +2815,11 @@
 - Purpose: Section visibility/face-connectivity tests
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Reference tests only; valuable proof harness.
-- RustChunk relevance: Uses a slow reference to verify optimized block/section visibility masks and row fill.
+- Findings: Uses a slow reference to verify optimized block/section visibility masks and row fill.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Reference tests only; valuable proof harness.
-- 1.20.1 implications: Block opacity/face-occlusion facts are versioned.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for leaf_culling_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Block opacity/face-occlusion facts are versioned.
 - RustChunk implementation mapping: Block opacity/face-occlusion facts are versioned.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2832,11 +2832,11 @@
 - Purpose: Minimap tile/image model
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Optional UI feature; not core engine.
-- RustChunk relevance: Builds map-colour tiles per loaded chunk, shades height/water depth and composes a 128px view.
+- Findings: Builds map-colour tiles per loaded chunk, shades height/water depth and composes a 128px view.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Optional UI feature; not core engine.
-- 1.20.1 implications: Map palette/colour and scan rules are current version data.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for lighting.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Map palette/colour and scan rules are current version data.
 - RustChunk implementation mapping: Map palette/colour and scan rules are current version data.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2849,11 +2849,11 @@
 - Purpose: Mip level generation and alpha coverage
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: High-value texture quality algorithm; validate exact target format/rounding.
-- RustChunk relevance: Builds sprite mipmaps with linear-light colour filtering and alpha-test coverage preservation.
+- Findings: Builds sprite mipmaps with linear-light colour filtering and alpha-test coverage preservation.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: High-value texture quality algorithm; validate exact target format/rounding.
-- 1.20.1 implications: Mip strategy, alpha coverage and high-res resource behavior must be compared with 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for particle_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Mip strategy, alpha coverage and high-res resource behavior must be compared with 1.20.1.
 - RustChunk implementation mapping: Mip strategy, alpha coverage and high-res resource behavior must be compared with 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2866,11 +2866,11 @@
 - Purpose: Mod enablement list
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Optional mod manager feature; not vanilla.
-- RustChunk relevance: Persists per-mod enable/disable choices and distinguishes native mods built into an app.
+- Findings: Persists per-mod enable/disable choices and distinguishes native mods built into an app.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Optional mod manager feature; not vanilla.
-- 1.20.1 implications: Horizon `.hmod`/native build scheme does not establish Forge mod loading or Forge compatibility.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for reuse_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Horizon `.hmod`/native build scheme does not establish Forge mod loading or Forge compatibility.
 - RustChunk implementation mapping: Horizon `.hmod`/native build scheme does not establish Forge mod loading or Forge compatibility.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2883,11 +2883,11 @@
 - Purpose: Parsed model library
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: High-value resource architecture; rebuild 1.20.1 model/OBJ codecs.
-- RustChunk relevance: Loads and resolves resource models and fallback behavior across resource-pack reloads.
+- Findings: Loads and resolves resource models and fallback behavior across resource-pack reloads.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: High-value resource architecture; rebuild 1.20.1 model/OBJ codecs.
-- 1.20.1 implications: Model parent resolution and NeoForge OBJ extension are not all vanilla; resource path/override rules are versioned.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for sides.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Model parent resolution and NeoForge OBJ extension are not all vanilla; resource path/override rules are versioned.
 - RustChunk implementation mapping: Model parent resolution and NeoForge OBJ extension are not all vanilla; resource path/override rules are versioned.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2900,11 +2900,11 @@
 - Purpose: Standalone model registration/gallery
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Optional native mod feature.
-- RustChunk relevance: Registers standalone models requested by native mods and prepares instances for inspection/gallery.
+- Findings: Registers standalone models requested by native mods and prepares instances for inspection/gallery.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Optional native mod feature.
-- 1.20.1 implications: Not part of vanilla blockstate rendering; native mod API dependency.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for tint_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Not part of vanilla blockstate rendering; native mod API dependency.
 - RustChunk implementation mapping: Not part of vanilla blockstate rendering; native mod API dependency.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2917,11 +2917,11 @@
 - Purpose: Blockstate model catalog and baking
 - Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
 - Implementation / logic: Regression/parity fixture source; constructs inputs and asserts geometry, state or pixel behaviour. The test code was read, but it was not executed.
-- Findings: Critical renderer architecture; regenerate from 1.20.1 registries/assets.
-- RustChunk relevance: Maps registry states/variants/multipart rules to baked geometry and particle sprites.
+- Findings: Maps registry states/variants/multipart rules to baked geometry and particle sprites.
+- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
 - Decision: Critical renderer architecture; regenerate from 1.20.1 registries/assets.
-- 1.20.1 implications: Current states and definitions target 26.3, and IDs/variant schemas cannot be imported.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for visibility_tests.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Current states and definitions target 26.3, and IDs/variant schemas cannot be imported.
 - RustChunk implementation mapping: Current states and definitions target 26.3, and IDs/variant schemas cannot be imported.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2934,11 +2934,11 @@
 - Purpose: Cube face style/greedy merge helper
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Potential mesh optimization after 1.20.1 model parity.
-- RustChunk relevance: Identifies exact cube faces whose texture UVs can be merged into greedy rectangles.
+- Findings: Identifies exact cube faces whose texture UVs can be merged into greedy rectangles.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Potential mesh optimization after 1.20.1 model parity.
-- 1.20.1 implications: Only exact unit-cube cases are safe; partial shapes, rotation, emissive and transparent materials must remain separate.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for minimap.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Only exact unit-cube cases are safe; partial shapes, rotation, emissive and transparent materials must remain separate.
 - RustChunk implementation mapping: Only exact unit-cube cases are safe; partial shapes, rotation, emissive and transparent materials must remain separate.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2951,11 +2951,11 @@
 - Purpose: Multiline editor widget
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Useful reusable UI component; connect to RustChunk IME and text model.
-- RustChunk relevance: Provides wrapping, selection, cursor, keyboard shortcuts, word navigation, scroll and input state.
+- Findings: Provides wrapping, selection, cursor, keyboard shortcuts, word navigation, scroll and input state.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: Useful reusable UI component; connect to RustChunk IME and text model.
-- 1.20.1 implications: Current UI metrics/character indexing may differ from Java 1.20.1 UTF-16/IME contracts.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for mipmap.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Current UI metrics/character indexing may differ from Java 1.20.1 UTF-16/IME contracts.
 - RustChunk implementation mapping: Current UI metrics/character indexing may differ from Java 1.20.1 UTF-16/IME contracts.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2968,11 +2968,11 @@
 - Purpose: Native emissive texture overlays
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional resource-pack extension; visual-only.
-- RustChunk relevance: Loads bounded emissive overlays for native mods and OptiFine textures, pairing overlays with base sprites.
+- Findings: Loads bounded emissive overlays for native mods and OptiFine textures, pairing overlays with base sprites.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional resource-pack extension; visual-only.
-- 1.20.1 implications: Overlay formats and suffix mapping are third-party conventions, not vanilla behavior.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for mod_list.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Overlay formats and suffix mapping are third-party conventions, not vanilla behavior.
 - RustChunk implementation mapping: Overlay formats and suffix mapping are third-party conventions, not vanilla behavior.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -2985,11 +2985,11 @@
 - Purpose: Offline player name and identity persistence
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: High relevance to offline-first RustChunk; adapt validation and UUID generation.
-- RustChunk relevance: Persists/generates a stable offline name so local/LAN sessions do not all collide as one profile.
+- Findings: Persists/generates a stable offline name so local/LAN sessions do not all collide as one profile.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High relevance to offline-first RustChunk; adapt validation and UUID generation.
-- 1.20.1 implications: Offline UUID/name behavior must match Java 1.20.1 and must not masquerade as authenticated online identity.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for model_library.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Offline UUID/name behavior must match Java 1.20.1 and must not masquerade as authenticated online identity.
 - RustChunk implementation mapping: Offline UUID/name behavior must match Java 1.20.1 and must not masquerade as authenticated online identity.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3002,11 +3002,11 @@
 - Purpose: OIT core WGSL functions
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional OIT shader; vanilla sorted transparency remains baseline.
-- RustChunk relevance: Implements depth normalization, transmittance/absorbance accumulation and transparency composite primitives.
+- Findings: Implements depth normalization, transmittance/absorbance accumulation and transparency composite primitives.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional OIT shader; vanilla sorted transparency remains baseline.
-- 1.20.1 implications: Float blend and target support not guaranteed on Mali/GLES.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for models.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Float blend and target support not guaranteed on Mali/GLES.
 - RustChunk implementation mapping: Float blend and target support not guaranteed on Mali/GLES.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3019,11 +3019,11 @@
 - Purpose: OIT world-border fragment shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional OIT integration.
-- RustChunk relevance: Adapts world-border fragments to the OIT transparency pipeline.
+- Findings: Adapts world-border fragments to the OIT transparency pipeline.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional OIT integration.
-- 1.20.1 implications: Depends on border shader interface and OIT passes.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for catalog.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Depends on border shader interface and OIT passes.
 - RustChunk implementation mapping: Depends on border shader interface and OIT passes.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3036,11 +3036,11 @@
 - Purpose: OIT clouds fragment shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional OIT integration.
-- RustChunk relevance: Adapts cloud front/back transparency to OIT compositing.
+- Findings: Adapts cloud front/back transparency to OIT compositing.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional OIT integration.
-- 1.20.1 implications: Cloud blending and depth rules must match target rendering.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cube.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Cloud blending and depth rules must match target rendering.
 - RustChunk implementation mapping: Cloud blending and depth rules must match target rendering.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3053,11 +3053,11 @@
 - Purpose: OIT miscellaneous feature shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional OIT integration.
-- RustChunk relevance: Handles multiple non-terrain translucent categories in OIT pass.
+- Findings: Handles multiple non-terrain translucent categories in OIT pass.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional OIT integration.
-- 1.20.1 implications: Special layers such as text/lightning/particles have distinct blend/depth semantics.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for multiline_edit.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Special layers such as text/lightning/particles have distinct blend/depth semantics.
 - RustChunk implementation mapping: Special layers such as text/lightning/particles have distinct blend/depth semantics.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3070,11 +3070,11 @@
 - Purpose: OIT terrain fragment shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Optional OIT integration.
-- RustChunk relevance: Computes terrain translucent colour/absorbance for OIT accumulation.
+- Findings: Computes terrain translucent colour/absorbance for OIT accumulation.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Optional OIT integration.
-- 1.20.1 implications: Requires target terrain texture/light/fog interface and float blend support.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for native_emissive.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Requires target terrain texture/light/fog interface and float blend support.
 - RustChunk implementation mapping: Requires target terrain texture/light/fog interface and float blend support.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3087,11 +3087,11 @@
 - Purpose: Vanilla options file parser/schema
 - Dependencies / cross-references: Depends on client account/session state, protocol identity, text and input handling; account providers must remain isolated.
 - Implementation / logic: Persists and validates an offline profile name and its derived identity-related choice.
-- Findings: High-value compatibility layer; rebuild typed key registry against 1.20.1.
-- RustChunk relevance: Parses typed options.txt values, defaults, keybindings and serialization.
+- Findings: Parses typed options.txt values, defaults, keybindings and serialization.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value compatibility layer; rebuild typed key registry against 1.20.1.
-- 1.20.1 implications: The table and data codecs are explicitly 26.3 and current input/options keys differ.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for offline_name.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The table and data codecs are explicitly 26.3 and current input/options keys differ.
 - RustChunk implementation mapping: The table and data codecs are explicitly 26.3 and current input/options keys differ.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3104,11 +3104,11 @@
 - Purpose: Options file data-fix migration
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Adapt as migration framework only; regenerate target fix sequence.
-- RustChunk relevance: Applies versioned migrations to old raw options keys/values.
+- Findings: Applies versioned migrations to old raw options keys/values.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Adapt as migration framework only; regenerate target fix sequence.
-- 1.20.1 implications: Current migrations end at 26.3; key codes/values and version IDs cannot be reused blindly.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Current migrations end at 26.3; key codes/values and version IDs cannot be reused blindly.
 - RustChunk implementation mapping: Current migrations end at 26.3; key codes/values and version IDs cannot be reused blindly.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3121,11 +3121,11 @@
 - Purpose: Large options/settings UI
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: UI reference; port screen by screen after core input/render.
-- RustChunk relevance: Implements Options, video/audio/controls/accessibility/language/skin/resource pack pages and interaction state.
+- Findings: Implements Options, video/audio/controls/accessibility/language/skin/resource pack pages and interaction state.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: UI reference; port screen by screen after core input/render.
-- 1.20.1 implications: Many settings and controls are newer Horizon/26.3 features; UI is not evidence of a working game engine.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit_border.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Many settings and controls are newer Horizon/26.3 features; UI is not evidence of a working game engine.
 - RustChunk implementation mapping: Many settings and controls are newer Horizon/26.3 features; UI is not evidence of a working game engine.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3138,11 +3138,11 @@
 - Purpose: Overlay texture constants and calculations
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Useful small renderer parity helper; update to target source values.
-- RustChunk relevance: Computes white/hurt overlay texels and codes for entity shaders.
+- Findings: Computes white/hurt overlay texels and codes for entity shaders.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Useful small renderer parity helper; update to target source values.
-- 1.20.1 implications: Entity overlay layout is version-sensitive though likely stable; verify against 1.20.1 texture.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit_clouds.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Entity overlay layout is version-sensitive though likely stable; verify against 1.20.1 texture.
 - RustChunk implementation mapping: Entity overlay layout is version-sensitive though likely stable; verify against 1.20.1 texture.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3155,11 +3155,11 @@
 - Purpose: Custom touch-button images
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional Android UI feature; useful isolated utility.
-- RustChunk relevance: Loads/saves/scales player-provided icons for custom mobile buttons.
+- Findings: Loads/saves/scales player-provided icons for custom mobile buttons.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional Android UI feature; useful isolated utility.
-- 1.20.1 implications: Horizon-specific button count/path and texture budget.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit_features.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Horizon-specific button count/path and texture budget.
 - RustChunk implementation mapping: Horizon-specific button count/path and texture budget.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3172,11 +3172,11 @@
 - Purpose: Custom player skins
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: Optional feature; useful offline skin support if separated from auth.
-- RustChunk relevance: Stores and selects local skin PNGs per profile and optional upload flow.
+- Findings: Stores and selects local skin PNGs per profile and optional upload flow.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: Optional feature; useful offline skin support if separated from auth.
-- 1.20.1 implications: Skin layout, profile services and upload endpoints are provider/version-specific; online upload requires valid account.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for oit_world.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Skin layout, profile services and upload endpoints are provider/version-specific; online upload requires valid account.
 - RustChunk implementation mapping: Skin layout, profile services and upload endpoints are provider/version-specific; online upload requires valid account.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3189,11 +3189,11 @@
 - Purpose: Resource-pack selection screen
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: High-value UI; pack activation lifecycle must be version-correct.
-- RustChunk relevance: Lists, filters, orders and enables resource/data packs with compatibility notices.
+- Findings: Lists, filters, orders and enables resource/data packs with compatibility notices.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: High-value UI; pack activation lifecycle must be version-correct.
-- 1.20.1 implications: Pack metadata, format compatibility, icons and phone storage paths are Starling-specific.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for options_file.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pack metadata, format compatibility, icons and phone storage paths are Starling-specific.
 - RustChunk implementation mapping: Pack metadata, format compatibility, icons and phone storage paths are Starling-specific.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3206,11 +3206,11 @@
 - Purpose: Resource-pack discovery and composition
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Core resource-pack architecture; rebuild exact 1.20.1 priority rules.
-- RustChunk relevance: Finds, orders and overlays installed packs, resource roots and enabled pack state.
+- Findings: Finds, orders and overlays installed packs, resource roots and enabled pack state.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Core resource-pack architecture; rebuild exact 1.20.1 priority rules.
-- 1.20.1 implications: Pack formats/metadata may use 26.3 values; no assumption that loading a newer pack equals 1.20.1 compatibility.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for options_fixes.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Pack formats/metadata may use 26.3 values; no assumption that loading a newer pack equals 1.20.1 compatibility.
 - RustChunk implementation mapping: Pack formats/metadata may use 26.3 values; no assumption that loading a newer pack equals 1.20.1 compatibility.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3223,11 +3223,11 @@
 - Purpose: Resource-pack derived/cache storage
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: Potential startup/memory optimization; cache invalidation must be exact.
-- RustChunk relevance: Caches parsed/decoded resource-pack artifacts and reuses them across reloads.
+- Findings: Caches parsed/decoded resource-pack artifacts and reuses them across reloads.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: Potential startup/memory optimization; cache invalidation must be exact.
-- 1.20.1 implications: Keys must include game version, pack contents, registry/data versions and implementation version.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for options_ui.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Keys must include game version, pack contents, registry/data versions and implementation version.
 - RustChunk implementation mapping: Keys must include game version, pack contents, registry/data versions and implementation version.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3240,11 +3240,11 @@
 - Purpose: Lightweight parsing helpers
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Reuse only after exact input domain is known.
-- RustChunk relevance: Provides small parser/utility routines shared by renderer resource code.
+- Findings: Provides small parser/utility routines shared by renderer resource code.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Reuse only after exact input domain is known.
-- 1.20.1 implications: The module's syntax is limited and does not replace a full data-format parser.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for overlay.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The module's syntax is limited and does not replace a full data-format parser.
 - RustChunk implementation mapping: The module's syntax is limited and does not replace a full data-format parser.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3257,11 +3257,11 @@
 - Purpose: Client particle engine
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Core visual system; rebuild particle registry/options and tick behavior for 1.20.1.
-- RustChunk relevance: Builds/ticks particle types and emits their geometry, colour, light and sprite animation.
+- Findings: Builds/ticks particle types and emits their geometry, colour, light and sprite animation.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Core visual system; rebuild particle registry/options and tick behavior for 1.20.1.
-- 1.20.1 implications: The source has many later particle types/options and depends on newer block/entity/item catalogs.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for own_buttons.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The source has many later particle types/options and depends on newer block/entity/item catalogs.
 - RustChunk implementation mapping: The source has many later particle types/options and depends on newer block/entity/item catalogs.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3274,11 +3274,11 @@
 - Purpose: Resident POI section index
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Useful world-search acceleration architecture; rebuild POI type registry and update rules.
-- RustChunk relevance: Caches points of interest per resident section and searches nearby sections instead of scanning blocks.
+- Findings: Caches points of interest per resident section and searches nearby sections instead of scanning blocks.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Useful world-search acceleration architecture; rebuild POI type registry and update rules.
-- 1.20.1 implications: POI types, ticket counts/ranges and block state mappings must be 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for own_skin.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: POI types, ticket counts/ranges and block state mappings must be 1.20.1.
 - RustChunk implementation mapping: POI types, ticket counts/ranges and block state mappings must be 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3291,11 +3291,11 @@
 - Purpose: Vanilla post-effect chain parser/renderer
 - Dependencies / cross-references: Depends on the HUD atlas, font/text system, input/IME layer, settings persistence and screen draw pipeline.
 - Implementation / logic: UI state/layout/draw implementation with text metrics, touch/keyboard interaction and resource-backed visuals.
-- Findings: High-value vanilla resource rendering architecture; exact 1.20.1 codec/shader behavior required.
-- RustChunk relevance: Parses post_effect JSON, target graph, shader stages and uniforms; translates GLSL and runs passes.
+- Findings: Parses post_effect JSON, target graph, shader stages and uniforms; translates GLSL and runs passes.
+- RustChunk relevance: Relevant to user-facing controls/text/UI; versioned text, input and visual semantics need 1.20.1 parity.
 - Decision: High-value vanilla resource rendering architecture; exact 1.20.1 codec/shader behavior required.
-- 1.20.1 implications: This is closer to vanilla than native shader-pack stages, but current parser and shader set are pinned to 26.3.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for pack_screen.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: This is closer to vanilla than native shader-pack stages, but current parser and shader set are pinned to 26.3.
 - RustChunk implementation mapping: This is closer to vanilla than native shader-pack stages, but current parser and shader set are pinned to 26.3.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3308,11 +3308,11 @@
 - Purpose: Post-chain WGSL stand-in shader
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: Useful fallback only when target GLSL cannot translate and behavior is proven.
-- RustChunk relevance: Provides WGSL fallback implementations for selected vanilla post shaders.
+- Findings: Provides WGSL fallback implementations for selected vanilla post shaders.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: Useful fallback only when target GLSL cannot translate and behavior is proven.
-- 1.20.1 implications: Stand-ins must correspond to exact 1.20.1 built-in effect shaders.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for packs.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Stand-ins must correspond to exact 1.20.1 built-in effect shaders.
 - RustChunk implementation mapping: Stand-ins must correspond to exact 1.20.1 built-in effect shaders.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3325,11 +3325,11 @@
 - Purpose: Vanilla GLSL post shader translator
 - Dependencies / cross-references: Depends on resource-pack discovery/priority, JSON/model/texture codecs, namespace resolution and GPU atlas limits.
 - Implementation / logic: Resource-pack discovery/parsing/selection and rendering-resource composition.
-- Findings: High-value portability component; narrow parser and security testing required.
-- RustChunk relevance: Loads includes and rewrites GLSL blocks/samplers into Naga modules for wgpu.
+- Findings: Loads includes and rewrites GLSL blocks/samplers into Naga modules for wgpu.
+- RustChunk relevance: Relevant to resource-pack compatibility; keep third-party formats optional and validate untrusted assets.
 - Decision: High-value portability component; narrow parser and security testing required.
-- 1.20.1 implications: GLSL syntax/includes and uniform semantics must match 1.20.1 shaders; translator only handles supported grammar.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for cache.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: GLSL syntax/includes and uniform semantics must match 1.20.1 shaders; translator only handles supported grammar.
 - RustChunk implementation mapping: GLSL syntax/includes and uniform semantics must match 1.20.1 shaders; translator only handles supported grammar.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3342,11 +3342,11 @@
 - Purpose: Potent-sulfur gameplay helper
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Exclude from vanilla 1.20.1 base; mod-specific reference only.
-- RustChunk relevance: Queries block/fluid/line-of-sight around a sulfur geyser for gas and launch behavior.
+- Findings: Queries block/fluid/line-of-sight around a sulfur geyser for gas and launch behavior.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Exclude from vanilla 1.20.1 base; mod-specific reference only.
-- 1.20.1 implications: This is a modded/new block mechanic and must not enter vanilla behavior.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for par.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: This is a modded/new block mechanic and must not enter vanilla behavior.
 - RustChunk implementation mapping: This is a modded/new block mechanic and must not enter vanilla behavior.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3359,11 +3359,11 @@
 - Purpose: IME preedit/composition overlay
 - Dependencies / cross-references: Depends on target-version registries, entity/block state, random source, particle atlas and client tick ordering.
 - Implementation / logic: Client-side particle construction, tick, interpolation, collision/light sampling and sprite rendering.
-- Findings: High-value Android text-input architecture; adapt UTF-16/codepoint conversion carefully.
-- RustChunk relevance: Tracks composing text, caret and selection from native input methods and exposes candidate-window bounds.
+- Findings: Tracks composing text, caret and selection from native input methods and exposes candidate-window bounds.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: High-value Android text-input architecture; adapt UTF-16/codepoint conversion carefully.
-- 1.20.1 implications: The source supports SDL/winit event shapes; Android Java IME bridge must provide exact cursor/selection semantics.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for particles.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: The source supports SDL/winit event shapes; Android Java IME bridge must provide exact cursor/selection semantics.
 - RustChunk implementation mapping: The source supports SDL/winit event shapes; Android Java IME bridge must provide exact cursor/selection semantics.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3376,11 +3376,11 @@
 - Purpose: Context int/float provider evaluator
 - Dependencies / cross-references: Depends on authoritative chunk state, block facts/shape occlusion, fluids, dimensions and world update lifecycle.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Useful data-provider pattern; target codecs and tables need rebuild.
-- RustChunk relevance: Evaluates data-driven context_int_provider/context_float_provider values used for fuel/brewing timing.
+- Findings: Evaluates data-driven context_int_provider/context_float_provider values used for fuel/brewing timing.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Useful data-provider pattern; target codecs and tables need rebuild.
-- 1.20.1 implications: Provider JSON structure and supported conditions may differ for 1.20.1.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for poi_sections.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Provider JSON structure and supported conditions may differ for 1.20.1.
 - RustChunk implementation mapping: Provider JSON structure and supported conditions may differ for 1.20.1.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3393,11 +3393,11 @@
 - Purpose: Screen shader
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Shader helper; adapt to RustChunk's GUI pipeline.
-- RustChunk relevance: Samples/composites GUI/screen draws using atlas and per-screen colour.
+- Findings: Samples/composites GUI/screen draws using atlas and per-screen colour.
+- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
 - Decision: Shader helper; adapt to RustChunk's GUI pipeline.
-- 1.20.1 implications: Texture coordinate and alpha conventions must match HUD/UI vertex data.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for post_chain.rs; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Texture coordinate and alpha conventions must match HUD/UI vertex data.
 - RustChunk implementation mapping: Texture coordinate and alpha conventions must match HUD/UI vertex data.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
@@ -3410,11 +3410,11 @@
 - Purpose: Screen/widget rendering and text fields
 - Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
 - Implementation / logic: GPU shader/include source; defines the stage's data layout, sampling, colour/depth or compute operations. Its bindings and entry points are specific to the renderer pipeline.
-- Findings: High-value UI framework reference; rebuild font and widget semantics for 1.20.1.
-- RustChunk relevance: Provides draw-call representation, text measurement/clipping, scrolling labels, buttons and editable text fields.
+- Findings: Provides draw-call representation, text measurement/clipping, scrolling labels, buttons and editable text fields.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
 - Decision: High-value UI framework reference; rebuild font and widget semantics for 1.20.1.
-- 1.20.1 implications: Java string/UTF-16 indexing and input/IME differences are important; some draw primitives depend on newer resource IDs.
-- Follow-up checks: Introduce, where justified, as a separately scoped RustChunk module for post_chain.wgsl; keep game data and runtime semantics sourced from Minecraft Java 1.20.1.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Java string/UTF-16 indexing and input/IME differences are important; some draw primitives depend on newer resource IDs.
 - RustChunk implementation mapping: Java string/UTF-16 indexing and input/IME differences are important; some draw primitives depend on newer resource IDs.
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
