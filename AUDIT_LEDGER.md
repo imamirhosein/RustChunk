@@ -2829,3 +2829,352 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Main architectural leads: Android platform bridge, bounded/asynchronous diagnostics, chunk membership deltas, worker-oriented section meshing/lighting, resident-world invalidation, typed block-entity data and bounded region compression.
 - Explicit exclusions from vanilla 1.20.1 first milestone: Starling 26.3 DataFixer output, pre-1.13 block-state flattening, Optimize World migration UI, Starling no-AI/agent switch, Horizon native-mod block entities and Starling product-specific native-mod loading.
 - Tests present in source were read but not executed. No Cargo build, RustChunk code change, Android APK/device test, shader/render run, migration, worldgen probe or live Minecraft connection was performed.
+
+### 141. .claude/skills/vanilla-parity/SKILL.md
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 4c0714d92320e0f36507b7d51855ec74f33ab5c3.
+- Size: 77 lines.
+- Coverage: lines 1–77, complete.
+- Purpose: Agent procedure for diagnosing vanilla-parity reports through a generated port ledger and tracing vanilla methods to Rust implementations.
+- Implementation / logic: Rebuilds the ledger from the vanilla 26.3 jar/decompiled lab; uses issue/where/class/what/gaps commands; requires reading both vanilla and Rust functions because the generated map may be wrong; preserves operation order, constants, RNG draws and Java math; distinguishes integrated-server logic from client-only effects; runs ledger/map checks and area tests before PR.
+- Findings: Strong review method, especially the warning that generated mapping is a lead rather than proof and the need to check both execution paths. The jar path, tools, method map and target version are Horizon 26.3-specific. Its stated mapping error rate is a claim in this document, not independently measured here.
+- RustChunk relevance: High as a parity-review process; the existing mapping data is not reusable evidence for 1.20.1.
+- 1.20.1 implications: Rebuild the map against pinned 1.20.1 vanilla sources and RustChunk paths; do not import 26.3 verdicts or method paths. Include protocol 763 and the correct client/server seams in validation.
+- Decision: Adaptable as an engineering process; rewrite all version-specific data, scripts and paths. No runtime dependency.
+- Dependencies / cross-references: tools/port_ledger.py; tools/port_map/*.tsv; docs/port-ledger.md; docs/architecture.md; AGENTS.md; horizon_core random/math; vanilla jar and decompilation lab.
+- Follow-up checks: Inspect the generator/schema; validate map accuracy against 1.20.1 methods; define RustChunk seam rules; attach executable parity tests to each accepted port.
+- RustChunk implementation mapping: Candidate devtool and contributor workflow only; no shipped module. Replace the 26.3 commands and mappings.
+- Evidence required before adoption: Hash-pinned 1.20.1 vanilla inputs; verified method-to-Rust samples; paired source evidence; client/server seam checks; repeatable 1.20.1 parity tests in CI.
+- Completion state: Full source review completed; no ledger command, decompilation, RustChunk test or CI job was run.
+
+### 142. .dockerignore
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 458330c93359f503d2f949860f658ff2e82ca46b.
+- Size: 8 lines.
+- Coverage: lines 1–8, complete.
+- Purpose: Excludes build output, local state, JavaScript dependencies, benchmarks, packs and mods from Docker build contexts.
+- Implementation / logic: Ignores target/, .local/, node_modules directories, benchmarks/, packs/ and mods/; the comment says the relay needs Rust sources only.
+- Findings: Useful context-size and privacy safeguard, but ignored paths may contain required inputs in another project. This file does not identify the Dockerfile or prove the relay has no dependency on excluded content.
+- RustChunk relevance: Moderate for reducing build context and preventing local/game data from being uploaded; RustChunk's build inputs may differ.
+- 1.20.1 implications: No game semantics. Confirm user-owned 1.20.1 files and test fixtures are not required inside any Docker context before copying these exclusions.
+- Decision: Adaptable as a Docker hygiene pattern; rewrite the paths for RustChunk's actual build.
+- Dependencies / cross-references: Dockerfile and relay build; target/; .local/; node_modules; benchmarks; packs; mods.
+- Follow-up checks: Locate all Docker invocations; build from a clean context with ignored paths absent; confirm user assets are neither required nor included.
+- RustChunk implementation mapping: Build/deployment tooling only; no game crate or Android runtime mapping.
+- Evidence required before adoption: Successful clean Docker build and a context audit showing all required source/manifests/generated files remain available while private game data is excluded.
+- Completion state: Full source review completed; no Docker image was built.
+
+### 143. .gitattributes
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 585f03f060b9faa24a5625f663c43497ca049f62.
+- Size: 12 lines.
+- Coverage: lines 1–12, complete.
+- Purpose: Enforces LF line endings for byte-compared generated documentation, CSS and Rust source; marks generated Rust files for GitHub language statistics.
+- Implementation / logic: Applies text/eol=lf to selected paths and patterns, and linguist-generated to generated Rust outputs.
+- Findings: Prevents Windows autocrlf from creating false generated-file diffs. The exact path list does not prove all generated files are covered or that the generators are deterministic.
+- RustChunk relevance: Useful for consistent generated protocol/resource tables and clean cross-platform diffs, especially on Windows.
+- 1.20.1 implications: Version-independent source-control behavior; apply it to RustChunk's actual 1.20.1 generated artifacts, not Starling paths.
+- Decision: Adaptable; rewrite the path list for RustChunk generators and generated outputs.
+- Dependencies / cross-references: Git core.autocrlf; generated mod API files; theme tokens; command/API docs; associated generators and check modes.
+- Follow-up checks: Inventory generated outputs; test generator checks on Windows and Linux; avoid marking hand-maintained source as generated.
+- RustChunk implementation mapping: Repository configuration for generated protocol tables, registries and API files; no runtime mapping.
+- Evidence required before adoption: Windows/Linux checkout test with identical generated bytes and passing generator check on both platforms.
+- Completion state: Full source review completed; no cross-platform checkout or generator test was run.
+
+### 144. .githooks/pre-commit
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: abc64ac4e8daa0f4a46fa60e501dffeb5607f403.
+- Size: 12 lines.
+- Coverage: lines 1–12, complete.
+- Purpose: Pre-commit hook that finds a working Python 3 executable and runs the public-tree checker.
+- Implementation / logic: Tries python3, python, then py using a Python-version check; replaces itself with tools/check_public_tree.py on the first working interpreter; exits with an error if none is found.
+- Findings: Handles the Windows Store python3 stub and multiple Python command names. It only applies when hooks are installed and enabled; hooks can be bypassed, so CI is still required. The checker behavior is outside this wrapper.
+- RustChunk relevance: Useful local protection against committing private game assets, secrets and build products.
+- 1.20.1 implications: The checker policy must explicitly exclude user-owned 1.20.1 binaries/assets and prepared local files.
+- Decision: Adaptable as a local safeguard, not sufficient as sole enforcement.
+- Dependencies / cross-references: tools/check_public_tree.py; Python 3; Git hook installation/configuration; public-tree policy.
+- Follow-up checks: Inspect the checker and hook installer; test python3/python/py fallback, missing Python, executable mode and bypass behavior.
+- RustChunk implementation mapping: Repository developer workflow only; optionally installed by a RustChunk setup script.
+- Evidence required before adoption: Windows/Linux hook tests, rejection tests for private game data/secrets, and equivalent required CI checks.
+- Completion state: Full hook-source review completed; hook and checker were not executed.
+
+### 145. .githooks/pre-push
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 375b535c0f6415f27b2524bf211b2e4d4b840ad4.
+- Size: 12 lines.
+- Coverage: lines 1–12, complete.
+- Purpose: Pre-push hook that runs the public-tree checker in its pre-push mode.
+- Implementation / logic: Uses the same python3/python/py fallback as pre-commit, then executes tools/check_public_tree.py with --pre-push; errors if Python 3 cannot be found.
+- Findings: Adds a second local checkpoint before publishing. It shares the installation and bypass limitations of all local Git hooks; exact pre-push behavior is implemented by the checker, not this file.
+- RustChunk relevance: Useful to prevent accidental publication of private Minecraft data and local build outputs.
+- 1.20.1 implications: The protected-file policy should cover user-owned 1.20.1 assets and prepared resources; no protocol or gameplay behavior is present.
+- Decision: Adaptable as a local pre-push safeguard; CI must independently enforce the policy.
+- Dependencies / cross-references: tools/check_public_tree.py --pre-push; Python 3; Git hook setup; public-tree policy.
+- Follow-up checks: Inspect the checker's pre-push branch; test allowed/rejected file classes; verify CI catches the same violations when hooks are bypassed.
+- RustChunk implementation mapping: Repository workflow only; no production crate.
+- Evidence required before adoption: Supported-OS hook tests and CI tests proving prohibited game files/secrets cannot be pushed through a hook bypass.
+- Completion state: Full hook-source review completed; no hook or push test was executed.
+
+### 146. .github/actionlint.yaml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: af951fe125aacb21b2a7227da9e08d4cf61ce4f6.
+- Size: 4 lines.
+- Coverage: lines 1–4, complete.
+- Purpose: Configures actionlint's recognized self-hosted-runner labels for a maintainer Mac mini.
+- Implementation / logic: Declares the horizon-game and ludovics-mac-mini labels under the self-hosted-runner configuration key.
+- Findings: Lint configuration only; it does not provision runners or secure them. Its comment says the runner holds the maintainer's Minecraft files, making runner trust and workflow routing security-sensitive.
+- RustChunk relevance: Low unless RustChunk introduces self-hosted GitHub Actions runners; otherwise GitHub-hosted runners avoid this extra boundary.
+- 1.20.1 implications: Never schedule untrusted fork code on a runner containing local 1.20.1 files, credentials or signing material.
+- Decision: Reference-only unless a self-hosted runner is introduced; rewrite labels and security assumptions.
+- Dependencies / cross-references: actionlint; workflows using runs-on labels; GitHub runner configuration and access policy.
+- Follow-up checks: Validate the config with the chosen actionlint version; inspect workflow triggers and runner groups before adding private runners.
+- RustChunk implementation mapping: Optional CI lint configuration only; no client code mapping.
+- Evidence required before adoption: Passing actionlint validation and a threat model proving fork PRs cannot execute on runners with private game files or secrets.
+- Completion state: Full configuration review completed; actionlint and runner behavior were not tested.
+
+### 147. .github/CODEOWNERS
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 5567eb184c61306a7e646e99bf03dd4d4c50353b.
+- Size: 17 lines.
+- Coverage: lines 1–17, complete.
+- Purpose: Assigns a maintainer as code owner for workflow, CI/release, signing, update/download and packaging paths.
+- Implementation / logic: Uses a broad .github rule and explicit paths for CI scripts, release training, signing, update server, launcher signature/backend/link files, Cargo manifests and packaging.
+- Findings: A useful ownership boundary for sensitive supply-chain code. The file comment explicitly says code-owner review applies only once branch protection requires it; CODEOWNERS alone does not enforce review or show whether bypass is possible.
+- RustChunk relevance: High for protecting signing, update, resource acquisition and Android packaging logic from unreviewed changes.
+- 1.20.1 implications: Include version-pinned resource acquisition, auth/session, package signing, native loading and build/release automation in the RustChunk sensitive path inventory.
+- Decision: Adaptable ownership pattern; rewrite paths/reviewers and enable matching protected-branch rules.
+- Dependencies / cross-references: GitHub CODEOWNERS syntax; branch protection/rulesets; tools/ci/protect_pipeline.sh; docs/security.md; release/updater paths.
+- Follow-up checks: Audit coverage of every sensitive RustChunk path; verify reviewer access; inspect branch rules, required approvals and administrator bypass.
+- RustChunk implementation mapping: Repository governance for resource verification, auth, release, Android packaging and future native-extension boundaries; no runtime dependency.
+- Evidence required before adoption: Active protected-branch policy, a test PR requiring owner approval, complete sensitive-path coverage and reviewer succession plan.
+- Completion state: Full CODEOWNERS review completed; branch-protection enforcement was not inspected.
+
+### 148. .github/ISSUE_TEMPLATE/bug_report.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 1c0aa78a7cc60a1ff30d62c69e361bc56d7db834.
+- Size: 54 lines.
+- Coverage: lines 1–54, complete.
+- Purpose: Structured player bug report capturing reproduction, phone model, Android/version context, feature area and logs.
+- Implementation / logic: Requires the report description and phone model; offers Android and Starling version inputs, a dropdown for setup/singleplayer/server/shaders/resource packs/mods/touch controls, and log attachment guidance for latest, previous and rotated logs.
+- Findings: Device and log context helps reproduce mobile problems. Android/version fields are optional, and logs can contain account, server or filesystem information; the form has no redaction/privacy warning of its own.
+- RustChunk relevance: High for reproducing GPU-, device-, chunk- and input-related failures on Android.
+- 1.20.1 implications: Ask for RustChunk build and Minecraft 1.20.1 environment separately; request mod-loader/mod-list details only when relevant to the later milestone.
+- Decision: Adaptable issue-intake pattern; rewrite labels, log path, supported feature list and privacy guidance.
+- Dependencies / cross-references: GitHub issue forms; Android log location/rotation; diagnostics redaction/export; release version.
+- Follow-up checks: Verify actual log path and rotation; inspect redaction; test required/optional form behavior and attachment privacy.
+- RustChunk implementation mapping: Repository bug-triage form mapped to device, renderer, chunk, network and Android issue categories; no runtime module.
+- Evidence required before adoption: Test submissions, confirmed log path, verified redaction/retention and privacy review for session/server data.
+- Completion state: Full form-source review completed; no live issue or log-redaction test was performed.
+
+### 149. .github/ISSUE_TEMPLATE/config.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: c24e7816f4876a8d172ddf0645e97ee50e1e472f.
+- Size: 6 lines.
+- Coverage: lines 1–6, complete.
+- Purpose: Keeps blank issues enabled and routes desktop/shared-game issues to Horizon's repository.
+- Implementation / logic: Sets blank_issues_enabled to true and defines a single contact link with its destination and explanation.
+- Findings: Simple issue routing can separate Android-specific and shared-game ownership, but the Horizon URL is Starling-specific and should not be copied into RustChunk without a real relationship.
+- RustChunk relevance: Useful only if RustChunk later separates core and Android issue ownership; otherwise one tracker is simpler.
+- 1.20.1 implications: Route issues to the team actually responsible for the 1.20.1 client; no game-version behavior is implemented here.
+- Decision: Adaptable issue-routing pattern; existing destination is not reusable as-is.
+- Dependencies / cross-references: GitHub issue-form config; shared core/Android ownership; external issue tracker.
+- Follow-up checks: Decide whether multiple trackers are needed; verify destinations and preserve a private route for security reports.
+- RustChunk implementation mapping: GitHub repository configuration only; no runtime code mapping.
+- Evidence required before adoption: Confirmed ownership split, working destination URLs and an end-to-end report-routing test.
+- Completion state: Full configuration review completed; no live routing test was performed.
+
+### 150. .github/ISSUE_TEMPLATE/native-build.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: f98b500a428848fb48516388fee38e4f6ba71f9e.
+- Size: 25 lines.
+- Coverage: lines 1–25, complete.
+- Purpose: Issue form requesting a Starling native-mod build for a specified Starling version and list of native-mod identifiers.
+- Implementation / logic: Provides an explanation that a submitted request starts a build, then requires a version and space-separated mod IDs; a separate workflow consumes the fields.
+- Findings: The form is only an input surface; it does not validate identifiers, authorize code or establish trust. The format and workflow are Starling-native-mod-specific.
+- RustChunk relevance: None for the vanilla 1.20.1 first milestone. It must not be mistaken for Forge mod support.
+- 1.20.1 implications: Forge is deferred; this form does not implement Forge or Java mod compatibility.
+- Decision: Unnecessary for the current vanilla client; future reference only if an independently designed native-extension service is approved.
+- Dependencies / cross-references: .github/workflows/native-mods.yml; native-mods/; docs/starling-native-mods.md; GitHub issue forms.
+- Follow-up checks: No adoption now. For any future extension service, inspect trust, sandboxing, supported ABI/version matrix and artifact verification.
+- RustChunk implementation mapping: No current runtime/UI mapping; possible future developer request interface only after an extension system is designed.
+- Evidence required before adoption: Approved threat model, vetted source allowlist, isolated reproducible builds, signed artifacts, compatibility matrix and explicit user consent.
+- Completion state: Full form-source review completed; no issue was submitted or build requested.
+
+### 151. .github/pull_request_template.md
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 8ca6fe2f50fbb91faccd29f7ff83bc090d800d92.
+- Size: 40 lines.
+- Coverage: lines 1–40, complete.
+- Purpose: PR checklist for rationale, change type, vanilla reference, external code provenance, self-check evidence and screenshots.
+- Implementation / logic: Prompts for parity/bug/performance/feature/tooling/docs classification; asks for vanilla classes/methods and harness, exact external repository commit and license details, pr_ready output and before/after screenshots where visible. It also asks AI agents to disclose authorship and requests maintainer edit permission.
+- Findings: Good review and provenance prompts, but checkboxes are not enforcement. The 26.3 parity target and script names are version-specific, and a self-check block can be asserted without CI validation.
+- RustChunk relevance: High for traceable changes, license review, test evidence and visual regression.
+- 1.20.1 implications: Replace 26.3 references with a pinned 1.20.1 oracle; Forge-specific labels should wait for the deferred Forge phase.
+- Decision: Adaptable PR process; rewrite version-specific fields and make required checks enforceable in CI.
+- Dependencies / cross-references: CONTRIBUTING.md; tools/pr_ready.py; tools/rea_vanilla.py; parity harness; license allowlist; GitHub labels.
+- Follow-up checks: Inspect PR-ready script and label automation; determine which fields are actually validated; review fork PR and screenshot privacy behavior.
+- RustChunk implementation mapping: Repository review workflow covering protocol, world, renderer, Android, assets and future mod code; no runtime module.
+- Evidence required before adoption: A test PR proving version-specific references, provenance and CI results are validated rather than merely requested.
+- Completion state: Full template review completed; no PR or self-check workflow was executed.
+
+### 152. .github/release-line.txt
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 3b04cfb60da13a716867848ebeb2191a164887d9.
+- Size: 2 lines.
+- Coverage: lines 1–2, complete.
+- Purpose: Stores a single release-line value, currently 0.2.
+- Implementation / logic: Plain-text marker with one value; this file contains no parser or definition of the value's meaning.
+- Findings: The value alone does not show whether it means an application release line, compatibility channel, protocol generation or another selector. Assigning semantics without tracing consumers would be guesswork.
+- RustChunk relevance: Potentially useful only if RustChunk has a separate release-line concept; it must not be confused with Minecraft 1.20.1.
+- 1.20.1 implications: No demonstrated game-version meaning. Keep Minecraft version, client release and release channel separate if all are needed.
+- Decision: Undetermined pending consumer tracing; do not copy the value yet.
+- Dependencies / cross-references: Any release/build scripts, workflow expressions, update metadata or docs that read this path; none is established by this file alone.
+- Follow-up checks: Search the pinned tree for references to this path; inspect parser, validation, release docs and migration behavior.
+- RustChunk implementation mapping: No module assigned; possible release automation metadata only if an actual consumer and requirement are found.
+- Evidence required before adoption: Identified consumers, documented semantics, validation/default behavior and a release-pipeline test showing the effect of changing the value.
+- Completion state: Full file review completed; consumer tracing and release automation were not run.
+
+### 153. .github/trusted-reviewers.txt
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 7513add1f64b451e1089b40c82f37608756d04d2.
+- Size: 11 lines.
+- Coverage: lines 1–11, complete.
+- Purpose: Allowlist of GitHub logins for nightly-hold selection and issue/PR triage commands.
+- Implementation / logic: Lists one login per line with comments recording who added it and when; comments define a paused marker to suspend listed reviewers while keeping the maintainer's own commands available.
+- Findings: A simple revocable allowlist, but its security depends on consuming scripts correctly enforcing membership and on protected review for changes. This file does not implement identity verification, parsing, authorization or audit logging.
+- RustChunk relevance: Only relevant if RustChunk adds repository moderation commands; it is not a Minecraft player/account allowlist.
+- 1.20.1 implications: No gameplay or protocol impact. Keep automation identities distinct from Minecraft accounts and server operator permissions.
+- Decision: Reference-only for possible future repository moderation tooling; no client need.
+- Dependencies / cross-references: docs/release-flow.md; tools/ci/nightly_set.py; tools/ci/triage_command.py; CODEOWNERS; GitHub issue/PR permission scopes.
+- Follow-up checks: Inspect the consumer scripts for exact matching, bot handling, pause/revoke behavior and audit output; verify this file is owner-protected.
+- RustChunk implementation mapping: Optional repository automation config only; never part of Android app or game login.
+- Evidence required before adoption: Allow/deny/paused/revoked identity tests, least-privilege tokens, protected changes and auditable command logs.
+- Completion state: Full allowlist review completed; consumer scripts and GitHub permission enforcement were not run.
+
+### 154. .github/workflows/cancel-on-close.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 28343115f3580a9d63a0363bdc6ca5a6b37a6530.
+- Size: 32 lines.
+- Coverage: lines 1–32, complete.
+- Purpose: Cancels queued or running workflow runs for a pull request after it is closed or merged.
+- Implementation / logic: Uses pull_request_target on closed events with actions:write; checks out no source and runs no PR code. It queries unfinished statuses, filters by branch and head repository, de-duplicates run IDs and best-effort cancels them.
+- Findings: Avoiding checkout/execution is an important pull_request_target mitigation. Matching both branch and head repository avoids collisions from same-named branches in different forks. The API request asks for at most 100 runs per status, so unusually large result sets may be incomplete.
+- RustChunk relevance: Useful for freeing CI capacity from stale PR jobs, especially expensive Android/parity runs.
+- 1.20.1 implications: No game semantics; ensure cancellation targets obsolete 1.20.1 jobs without affecting unrelated workflows or branches.
+- Decision: Adaptable CI-cost control, subject to security and pagination validation.
+- Dependencies / cross-references: GitHub pull_request_target; Actions API; gh CLI; pull-request head ref/repository; actions:write permission.
+- Follow-up checks: Review expression/shell handling and pagination; test same-repo and fork PRs with colliding branch names; confirm cancellation scope.
+- RustChunk implementation mapping: GitHub CI automation only; no shipped game code.
+- Evidence required before adoption: Threat-model review, least-privilege permission confirmation, fork/collision integration tests and proof only intended PR runs are cancelled.
+- Completion state: Full workflow-source review completed; no workflow dispatch or cancellation was performed.
+
+### 155. .github/workflows/ci.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 84c4414e59f859b11671ab8cbc0f69a39de2e1b4.
+- Size: 97 lines.
+- Coverage: lines 1–97, complete.
+- Purpose: General CI for selected branch pushes and PRs, covering public-tree hygiene, Python research tooling, Rust formatting, lint and core tests.
+- Implementation / logic: Triggers on selected branches, PR changes and manual dispatch; cancels superseded PR runs; disables telemetry in tests; selects hosted or restricted self-hosted runners; detects Rust changes; checks public-tree files and PR ranges; runs Python tests, installs Rust plus system headers, caches dependencies, then runs fmt, Clippy and workspace library/binary/integration/doc tests.
+- Findings: Strong layered CI with private-game-file protection and fork PR isolation from self-hosted runners. Rust checks may be skipped when change detection says no Rust changed, while Python and public-tree checks still run. This workflow does not itself run vanilla parity, Android APK release builds or device tests. Action references use version tags, not immutable commit SHAs.
+- RustChunk relevance: Very high as a base CI pattern: change detection, reproducible lint/test gates, private-data exclusion and split release/device testing.
+- 1.20.1 implications: Rewrite branch/path triggers and add 1.20.1 protocol, NBT, chunks, renderer and server-interoperability parity gates. Passing general CI is not proof of 1.20.1 compatibility.
+- Decision: Adaptable as a CI foundation; rewrite triggers, scripts, runner policy, caches and version-specific test coverage.
+- Dependencies / cross-references: tools/ci/rust_changes.py; tools/check_public_tree.py; tests/; Cargo workspace; rustfmt; Clippy; Rust tests; telemetry config; Android and parity workflows.
+- Follow-up checks: Inspect change detection for missed inputs; verify other workflows run parity and APK/device tests; review action pinning and self-hosted runner protections; verify telemetry stays disabled in tests.
+- RustChunk implementation mapping: Workspace CI for host-side 1.20.1 protocol/world/render tests; keep Android APK and physical-device tests in separate jobs.
+- Evidence required before adoption: CI tests for Rust and non-Rust changes; fork PR isolation; private-file rejection; passing 1.20.1 fixtures/parity; Android build and device gates for release candidates.
+- Completion state: Full workflow-source review completed; no workflow run, Cargo command, CI check or APK build was performed.
+
+### 156. .github/workflows/claim-command.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 9c6ddfc290dbd8682a9b3f93fddfdb74bfcf9b73.
+- Size: 81 lines.
+- Coverage: lines 1–81, complete.
+- Purpose: Handles /claim and /unclaim issue comments and periodically releases old claims without a linked open PR.
+- Implementation / logic: Triggers on issue comments, schedule and manual dispatch; restricts command execution to the canonical Horizon repo; ignores bot comments; serializes by issue number; sparsely checks out main scripts/list; passes user comment data through environment variables; grants issue-write permission for claim/release operations.
+- Findings: Runs trusted main-branch scripts rather than PR code and avoids interpolating comment text into shell source. Actual command parser, reviewer authorization, linked-PR detection and stale-age logic live in Python scripts not reviewed here. Prefix filtering in YAML is not proof of secure parsing.
+- RustChunk relevance: Low for the client; optional contributor coordination only if issue traffic warrants it. It must not affect in-game permissions.
+- 1.20.1 implications: No game behavior. Keep repository moderation separate from Minecraft authentication and server operator permissions.
+- Decision: Unnecessary for the vanilla client; possible future repository automation after script review.
+- Dependencies / cross-references: tools/ci/claim_command.py; tools/ci/nightly_set.py; .github/trusted-reviewers.txt; GitHub issue-comment/schedule events and issue APIs.
+- Follow-up checks: Inspect parser and authorization; test malformed prefixes, bots, forks, duplicate claims, stale claims with/without PRs and API rate limits.
+- RustChunk implementation mapping: No shipping module; optional GitHub contributor workflow only.
+- Evidence required before adoption: Parser/authorization tests, minimum token scopes, audit trail, abuse/rate-limit handling and protection from releasing active claims.
+- Completion state: Full workflow-source review completed; called scripts and live GitHub behavior were not run.
+
+### 157. .github/workflows/mod-registry.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 0f252bb68206c90800fffe8a74b167c8492915de.
+- Size: 35 lines.
+- Coverage: lines 1–35, complete.
+- Purpose: Dedicated CI for the Horizon mod-registry workspace when its crates or shared mod checks change.
+- Implementation / logic: Runs on main pushes and PRs touching the mod registry, shared mods crate or workflow; installs stable Rust with fmt/Clippy; caches the registry workspace; runs locked formatting, lint and tests.
+- Findings: Isolating a small workspace reduces unrelated CI work, but path filters must include all inputs that affect it. This does not build native mods or prove Minecraft mod compatibility.
+- RustChunk relevance: Potentially useful if RustChunk later has a separate resource/mod metadata service; not required for the vanilla client.
+- 1.20.1 implications: A future registry must distinguish data packs, resource packs, Forge mods and any Rust extension format, and identify exact 1.20.1 compatibility. This workflow establishes none of those.
+- Decision: Adaptable CI isolation pattern; the current mod-registry feature is unnecessary for the first milestone.
+- Dependencies / cross-references: crates/horizon-mod-registry; crates/horizon-mods; Cargo.lock; rustfmt; Clippy; test suite; GitHub path filters.
+- Follow-up checks: Inspect manifests and indirect inputs; test path-filter coverage; verify Android dependencies if this service is ever shipped on-device.
+- RustChunk implementation mapping: Future optional metadata/mod service CI only; no first-milestone game crate.
+- Evidence required before adoption: Defined 1.20.1 registry schema and ownership, path-trigger tests, reproducible locked builds and explicit compatibility tests.
+- Completion state: Full workflow-source review completed; no registry build, lint or test was run.
+
+### 158. .github/workflows/mojang-republish.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 11c68c4437687e39eeadad92a2c7f98deca02ca0.
+- Size: 34 lines.
+- Coverage: lines 1–34, complete.
+- Purpose: Hourly detector for Mojang version-manifest republishing that changes pinned metadata not yet recorded in research-lock.json.
+- Implementation / logic: Runs hourly or manually with a dry-run input; only runs in the canonical Horizon repository; grants contents:read and issues:write; invokes a Python checker to inspect the public manifest and optionally print proposed issue changes.
+- Findings: Useful supply-chain alerting pattern for detecting upstream metadata changes that may break preparation. Behavior depends on the Python script, which was not reviewed; this workflow does not automatically update pinned hashes or establish artifact authenticity.
+- RustChunk relevance: High if RustChunk pins Mojang manifests or 1.20.1 downloads; alerts can protect reproducible acquisition inputs.
+- 1.20.1 implications: Pin the exact 1.20.1 metadata and downloaded file hashes; investigate republished metadata before accepting any change.
+- Decision: Adaptable supply-chain alert; rewrite checks around RustChunk's pinned 1.20.1 acquisition manifest.
+- Dependencies / cross-references: tools/ci/mojang_republish.py; research-lock.json; Mojang public version manifest; GitHub issues API; workflow_dispatch input.
+- Follow-up checks: Inspect hash/URL comparison, duplicate issue suppression, malformed manifest behavior and dry-run equivalence; identify all 1.20.1 pinned artifacts.
+- RustChunk implementation mapping: Repository resource-preparation provenance workflow only; not part of runtime launch.
+- Evidence required before adoption: Tests for unchanged/republished/missing/malformed entries; exact hash comparison; dry-run parity; issue deduplication and least-privilege permissions.
+- Completion state: Full workflow-source review completed; no external manifest query or script execution was performed.
+
+### 159. .github/workflows/native-hook-stamp.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: 3ca07a4732ac8019fbfbacfe627ec29a04d5d10d.
+- Size: 56 lines.
+- Coverage: lines 1–56, complete.
+- Purpose: Opens an automation PR assigning numbers to pending native-hook API fragments after they land on main.
+- Implementation / logic: Triggers on main changes to hook fragment JSON; checks out main with history; runs a stamping script; exits if no diff; configures the GitHub bot; creates/refreshes an automation branch; commits tracked changes; pushes with force-with-lease and opens a PR. Runs only in the canonical Horizon repository with contents and pull-request write permissions.
+- Findings: Makes generated numbering reviewable and separates it from the fragment submission. Correctness depends on the fragment schema and stamping script, neither reviewed here. Force-with-lease helps branch safety but race behavior and automation ownership still need tests.
+- RustChunk relevance: None for vanilla gameplay. Could be a pattern for a future versioned Rust-native extension API.
+- 1.20.1 implications: Starling native-hook IDs are not Forge APIs or Minecraft packet IDs. Any future extension API must have its own identifiers and compatibility contract.
+- Decision: Unnecessary in the current milestone; adaptable only if a future extension API requires generated IDs.
+- Dependencies / cross-references: tools/stamp_native_hooks.py; tools/native-hook-fragments/*.json; hook API schema; GitHub Actions bot; automation branch/PR API.
+- Follow-up checks: Inspect schema and numbering algorithm; test deterministic order, duplicate/collision detection, idempotence, branch races and generated-output checks.
+- RustChunk implementation mapping: No current runtime module; possible future devtools workflow after an extension ABI is defined.
+- Evidence required before adoption: Versioned API schema, deterministic generator tests, collision tests, protected automation branch and reviewable generated-output PR.
+- Completion state: Full workflow-source review completed; stamping script and workflow were not executed.
+
+### 160. .github/workflows/native-mods.yml
+- Source repository/ref: starling-client/starling / pinned snapshot.
+- Source SHA: d7d5bdf5d054c42c98e9f856252169badd6731bb.
+- Size: 280 lines.
+- Coverage: lines 1–280, complete.
+- Purpose: Builds Starling game-library variants with selected native mods and publishes shared libraries plus metadata as release assets.
+- Implementation / logic: Accepts issue-form or manual requests; reads version/mod identifiers from environment; normalizes IDs, validates version syntax and tag existence, checks each requested mod manifest, selects Azure VM or hosted runner, checks out tooling/source without persisted credentials, installs Android/Rust/Java build tools, builds ARM64 library variants, uploads artifacts and publishes a prerelease. Separate jobs start/deallocate the VM and attempt to keep it alive for queued builds.
+- Findings: This is a privileged native-code build-and-publish pipeline, not evidence of Forge support. It compiles selected code into a library players download; trust, build isolation, artifact integrity/signing, scoped permissions and VM cleanup are critical. The called packaging script, client downloader, signature checks and VM failure paths were not examined or executed. The dated VM transition in comments does not prove current cloud configuration.
+- RustChunk relevance: Low for the vanilla base client and high-risk for any later native extension distribution. Only isolated build-orchestration concepts may be useful; Starling's native-mod format/library replacement is not a Forge adapter.
+- 1.20.1 implications: No demonstrated 1.20.1/Forge compatibility. Do not load arbitrary native code in the first milestone. A later extension system needs its own ABI, exact build binding, signatures and explicit trust.
+- Decision: Unnecessary for the current vanilla milestone; retain as security/CI reference only if a separately approved native-extension system is designed.
+- Dependencies / cross-references: native-mods/ and prebuilt.txt; per-mod mixin manifests; packaging/android/native_build.sh; game/native_builds.rs; docs/starling-native-mods.md; Android NDK; cargo-ndk; Java 25; Azure OIDC/VM; GitHub Actions artifacts/releases.
+- Follow-up checks: Inspect native_build.sh, build metadata and client downloader; verify hashes/signatures, source allowlist, tag immutability, reproducibility, artifact retention and VM cleanup on cancellation/failure.
+- RustChunk implementation mapping: No current shipping component. If an extension system is approved later, reuse only high-level isolated build orchestration; independently design the format, loader, ABI, trust and signed artifact protocol.
+- Evidence required before adoption: Formal extension threat model, reproducible source-to-artifact builds, reviewed allowlist, signed and client-verified artifacts, version/ABI matrix, isolated runners and tested cleanup/revocation.
+- Completion state: Full workflow-source review completed; no workflow dispatch, native build, publication, VM operation, signature check or client download was performed.
+
+## Batch checkpoint — entries 141–160 — 2026-11-18
+
+- Completed full source review of entries 141–160 from pinned Starling tree snapshot 5432370d573642041585c69b40fb045b27133488; all 20 paths and blob SHAs were checked against that tree.
+- Source files ranged from 2 to 280 lines; every file was read in full and no multi-chunk files were needed.
+- Every new entry uses the 15-part standard, including explicit RustChunk implementation mapping and evidence required before adoption.
+- Main findings: the parity-ledger process is valuable only after rebuilding a 1.20.1 oracle; Git hooks/public-tree checks are useful but require CI; CODEOWNERS/trusted reviewers need protected GitHub permissions; general CI patterns are adaptable but do not prove game parity; Starling native-mod workflows are out of scope for the vanilla milestone and are not Forge support.
+- The release-line value remains undetermined pending consumer tracing. The native-mod build pipeline is a security-sensitive future reference, not a current implementation candidate.
+- Tests/checkers/workflows were read but not executed. No Cargo build, actionlint run, Docker build, hook test, native-mod build, artifact publication, Azure VM operation, RustChunk gameplay change, Android APK build or device test was performed.
