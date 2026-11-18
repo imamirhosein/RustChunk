@@ -14,7 +14,8 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 
 - Use the pinned Starling commit recorded by the audit, not the moving default branch.
 - Continue in deterministic source-tree path order from the last audited path.
-- A source path may appear only once in the audit. Skip paths already present in entries 1–800; do not give them a second audit number.
+- A source path may appear only once in the audit. Before selecting new files, build the skip set from every path already present in the current index (currently entries 1–1000); do not give a path a second audit number.
+- Corrective closure for entries 1–1000: six duplicate slots (631, 632, 633, 754, 762 and 766) were replaced with the six next unique paths after the former entry-1000 endpoint: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`. Those six files are already audited and must be skipped by future batches.
 - Each file must be inspected completely before moving on. For long files, read consecutive sections of at most 400 lines until the end of that file.
 - If a source file cannot be read completely, record the exact limitation and do not mark it as fully reviewed.
 
@@ -50,4 +51,4 @@ Before reporting a batch complete:
 - Re-read both files and verify numbering, path agreement, missing rows and duplicate rows.
 - Only then report the completed range and stop at the batch boundary.
 
-The next batch after 601–800 is **801–1000**.
+The next batch after 801–1000 is **1001–1200**.
