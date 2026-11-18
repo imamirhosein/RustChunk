@@ -997,947 +997,947 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `79faf6d241ae5ee171bae6688b4f128130b26e9c`
 - Size: 602 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates attack touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: دکمهٔ حمله (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to attack_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دکمهٔ حمله glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/attack.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 860. `crates/horizon-client/assets/touch/attack_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `38d3a7829ae1c095282b33af094e383041cbc755`
 - Size: 575 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: دکمهٔ حمله (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of attack.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دکمهٔ حمله glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/camera.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 861. `crates/horizon-client/assets/touch/camera.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `824d477a99cb3219f85e6db735658212aa8f0a49`
 - Size: 564 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates camera touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: دوربین (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to camera_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دوربین glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.g and stick_knob.png.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/camera_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 862. `crates/horizon-client/assets/touch/camera_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `3fea6e9509ffb522c36fe3a16029d38203e908f9`
 - Size: 583 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: دوربین (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to chat_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a گفت‌وگو glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/chat.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 863. `crates/horizon-client/assets/touch/chat.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `6ba3c6f61e32ad1afcbac8a427f9c8f863de5b6e`
 - Size: 550 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates chat touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: گفت‌وگو (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of chat.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a گفت‌وگو glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/command.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 864. `crates/horizon-client/assets/touch/chat_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a9ab6257a24fd6e2ec2205fa94bf20b05c559221`
 - Size: 535 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: فرمان (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to command_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فرمان glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/command_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 865. `crates/horizon-client/assets/touch/command.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ca8a7a102cce924ff264e318947c1a8b3b650388`
 - Size: 616 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates command touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: فرمان (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of command.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فرمان glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_apple.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 866. `crates/horizon-client/assets/touch/command_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `386626cf3e69fcf187f30a067aa193eab78dc0bf`
 - Size: 624 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: سیب سفارشی (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_apple.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a سیب سفارشی glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_apple_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 867. `crates/horizon-client/assets/touch/custom_apple.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `34ff5bcfba7ed2f5c0bdfa14f35077e9d97fe5c8`
 - Size: 522 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: پس‌زمینهٔ خالی کنترل سفارشی (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_blank_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پس‌زمینهٔ خالی کنترل سفارشی glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is an intentionally blank/customizable tile. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_check.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 868. `crates/horizon-client/assets/touch/custom_apple_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b4e36d0dc91749fa7d5219d127fd815606acc041`
 - Size: 505 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: علامت تأیید (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_check_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a علامت تأیید glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_check_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 869. `crates/horizon-client/assets/touch/custom_blank.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `522651c96acaf48c2a0e94604a38c162ce66ff08`
 - Size: 601 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: علامت تأیید (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_check.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a علامت ضربدر glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_cross.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 870. `crates/horizon-client/assets/touch/custom_check.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e580d1c226adf447773355a1b2465280cffa897d`
 - Size: 598 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: علامت ضربدر (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_cross.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a علامت ضربدر glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_cross_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 871. `crates/horizon-client/assets/touch/custom_check_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ee5ec45cd3cd8c0927a7a23a715544dfd328ce0b`
 - Size: 579 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: تاج (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_crown_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a تاج glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_crown_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 872. `crates/horizon-client/assets/touch/custom_cross.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `647c6928c1610cd8894e361fd1d55a4968c5ae47`
 - Size: 570 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: تاج (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_crown.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a تاج glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_fire.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 873. `crates/horizon-client/assets/touch/custom_cross_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e4e8bd7d6f405e1e98589a9d1a724d4b57a3db9c`
 - Size: 566 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: آتش (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_fire_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a آتش glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_fire_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 874. `crates/horizon-client/assets/touch/custom_crown.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b8ba35dab5368346a27d14384a8b8b19412b4213`
 - Size: 449 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: پرچم (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_flag_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پرچم glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_flag.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 875. `crates/horizon-client/assets/touch/custom_crown_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `26bba25125bfe5dad894101d8224344b6817f4fc`
 - Size: 460 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: پرچم (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_flag.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پرچم glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_heart.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 876. `crates/horizon-client/assets/touch/custom_fire.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f88fc5c7bc9fd8324cdda295bcf401b3f5aa4fb9`
 - Size: 487 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: قلب (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_heart_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a قلب glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_heart_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 877. `crates/horizon-client/assets/touch/custom_fire_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `856cbc999e82a9054819fbb19922ccc8946a4cfd`
 - Size: 496 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: قلب (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_home_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a خانه glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_home.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 878. `crates/horizon-client/assets/touch/custom_flag.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f0b6a99efd9ec0f3438d57032e2b9ed13d45d045`
 - Size: 509 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: خانه (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_home.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a خانه glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_music.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 879. `crates/horizon-client/assets/touch/custom_flag_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f0616274106927cb8f7f6aff82046129931320bf`
 - Size: 504 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: موسیقی (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_music_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a موسیقی glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_music_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 880. `crates/horizon-client/assets/touch/custom_heart.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0fbeade3f9bb4d8f4e5ddfce89e1f4c06941e6c1`
 - Size: 540 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: موسیقی (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_music.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a موسیقی glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_pickaxe.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 881. `crates/horizon-client/assets/touch/custom_heart_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `443c392d8f2ca214cd3637a5e563b5a226ab7a96`
 - Size: 536 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: کلنگ (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_pickaxe.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a کلنگ glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_pickaxe_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 882. `crates/horizon-client/assets/touch/custom_home.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `9415e3d52f0335fec61d20ef50c551a8253a32e8`
 - Size: 513 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: افزودن (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_plus_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a افزودن glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_plus_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 883. `crates/horizon-client/assets/touch/custom_home_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `201aa268f0a344d80c707bca013f52148efd4446`
 - Size: 521 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: افزودن (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_plus.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a افزودن glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_potion.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 884. `crates/horizon-client/assets/touch/custom_music.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ab86a70d58c889b5b7b317575048a5e39801f2fb`
 - Size: 449 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: معجون (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_potion_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a معجون glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_potion_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 885. `crates/horizon-client/assets/touch/custom_music_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f196a8d868bd2bc63fb07adb05e60412cdcb9832`
 - Size: 467 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: سپر (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_shield_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a سپر glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_shield.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 886. `crates/horizon-client/assets/touch/custom_pickaxe.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `724b4e760953fe8170e3a033349902ee6bbd62db`
 - Size: 543 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: سپر (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_shield.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a سپر glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_skull.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 887. `crates/horizon-client/assets/touch/custom_pickaxe_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `2ef6b2696bdb7fc66b3ffa03b2617b84424338bc`
 - Size: 541 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جمجمه (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_skull_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جمجمه glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.b SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_skull_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 888. `crates/horizon-client/assets/touch/custom_plus.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `415511aa7c2af05b7c16af721d8773672b5509a4`
 - Size: 584 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جمجمه (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to custom_star_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a ستاره glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_star.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 889. `crates/horizon-client/assets/touch/custom_plus_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `7f7cc6d4cbef951080cb9784ed46e26679d47d3f`
 - Size: 550 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: ستاره (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of custom_star.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a ستاره glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/custom_star_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 890. `crates/horizon-client/assets/touch/custom_potion.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `696db28ebc5fabdd544f35d8bc196f4c6a8f1a0d`
 - Size: 532 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: اشکال‌زدایی (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to debug_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a اشکال‌زدایی glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/debug_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 891. `crates/horizon-client/assets/touch/custom_potion_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `01be75a85a46b9447ce405968cb1d7d40dc616ae`
 - Size: 511 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: اشکال‌زدایی (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of debug.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a اشکال‌زدایی glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_down.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 892. `crates/horizon-client/assets/touch/custom_shield.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `8a403456a5bde86d5918917848a284b2c87a699e`
 - Size: 483 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جهت پایین (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of dpad_down.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت پایین glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_down_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 893. `crates/horizon-client/assets/touch/custom_shield_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `244f6d16f2f659b3ae14033811d601986d43b907`
 - Size: 478 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جهت چپ (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to dpad_left_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت چپ glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_left_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 894. `crates/horizon-client/assets/touch/custom_skull.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ce5c65f575db8b2df6c6516b853929c0904d51ac`
 - Size: 485 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جهت چپ (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of dpad_left.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت چپ glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_middle.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 895. `crates/horizon-client/assets/touch/custom_skull_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `699a6d594e043850c547659e87a8e1023e6bb53d`
 - Size: 496 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: مرکز صفحه‌جهت (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to dpad_middle_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت راست glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_right.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 896. `crates/horizon-client/assets/touch/custom_star.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `269a0e50fa10f5679648bcb772920c1c20c29330`
 - Size: 542 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates custom-control icon, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جهت راست (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of dpad_right.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت راست glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_right_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 897. `crates/horizon-client/assets/touch/custom_star_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `aa0b91c2514aaf30b8af14091d618986e5616135`
 - Size: 533 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جهت بالا (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to dpad_up_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت بالا glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/dpad_up_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 898. `crates/horizon-client/assets/touch/debug.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `faad2881a263b93865b1780ed141090791d9608f`
 - Size: 558 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates debug touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: جهت بالا (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of dpad_up.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a جهت بالا glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/drop.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 899. `crates/horizon-client/assets/touch/debug_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0f629fb2140c3f61fad4a9c280632a0bfe001e2d`
 - Size: 535 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: انداختن آیتم (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to drop_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a انداختن آیتم glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/drop_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 900. `crates/horizon-client/assets/touch/dpad_down.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `391a6ed48699db000ab1fc2c1434f4477741b59f`
 - Size: 556 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates directional-pad asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: فهرست آیتم‌ها (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to inventory_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست آیتم‌ها glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/inventory.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 901. `crates/horizon-client/assets/touch/dpad_down_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `70dca324fc172dbbd8cb0a76792e1cfe25a4dabd`
 - Size: 567 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: فهرست آیتم‌ها (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of inventory.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست آیتم‌ها glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/jump.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 902. `crates/horizon-client/assets/touch/dpad_left.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `11a9c354a9f8ac02c118ffc3a9c5348bbf7a0cb8`
 - Size: 576 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates directional-pad asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: پرش (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to jump_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پرش glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/jump_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 903. `crates/horizon-client/assets/touch/dpad_left_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e33fd86923acb98ca87c656fcc11a8353cda2fc8`
 - Size: 571 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: پرش (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to offhand_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دست فرعی glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/offhand.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 904. `crates/horizon-client/assets/touch/dpad_middle.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `522651c96acaf48c2a0e94604a38c162ce66ff08`
 - Size: 601 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates directional-pad asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: دست فرعی (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of offhand.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دست فرعی glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pause.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 905. `crates/horizon-client/assets/touch/dpad_right.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `26d43a0159c9f44350e192e0ca878a58a77253d5`
 - Size: 611 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates directional-pad asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: مکث (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to pause_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مکث glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pause_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 906. `crates/horizon-client/assets/touch/dpad_right_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `1798cb3315d482b447bd40540bd0a4fa811ba31a`
 - Size: 597 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: مکث (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of pause.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مکث glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pick.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 907. `crates/horizon-client/assets/touch/dpad_up.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `295f1b96e997f22c2a475afc848780cc6c548d71`
 - Size: 574 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates directional-pad asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: انتخاب/برداشت (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of pick.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a انتخاب/برداشت glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pick_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 908. `crates/horizon-client/assets/touch/dpad_up_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0c58a3cb6df9322a0f7affcfe147747862ef043a`
 - Size: 574 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: فهرست بازیکنان (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to players_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست بازیکنان glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/players_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 909. `crates/horizon-client/assets/touch/drop.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a0c8530f60c8ad5472770d555dc671ecfe248d6a`
 - Size: 569 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates drop touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: فهرست بازیکنان (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of players.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست بازیکنان glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/sneak.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 910. `crates/horizon-client/assets/touch/drop_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `90d75c4edc457af91fa35fb5eade67e7e306bd70`
 - Size: 568 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: مخفی‌کاری/خم‌شدن (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to sneak_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مخفی‌کاری/خم‌شدن glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/sneak_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 911. `crates/horizon-client/assets/touch/inventory.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f106e135a0fc2a32c7861c118620577e40d12439`
 - Size: 573 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates inventory touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 48×48px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: پایهٔ جوی‌استیک (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to stick_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پایهٔ جوی‌استیک glyph; dimensions 48×48, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is the larger 48×48 joystick base. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/stick.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 912. `crates/horizon-client/assets/touch/inventory_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `718533f2cdbbc44174a1cbf0e3e4506b34bdcd5b`
 - Size: 577 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: دستهٔ جوی‌استیک (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to stick_knob_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دستهٔ جوی‌استیک glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/use.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 913. `crates/horizon-client/assets/touch/jump.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `5944b88fe417295285ad940b4b67ad4b02ed8f72`
 - Size: 588 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates jump touch-control asset, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: استفاده از آیتم (default state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to use_pressed.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a استفاده از آیتم glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
+- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
-- Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
+- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
+- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/use_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
+- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
+- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
 
 ### 914. `crates/horizon-client/assets/touch/jump_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `3438df2de9a62ba8ce29ec43c20ea5aeba89eccc`
 - Size: 573 bytes; PNG, line count not applicable
-- Coverage: Metadata only: source path, Git blob SHA and byte count; PNG binary/pixel data was not retrieved.
-- Purpose: Android touch-control PNG asset; its filename indicates pressed-state variant, but its visual appearance was not inspected.
-- Dependencies / cross-references: Path is under the Android touch-control asset directory; exact call site and image dimensions remain unverified.
-- Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
-- Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
-- RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
+- Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
+- Purpose: Android touch-UI asset: استفاده از آیتم (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
+- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of use.png. Exact runtime consumer still requires source-reference tracing.
+- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a استفاده از آیتم glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
+- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
+- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
 - Decision: **Metadata-only; do not approve reuse yet.**
 - 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
 - Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
@@ -3411,7 +3411,7 @@
 
 - Entries added: 200 unique paths (801–1000).
 - Text files read fully: 130.
-- PNG files metadata-only, NOT fully reviewed: 70.
+- PNG files retrieved and visually/binary-structure reviewed: 70 (69 at 24×24; stick.png at 48×48; all 8-bit RGBA).
 - Four prior paths were skipped during deterministic selection; none were counted twice.
 - All source SHAs and byte sizes are pinned to the Starling snapshot listed above.
 - No build, test, benchmark, APK, Forge, server or Android device execution was performed.
