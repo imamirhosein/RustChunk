@@ -1739,14 +1739,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source SHA: `f65082b645f15fbb73de046d0e1a459da7874087`.
 - Size: 497 bytes; 16 lines; complete file fetched.
 - Coverage: lines 1–16, complete.
-- Purpose: ریشه crate ورودی کلاینت؛ مشخص می‌کند لایه ورودی کدام subsystemها را ارائه می‌کند.
-- Implementation / logic: crate از ابتدا `forbid(unsafe_code)` را اعمال می‌کند و ماژول‌های clipboard، gamepad، input state، input mode، interaction input، key names، keybinds، keymapping، modifiers، mouse و window را public می‌کند. توضیح فایل می‌گوید horizon-client این ماژول‌ها را با مسیرهای قدیمی خود re-export می‌کند.
-- Findings: فایل صرفاً module surface و سیاست unsafe را تعریف می‌کند و خود هیچ event loop یا input mapping اجرا نمی‌کند. وابستگی‌های واقعی، backendها و تنظیمات در ماژول‌های فرزند هستند. ممنوعیت unsafe در این crate به dependencyهای خارجی یا crateهای دیگر گسترش ندارد.
-- RustChunk relevance: مرزبندی یک crate مستقل برای دریافت input و جدا کردن آن از gameplay و UI الگوی مفیدی است، به‌خصوص برای نگهداری backendهای Android و desktop.
-- 1.20.1 implications: معماری کلی مستقل از پروتکل Minecraft است؛ نام ماژول‌ها و APIهای Horizon را عیناً فرض نکن. RustChunk باید input abstraction کوچک و پلتفرم‌محور داشته باشد و بعد آن را به actionهای بازی متصل کند.
-- Decision: **ساختار crate قابل اقتباس؛ کد این فایل خودش صرفاً مرجع سازمان‌دهی است**.
+- Purpose: The client-input crate root; it specifies which subsystems the input layer exposes.
+- Implementation / logic: The crate applies `forbid(unsafe_code)` at its root and publicly exposes the clipboard, gamepad, input state, input mode, interaction input, key names, keybinds, keymapping, modifiers, mouse, and window modules. The file notes that `horizon-client` re-exports these modules under their legacy paths.
+- Findings: The file defines only the module surface and unsafe-code policy; it does not implement an event loop or input mapping. Actual dependencies, backends, and settings live in child modules. The unsafe-code prohibition in this crate does not extend to external dependencies or other crates.
+- RustChunk relevance: A separate input crate that is isolated from gameplay and UI is a useful pattern, particularly for maintaining Android and desktop backends.
+- 1.20.1 implications: The overall architecture is independent of the Minecraft protocol; do not assume Horizon's module names or APIs can be reused verbatim. RustChunk should define a small platform-oriented input abstraction and connect it to game actions.
+- Decision: **The crate structure is adaptable; this file itself is only an organizational reference.**
 - Dependencies / cross-references: `crates/horizon-client/Cargo.toml`, `client_lib.rs` re-exports, and child modules listed above.
-- Follow-up checks: public API هر ماژول، feature gates پلتفرمی و backendهای واقعی Android/desktop در فایل‌های بعدی همین نوبت بررسی شوند.
+- Follow-up checks: Review each module's public API, platform feature gates, and actual Android/desktop backends in the following files in this audit.
 - Completion state: complete source review; no tests or build were run.
 
 ### 82. `crates/horizon-client-input/src/input.rs`
@@ -1754,14 +1754,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source SHA: `f8b2c10b7f3576c5853274ffb09b25bad7a83621`.
 - Size: 3,690 bytes; 112 lines; complete file fetched.
 - Coverage: lines 1–112, complete.
-- Purpose: محاسبه جهت حرکت از کلیدهای چهارگانه، اعمال ضریب‌های حرکت و shortcut خروج سیستم‌عامل.
-- Implementation / logic: keyboard_direction برای forward/back/left/right impulseهای -1/0/1 می‌سازد و بردار قطری را normalize می‌کند. modify_input برای ورودی غیرصفر ضریب پایه 0.98 و سپس item-use و sneak multipliers را اعمال می‌کند. square_movement بردار را با فرمول Java-style محدودسازی سرعت normalize می‌کند و عمداً NaN را مانند Math.min منتشر می‌کند. is_quit_shortcut_down روی macOS از Super+Q و در بقیه سیستم‌ها از Alt+F4 استفاده می‌کند.
-- Findings: comment صریحاً مدل 26.3 را اعلام و sprint eligibility/pose/input lifecycle را خارج از scope می‌گذارد. حرکت صفر قبل از multipliers برمی‌گردد؛ NaN در Rust f32::min و Java Math.min رفتار متفاوت دارند و نویسنده آن را جبران کرده است. Tests فقط shortcut platform را بررسی می‌کنند؛ movement math tests در این فایل دیده نمی‌شود و هیچ تستی اجرا نشده است.
-- RustChunk relevance: جهت‌گیری کلیدها، diagonal normalization و movement scalar semantics جزء ورودی player و gameplay core هستند؛ منطق باید مستقل از winit و منبع event باقی بماند.
-- 1.20.1 implications: الگوریتم حرکت باید با LocalPlayer/Input 1.20.1 oracle شود؛ ضرایب حرکت، item use, sneak, riding و sprint ممکن است در نسخه هدف تفاوت داشته باشند. Shortcutهای desktop برای Android ضروری نیستند و باید از platform abstraction بیایند.
-- Decision: **بردار نرمال‌سازی و ایده multiplier قابل اقتباس؛ ضرایب و منطق lifecycle باید با 1.20.1 بازبینی شوند**.
+- Purpose: Computes movement direction from the four directional keys, applies movement multipliers, and detects the operating-system quit shortcut.
+- Implementation / logic: `keyboard_direction` creates -1/0/1 impulses for forward/back/left/right and normalizes diagonal vectors. `modify_input` applies a base multiplier of 0.98 to nonzero input, followed by item-use and sneak multipliers. `square_movement` normalizes the vector using a Java-style speed-clamping formula and deliberately propagates NaN in the same way as `Math.min`. `is_quit_shortcut_down` uses Super+Q on macOS and Alt+F4 on other systems.
+- Findings: The comment explicitly identifies the model as 26.3 and excludes sprint eligibility, pose, and input lifecycle from scope. Zero movement returns before multipliers are applied. Rust `f32::min` and Java `Math.min` differ for NaN, and the implementation compensates for this. Tests cover only platform quit shortcuts; no movement-math tests are present in this file, and no tests were run.
+- RustChunk relevance: Key direction, diagonal normalization, and movement-scalar semantics are part of player input and the gameplay core; this logic should remain independent of winit and the event source.
+- 1.20.1 implications: Compare the movement algorithm with a 1.20.1 `LocalPlayer`/`Input` oracle. Movement multipliers and item-use, sneak, riding, and sprint behavior may differ in the target version. Desktop quit shortcuts are not needed on Android and should come from the platform abstraction.
+- Decision: **The vector-normalization approach and multiplier concept are adaptable; the multiplier values and lifecycle logic must be reviewed against 1.20.1.**
 - Dependencies / cross-references: winit KeyCode/ModifiersState; LocalPlayer.modifyInput semantics; key event state provider; sprint/pose/riding lifecycle not implemented here.
-- Follow-up checks: مقایسه تابع movement input با vanilla 1.20.1؛ یافتن محل محاسبه item_use/sneaking؛ بررسی NaN/infinite input و تست‌های diagonal/analog controller.
+- Follow-up checks: Compare movement-input functions with vanilla 1.20.1; locate the item-use/sneaking calculations; inspect NaN/infinite input and add diagonal/analog-controller tests.
 - Completion state: complete source review; no tests or build were run.
 
 ### 83. `crates/horizon-client-input/src/input_mode.rs`
@@ -1769,14 +1769,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source SHA: `24dc84c50a2abe43ef0391c3f649c191ef2a7233`.
 - Size: 5,349 bytes; 148 lines; complete file fetched.
 - Coverage: lines 1–148, complete.
-- Purpose: تعیین mode ورودی Touch/Pad/KeyboardMouse و تشخیص keyboard فیزیکی Android در برابر virtual keyboard و کلیدهای سیستمی.
-- Implementation / logic: InputMode::first پلتفرم‌هایی را که touch ورودی اصلی است با Touch شروع می‌کند. after در گوشی با آخرین ورودی mode را عوض می‌کند، اما در touch-laptop بعد از نخستین لمس، حالت Touch را حفظ می‌کند. android_keyboard از Android keycode allowlist، device != virtual keyboard، scan_code != 0 و منبع غیر gamepad برای تشخیص تایپ فیزیکی استفاده می‌کند. held_modifiers با بررسی مجموعه کلیدهای فشرده، SHIFT/CONTROL/ALT/SUPER را بازسازی می‌کند؛ توضیح فایل می‌گوید Android modifier change را از winit دریافت نمی‌کند.
-- Findings: تشخیص فیزیکی بودن keyboard بر allowlist عددی Android keycodes و source/device metadata متکی است و با تغییر API/device drivers نیاز به اعتبارسنجی دارد. منطق mode روی touch-laptop و phone عمداً متفاوت است. held_modifiers state را از کلیدهای held محاسبه می‌کند؛ correctness به key-up/cancel/focus-loss event handling وابسته است. Tests برای mode transitions، physical-vs-virtual keyboard و modifier aggregation موجودند؛ اجرا نشده‌اند.
-- RustChunk relevance: مستقیم برای Galaxy/Android touchscreen، keyboard فیزیکی و gamepad مهم است؛ از mode detection می‌توان برای انتخاب touch overlay و جلوگیری از اشتباه گرفتن OS navigation keys با تایپ استفاده کرد.
-- 1.20.1 implications: مستقل از protocol، ولی باید در RustChunk Android backend بر اساس Android NDK/Java key event codes و winit integration نسخه مورد استفاده بازبینی شود. allowlist فعلی را بدون تأیید platform SDK کپی نکن؛ focus loss و key cancellation را در lifecycle سراسری مدیریت کن.
-- Decision: **طراحی mode switching و بازسازی modifier قابل اقتباس؛ Android keycode/source allowlist باید برای دستگاه‌های هدف validate شود**.
+- Purpose: Selects the Touch/Pad/KeyboardMouse input mode and distinguishes a physical Android keyboard from a virtual keyboard and system keys.
+- Implementation / logic: `InputMode::first` starts in Touch on platforms where touch is the primary input. On a phone, `after` switches modes according to the most recent input; on a touch laptop, it remains in Touch after the first touch. `android_keyboard` uses an Android keycode allowlist, `device != virtual keyboard`, `scan_code != 0`, and a non-gamepad source to detect physical typing. `held_modifiers` reconstructs SHIFT/CONTROL/ALT/SUPER by inspecting the set of held keys; the file notes that Android modifier changes are not received through winit.
+- Findings: Physical-keyboard detection relies on a numeric Android keycode allowlist and source/device metadata, so it must be validated as APIs and device drivers change. Mode behavior intentionally differs between touch laptops and phones. `held_modifiers` derives state from held keys; correctness depends on key-up/cancel/focus-loss handling. Tests cover mode transitions, physical-vs-virtual keyboard detection, and modifier aggregation; they were not run.
+- RustChunk relevance: Directly relevant to Galaxy/Android touchscreens, physical keyboards, and gamepads. Mode detection can select the touch overlay and prevent OS navigation keys from being mistaken for typing.
+- 1.20.1 implications: Independent of the protocol, but it must be reviewed in the RustChunk Android backend against the Android NDK/Java key-event codes and the selected winit integration. Do not copy the current allowlist without checking the platform SDK; handle focus loss and key cancellation in the global lifecycle.
+- Decision: **The mode-switching design and modifier reconstruction are adaptable; the Android keycode/source allowlist must be validated on target devices.**
 - Dependencies / cross-references: winit KeyCode/ModifiersState; `crate::gamepad::android::from_pad`; Android key event source/device/scan-code mapping; touch overlay and keyboard event dispatch.
-- Follow-up checks: بررسی Android input event bridge، key-up/focus-loss cleanup، device-specific scan codes و دستگاه‌های HID/gamepad واقعی.
+- Follow-up checks: Inspect the Android input-event bridge, key-up/focus-loss cleanup, device-specific scan codes, and real HID/gamepad devices.
 - Completion state: complete source review; no tests or device input tests were run.
 
 ### 84. `crates/horizon-client-input/src/interaction_input.rs`
@@ -1784,14 +1784,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source SHA: 9457726434ea4fc943047a9d2351428846595c01.
 - Size: 8,959 bytes; 276 lines; complete file fetched.
 - Coverage: lines 1–276, complete.
-- Purpose: صف‌کردن clickهای Attack/Use/Pick بین event و tick و اجرای آن‌ها با ترتیب مشابه Minecraft.handleKeybinds.
-- Implementation / logic: InteractionInput تعداد click هر سه دکمه را نگه می‌دارد. tick صف را drain، hit result همان tick را pin می‌کند، اگر item واقعاً در حال استفاده باشد clickها را discard و در صورت رها شدن use آن را release می‌کند؛ در غیر این صورت attackها، سپس useها و pickها را اجرا می‌کند. بعد use held را با use_delay بررسی و continue_attack را اجرا می‌کند و hit result را آزاد می‌سازد. use_on_target اول entity یا block را امتحان و اگر consumed نشد item را fallback می‌کند. release_on_screen_open مسیرهایی را مدل می‌کند که باز شدن بعضی screenها use را همان لحظه آزاد می‌کند.
-- Findings: حفظ یک hit result طی کل tick یک رفتار مهم است؛ چند کلیک در یک tick نباید بعد از تغییر بلوک، مجدداً crosshair target متفاوتی دریافت کنند. منطق تمایز بین item-use فعال و quick click به lifecycle دقیق start/release وابسته است. ترتیب Attack → Use → Pick، discard هنگام active use و continue_attack بعد از instant attack مهم‌اند. شمارنده‌ها u32 هستند و press با ++ می‌تواند در input storm overflow کند؛ در debug build overflow ممکن است panic بدهد. Tests پنج سناریوی ترتیب click، use release، delay/digging و shared hit result را مدل می‌کنند؛ اجرا نشده‌اند.
-- RustChunk relevance: بسیار مهم برای موبایل و دسکتاپ؛ tapهای کوتاه ممکن است بین tickها رخ دهند و نباید گم شوند. جداسازی input edge buffering از gameplay tick الگوی مناسبی برای RustChunk است.
-- 1.20.1 implications: comments و names به 26.3 اشاره دارند؛ رفتار باید با Minecraft.handleKeybinds, startUseItem, MultiPlayerGameMode و hitResult نسخه 1.20.1 تطبیق داده شود. این logic عمدتاً gameplay lifecycle است نه wire protocol، ولی نتایج آن به packetهای interaction/break/use تبدیل می‌شوند؛ ترتیب و cancellation باید با سرور 1.20.1 آزمایش شود.
-- Decision: الگوی tick-buffering و stable hit result قابل اقتباس؛ lifecycle و edge cases باید با کد نسخه 1.20.1 بازنویسی/اعتبارسنجی شوند.
+- Purpose: Queues Attack/Use/Pick clicks between input events and ticks, then executes them in an order modeled on `Minecraft.handleKeybinds`.
+- Implementation / logic: `InteractionInput` stores click counts for all three buttons. Each tick drains the queue and pins that tick's hit result. If an item is genuinely being used, clicks are discarded and a released use is released; otherwise attacks run first, then uses, then picks. It then checks held use against `use_delay`, runs `continue_attack`, and releases the hit result. `use_on_target` first tries an entity or block and falls back to the item if the action was not consumed. `release_on_screen_open` models paths where opening certain screens immediately releases use.
+- Findings: Retaining one hit result for the whole tick is important: multiple clicks in a single tick should not acquire a different crosshair target after a block changes. Distinguishing active item use from a quick click depends on exact start/release lifecycle behavior. The Attack → Use → Pick order, discarding input during active use, and `continue_attack` after an instant attack are significant. Counters are `u32`, and incrementing on press can overflow during an input storm; in debug builds this may panic. Tests model five scenarios involving click order, use release, delay/digging, and a shared hit result; they were not run.
+- RustChunk relevance: Very important for mobile and desktop: short taps may occur between ticks and must not be lost. Separating input-edge buffering from the gameplay tick is a suitable pattern for RustChunk.
+- 1.20.1 implications: Comments and names refer to 26.3; behavior must be compared with 1.20.1 `Minecraft.handleKeybinds`, `startUseItem`, `MultiPlayerGameMode`, and hit-result logic. This is primarily gameplay lifecycle logic rather than wire protocol, but its outcomes become interaction/break/use packets; ordering and cancellation must be tested against a 1.20.1 server.
+- Decision: **Tick buffering and a stable hit result are adaptable patterns; lifecycle behavior and edge cases must be rewritten/validated against 1.20.1 code.**
 - Dependencies / cross-references: Minecraft.handleKeybinds, MultiPlayerGameMode startAttack/startDestroyBlock/releaseUsingItem, hitResult/pick lifecycle, screen set/release key mappings, player item-use state.
-- Follow-up checks: تطبیق دقیق vanilla 1.20.1 input tick ordering؛ سنجش overflow/capacity، focus loss، touch cancel و چند tap قبل از tick؛ بررسی server acknowledgements برای همزمانی break و use.
+- Follow-up checks: Match the exact vanilla 1.20.1 input-tick order; test overflow/capacity, focus loss, touch cancellation, and multiple taps before a tick; inspect server acknowledgements for break/use synchronization.
 - Completion state: complete source review; no tests or gameplay/server run were executed.
 
 ### 85. `crates/horizon-client-input/src/key_names.rs`
@@ -1799,14 +1799,14 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source SHA: c6ba9d634bf247c73ba80a5e8f11b23a2c0b7599.
 - Size: 9,297 bytes; 265 lines; complete file fetched.
 - Coverage: lines 1–265, complete.
-- Purpose: جداول نگاشت SDL scancode و mouse button ID به translation keyهای Minecraft برای نمایش نام کلیدها در UI.
-- Implementation / logic: فایل صریحاً می‌گوید جداول InputConstants نسخه 26.3 از VanillaOptionsTableExporter تولید شده‌اند. KEYBOARD شامل scancodeهای SDL و key.keyboard.* localization keys است؛ MOUSE شامل شماره دکمه‌های 1 تا 8 و key.mouse.* است.
-- Findings: داده‌ها static/generated هستند و هیچ logic runtime یا platform conversion ندارند. Scancode به keycode و character text یکی نیست؛ layout و locale صفحه‌کلید می‌تواند label و actual typed character را از هم جدا کند. جدول شامل کلیدهای نادر، بین‌المللی، keypad، media و Android soft keys است. چون منبع، exporter نسخه 26.3 است، حتی اگر بسیاری از نام‌ها پایدار باشند، کامل بودن و naming/version parity با 1.20.1 تضمین نیست. Tests در فایل دیده نمی‌شوند؛ هیچ تستی اجرا نشده است.
-- RustChunk relevance: نگاشت قابل ترجمه برای صفحه تنظیمات keybind، نمایش نام کلیدهای فیزیکی، mouse buttons و keyboard UI مفید است.
-- 1.20.1 implications: 1.20.1 translation keys و key enumeration باید از نسخه هدف استخراج شود؛ کپی کل جدول 26.3 می‌تواند کلیدهای بعدی را اضافه کند یا کلیدهای موردنیاز را جا بیندازد. SDL scancodeها فقط اگر backend SDL واقعاً در RustChunk استفاده شود مبنا هستند؛ winit و Android ممکن است mapping دیگری داشته باشند.
-- Decision: داده‌های مشابه قابل تولید/اقتباس؛ این جدول 26.3 باید برای 1.20.1 بازتولید شود.
+- Purpose: Tables mapping SDL scancodes and mouse-button IDs to Minecraft translation keys for displaying key names in the UI.
+- Implementation / logic: The file explicitly states that its 26.3 `InputConstants` tables were generated by `VanillaOptionsTableExporter`. `KEYBOARD` contains SDL scancodes and `key.keyboard.*` localization keys; `MOUSE` contains button numbers 1–8 and `key.mouse.*` keys.
+- Findings: The data is static/generated and contains no runtime logic or platform conversion. A scancode is not the same as a keycode or character text; keyboard layout and locale can make the displayed label differ from the character typed. The table includes rare, international, keypad, media, and Android soft keys. Because the source is a 26.3 exporter, completeness and naming/version parity with 1.20.1 are not guaranteed even if many names are stable. No tests are present in the file, and no tests were run.
+- RustChunk relevance: A comparable mapping is useful for the keybind settings screen, display names for physical keys and mouse buttons, and keyboard UI.
+- 1.20.1 implications: Translation keys and key enumeration must be extracted from the target version. Copying the entire 26.3 table could add later-version keys or omit required ones. SDL scancodes are relevant only if RustChunk actually uses an SDL backend; winit and Android may have different mappings.
+- Decision: **Equivalent data can be generated/adapted; this 26.3 table must be regenerated for 1.20.1.**
 - Dependencies / cross-references: SDL scancode definitions, winit keyboard backend, VanillaOptionsTableExporter, language resource keys, keybinding options UI.
-- Follow-up checks: استخراج جدول 1.20.1 با oracle؛ تعیین mapping جدا برای winit/Android/SDL؛ بررسی layoutهای non-US و physical-vs-logical key naming.
+- Follow-up checks: Extract the 1.20.1 table with an oracle; define separate mappings for winit/Android/SDL; check non-US layouts and physical-versus-logical key naming.
 - Completion state: complete source review; no tests or build were run.
 
 ### 86. `crates/horizon-client-input/src/keybinds.rs`
