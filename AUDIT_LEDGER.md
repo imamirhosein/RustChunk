@@ -2160,4 +2160,15 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Rechecked key claims against source for `artifacts.rs`, `play.rs`, `item.rs`, `touch.rs` and `net.rs`. In particular, the networking entry now explicitly records that 1.20.1 has no separate Configuration state.
 - Source hash/coverage verification is not a substitute for executed tests. No build, automated test suite, Android device run, or live Minecraft server connection was performed during this checkpoint.
 
+### Documentation re-review — 2026-11-18
+
+- Re-reviewed all 100 ledger entries as one document and standardized their headings and 13 common fields. Existing file-specific subsections and evidence were retained.
+- Where the earlier entry used custom subsections instead of consolidated `Implementation / logic` or `Findings` fields, the standardized fields point back to those existing subsections; no unsupported implementation detail was added.
+- Translated all Persian-script content in entries 61–100 into English. A full-file scan found no remaining Persian-script characters.
+- Classified every Forge/NeoForge/FML mention in entries 1–40 as a historical reference or current project/file-level conclusion. The original evidence was retained.
+- Created `AUDIT_INDEX.md` with 100 numbered rows, split into four parts of 25 entries each. Each row records the source path, a normalized decision label, and a one-line summary derived from the ledger's Decision field.
+- Final structural checks: exactly one entry for each number 1–100; all 100 have source SHA and all 13 common fields; all headings use `### N. \`path\``; no duplicate `##` headings; no Persian-script text; all 100 index rows are in sequence and partitioned 25/25/25/25.
+- Revalidated all 100 source paths and blob SHAs against the complete pinned Starling Git tree at `5432370d573642041585c69b40fb045b27133488`; no missing paths or SHA mismatches were found.
+- Verification boundary: this pass revalidated the ledger and source identities, but did not repeat a fresh line-by-line semantic read of all 100 source files. Existing semantic notes remain the findings from their recorded original source audits. No tests, build, Android device run, or live-server run was performed.
+
 
