@@ -115,7 +115,7 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 - The connector exposes no branch-deletion operation. Therefore the duplicate archive branch could not be removed from this session; the original backup remains untouched and authoritative, while the archive duplicate remains present at the same baseline commit.
 - GitHub reports `protected: false` for both backup branches; no server-side branch protection was enabled. Do not claim these branches are technically locked.
 - No Rust build, benchmark, unit-test run, APK build, Android device test, client launch, or server connection was performed during this QA batch.
-- Re-reading the updated ledger, Index and QA log is required before marking this batch complete.
+- Post-write verification completed: re-read all four ledger files and the Index; confirmed 1,000 unique existing paths, 100 new unique paths at 101–200, 100/100 SHA-and-byte matches against the pinned Git tree, 100/100 Index path matches, no field or decision-tag violations, and no coverage-range gaps or overlaps. The corrected SHA and line/byte metadata for entry 174 were also rechecked.
 
 ### Next QA batch
 
