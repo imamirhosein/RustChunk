@@ -1,4 +1,3 @@
-| 766 | `crates/horizon-client/examples/probe/recipe_book_fixture.rs` | Adapt the recipe-book state model as a test reference and rebuild packet/registry fixtures for Java 1.20.1. | Recipe-book settings/persistence fixture; packet layout and registry data are version-specific. |
 
 - Source ledger: entries 1–400 in `AUDIT_LEDGER.md`; entries 401–600 in `AUDIT_LEDGER_401_600.md`
 - Source repository/ref: `starling-client/starling` / `starling`
@@ -769,9 +768,9 @@
 | 628 | `crates/horizon-client-render/src/camera.rs` | High-value camera architecture; replace constants and verify math. | Maintains camera pose, projection, third-person clipping, view bob, hurt and interpolation state. |
 | 629 | `crates/horizon-client-render/src/chat.rs` | Rebuild packet/security integration for 1.20.1; retain separable UI state patterns. | Coordinates chat history, draft/composition, message display, completion and signing-related UI state. |
 | 630 | `crates/horizon-client-render/src/chat_tests.rs` | Test reference only; port selected tests after target fixtures exist. | Checks chat wrapping, ordering, history, keyboard interactions and related rendering behavior. |
-| 631 | `crates/horizon-client-render/src/chunk.rs` | Optional compatibility extension; do not include in vanilla core. | Parses CIT rules and selects item texture substitutions based on stack/context properties. |
-| 632 | `crates/horizon-client-render/src/chunk/block_entity.rs` | Optional renderer extension; defer until vanilla armor rendering is stable. | Applies custom armor texture rules across equipment/model layers. |
-| 633 | `crates/horizon-client-render/src/chunk_map.rs` | Adapt bounded resource loading after 1.20.1 rules are defined. | Discovers, decodes and associates custom item texture resources with matching rules. |
+| 631 | `crates/horizon-client/examples/probe/pick_block_data_fixture.rs` | Use as a test-harness reference only; rebuild the item/block-entity representation for Java 1.20.1 instead of adopting newer component-patch semantics. | Block-entity pick/place oracle fixture; item-component representation is newer than 1.20.1. |
+| 632 | `crates/horizon-client/examples/probe/place_recipe_fixture.rs` | Adapt the parity-harness architecture only; recreate recipe catalogues, menu rules and item formats for the exact 1.20.1 target. | Recipe-placement fixture; registry and item-stack formats need 1.20.1 parity. |
+| 633 | `crates/horizon-client/examples/probe/player_sync_fixture.rs` | Strong candidate for RustChunk movement tests, but regenerate packet schema and byte expectations for Java 1.20.1 before adoption. | Movement packet and teleport-velocity oracle; packet IDs/layout are protocol-version-specific. |
 | 634 | `crates/horizon-client-render/src/cit.rs` | Optional pack feature; keep separate from vanilla enchantment glint. | Builds shared texture arrays and per-layer blend parameters for custom glint effects. |
 | 635 | `crates/horizon-client-render/src/cit_armor.rs` | Reusable performance pattern; preserve exact cloud appearance. | Builds cloud geometry and updates position/phase via uniforms while remaining inside a geometry cell. |
 | 636 | `crates/horizon-client-render/src/cit_assets.rs` | High-value algorithm; adapt shape registry and movement semantics. | Uses chunk-section palettes and compact shape data to avoid scanning blocks that cannot collide. |
@@ -892,7 +891,7 @@
 | 751 | `crates/horizon-client-render/src/jigsaw_block.rs` | Critical core system; implement against 1.20.1 light engine, not the 26.3 tables. | Computes block and sky light, face occlusion and incremental relighting over resident chunks. |
 | 752 | `crates/horizon-client-render/src/keypad.rs` | High-value architecture for distant view, but isolate from near gameplay and collision. | Samples distant column data, schedules tile meshing and selects coarse tiles beyond resident chunks. |
 | 753 | `crates/horizon-client-render/src/level_loading.rs` | Optional performance feature; adopt only after cache invalidation is proven. | Stores sampled columns in append-only region files keyed by generator/build data. |
-| 754 | `crates/horizon-client-render/src/lib.rs` | High-value independent mesh design; rederive from 1.20.1 block/biome/lighting data. | Builds distant exposed voxel faces from sampled columns, merging faces while preserving material and UV phase. |
+| 754 | `crates/horizon-client/examples/probe/raid_fixture.rs` | Adapt as a test-harness architecture only; re-derive patrol/raid state transitions and scenario outputs from the Java 1.20.1 oracle. | 1,043-line patrol/raid fixture with synthetic world stubs; Bad Omen and raid transitions need 1.20.1 comparison. |
 | 755 | `crates/horizon-client-render/src/light.rs` | Adapt logging architecture to Android app storage and privacy policy. | Writes game logs, rollover archives, recent ring buffer and crash reports with token redaction concerns. |
 | 756 | `crates/horizon-client-render/src/lod.rs` | Optional visual optimization. | Implements a separable multi-pass blur for menu backgrounds with lower-resolution software fallback. |
 | 757 | `crates/horizon-client-render/src/lod/cache.rs` | Shader helper. | Performs separable box blur/downsample operations for menu background. |
@@ -900,11 +899,11 @@
 | 759 | `crates/horizon-client-render/src/logging.rs` | Optional mesher optimization with high potential gains. | Builds section-local leaf-volume masks and classifies safe leaf faces for solidification/removal. |
 | 760 | `crates/horizon-client-render/src/menu_blur.rs` | Test/reference source; not executed. | Checks leaf mode geometry, cavity faces, chunk boundaries and no-leaf equivalence. |
 | 761 | `crates/horizon-client-render/src/menu_blur.wgsl` | Reference tests only. | Checks block particles use the proper particle sprite and biome tint source. |
-| 762 | `crates/horizon-client-render/src/mesher.rs` | Reference tests only; high-value for chunk seam correctness. | Compares reused padded snapshots/light with fresh chunk geometry across section/resource reloads. |
+| 762 | `crates/horizon-client/examples/probe/random_tick_sections_probe.rs` | Use as a parity-test reference; implement only after confirming section selection and random sequence against Java 1.20.1. | Random-tick section probe; fake level records reads and does not simulate full block updates. |
 | 763 | `crates/horizon-client-render/src/mesher/fluid.rs` | Potential CPU/GPU optimization; preserve conservative bucket for unusual faces. | Groups quads by facing and emits only runs potentially visible from the camera. |
 | 764 | `crates/horizon-client-render/src/mesher/leaf_culling.rs` | Reference tests only. | Checks one-biome shortcut against full spatial tint interpolation. |
 | 765 | `crates/horizon-client-render/src/mesher/leaf_culling_tests.rs` | Reference tests only; valuable proof harness. | Uses a slow reference to verify optimized block/section visibility masks and row fill. |
-| 766 | `crates/horizon-client-render/src/mesher/lighting.rs` | Optional UI feature; not core engine. | Builds map-colour tiles per loaded chunk, shades height/water depth and composes a 128px view. |
+| 766 | `crates/horizon-client/examples/probe/recipe_book_fixture.rs` | Adapt the recipe-book state model as a test reference and rebuild packet/registry fixtures for Java 1.20.1. | Recipe-book settings/persistence fixture; packet layout and registry data are version-specific. |
 | 767 | `crates/horizon-client-render/src/mesher/particle_tests.rs` | High-value texture quality algorithm; validate exact target format/rounding. | Builds sprite mipmaps with linear-light colour filtering and alpha-test coverage preservation. |
 | 768 | `crates/horizon-client-render/src/mesher/reuse_tests.rs` | Optional mod manager feature; not vanilla. | Persists per-mod enable/disable choices and distinguishes native mods built into an app. |
 | 769 | `crates/horizon-client-render/src/mesher/sides.rs` | High-value resource architecture; rebuild 1.20.1 model/OBJ codecs. | Loads and resolves resource models and fallback behavior across resource-pack reloads. |
