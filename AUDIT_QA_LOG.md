@@ -122,3 +122,11 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 - Next range: **201–300**.
 - Continue only on `starling-1.20.1-port-audit`.
 - Keep the original backup branch unchanged. Do not modify the duplicate archive branch.
+
+
+### Supplemental source-range verification — entry 111
+
+- Re-read pinned `crates/horizon-world/src/nbt.rs` in exact consecutive ranges 1–400, 401–800 and 801–1,151.
+- All three requests returned source SHA `b27bf4fda2c50ec7b81adb316aa0d12359e2dc56`.
+- Ranges contain 400 + 400 + 351 = 1,151 logical lines, with no gaps or overlaps.
+- Updated entry 111 Coverage to record these exact ranges. No source implementation claim or completion status was promoted by this re-read.
