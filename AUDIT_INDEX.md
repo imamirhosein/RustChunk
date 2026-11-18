@@ -1,4 +1,4 @@
-# RustChunk Starling Audit Index — Entries 1–160
+# RustChunk Starling Audit Index — Entries 1–200
 
 - Source ledger: `AUDIT_LEDGER.md`
 - Source repository/ref: `starling-client/starling` / `starling`
