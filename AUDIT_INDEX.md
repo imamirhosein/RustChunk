@@ -1,6 +1,6 @@
-# RustChunk Starling Audit Index — Entries 1–400
+# RustChunk Starling Audit Index — Entries 1–600
 
-- Source ledger: `AUDIT_LEDGER.md`
+- Source ledger: entries 1–400 in `AUDIT_LEDGER.md`; entries 401–600 in `AUDIT_LEDGER_401_600.md`
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
 - Decisions and one-line reasons summarize each ledger entry's Decision field; consult the ledger for evidence, limitations, implementation mapping and follow-up checks.
@@ -490,3 +490,243 @@
 | 398 | `benchmarks/rust-native-walking-2026-10-07/scene-motion.json` | Adaptable motion tests; integrate missing 1.20.1 player lifecycle. | Full Player.tick, inventory/equipment ticks, freezing, health/damage and network consumers are not covered. |
 | 399 | `benchmarks/rust-native-walking-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence. |
 | 400 | `benchmarks/rust-neighbor-spread-2026-10-06/scoped-parity.json` | Adaptable worldgen algorithm tests; rebuild 1.20.1 block-state/feature data. | Actual chunks, neighbor callbacks and complete feature/world generation are pending. |
+
+## Part 18 — Entries 401–425
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 401 | `benchmarks/rust-noise-2026-10-05/scoped-parity.json` | Adaptable; rebuild version data | Selected maths only; no complete terrain/world proof |
+| 402 | `benchmarks/rust-object-open-map-2026-10-07/scoped-parity.json` | Reference; prefer Rust ownership | Collection parity is not game integration |
+| 403 | `benchmarks/rust-object-open-set-2026-10-07/scoped-parity.json` | Reference; use Rust set if equivalent | Not proof of integrated attribute queues |
+| 404 | `benchmarks/rust-pillar-2026-10-06/scoped-parity.json` | Adaptable feature algorithm | No complete chunk mutation/biome generation |
+| 405 | `benchmarks/rust-piston-movement-2026-10-07/movement-registry-regression.json` | Reference; regenerate target data | 26.3 table; no live piston event |
+| 406 | `benchmarks/rust-piston-movement-2026-10-07/scoped-parity.json` | Adaptable numeric regression | No piston activation/block lifecycle/network |
+| 407 | `benchmarks/rust-piston-shape-2026-10-06/scoped-parity.json` | Adaptable shape tests | No live block entity/piston lifecycle |
+| 408 | `benchmarks/rust-placement-2026-10-06/scoped-parity.json` | Adaptable codecs | No full configured-feature composition/world mutation |
+| 409 | `benchmarks/rust-player-equipment-2026-10-07/scoped-parity.json` | Adaptable ownership model | No full synchronized/use/save lifecycle |
+| 410 | `benchmarks/rust-player-food-2026-10-07/scoped-parity.json` | Adaptable state tests | No full player tick/regeneration/damage/persistence |
+| 411 | `benchmarks/rust-player-health-2026-10-07/scoped-parity.json` | Adaptable state composition | No full damage source/wire/player lifecycle |
+| 412 | `benchmarks/rust-player-hurt-2026-10-07/scoped-parity.json` | Adaptable damage tests | Downstream damage/effect services controlled |
+| 413 | `benchmarks/rust-player-inventory-2026-10-07/scoped-parity.json` | Adaptable inventory algorithms | No menus/recipes/pickup or all components |
+| 414 | `benchmarks/rust-player-travel-2026-10-07/scoped-parity.json` | Adaptable movement sequencing | No live fluid/collision/vehicle/effect full tick |
+| 415 | `benchmarks/rust-powder-snow-collision-2026-10-06/scoped-parity.json` | Adaptable collision tests | No freezing/sinking/durability/live movement |
+| 416 | `benchmarks/rust-registered-entity-fluid-2026-10-07/immersion-regression.json` | Adaptable query/order regression | No live fluid propagation or broad entity index |
+| 417 | `benchmarks/rust-registered-entity-fluid-2026-10-07/scoped-parity.json` | Adaptable fluid tests | Providers fixture-controlled; no complete liquid movement |
+| 418 | `benchmarks/rust-registered-entity-fluid-2026-10-07/tick-regression.json` | Adaptable tick ordering | No particle/audio playback or live propagation |
+| 419 | `benchmarks/rust-registered-player-combat-2026-10-07/scoped-parity.json` | Adaptable combat harness | PvP/blocking/durability/effect consumers controlled |
+| 420 | `benchmarks/rust-registry-fall-ray-2026-10-07/scoped-parity.json` | Adaptable ray tests | No live chunk provider or complete consumer |
+| 421 | `benchmarks/rust-registry-fluid-2026-10-07/scoped-parity.json` | Reference query design | 26.3 ids/data; no live spreading |
+| 422 | `benchmarks/rust-replace-blobs-2026-10-06/scoped-parity.json` | Adaptable feature tests | No complete chunk mutation/biome generation |
+| 423 | `benchmarks/rust-replace-block-2026-10-06/scoped-parity.json` | Adaptable placement logic | No region effects/structure processors/decorations |
+| 424 | `benchmarks/rust-resident-collision-scan-2026-10-06/scoped-parity.json` | Adaptable collision harness | Controlled proxy; no live chunk/entity broad-phase |
+| 425 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-baking.json` | Adaptable geometry oracle | CPU geometry only; no atlas/shader/GPU pixels |
+
+## Part 19 — Entries 426–450
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 426 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-decoding.json` | Adaptable parser fixture | No parent resolution/atlas/GPU rendering |
+| 427 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-resolution.json` | Adaptable resolver fixture | No final quad bake/light/render pixels |
+| 428 | `benchmarks/rust-resource-number-scanner-2026-10-06/sprite-animation.json` | Adaptable state tests | No image decode/atlas upload/GPU |
+| 429 | `benchmarks/rust-restitution-2026-10-07/scoped-parity.json` | Adaptable numeric tests | No live grounding/tags/effects/world lifecycle |
+| 430 | `benchmarks/rust-retained-upgrade-status-2026-10-06/scoped-parity.json` | Adaptable metadata model | No save-dirty scheduling/biome migration/full retrogen |
+| 431 | `benchmarks/rust-retrogen-biome-fill-2026-10-06/scoped-parity.json` | Adaptable section updates | No target palette/full biome generation |
+| 432 | `benchmarks/rust-retrogen-biome-generation-2026-10-06/scoped-parity.json` | Adaptable generator pattern | Not full generation; holder placeholders limit fidelity |
+| 433 | `benchmarks/rust-retrogen-chunk-2026-10-06/scoped-parity.json` | Adaptable chunk state | No persistence/scheduler/full lifecycle |
+| 434 | `benchmarks/rust-retrogen-data-2026-10-06/scoped-parity.json` | Adaptable codec tests | No automatic schedule or end-to-end upgrade |
+| 435 | `benchmarks/rust-rule-test-2026-10-06/scoped-parity.json` | Adaptable codec tests | No processor execution or structure mutation |
+| 436 | `benchmarks/rust-scaffolding-collision-2026-10-06/scoped-parity.json` | Adaptable shape matrix | No placement/support/fall/live movement |
+| 437 | `benchmarks/rust-scattered-ore-2026-10-06/scoped-parity.json` | Adaptable feature test | No complete veins/chunk decoration |
+| 438 | `benchmarks/rust-server-player-combat-2026-10-07/scoped-parity.json` | Adaptable damage composition | Effects/durability/PvP/network/death controlled |
+| 439 | `benchmarks/rust-server-player-combat-immunity-2026-10-07/inner-damage-regression.json` | Adaptable regression | Outer gates and attribution/world integration separate |
+| 440 | `benchmarks/rust-server-player-combat-immunity-2026-10-07/scoped-parity.json` | Adaptable boundary tests | No complete damage/effects/packets/player tick |
+| 441 | `benchmarks/rust-server-player-damage-2026-10-07/scoped-parity.json` | Adaptable damage flow | Criteria/effects/durability/death controlled |
+| 442 | `benchmarks/rust-shared-item-use-2026-10-07/item-use-lifecycle.json` | Adaptable lifecycle tests | Start/network/concrete consumables/full player lifecycle pending |
+| 443 | `benchmarks/rust-shared-item-use-2026-10-07/item-use-start.json` | Adaptable dispatch tests | Transport and synced flag consumers absent |
+| 444 | `benchmarks/rust-shared-item-use-2026-10-07/item-use.json` | Adaptable blocking tests | Full lifecycle/durability/combat integration absent |
+| 445 | `benchmarks/rust-simple-block-2026-10-06/scoped-parity.json` | Adaptable feature implementation | Chunk writes/neighbors/full generation not tested |
+| 446 | `benchmarks/rust-simple-container-2026-10-07/scoped-parity.json` | Adaptable container pattern | No persistence/menu transactions/full components |
+| 447 | `benchmarks/rust-snow-freeze-2026-10-06/scoped-parity.json` | Adaptable terrain feature | Lighting/broad mutation/surface generation absent |
+| 448 | `benchmarks/rust-speleothem-2026-10-06/scoped-parity.json` | Adaptable feature geometry | No neighbor updates/falling/fluid/full caves |
+| 449 | `benchmarks/rust-spike-2026-10-06/scoped-parity.json` | Adaptable deterministic feature | No complete End chunk/world lifecycle |
+| 450 | `benchmarks/rust-spring-2026-10-06/scoped-parity.json` | Adaptable feature tests | Tick execution/spreading/full worldgen absent |
+
+## Part 20 — Entries 451–475
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 451 | `benchmarks/rust-sprite-animation-2026-10-06/scoped-parity.json` | Adaptable animation logic | No image decode/atlas/GPU frame interpolation |
+| 452 | `benchmarks/rust-sprite-animation-2026-10-06/startup-smoke.json` | Reference visual smoke only | No player gameplay/device hardware/FPS |
+| 453 | `benchmarks/rust-state-provider-2026-10-06/scoped-parity.json` | Adaptable codec architecture | No registry reload/placement/worldgen integration |
+| 454 | `benchmarks/rust-status-effect-2026-10-07/scoped-parity.json` | Adaptable value semantics | Effect tick/registry/UI lifecycle separate |
+| 455 | `benchmarks/rust-status-tick-2026-10-07/scoped-parity.json` | Adaptable tick algorithm | Real dispatch/registry/full gameplay outside harness |
+| 456 | `benchmarks/rust-stored-consume-2026-10-07/scoped-parity.json` | Adaptable regression; evidence gap | No aggregate Rust hash; registration/notification/sound controlled |
+| 457 | `benchmarks/rust-stored-effect-attributes-2026-10-07/scoped-parity.json` | Reference only pending evidence | No top-level hash and reference outputs differ |
+| 458 | `benchmarks/rust-stored-effect-notifications-2026-10-07/scoped-parity.json` | Reference only pending evidence | No top-level hash; reference output hashes differ |
+| 459 | `benchmarks/rust-structure-density-2026-10-06/scoped-parity.json` | Adaptable numeric provider | No structure discovery/placement/terrain integration |
+| 460 | `benchmarks/rust-suffocation-2026-10-06/contextual-regression.json` | Adaptable shape tests | No live entity/minecart/world lifecycle |
+| 461 | `benchmarks/rust-suffocation-2026-10-06/scoped-parity.json` | Adaptable query tests | No live chunk provider/entity movement |
+| 462 | `benchmarks/rust-swimming-2026-10-07/scoped-parity.json` | Adaptable predicates | No full water physics/player tick |
+| 463 | `benchmarks/rust-synced-bytes-2026-10-07/float-regression.json` | Adaptable sync design | Other types/packet codecs/entity schema absent |
+| 464 | `benchmarks/rust-synced-bytes-2026-10-07/scoped-parity.json` | Adaptable typed tests | Other types/schema/wire codecs pending |
+| 465 | `benchmarks/rust-synced-floats-2026-10-07/scoped-parity.json` | Adaptable numeric serialization | Only float serializer; no protocol/wire schema |
+| 466 | `benchmarks/rust-teleport-consume-2026-10-07/scoped-parity.json` | Adaptable random algorithm | Actual teleport/passenger/world events controlled |
+| 467 | `benchmarks/rust-terrain-2026-10-06/scoped-parity.json` | Adaptable terrain architecture | Material rules/carvers/structures/full blend absent |
+| 468 | `benchmarks/rust-ticks-2026-10-05/scoped-parity.json` | Adaptable scheduler tests | No block/fluid tick execution/full scheduler |
+| 469 | `benchmarks/rust-underwater-magma-2026-10-06/scoped-parity.json` | Adaptable feature placement | Chunk updates/postprocessing/full generation absent |
+| 470 | `benchmarks/rust-use-flag-reaction-2026-10-07/scoped-parity.json` | Adaptable event ordering | Other sync keys/packet delivery/full item use absent |
+| 471 | `benchmarks/rust-use-remainder-2026-10-07/scoped-parity.json` | Adaptable component contract | No full component schema/insertion/drop/consumables |
+| 472 | `benchmarks/rust-value-provider-2026-10-06/scoped-parity.json` | Adaptable provider algorithms | Gaussian/full height provider/terrain incomplete |
+| 473 | `benchmarks/rust-view-direction-2026-10-07/scoped-parity.json` | Adaptable numeric fixtures | No platform numeric/action integration proof |
+| 474 | `benchmarks/rust-vines-2026-10-06/scoped-parity.json` | Adaptable feature logic | No growth tick/neighbor/live chunk |
+| 475 | `benchmarks/rust-water-splash-2026-10-07/scoped-parity.json` | Adaptable event request model | No audio mixer/particle renderer/live movement |
+
+## Part 21 — Entries 476–500
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 476 | `benchmarks/rust-world-2026-10-05/scoped-parity.json` | Reference only | No output hash/reference pair; not implementation evidence |
+| 477 | `benchmarks/rust-world-border-2026-10-07/scoped-parity.json` | Adaptable geometry/state tests | No persistence/listener/damage/network integration |
+| 478 | `benchmarks/rust-world-collision-check-2026-10-07/movement-regression.json` | Adaptable physics tests | Providers/entity lists/border controlled; no live broad phase |
+| 479 | `benchmarks/rust-world-collision-check-2026-10-07/scoped-parity.json` | Adaptable collision composition | Live entity broad phase/minecart/world lifecycle incomplete |
+| 480 | `benchmarks/rust-world-edge-backoff-2026-10-07/scoped-parity.json` | Adaptable edge regression | Isolated query, not integrated Player physics/world |
+| 481 | `benchmarks/rust-world-movement-2026-10-07/geometry-regression.json` | Adaptable geometry suite | No live World shape selection/integrated movement |
+| 482 | `benchmarks/rust-world-movement-2026-10-07/scoped-parity.json` | Adaptable movement kernel | No live provider/full movement tick/input lifecycle |
+| 483 | `benchmarks/rust-world-ray-2026-10-07/scoped-parity.json` | Adaptable ray traversal | No live world/chunk provider/complete consumers |
+| 484 | `benchmarks/rust-worldgen-2026-10-06/scoped-parity.json` | Architecture reference; rebuild data | Selected codec/query manifests only; no full terrain/chunk/world proof |
+| 485 | `benchmarks/rust-worldgen-random-2026-10-06/scoped-parity.json` | Adaptable deterministic RNG tests | Gaussian/concurrent/full decoration outside scope |
+| 486 | `benchmarks/server-2026-10-17/README.md` | Reference method only | Bot host overloaded, unequal workloads and vanilla watchdog; not Android client |
+| 487 | `benchmarks/server-2026-10-17/earlier-002f14ce/explore-equal-rate.json` | Reference server data | Server only, one pass; not A22/client FPS |
+| 488 | `benchmarks/server-2026-10-17/earlier-002f14ce/load.txt` | Context only | Remote bot host high load/ThinkPad variability confound |
+| 489 | `benchmarks/server-2026-10-17/earlier-002f14ce/walk-explore.json` | Reference throughput only | Vanilla watchdog/broken pipe at high load; unequal chunks |
+| 490 | `benchmarks/server-2026-10-17/explore-equal-rate.json` | Reference comparison | Server tick/RSS/CPU only |
+| 491 | `benchmarks/server-2026-10-17/load.txt` | Benchmark context | Mac mini bot host often saturated |
+| 492 | `benchmarks/server-2026-10-17/walk-explore.json` | Reference server result | Vanilla watchdog high counts; remote bots |
+| 493 | `benchmarks/server-equal-mixed-2026-10-18/README.md` | Reference only; fairness caveat | At25 new-chunk rate still differs; vanilla50 watchdog; remote bot host busy |
+| 494 | `benchmarks/server-equal-mixed-2026-10-18/load.txt` | Context only | Bot host CPU 70–93%; server host spikes |
+| 495 | `benchmarks/server-equal-mixed-2026-10-18/mixed-equal.json` | Reference server data | Horizon 1.77/4.74/11.72/23.82ms; vanilla 11.34/34.3/50.45 then watchdog; 25 work differs |
+| 496 | `benchmarks/server-equal-work-2026-10-17/README.md` | Reference method | Paper often faster in walking; vanilla watchdog at100; server-only |
+| 497 | `benchmarks/server-equal-work-2026-10-17/explore-equal-rate.json` | Reference measurements | Both 20TPS; ThinkPad Linux/OpenJDK25 only |
+| 498 | `benchmarks/server-equal-work-2026-10-17/horizon.json` | Reference server benchmark | At100 walking ~114.5ms MSPT/8.7TPS; no client data |
+| 499 | `benchmarks/server-equal-work-2026-10-17/run-1-before-chunk-cache.json` | Historical reference | High-load outliers/watchdog; server revision specific |
+| 500 | `benchmarks/server-equal-work-2026-10-17/run-2-chunk-cache.json` | Historical reference | No matched vanilla baseline |
+
+## Part 22 — Entries 501–525
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 501 | `benchmarks/server-equal-work-2026-10-17/vanilla.json` | Reference baseline | Watchdog/broken-pipe at high counts |
+| 502 | `benchmarks/server-four-way-2026-10-19/README.md` | Reference only | Paper fastest average MSPT in several loads; remote host involved |
+| 503 | `benchmarks/server-four-way-2026-10-19/load.txt` | Context only | Remote bots 80–90% busy; server host spikes |
+| 504 | `benchmarks/server-four-way-2026-10-19/report-25-50.json` | Reference dedicated-server metrics | Paper25 28.3ms vs Horizon30.92; at50 Horizon47.83/Paper46.86/Fabric58.3; vanilla fails |
+| 505 | `benchmarks/server-four-way-2026-10-19/report-paper-10.json` | Reference only | One workload slice only |
+| 506 | `benchmarks/server-four-way-2026-10-19/runs.jsonl` | Reference dataset | Server workload data, not client FPS |
+| 507 | `benchmarks/server-mixed-2026-10-18/README.md` | Reference method | Explore throughput differs; compare ticks cautiously |
+| 508 | `benchmarks/server-mixed-2026-10-18/load.txt` | Context only | Mac bot host heavily loaded |
+| 509 | `benchmarks/server-mixed-2026-10-18/mixed.json` | Reference server data | At50 Horizon MSPT higher than vanilla in run; throughput unequal |
+| 510 | `benchmarks/server-vs-pumpkin-2026-10-31.json` | Reference server comparison | Pumpkin faster at20, mixed60, Horizon stronger100; anti-cheat/ground disabled |
+| 511 | `benchmarks/shared-json-buffer-lifetime-20261017.json` | Reference only | Near-identical medians; negligible gain |
+| 512 | `benchmarks/shared-json-decoder-phases-20261017.json` | Reference microbenchmark | Typed sample faster but higher peak RSS; loader-only |
+| 513 | `benchmarks/shared-json-five-way-20261017.json` | Adaptable measurement design | Loader-only and variant confounds |
+| 514 | `benchmarks/shared-json-five-way-final-20261017.json` | Reference optimization evidence | Lower RSS vs baseline, but host variance and loader-only scope |
+| 515 | `benchmarks/shared-json-historical-20261017.json` | Historical reference | Host/build context differs; no full startup |
+| 516 | `benchmarks/shared-json-startup-20261017.json` | Reference only | High host load, not full app startup |
+| 517 | `benchmarks/shared-json-startup-followup-20261017.json` | Reference only | Outliers/load variance prevent robust winner |
+| 518 | `benchmarks/shared-json-variant-isolation-20261017.json` | Historical experiment | No meaningful gain; experiments reverted |
+| 519 | `benchmarks/tick-state-2026-10-04/live-observations.json` | Reference telemetry only | One demo-world observation, not controlled benchmark |
+| 520 | `crates/cargo-horizon-mod/Cargo.toml` | Unnecessary for first milestone | Mod ecosystem not needed for vanilla client |
+| 521 | `crates/cargo-horizon-mod/src/check.rs` | Defer; trust concepts only | Native source unsandboxed and not run by registry check |
+| 522 | `crates/cargo-horizon-mod/src/main.rs` | Defer; not Forge | Horizon format, not Forge/1.20.1 loader |
+| 523 | `crates/cargo-horizon-mod/src/registry.rs` | Unnecessary for base client | Horizon mod registry; base load error can appear empty |
+| 524 | `crates/cargo-horizon-mod/template/content/block.json` | Defer | Horizon API 26.3-specific |
+| 525 | `crates/cargo-horizon-mod/template/content/blockstate.json` | Defer | Horizon paths/conventions |
+
+## Part 23 — Entries 526–550
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 526 | `crates/cargo-horizon-mod/template/content/horizon-mod.toml` | Defer | API0.2, not Forge |
+| 527 | `crates/cargo-horizon-mod/template/content/item.json` | Defer | No Forge registration |
+| 528 | `crates/cargo-horizon-mod/template/content/lang.json` | Adaptable localization only | Localization idea generic; ids/resource paths differ |
+| 529 | `crates/cargo-horizon-mod/template/content/loot.json` | Adaptable data-pack concept | 1.20.1 codec validation required |
+| 530 | `crates/cargo-horizon-mod/template/content/model.json` | Adaptable sample only | Model schema/resolution version-dependent |
+| 531 | `crates/cargo-horizon-mod/template/content/pickaxe.json` | Adaptable resource idea | Tag path/version must be checked |
+| 532 | `crates/cargo-horizon-mod/template/content/recipe.json` | Adaptable example | Recipe codec/IDs need target validation |
+| 533 | `crates/cargo-horizon-mod/template/gitignore` | Adaptable after path rewrite | Generic hygiene but paths upstream-specific |
+| 534 | `crates/cargo-horizon-mod/template/native/api.toml` | Unnecessary initially | Pinned Horizon API unrelated to Forge |
+| 535 | `crates/cargo-horizon-mod/template/native/horizon-mixin.toml` | Unnecessary initially | Not Forge/1.20.1 schema |
+| 536 | `crates/cargo-horizon-mod/template/native/lib.rs` | Defer | Unsandboxed Horizon hooks, not Forge |
+| 537 | `crates/horizon-android/Cargo.toml` | Adaptable Android integration | Packaging pattern useful but game/package coupling needs rewrite |
+| 538 | `crates/horizon-anticheat/Cargo.toml` | Exclude from client | Server-only, not client runtime |
+| 539 | `crates/horizon-anticheat/src/combat.rs` | Exclude from client | Server validation only |
+| 540 | `crates/horizon-anticheat/src/lib.rs` | Exclude from client | Server moderation policy, not client engine |
+| 541 | `crates/horizon-anticheat/src/prediction.rs` | Exclude from client | Server authority only |
+| 542 | `crates/horizon-anticheat/src/timer.rs` | Exclude from client | Server-only detection |
+| 543 | `crates/horizon-assets/Cargo.toml` | Adaptable boundary; rewrite assets | Data/source APIs 26.3-specific |
+| 544 | `crates/horizon-assets/examples/blockstate_binding_fixture.rs` | Adaptable parity harness | Harness only; rebuild target registry data |
+| 545 | `crates/horizon-assets/examples/blockstate_model_fixture.rs` | Adaptable parser oracle | Not runtime/GPU render |
+| 546 | `crates/horizon-assets/examples/cuboid_model_fixture.rs` | Adaptable fixture | No atlas/parents/GPU |
+| 547 | `crates/horizon-assets/examples/item_model_fixture.rs` | Adaptable architecture; rebuild catalogs | 26.3 catalog and CPU fixture; not Android GPU proof |
+| 548 | `crates/horizon-assets/examples/model_baking_fixture.rs` | Adaptable geometry oracle | CPU geometry only |
+| 549 | `crates/horizon-assets/examples/model_choice_fixture.rs` | Adaptable selection harness | RNG target semantics need verification |
+| 550 | `crates/horizon-assets/examples/model_resolution_fixture.rs` | Adaptable inheritance tests | No GPU/final rendering |
+
+## Part 24 — Entries 551–575
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 551 | `crates/horizon-assets/examples/sprite_animation_fixture.rs` | Adaptable state tests | No image/atlas/GPU stage |
+| 552 | `crates/horizon-assets/examples/support/mod.rs` | Adaptable test support | Test serialization utilities only |
+| 553 | `crates/horizon-assets/src/animation.rs` | Adaptable CPU logic | CPU side; GPU interpolation/atlas absent |
+| 554 | `crates/horizon-assets/src/bake.rs` | Highly adaptable; port with oracle | CPU geometry, no atlas/shader/pixel parity |
+| 555 | `crates/horizon-assets/src/bake/transform.rs` | Adaptable math; rebuild transforms | JOML/asset behavior 26.3-specific |
+| 556 | `crates/horizon-assets/src/blockstate.rs` | Adaptable parser | Target JSON/schema semantics need validation |
+| 557 | `crates/horizon-assets/src/blockstate/bind.rs` | Adaptable binding | Invalid/overlap semantics need 1.20.1 oracle |
+| 558 | `crates/horizon-assets/src/blockstate/choice.rs` | Adaptable algorithm | Random consumption affects appearance; re-oracle |
+| 559 | `crates/horizon-assets/src/item_bake.rs` | Adaptable CPU bake | BTree ordering may differ from Java HashSet; no GPU |
+| 560 | `crates/horizon-assets/src/item_model.rs` | Architecture adaptable; rewrite data | All component ids/selectors are 26.3 data |
+| 561 | `crates/horizon-assets/src/item_model/component_predicate.rs` | Adaptable predicate architecture | Only selected families; rebuild component registry |
+| 562 | `crates/horizon-assets/src/item_model/foreign.rs` | Reference future extension only | No actual mod hook execution; loader support limited |
+| 563 | `crates/horizon-assets/src/item_model/foreign_tests.rs` | Adaptable tests only | Fallback is not mod runtime/Forge compatibility |
+| 564 | `crates/horizon-assets/src/item_model/special.rs` | Adaptable schema; rebuild data | Actual renderer elsewhere; 26.3 catalog |
+| 565 | `crates/horizon-assets/src/item_model/tests.rs` | Adaptable focused tests | Not renderer acceptance |
+| 566 | `crates/horizon-assets/src/json.rs` | Adaptable only after oracle | 1024-char token cap and parser edges need tests |
+| 567 | `crates/horizon-assets/src/lib.rs` | Adaptable boundary | Module aggregation, not client integration |
+| 568 | `crates/horizon-assets/src/math.rs` | Highly adaptable math | f32/platform-sensitive; ARM64/Java oracle required |
+| 569 | `crates/horizon-assets/src/model.rs` | Adaptable resource model | NeoForge OBJ/composite and 26.3 data need review |
+| 570 | `crates/horizon-assets/src/obj.rs` | Defer optional extension | Optional extension/MTL not base vanilla requirement |
+| 571 | `crates/horizon-assets/src/palette.rs` | Adaptable utility | CPU utility only; no texture upload |
+| 572 | `crates/horizon-assets/src/resolve.rs` | Highly adaptable architecture | No final GPU parity; 26.3 resource rules |
+| 573 | `crates/horizon-bench/Cargo.toml` | Adaptable measurement schema | Tooling, not gameplay |
+| 574 | `crates/horizon-bench/src/hardware.rs` | Adaptable telemetry | Android needs native APIs |
+| 575 | `crates/horizon-bench/src/lib.rs` | Adaptable report design | Upstream-specific schema; tests format logic only |
+
+## Part 25 — Entries 576–600
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 576 | `crates/horizon-bots/Cargo.toml` | Exclude from client; optional QA | Not playable Android client |
+| 577 | `crates/horizon-bots/src/main.rs` | Server QA reference only | Protocol26.3 and synthetic flight; not faithful human client |
+| 578 | `crates/horizon-chat-filter/Cargo.toml` | Exclude from client | Not client/render dependency |
+| 579 | `crates/horizon-chat-filter/data/slurs.txt` | Exclude from client | Not needed in client; false-positive policy concern |
+| 580 | `crates/horizon-chat-filter/src/lib.rs` | Exclude from client | Server moderation policy, not client chat rendering |
+| 581 | `crates/horizon-chat-filter/src/normalise.rs` | Reference only | Language-dependent; can false-positive |
+| 582 | `crates/horizon-chat-filter/src/tests.rs` | Reference tests only | One server policy, not general language semantics |
+| 583 | `crates/horizon-client-core/src/block_entity_nbt.rs` | Adaptable boundary | Useful boundary; 26.3 schema |
+| 584 | `crates/horizon-client-core/src/bossbar.rs` | High-value architecture; rewrite schema | 26.3-only types/defaults; rebuild exact 1.20.1 ids |
+| 585 | `crates/horizon-client-core/src/component.rs` | Adaptable state model | No packet sync/HUD integration; color mappings 26.3 |
+| 586 | `crates/horizon-client-core/src/fastutil_order.rs` | Adaptable tree; reimplement codecs | Later 26.3 component forms; 1.20.1 differs |
+| 587 | `crates/horizon-client-core/src/gamerules.rs` | Reference only where target oracle needs | Collection internals not universal semantics |
+| 588 | `crates/horizon-client-core/src/identifier.rs` | Adaptable typed model | 26.3 catalog; regenerate 1.20.1 table |
+| 589 | `crates/horizon-client-core/src/key_display.rs` | Adaptable validation | Two helpers differ in strictness; compare target JVM |
+| 590 | `crates/horizon-client-core/src/lang.rs` | Adaptable presentation | SDL/US layout assumptions; Android APIs differ |
+| 591 | `crates/horizon-client-core/src/nbt_path.rs` | Adaptable translation architecture | Load target 1.20.1 language resources |
+| 592 | `crates/horizon-client-core/src/nbt_value.rs` | Adaptable layering | Module aggregation, not game integration |
+| 593 | `crates/horizon-client-core/src/particle_type.rs` | Highly adaptable NBT engine | Need Java 1.20.1 oracle incl mutation/depth edges |
+| 594 | `crates/horizon-client-core/src/pattern.rs` | Adaptable utility | Numeric conversion version-specific |
+| 595 | `crates/horizon-client-core/src/potions.rs` | Reference schema; rebuild table | Later ids; regenerate 1.20.1 registry/layers |
+| 596 | `crates/horizon-client-core/src/registries.rs` | Adaptable parser with conformance tests | No groups/braces; only a subset supported |
+| 597 | `crates/horizon-client-core/src/scoreboard.rs` | Adaptable architecture; rewrite tables | Later effect ids/mod registration; regenerate 1.20.1 |
+| 598 | `crates/horizon-client-core/src/snbt.rs` | Reference map layout; rebuild ids | 26.3 catalog cannot be used as 1.20.1 truth |
+| 599 | `crates/horizon-client-core/src/sound_source.rs` | High-value state/save model; rebuild | 26.3 criteria/stats, no packet/HUD integration |
+| 600 | `crates/horizon-client-core/src/text.rs` | Adaptable formatting utility | Hash order heuristic; exact serialization needs Java oracle |
