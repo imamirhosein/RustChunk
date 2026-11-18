@@ -3637,3 +3637,180 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Evidence required before adoption: Require 1.20.1 fixtures, valid draw/submit counters, repeated runs, driver/API metadata and Galaxy A22 measurements.
 - Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
 
+## Batch checkpoint — entries 171–180 — 2026-11-18
+
+- Completed source review for entries 171–180 from pinned Starling snapshot `5432370d573642041585c69b40fb045b27133488`; each selected path and blob SHA was checked.
+- The long performance JSONs were read in consecutive ranges of no more than 400 lines.
+- The 26.3 software-renderer baseline and M4 Pro/RTX5080 raw performance reports provide benchmark formats only. Zero/near-zero drawn-section counters require tracing; none of these desktop numbers establishes Android performance.
+- No benchmark was run and no RustChunk build/APK/device test was performed.
+
+### 171. `benchmarks/graphics/after-lavapipe.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `946f1c27a730fff503e10b8d611d3a8e5fab35f7`
+- Size: 547 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–547.
+- Purpose: Post-change Horizon graphics benchmark using Mesa llvmpipe/lavapipe software Vulkan.
+- Implementation / logic: Records four fixed scenes at RD8/16/32, 1600×1000, Mailbox present mode, Vulkan/llvmpipe, section/upload counters and per-flight FPS/frame metrics.
+- Findings: RD32 software rendering drops to roughly 3–5 FPS. RD16 drawn_sections is zero despite uploads and frame activity. Software Vulkan is a CPU/fallback stress test, not a physical GPU result; not directly comparable to RTX4080 due different size/present mode.
+- RustChunk relevance: Adaptable host CPU/software-render fallback stress scenario, low priority for mobile release.
+- 1.20.1 implications: Linux llvmpipe is not Samsung Mali hardware or a 1.20.1 renderer.
+- Decision: Reference; Adaptable test method
+- Dependencies / cross-references: graphics benchmark harness; Mesa llvmpipe/lavapipe; Horizon renderer counters and fixed test scene.
+- Follow-up checks: Trace zero-section metric; repeat identical runs and record CPU timings; validate fallback path separately from GPU hardware.
+- RustChunk implementation mapping: Optional host diagnostic after RustChunk renderer exists; not an Android benchmark.
+- Evidence required before adoption: Require correct counter semantics, pinned software driver, repeated fixed-scene tests and separate physical Galaxy A22 validation.
+- Completion state: Complete source review; no upstream benchmark/workflow was run, no RustChunk build/APK/device test was performed.
+
+### 172. `benchmarks/graphics/baseline-4080.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `4919084242681a3cd76184f852114fe9e051bfee`
+- Size: 393 lines; full file fetched and read.
+- Coverage: Complete; all 393 lines read.
+- Purpose: Pre-change Horizon graphics baseline on RTX4080.
+- Implementation / logic: Captures four-scene short flights and render distances 8/16/32 under Vulkan; linked to baseline commit 27a32cc3 with section counters, uploaded bytes and frame performance.
+- Findings: RD16/RD32 drawn-section counter is at or near zero in some scenes, so it is not yet a reliable visual-completeness metric. No repeated confidence interval data.
+- RustChunk relevance: Historical before-state template for renderer regression tests only.
+- 1.20.1 implications: 26.3 RTX4080/Vulkan desktop results do not establish a 1.20.1 or phone baseline.
+- Decision: Reference; Version-specific
+- Dependencies / cross-references: tools/graphics_bench.py; Horizon baseline commit; renderer/GPU metrics.
+- Follow-up checks: Pair only with after-4080 after checking identical inputs/settings and counter meanings; repeat with source and driver pinned.
+- RustChunk implementation mapping: Future RustChunk baseline/after pair after a native renderer exists.
+- Evidence required before adoption: Require same source/assets/driver/resolution/scenes, repeated measurements and verified draw/submit counters.
+- Completion state: Complete source review; no upstream benchmark/workflow was run, no RustChunk build/APK/device test was performed.
+
+### 173. `benchmarks/graphics/baseline-lavapipe.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `72ea8253ca620a940812a3faa39335b8fe923050`
+- Size: 393 lines; full file fetched and read.
+- Coverage: Complete; all 393 lines read.
+- Purpose: Pre-change Horizon graphics baseline on Mesa llvmpipe/lavapipe software Vulkan.
+- Implementation / logic: Records four benchmark scenes at RD8/16/32 with software Vulkan at 1600×1000/Mailbox, FPS and renderer counters.
+- Findings: RD16/RD32 drawn-section counts are around one; this cannot be treated as a visual-completeness check. It is a historical software-render snapshot, not a physical GPU measurement.
+- RustChunk relevance: Reference-only for host software-renderer regression methodology.
+- 1.20.1 implications: Linux llvmpipe cannot predict Android Mali-G52 or 1.20.1 rendering.
+- Decision: Reference; Version-specific
+- Dependencies / cross-references: graphics benchmark harness; Mesa software Vulkan; Horizon renderer baseline.
+- Follow-up checks: Check counter definitions and matching after-lavapipe conditions; preserve CPU timings and repeat runs.
+- RustChunk implementation mapping: Optional host software-renderer baseline after RustChunk renderer exists.
+- Evidence required before adoption: Require same scene/driver/tool versions, correct counters and separate ARM64 device tests.
+- Completion state: Complete source review; no upstream benchmark/workflow was run, no RustChunk build/APK/device test was performed.
+
+### 174. `benchmarks/model-state-parse-2026-10-14.md`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `15a50e8ff7ece5a5679097f18bd76d9ed5777793c`
+- Size: 70 lines; full file fetched and read.
+- Coverage: Complete; all 70 lines read.
+- Purpose: Benchmark report for reducing duplicate model-state JSON parsing with shared BTreeMap reuse.
+- Implementation / logic: Uses synthetic input with 843 block schemas and 53,952 states, warmups and 15 samples; reports 96.080 ms repeated parse vs 73.585 ms shared parse (~1.306×).
+- Findings: This isolates parse/state binding; excludes full startup, model bake, textures and GPU. Note says real-resource benefit is smaller than synthetic results.
+- RustChunk relevance: Useful optimization method: eliminate duplicate parsing only after output equality is verified.
+- 1.20.1 implications: Schema is 26.3-specific. Regenerate 1.20.1 inputs and measure memory tradeoff on Galaxy A22.
+- Decision: Adaptable; Reference
+- Dependencies / cross-references: Model-state parser; state registry; synthetic fixtures; Cargo benchmark path.
+- Follow-up checks: Inspect implementation and equality tests; build 1.20.1 fixtures; capture CPU and allocations/RAM on target phone.
+- RustChunk implementation mapping: Future native Rust model-state/resource parser; current JNI installer has no equivalent parser.
+- Evidence required before adoption: Require exact state-map equality, source/input pins, repeatable measurements, cache separation and A22 memory/thermal data.
+- Completion state: Complete source review; no upstream benchmark/workflow was run, no RustChunk build/APK/device test was performed.
+
+### 175. `benchmarks/overlay-real-packs-2026-10-15.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `f664be6c44eac16944c27ee30b0704f5f3fb2194`
+- Size: 55 lines; full file fetched and read.
+- Coverage: Complete; all 55 lines read.
+- Purpose: Benchmark results/metadata for overlay lookup using three published resource packs.
+- Implementation / logic: Records environment/toolchain, 26.3 manifest, pack URLs/versions/ZIP sizes/SHA-512, asset counts and uncompressed sizes; compares original, cold overlay and cache-hit paths, with output equivalence checked outside the timing loop.
+- Findings: Only measures overlay lookup on Linux x86_64/NVMe/warm storage; not full pack load, bake, upload or rendering. Pack files are not included; third-party licensing still applies.
+- RustChunk relevance: Adaptable methodology for cache-hit/cold lookup and content provenance in a future resource-pack manager.
+- 1.20.1 implications: 26.3 pack schema is version-specific. RustChunk needs 1.20.1 pack semantics and A22 filesystem measurements; do not redistribute unlicensed packs.
+- Decision: Adaptable; Reference
+- Dependencies / cross-references: Starling overlay/resource manager; published pack metadata and hashes; Linux cache/storage.
+- Follow-up checks: Trace cache key/invalidation and output comparator; verify pack revisions/licensing; repeat with 1.20.1 packs and Android cold/warm storage.
+- RustChunk implementation mapping: Future native resource manager benchmark; no such resource loader exists in current RustChunk.
+- Evidence required before adoption: Require cache correctness, semantic equality, legal input provenance, versioned pack fixture and Android I/O/memory measurements.
+- Completion state: Complete source review; no upstream benchmark/workflow was run, no RustChunk build/APK/device test was performed.
+
+### 176. `benchmarks/perf/horizon-m4pro-1080p-rd16.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `563707b4d975f5bc31e6fa1cb03e68faf3ebcebc`
+- Size: 759 lines; full file fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–759.
+- Purpose: Horizon 26.3 performance report at render distance 16.
+- Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Apple M4 Pro/macOS, Metal, 1920×1080 offscreen; scene-average FPS 568/333/412/357; peak RSS about 1.89 GB.
+- Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
+- RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
+- 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
+- Decision: Reference; Adaptable methodology.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
+- RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural JSON checks; no benchmark run, RustChunk build, APK or phone test was performed.
+
+### 177. `benchmarks/perf/horizon-m4pro-1080p-rd32.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `bfe22246200b7b4b02a61c345c31ff17cb0330b7`
+- Size: 759 lines; full file fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–759.
+- Purpose: Horizon 26.3 performance report at render distance 32.
+- Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Same M4 Pro/Metal/offscreen setup at RD32; average FPS 326/165/210/190; peak RSS about 2.54 GB.
+- Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
+- RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
+- 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
+- Decision: Reference; Adaptable methodology.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
+- RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural JSON checks; no benchmark run, RustChunk build, APK or phone test was performed.
+
+### 178. `benchmarks/perf/horizon-m4pro-1080p-rd8.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `181008314bde7caf60fef69bbd2727c69e1964e2`
+- Size: 759 lines; full file fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–759.
+- Purpose: Horizon 26.3 performance report at render distance 8.
+- Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Same M4 Pro/Metal/offscreen setup at RD8; average FPS 540/364/410/466; peak RSS about 1.54 GB; recorded load average is high.
+- Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
+- RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
+- 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
+- Decision: Reference; Adaptable methodology.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
+- RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural JSON checks; no benchmark run, RustChunk build, APK or phone test was performed.
+
+### 179. `benchmarks/perf/horizon-win-9800x3d-5080-rd16.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `017c9cbec6d786b71b156ea7c70e8aee2b94ab6a`
+- Size: 774 lines; full file fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–774.
+- Purpose: Horizon 26.3 performance report at render distance 16.
+- Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Windows 11 Ryzen 7 9800X3D/RTX5080, Vulkan, 1280×720; mean FPS 1712/2424/2201/1961; peak working set about 1.46 GB.
+- Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
+- RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
+- 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
+- Decision: Reference; Adaptable methodology.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
+- RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural JSON checks; no benchmark run, RustChunk build, APK or phone test was performed.
+
+### 180. `benchmarks/perf/horizon-win-9800x3d-5080-rd32.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `82e5776686fc2b765a58ee3d21f9ca6c07e934d8`
+- Size: 774 lines; full file fetched and read.
+- Coverage: complete; read consecutively in lines 1–400 and 401–774.
+- Purpose: Horizon 26.3 performance report at render distance 32.
+- Implementation / logic: Records app/build identity, OS/CPU/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, RSS/footprint and 12 raw frame records. Same Windows/RTX5080 Vulkan setup at RD32; mean FPS 1164/1389/1189/1086; peak working set about 2.04 GB.
+- Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
+- RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
+- 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
+- Decision: Reference; Adaptable methodology.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
+- RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural JSON checks; no benchmark run, RustChunk build, APK or phone test was performed.
+
