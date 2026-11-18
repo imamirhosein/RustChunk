@@ -136,7 +136,7 @@
 | 106 | `crates/horizon-world/Cargo.toml` | Adaptable | Adaptable as a dedicated world-data crate; the versioned world formats and resource pipeline must be rebuilt or verified for 1.20.1. |
 | 107 | `packaging/android/java/io/github/juanluci/starling/NativeMods.java` | Adaptable; Unnecessary | Unnecessary for the vanilla 1.20.1 base; the APK-stamp/startup-rollback pattern is adaptable later, while the current native-mod integration is Horizon-specific. |
 | 108 | `packaging/android/native_mod_permissions.py` | Adaptable; Unnecessary | Unnecessary for the vanilla 1.20.1 base; the idea of predeclaring native-extension permissions is adaptable, but this scanner is heuristic and Horizon-specific. |
-| 109 | `crates/horizon-client-render/src/chunk.rs` | Highly relevant/adaptable; Adaptable; Rewrite required | Highly adaptable as a memory-efficient resident chunk representation; global layout, section indexing, light/heightmap semantics and registry data require validation or rewrite for 1.20.1. |
+| 109 | `crates/horizon-client-render/src/chunk.rs` | Adaptable; Rewrite required | Highly adaptable as a memory-efficient resident chunk representation; global layout, section indexing, light/heightmap semantics and registry data require validation or rewrite for 1.20.1. |
 | 110 | `crates/horizon-world/src/chunk.rs` | Adaptable; Rewrite required | Adaptable as storage algorithms and palette machinery; the existing data version, registry IDs and serialized chunk layout require a 1.20.1-specific rewrite/adapter. |
 | 111 | `crates/horizon-world/src/nbt.rs` | Essential; Adaptable | Essential reusable subsystem for a Java client, but version-sensitive edge semantics and custom mixed-list behavior must be separated and validated before use in RustChunk 1.20.1. |
 | 112 | `crates/horizon-world/src/region.rs` | Adaptable | Adaptable as a region-storage implementation; verify 1.20.1 compression/repair semantics and replace or supplement hard-link publication if Android filesystem support is insufficient. |
@@ -149,7 +149,7 @@
 | 119 | `crates/horizon-client/src/main.rs` | Adaptable | Adaptable as a minimal executable/bootstrap pattern; the 26.3 mod marker and allocator feature set are Horizon-specific and must be reconsidered. |
 | 120 | `crates/horizon-world/examples/probe/main.rs` | Adaptable | Adaptable as a parity harness organization pattern; every child fixture must be replaced or versioned for 1.20.1. |
 | 121 | `crates/horizon-client/src/entry.rs` | Adaptable | Adaptable as startup architecture; mod integration and server branches require redesign or omission for vanilla 1.20.1. |
-| 122 | `crates/horizon-client/src/android.rs` | Highly relevant/adaptable; Reference | Highly relevant as an Android architecture reference; implement a smaller RustChunk bridge with explicit unsafe/JNI review and device validation. |
+| 122 | `crates/horizon-client/src/android.rs` | Adaptable; Reference | Highly relevant as an Android architecture reference; implement a smaller RustChunk bridge with explicit unsafe/JNI review and device validation. |
 | 123 | `crates/horizon-client/src/diagnostics.rs` | Adaptable | Adaptable diagnostics architecture; redaction, durability and Android exit collection need security/privacy review. |
 | 124 | `crates/horizon-client-render/src/chunk_map.rs` | Adaptable | Adaptable as resident chunk membership bookkeeping; revision lifetime, reset semantics and ordering assumptions need tests. |
 | 125 | `crates/horizon-client-render/src/mesher.rs` | Essential; Rewrite required | Essential rendering subsystem concept; reimplement against 1.20.1 model/registry/biome/light/shader data rather than copy as-is. |
@@ -158,7 +158,7 @@
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 126 | `crates/horizon-client-render/src/mesher/lighting.rs` | Highly relevant/adaptable; Adaptable; Reference | Highly adaptable as algorithm reference; constants, state facts, float narrowing and shader packing need 1.20.1 parity tests and ARM64 validation. |
+| 126 | `crates/horizon-client-render/src/mesher/lighting.rs` | Adaptable; Reference | Highly adaptable as algorithm reference; constants, state facts, float narrowing and shader packing need 1.20.1 parity tests and ARM64 validation. |
 | 127 | `crates/horizon-client-render/src/world.rs` | Adaptable | Adaptable as resident-world orchestration; ownership and invalidation should be simplified and verified against 1.20.1. |
 | 128 | `crates/horizon-client-render/src/chunk/block_entity.rs` | Adaptable | Adaptable as typed-data architecture; enum/extension types must be rebuilt for 1.20.1 and revision semantics made safer. |
 | 129 | `crates/horizon-world/src/compression.rs` | Adaptable | Adaptable as bounded compression layer; LZ4 variant and codec-ID table require version verification. |
@@ -179,7 +179,7 @@
 | 143 | `.gitattributes` | Adaptable | Enforce stable line endings for RustChunk-generated files and cross-platform checks. |
 | 144 | `.githooks/pre-commit` | Adaptable | Useful local public-tree check; must be backed by CI because hooks can be bypassed. |
 | 145 | `.githooks/pre-push` | Adaptable | Useful pre-push public-tree guard; must be backed by CI and checker tests. |
-| 146 | `.github/actionlint.yaml` | Reference-only | Only relevant if RustChunk adopts self-hosted CI runners; runner trust is critical. |
+| 146 | `.github/actionlint.yaml` | Reference; Optional/future | Only relevant if RustChunk adopts self-hosted CI runners; runner trust is critical. |
 | 147 | `.github/CODEOWNERS` | Adaptable | Protect signing, update, resource-acquisition and release paths with enforced owner review. |
 | 148 | `.github/ISSUE_TEMPLATE/bug_report.yml` | Adaptable | Strong Android bug-triage template; rewrite fields and verify log privacy/redaction. |
 | 149 | `.github/ISSUE_TEMPLATE/config.yml` | Adaptable | Issue routing pattern only; replace the Horizon-specific destination. |
@@ -191,30 +191,30 @@
 |---:|---|---|---|
 | 151 | `.github/pull_request_template.md` | Adaptable; Rewrite required | Useful PR provenance and evidence checklist; replace 26.3 references and validate with CI. |
 | 152 | `.github/release-line.txt` | Undetermined | Meaning is not clear until its consumers are traced; do not copy the value yet. |
-| 153 | `.github/trusted-reviewers.txt` | Reference-only | Repository moderation allowlist only; consumer scripts and permissions need review. |
+| 153 | `.github/trusted-reviewers.txt` | Reference; Optional/future | Repository moderation allowlist only; consumer scripts and permissions need review. |
 | 154 | `.github/workflows/cancel-on-close.yml` | Adaptable | CI cost-control pattern; verify pull_request_target safety and run-selection behavior. |
 | 155 | `.github/workflows/ci.yml` | Adaptable; Rewrite required | Strong CI foundation, but RustChunk needs 1.20.1 parity and separate Android/device gates. |
-| 156 | `.github/workflows/claim-command.yml` | Unnecessary; Adaptable/future | Contributor-claim automation only; not part of the client and requires parser/auth review. |
-| 157 | `.github/workflows/mod-registry.yml` | Adaptable; Unnecessary/future | Isolated workspace CI pattern; mod registry is not needed in the vanilla milestone. |
+| 156 | `.github/workflows/claim-command.yml` | Unnecessary; Optional/future | Contributor-claim automation only; not part of the client and requires parser/auth review. |
+| 157 | `.github/workflows/mod-registry.yml` | Adaptable; Unnecessary; Optional/future | Isolated workspace CI pattern; mod registry is not needed in the vanilla milestone. |
 | 158 | `.github/workflows/mojang-republish.yml` | Adaptable | Useful pinned-metadata change alert; rewrite and test against RustChunk's 1.20.1 acquisition lock. |
 | 159 | `.github/workflows/native-hook-stamp.yml` | Unnecessary; Optional/future | Generated native-hook ID service is irrelevant until an extension ABI is approved. |
-| 160 | `.github/workflows/native-mods.yml` | Unnecessary; Security reference | High-risk Starling native-code pipeline; not Forge and not part of the vanilla client. |
+| 160 | `.github/workflows/native-mods.yml` | Unnecessary; Reference; Optional/future | High-risk Starling native-code pipeline; not Forge and not part of the vanilla client. |
 
 ## Part 8 — Entries 161–175
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 161 | `.github/workflows/overlap-note.yml` | Adaptable; Security reference | Trusted main-branch, diff-only PR overlap automation; privileged event/runner isolation needs security tests. |
+| 161 | `.github/workflows/overlap-note.yml` | Adaptable; Reference | Trusted main-branch, diff-only PR overlap automation; privileged event/runner isolation needs security tests. |
 | 162 | `.github/workflows/pack-bench.yml` | Adaptable; Optional/future | Resource-pack branch/base benchmark pattern; replace 26.3 fixtures and add Android measurements. |
 | 163 | `.github/workflows/parity-main.yml` | Adaptable; Rewrite required | Useful parity gate/bisect pattern; requires complete 1.20.1 oracle and protected cache/runner gates. |
-| 164 | `.github/workflows/pr-labels.yml` | Adaptable; Security reference | Metadata-only PR labeling; test untrusted event data and never execute PR-head code. |
+| 164 | `.github/workflows/pr-labels.yml` | Adaptable; Reference | Metadata-only PR labeling; test untrusted event data and never execute PR-head code. |
 | 165 | `AGENTS.md` | Adaptable; Rewrite required | Strong navigation/governance template; rewrite Starling paths, versions, tools and policy assumptions. |
-| 166 | `bench/bench.py` | Optional/future; Adaptable methodology | Server-load benchmark only; later needs protocol-763 bots/server and process-cleanup hardening. |
-| 167 | `benchmarks/entity-model-document-2026-10-14/generate_fixture.py` | Adaptable; Test-only reference | Deterministic synthetic model fixture; regenerate using 1.20.1 resource schema. |
+| 166 | `bench/bench.py` | Adaptable; Optional/future | Server-load benchmark only; later needs protocol-763 bots/server and process-cleanup hardening. |
+| 167 | `benchmarks/entity-model-document-2026-10-14/generate_fixture.py` | Adaptable; Reference; Optional/future | Deterministic synthetic model fixture; regenerate using 1.20.1 resource schema. |
 | 168 | `benchmarks/entity-model-document-2026-10-14/README.md` | Adaptable; Reference | Output-equality and warm/alternating method; 42.94× result is only a synthetic parser segment. |
-| 169 | `benchmarks/entity-model-document-2026-10-14/results.json` | Reference; Adaptable schema | Raw timings agree with README but lack independent fixture/source/hardware provenance. |
-| 170 | `benchmarks/graphics/after-4080.json` | Adaptable methodology; Raw values not reusable | RTX4080/Vulkan post-change report; RD16 drawn_sections=0 requires investigation. |
-| 171 | `benchmarks/graphics/after-lavapipe.json` | Reference; Adaptable test method | Software Vulkan stress data only; RD16 drawn_sections=0 and RD32 lows need context. |
+| 169 | `benchmarks/entity-model-document-2026-10-14/results.json` | Reference; Adaptable | Raw timings agree with README but lack independent fixture/source/hardware provenance. |
+| 170 | `benchmarks/graphics/after-4080.json` | Adaptable; Reference; Version-specific | RTX4080/Vulkan post-change report; RD16 drawn_sections=0 requires investigation. |
+| 171 | `benchmarks/graphics/after-lavapipe.json` | Adaptable; Reference; Version-specific | Software Vulkan stress data only; RD16 drawn_sections=0 and RD32 lows need context. |
 | 172 | `benchmarks/graphics/baseline-4080.json` | Reference; Version-specific | Historical RTX4080 baseline; zero/near-zero draw counters limit interpretation. |
 | 173 | `benchmarks/graphics/baseline-lavapipe.json` | Reference; Version-specific | Historical llvmpipe baseline; not a physical GPU or phone proxy. |
 | 174 | `benchmarks/model-state-parse-2026-10-14.md` | Adaptable; Reference | Shared parse reuse gives a scoped synthetic 1.306× result; validate 1.20.1 and A22. |
