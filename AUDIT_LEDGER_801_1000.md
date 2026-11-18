@@ -17,12 +17,12 @@
 - Implementation / logic: Transforms supported syntax/macros/uniforms before WGSL validation.
 - Findings: Not a complete GLSL implementation; unsupported extensions and implicit semantics remain.
 - RustChunk relevance: Optional shader-pack bridge; never a baseline render dependency.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/post_glsl.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/post_glsl.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 802. `crates/horizon-client-render/src/potent_sulfur.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -34,12 +34,12 @@
 - Implementation / logic: Maps this feature into renderer-facing state.
 - Findings: Not a vanilla 1.20.1 feature or registry entry.
 - RustChunk relevance: Exclude from 1.20.1 baseline.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/potent_sulfur.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/potent_sulfur.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.nd targeted regression evidence; on-device evidence for Android/GPU/audio paths.
 
 ### 803. `crates/horizon-client-render/src/preedit.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -51,12 +51,12 @@
 - Implementation / logic: Maintains composing text and commits/cancels composition.
 - Findings: UTF-8 offsets, graphemes and Java UTF-16 indices are not interchangeable.
 - RustChunk relevance: Useful Android text-input reference; port with explicit Unicode index mapping.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/preedit.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-r
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ender/src/preedit.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 804. `crates/horizon-client-render/src/providers.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -68,12 +68,12 @@
 - Implementation / logic: Maps provider JSON to bitmap/space/Unihex/TTF-style providers.
 - Findings: Provider variants and constraints are version-specific; bound dimensions and image sizes.
 - RustChunk relevance: Rebuild codec set from 1.20.1; preserve generic glyph-provider interface.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/providers.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapp
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ing: RustChunk module corresponding to `crates/horizon-client-render/src/providers.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 805. `crates/horizon-client-render/src/screen.wgsl`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -85,12 +85,12 @@
 - Implementation / logic: Transforms GUI vertices/UVs and samples textures.
 - Findings: Must match bind layout, alpha and scaling exactly.
 - RustChunk relevance: Generic renderer pattern; validate separately on Android GPU.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks w
+- RustChunk implementation mapping: here applicable; no test was executed in this audit.
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/screen.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 806. `crates/horizon-client-render/src/screen_draw.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -102,12 +102,12 @@
 - Implementation / logic: Emits ordered sprite/fill/text/blit/scissor/tooltip draw operations.
 - Findings: Ordering and nested scissor are observable; batch only across equivalent state.
 - RustChunk relevance: High-value GUI foundation; rebuild Java 1.20.1 geometry and scaling.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: 
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/screen_draw.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 807. `crates/horizon-client-render/src/screen_effects.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -119,12 +119,12 @@
 - Implementation / logic: Selects effect quads, transforms, opacity and timing.
 - Findings: Effect list and ordering are version-specific.
 - RustChunk relevance: Reuse composition architecture; regenerate effect catalogue from 1.20.1.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/screen_effects.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping:
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant. RustChunk module corresponding to `crates/horizon-client-render/src/screen_effects.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 808. `crates/horizon-client-render/src/sculk.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -136,12 +136,12 @@
 - Implementation / logic: Produces sculk effect/render state and associated events.
 - Findings: Post-1.20.1 states may be included; data table must be filtered.
 - RustChunk relevance: Adapt 1.20.1 sculk subset only; keep game logic separate from rendering.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sculk.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device chec
+- RustChunk implementation mapping: ks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 809. `crates/horizon-client-render/src/section_mask.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -153,12 +153,12 @@
 - Implementation / logic: Bit-set insert/remove/contains/iteration over four words.
 - Findings: Index boundary and shift behavior require explicit bounds.
 - RustChunk relevance: Small reusable utility; align index to target chunk height.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/section_mask.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sculk.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 810. `crates/horizon-client-render/src/server_terrain.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -170,12 +170,12 @@
 - Implementation / logic: Decodes/updates distant terrain separately from resident chunks.
 - Findings: Horizon-specific extension, not vanilla protocol; stale tiles must never replace nearby real chunks.
 - RustChunk relevance: Optional far-terrain layer only after near-chunk correctness.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/server_terrain.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fix
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/section_mask.rs`, or an isolated optional/tooling module if the feature is not vanilla core.tures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 811. `crates/horizon-client-render/src/settings.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -187,12 +187,12 @@
 - Implementation / logic: Loads, validates, edits and serializes many option values.
 - Findings: Large set of LOD/FSR/frame-gen/native-pack settings are Horizon-only.
 - RustChunk relevance: Reuse versioned settings pattern; split vanilla options from RustChunk extensions.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: 26.3 tables unchanged.
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/settings.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 812. `crates/horizon-client-render/src/shader_options.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -204,12 +204,12 @@
 - Implementation / logic: Stores option defaults/ranges and routes changes to shader settings.
 - Findings: User pack metadata is untrusted and can request invalid ranges/rebuilds.
 - RustChunk relevance: Optional shader compatibility feature; not required for Vanilla.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/shader_options.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Cre
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/settings.rs`, or an isolated optional/tooling module if the feature is not vanilla core.ate Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 813. `crates/horizon-client-render/src/shader_pack_list.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -221,12 +221,12 @@
 - Implementation / logic: Enumerates packs and tracks selected/incompatible state.
 - Findings: File traversal, symlinks and pack compatibility need hardening.
 - RustChunk relevance: Defer; optional shader-pack manager.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: t import Starling 26.3 tables unchanged.
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/shader_pack_list.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 814. `crates/horizon-client-render/src/signs.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -238,12 +238,12 @@
 - Implementation / logic: Resolves lines/styles/glow and creates face/text draw data.
 - Findings: NBT/components and side fields must match 1.20.1 exactly.
 - RustChunk relevance: High-value 1.20.1 block-entity render feature; rebuild target NBT schema.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: 
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/signs.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 815. `crates/horizon-client-render/src/skins.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -255,12 +255,12 @@
 - Implementation / logic: Loads skin data, updates player textures and manages cache.
 - Findings: Concurrency, stale profiles and unbounded cache growth risk; later metadata may differ.
 - RustChunk relevance: Optional account appearance layer; offline fallback must work.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/skins.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/signs.rs`, or an isolated optional/tooling module if the feature is not vanilla core.case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 816. `crates/horizon-client-render/src/sound_engine.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -272,12 +272,12 @@
 - Implementation / logic: Maintains sources, loops, pitch/gain, distance attenuation, pause/stop and output device state.
 - Findings: Large replacement for conventional audio backend; source/event catalogue includes later-version data.
 - RustChunk relevance: Architecture reference only; defer full backend replacement until core loop stable.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: 
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sound_engine.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 817. `crates/horizon-client-render/src/sound_events.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -289,12 +289,12 @@
 - Implementation / logic: Builds registry of event variants and referenced sound resources.
 - Findings: Snapshot's event ids/data are 26.3-specific.
 - RustChunk relevance: Regenerate exact 1.20.1 sounds.json and subtitle keys.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sound_events.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and 
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sound_engine.rs`, or an isolated optional/tooling module if the feature is not vanilla core.device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 818. `crates/horizon-client-render/src/sound_preview.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -306,12 +306,12 @@
 - Implementation / logic: Starts/stops a temporary preview source.
 - Findings: Rapid selection/screen close can leave source lifetime bugs.
 - RustChunk relevance: Optional UI utility; keep preview token separate from gameplay audio.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: nchanged.
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sound_preview.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 819. `crates/horizon-client-render/src/spans.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -323,12 +323,12 @@
 - Implementation / logic: Stores character/style runs and provides merge/slice/iteration.
 - Findings: Unicode indexing and bidi reordering can break formatting if byte offsets are used.
 - RustChunk relevance: Useful generic text model; implement Java-compatible styles and Unicode mapping.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/spans.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sound_preview.rs`, or an isolated optional/tooling module if the feature is not vanilla core., edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 820. `crates/horizon-client-render/src/split_layout.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -340,12 +340,12 @@
 - Implementation / logic: Partitions output area into per-player screen rectangles.
 - Findings: Split-screen is Horizon-only and not first-release mobile scope.
 - RustChunk relevance: Defer; optional multi-view rendering feature.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: ng 26.3 tables unchanged.
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_layout.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 821. `crates/horizon-client-render/src/split_map.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -357,12 +357,12 @@
 - Implementation / logic: Associates player indices with allocated viewports.
 - Findings: Product-specific; reassignment/removal handling requires lifecycle tests.
 - RustChunk relevance: Defer until single-player render/input is stable.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_map.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: 
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_layout.rs`, or an isolated optional/tooling module if the feature is not vanilla core.Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 822. `crates/horizon-client-render/src/split_profiles.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -374,12 +374,12 @@
 - Implementation / logic: Selects/migrates profile settings for multiple local players.
 - Findings: Not vanilla Minecraft behavior; preset data is Horizon-specific.
 - RustChunk relevance: Reuse profile-store patterns only; no need to import schema.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_profiles.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: t import Starling 26.3 tables unchanged.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_profiles.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 823. `crates/horizon-client-render/src/split_profiles/store.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -391,12 +391,12 @@
 - Implementation / logic: Loads/saves profile records.
 - Findings: Atomic save/corrupt data handling must be checked.
 - RustChunk relevance: Reusable storage pattern, not the feature itself.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_profiles/store.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit..
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_profiles/store.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 824. `crates/horizon-client-render/src/split_ui.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -408,12 +408,12 @@
 - Implementation / logic: Composes per-view GUI and focus state.
 - Findings: Optional product layer with complicated multi-focus semantics.
 - RustChunk relevance: Defer from first RustChunk release.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_ui.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/split_ui.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 825. `crates/horizon-client-render/src/sprite_cache.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -425,12 +425,12 @@
 - Implementation / logic: Stores/loads derived sprite representations using metadata cache keys.
 - Findings: Path/size/mtime can miss same-size content replacement; cache must be versioned and bounded.
 - RustChunk relevance: Useful optimization only with stronger content-hash invalidation.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sprite_cache.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.his is not proof of 1.20.1 compatibility.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sprite_cache.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 826. `crates/horizon-client-render/src/sprites.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -442,12 +442,12 @@
 - Implementation / logic: Decodes sprite source types and builds atlas/animation frames.
 - Findings: Codec variants, alpha and image bounds are version-specific.
 - RustChunk relevance: Core renderer feature; rebuild from 1.20.1 atlas assets and source codecs.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sprites.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.ot proof of 1.20.1 compatibility.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/sprites.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 827. `crates/horizon-client-render/src/static_entity.wgsl`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -459,12 +459,12 @@
 - Implementation / logic: Applies position transforms while retaining large-world precision.
 - Findings: Coordinate-space mismatch can cause double camera offsets.
 - RustChunk relevance: Reusable shader pattern; validate RustChunk coordinate origin.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/static_entity.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/static_entity.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 828. `crates/horizon-client-render/src/streaming.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -476,12 +476,12 @@
 - Implementation / logic: Uses bounded queues, distance priority/reranking, per-column sequences, nonblocking mailbox, stale-result rejection, neighbor-light readiness and mesh pooling.
 - Findings: A stale worker result or LOD substitute must never replace nearby authoritative chunk data; near residency policy is critical.
 - RustChunk relevance: Highest-value architectural reference for RustChunk chunk gaps/void-under-feet issue; port concepts, not code wholesale.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/streaming.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/streaming.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 829. `crates/horizon-client-render/src/structure_block.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -493,12 +493,12 @@
 - Implementation / logic: Loads/saves structure data and handles placement/scan/save modes.
 - Findings: Template/rotation semantics must match 1.20.1.
 - RustChunk relevance: Useful lower-priority vanilla feature; target NBT and placement behavior must be rebuilt.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/structure_block.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/structure_block.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 830. `crates/horizon-client-render/src/system_stats.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -510,12 +510,12 @@
 - Implementation / logic: Reads CPU/memory/GPU details where available.
 - Findings: OEM/kernel nodes may be missing or permission-restricted; not a stable gameplay dependency.
 - RustChunk relevance: Optional diagnostics service only.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/system_stats.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/system_stats.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 831. `crates/horizon-client-render/src/tab_list.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -527,12 +527,12 @@
 - Implementation / logic: Sorts and renders player rows, skins and latency indicators.
 - Findings: Later profile fields may not exist in 1.20.1; packet model must be target-version-specific.
 - RustChunk relevance: Useful multiplayer UI architecture; rebuild from 1.20.1 player-info data.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/tab_list.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/tab_list.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 832. `crates/horizon-client-render/src/telemetry.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -544,12 +544,12 @@
 - Implementation / logic: Filters and serializes telemetry events.
 - Findings: Identifiers, paths and tokens must be scrubbed; telemetry is not gameplay-critical.
 - RustChunk relevance: Do not port by default; separate opt-in diagnostics and privacy review.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/telemetry.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/telemetry.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 833. `crates/horizon-client-render/src/terrain.wgsl`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -561,12 +561,12 @@
 - Implementation / logic: Transforms terrain data and computes light, visibility, fog, emission, sky/sunrise and fragment output.
 - Findings: Tightly bound to newer renderer pipelines/26.3 assets and shader features; desktop shader success would not prove Mali/GLES compatibility.
 - RustChunk relevance: Architecture/algorithm reference; build a minimal 1.20.1 terrain path first.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/terrain.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/terrain.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.e; on-device evidence for Android/GPU/audio paths.
 
 ### 834. `crates/horizon-client-render/src/test_block.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -578,12 +578,12 @@
 - Implementation / logic: Models test-block modes and controls.
 - Findings: Confirm target fields against 1.20.1 source before reuse.
 - RustChunk relevance: Optional test tooling feature; lower runtime priority.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/test_block.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/test_block.rs`, or an isolated option
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.al/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 835. `crates/horizon-client-render/src/test_instance_block.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -595,12 +595,12 @@
 - Implementation / logic: Stores and dispatches instance/test state.
 - Findings: Feature is newer than 1.20.1.
 - RustChunk relevance: Exclude from 1.20.1 baseline.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/test_instance_block.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/test_instance
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant._block.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 836. `crates/horizon-client-render/src/testgen.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -612,12 +612,12 @@
 - Implementation / logic: Converts test descriptions to generated code/fixtures.
 - Findings: Generated output must be deterministic and version-pinned.
 - RustChunk relevance: Reusable test tooling only.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/testgen.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Can
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.didate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/testgen.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 837. `crates/horizon-client-render/src/title_edition.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -629,12 +629,12 @@
 - Implementation / logic: Selects label text for title screen.
 - Findings: Branding is Horizon-specific, not a Minecraft feature.
 - RustChunk relevance: Do not port Starling branding; RustChunk owns its own identity.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed 
+- RustChunk implementation mapping: in this audit.
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/title_edition.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 838. `crates/horizon-client-render/src/trims.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -646,12 +646,12 @@
 - Implementation / logic: Maps trim patterns/materials to armor texture layers.
 - Findings: Armor trims exist in 1.20 but this snapshot's tables/assets may be newer.
 - RustChunk relevance: Useful 1.20.1 feature after rebuilding exact trim registries.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/trims.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/trim
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.s.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 839. `crates/horizon-client-render/src/ui.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -663,12 +663,12 @@
 - Implementation / logic: Routes key/mouse/text/scroll actions, updates screens and produces draw commands.
 - Findings: Large Horizon-specific UI integration; bulk port introduces coupling and lifecycle/input-focus bugs.
 - RustChunk relevance: Use as navigation reference; implement minimal 1.20.1 screens independently.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/ui.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create 
+- RustChunk implementation mapping: Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 840. `crates/horizon-client-render/src/vault.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -680,12 +680,12 @@
 - Implementation / logic: Tracks players, reward state, cooldown and loot ejection.
 - Findings: Trial Chamber/Vault are 1.21-era features, not 1.20.1.
 - RustChunk relevance: Exclude from 1.20.1 baseline.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/vault.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applica
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/ui.rs`, or an isolated optional/tooling module if the feature is not vanilla core.ble; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 841. `crates/horizon-client-render/src/weather.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -697,12 +697,12 @@
 - Implementation / logic: Computes weather strength and render descriptors.
 - Findings: Climate and biome data in snapshot are version-specific.
 - RustChunk relevance: Rebuild Java 1.20.1 weather transitions and biome rules.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/weather.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Crea
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/vault.rs`, or an isolated optional/tooling module if the feature is not vanilla core.te Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 842. `crates/horizon-client-render/src/widgets.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -714,12 +714,12 @@
 - Implementation / logic: Buttons, sliders, toggles, lists and text controls.
 - Findings: Widget style/focus/IME behavior is Horizon-specific.
 - RustChunk relevance: Reuse generic widget patterns; implement RustChunk screen-specific UX.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/widgets.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/widgets.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 843. `crates/horizon-client-render/src/world_post.wgsl`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -731,12 +731,12 @@
 - Implementation / logic: Samples/composites post effects and final color.
 - Findings: Coupled to Horizon HDR/FSR/native shader stack.
 - RustChunk relevance: Optional after baseline renderer; no dependency for Vanilla game.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/world_post.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit. not import Starling 26.3 tables unchanged.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/world_post.wgsl`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 844. `crates/horizon-client-render/src/worldborder.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -748,12 +748,12 @@
 - Implementation / logic: Interpolates size/center and calculates distance/visual warning.
 - Findings: Core logic is vanilla but interpolation/limits must match 1.20.1.
 - RustChunk relevance: Reusable vanilla behavior; compare exact formulas.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/worldborder.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/worldborder.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 845. `crates/horizon-client-render/src/zip.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -765,12 +765,12 @@
 - Implementation / logic: Parses entries and reads requested file streams.
 - Findings: Archive-bomb limits, CRC and normalized paths must be consistently enforced across methods.
 - RustChunk relevance: Important security-sensitive pack subsystem; harden before use.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/zip.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.e; this is not proof of 1.20.1 compatibility.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/src/zip.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 846. `crates/horizon-client-render/tests/sunrise_shader.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -782,12 +782,12 @@
 - Implementation / logic: Checks shader syntax and optionally compares optimized sector lookup against full fan search.
 - Findings: GPU test is ignored and was not run; host GPU success would not imply Android Mali compatibility.
 - RustChunk relevance: Adopt test structure only; no execution was performed.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/tests/sunrise_shader.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client-render/tests/sunrise_shader.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 847. `crates/horizon-client/assets/bedrock-touch.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -799,12 +799,12 @@
 - Implementation / logic: Lists icon names, upstream relative paths, SHA-1 and byte count; pins license file hash.
 - Findings: Hash pinning doesn't replace checking the actual license text and matching each included asset.
 - RustChunk relevance: Keep as provenance only; do not assume reuse rights without license review.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/bedrock-touch.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/bedrock-touch.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 848. `crates/horizon-client/assets/horizon/lang/de_de.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -816,12 +816,12 @@
 - Implementation / logic: 338 keys; comparison with English base leaves 289 keys missing; shared placeholders matched.
 - Findings: Partial localization with substantial English fallback.
 - RustChunk relevance: Optional UI localization; not a Java 1.20.1 game language file.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/de_de.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/de_de.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 849. `crates/horizon-client/assets/horizon/lang/en_us.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -833,12 +833,12 @@
 - Implementation / logic: 627 keys used as base for locale comparison.
 - Findings: Reference for Horizon UI only, not for Minecraft 1.20.1 vanilla strings.
 - RustChunk relevance: Use only as a seed for RustChunk-owned UI keys.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/en_us.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/en_us.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 850. `crates/horizon-client/assets/horizon/lang/es_es.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -850,12 +850,12 @@
 - Implementation / logic: 226 keys; 401 absent vs English; shared placeholder formats match.
 - Findings: Incomplete localization; fallback will be common.
 - RustChunk relevance: Optional UI locale; not a vanilla game language asset.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/es_es.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/es_es.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 851. `crates/horizon-client/assets/horizon/lang/fr_fr.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -867,12 +867,12 @@
 - Implementation / logic: 406 keys; 221 absent vs English; shared placeholders match.
 - Findings: Partial localization; long labels may affect layout.
 - RustChunk relevance: Optional UI locale; keep separate from 1.20.1 language data.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/fr_fr.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/fr_fr.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 852. `crates/horizon-client/assets/horizon/lang/ms_my.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -884,12 +884,12 @@
 - Implementation / logic: 627 keys; key count matches English and shared placeholder sequences match; semantic quality was not human-reviewed.
 - Findings: Coverage appears complete by key count, but key parity is not proof of translation quality.
 - RustChunk relevance: Optional locale; require human review before release.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/ms_my.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/ms_my.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 853. `crates/horizon-client/assets/horizon/lang/pl_pl.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -901,12 +901,12 @@
 - Implementation / logic: 356 keys; 271 absent vs English; shared placeholders match.
 - Findings: Partial localization; inflection and long UI text need QA.
 - RustChunk relevance: Optional locale; target version strings are not included.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/pl_pl.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/pl_pl.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.nd targeted regression evidence; on-device evidence for Android/GPU/audio paths.
 
 ### 854. `crates/horizon-client/assets/horizon/lang/pt_br.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -918,12 +918,12 @@
 - Implementation / logic: 142 keys; 485 absent vs English; high fallback reliance.
 - Findings: Very incomplete localization.
 - RustChunk relevance: Optional locale; fill strings before presenting as complete.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/pt_br.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lan
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.g/pt_br.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 855. `crates/horizon-client/assets/horizon/lang/ru_ru.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -935,12 +935,12 @@
 - Implementation / logic: 356 keys; 271 absent vs English; shared placeholders match.
 - Findings: Partial localization; long labels/plurals need QA.
 - RustChunk relevance: Optional locale.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/ru_ru.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module correspo
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.nding to `crates/horizon-client/assets/horizon/lang/ru_ru.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 856. `crates/horizon-client/assets/horizon/lang/tr_tr.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -952,12 +952,12 @@
 - Implementation / logic: 221 keys; 406 absent vs English; shared placeholders match.
 - Findings: Incomplete localization; Turkish I/İ casing needs correct case mapping.
 - RustChunk relevance: Optional locale.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/tr_tr.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Ca
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ndidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/tr_tr.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 857. `crates/horizon-client/assets/horizon/lang/uk_ua.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -969,12 +969,12 @@
 - Implementation / logic: 458 keys; 169 absent vs English; shared placeholders match.
 - Findings: Partial localization and plural QA needed.
 - RustChunk relevance: Optional locale.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/uk_ua.json`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/uk_ua.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 858. `crates/horizon-client/assets/horizon/lang/zh_cn.json`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -986,11 +986,11 @@
 - Implementation / logic: 356 keys; 271 absent vs English; shared placeholders match.
 - Findings: Partial localization; CJK font fallback/width are relevant.
 - RustChunk relevance: Optional locale; not game 1.20.1 translation content.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/zh_cn.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/assets/horizon/lang/zh_cn.json`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
 
 ### 859. `crates/horizon-client/assets/touch/attack.png`
@@ -2159,11 +2159,11 @@
 - Implementation / logic: Only repository tree metadata was read. The connector rejects PNG bytes because it accepts UTF-8 text; no signature, IHDR, dimensions, alpha or pixels were decoded.
 - Findings: Visual role, normal/pressed matching, transparency, dimensions and license/provenance remain unverified. Three files share identical blob SHA: custom_blank.png, dpad_middle.png and stick_knob.png.
 - RustChunk relevance: May support a future Android control overlay, but inclusion or redistribution must wait for visual and license checks.
-- Decision: **Metadata-only; do not approve reuse yet.**
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Obtain bytes through a binary-capable route; inspect dimensions/alpha/pixels, compare state pairs, identify consumers and verify license.
-- RustChunk implementation mapping: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
-- Evidence required before adoption: PNG file bytes and visual inspection, paired-state check, consumer trace and provenance/license verification.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Pending visual inspection; if suitable, place under `android-controls/assets` with content hash and source/license metadata.
+- RustChunk implementation mapping: PNG file bytes and visual inspection, pair
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ed-state check, consumer trace and provenance/license verification.
 - Completion state: NOT FULLY REVIEWED — binary bytes/pixels unavailable through UTF-8-only GitHub connector; source-tree SHA and size recorded only.
 
 ### 928. `crates/horizon-client/assets/touch/use_pressed.png`
@@ -2196,9 +2196,9 @@
 - Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
 - 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
 - Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/build.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/build.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 930. `crates/horizon-client/examples/chunk_load_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2210,12 +2210,12 @@
 - Implementation / logic: Times pipeline stages over controlled worker counts and checksums.
 - Findings: Synthetic fixtures/newer asset version and desktop timing are not Galaxy A22 performance evidence.
 - RustChunk relevance: Reuse stage-separated harness; rebuild 1.20.1 fixtures.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/chunk_load_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/chunk_load_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 931. `crates/horizon-client/examples/collision_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2227,12 +2227,12 @@
 - Implementation / logic: Runs synthetic cases and validates a result checksum.
 - Findings: Synthetic query mix may not represent real movement/world geometry.
 - RustChunk relevance: Reuse benchmark methodology only after collision parity.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/collision_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.of of 1.20.1 compatibility.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/collision_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 932. `crates/horizon-client/examples/gameplay_decode_profile.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2244,12 +2244,12 @@
 - Implementation / logic: Separates raw parse from later validation/typed passes.
 - Findings: Desktop profile and snapshot schema do not establish Android performance.
 - RustChunk relevance: Use as profiling tool only; rebuild target facts schema.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/gameplay_decode_profile.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/gameplay_decode_profile.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 933. `crates/horizon-client/examples/gen_light_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2261,12 +2261,12 @@
 - Implementation / logic: Times generation and light stages with optional simulation controls.
 - Findings: Newer data and potentially long-running runs; no benchmark was run.
 - RustChunk relevance: Use as harness pattern, not as measured claim.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/gen_light_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/gen_light_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 934. `crates/horizon-client/examples/json_load_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2278,12 +2278,12 @@
 - Implementation / logic: Benchmarks reader vs byte/text parse and compares failures.
 - Findings: I/O benefits depend on Android storage/allocation; no result was run.
 - RustChunk relevance: Evaluate only with target fixtures and Android profiling.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/json_load_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/json_load_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 935. `crates/horizon-client/examples/mod_port_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2295,12 +2295,12 @@
 - Implementation / logic: Collects probe data for block/item/recipe/tag support.
 - Findings: Targets newer mod API and does not prove Forge 1.20.1 compatibility.
 - RustChunk relevance: Future research aid only; no Forge support conclusion.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/mod_port_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/mod_port_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 936. `crates/horizon-client/examples/model_library_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2312,12 +2312,12 @@
 - Implementation / logic: Loads models repeatedly and reports duration/allocations.
 - Findings: Desktop allocation instrumentation isn't an Android baseline.
 - RustChunk relevance: Use to locate hot paths after model parity.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/model_library_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/model_library_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 937. `crates/horizon-client/examples/model_states_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2329,12 +2329,12 @@
 - Implementation / logic: Compares repeated resolution with precomputed facts.
 - Findings: Synthetic state corpus and newer registry sizes are not representative of 1.20.1.
 - RustChunk relevance: Adapt benchmark method; rebuild target model state table.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/model_states_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/model_states_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 938. `crates/horizon-client/examples/old_world_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2346,12 +2346,12 @@
 - Implementation / logic: Reads region chunks and writes transformed region fixtures.
 - Findings: Deletes `.mca` files under its destination before writing; destructive outside a disposable directory.
 - RustChunk relevance: Fixture-only tool; never run on user worlds.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/old_world_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/old_world_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 939. `crates/horizon-client/examples/portal_scan_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2363,12 +2363,12 @@
 - Implementation / logic: Compares cached index and scan time with checksum.
 - Findings: Synthetic workload doesn't predict real portals/player session load.
 - RustChunk relevance: Optional optimization if profiling proves portal scan hot.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/portal_scan_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/portal_scan_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage. paths.
 
 ### 940. `crates/horizon-client/examples/probe/ambient_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2380,12 +2380,12 @@
 - Implementation / logic: Serializes controlled ambient values.
 - Findings: Current resource data must be regenerated for 1.20.1.
 - RustChunk relevance: Use as a parity harness template.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/ambient_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/ambient_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage. evidence for Android/GPU/audio paths.
 
 ### 941. `crates/horizon-client/examples/probe/arrow_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2397,12 +2397,12 @@
 - Implementation / logic: Ticks scripted seeded arrows and logs projectile-visible state.
 - Findings: Item/effect and entity data may be newer; collision order is observable.
 - RustChunk relevance: Rebuild with 1.20.1 arrow/tipped-arrow semantics.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/arrow_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/arrow_probe.rs`, or an
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant. isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 942. `crates/horizon-client/examples/probe/audio_attributes_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2414,12 +2414,12 @@
 - Implementation / logic: Serializes selected audio source settings.
 - Findings: Sound groups/defaults depend on target version.
 - RustChunk relevance: Useful deterministic audio test input.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/audio_attributes_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/audio_attributes_fixture.rs`, or an isolated optional/tooling mo
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.dule if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 943. `crates/horizon-client/examples/probe/audio_common/mod.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2431,12 +2431,12 @@
 - Implementation / logic: Implements fake backend, descriptions and flushing for audio fixture tools.
 - Findings: Fake backend tests internal scheduling only, not actual audio output.
 - RustChunk relevance: Reuse in tests; keep real platform audio separate.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/audio_common/mod.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module cor
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.responding to `crates/horizon-client/examples/probe/audio_common/mod.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 944. `crates/horizon-client/examples/probe/auto_jump_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2448,12 +2448,12 @@
 - Implementation / logic: Replays movement conditions and records auto-jump outcomes.
 - Findings: Thresholds and collision geometry must match 1.20.1.
 - RustChunk relevance: High-value movement parity harness.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed i
+- RustChunk implementation mapping: n this audit.
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/auto_jump_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 945. `crates/horizon-client/examples/probe/block_entity_anim_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2465,12 +2465,12 @@
 - Implementation / logic: Runs controlled animations and serializes per-tick state.
 - Findings: Contains later-added entity/block states beyond 1.20.1; use version-filtered cases.
 - RustChunk relevance: Use as test transport; rebuild target entity list.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where appl
+- RustChunk implementation mapping: icable; no test was executed in this audit.
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_entity_anim_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 946. `crates/horizon-client/examples/probe/block_entity_render_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2482,12 +2482,12 @@
 - Implementation / logic: Builds render cases and serializes quads/text output.
 - Findings: Uses current newer model/asset catalog; not an automatic 1.20.1 oracle.
 - RustChunk relevance: Rebuild models and states for target.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_entity_render_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edg
+- RustChunk implementation mapping: e-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 947. `crates/horizon-client/examples/probe/block_entity_tickers_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2499,12 +2499,12 @@
 - Implementation / logic: Creates ticker cases and logs update order/events.
 - Findings: Registry list is version-pinned.
 - RustChunk relevance: Use only after reproducing 1.20.1 ticker order.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_entity_tickers_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where appl
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_entity_render_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.icable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 948. `crates/horizon-client/examples/probe/block_particles_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2516,12 +2516,12 @@
 - Implementation / logic: Replays scripted cases and emits particle records.
 - Findings: Particle ids/resources depend on version.
 - RustChunk relevance: Rebuild target particle set.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: 
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_particles_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 949. `crates/horizon-client/examples/probe/block_tint_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2533,12 +2533,12 @@
 - Implementation / logic: Queries color outputs at fixed positions.
 - Findings: Color maps/current biomes are from newer assets.
 - RustChunk relevance: Regenerate 1.20.1 colormaps.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_tint_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_particles_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 950. `crates/horizon-client/examples/probe/block_transform_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2550,12 +2550,12 @@
 - Implementation / logic: Outputs transformed boxes/faces for scripted states.
 - Findings: State/model catalogue is version-specific.
 - RustChunk relevance: Use as parity harness with 1.20.1 states.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_transform_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was exe
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_tint_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.cuted in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 951. `crates/horizon-client/examples/probe/breaking_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2567,12 +2567,12 @@
 - Implementation / logic: Generates breaking geometry and serializes quads/stage light.
 - Findings: Requires target-version models and crack sprite rules.
 - RustChunk relevance: Adapt after base mesher and model parity.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/breaking_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_transform_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core., edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 952. `crates/horizon-client/examples/probe/camera_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2584,12 +2584,12 @@
 - Implementation / logic: Runs JSON-line operations and prints bit-level numeric camera outputs.
 - Findings: Exact numeric behavior is visible; source uses current model/input types.
 - RustChunk relevance: High priority for first-person correctness; rebuild 1.20.1 behavior.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/camera_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/camera_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 953. `crates/horizon-client/examples/probe/cauldron_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2601,12 +2601,12 @@
 - Implementation / logic: Runs scripted cauldron fill/drain/wash cases.
 - Findings: Item/tag table must be the 1.20.1 version.
 - RustChunk relevance: Good vanilla interaction parity tool.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cauldron_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cauldron_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 954. `crates/horizon-client/examples/probe/chat_screen_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2618,12 +2618,12 @@
 - Implementation / logic: Replays text/key/mouse operations and serializes screen state.
 - Findings: Newer chat components/signing flags can appear; separate UI and protocol semantics.
 - RustChunk relevance: Rebuild screen and signed-chat behavior for 1.20.1.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chat_screen_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.scribed above; this is not proof of 1.20.1 compatibility.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chat_screen_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 955. `crates/horizon-client/examples/probe/chat_screen_fixture/registries.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2635,12 +2635,12 @@
 - Implementation / logic: Provides a fixed lookup set for fixture transport.
 - Findings: Registry contents are target-version data.
 - RustChunk relevance: Regenerate from 1.20.1 command/registry tables.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chat_screen_fixture/registries.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chat_screen_fixture/registries.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 956. `crates/horizon-client/examples/probe/chest_pair_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2652,12 +2652,12 @@
 - Implementation / logic: Creates paired chest states and emits resulting model selection.
 - Findings: Chest state logic should follow 1.20.1 block updates.
 - RustChunk relevance: Useful block-entity adjacency test.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chest_pair_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chest_pair_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 957. `crates/horizon-client/examples/probe/cloud_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2669,12 +2669,12 @@
 - Implementation / logic: Serializes generated cloud face points.
 - Findings: Custom cloud rendering may differ from vanilla.
 - RustChunk relevance: Use only as a test if RustChunk adopts the matching algorithm.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cloud_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cloud_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 958. `crates/horizon-client/examples/probe/command_parse_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2686,12 +2686,12 @@
 - Implementation / logic: Parses scripted commands and serializes success/error/arguments.
 - Findings: Includes argument types and registry keys newer than 1.20.1.
 - RustChunk relevance: Rebuild command tree from 1.20.1; don't expose newer commands.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/command_parse_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/command_parse_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 959. `crates/horizon-client/examples/probe/container_screen_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2703,12 +2703,12 @@
 - Implementation / logic: Replays clicks/drags and outputs selected slot/actions.
 - Findings: Menu click semantics must match Java 1.20.1.
 - RustChunk relevance: Useful inventory UI parity case.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/container_screen_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/container_screen_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 960. `crates/horizon-client/examples/probe/container_title_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2720,12 +2720,12 @@
 - Implementation / logic: Serializes displayed title output.
 - Findings: Modern text components may differ from 1.20.1 NBT display name.
 - RustChunk relevance: Adapt to 1.20.1 custom-name rules.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/container_title_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/container_title_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 961. `crates/horizon-client/examples/probe/creative_mining_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2737,12 +2737,12 @@
 - Implementation / logic: Checks if item permits breaking a target block in creative.
 - Findings: Uses newer `can_destroy_blocks_in_creative` component, not 1.20.1 item schema.
 - RustChunk relevance: Do not port the component; implement 1.20.1 creative behavior.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/creative_mining_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/creative_mining_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 962. `crates/horizon-client/examples/probe/creative_search_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2754,12 +2754,12 @@
 - Implementation / logic: Builds case-based result ordering.
 - Findings: Tabs and items are pinned to newer registry data.
 - RustChunk relevance: Regenerate target 1.20.1 creative inventory.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/creative_search_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/creative_search_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage..
 
 ### 963. `crates/horizon-client/examples/probe/cushion_placement_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2771,12 +2771,12 @@
 - Implementation / logic: Replays placement cases and resulting block states.
 - Findings: Verify the named block/feature exists in target registry; may be a newer/mod-specific feature.
 - RustChunk relevance: Do not assume baseline support without 1.20.1 registry evidence.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cushion_placement_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cushion_placement_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
 
 ### 964. `crates/horizon-client/examples/probe/emitter_particles_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2788,12 +2788,12 @@
 - Implementation / logic: Runs seeded emitter cases and serializes output.
 - Findings: Particle types and providers are version-specific.
 - RustChunk relevance: Rebuild target particle providers.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/emitter_particles_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/emitter_particles_p
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.robe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 965. `crates/horizon-client/examples/probe/enchanting_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2805,12 +2805,12 @@
 - Implementation / logic: Creates seeded offers and logs selection behavior.
 - Findings: Enchantments/weights and item data must match 1.20.1.
 - RustChunk relevance: Useful vanilla UI/gameplay parity tool.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/enchanting_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: 
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.RustChunk module corresponding to `crates/horizon-client/examples/probe/enchanting_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 966. `crates/horizon-client/examples/probe/entity_anim_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2822,12 +2822,12 @@
 - Implementation / logic: Runs deterministic animation cases and serializes transforms.
 - Findings: Includes later species (Creaking/Sniffer/Happy Ghast etc.) beyond 1.20.1.
 - RustChunk relevance: Use as harness architecture; filter to 1.20.1 mobs.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_anim_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device check
+- RustChunk implementation mapping: s where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 967. `crates/horizon-client/examples/probe/entity_components_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2839,12 +2839,12 @@
 - Implementation / logic: Builds entity component views and evaluates predicates.
 - Findings: Modern entity component variant schema is newer than 1.20.1.
 - RustChunk relevance: Rebuild target advancement predicates; do not import later component model.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_components_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_anim_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 968. `crates/horizon-client/examples/probe/entity_death_loot_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2856,12 +2856,12 @@
 - Implementation / logic: Runs seeded death cases and records drops.
 - Findings: New item components/species can be present; target loot data must be rebuilt.
 - RustChunk relevance: Adapt to 1.20.1 death/loot ordering.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_death_loot_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 orac
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_components_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.le fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 969. `crates/horizon-client/examples/probe/entity_particles_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2873,12 +2873,12 @@
 - Implementation / logic: Runs entity particle cases and logs spawn values.
 - Findings: Event/particle registry is version-dependent.
 - RustChunk relevance: Regenerate 1.20.1 particle map.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: ables unchanged.
 - RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_particles_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 970. `crates/horizon-client/examples/probe/environment_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2890,12 +2890,12 @@
 - Implementation / logic: Supplies controlled environmental state and serializes derived values.
 - Findings: Biome/environment data comes from pinned snapshot.
 - RustChunk relevance: Use to build 1.20.1 environment parity tests.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/environment_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_particles_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 971. `crates/horizon-client/examples/probe/finalize_spawn_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2907,12 +2907,12 @@
 - Implementation / logic: Creates seeded mobs and logs finalized state/draw order.
 - Findings: Contains species added after 1.20.1 (e.g. newer aquatic/undead variants); filter carefully.
 - RustChunk relevance: High-value test pattern; rebuild only target species.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/finalize_spawn_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: ssets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/finalize_spawn_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 972. `crates/horizon-client/examples/probe/fire_starter_sound_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2924,12 +2924,12 @@
 - Implementation / logic: Feeds seed values and logs sound, pitch and next RNG value.
 - Findings: Small but random-call order is observable and version-bound.
 - RustChunk relevance: Adapt to 1.20.1 fire charge semantics.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/fire_starter_sound_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/fire_starter_sound_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 973. `crates/horizon-client/examples/probe/firework_tooltip_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2941,12 +2941,12 @@
 - Implementation / logic: Serializes tooltip rows for selected firework cases.
 - Findings: Modern component schema may differ; 1.20.1 uses target NBT forms.
 - RustChunk relevance: Rebuild target NBT/tooltip mapping.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/firework_tooltip_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.; this is not proof of 1.20.1 compatibility.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/firework_tooltip_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 974. `crates/horizon-client/examples/probe/first_person_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2958,12 +2958,12 @@
 - Implementation / logic: Replays actions and emits first-person state.
 - Findings: Exact timing and item categories must match target 1.20.1.
 - RustChunk relevance: High priority for player feel and visual parity.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/first_person_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/first_person_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 975. `crates/horizon-client/examples/probe/frame_limiter_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2975,12 +2975,12 @@
 - Implementation / logic: Runs scripted time intervals and outputs tick/partial/delay.
 - Findings: Desktop sleeps are not an Android scheduler; lifecycle and refresh rate differ.
 - RustChunk relevance: Reuse deterministic clock design; implement platform-specific pacing.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/frame_limiter_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/frame_limiter_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 976. `crates/horizon-client/examples/probe/game_loop_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2992,12 +2992,12 @@
 - Implementation / logic: Replays scripted events and logs tick/render order.
 - Findings: Desktop window lifecycle differs from Android activity lifecycle.
 - RustChunk relevance: Match 1.20.1 tick behavior while adapting Android lifecycle.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/game_loop_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/game_loop_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 977. `crates/horizon-client/examples/probe/ghost_recipe_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3009,12 +3009,12 @@
 - Implementation / logic: Serializes recipe preview/display output.
 - Findings: Recipe and item data are version-specific.
 - RustChunk relevance: Rebuild from 1.20.1 recipe schema.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/ghost_recipe_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/ghost_recipe_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 978. `crates/horizon-client/examples/probe/held_drop_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3026,12 +3026,12 @@
 - Implementation / logic: Runs drop-one/drop-stack inputs and records inventory/result.
 - Findings: Item stack serialization and action order must match 1.20.1.
 - RustChunk relevance: Use as core inventory parity case.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/held_drop_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/held_drop_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 979. `crates/horizon-client/examples/probe/held_item_stack_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3043,12 +3043,12 @@
 - Implementation / logic: Reads selected held stack and serializes state.
 - Findings: New component fields can differ by version.
 - RustChunk relevance: Implement target ItemStack empty/count/copy semantics.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/held_item_stack_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/held_item_stack_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 980. `crates/horizon-client/examples/probe/hotbar_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3060,12 +3060,12 @@
 - Implementation / logic: Loads cases and emits slot/selection output.
 - Findings: Inventory/slot serialization is versioned.
 - RustChunk relevance: Adapt hotbar indices and NBT to 1.20.1.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hotbar_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hotbar_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 981. `crates/horizon-client/examples/probe/hud_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3077,12 +3077,12 @@
 - Implementation / logic: Builds crosshair/hotbar/health/XP and overlay draw commands.
 - Findings: Some newer HUD indicators/effects may be included; target atlas and behavior needed.
 - RustChunk relevance: High-value visual parity test; rebuild exact 1.20.1 draw list.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hud_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hud_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.-device evidence for Android/GPU/audio paths.
 
 ### 982. `crates/horizon-client/examples/probe/hud_fixture/kinds.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3094,12 +3094,12 @@
 - Implementation / logic: Generates overlay-specific outputs and state values.
 - Findings: Overlay set and game fields may contain later additions.
 - RustChunk relevance: Use only 1.20.1 overlay types and ordering.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hud_fixture/kinds.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hud_fixture/kinds.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 983. `crates/horizon-client/examples/probe/inline_object_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3111,12 +3111,12 @@
 - Implementation / logic: Serializes text with inline objects and style runs.
 - Findings: Inline-object resource syntax may be a Horizon extension, not a vanilla 1.20.1 component.
 - RustChunk relevance: Treat as optional extension until target spec confirms.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device 
+- RustChunk implementation mapping: checks where applicable; no test was executed in this audit.
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/inline_object_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 984. `crates/horizon-client/examples/probe/input_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3128,12 +3128,12 @@
 - Implementation / logic: Replays basic action sequence and emits logical state.
 - Findings: Platform bindings should not leak into game actions.
 - RustChunk relevance: Useful input test pattern.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/input_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/input_probe.rs`, or an isolated optional/t
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 985. `crates/horizon-client/examples/probe/interaction_input_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3145,12 +3145,12 @@
 - Implementation / logic: Replays press/release/action operations.
 - Findings: Must handle touch cancel and multiple pointers to avoid stuck key states.
 - RustChunk relevance: Important for Android control correctness.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/interaction_input_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk modu
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.le corresponding to `crates/horizon-client/examples/probe/interaction_input_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 986. `crates/horizon-client/examples/probe/lan_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3162,12 +3162,12 @@
 - Implementation / logic: Sends/receives local discovery messages and serializes found servers.
 - Findings: Network permission/multicast behavior differs across Android devices.
 - RustChunk relevance: Optional multiplayer convenience feature.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applica
+- RustChunk implementation mapping: ble; no test was executed in this audit.
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/lan_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 987. `crates/horizon-client/examples/probe/light_parity.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3179,12 +3179,12 @@
 - Implementation / logic: Loads chunks, applies light operations and reports differences.
 - Findings: Strong correctness oracle pattern; no test was run during this audit.
 - RustChunk relevance: Very high value for 1.20.1 lighting validation; recreate target fixtures.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/light_parity.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/light_parity.rs`, or an isolated optional/tooling module if 
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 988. `crates/horizon-client/examples/probe/lore_tooltip_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3196,12 +3196,12 @@
 - Implementation / logic: Serializes styled tooltip rows.
 - Findings: New component schema may not match 1.20.1 display.Lore NBT.
 - RustChunk relevance: Adapt to target NBT and tooltip ordering.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/lore_tooltip_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/lore_tooltip_f
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 989. `crates/horizon-client/examples/probe/marker_particles_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3213,12 +3213,12 @@
 - Implementation / logic: Runs deterministic marker particle cases and logs state.
 - Findings: Particle definitions are target-version data.
 - RustChunk relevance: Regenerate target particle set.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/marker_particles_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/marker_particles_probe.rs`, or an isolated
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant. optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 990. `crates/horizon-client/examples/probe/menu_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3230,12 +3230,12 @@
 - Implementation / logic: Replays menu interactions and serializes current state.
 - Findings: Horizon-specific screens should not be mixed with vanilla screen parity.
 - RustChunk relevance: Use as generic UI test harness; target menu set only.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/menu_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/menu_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 991. `crates/horizon-client/examples/probe/mipmap_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3247,12 +3247,12 @@
 - Implementation / logic: Creates mipmaps and records sample results.
 - Findings: Filtering/alpha behavior affects foliage/cutout textures and needs Java parity.
 - RustChunk relevance: Use to validate texture pipeline before tuning performance.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mipmap_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mipmap_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 992. `crates/horizon-client/examples/probe/mob_ai_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3264,12 +3264,12 @@
 - Implementation / logic: Builds scenarios and logs every AI-visible field, goals, navigation, movement, events and RNG state per tick.
 - Findings: Includes newer systems/species (Creaking heart, Copper Golem, Happy Ghast, Nautilus etc.) outside 1.20.1; simulation order/data are snapshot-specific.
 - RustChunk relevance: High value test harness; rebuild target 1.20.1 mob subset, never transplant its newer species list.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mob_ai_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candid
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.ate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mob_ai_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 993. `crates/horizon-client/examples/probe/mob_attributes_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3281,12 +3281,12 @@
 - Implementation / logic: Prints dimensions, scale, max health, speed, attack and related attributes.
 - Findings: Values come from newer registry data and include later attributes.
 - RustChunk relevance: Regenerate only 1.20.1 mob attribute tables.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: 
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mob_attributes_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 994. `crates/horizon-client/examples/probe/music_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3298,12 +3298,12 @@
 - Implementation / logic: Replays situation/tick/stop/frequency/toast operations and serializes channel state.
 - Findings: Music list and timing policy are versioned; fake backend isn't actual audio output.
 - RustChunk relevance: Useful scheduling parity harness; rebuild 1.20.1 music events.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: 
 - Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/music_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
+- Completion state: FULL TEXT REVIEW COMPLETE — complete source file was read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 995. `crates/horizon-client/examples/probe/natural_spawn_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3315,11 +3315,11 @@
 - Implementation / logic: Builds synthetic world and replays spawn selection/spawner/trial/vault ticks and events.
 - Findings: Contains Trial Spawner and Vault (1.21-era), plus newer species; these are not 1.20.1 baseline features.
 - RustChunk relevance: Adapt natural spawning and ordinary spawner only; exclude Trial/Vault from 1.20.1.
-- Decision: Potentially useful as a source/test/architecture reference for the subsystem described above; this is not proof of 1.20.1 compatibility.
-- 1.20.1 implications: See Findings above; adapt algorithms only after target-version comparison.
-- Follow-up checks: Rebuild versioned IDs, registries, packet/data schemas and assets from the exact Minecraft 1.20.1 sources; do not import Starling 26.3 tables unchanged.
-- RustChunk implementation mapping: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
-- Evidence required before adoption: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/natural_spawn_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/natural_spawn_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths.
 
 ### 996. `crates/horizon-client/examples/probe/options_probe.rs`
