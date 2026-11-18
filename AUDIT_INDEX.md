@@ -734,110 +734,110 @@
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 601 | `crates/horizon-client-core/src/uuid.rs` | Highly adaptable utility; strict-test parser | Parser accepts any hyphen placement if 32 hex digits remain; compare exact Java 1.20.1 behavior. |
-| 602 | `crates/horizon-client-core/src/who.rs` | Reusable local discriminator only | Mob runtime IDs are scoped/reusable; not persistent identity. |
-| 603 | `crates/horizon-client-render/examples/compositor.rs` | Adapt compositor smoke-test pattern | Desktop wgpu/winit example only; no Android surface lifecycle or device validation. |
-| 604 | `crates/horizon-client-render/examples/pack_load_bench.rs` | Adapt benchmark harness; replace fixtures | Synthetic packs and test ZIP shortcuts do not represent real 1.20.1 resource packs. |
-| 605 | `crates/horizon-client-render/src/android_controls.rs` | Optional Android UX reference | Horizon-specific touch behaviors; rebind item actions and validate multi-touch on Android. |
-| 606 | `crates/horizon-client-render/src/android_controls/custom.rs` | Optional custom-button layer | GoyControl/MCPE modes are product-specific; verify pointer/key ownership and release paths. |
-| 607 | `crates/horizon-client-render/src/android_controls/editor.rs` | Optional layout-editor reference | US/ASCII key capture and save/error behavior need international keyboard and persistence tests. |
-| 608 | `crates/horizon-client-render/src/android_controls/layout.rs` | Reuse schema-validation patterns only | Fourteen-slot profile schema and presets are Horizon-specific; create a RustChunk-owned versioned schema. |
-| 609 | `crates/horizon-client-render/src/assets.rs` | High-value asset architecture; rebuild target data | Pinned 26.3 registry, tags, facts and assets cannot be mixed with 1.20.1. |
-| 610 | `crates/horizon-client-render/src/atlas_sources.rs` | Strongly adaptable atlas logic | Verify each sprite source codec against 1.20.1 and harden malformed image/path inputs. |
-| 611 | `crates/horizon-client-render/src/audio.rs` | Audio architecture reference; defer replacement | Large OpenAL-style replacement needs 1.20.1 sound semantics and real Android output tests. |
-| 612 | `crates/horizon-client-render/src/auth.rs` | Security-sensitive reference; reimplement | Handwritten timestamp parser accepts impossible calendar dates; verify 1.20.1 services and token handling. |
-| 613 | `crates/horizon-client-render/src/ban_notice.rs` | Adapt parsing/UI pattern | Moderation JSON and translation keys must match 1.20.1; fail-closed defaults need explicit tests. |
-| 614 | `crates/horizon-client-render/src/bidi.rs` | Valuable RTL rendering reference | Arabic/Persian shaping, Unicode data and styled mixed-direction text need Java 1.20.1 golden tests. |
-| 615 | `crates/horizon-client-render/src/biome.rs` | High-value algorithms; rebuild 1.20.1 registry | Biome IDs/attributes are 26.3-specific; parser casts/count ranges and empty table need hardening. |
-| 616 | `crates/horizon-client-render/src/block_edit.rs` | Adapt strict bulk-edit algorithm only | It bypasses normal block-entity, neighbor, path and light side effects; callers must explicitly handle them. |
-| 617 | `crates/horizon-client-render/src/block_entities.rs` | High-value lifecycle reference | Reproduce 1.20.1 ticker promotion/order and chunk-load lifecycle; fastutil order is observable. |
-| 618 | `crates/horizon-client-render/src/block_entity_anim.rs` | Adapt animation state patterns | Rebuild 1.20.1 ticker catalog and client/server event behavior; later entity states are included. |
-| 619 | `crates/horizon-client-render/src/block_entity_cem.rs` | Optional OptiFine/EMF CEM feature | Not vanilla core; model catalog and supported parts must be scoped to 1.20.1. |
-| 620 | `crates/horizon-client-render/src/block_entity_render.rs` | Renderer architecture; rebuild target models/catalog | Model states/assets are 26.3; separate dynamic render, static cache and target-version entity model data. |
+| 601 | `crates/horizon-client-core/src/uuid.rs` | adaptable; reference; version-specific | Parser accepts any hyphen placement if 32 hex digits remain; compare exact Java 1.20.1 behavior. |
+| 602 | `crates/horizon-client-core/src/who.rs` | adaptable; reference; version-specific | Mob runtime IDs are scoped/reusable; not persistent identity. |
+| 603 | `crates/horizon-client-render/examples/compositor.rs` | adaptable; reference; optional/future | Desktop wgpu/winit example only; no Android surface lifecycle or device validation. |
+| 604 | `crates/horizon-client-render/examples/pack_load_bench.rs` | adaptable; reference; version-specific | Synthetic packs and test ZIP shortcuts do not represent real 1.20.1 resource packs. |
+| 605 | `crates/horizon-client-render/src/android_controls.rs` | adaptable; optional/future; version-specific | Horizon-specific touch behaviors; rebind item actions and validate multi-touch on Android. |
+| 606 | `crates/horizon-client-render/src/android_controls/custom.rs` | adaptable; optional/future; version-specific | GoyControl/MCPE modes are product-specific; verify pointer/key ownership and release paths. |
+| 607 | `crates/horizon-client-render/src/android_controls/editor.rs` | adaptable; optional/future; version-specific | US/ASCII key capture and save/error behavior need international keyboard and persistence tests. |
+| 608 | `crates/horizon-client-render/src/android_controls/layout.rs` | adaptable; optional/future; version-specific | Fourteen-slot profile schema and presets are Horizon-specific; create a RustChunk-owned versioned schema. |
+| 609 | `crates/horizon-client-render/src/assets.rs` | adaptable; version-specific | Pinned 26.3 registry, tags, facts and assets cannot be mixed with 1.20.1. |
+| 610 | `crates/horizon-client-render/src/atlas_sources.rs` | adaptable; version-specific | Verify each sprite source codec against 1.20.1 and harden malformed image/path inputs. |
+| 611 | `crates/horizon-client-render/src/audio.rs` | adaptable; optional/future | Large OpenAL-style replacement needs 1.20.1 sound semantics and real Android output tests. |
+| 612 | `crates/horizon-client-render/src/auth.rs` | rewrite required; version-specific | Handwritten timestamp parser accepts impossible calendar dates; verify 1.20.1 services and token handling. |
+| 613 | `crates/horizon-client-render/src/ban_notice.rs` | adaptable; version-specific | Moderation JSON and translation keys must match 1.20.1; fail-closed defaults need explicit tests. |
+| 614 | `crates/horizon-client-render/src/bidi.rs` | adaptable; version-specific | Arabic/Persian shaping, Unicode data and styled mixed-direction text need Java 1.20.1 golden tests. |
+| 615 | `crates/horizon-client-render/src/biome.rs` | adaptable; version-specific | Biome IDs/attributes are 26.3-specific; parser casts/count ranges and empty table need hardening. |
+| 616 | `crates/horizon-client-render/src/block_edit.rs` | adaptable; optional/future; version-specific | It bypasses normal block-entity, neighbor, path and light side effects; callers must explicitly handle them. |
+| 617 | `crates/horizon-client-render/src/block_entities.rs` | adaptable; version-specific | Reproduce 1.20.1 ticker promotion/order and chunk-load lifecycle; fastutil order is observable. |
+| 618 | `crates/horizon-client-render/src/block_entity_anim.rs` | adaptable; version-specific | Rebuild 1.20.1 ticker catalog and client/server event behavior; later entity states are included. |
+| 619 | `crates/horizon-client-render/src/block_entity_cem.rs` | unnecessary; optional/future | Not vanilla core; model catalog and supported parts must be scoped to 1.20.1. |
+| 620 | `crates/horizon-client-render/src/block_entity_render.rs` | adaptable; version-specific | Model states/assets are 26.3; separate dynamic render, static cache and target-version entity model data. |
 ## Part 27 — Entries 621–800
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 621 | `crates/horizon-client-render/src/block_entity_render_tests.rs` | Reference tests only; do not port as runtime code. | Exercises vertex parity, cache invalidation, resource reloads and fallback paths for special block-entity models. |
-| 622 | `crates/horizon-client-render/src/bluemap.rs` | Defer as an optional network integration. | Fetches and displays remote world-map tiles and metadata alongside the in-game world. |
-| 623 | `crates/horizon-client-render/src/bluemap_detect.rs` | Optional plugin; never enable implicitly. | Detects a map endpoint from server-provided or discovered information before map tile loading. |
-| 624 | `crates/horizon-client-render/src/border.wgsl` | Adapt shader logic only after target shader compilation. | Computes the border overlay fragment colour/fade in the GPU shader. |
-| 625 | `crates/horizon-client-render/src/border_render.rs` | Adapt geometry and lifecycle; rebuild target constants. | Builds border wall/plane geometry and animation parameters for the world-border pass. |
-| 626 | `crates/horizon-client-render/src/breaking.rs` | Reusable algorithm with target atlas mapping. | Builds destroy-stage UVs and geometry for crack overlays on models/entities. |
-| 627 | `crates/horizon-client-render/src/brewing.rs` | Rebuild the data model for 1.20.1; do not copy the current catalog. | Resolves brewing operations, ingredient matches and brewing time from data-driven definitions/providers. |
-| 628 | `crates/horizon-client-render/src/camera.rs` | High-value camera architecture; replace constants and verify math. | Maintains camera pose, projection, third-person clipping, view bob, hurt and interpolation state. |
-| 629 | `crates/horizon-client-render/src/chat.rs` | Rebuild packet/security integration for 1.20.1; retain separable UI state patterns. | Coordinates chat history, draft/composition, message display, completion and signing-related UI state. |
-| 630 | `crates/horizon-client-render/src/chat_tests.rs` | Test reference only; port selected tests after target fixtures exist. | Checks chat wrapping, ordering, history, keyboard interactions and related rendering behavior. |
-| 631 | `crates/horizon-client/examples/probe/pick_block_data_fixture.rs` | Use as a test-harness reference only; rebuild the item/block-entity representation for Java 1.20.1 instead of adopting newer component-patch semantics. | Block-entity pick/place oracle fixture; item-component representation is newer than 1.20.1. |
-| 632 | `crates/horizon-client/examples/probe/place_recipe_fixture.rs` | Adapt the parity-harness architecture only; recreate recipe catalogues, menu rules and item formats for the exact 1.20.1 target. | Recipe-placement fixture; registry and item-stack formats need 1.20.1 parity. |
-| 633 | `crates/horizon-client/examples/probe/player_sync_fixture.rs` | Strong candidate for RustChunk movement tests, but regenerate packet schema and byte expectations for Java 1.20.1 before adoption. | Movement packet and teleport-velocity oracle; packet IDs/layout are protocol-version-specific. |
-| 634 | `crates/horizon-client-render/src/cit.rs` | Optional pack feature; keep separate from vanilla enchantment glint. | Builds shared texture arrays and per-layer blend parameters for custom glint effects. |
-| 635 | `crates/horizon-client-render/src/cit_armor.rs` | Reusable performance pattern; preserve exact cloud appearance. | Builds cloud geometry and updates position/phase via uniforms while remaining inside a geometry cell. |
-| 636 | `crates/horizon-client-render/src/cit_assets.rs` | High-value algorithm; adapt shape registry and movement semantics. | Uses chunk-section palettes and compact shape data to avoid scanning blocks that cannot collide. |
-| 637 | `crates/horizon-client-render/src/cit_glint.rs` | UI feature may be adapted after core screen/input works. | Provides command-block text/metadata and UI-facing state used by command-block screens. |
-| 638 | `crates/horizon-client-render/src/clouds.rs` | Optional resource-pack compatibility; defer from vanilla baseline. | Implements OptiFine-style connected textures, predicates and neighbour-sensitive sprite selection. |
-| 639 | `crates/horizon-client-render/src/collisions.rs` | Reuse generic slot/UI patterns; rebuild the container catalog. | Builds container content, slot layout and specialized chest/furnace-like screen states. |
-| 640 | `crates/horizon-client-render/src/command_block.rs` | Adapt diagnostics with a strict privacy allowlist. | Collects crash context and scrubs sensitive/player/server details before presenting or saving reports. |
-| 641 | `crates/horizon-client-render/src/connected.rs` | High-value architecture; rebuild codecs and resources from 1.20.1. | Reads datapack metadata/resources and manages reloadable data inputs. |
-| 642 | `crates/horizon-client-render/src/containers.rs` | Optional cosmetic feature; keep separate from gameplay light engine. | Adds nearby light-source values to shader-side visual shading without changing authoritative world light. |
-| 643 | `crates/horizon-client-render/src/crash.rs` | Rebuild effect and attribute registry for 1.20.1. | Stores active effects, durations, modifiers and display-facing state. |
-| 644 | `crates/horizon-client-render/src/datapack.rs` | Optional provider integration; isolate from vanilla auth. | Routes account/session behavior through an additional third-party identity provider. |
-| 645 | `crates/horizon-client-render/src/dynamic_light.rs` | Reuse shader concepts only after target pipeline parity. | Implements entity texture, lighting, overlay, fog and special-layer rendering. |
-| 646 | `crates/horizon-client-render/src/effects.rs` | Rebuild attribute catalog and evaluation rules from 1.20.1. | Resolves data-driven environmental attributes such as fog, sky, ambience and related visual/gameplay values. |
-| 647 | `crates/horizon-client-render/src/elyby.rs` | Reuse separation principle; define a RustChunk-owned schema. | Keeps extra renderer/mobile settings outside vanilla options.txt. |
-| 648 | `crates/horizon-client-render/src/entity.wgsl` | Use Rust's standard hasher unless profiling justifies this. | Centralizes a fast non-cryptographic hasher choice for internal maps/sets. |
-| 649 | `crates/horizon-client-render/src/environment.rs` | Reimplement using 1.20.1 fog semantics and current RustChunk render distances. | Combines fog type, distances, colours, water/lava effects and render-time parameters. |
-| 650 | `crates/horizon-client-render/src/extras.rs` | High-value font architecture; validate exact 1.20.1 provider codecs. | Loads bitmap, Unihex and TTF font providers, glyph metrics and atlas data. |
-| 651 | `crates/horizon-client-render/src/fast_hash.rs` | Optional compatibility extension; do not include in vanilla core. | Parses a Fusion-specific model/texture rule and applies connected model conditions. |
-| 652 | `crates/horizon-client-render/src/fog.rs` | Architectural reference only; do not transplant as one monolithic renderer. | Owns surface/device lifecycle, render passes, terrain/entities/HUD, GPU buffers, shaders, caches and presentation. |
-| 653 | `crates/horizon-client-render/src/font.rs` | Do not apply to Mali; retain only device-fingerprint-gated workarounds with evidence. | Selects driver-specific GPU workarounds for Qualcomm Adreno variants. |
-| 654 | `crates/horizon-client-render/src/fusion.rs` | Adapt core animation/mipmap logic after 1.20.1 metadata parity. | Builds frame chains and animation state for atlas sprites, including mip levels. |
-| 655 | `crates/horizon-client-render/src/gfx.rs` | Optional compute path; retain a CPU fallback. | Runs the GPU part of sprite-frame update and texture copy work. |
-| 656 | `crates/horizon-client-render/src/gfx/adreno.rs` | High-value allocator design; impose Android memory caps. | Allocates paged GPU memory, free lists, compaction and spill/reuse for meshes. |
-| 657 | `crates/horizon-client-render/src/gfx/animate.rs` | Optional shader-pack hook, not the main lighting engine. | Provides material/shader-pack access to block light values for custom material shading. |
-| 658 | `crates/horizon-client-render/src/gfx/animate.wgsl` | Optional split-screen feature; defer. | Composes multiple offscreen views into one surface. |
-| 659 | `crates/horizon-client-render/src/gfx/arena.rs` | Test source only; no test executed. | Checks destroy overlay and GPU rendering regressions. |
-| 660 | `crates/horizon-client-render/src/gfx/block_light.rs` | Optional optimization; enable only when adapter supports the exact path and profiling proves benefit. | Reads occlusion results asynchronously and uses prior-frame visibility to skip hidden sections. |
-| 661 | `crates/horizon-client-render/src/gfx/compositor.rs` | Port only with a supported backend and proven conservative result. | Evaluates occlusion/query results for section visibility. |
-| 662 | `crates/horizon-client-render/src/gfx/crumbling_tests.rs` | Adapt geometry residency; use 1.20.1 sky resources. | Builds and retains End sky cube geometry and atlas bindings. |
-| 663 | `crates/horizon-client-render/src/gfx/cull.rs` | Reference tests only; not executed. | Compares resident sky geometry and rendered pixels against expected behavior. |
-| 664 | `crates/horizon-client-render/src/gfx/cull.wgsl` | High-value batching pattern; keep stable order for translucent cases. | Groups entity draw runs by material/overlay to reduce pipeline switches while preserving semantics. |
-| 665 | `crates/horizon-client-render/src/gfx/end_sky.rs` | Optional visual feature; verify 1.20.1 glow behavior. | Builds glowing entity outline masks and compositing. |
-| 666 | `crates/horizon-client-render/src/gfx/end_sky/tests.rs` | Shader algorithm reference only. | Computes mask/edge colour for glowing entity outlines. |
-| 667 | `crates/horizon-client-render/src/gfx/entity_batch.rs` | Potential optimization; default to CPU until mobile parity/benefit demonstrated. | Transforms entity model vertices on GPU and retains a CPU expansion fallback. |
-| 668 | `crates/horizon-client-render/src/gfx/entity_outline.rs` | Optional compute backend; retain CPU path. | Computes skinned entity vertex positions and normals. |
-| 669 | `crates/horizon-client-render/src/gfx/entity_outline.wgsl` | Apply only by exact driver fingerprint. | Lowers or rewrites generated shader source for problematic older Adreno GLES drivers. |
-| 670 | `crates/horizon-client-render/src/gfx/entity_skin.rs` | Optional optimization; gate by proven adapter/driver benchmarks. | Flattens or batches section draw instances to reduce per-section draw overhead. |
-| 671 | `crates/horizon-client-render/src/gfx/entity_skin.wgsl` | Shader helper only; pair with a verified CPU fallback. | Generates flattened draw indices from draw ranges and page tables. |
-| 672 | `crates/horizon-client-render/src/gfx/entity_source.rs` | Defer; not a core Minecraft capability and risky for mobile baseline. | Coordinates offscreen real frames, interpolation, presentation thread and camera/hand motion. |
-| 673 | `crates/horizon-client-render/src/gfx/flat.rs` | Research reference only; do not port wholesale. | Interpolates consecutive images using depth, motion vectors and optical flow. |
-| 674 | `crates/horizon-client-render/src/gfx/flatten.wgsl` | Optional shader reference; defer. | Implements compute passes for depth dilation, vector fields, blending and inpainting. |
-| 675 | `crates/horizon-client-render/src/gfx/frame_gen.rs` | Optional frame-generation support; not needed for a vanilla client. | Tracks independently moving entities by ID and rasterizes motion vectors. |
-| 676 | `crates/horizon-client-render/src/gfx/frame_gen/interpolation.rs` | Optional shader; defer with frame generation. | Renders per-entity motion vectors while respecting depth and transparent texels. |
-| 677 | `crates/horizon-client-render/src/gfx/frame_gen/interpolation.wgsl` | Optional frame-generation research; not core client rendering. | Implements multilevel luma pyramids, block matching and scene-change detection. |
-| 678 | `crates/horizon-client-render/src/gfx/frame_gen/motion.rs` | Optional GPU shader. | Computes luma, histograms, multilevel searches and block vectors. |
-| 679 | `crates/horizon-client-render/src/gfx/frame_gen/motion.wgsl` | Optional desktop/display feature; not a priority for A22. | Selects HDR10/scRGB surfaces, controls paper white/peak and maps world/HUD to HDR output. |
-| 680 | `crates/horizon-client-render/src/gfx/frame_gen/optical_flow.rs` | Optional screenshot compatibility code. | Constructs a BT.2020/PQ profile for HDR screenshot interoperability. |
-| 681 | `crates/horizon-client-render/src/gfx/frame_gen/optical_flow.wgsl` | Optional HDR support only. | Measures sprite brightness on GPU for adaptive HDR highlight selection. |
-| 682 | `crates/horizon-client-render/src/gfx/hdr.rs` | High-value build-time validation; adapt for RustChunk shaders. | Audits WGSL vertex/fragment interface variables against a downlevel GPU limit. |
-| 683 | `crates/horizon-client-render/src/gfx/hdr_icc.rs` | Potential render optimization; target GPU tests required. | Draws sky after solid terrain using far-plane depth to avoid shading covered pixels. |
-| 684 | `crates/horizon-client-render/src/gfx/hdr_stats.rs` | Reference tests only; no test run. | Checks late-sky shader output pixel-for-pixel against the ordinary draw order. |
-| 685 | `crates/horizon-client-render/src/gfx/inter_stage_tests.rs` | Reusable CPU/GPU cache pattern. | Retains deterministic lightning bolt geometry by seed and reuses it while active. |
-| 686 | `crates/horizon-client-render/src/gfx/late_sky.rs` | Reference tests only; not executed. | Compares retained bolt geometry, atlas sampling and GPU draw output with a pinned reference. |
-| 687 | `crates/horizon-client-render/src/gfx/late_sky/tests.rs` | High-value architecture for RustChunk LOD, but isolate from real world simulation. | Uploads/fades distant tile meshes and handles replacement by nearer tiles. |
-| 688 | `crates/horizon-client-render/src/gfx/lightning.rs` | Optional Horizon shader-pack extension; defer from vanilla baseline. | Injects a custom material shader stage into terrain shading. |
-| 689 | `crates/horizon-client-render/src/gfx/lightning/tests/mod.rs` | Optional extension only. | Holds custom stages, settings and timers for Horizon's own shader-pack system. |
-| 690 | `crates/horizon-client-render/src/gfx/lod.rs` | Optional extension; high complexity and untrusted shader input. | Runs arbitrary multi-pass pack post effects with custom targets, bindings and history. |
-| 691 | `crates/horizon-client-render/src/gfx/native_material.rs` | Optional mod API; defer until stable render lifecycle. | Provides hook points for native mods to draw at chosen frame phases. |
-| 692 | `crates/horizon-client-render/src/gfx/native_pack.rs` | Optional API support, not vanilla core. | Defines event structs and ordered dispatch for native renderer hooks. |
-| 693 | `crates/horizon-client-render/src/gfx/native_post.rs` | Optional extension, not required for vanilla shadows. | Renders depth/colour shadow maps for custom shader packs. |
-| 694 | `crates/horizon-client-render/src/gfx/native_render.rs` | Optional custom shader feature. | Allows custom sky shader stage over renderer globals. |
-| 695 | `crates/horizon-client-render/src/gfx/native_render/generated.rs` | High-value algorithm; validate against 1.20.1 VisGraph/SectionOcclusionGraph. | Searches visible section connectivity from camera via open faces on a background worker, preserving last completed graph for frames. |
-| 696 | `crates/horizon-client-render/src/gfx/native_shadow.rs` | Optional renderer path; keep vanilla sorted transparency as fallback. | Uses multi-stage depth/transmittance accumulation and final composite for translucent surfaces. |
-| 697 | `crates/horizon-client-render/src/gfx/native_sky.rs` | Optional OIT component. | Applies OIT stages to particles, weather, border, text and other non-terrain draw categories. |
-| 698 | `crates/horizon-client-render/src/gfx/occlusion.rs` | Optional bridge, not needed for vanilla terrain arrays. | Copies sprite arrays into a 2D atlas layout expected by shader packs. |
-| 699 | `crates/horizon-client-render/src/gfx/oit.rs` | Useful non-blocking readback pattern for optional integrations. | Copies the centre depth texel through a tiny target and reads it back later without blocking the frame. |
-| 700 | `crates/horizon-client-render/src/gfx/oit_features.rs` | Optional shader-pack bridge. | Builds uniform slots for individual entity/block entity/particle draw runs. |
+| 621 | `crates/horizon-client-render/src/block_entity_render_tests.rs` | adaptable; reference; version-specific | Exercises vertex parity, cache invalidation, resource reloads and fallback paths for special block-entity models. |
+| 622 | `crates/horizon-client-render/src/bluemap.rs` | unnecessary; optional/future | Fetches and displays remote world-map tiles and metadata alongside the in-game world. |
+| 623 | `crates/horizon-client-render/src/bluemap_detect.rs` | unnecessary; optional/future | Detects a map endpoint from server-provided or discovered information before map tile loading. |
+| 624 | `crates/horizon-client-render/src/border.wgsl` | adaptable; version-specific | Computes the border overlay fragment colour/fade in the GPU shader. |
+| 625 | `crates/horizon-client-render/src/border_render.rs` | adaptable; version-specific | Builds border wall/plane geometry and animation parameters for the world-border pass. |
+| 626 | `crates/horizon-client-render/src/breaking.rs` | adaptable; version-specific | Builds destroy-stage UVs and geometry for crack overlays on models/entities. |
+| 627 | `crates/horizon-client-render/src/brewing.rs` | rewrite required; version-specific | Resolves brewing operations, ingredient matches and brewing time from data-driven definitions/providers. |
+| 628 | `crates/horizon-client-render/src/camera.rs` | adaptable; version-specific | Maintains camera pose, projection, third-person clipping, view bob, hurt and interpolation state. |
+| 629 | `crates/horizon-client-render/src/chat.rs` | adaptable; version-specific | Coordinates chat history, draft/composition, message display, completion and signing-related UI state. |
+| 630 | `crates/horizon-client-render/src/chat_tests.rs` | adaptable; reference; version-specific | Checks chat wrapping, ordering, history, keyboard interactions and related rendering behavior. |
+| 631 | `crates/horizon-client/examples/probe/pick_block_data_fixture.rs` | adaptable; reference; version-specific | Block-entity pick/place oracle fixture; item-component representation is newer than 1.20.1. |
+| 632 | `crates/horizon-client/examples/probe/place_recipe_fixture.rs` | adaptable; reference; version-specific | Recipe-placement fixture; registry and item-stack formats need 1.20.1 parity. |
+| 633 | `crates/horizon-client/examples/probe/player_sync_fixture.rs` | adaptable; reference; version-specific | Movement packet and teleport-velocity oracle; packet IDs/layout are protocol-version-specific. |
+| 634 | `crates/horizon-client-render/src/cit.rs` | unnecessary; optional/future; version-specific | This is optional OptiFine-compatible resource-pack behavior, not vanilla rendering. Rule semantics depend on the separate `horizon_optifine` parser and 26.3-era item-component model; th |
+| 635 | `crates/horizon-client-render/src/cit_armor.rs` | unnecessary; optional/future; version-specific | The source explicitly maps 26.3 equipment asset names back to pre-1.21.2 texture names. That compatibility mapping is not itself the Java 1.20.1 armor resource schema; this remains an o |
+| 636 | `crates/horizon-client-render/src/cit_assets.rs` | unnecessary; optional/future; version-specific | This is a resource-pack compatibility adapter for files vanilla does not normally enumerate. Its reserved namespace and path rebasing must be reviewed as security boundaries; the implem |
+| 637 | `crates/horizon-client-render/src/cit_glint.rs` | unnecessary; optional/future; version-specific | Builds shared texture arrays and per-layer blend parameters for custom glint effects. |
+| 638 | `crates/horizon-client-render/src/clouds.rs` | adaptable; version-specific | Builds cloud geometry and updates position/phase via uniforms while remaining inside a geometry cell. |
+| 639 | `crates/horizon-client-render/src/collisions.rs` | adaptable; version-specific | Uses chunk-section palettes and compact shape data to avoid scanning blocks that cannot collide. |
+| 640 | `crates/horizon-client-render/src/command_block.rs` | adaptable; optional/future; version-specific | Provides command-block text/metadata and UI-facing state used by command-block screens. |
+| 641 | `crates/horizon-client-render/src/connected.rs` | unnecessary; optional/future | Implements OptiFine-style connected textures, predicates and neighbour-sensitive sprite selection. |
+| 642 | `crates/horizon-client-render/src/containers.rs` | adaptable; version-specific | Builds container content, slot layout and specialized chest/furnace-like screen states. |
+| 643 | `crates/horizon-client-render/src/crash.rs` | adaptable; reference | Collects crash context and scrubs sensitive/player/server details before presenting or saving reports. |
+| 644 | `crates/horizon-client-render/src/datapack.rs` | adaptable; version-specific | Reads datapack metadata/resources and manages reloadable data inputs. |
+| 645 | `crates/horizon-client-render/src/dynamic_light.rs` | unnecessary; optional/future | Adds nearby light-source values to shader-side visual shading without changing authoritative world light. |
+| 646 | `crates/horizon-client-render/src/effects.rs` | adaptable; version-specific | Stores active effects, durations, modifiers and display-facing state. |
+| 647 | `crates/horizon-client-render/src/elyby.rs` | unnecessary; optional/future | Routes account/session behavior through an additional third-party identity provider. |
+| 648 | `crates/horizon-client-render/src/entity.wgsl` | adaptable; version-specific | Implements entity texture, lighting, overlay, fog and special-layer rendering. |
+| 649 | `crates/horizon-client-render/src/environment.rs` | adaptable; version-specific | Resolves data-driven environmental attributes such as fog, sky, ambience and related visual/gameplay values. |
+| 650 | `crates/horizon-client-render/src/extras.rs` | unnecessary; optional/future | Keeps extra renderer/mobile settings outside vanilla options.txt. |
+| 651 | `crates/horizon-client-render/src/fast_hash.rs` | adaptable; reference | Centralizes a fast non-cryptographic hasher choice for internal maps/sets. |
+| 652 | `crates/horizon-client-render/src/fog.rs` | adaptable; version-specific | Combines fog type, distances, colours, water/lava effects and render-time parameters. |
+| 653 | `crates/horizon-client-render/src/font.rs` | adaptable; version-specific | Loads bitmap, Unihex and TTF font providers, glyph metrics and atlas data. |
+| 654 | `crates/horizon-client-render/src/fusion.rs` | unnecessary; optional/future | Parses a Fusion-specific model/texture rule and applies connected model conditions. |
+| 655 | `crates/horizon-client-render/src/gfx.rs` | adaptable; version-specific | Owns surface/device lifecycle, render passes, terrain/entities/HUD, GPU buffers, shaders, caches and presentation. |
+| 656 | `crates/horizon-client-render/src/gfx/adreno.rs` | adaptable; reference; optional/future | Selects driver-specific GPU workarounds for Qualcomm Adreno variants. |
+| 657 | `crates/horizon-client-render/src/gfx/animate.rs` | adaptable; version-specific | Builds frame chains and animation state for atlas sprites, including mip levels. |
+| 658 | `crates/horizon-client-render/src/gfx/animate.wgsl` | adaptable; version-specific | Runs the GPU part of sprite-frame update and texture copy work. |
+| 659 | `crates/horizon-client-render/src/gfx/arena.rs` | adaptable; version-specific | Allocates paged GPU memory, free lists, compaction and spill/reuse for meshes. |
+| 660 | `crates/horizon-client-render/src/gfx/block_light.rs` | unnecessary; optional/future | Provides material/shader-pack access to block light values for custom material shading. |
+| 661 | `crates/horizon-client-render/src/gfx/compositor.rs` | adaptable; reference; optional/future | Composes multiple offscreen views into one surface. |
+| 662 | `crates/horizon-client-render/src/gfx/crumbling_tests.rs` | adaptable; reference; version-specific | Checks destroy overlay and GPU rendering regressions. |
+| 663 | `crates/horizon-client-render/src/gfx/cull.rs` | adaptable; version-specific | Reads occlusion results asynchronously and uses prior-frame visibility to skip hidden sections. |
+| 664 | `crates/horizon-client-render/src/gfx/cull.wgsl` | adaptable; version-specific | Evaluates occlusion/query results for section visibility. |
+| 665 | `crates/horizon-client-render/src/gfx/end_sky.rs` | adaptable; version-specific | Builds and retains End sky cube geometry and atlas bindings. |
+| 666 | `crates/horizon-client-render/src/gfx/end_sky/tests.rs` | adaptable; version-specific | Compares resident sky geometry and rendered pixels against expected behavior. |
+| 667 | `crates/horizon-client-render/src/gfx/entity_batch.rs` | adaptable; version-specific | Groups entity draw runs by material/overlay to reduce pipeline switches while preserving semantics. |
+| 668 | `crates/horizon-client-render/src/gfx/entity_outline.rs` | adaptable; version-specific | Builds glowing entity outline masks and compositing. |
+| 669 | `crates/horizon-client-render/src/gfx/entity_outline.wgsl` | adaptable; version-specific | Computes mask/edge colour for glowing entity outlines. |
+| 670 | `crates/horizon-client-render/src/gfx/entity_skin.rs` | adaptable; optional/future; version-specific | Transforms entity model vertices on GPU and retains a CPU expansion fallback. |
+| 671 | `crates/horizon-client-render/src/gfx/entity_skin.wgsl` | adaptable; optional/future; version-specific | Computes skinned entity vertex positions and normals. |
+| 672 | `crates/horizon-client-render/src/gfx/entity_source.rs` | adaptable; reference; optional/future | Lowers or rewrites generated shader source for problematic older Adreno GLES drivers. |
+| 673 | `crates/horizon-client-render/src/gfx/flat.rs` | adaptable; optional/future; version-specific | Flattens or batches section draw instances to reduce per-section draw overhead. |
+| 674 | `crates/horizon-client-render/src/gfx/flatten.wgsl` | adaptable; optional/future; version-specific | Generates flattened draw indices from draw ranges and page tables. |
+| 675 | `crates/horizon-client-render/src/gfx/frame_gen.rs` | unnecessary; optional/future; version-specific | Coordinates offscreen real frames, interpolation, presentation thread and camera/hand motion. |
+| 676 | `crates/horizon-client-render/src/gfx/frame_gen/interpolation.rs` | unnecessary; optional/future; version-specific | Interpolates consecutive images using depth, motion vectors and optical flow. |
+| 677 | `crates/horizon-client-render/src/gfx/frame_gen/interpolation.wgsl` | unnecessary; optional/future; version-specific | Implements compute passes for depth dilation, vector fields, blending and inpainting. |
+| 678 | `crates/horizon-client-render/src/gfx/frame_gen/motion.rs` | unnecessary; optional/future; version-specific | Tracks independently moving entities by ID and rasterizes motion vectors. |
+| 679 | `crates/horizon-client-render/src/gfx/frame_gen/motion.wgsl` | unnecessary; optional/future; version-specific | Renders per-entity motion vectors while respecting depth and transparent texels. |
+| 680 | `crates/horizon-client-render/src/gfx/frame_gen/optical_flow.rs` | unnecessary; optional/future; version-specific | Implements multilevel luma pyramids, block matching and scene-change detection. |
+| 681 | `crates/horizon-client-render/src/gfx/frame_gen/optical_flow.wgsl` | unnecessary; optional/future; version-specific | Computes luma, histograms, multilevel searches and block vectors. |
+| 682 | `crates/horizon-client-render/src/gfx/hdr.rs` | unnecessary; optional/future | Selects HDR10/scRGB surfaces, controls paper white/peak and maps world/HUD to HDR output. |
+| 683 | `crates/horizon-client-render/src/gfx/hdr_icc.rs` | unnecessary; optional/future | Constructs a BT.2020/PQ profile for HDR screenshot interoperability. |
+| 684 | `crates/horizon-client-render/src/gfx/hdr_stats.rs` | adaptable; reference; optional/future | Measures sprite brightness on GPU for adaptive HDR highlight selection. |
+| 685 | `crates/horizon-client-render/src/gfx/inter_stage_tests.rs` | adaptable; reference; version-specific | Audits WGSL vertex/fragment interface variables against a downlevel GPU limit. |
+| 686 | `crates/horizon-client-render/src/gfx/late_sky.rs` | adaptable; optional/future; version-specific | Draws sky after solid terrain using far-plane depth to avoid shading covered pixels. |
+| 687 | `crates/horizon-client-render/src/gfx/late_sky/tests.rs` | adaptable; reference; version-specific | Checks late-sky shader output pixel-for-pixel against the ordinary draw order. |
+| 688 | `crates/horizon-client-render/src/gfx/lightning.rs` | adaptable; optional/future | Retains deterministic lightning bolt geometry by seed and reuses it while active. |
+| 689 | `crates/horizon-client-render/src/gfx/lightning/tests/mod.rs` | adaptable; reference; optional/future | Compares retained bolt geometry, atlas sampling and GPU draw output with a pinned reference. |
+| 690 | `crates/horizon-client-render/src/gfx/lod.rs` | adaptable; optional/future; version-specific | Uploads/fades distant tile meshes and handles replacement by nearer tiles. |
+| 691 | `crates/horizon-client-render/src/gfx/native_material.rs` | unnecessary; optional/future | Injects a custom material shader stage into terrain shading. |
+| 692 | `crates/horizon-client-render/src/gfx/native_pack.rs` | unnecessary; optional/future | Holds custom stages, settings and timers for Horizon's own shader-pack system. |
+| 693 | `crates/horizon-client-render/src/gfx/native_post.rs` | unnecessary; optional/future | Runs arbitrary multi-pass pack post effects with custom targets, bindings and history. |
+| 694 | `crates/horizon-client-render/src/gfx/native_render.rs` | unnecessary; optional/future | Provides hook points for native mods to draw at chosen frame phases. |
+| 695 | `crates/horizon-client-render/src/gfx/native_render/generated.rs` | unnecessary; optional/future | Defines event structs and ordered dispatch for native renderer hooks. |
+| 696 | `crates/horizon-client-render/src/gfx/native_shadow.rs` | unnecessary; optional/future | Renders depth/colour shadow maps for custom shader packs. |
+| 697 | `crates/horizon-client-render/src/gfx/native_sky.rs` | unnecessary; optional/future | Allows custom sky shader stage over renderer globals. |
+| 698 | `crates/horizon-client-render/src/gfx/occlusion.rs` | adaptable; version-specific | Searches visible section connectivity from camera via open faces on a background worker, preserving last completed graph for frames. |
+| 699 | `crates/horizon-client-render/src/gfx/oit.rs` | unnecessary; optional/future | Uses multi-stage depth/transmittance accumulation and final composite for translucent surfaces. |
+| 700 | `crates/horizon-client-render/src/gfx/oit_features.rs` | unnecessary; optional/future | Applies OIT stages to particles, weather, border, text and other non-terrain draw categories. |
 | 701 | `crates/horizon-client-render/src/gfx/pack_atlas.rs` | Optional shader pack layer. | Groups entity and particle spans by pack program and falls back to Horizon draw for unclaimed spans. |
 | 702 | `crates/horizon-client-render/src/gfx/pack_center_depth.rs` | Optional shader pack compatibility. | Builds hand projection and geometry binding for shader-pack hand programs. |
 | 703 | `crates/horizon-client-render/src/gfx/pack_draw.rs` | Optional extension with untrusted resource allocation risk. | Creates, sizes, clears, snapshots and reads back pack-owned image/storage-buffer resources. |

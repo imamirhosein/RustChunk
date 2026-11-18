@@ -328,3 +328,87 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 
 - Next range: **601–700**.
 - Continue only on `starling-1.20.1-port-audit`; do not modify the original backup branch.
+
+
+## QA batch 601–700 — 2026-11-18
+
+### Scope and provenance
+
+- QA-reviewed exactly 100 existing entries (601–700) against pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; no source path was added, removed or renumbered.
+- The pinned source tree contains 5749 entries and is not truncated. All 100 paths exist in that tree and all 100 recorded Source SHAs match the pinned Git blob SHAs.
+- Canonical byte counts were checked against the pinned tree and fetched source. Corrected entry 620 from 152,652 to 152,654 bytes.
+- Corrected logical line counts for the three replacement fixtures: entry 631 97→96, entry 632 99→98, entry 633 73→72. Final-LF files do not count the synthetic empty split element as a source line.
+- Rewrote long-file Coverage records as consecutive, gap-free ranges of at most 400 logical lines, ending at each source's canonical final line.
+- Verified the Index has 1,000 sequential rows and 1,000 unique source paths; entries 601–700 match their Ledger paths. No duplicate path exists in the full index.
+
+### Critical detail-alignment correction
+
+- The three replacement fixture paths at 631–633 were correctly described, but the descriptive fields after entry 633 had not been re-aligned to the updated source-path sequence.
+- Source repository/ref, Source SHA, Size and Coverage were already attached to the correct path. Starting at entry 634, the other 11 descriptive fields (Purpose through Completion state) were shifted by three source slots.
+- Reconstructed entries 634–636 from their actual pinned source files (`cit.rs`, `cit_armor.rs`, `cit_assets.rs`), then reassigned the detailed fields from slots 634–697 to their correct source paths at 637–700. The Index decisions and reasons were realigned to match the corrected Ledger.
+- This corrects the mapping for CIT, clouds, collisions, command-block UI, connected textures, containers, crash reports, datapacks, dynamic light, effects, Ely.by, shaders, environment, extras, fast-hash, fog, fonts, Fusion, the main renderer, Adreno workarounds, animation, GPU arenas, block lighting, compositor, culling, End sky, entity batching/outline/skinning, frame generation, HDR, late sky, lightning, LOD, native shader hooks, occlusion and OIT.
+- The original displaced details from slots 698–700 are preserved below for QA 701–703. They belong to source entries 701–703, not to the current entries 698–700. Entries 701–800 have not been approved or modified in this pass.
+
+### Decisions and scope
+
+- Standardized all 100 Ledger Decision fields and matching Index decision cells to the protocol's primary labels (`essential`, `adaptable`, `rewrite required`, `integrate`, `unnecessary`, `undetermined`) with only approved secondary qualifiers (`reference`, `version-specific`, `optional/future`).
+- Clarified that OptiFine/CIT, Fusion, dynamic lighting, BlueMap, Ely.by, frame generation, HDR, native shader packs and OIT are optional compatibility/renderer extensions, not prerequisites for the vanilla 1.20.1 baseline.
+- Frame generation, HDR and OIT have no demonstrated support or performance benefit on the target Mali-G52 Android device; defer them until separate backend/device evidence exists.
+- The section-occlusion graph and far-terrain LOD are different systems: visibility culling must not hide authoritative loaded chunks, and far tiles remain visual approximations only.
+
+### Carry-forward details for QA 701–703
+
+The original displaced detailed fields from slots 698–700 are preserved here. During QA 701–800, apply each record's details to its correct source path at 701–703 after checking SHA, size and actual contents:
+
+### Preserved original shifted detail from slot 698 — carry forward to source entry 701
+- Purpose: Shader-pack block atlas conversion
+- Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
+- Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
+- Findings: Copies sprite arrays into a 2D atlas layout expected by shader packs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
+- Decision: Optional bridge, not needed for vanilla terrain arrays.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Atlas size and array split depend on GPU max texture limits.
+- RustChunk implementation mapping: Atlas size and array split depend on GPU max texture limits.
+- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
+- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+
+### Preserved original shifted detail from slot 699 — carry forward to source entry 702
+- Purpose: Asynchronous center-depth readback
+- Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
+- Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
+- Findings: Copies the centre depth texel through a tiny target and reads it back later without blocking the frame.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
+- Decision: Useful non-blocking readback pattern for optional integrations.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Depth formats, copy alignment and map lifetime depend on backend.
+- RustChunk implementation mapping: Depth formats, copy alignment and map lifetime depend on backend.
+- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
+- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+
+### Preserved original shifted detail from slot 700 — carry forward to source entry 703
+- Purpose: Shader-pack per-draw uniforms
+- Dependencies / cross-references: Depends on the wgpu renderer, frame graph, shader/asset bindings and GPU adapter capabilities; optional pack paths additionally depend on the relevant shader-pack API.
+- Implementation / logic: GPU/render implementation with allocation, pipeline, pass-order, readback or batching responsibilities; optional paths must retain a conservative fallback.
+- Findings: Builds uniform slots for individual entity/block entity/particle draw runs.
+- RustChunk relevance: Relevant to rendering/GPU architecture; optional renderer extensions must not become prerequisites for vanilla gameplay.
+- Decision: Optional shader-pack bridge.
+- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
+- Follow-up checks: Newer pack stage names and uniform schema do not match vanilla 1.20.1.
+- RustChunk implementation mapping: Newer pack stage names and uniform schema do not match vanilla 1.20.1.
+- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
+- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+
+### Verification after write
+
+- Re-read the updated Ledger, Index and QA log from GitHub and verify the active branch commit.
+- Confirmed 100 sequential entries, all 15 fields exactly once per entry, 100/100 Index path and Decision matches, and the full Index at 1,000 unique paths.
+- Confirmed all 100 Source SHAs match the pinned tree; corrected source bytes and logical line counts are recorded; long-file Coverage ranges are contiguous and end at the canonical final line.
+- The original backup `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`. GitHub reports `protected: false`, so it is procedurally read-only but not server-locked. The duplicate archive branch remains absent.
+- No Rust tests, GPU tests, benchmark execution, APK build, Android device run, Minecraft launch or Forge/server connection was performed.
+
+### Limits and next range
+
+- This pass verifies source provenance, structure, coverage metadata and the detected alignment defect; it does not claim that tests ran or that Android graphics/performance passed.
+- The three-entry alignment defect appears to continue into entries after 700. QA 701–800 must use the preserved details above and independently verify the source-to-description mapping before being accepted.
+- Next QA range: **701–800**.
