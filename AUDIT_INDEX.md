@@ -1,4 +1,4 @@
-# RustChunk Starling Audit Index — Entries 1–600
+| 766 | `crates/horizon-client/examples/probe/recipe_book_fixture.rs` | Adapt the recipe-book state model as a test reference and rebuild packet/registry fixtures for Java 1.20.1. | Recipe-book settings/persistence fixture; packet layout and registry data are version-specific. |
 
 - Source ledger: entries 1–400 in `AUDIT_LEDGER.md`; entries 401–600 in `AUDIT_LEDGER_401_600.md`
 - Source repository/ref: `starling-client/starling` / `starling`
