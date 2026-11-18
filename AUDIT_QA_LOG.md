@@ -80,3 +80,45 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 - Next range: **101–200**.
 - Continue only on `starling-1.20.1-port-audit`.
 - Do not modify `archive/audit-1000-frozen-2026-11-18` or `backup/audit-1000-unique-2026-11-18`.
+
+
+## QA batch 101–200 — 2026-11-18
+
+### Scope and checks
+
+- Reviewed entries 101–200 in `AUDIT_LEDGER_1_400.md`; no new source-audit entries were created and no entry numbers were changed.
+- Verified exactly 100 sequential ledger entries (101–200), each with all 15 required fields exactly once.
+- Compared all 100 paths against the complete Index: all 100 entry numbers and paths match.
+- Compared the batch against all four ledgers covering entries 1–1000: all 100 paths are unique within the batch and absent from entries 1–1000. The full existing set still contains 1,000 unique paths.
+- Verified every path exists in the pinned Starling tree (5,749 tree entries; tree not truncated).
+- Verified 99 recorded source SHAs matched the exact pinned Git tree. Entry 174 had a malformed SHA and was corrected to the exact tree SHA listed below.
+- Fetched the source blobs and checked logical line counts and byte sizes. Source files in this batch end with LF; the trailing LF is not an additional logical line.
+- Checked coverage endpoints. Long-file ranges remain consecutive and gap-free after correcting final endpoints.
+- Audited Index decisions for this range and normalized 15 nonstandard descriptions/placeholders into the approved decision vocabulary. Explanatory wording remains in the reason column or after an em dash in the ledger.
+
+### Corrections made on the active audit branch
+
+1. Corrected logical line counts and Coverage endpoints for all 100 entries. For 97 files, the existing count included the synthetic empty split element after the final LF and was one too high.
+2. Corrected two under-counted source files after re-reading their complete pinned blobs:
+   - 167 — `benchmarks/entity-model-document-2026-10-14/generate_fixture.py`: 29 → 31 logical lines; 1,605 bytes.
+   - 168 — `benchmarks/entity-model-document-2026-10-14/README.md`: 61 → 78 logical lines; 3,762 bytes.
+3. Corrected entry 174 — `benchmarks/model-state-parse-2026-10-14.md`:
+   - SHA corrected to `15a50e8ff7ece5a567909f18bd76d9ed5777793c`.
+   - Logical line count corrected from 70 to 69; 3,671 bytes.
+4. Added byte sizes from the pinned Git tree to the Size field for all 100 entries. Full logical line counts and byte sizes now use one consistent convention.
+5. Normalized Decision labels in entries 109, 122, 126, 146, 153, 156, 157, 160, 161, 164, 166, 167, 169, 170 and 171; matching Index rows were updated.
+6. Entry 167's findings now explicitly note that the script writes to the caller-supplied output path; callers should use a disposable destination.
+
+### Verification after writes
+
+- The archive and original backup branches were rechecked before the updates and both still pointed to baseline commit `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`.
+- The connector exposes no branch-deletion operation. Therefore the duplicate archive branch could not be removed from this session; the original backup remains untouched and authoritative, while the archive duplicate remains present at the same baseline commit.
+- GitHub reports `protected: false` for both backup branches; no server-side branch protection was enabled. Do not claim these branches are technically locked.
+- No Rust build, benchmark, unit-test run, APK build, Android device test, client launch, or server connection was performed during this QA batch.
+- Re-reading the updated ledger, Index and QA log is required before marking this batch complete.
+
+### Next QA batch
+
+- Next range: **201–300**.
+- Continue only on `starling-1.20.1-port-audit`.
+- Keep the original backup branch unchanged. Do not modify the duplicate archive branch.
