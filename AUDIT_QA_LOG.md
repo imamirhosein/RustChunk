@@ -412,3 +412,46 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - This pass verifies source provenance, structure, coverage metadata and the detected alignment defect; it does not claim that tests ran or that Android graphics/performance passed.
 - The three-entry alignment defect appears to continue into entries after 700. QA 701–800 must use the preserved details above and independently verify the source-to-description mapping before being accepted.
 - Next QA range: **701–800**.
+
+
+## QA batch 701–800 — 2026-11-19
+
+### Scope and checks
+
+- Reviewed exactly 100 existing entries (701–800). This is a corrective QA pass, not a new source-audit batch; no path was reselected or renumbered.
+- The pinned Starling tree is complete (5,749 entries, not truncated). All 100 paths exist; all recorded SHA values and byte sizes match the pinned Git tree.
+- Verified consecutive numbering, exactly one occurrence of each of the 15 standard fields, and 100/100 Ledger-to-Index path agreement.
+- Re-read complete source files from the pinned commit and recorded canonical logical line counts and byte sizes. Long files were inspected to EOF in consecutive sections of at most 400 lines.
+- Found that many existing descriptions in 701–800 had drifted onto neighbouring paths. Corrected Purpose, Dependencies, Implementation/logic, Findings, RustChunk relevance, Decision, 1.20.1 implications, follow-up checks and implementation mapping for all 100 records; updated matching Index decisions/reasons.
+- Recalculated all 100 Size and Coverage fields from the pinned source. Logical lines exclude a synthetic empty split element after a final LF.
+- Separated optional shader-pack/OIT and Horizon-only extensions from the base vanilla client. These files do not establish Forge 1.20.1 support.
+- Clarified that entry 774 is Horizon HMOD/HNMOD enablement, not Forge mod discovery or execution.
+- Identified important client foundations for later 1.20.1 work: resident sections (719), translucent sorting (731), weather (734), HUD/layout/overlays (743–748), lighting (755), far LOD (756–758), fluid meshing (763), model loading/baking (775, 777), options persistence (787–788), resource packs (794–795) and particles (797).
+- Preserved the touch-control decision: keypad profiles (752) and custom button-image handling (791) are references only; RustChunk's touch editor/layout/icons remain independently designed.
+
+### Target-version and device caveats
+
+- Starling is pinned to a newer Minecraft 26.3 snapshot. Do not reuse 26.3 IDs, registries, packets, codecs, resource formats or shader assumptions as Java 1.20.1 facts.
+- Horizon HMOD/HNMOD is unrelated to Forge 47.x.
+- Adreno-specific shader shortcuts do not establish Mali-G52 correctness/performance.
+- Far LOD must remain separate from authoritative near chunks, lighting and simulation; it cannot conceal missing near chunks.
+- Offline name/UUID generation is not Microsoft authentication and does not grant online-mode server access.
+
+### Verification after writes
+
+- Re-read the updated Ledger, Index and QA log from GitHub.
+- Confirmed 100 entries, exactly 15 fields each, 100/100 Ledger-to-Index path/decision matches, and source SHA/size pairs against the pinned upstream tree.
+- Confirmed Coverage ends at each source's canonical logical final line.
+- Original backup branch `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4` (GitHub `protected=false`; procedural read-only only). The duplicate archive branch is absent.
+- The agreed second backup is deferred until QA reaches 1,000/1,000.
+- No Rust build, unit-test suite, benchmark execution, APK build, Android-device test, Minecraft launch or multiplayer-server connection was performed.
+
+### Limits
+
+- This is a complete-source metadata, structure, coverage, description and decision QA pass. Reading tests is not executing them.
+- It does not establish RustChunk compatibility with Minecraft 1.20.1, Forge, Android ARM64/Mali or Aternos.
+
+### Next QA range
+
+- Next range: **801–900**.
+- Continue only on `starling-1.20.1-port-audit`; do not modify the original backup branch.

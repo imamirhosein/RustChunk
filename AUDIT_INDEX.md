@@ -838,106 +838,106 @@
 | 698 | `crates/horizon-client-render/src/gfx/occlusion.rs` | adaptable; version-specific | Searches visible section connectivity from camera via open faces on a background worker, preserving last completed graph for frames. |
 | 699 | `crates/horizon-client-render/src/gfx/oit.rs` | unnecessary; optional/future | Uses multi-stage depth/transmittance accumulation and final composite for translucent surfaces. |
 | 700 | `crates/horizon-client-render/src/gfx/oit_features.rs` | unnecessary; optional/future | Applies OIT stages to particles, weather, border, text and other non-terrain draw categories. |
-| 701 | `crates/horizon-client-render/src/gfx/pack_atlas.rs` | Optional shader pack layer. | Groups entity and particle spans by pack program and falls back to Horizon draw for unclaimed spans. |
-| 702 | `crates/horizon-client-render/src/gfx/pack_center_depth.rs` | Optional shader pack compatibility. | Builds hand projection and geometry binding for shader-pack hand programs. |
-| 703 | `crates/horizon-client-render/src/gfx/pack_draw.rs` | Optional extension with untrusted resource allocation risk. | Creates, sizes, clears, snapshots and reads back pack-owned image/storage-buffer resources. |
-| 704 | `crates/horizon-client-render/src/gfx/pack_entities.rs` | Optional large extension; defer wholesale. | Implements shader-pack prepare/deferred/composite/final and multiple colortex buffers/history. |
-| 705 | `crates/horizon-client-render/src/gfx/pack_hand.rs` | Optional shader helper. | Provides blit/copy/downsample helpers for the pack post graph. |
-| 706 | `crates/horizon-client-render/src/gfx/pack_images.rs` | Optional extension only. | Maintains shadow depth and colour textures and ping-pong state for shader packs. |
-| 707 | `crates/horizon-client-render/src/gfx/pack_post.rs` | Optional shader-pack integration; some geometry ideas are adaptable. | Builds sky disc, sunset fan, stars and textured sun/moon inputs for pack gbuffers stages. |
-| 708 | `crates/horizon-client-render/src/gfx/pack_post.wgsl` | Optional extension; resource hardening required. | Maps custom pack textures and sampler declarations to GPU textures/views. |
-| 709 | `crates/horizon-client-render/src/gfx/pack_shadow.rs` | Useful optional profiling architecture. | Collects asynchronous timestamp query data and reports per-pass medians/distributions. |
-| 710 | `crates/horizon-client-render/src/gfx/pack_sky.rs` | Optional API mapping; rebuild fields for 1.20.1. | Builds camera, player status, biome, item, weather, fog and matrix uniforms for shader packs. |
-| 711 | `crates/horizon-client-render/src/gfx/pack_textures.rs` | Optional extension; weather geometry may inform normal renderer. | Converts rain/snow to pack weather vertices/textures and animation phases. |
-| 712 | `crates/horizon-client-render/src/gfx/pack_timing.rs` | Potential batching optimization; prove on target GPU. | Groups solid draws by GPU arena page within distance bands to reduce bind/draw call overhead. |
-| 713 | `crates/horizon-client-render/src/gfx/pack_uniforms.rs` | UI feature; reuse resource validation patterns. | Loads six cube-map faces, validates/reduces them and draws animated title panorama. |
-| 714 | `crates/horizon-client-render/src/gfx/pack_weather.rs` | Shader helper; adapt to RustChunk GUI pipeline. | Projects cube texture coordinates and camera view for title panorama. |
-| 715 | `crates/horizon-client-render/src/gfx/page_runs.rs` | Useful screenshot portability pattern. | Renders to a readable offscreen texture when the surface cannot be copied from, then presents it. |
-| 716 | `crates/horizon-client-render/src/gfx/panorama.rs` | High-value architecture for chunk residency/render culling. | Stores section values densely by chunk column and rejects whole columns with distance/frustum bounds. |
-| 717 | `crates/horizon-client-render/src/gfx/panorama.wgsl` | Useful startup/resource reload optimization. | Reuses compiled shader modules/layouts/pipelines across renderer rebuild generations. |
-| 718 | `crates/horizon-client-render/src/gfx/readback.rs` | Do not apply to Mali by default; optional exact-device path. | Substitutes cheaper solid/cutout pipelines on selected Adreno Vulkan devices after equivalence testing. |
-| 719 | `crates/horizon-client-render/src/gfx/resident.rs` | Reference tests only, not executed. | Compares optimized static/cutout terrain pipelines with the usual terrain output. |
-| 720 | `crates/horizon-client-render/src/gfx/reuse.rs` | Reusable optimization pattern. | Builds seeded night-sky star triangles once and updates only a small rotation/brightness uniform. |
-| 721 | `crates/horizon-client-render/src/gfx/solid_paths.rs` | Shader helper. | Transforms star vertices and applies frame brightness. |
-| 722 | `crates/horizon-client-render/src/gfx/solid_paths/tests.rs` | Experimental CPU optimization; do not enable without profiling. | Hands command encoding/submission to a worker thread and preserves queue ordering around writes/readbacks. |
-| 723 | `crates/horizon-client-render/src/gfx/stars.rs` | High-value algorithmic optimization for sky rendering. | Builds the sky fan geometry once per frame instead of per-pixel ray/triangle search. |
-| 724 | `crates/horizon-client-render/src/gfx/stars.wgsl` | Essential only if the GLES backend is chosen; validate exact output. | Provides GLSL ES-compatible sampling functions for terrain textures and mip levels. |
-| 725 | `crates/horizon-client-render/src/gfx/submit.rs` | Useful portability layer; make transformations narrow and tested. | Keeps Vulkan WGSL unchanged while rewriting specific constructs for legacy GLES shader compilation. |
-| 726 | `crates/horizon-client-render/src/gfx/sunrise_fan.rs` | Test harness only. | Creates the GPU instance/backend set used by renderer tests. |
-| 727 | `crates/horizon-client-render/src/gfx/terrain_gles.wgsl.inc` | Useful diagnostic architecture; not always available on mobile. | Reads timestamp query data asynchronously and frees query slots when results arrive or fail. |
-| 728 | `crates/horizon-client-render/src/gfx/terrain_source.rs` | Reusable algorithm; validate target ordering rules. | Sorts translucent faces by distance while changing indices rather than moving vertices. |
-| 729 | `crates/horizon-client-render/src/gfx/test_gpu.rs` | High-value performance/memory pattern. | Reuses mapped staging buffers for per-frame buffer/texture uploads rather than allocating one per write. |
-| 730 | `crates/horizon-client-render/src/gfx/timing.rs` | Optional XR/split-view architecture; not needed for flat Android client. | Shares camera-relative world data across one or two eye views while varying projection/rotation. |
-| 731 | `crates/horizon-client-render/src/gfx/translucency.rs` | Adapt vanilla weather renderer separately from pack integration. | Builds and draws rain/snow quads with native and optional shader-pack paths. |
-| 732 | `crates/horizon-client-render/src/gfx/upload.rs` | Useful shader composition helper but optional. | Extracts and prefixes top-level shader names to combine vanilla snippets with pack code safely. |
-| 733 | `crates/horizon-client-render/src/gfx/view.rs` | Potential quality/performance module; keep optional and benchmarked. | Manages render resolution, FXAA/TAA history, reprojection and upscale pass. |
-| 734 | `crates/horizon-client-render/src/gfx/weather.rs` | Reuse separation of vanilla and renderer-specific settings; adapt to RustChunk-owned keys. | Stores renderer/API/preset/upscaling/LOD/culling/HDR options and recovery markers. |
-| 735 | `crates/horizon-client-render/src/gfx/wgsl_prefix.rs` | UI-only reference; no game compatibility dependency. | Defines visual design tokens and draw primitives for graphics settings UI. |
-| 736 | `crates/horizon-client-render/src/gfx/world_post.rs` | Optional UI layer; defer until renderer controls stabilize. | Presents pages, search, toggles/sliders and descriptions for renderer settings. |
-| 737 | `crates/horizon-client-render/src/graphics.rs` | Optional display feature; defer for current Android target. | Maps world/GUI into HDR output and handles PQ/scRGB and calibration visuals. |
-| 738 | `crates/horizon-client-render/src/graphics_style.rs` | Optional settings UI. | Guides the user through black-level, peak brightness and paper-white calibration. |
-| 739 | `crates/horizon-client-render/src/graphics_ui.rs` | Optional HDR helper. | Measures bright/opaque sprite texels for HDR threshold selection. |
-| 740 | `crates/horizon-client-render/src/hdr.wgsl` | High-value UI/atlas architecture; rebuild for 1.20.1 assets. | Packs GUI, font, item/block sprites and animation data into a shared atlas; emits GUI geometry batches. |
-| 741 | `crates/horizon-client-render/src/hdr_calibration.rs` | Core renderer component to adapt with version-specific assets. | Draws batched GUI sprites/textures and special overlays. |
-| 742 | `crates/horizon-client-render/src/hdr_stats.wgsl` | Optional resource-pack compatibility feature. | Adds OptiFine-style custom enchantment glint textures to GUI item quads. |
-| 743 | `crates/horizon-client-render/src/hud.rs` | Optional shader-pack feature. | Substitutes resource pack core/text shaders for GUI text and preserves uniform/vertex layout. |
-| 744 | `crates/horizon-client-render/src/hud.wgsl` | High-value parity architecture; rebuild state inputs for 1.20.1. | Computes vanilla-like hotbar, crosshair, hearts, armour, food, vehicle health and experience draw primitives. |
-| 745 | `crates/horizon-client-render/src/hud/cit_glint.rs` | Useful rendering separation; rebuild registries and packet inputs. | Builds overlays for effects, boss bars, title/subtitle, selected-item name, border, portal, vignette and other screens. |
-| 746 | `crates/horizon-client-render/src/hud/pack_text.rs` | Adapt with target effect and item registries. | Computes effect/slot information shown in inventory-facing UI. |
-| 747 | `crates/horizon-client-render/src/hud_layout.rs` | High-value utility if exact semantics are retained. | Implements Java-like string/number parsing and text operations used by renderer/UI compatibility. |
-| 748 | `crates/horizon-client-render/src/hud_overlays.rs` | Specialized UI/gameplay support; target 1.20.1 field set required. | Represents jigsaw block configuration/visual interaction data. |
-| 749 | `crates/horizon-client-render/src/inventory_effects.rs` | Optional Android UX feature. | Provides a virtual keypad/control interface for touch or text input. |
-| 750 | `crates/horizon-client-render/src/java_text.rs` | High-value state separation; rebuild packet/status lifecycle for 1.20.1. | Tracks server/client readiness, player chunk readiness, progress and loading overlays. |
-| 751 | `crates/horizon-client-render/src/jigsaw_block.rs` | Critical core system; implement against 1.20.1 light engine, not the 26.3 tables. | Computes block and sky light, face occlusion and incremental relighting over resident chunks. |
-| 752 | `crates/horizon-client-render/src/keypad.rs` | High-value architecture for distant view, but isolate from near gameplay and collision. | Samples distant column data, schedules tile meshing and selects coarse tiles beyond resident chunks. |
-| 753 | `crates/horizon-client-render/src/level_loading.rs` | Optional performance feature; adopt only after cache invalidation is proven. | Stores sampled columns in append-only region files keyed by generator/build data. |
-| 754 | `crates/horizon-client/examples/probe/raid_fixture.rs` | Adapt as a test-harness architecture only; re-derive patrol/raid state transitions and scenario outputs from the Java 1.20.1 oracle. | 1,043-line patrol/raid fixture with synthetic world stubs; Bad Omen and raid transitions need 1.20.1 comparison. |
-| 755 | `crates/horizon-client-render/src/light.rs` | Adapt logging architecture to Android app storage and privacy policy. | Writes game logs, rollover archives, recent ring buffer and crash reports with token redaction concerns. |
-| 756 | `crates/horizon-client-render/src/lod.rs` | Optional visual optimization. | Implements a separable multi-pass blur for menu backgrounds with lower-resolution software fallback. |
-| 757 | `crates/horizon-client-render/src/lod/cache.rs` | Shader helper. | Performs separable box blur/downsample operations for menu background. |
-| 758 | `crates/horizon-client-render/src/lod/mesh.rs` | Critical renderer feature; reconstruct from 1.20.1 FluidRenderer and shapes. | Generates liquid heights, faces, UV flow, neighbour occlusion, overlay and lighting. |
-| 759 | `crates/horizon-client-render/src/logging.rs` | Optional mesher optimization with high potential gains. | Builds section-local leaf-volume masks and classifies safe leaf faces for solidification/removal. |
-| 760 | `crates/horizon-client-render/src/menu_blur.rs` | Test/reference source; not executed. | Checks leaf mode geometry, cavity faces, chunk boundaries and no-leaf equivalence. |
-| 761 | `crates/horizon-client-render/src/menu_blur.wgsl` | Reference tests only. | Checks block particles use the proper particle sprite and biome tint source. |
-| 762 | `crates/horizon-client/examples/probe/random_tick_sections_probe.rs` | Use as a parity-test reference; implement only after confirming section selection and random sequence against Java 1.20.1. | Random-tick section probe; fake level records reads and does not simulate full block updates. |
-| 763 | `crates/horizon-client-render/src/mesher/fluid.rs` | Potential CPU/GPU optimization; preserve conservative bucket for unusual faces. | Groups quads by facing and emits only runs potentially visible from the camera. |
-| 764 | `crates/horizon-client-render/src/mesher/leaf_culling.rs` | Reference tests only. | Checks one-biome shortcut against full spatial tint interpolation. |
-| 765 | `crates/horizon-client-render/src/mesher/leaf_culling_tests.rs` | Reference tests only; valuable proof harness. | Uses a slow reference to verify optimized block/section visibility masks and row fill. |
-| 766 | `crates/horizon-client/examples/probe/recipe_book_fixture.rs` | Adapt the recipe-book state model as a test reference and rebuild packet/registry fixtures for Java 1.20.1. | Recipe-book settings/persistence fixture; packet layout and registry data are version-specific. |
-| 767 | `crates/horizon-client-render/src/mesher/particle_tests.rs` | High-value texture quality algorithm; validate exact target format/rounding. | Builds sprite mipmaps with linear-light colour filtering and alpha-test coverage preservation. |
-| 768 | `crates/horizon-client-render/src/mesher/reuse_tests.rs` | Optional mod manager feature; not vanilla. | Persists per-mod enable/disable choices and distinguishes native mods built into an app. |
-| 769 | `crates/horizon-client-render/src/mesher/sides.rs` | High-value resource architecture; rebuild 1.20.1 model/OBJ codecs. | Loads and resolves resource models and fallback behavior across resource-pack reloads. |
-| 770 | `crates/horizon-client-render/src/mesher/tint_tests.rs` | Optional native mod feature. | Registers standalone models requested by native mods and prepares instances for inspection/gallery. |
-| 771 | `crates/horizon-client-render/src/mesher/visibility_tests.rs` | Critical renderer architecture; regenerate from 1.20.1 registries/assets. | Maps registry states/variants/multipart rules to baked geometry and particle sprites. |
-| 772 | `crates/horizon-client-render/src/minimap.rs` | Potential mesh optimization after 1.20.1 model parity. | Identifies exact cube faces whose texture UVs can be merged into greedy rectangles. |
-| 773 | `crates/horizon-client-render/src/mipmap.rs` | Useful reusable UI component; connect to RustChunk IME and text model. | Provides wrapping, selection, cursor, keyboard shortcuts, word navigation, scroll and input state. |
-| 774 | `crates/horizon-client-render/src/mod_list.rs` | Optional resource-pack extension; visual-only. | Loads bounded emissive overlays for native mods and OptiFine textures, pairing overlays with base sprites. |
-| 775 | `crates/horizon-client-render/src/model_library.rs` | High relevance to offline-first RustChunk; adapt validation and UUID generation. | Persists/generates a stable offline name so local/LAN sessions do not all collide as one profile. |
-| 776 | `crates/horizon-client-render/src/models.rs` | Optional OIT shader; vanilla sorted transparency remains baseline. | Implements depth normalization, transmittance/absorbance accumulation and transparency composite primitives. |
-| 777 | `crates/horizon-client-render/src/models/catalog.rs` | Optional OIT integration. | Adapts world-border fragments to the OIT transparency pipeline. |
-| 778 | `crates/horizon-client-render/src/models/cube.rs` | Optional OIT integration. | Adapts cloud front/back transparency to OIT compositing. |
-| 779 | `crates/horizon-client-render/src/multiline_edit.rs` | Optional OIT integration. | Handles multiple non-terrain translucent categories in OIT pass. |
-| 780 | `crates/horizon-client-render/src/native_emissive.rs` | Optional OIT integration. | Computes terrain translucent colour/absorbance for OIT accumulation. |
-| 781 | `crates/horizon-client-render/src/offline_name.rs` | High-value compatibility layer; rebuild typed key registry against 1.20.1. | Parses typed options.txt values, defaults, keybindings and serialization. |
-| 782 | `crates/horizon-client-render/src/oit.wgsl` | Adapt as migration framework only; regenerate target fix sequence. | Applies versioned migrations to old raw options keys/values. |
-| 783 | `crates/horizon-client-render/src/oit_border.wgsl` | UI reference; port screen by screen after core input/render. | Implements Options, video/audio/controls/accessibility/language/skin/resource pack pages and interaction state. |
-| 784 | `crates/horizon-client-render/src/oit_clouds.wgsl` | Useful small renderer parity helper; update to target source values. | Computes white/hurt overlay texels and codes for entity shaders. |
-| 785 | `crates/horizon-client-render/src/oit_features.wgsl` | Optional Android UI feature; useful isolated utility. | Loads/saves/scales player-provided icons for custom mobile buttons. |
-| 786 | `crates/horizon-client-render/src/oit_world.wgsl` | Optional feature; useful offline skin support if separated from auth. | Stores and selects local skin PNGs per profile and optional upload flow. |
-| 787 | `crates/horizon-client-render/src/options_file.rs` | High-value UI; pack activation lifecycle must be version-correct. | Lists, filters, orders and enables resource/data packs with compatibility notices. |
-| 788 | `crates/horizon-client-render/src/options_fixes.rs` | Core resource-pack architecture; rebuild exact 1.20.1 priority rules. | Finds, orders and overlays installed packs, resource roots and enabled pack state. |
-| 789 | `crates/horizon-client-render/src/options_ui.rs` | Potential startup/memory optimization; cache invalidation must be exact. | Caches parsed/decoded resource-pack artifacts and reuses them across reloads. |
-| 790 | `crates/horizon-client-render/src/overlay.rs` | Reuse only after exact input domain is known. | Provides small parser/utility routines shared by renderer resource code. |
-| 791 | `crates/horizon-client-render/src/own_buttons.rs` | Core visual system; rebuild particle registry/options and tick behavior for 1.20.1. | Builds/ticks particle types and emits their geometry, colour, light and sprite animation. |
-| 792 | `crates/horizon-client-render/src/own_skin.rs` | Useful world-search acceleration architecture; rebuild POI type registry and update rules. | Caches points of interest per resident section and searches nearby sections instead of scanning blocks. |
-| 793 | `crates/horizon-client-render/src/pack_screen.rs` | High-value vanilla resource rendering architecture; exact 1.20.1 codec/shader behavior required. | Parses post_effect JSON, target graph, shader stages and uniforms; translates GLSL and runs passes. |
-| 794 | `crates/horizon-client-render/src/packs.rs` | Useful fallback only when target GLSL cannot translate and behavior is proven. | Provides WGSL fallback implementations for selected vanilla post shaders. |
-| 795 | `crates/horizon-client-render/src/packs/cache.rs` | High-value portability component; narrow parser and security testing required. | Loads includes and rewrites GLSL blocks/samplers into Naga modules for wgpu. |
-| 796 | `crates/horizon-client-render/src/par.rs` | Exclude from vanilla 1.20.1 base; mod-specific reference only. | Queries block/fluid/line-of-sight around a sulfur geyser for gas and launch behavior. |
-| 797 | `crates/horizon-client-render/src/particles.rs` | High-value Android text-input architecture; adapt UTF-16/codepoint conversion carefully. | Tracks composing text, caret and selection from native input methods and exposes candidate-window bounds. |
-| 798 | `crates/horizon-client-render/src/poi_sections.rs` | Useful data-provider pattern; target codecs and tables need rebuild. | Evaluates data-driven context_int_provider/context_float_provider values used for fuel/brewing timing. |
-| 799 | `crates/horizon-client-render/src/post_chain.rs` | Shader helper; adapt to RustChunk's GUI pipeline. | Samples/composites GUI/screen draws using atlas and per-screen colour. |
-| 800 | `crates/horizon-client-render/src/post_chain.wgsl` | High-value UI framework reference; rebuild font and widget semantics for 1.20.1. | Provides draw-call representation, text measurement/clipping, scrolling labels, buttons and editable text fields. |
+| 701 | `crates/horizon-client-render/src/gfx/pack_atlas.rs` | unnecessary; reference; optional/future | Optional shader-pack compatibility, not vanilla rendering. |
+| 702 | `crates/horizon-client-render/src/gfx/pack_center_depth.rs` | unnecessary; reference; optional/future | Not needed for vanilla gameplay/rendering. |
+| 703 | `crates/horizon-client-render/src/gfx/pack_draw.rs` | unnecessary; reference; optional/future | Only useful if a separate shader-pack API is built. |
+| 704 | `crates/horizon-client-render/src/gfx/pack_entities.rs` | unnecessary; reference; optional/future | Do not make pack stages a base renderer dependency. |
+| 705 | `crates/horizon-client-render/src/gfx/pack_hand.rs` | unnecessary; reference; optional/future | Optional pack feature only. |
+| 706 | `crates/horizon-client-render/src/gfx/pack_images.rs` | unnecessary; reference; optional/future | Avoid large untrusted allocations in the base client. |
+| 707 | `crates/horizon-client-render/src/gfx/pack_post.rs` | unnecessary; reference; optional/future | Defer until vanilla frame graph and resource limits are mature. |
+| 708 | `crates/horizon-client-render/src/gfx/pack_post.wgsl` | unnecessary; reference; optional/future | Optional pack helper, not a base shader. |
+| 709 | `crates/horizon-client-render/src/gfx/pack_shadow.rs` | unnecessary; reference; optional/future | Not required for vanilla rendering. |
+| 710 | `crates/horizon-client-render/src/gfx/pack_sky.rs` | unnecessary; reference; optional/future | Keep separate from vanilla sky rendering. |
+| 711 | `crates/horizon-client-render/src/gfx/pack_textures.rs` | unnecessary; reference; optional/future | Optional shader-pack texture compatibility only. |
+| 712 | `crates/horizon-client-render/src/gfx/pack_timing.rs` | adaptable; reference; optional/future | Useful later for GPU profiling, not the initial renderer. |
+| 713 | `crates/horizon-client-render/src/gfx/pack_uniforms.rs` | unnecessary; reference; optional/future | Do not import newer pack fields into vanilla state. |
+| 714 | `crates/horizon-client-render/src/gfx/pack_weather.rs` | unnecessary; reference; optional/future | Vanilla weather has its own renderer. |
+| 715 | `crates/horizon-client-render/src/gfx/page_runs.rs` | adaptable; version-specific | Candidate chunk-render optimization after parity. |
+| 716 | `crates/horizon-client-render/src/gfx/panorama.rs` | adaptable; version-specific | Useful later for a polished title screen. |
+| 717 | `crates/horizon-client-render/src/gfx/panorama.wgsl` | adaptable; version-specific | Only useful with the title panorama feature. |
+| 718 | `crates/horizon-client-render/src/gfx/readback.rs` | adaptable; version-specific | Useful portability foundation for capture. |
+| 719 | `crates/horizon-client-render/src/gfx/resident.rs` | essential; version-specific | Core renderer architecture for loaded chunks. |
+| 720 | `crates/horizon-client-render/src/gfx/reuse.rs` | adaptable; version-specific | Useful renderer lifecycle optimization. |
+| 721 | `crates/horizon-client-render/src/gfx/solid_paths.rs` | unnecessary; reference; optional/future | Do not apply to Mali based on Adreno measurements. |
+| 722 | `crates/horizon-client-render/src/gfx/solid_paths/tests.rs` | unnecessary; reference; version-specific | Test infrastructure only. |
+| 723 | `crates/horizon-client-render/src/gfx/stars.rs` | adaptable; version-specific | Useful sky-renderer optimization. |
+| 724 | `crates/horizon-client-render/src/gfx/stars.wgsl` | adaptable; version-specific | Useful with verified target star geometry. |
+| 725 | `crates/horizon-client-render/src/gfx/submit.rs` | adaptable; reference; optional/future | Experimental until exact-device profiling. |
+| 726 | `crates/horizon-client-render/src/gfx/sunrise_fan.rs` | adaptable; version-specific | Useful sky optimization after parity. |
+| 727 | `crates/horizon-client-render/src/gfx/terrain_gles.wgsl.inc` | adaptable; version-specific | Useful only if GLES is selected, with Mali validation. |
+| 728 | `crates/horizon-client-render/src/gfx/terrain_source.rs` | adaptable; version-specific | Potential portability layer if GLES is chosen. |
+| 729 | `crates/horizon-client-render/src/gfx/test_gpu.rs` | unnecessary; reference; version-specific | Test helper only. |
+| 730 | `crates/horizon-client-render/src/gfx/timing.rs` | adaptable; reference; optional/future | Useful optional diagnostics. |
+| 731 | `crates/horizon-client-render/src/gfx/translucency.rs` | essential; version-specific | Core transparent terrain behavior. |
+| 732 | `crates/horizon-client-render/src/gfx/upload.rs` | adaptable; version-specific | Useful upload optimization after baseline transfers. |
+| 733 | `crates/horizon-client-render/src/gfx/view.rs` | adaptable; reference; optional/future | Single-view separation useful, stereo deferred. |
+| 734 | `crates/horizon-client-render/src/gfx/weather.rs` | essential; version-specific | Core client visuals; adapt vanilla weather. |
+| 735 | `crates/horizon-client-render/src/gfx/wgsl_prefix.rs` | unnecessary; reference; optional/future | Only needed with pack composition. |
+| 736 | `crates/horizon-client-render/src/gfx/world_post.rs` | adaptable; optional/future | Defer until base renderer and profiling. |
+| 737 | `crates/horizon-client-render/src/graphics.rs` | adaptable; version-specific | Use separation pattern, not Horizon catalogue. |
+| 738 | `crates/horizon-client-render/src/graphics_style.rs` | unnecessary; reference; optional/future | Visual reference only; RustChunk design remains independent. |
+| 739 | `crates/horizon-client-render/src/graphics_ui.rs` | adaptable; version-specific | Port only after RustChunk's settings/input model exists. |
+| 740 | `crates/horizon-client-render/src/hdr.wgsl` | unnecessary; reference; optional/future | Optional display feature. |
+| 741 | `crates/horizon-client-render/src/hdr_calibration.rs` | unnecessary; reference; optional/future | Defer with HDR. |
+| 742 | `crates/horizon-client-render/src/hdr_stats.wgsl` | unnecessary; reference; optional/future | Not needed for SDR. |
+| 743 | `crates/horizon-client-render/src/hud.rs` | essential; version-specific | Core HUD renderer; rebuild assets/budget for 1.20.1. |
+| 744 | `crates/horizon-client-render/src/hud.wgsl` | essential; version-specific | Core GUI shader path. |
+| 745 | `crates/horizon-client-render/src/hud/cit_glint.rs` | unnecessary; reference; optional/future | Defer optional pack feature. |
+| 746 | `crates/horizon-client-render/src/hud/pack_text.rs` | unnecessary; reference; optional/future | Defer pack shader support. |
+| 747 | `crates/horizon-client-render/src/hud_layout.rs` | essential; version-specific | Core client HUD. |
+| 748 | `crates/horizon-client-render/src/hud_overlays.rs` | essential; version-specific | Core gameplay UI. |
+| 749 | `crates/horizon-client-render/src/inventory_effects.rs` | adaptable; version-specific | Secondary inventory feature. |
+| 750 | `crates/horizon-client-render/src/java_text.rs` | essential; version-specific | Important for options/config parity. |
+| 751 | `crates/horizon-client-render/src/jigsaw_block.rs` | adaptable; version-specific | Implement when Jigsaw support is added. |
+| 752 | `crates/horizon-client-render/src/keypad.rs` | adaptable; reference; optional/future | Use as reference only; design editor/icons independently. |
+| 753 | `crates/horizon-client-render/src/level_loading.rs` | adaptable; version-specific | Useful after chunk streaming/login exists. |
+| 754 | `crates/horizon-client/examples/probe/raid_fixture.rs` | unnecessary; reference; version-specific | Parity fixture pattern only. |
+| 755 | `crates/horizon-client-render/src/light.rs` | essential; version-specific | Core world subsystem. |
+| 756 | `crates/horizon-client-render/src/lod.rs` | adaptable; version-specific | High-value far-view architecture after near chunks work. |
+| 757 | `crates/horizon-client-render/src/lod/cache.rs` | adaptable; optional/future | Add after LOD is stable. |
+| 758 | `crates/horizon-client-render/src/lod/mesh.rs` | adaptable; version-specific | Adopt only with LOD system. |
+| 759 | `crates/horizon-client-render/src/logging.rs` | adaptable; version-specific | Adapt to app-private storage. |
+| 760 | `crates/horizon-client-render/src/menu_blur.rs` | unnecessary; reference; optional/future | Optional visual feature. |
+| 761 | `crates/horizon-client-render/src/menu_blur.wgsl` | unnecessary; reference; optional/future | Only with menu blur. |
+| 762 | `crates/horizon-client/examples/probe/random_tick_sections_probe.rs` | unnecessary; reference; version-specific | Test reference only. |
+| 763 | `crates/horizon-client-render/src/mesher/fluid.rs` | essential; version-specific | Core mesher. |
+| 764 | `crates/horizon-client-render/src/mesher/leaf_culling.rs` | adaptable; optional/future | Optional optimization after baseline meshing. |
+| 765 | `crates/horizon-client-render/src/mesher/leaf_culling_tests.rs` | unnecessary; reference; version-specific | Test suite reference. |
+| 766 | `crates/horizon-client/examples/probe/recipe_book_fixture.rs` | unnecessary; reference; version-specific | Fixture design only. |
+| 767 | `crates/horizon-client-render/src/mesher/particle_tests.rs` | unnecessary; reference; version-specific | Test reference only. |
+| 768 | `crates/horizon-client-render/src/mesher/reuse_tests.rs` | unnecessary; reference; version-specific | Reference suite. |
+| 769 | `crates/horizon-client-render/src/mesher/sides.rs` | adaptable; version-specific | Potential mesh optimization. |
+| 770 | `crates/horizon-client-render/src/mesher/tint_tests.rs` | unnecessary; reference; version-specific | Test reference only. |
+| 771 | `crates/horizon-client-render/src/mesher/visibility_tests.rs` | unnecessary; reference; version-specific | Test pattern only. |
+| 772 | `crates/horizon-client-render/src/minimap.rs` | unnecessary; reference; optional/future | Optional UX feature. |
+| 773 | `crates/horizon-client-render/src/mipmap.rs` | adaptable; version-specific | Useful asset-pipeline algorithm. |
+| 774 | `crates/horizon-client-render/src/mod_list.rs` | unnecessary; reference; optional/future | Must not be mistaken for Forge support. |
+| 775 | `crates/horizon-client-render/src/model_library.rs` | essential; version-specific | Core asset pipeline. |
+| 776 | `crates/horizon-client-render/src/models.rs` | unnecessary; reference; optional/future | Defer from base client. |
+| 777 | `crates/horizon-client-render/src/models/catalog.rs` | essential; version-specific | Core model/mesher subsystem. |
+| 778 | `crates/horizon-client-render/src/models/cube.rs` | adaptable; version-specific | Optional mesher optimization. |
+| 779 | `crates/horizon-client-render/src/multiline_edit.rs` | adaptable; version-specific | Reusable UI widget after IME integration. |
+| 780 | `crates/horizon-client-render/src/native_emissive.rs` | unnecessary; reference; optional/future | Defer optional pack/mod feature. |
+| 781 | `crates/horizon-client-render/src/offline_name.rs` | adaptable; version-specific | Relevant to offline profile UX with auth separation. |
+| 782 | `crates/horizon-client-render/src/oit.wgsl` | unnecessary; reference; optional/future | Defer experimental GPU feature. |
+| 783 | `crates/horizon-client-render/src/oit_border.wgsl` | unnecessary; reference; optional/future | Only if OIT is adopted. |
+| 784 | `crates/horizon-client-render/src/oit_clouds.wgsl` | unnecessary; reference; optional/future | Optional OIT only. |
+| 785 | `crates/horizon-client-render/src/oit_features.wgsl` | unnecessary; reference; optional/future | Optional OIT only. |
+| 786 | `crates/horizon-client-render/src/oit_world.wgsl` | unnecessary; reference; optional/future | Keep sorted transparency as baseline. |
+| 787 | `crates/horizon-client-render/src/options_file.rs` | essential; version-specific | Core options persistence rebuilt for 1.20.1. |
+| 788 | `crates/horizon-client-render/src/options_fixes.rs` | adaptable; version-specific | Regenerate migration chain through 1.20.1. |
+| 789 | `crates/horizon-client-render/src/options_ui.rs` | adaptable; version-specific | Port screens incrementally after GUI/input/settings foundation. |
+| 790 | `crates/horizon-client-render/src/overlay.rs` | adaptable; version-specific | Useful renderer parity helper. |
+| 791 | `crates/horizon-client-render/src/own_buttons.rs` | adaptable; reference; optional/future | Use as inspiration only; build RustChunk editor/icons independently. |
+| 792 | `crates/horizon-client-render/src/own_skin.rs` | adaptable; optional/future | Optional offline profile feature. |
+| 793 | `crates/horizon-client-render/src/pack_screen.rs` | adaptable; version-specific | Port after resource-pack backend exists. |
+| 794 | `crates/horizon-client-render/src/packs.rs` | essential; version-specific | Core asset pipeline feature. |
+| 795 | `crates/horizon-client-render/src/packs/cache.rs` | adaptable; optional/future | Add after uncached composition is correct. |
+| 796 | `crates/horizon-client-render/src/par.rs` | adaptable; reference; optional/future | Use only if startup profiling proves it useful. |
+| 797 | `crates/horizon-client-render/src/particles.rs` | essential; version-specific | Core client visual subsystem. |
+| 798 | `crates/horizon-client-render/src/poi_sections.rs` | adaptable; version-specific | Useful world acceleration when POI gameplay is added. |
+| 799 | `crates/horizon-client-render/src/post_chain.rs` | adaptable; version-specific | Add after GPU pipeline/shader translator. |
+| 800 | `crates/horizon-client-render/src/post_chain.wgsl` | adaptable; version-specific | Fallback paired with verified target post chain. |
 
 ## Part 29 — Entries 801–1000
 
