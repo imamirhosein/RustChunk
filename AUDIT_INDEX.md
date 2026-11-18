@@ -374,121 +374,121 @@
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 301 | `benchmarks/rust-fluid-2026-10-06/scoped-parity.json` | Adaptable codec/query tests; rebuild all version data. | Registered state inventory is from 26.3; fluid spreading, live world binding and gameplay are absent. |
-| 302 | `benchmarks/rust-fluid-box-2026-10-07/scoped-parity.json` | Adaptable geometry/callback tests; rewrite vehicle semantics. | Passenger lifecycle and actual live boat/world integration are controlled or absent. |
-| 303 | `benchmarks/rust-fluid-flow-2026-10-07/scoped-parity.json` | Adaptable flow algorithm tests; rebuild registry/tag fixtures. | World registry/provider binding, propagation and spreading are not covered. |
-| 304 | `benchmarks/rust-fluid-occupancy-2026-10-07/scoped-parity.json` | Adaptable chunk-scan tests; port 1.20.1 storage rules. | Resident snapshots are controlled; live entity collision composition and world integration remain open. |
-| 305 | `benchmarks/rust-fluid-shape-2026-10-07/scoped-parity.json` | Adaptable cache and shape tests; rebuild fluid states. | Fluid propagation, immersion and ray/world binding are outside scope. |
-| 306 | `benchmarks/rust-food-2026-10-07/scoped-parity.json` | Adaptable food-state tests; rewrite player tick integration. | Player damage/health services, consumables, persistence and complete player tick are not integrated. |
-| 307 | `benchmarks/rust-food-properties-2026-10-07/scoped-parity.json` | Adaptable consumption callback tests; rebuild item registry integration. | Sound playback, concrete consumable dispatch, particles/effects and full use lifecycle are omitted. |
-| 308 | `benchmarks/rust-food-storage-2026-10-07/scoped-parity.json` | Adaptable persistence tests; rewrite 1.20.1 NBT semantics. | Only FoodData fields are covered; complete player save lifecycle and other fields are outside scope. |
-| 309 | `benchmarks/rust-free-space-2026-10-07/collision-regression.json` | Adaptable collision regression; rebuild world/query integration. | Entity lists, border conditions and chunk snapshots are controlled; full live entity indexing is absent. |
-| 310 | `benchmarks/rust-free-space-2026-10-07/scoped-parity.json` | Adaptable composition tests; rewrite version-specific shapes. | Chunk generation, live entity indexing and complete gameplay are not represented. |
-| 311 | `benchmarks/rust-generation-ticks-2026-10-06/scoped-parity.json` | Adaptable scheduler design; rewrite 1.20.1 tick lifecycle. | This records queue behavior, not execution of actual block/fluid ticks or complete generation. |
-| 312 | `benchmarks/rust-geometry-2026-10-05/scoped-parity.json` | Adaptable geometry algorithms/tests; verify float semantics for target toolchain. | Selected operations are tested in isolation; not a full world collision or camera pipeline. |
-| 313 | `benchmarks/rust-geometry-2026-10-06/scoped-parity.json` | Adaptable geometry tests; rebuild target-specific behavior. | Only selected primitives and controlled cases; complete collision/shape consumers are not included. |
-| 314 | `benchmarks/rust-ground-support-2026-10-07/scan-regression.json` | Adaptable collision scan tests; rewrite world providers. | Controlled providers and contexts; registered 1.20.1 shapes, live loading and full entity movement remain untested. |
-| 315 | `benchmarks/rust-ground-support-2026-10-07/scoped-parity.json` | Adaptable support-query cases; evidence gap for direct parity. | No top-level Rust output digest is present; provider/registry integration is controlled. |
-| 316 | `benchmarks/rust-height-provider-2026-10-06/scoped-parity.json` | Adaptable provider algorithms; rebuild codecs and registries. | Warning logs and complete generation placement are excluded; 26.3 codec data is version-specific. |
-| 317 | `benchmarks/rust-heightmap-2026-10-06/scoped-parity.json` | Adaptable packed-heightmap tests; rebuild 1.20.1 state table. | Imported air/fluid facts do not port block behavior; full chunk lifecycle and generation are not covered. |
-| 318 | `benchmarks/rust-interaction-shape-2026-10-07/scoped-parity.json` | Adaptable shape abstraction; rewrite registry/shape table. | Shape table belongs to 26.3; world ray binding and complete gameplay are excluded. |
-| 319 | `benchmarks/rust-inventory-pickup-2026-10-07/scoped-parity.json` | Adaptable inventory algorithms; rebuild ItemStack model. | Pickup entities, menus, networking, arbitrary overrides and full item components are not included. |
-| 320 | `benchmarks/rust-inventory-tick-2026-10-07/scoped-parity.json` | Adaptable tick-order tests; rewrite 1.20.1 item lifecycle. | Concrete registered item effects and the enclosing player/world tick are pending. |
-| 321 | `benchmarks/rust-inventory-use-2026-10-07/scoped-parity.json` | Adaptable lifecycle sequencing; rebuild item-use states. | Does not cover full start-use path, concrete consumable effects, packet delivery or complete Player.tick. |
-| 322 | `benchmarks/rust-inventory-use-start-2026-10-07/scoped-parity.json` | Adaptable input-to-use flow; rewrite packet and item schema. | Packet delivery, combat effects and full tick/network lifecycle are outside scope. |
-| 323 | `benchmarks/rust-item-after-use-2026-10-07/remainder-regression.json` | Adaptable regression suite; rebuild component schema. | Actual item insertion/drop, full component codec and concrete use effects remain outside scope. |
-| 324 | `benchmarks/rust-item-after-use-2026-10-07/scoped-parity.json` | Adaptable item-use tests; reimplement 1.20.1 semantics. | Concrete consumables, complete inventory transactions and whole item-use lifecycle are not covered. |
-| 325 | `benchmarks/rust-item-blocking-2026-10-07/scoped-parity.json` | Adaptable blocking algorithm; rebuild item/damage rules. | Real damageable item components, full combat and death flow are not integrated. |
+| 301 | `benchmarks/rust-fluid-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Registered state inventory is from 26.3; fluid spreading, live world binding and gameplay are absent. |
+| 302 | `benchmarks/rust-fluid-box-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Passenger lifecycle and actual live boat/world integration are controlled or absent. |
+| 303 | `benchmarks/rust-fluid-flow-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | World registry/provider binding, propagation and spreading are not covered. |
+| 304 | `benchmarks/rust-fluid-occupancy-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Resident snapshots are controlled; live entity collision composition and world integration remain open. |
+| 305 | `benchmarks/rust-fluid-shape-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Fluid propagation, immersion and ray/world binding are outside scope. |
+| 306 | `benchmarks/rust-food-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Player damage/health services, consumables, persistence and complete player tick are not integrated. |
+| 307 | `benchmarks/rust-food-properties-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Sound playback, concrete consumable dispatch, particles/effects and full use lifecycle are omitted. |
+| 308 | `benchmarks/rust-food-storage-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Only FoodData fields are covered; complete player save lifecycle and other fields are outside scope. |
+| 309 | `benchmarks/rust-free-space-2026-10-07/collision-regression.json` | Adaptable; Version-specific | Entity lists, border conditions and chunk snapshots are controlled; full live entity indexing is absent. |
+| 310 | `benchmarks/rust-free-space-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Chunk generation, live entity indexing and complete gameplay are not represented. |
+| 311 | `benchmarks/rust-generation-ticks-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | This records queue behavior, not execution of actual block/fluid ticks or complete generation. |
+| 312 | `benchmarks/rust-geometry-2026-10-05/scoped-parity.json` | Adaptable; Version-specific | Selected operations are tested in isolation; not a full world collision or camera pipeline. |
+| 313 | `benchmarks/rust-geometry-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Only selected primitives and controlled cases; complete collision/shape consumers are not included. |
+| 314 | `benchmarks/rust-ground-support-2026-10-07/scan-regression.json` | Adaptable; Version-specific | Controlled providers and contexts; registered 1.20.1 shapes, live loading and full entity movement remain untested. |
+| 315 | `benchmarks/rust-ground-support-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No top-level Rust output digest is present; provider/registry integration is controlled. |
+| 316 | `benchmarks/rust-height-provider-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Warning logs and complete generation placement are excluded; 26.3 codec data is version-specific. |
+| 317 | `benchmarks/rust-heightmap-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Imported air/fluid facts do not port block behavior; full chunk lifecycle and generation are not covered. |
+| 318 | `benchmarks/rust-interaction-shape-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Shape table belongs to 26.3; world ray binding and complete gameplay are excluded. |
+| 319 | `benchmarks/rust-inventory-pickup-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Pickup entities, menus, networking, arbitrary overrides and full item components are not included. |
+| 320 | `benchmarks/rust-inventory-tick-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Concrete registered item effects and the enclosing player/world tick are pending. |
+| 321 | `benchmarks/rust-inventory-use-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Does not cover full start-use path, concrete consumable effects, packet delivery or complete Player.tick. |
+| 322 | `benchmarks/rust-inventory-use-start-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Packet delivery, combat effects and full tick/network lifecycle are outside scope. |
+| 323 | `benchmarks/rust-item-after-use-2026-10-07/remainder-regression.json` | Adaptable; Version-specific | Actual item insertion/drop, full component codec and concrete use effects remain outside scope. |
+| 324 | `benchmarks/rust-item-after-use-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Concrete consumables, complete inventory transactions and whole item-use lifecycle are not covered. |
+| 325 | `benchmarks/rust-item-blocking-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Real damageable item components, full combat and death flow are not integrated. |
 
 ## Part 15 — Entries 326–350
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 326 | `benchmarks/rust-item-cooldowns-2026-10-07/scoped-parity.json` | Adaptable cooldown state machine; rewrite protocol integration. | Network synchronization and complete player/item lifecycle are absent. |
-| 327 | `benchmarks/rust-item-durability-2026-10-07/scoped-parity.json` | Adaptable durability tests; rebuild 1.20.1 component definitions. | Full component codecs, enchantments and complete gameplay are not covered. |
-| 328 | `benchmarks/rust-item-particles-2026-10-07/scoped-parity.json` | Adaptable event/request model; rebuild particle registry. | Particle queues/rendering, sound/effects integration and real gameplay are outside scope. |
-| 329 | `benchmarks/rust-item-stack-storage-2026-10-07/scoped-parity.json` | Adaptable value semantics; rebuild ItemStack for 1.20.1. | Component codecs, menu transactions, equipment synchronization and full use flow are not included. |
-| 330 | `benchmarks/rust-item-template-2026-10-07/scoped-parity.json` | Adaptable template validation; rewrite component registry. | Does not exercise every component codec or complete containers and use lifecycle. |
-| 331 | `benchmarks/rust-item-use-2026-10-07/scoped-parity.json` | Adaptable lifecycle tests; rebind to 1.20.1 entity tick. | Start-use path, synchronized flags, concrete consumables and full lifecycle remain pending. |
-| 332 | `benchmarks/rust-item-use-catalog-2026-10-07/scoped-parity.json` | Reference catalog only; rebuild from 1.20.1 registries. | Import is 26.3-specific; other component codecs, inventory, enchantments and use effects remain unverified. |
-| 333 | `benchmarks/rust-item-use-lifecycle-2026-10-07/scoped-parity.json` | Adaptable lifecycle sequencing; rewrite against 1.20.1. | Starting use, actual synchronized flags, concrete consumables, remainders and complete tick are incomplete. |
-| 334 | `benchmarks/rust-item-use-start-2026-10-07/scoped-parity.json` | Adaptable dispatch tests; rewrite protocol and inventory sync. | Transport, wire encoding, persistent data and server/client lifecycle are not exercised. |
-| 335 | `benchmarks/rust-java-hash-map-2026-10-07/scoped-parity.json` | Reference only; use Rust-native collections where justified. | JDK collection parity is not game logic; JDK version/platform semantics must not be assumed. |
-| 336 | `benchmarks/rust-java-identity-map-2026-10-07/cooldown-regression.json` | Reference regression; validate only required semantics. | This is a Java/JDK regression context, not a complete in-game cooldown lifecycle. |
-| 337 | `benchmarks/rust-java-identity-map-2026-10-07/ordered-map-regression.json` | Reference regression; avoid copying JDK internals blindly. | It is a JDK implementation comparison, not Minecraft feature parity. |
-| 338 | `benchmarks/rust-java-identity-map-2026-10-07/scoped-parity.json` | Adaptable collection tests; evidence gap for aggregate Rust output. | No top-level rust_output_sha256; JAR references have one matching output digest, but process identity inputs remain environment-dependent. |
-| 339 | `benchmarks/rust-liquid-collision-2026-10-06/scoped-parity.json` | Adaptable collision cases; rebuild fluid registry and shapes. | Does not implement entity movement or fluid propagation in a live world. |
-| 340 | `benchmarks/rust-live-attribute-health-2026-10-07/scoped-parity.json` | Adaptable attribute/health composition; rewrite 1.20.1 attributes. | Live refresh paths and complete damage/player tick are not fully integrated. |
-| 341 | `benchmarks/rust-live-attribute-updates-2026-10-07/scoped-parity.json` | Adaptable notification ordering; evidence gap and rewrite queue ownership. | No top-level Rust output digest; client/server reference outputs differ, so not a single equivalent aggregate. |
-| 342 | `benchmarks/rust-live-attributes-2026-10-07/scoped-parity.json` | Adaptable data model; rebuild 1.20.1 attribute registry. | No top-level Rust output digest; client/server outputs differ; complete entity supplier lifecycle remains open. |
-| 343 | `benchmarks/rust-live-player-combat-2026-10-07/scoped-parity.json` | Adaptable combat composition; full server lifecycle rewrite required. | Several knockback, criterion, source and world lifecycle consumers remain controlled; output has separate Rust/live hashes. |
-| 344 | `benchmarks/rust-live-upgrade-region-2026-10-06/scoped-parity.json` | Adaptable region harness; rewrite version-specific worldgen. | Proxy is not a real WorldGenRegion; complete chunks/worldgen, POI, light and postprocessing are pending. |
-| 345 | `benchmarks/rust-living-air-2026-10-07/scoped-parity.json` | Adaptable physics equations; rewrite player/entity hooks. | Full Player.travel and live effects/world providers are not integrated. |
-| 346 | `benchmarks/rust-living-damage-2026-10-07/scoped-parity.json` | Adaptable damage-state tests; rebuild damage sources/attributes. | Damage service composition and full world/player lifecycle remain controlled. |
-| 347 | `benchmarks/rust-living-fall-2026-10-07/scoped-parity.json` | Adaptable numeric/callback tests; rewrite block/entity hooks. | Actual world landing callbacks, enchantment hooks and complete damage application are not included. |
-| 348 | `benchmarks/rust-living-fluid-2026-10-07/scoped-parity.json` | Adaptable fluid physics tests; rebuild tags and movement. | Fluid propagation, full vehicle logic and playable world integration remain pending. |
-| 349 | `benchmarks/rust-living-health-2026-10-07/scoped-parity.json` | Adaptable health storage tests; rebuild entity schema. | Full registered attribute binding, damage sources and complete player lifecycle are not covered. |
-| 350 | `benchmarks/rust-living-hurt-2026-10-07/scoped-parity.json` | Adaptable server damage flow; rewrite version-specific hooks. | Totems, criteria, blocking, source service and enclosing server tick are not fully integrated. |
+| 326 | `benchmarks/rust-item-cooldowns-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Network synchronization and complete player/item lifecycle are absent. |
+| 327 | `benchmarks/rust-item-durability-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Full component codecs, enchantments and complete gameplay are not covered. |
+| 328 | `benchmarks/rust-item-particles-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Particle queues/rendering, sound/effects integration and real gameplay are outside scope. |
+| 329 | `benchmarks/rust-item-stack-storage-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Component codecs, menu transactions, equipment synchronization and full use flow are not included. |
+| 330 | `benchmarks/rust-item-template-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Does not exercise every component codec or complete containers and use lifecycle. |
+| 331 | `benchmarks/rust-item-use-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Start-use path, synchronized flags, concrete consumables and full lifecycle remain pending. |
+| 332 | `benchmarks/rust-item-use-catalog-2026-10-07/scoped-parity.json` | Reference; Version-specific | Import is 26.3-specific; other component codecs, inventory, enchantments and use effects remain unverified. |
+| 333 | `benchmarks/rust-item-use-lifecycle-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Starting use, actual synchronized flags, concrete consumables, remainders and complete tick are incomplete. |
+| 334 | `benchmarks/rust-item-use-start-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Transport, wire encoding, persistent data and server/client lifecycle are not exercised. |
+| 335 | `benchmarks/rust-java-hash-map-2026-10-07/scoped-parity.json` | Reference; Version-specific | JDK collection parity is not game logic; JDK version/platform semantics must not be assumed. |
+| 336 | `benchmarks/rust-java-identity-map-2026-10-07/cooldown-regression.json` | Reference; Version-specific | This is a Java/JDK regression context, not a complete in-game cooldown lifecycle. |
+| 337 | `benchmarks/rust-java-identity-map-2026-10-07/ordered-map-regression.json` | Reference; Version-specific | It is a JDK implementation comparison, not Minecraft feature parity. |
+| 338 | `benchmarks/rust-java-identity-map-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No top-level rust_output_sha256; JAR references have one matching output digest, but process identity inputs remain environment-dependent. |
+| 339 | `benchmarks/rust-liquid-collision-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Does not implement entity movement or fluid propagation in a live world. |
+| 340 | `benchmarks/rust-live-attribute-health-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Live refresh paths and complete damage/player tick are not fully integrated. |
+| 341 | `benchmarks/rust-live-attribute-updates-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No top-level Rust output digest; client/server reference outputs differ, so not a single equivalent aggregate. |
+| 342 | `benchmarks/rust-live-attributes-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No top-level Rust output digest; client/server outputs differ; complete entity supplier lifecycle remains open. |
+| 343 | `benchmarks/rust-live-player-combat-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Several knockback, criterion, source and world lifecycle consumers remain controlled; output has separate Rust/live hashes. |
+| 344 | `benchmarks/rust-live-upgrade-region-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Proxy is not a real WorldGenRegion; complete chunks/worldgen, POI, light and postprocessing are pending. |
+| 345 | `benchmarks/rust-living-air-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Full Player.travel and live effects/world providers are not integrated. |
+| 346 | `benchmarks/rust-living-damage-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Damage service composition and full world/player lifecycle remain controlled. |
+| 347 | `benchmarks/rust-living-fall-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Actual world landing callbacks, enchantment hooks and complete damage application are not included. |
+| 348 | `benchmarks/rust-living-fluid-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Fluid propagation, full vehicle logic and playable world integration remain pending. |
+| 349 | `benchmarks/rust-living-health-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Full registered attribute binding, damage sources and complete player lifecycle are not covered. |
+| 350 | `benchmarks/rust-living-hurt-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Totems, criteria, blocking, source service and enclosing server tick are not fully integrated. |
 
 ## Part 16 — Entries 351–375
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 351 | `benchmarks/rust-living-landing-2026-10-07/scoped-parity.json` | Adaptable fall-damage composition; rebuild 1.20.1 block hooks. | Full fluid immersion, enchantment hooks, particles rendering and Player/world integration remain pending. |
-| 352 | `benchmarks/rust-living-motion-2026-10-07/scoped-parity.json` | Adaptable movement formulas; rewrite against 1.20.1 physics. | Live overrides, effects and complete Player/entity integration are not included. |
-| 353 | `benchmarks/rust-material-condition-2026-10-06/scoped-parity.json` | Adaptable rule engine tests; rebuild 1.20.1 rule data. | Caller-owned context/data and complete worldgen registry/encoding are not included. |
-| 354 | `benchmarks/rust-material-extension-2026-10-06/scoped-parity.json` | Adaptable extension architecture; rewrite biome/worldgen data. | Thresholds and callbacks are controlled; does not establish complete biome or chunk generation. |
-| 355 | `benchmarks/rust-material-rule-library-2026-10-06/scoped-parity.json` | Adaptable registry/rule design; rebuild target-specific rules. | Encoding, reload, registry validation and full generated worlds are not covered. |
-| 356 | `benchmarks/rust-material-stage-2026-10-06/scoped-parity.json` | Adaptable surface-stage test; rewrite 1.20.1 surface rules. | Only bounded 3x3 biome input and generated terrain fixtures; full chunk/biome pipeline is absent. |
-| 357 | `benchmarks/rust-material-surface-2026-10-06/scoped-parity.json` | Adaptable deterministic terrain subroutine; rebuild target data. | Full rule evaluation, extensions, generation stages and chunk integration remain pending. |
-| 358 | `benchmarks/rust-model-baking-2026-10-06/scoped-parity.json` | Adaptable geometry tests; rewrite renderer interfaces. | No atlas packing, blockstate transform integration, shader/pixel or GPU parity. |
-| 359 | `benchmarks/rust-model-resolution-2026-10-06/scoped-parity.json` | Adaptable dependency resolution; rebuild 1.20.1 model resources. | Does not cover quad baking, blockstate variants, atlas, lighting or visual parity. |
-| 360 | `benchmarks/rust-movement-emission-2026-10-07/scoped-parity.json` | Adaptable event-request model; rebuild sound/tag registry. | Does not play audio or connect to a live player movement loop. |
-| 361 | `benchmarks/rust-movement-registry-2026-10-07/scoped-parity.json` | Reference data schema; regenerate from 1.20.1 registries. | 26.3 coefficients/tags are not 1.20.1 data; does not prove live player movement. |
-| 362 | `benchmarks/rust-movement-support-2026-10-07/scoped-parity.json` | Adaptable helper tests; rebuild world collision binding. | Not an integrated Player movement loop; target block/attribute registries differ. |
-| 363 | `benchmarks/rust-native-attribute-updates-2026-10-07/input-scene.json` | Reference input fixture; regenerate for 1.20.1. | No aggregate Rust output hash; scene manifest is an input description, not an acceptance result. |
-| 364 | `benchmarks/rust-native-attribute-updates-2026-10-07/interactive-smoke.json` | Reference smoke evidence only; not a performance benchmark. | Linux x86_64 Vulkan llvmpipe CPU renderer; default actor/scene smoke only, not game, GPU performance or Android evidence. |
-| 365 | `benchmarks/rust-native-attribute-updates-2026-10-07/scene-motion.json` | Adaptable movement parity scope; evidence and integration gates remain. | No top-level Rust output digest despite reference data; fluids/effects/inventory/network and full Player tick are omitted. |
-| 366 | `benchmarks/rust-native-attribute-updates-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | CPU llvmpipe scene only; startup snapshot cannot demonstrate playable game, Android FPS or native pixel parity. |
-| 367 | `benchmarks/rust-native-blockstate-client-2026-10-06/startup-smoke.json` | Adaptable visual inspection checklist; rebuild 1.20.1 assets. | Linux llvmpipe software renderer; no native pixel comparison or hardware FPS. |
-| 368 | `benchmarks/rust-native-chunk-models-2026-10-06/startup-smoke.json` | Reference rendering smoke only; no hardware performance claim. | Linux llvmpipe and private screenshots; not Android GPU/frame pacing or whole-world loading evidence. |
-| 369 | `benchmarks/rust-native-crouch-2026-10-07/input-scene.json` | Reference input fixture; regenerate against 1.20.1. | Controlled scene and query gates; full client/server tick, effects, vehicles and network are omitted. |
-| 370 | `benchmarks/rust-native-crouch-2026-10-07/interactive-smoke.json` | Reference smoke evidence only. | Linux llvmpipe; only 8 cm recorded walk, no fluid/other poses/full client lifecycle or Android device result. |
-| 371 | `benchmarks/rust-native-crouch-2026-10-07/scene-motion.json` | Adaptable input/movement tests; integrate 1.20.1 entity state. | Does not prove full LocalPlayer tick, GUI settings persistence, network or full gameplay. |
-| 372 | `benchmarks/rust-native-crouch-2026-10-07/sprint-input.json` | Adaptable key-state tests; regenerate 1.20.1 input rules. | No full parent movement, complete client tick, GUI persistence, networking or gameplay parity. |
-| 373 | `benchmarks/rust-native-crouch-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | 30-frame CPU llvmpipe startup; no active movement, game lifecycle or hardware FPS claim. |
-| 374 | `benchmarks/rust-native-health-2026-10-07/interactive-smoke.json` | Reference gameplay smoke only; not acceptance. | Linux llvmpipe resident scene; death/drop/respawn, full hunger and device performance are not tested. |
-| 375 | `benchmarks/rust-native-health-2026-10-07/scene-motion.json` | Adaptable integrated method test; rebuild 1.20.1 damage/food flow. | Full Player.tick, inventory/equipment, freezing, packets and death/drop/respawn services remain outside scope. |
+| 351 | `benchmarks/rust-living-landing-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Full fluid immersion, enchantment hooks, particles rendering and Player/world integration remain pending. |
+| 352 | `benchmarks/rust-living-motion-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Live overrides, effects and complete Player/entity integration are not included. |
+| 353 | `benchmarks/rust-material-condition-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Caller-owned context/data and complete worldgen registry/encoding are not included. |
+| 354 | `benchmarks/rust-material-extension-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Thresholds and callbacks are controlled; does not establish complete biome or chunk generation. |
+| 355 | `benchmarks/rust-material-rule-library-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Encoding, reload, registry validation and full generated worlds are not covered. |
+| 356 | `benchmarks/rust-material-stage-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Only bounded 3x3 biome input and generated terrain fixtures; full chunk/biome pipeline is absent. |
+| 357 | `benchmarks/rust-material-surface-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Full rule evaluation, extensions, generation stages and chunk integration remain pending. |
+| 358 | `benchmarks/rust-model-baking-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No atlas packing, blockstate transform integration, shader/pixel or GPU parity. |
+| 359 | `benchmarks/rust-model-resolution-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Does not cover quad baking, blockstate variants, atlas, lighting or visual parity. |
+| 360 | `benchmarks/rust-movement-emission-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Does not play audio or connect to a live player movement loop. |
+| 361 | `benchmarks/rust-movement-registry-2026-10-07/scoped-parity.json` | Reference; Version-specific | 26.3 coefficients/tags are not 1.20.1 data; does not prove live player movement. |
+| 362 | `benchmarks/rust-movement-support-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Not an integrated Player movement loop; target block/attribute registries differ. |
+| 363 | `benchmarks/rust-native-attribute-updates-2026-10-07/input-scene.json` | Reference; Version-specific | No aggregate Rust output hash; scene manifest is an input description, not an acceptance result. |
+| 364 | `benchmarks/rust-native-attribute-updates-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux x86_64 Vulkan llvmpipe CPU renderer; default actor/scene smoke only, not game, GPU performance or Android evidence. |
+| 365 | `benchmarks/rust-native-attribute-updates-2026-10-07/scene-motion.json` | Adaptable; Version-specific | No top-level Rust output digest despite reference data; fluids/effects/inventory/network and full Player tick are omitted. |
+| 366 | `benchmarks/rust-native-attribute-updates-2026-10-07/startup-smoke.json` | Reference; Version-specific | CPU llvmpipe scene only; startup snapshot cannot demonstrate playable game, Android FPS or native pixel parity. |
+| 367 | `benchmarks/rust-native-blockstate-client-2026-10-06/startup-smoke.json` | Adaptable; Version-specific | Linux llvmpipe software renderer; no native pixel comparison or hardware FPS. |
+| 368 | `benchmarks/rust-native-chunk-models-2026-10-06/startup-smoke.json` | Reference; Version-specific | Linux llvmpipe and private screenshots; not Android GPU/frame pacing or whole-world loading evidence. |
+| 369 | `benchmarks/rust-native-crouch-2026-10-07/input-scene.json` | Reference; Version-specific | Controlled scene and query gates; full client/server tick, effects, vehicles and network are omitted. |
+| 370 | `benchmarks/rust-native-crouch-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe; only 8 cm recorded walk, no fluid/other poses/full client lifecycle or Android device result. |
+| 371 | `benchmarks/rust-native-crouch-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Does not prove full LocalPlayer tick, GUI settings persistence, network or full gameplay. |
+| 372 | `benchmarks/rust-native-crouch-2026-10-07/sprint-input.json` | Adaptable; Version-specific | No full parent movement, complete client tick, GUI persistence, networking or gameplay parity. |
+| 373 | `benchmarks/rust-native-crouch-2026-10-07/startup-smoke.json` | Reference; Version-specific | 30-frame CPU llvmpipe startup; no active movement, game lifecycle or hardware FPS claim. |
+| 374 | `benchmarks/rust-native-health-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe resident scene; death/drop/respawn, full hunger and device performance are not tested. |
+| 375 | `benchmarks/rust-native-health-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Full Player.tick, inventory/equipment, freezing, packets and death/drop/respawn services remain outside scope. |
 
 ## Part 17 — Entries 376–400
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 376 | `benchmarks/rust-native-health-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | No player lifecycle or movement; Linux llvmpipe CPU renderer only. |
-| 377 | `benchmarks/rust-native-hunger-2026-10-07/interactive-smoke.json` | Reference smoke evidence only. | Elapsed wall time is not simulation time; complete enclosing ticks, item use, death lifecycle and GPU/device evidence are absent. |
-| 378 | `benchmarks/rust-native-hunger-2026-10-07/scene-motion.json` | Adaptable player-state tests; rewrite tick orchestration. | No complete outer Player.tick, item-use path, full death/drop/respawn or device integration. |
-| 379 | `benchmarks/rust-native-landing-2026-10-07/interactive-smoke.json` | Reference smoke evidence only. | Damage request is not applied to health; Linux CPU scene only, no full gameplay or device acceptance. |
-| 380 | `benchmarks/rust-native-landing-2026-10-07/scene-motion.json` | Adaptable end-to-end fixture design; rewrite world services. | Controlled scene excludes many world callbacks, packet acceptance, full player tick and complete death flow. |
-| 381 | `benchmarks/rust-native-model-client-2026-10-06/startup-smoke.json` | Reference visual QA only; not device performance evidence. | Pre-final interactive view differs from final fingerprints; CPU llvmpipe only, no gameplay or complete pixel parity. |
-| 382 | `benchmarks/rust-native-motion-tick-2026-10-07/scoped-parity.json` | Adaptable method-level parity tests; add missing tick lifecycle. | No full Player.aiStep/tick, local input, freezing, health/damage or complete gameplay claim. |
-| 383 | `benchmarks/rust-native-movement-statistics-2026-10-07/interactive-smoke.json` | Reference smoke evidence only. | Linux llvmpipe; sprint/full gameplay and Android hardware FPS are not established. |
-| 384 | `benchmarks/rust-native-movement-statistics-2026-10-07/scene-motion.json` | Adaptable composed movement/statistics tests; rebuild 1.20.1 server loop. | Still excludes complete client/server packet acceptance, inventory/effects and full Player.tick. |
-| 385 | `benchmarks/rust-native-scene-collision-2026-10-07/interactive-smoke.json` | Reference renderer smoke only. | No gameplay simulation; Vulkan llvmpipe CPU adapter, not target GPU or Android FPS. |
-| 386 | `benchmarks/rust-native-scene-collision-2026-10-07/scoped-parity.json` | Adaptable collision test fixtures; evidence gap for output digest. | No aggregate Rust output hash; no gravity, tick schedule, fluid/entity gameplay or pixel renderer parity. |
-| 387 | `benchmarks/rust-native-scene-collision-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | 30-frame CPU llvmpipe snapshot; not a performance benchmark or playable game proof. |
-| 388 | `benchmarks/rust-native-scene-motion-2026-10-07/collision-regression.json` | Adaptable boundary regression; integrate in target world. | Collision adapter only; does not establish live player travel, gravity, tick, fluids or full gameplay. |
-| 389 | `benchmarks/rust-native-scene-motion-2026-10-07/scoped-parity.json` | Adaptable method-level motion tests; add excluded integrations separately. | Fluids, vehicles, effects, crouch, landing/damage, audio and network consumers remain controlled; no full player tick. |
-| 390 | `benchmarks/rust-native-scene-motion-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | Linux llvmpipe CPU renderer only; no visual pixel parity or Android device measurement. |
-| 391 | `benchmarks/rust-native-sprint-2026-10-07/double-tap-smoke.json` | Reference smoke evidence only. | Linux llvmpipe; focus pauses walking, and full pose/fluid/effect/item-use/network lifecycle is outside scope. |
-| 392 | `benchmarks/rust-native-sprint-2026-10-07/scene-motion.json` | Adaptable composed sprint tests; rebuild player state for 1.20.1. | No complete outer client/server tick, GUI persistence, effects, inventory, networking or full gameplay. |
-| 393 | `benchmarks/rust-native-sprint-2026-10-07/sprint-input.json` | Adaptable input state machine tests; regenerate 1.20.1 controls. | Setter records requests; actual parent movement, GUI options and network lifecycle are separate. |
-| 394 | `benchmarks/rust-native-sprint-2026-10-07/sprint-key-smoke.json` | Reference smoke evidence only. | Linux llvmpipe; no fluid/effect/item-use/client-server lifecycle, native pixel or A22 performance claim. |
-| 395 | `benchmarks/rust-native-sprint-2026-10-07/sprint-scene.json` | Adaptable sprint integration tests; rewrite target controls. | Raw shift is recorded but crouch is unbound; effects/equipment/vehicles/fluids, complete ticks and networking remain excluded. |
-| 396 | `benchmarks/rust-native-walking-2026-10-07/interactive-smoke.json` | Reference smoke evidence only. | Linux llvmpipe development scene; no full gameplay, native pixel parity or device acceptance. |
-| 397 | `benchmarks/rust-native-walking-2026-10-07/local-input.json` | Adaptable input math tests; rebuild 1.20.1 controls. | Does not establish full LocalPlayer tick, input remapping, sprint eligibility, pose/camera or network lifecycle. |
-| 398 | `benchmarks/rust-native-walking-2026-10-07/scene-motion.json` | Adaptable motion tests; integrate missing 1.20.1 player lifecycle. | Full Player.tick, inventory/equipment ticks, freezing, health/damage and network consumers are not covered. |
-| 399 | `benchmarks/rust-native-walking-2026-10-07/startup-smoke.json` | Reference renderer smoke only. | Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence. |
-| 400 | `benchmarks/rust-neighbor-spread-2026-10-06/scoped-parity.json` | Adaptable worldgen algorithm tests; rebuild 1.20.1 block-state/feature data. | Actual chunks, neighbor callbacks and complete feature/world generation are pending. |
+| 376 | `benchmarks/rust-native-health-2026-10-07/startup-smoke.json` | Reference; Version-specific | No player lifecycle or movement; Linux llvmpipe CPU renderer only. |
+| 377 | `benchmarks/rust-native-hunger-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Elapsed wall time is not simulation time; complete enclosing ticks, item use, death lifecycle and GPU/device evidence are absent. |
+| 378 | `benchmarks/rust-native-hunger-2026-10-07/scene-motion.json` | Adaptable; Version-specific | No complete outer Player.tick, item-use path, full death/drop/respawn or device integration. |
+| 379 | `benchmarks/rust-native-landing-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Damage request is not applied to health; Linux CPU scene only, no full gameplay or device acceptance. |
+| 380 | `benchmarks/rust-native-landing-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Controlled scene excludes many world callbacks, packet acceptance, full player tick and complete death flow. |
+| 381 | `benchmarks/rust-native-model-client-2026-10-06/startup-smoke.json` | Reference; Version-specific | Pre-final interactive view differs from final fingerprints; CPU llvmpipe only, no gameplay or complete pixel parity. |
+| 382 | `benchmarks/rust-native-motion-tick-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full Player.aiStep/tick, local input, freezing, health/damage or complete gameplay claim. |
+| 383 | `benchmarks/rust-native-movement-statistics-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe; sprint/full gameplay and Android hardware FPS are not established. |
+| 384 | `benchmarks/rust-native-movement-statistics-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Still excludes complete client/server packet acceptance, inventory/effects and full Player.tick. |
+| 385 | `benchmarks/rust-native-scene-collision-2026-10-07/interactive-smoke.json` | Reference; Version-specific | No gameplay simulation; Vulkan llvmpipe CPU adapter, not target GPU or Android FPS. |
+| 386 | `benchmarks/rust-native-scene-collision-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No aggregate Rust output hash; no gravity, tick schedule, fluid/entity gameplay or pixel renderer parity. |
+| 387 | `benchmarks/rust-native-scene-collision-2026-10-07/startup-smoke.json` | Reference; Version-specific | 30-frame CPU llvmpipe snapshot; not a performance benchmark or playable game proof. |
+| 388 | `benchmarks/rust-native-scene-motion-2026-10-07/collision-regression.json` | Adaptable; Version-specific | Collision adapter only; does not establish live player travel, gravity, tick, fluids or full gameplay. |
+| 389 | `benchmarks/rust-native-scene-motion-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Fluids, vehicles, effects, crouch, landing/damage, audio and network consumers remain controlled; no full player tick. |
+| 390 | `benchmarks/rust-native-scene-motion-2026-10-07/startup-smoke.json` | Reference; Version-specific | Linux llvmpipe CPU renderer only; no visual pixel parity or Android device measurement. |
+| 391 | `benchmarks/rust-native-sprint-2026-10-07/double-tap-smoke.json` | Reference; Version-specific | Linux llvmpipe; focus pauses walking, and full pose/fluid/effect/item-use/network lifecycle is outside scope. |
+| 392 | `benchmarks/rust-native-sprint-2026-10-07/scene-motion.json` | Adaptable; Version-specific | No complete outer client/server tick, GUI persistence, effects, inventory, networking or full gameplay. |
+| 393 | `benchmarks/rust-native-sprint-2026-10-07/sprint-input.json` | Adaptable; Version-specific | Setter records requests; actual parent movement, GUI options and network lifecycle are separate. |
+| 394 | `benchmarks/rust-native-sprint-2026-10-07/sprint-key-smoke.json` | Reference; Version-specific | Linux llvmpipe; no fluid/effect/item-use/client-server lifecycle, native pixel or A22 performance claim. |
+| 395 | `benchmarks/rust-native-sprint-2026-10-07/sprint-scene.json` | Adaptable; Version-specific | Raw shift is recorded but crouch is unbound; effects/equipment/vehicles/fluids, complete ticks and networking remain excluded. |
+| 396 | `benchmarks/rust-native-walking-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe development scene; no full gameplay, native pixel parity or device acceptance. |
+| 397 | `benchmarks/rust-native-walking-2026-10-07/local-input.json` | Adaptable; Version-specific | Does not establish full LocalPlayer tick, input remapping, sprint eligibility, pose/camera or network lifecycle. |
+| 398 | `benchmarks/rust-native-walking-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Full Player.tick, inventory/equipment ticks, freezing, health/damage and network consumers are not covered. |
+| 399 | `benchmarks/rust-native-walking-2026-10-07/startup-smoke.json` | Reference; Version-specific | Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence. |
+| 400 | `benchmarks/rust-neighbor-spread-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Actual chunks, neighbor callbacks and complete feature/world generation are pending. |
 
 ## Part 18 — Entries 401–425
 
