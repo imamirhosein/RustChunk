@@ -5025,3 +5025,853 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - RustChunk implementation mapping: این JSON خودِ ماژول اجرایی نیست؛ به‌عنوان شاهد/fixture برای آزمون 1.20.1 در نقشهٔ مهندسی RustChunk ثبت می‌شود. مقصد runtime در آینده subsystem متناظر rust-collision-context-2026-10-06 است؛ در وضعیت فعلی workspace RustChunk فقط package فعلی `engine` دارد و پیاده‌سازی native gameplay در آن اثبات نشده است.
 - Evidence required before adoption: برای پذیرش، باید ورودی‌ها و SHAهای رسمی Java 1.20.1، fixtureهای مستقل، خروجی oracle و Rust، و آزمون تکرارپذیر CI ارائه شود؛ هر scope خارج‌شده در manifest باید آزمون جدا داشته باشد.
 - Completion state: بازبینی کامل سند JSON انجام شد؛ این بررسی خودش هیچ build، اجرای آزمون، benchmark، اتصال server یا تست دستگاهی انجام نداده است. گزارش فقط دامنه و شواهد ثبت‌شده در upstream را مستند می‌کند.
+
+### 251. `benchmarks/rust-combat-rules-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `44e6395b0b3f9048d1bedc4a282b3a9b8ee573bb`.
+- Size: 27,467 bytes; 248 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: CombatRules armor/toughness و magic protection.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۴۰٬۶۵۶ fixture؛ محاسبهٔ armor/magic، server/client branches، unenchanted/empty stack، query order، numeric edges و callback failures..
+- Findings: 26.3؛ enchantment armor hook، enchanted components، damage tags/equipment و pipeline کامل باقی‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable arithmetic tests; Version-specific combat rules.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: الگوریتم و مقادیر damage 1.20.1 را از Java همان نسخه استخراج کنید؛ modern enchantment components را منتقل نکنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 252. `benchmarks/rust-component-durability-2026-10-07/blocking-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `dddc1dd841eeacadee93f3f12befc2c62474e17b`.
+- Size: 30,294 bytes; 270 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Regression مستقل durability هنگام blocking.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۲۰٬۸۹۵ fixture؛ همان شاخهٔ BlocksAttacks.hurtBlockingItem با storage واقعی unenchanted ItemStack و چند player class؛ Rust output hash برابر است..
+- Findings: این گزارش جدا از entry 228 است اما scope و خروجی هم‌پوشانی دارند؛ component codec، enchantment و full inventory lifecycle خارج scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Reference/Adaptable regression harness; Version-specific item model.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: تکرار مستقل در 1.20.1 و کنترل overlap با entry 228؛ durability/NBT را از legacy item model بگیرید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 253. `benchmarks/rust-component-durability-2026-10-07/scalar-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8bd2d40fc687135925c86290ce19cdfbc4d22d49`.
+- Size: 30,265 bytes; 270 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Scalar regression برای durability.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۰٬۰۵۲ fixture؛ damage predicates، clamped reads/writes، count wrapping، unbreakable/invalid components و ServerPlayer callbacks..
+- Findings: 26.3؛ no-enchantment path؛ full component store/codec، enchantment و equipment handling خارج scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable numeric test; Modern data model not portable.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 item damage و count را با NBT/legacy stack semantics بازسازی کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 254. `benchmarks/rust-component-durability-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5cf2427e628259b5e699b57a1a6526db7b0be45a`.
+- Size: 30,230 bytes; 270 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Durability همراه copy-on-write component patch.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۰٬۱۴۲ fixture؛ prototype، visible patch mutations، stack copies، shrink/break state و mutation-before-error..
+- Findings: 26.3 component architecture است؛ full item-component codecs، enchantments و equipment lifecycle pending هستند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Reference/Adaptable storage idea; Version-specific schema.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: برای RustChunk فقط مفهوم patch/copy behavior قابل مطالعه است؛ 1.20.1 NBT/item storage مستقل لازم دارد. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 255. `benchmarks/rust-component-patch-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `66c4468c6fe4c262a8bcd6f4fd362ef5ce23f179`.
+- Size: 30,207 bytes; 269 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: PatchedDataComponentMap.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۴٬۵۸۵ fixture؛ reads، set/remove، iteration order، apply/restore، sanitation، map copies و mutation-before-error..
+- Findings: 26.3 data component system؛ prototype hash-table construction، identity hashes، mutable aliases و item/inventory کامل بیرون scope..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Reference only; 1.20.1 has legacy item data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: این مدل را به‌عنوان codec 1.20.1 استفاده نکنید؛ فقط مفهوم test کردن patch semantics قابل اقتباس است. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این فقط manifest مربوط به مدل DataComponent جدید است؛ در RustChunk 1.20.1 به data model فعلی 1.20.1 item stack/NBT تبدیل مستقیم ندارد. هیچ runtime module موجودی به آن نگاشت نمی‌شود.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 256. `benchmarks/rust-consumable-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c62cee86107d34cfc2137642f1d04d36d780e33f`.
+- Size: 32,807 bytes; 291 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: چرخهٔ Consumable.canConsume/startConsuming/onConsume.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۶٬۱۲۳ fixture؛ actual FoodProperties/FoodData، stack components، دو RNG، server/player branches و consumption effects..
+- Findings: 26.3؛ eligibility/start-use، stat service، effect bodies و event delivery کنترل‌شده‌اند؛ full lifecycle/gameplay pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable lifecycle test; Version-specific item/effect model.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 edible items، potion/effect handling و event flow را مجدداً از Java استخراج کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 257. `benchmarks/rust-consumable-emission-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `352b98ba9dc0b1be90cc2ed0c697aada8eec25b5`.
+- Size: 32,604 bytes; 291 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: زمان‌بندی و emission ذرات/صدا هنگام مصرف.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۶٬۷۹۲ fixture؛ animation timing، random draw order، particle callbacks، sound overrides و failure prefixes..
+- Findings: 26.3؛ audio playback، rendering، completion/effects و full gameplay خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable event-order test; Version-specific assets/API.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: فقط ترتیب event و RNG را به‌عنوان روش تست نگه دارید؛ names/sounds/particles برای 1.20.1 جدا استخراج شوند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 258. `benchmarks/rust-consume-effect-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d8843a429cfd1c84446616b79501a074ec1786a9`.
+- Size: 32,922 bytes; 293 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Consume effects برای status effects و sound.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۲٬۵۱۲ fixture؛ Apply/Remove/Clear status effects و PlaySound با effect instances و RNG واقعی، ترتیب و mutation/failure..
+- Findings: 26.3؛ actor storage و sound delivery کنترل‌شده‌اند؛ holder binding، teleport handling و integration کامل pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable effect sequencing; Version-specific effect catalogue.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: effect IDs، holders و semantics را از 1.20.1 استخراج و در entity lifecycle ادغام کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 259. `benchmarks/rust-contextual-collision-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3cd22dd0a6ba2f963652ff4bcf016e9e1290da19`.
+- Size: 23,716 bytes; 219 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Contextual collision manifest مستقل.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷۸۵٬۹۰۶ fixture؛ ۳۵٬۴۹۲ cached، ۳۲ context-sensitive و ۱۹۹ uncached state در ۱۱ context؛ همان scope contextual regression..
+- Findings: هم‌پوشانی عمدی با entry 239 دارد؛ دو manifest را یکی فرض نکنید، اما رفتارهای مشترک را دوباره پیاده‌سازی نکنید..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Reference/Adaptable collision regression; Version-specific state map.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: hash/fixture provenance دو manifest را مقایسه کنید و در 1.20.1 یک test matrix یکتا با provenance روشن بسازید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 260. `benchmarks/rust-core-2026-10-05/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `67cc61e067cea0cfcc758fa2e397b5ae7c852657`.
+- Size: 5,307 bytes; 70 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: هستهٔ primitiveهای عددی و RNG.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: مجموعهٔ انتخابی position، seeded RNG، integer intervals، triangular floats، positional factories، Java UTF-16 hash، MD5 seed و packed storage..
+- Findings: 26.3؛ انتخابی و غیرجامع است؛ gameplay، rendering و performance را اثبات نمی‌کند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable low-level test corpus; Version-specific algorithms.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: primitiveها را با implementation 1.20.1 مقایسه کنید؛ فقط مواردی که در نسخه هدف همان semantics را دارند منتقل شوند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 261. `benchmarks/rust-damage-immunity-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `7724dca8784d76b3b9179311549a71a74ebbfe4b`.
+- Size: 28,691 bytes; 258 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Damage immunity gates.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۷٬۹۸۸ fixture؛ Entity immunity، LivingEntity enchantment dispatch، Player gamerule و ServerPlayer dimension/loading predicates..
+- Findings: 26.3؛ flags/tags/rules کنترل‌شده و enchantment equipment خالی است؛ registered source/rule binding و full pipeline pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable logic tests; Version-specific damage rules.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: گیت‌های immunity و tagها را با 1.20.1 damage source/rule set دوباره استخراج کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 262. `benchmarks/rust-damage-reduction-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `88c6a10cea7390e96d048fa7efa59e201e1608a8`.
+- Size: 27,999 bytes; 252 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: LivingEntity damage reduction.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۱٬۹۷۴ fixture؛ armor value, armor/magic reduction، bypass tags، resistance amplifier، statistics و failure edges..
+- Findings: 26.3؛ enchantments، durability effects، live registries و full damage integration باقی‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable arithmetic tests; Version-specific combat behavior.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: CombatRules، attributes و damage tags را از 1.20.1 بازسازی و با vectors بسنجید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 263. `benchmarks/rust-damage-source-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9b515214c62bb9b54084e795e6c6073d0ec16135`.
+- Size: 29,230 bytes; 262 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: DamageType codec و DamageSource.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۵٬۱۰۰ fixture؛ bundled definitions/tags، source identity، difficulty scaling، exhaustion و virtual creative source..
+- Findings: 26.3؛ catalog indices محلی‌اند نه network IDs؛ live registry reload، Rust codec و death messages pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable schema/test method; Version-specific registry.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: DamageType registry و codec را برای 1.20.1 استخراج کنید؛ indexهای محلی را packet ID تلقی نکنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 264. `benchmarks/rust-decoration-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `649dad3b89dd620113773b809818ce3ca768999d`.
+- Size: 17,301 bytes; 162 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: ChunkGenerator.applyBiomeDecoration.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۲٬۱۸۸ fixture، ۶۷ biome و ۴٬۳۷۶ requested decoration؛ biome intersection، FeatureSorter، seeding، progress و partial failures..
+- Findings: 26.3؛ structures disabled و feature payloadها synthetic هستند؛ full registry/world lifecycle خارج scope..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable worldgen orchestration tests; Version-specific biome/feature data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: decoration order، seed formula و biome lists را برای 1.20.1 oracle کنید؛ structures جدا بمانند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 265. `benchmarks/rust-decoration-region-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `c6915af6409814ba34bf870031b8b4b0f7efaa47`.
+- Size: 19,486 bytes; 179 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Decoration روی region و resident ProtoChunks.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۲۴۰ fixture، ۹ chunk در هر fixture و ۴۸۰ requested decoration؛ configured fill layers، replacements، ore، biome zoom و section data..
+- Findings: 26.3؛ WorldGenRegion policy، POI، block entities، lighting، structures و full terrain lifecycle خارج scope..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable integration harness; Version-specific region semantics.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 worldgen pipeline و write-zone/lighting/POI integration را روی world واقعی جداگانه بررسی کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 266. `benchmarks/rust-delta-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `59f90dc6728fef3f45add84f5fb6156c9e131a0e`.
+- Size: 23,894 bytes; 216 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: DeltaFeature codec و generation.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۲۴٬۲۶۹ fixture، ۳۵٬۷۲۳ candidate states؛ rim/patch random draws، Manhattan traversal، provider families و writes..
+- Findings: 26.3؛ world updates، fluid behavior و full generation خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable feature test; Version-specific provider/state data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: DeltaFeature 1.20.1 algorithm/provider schema و RNG sequence را از oracle استخراج کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 267. `benchmarks/rust-density-2026-10-05/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `98ad5e4908680e3db19bf17f1b02fa7c22b62349`.
+- Size: 14,169 bytes; 160 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: جامع‌ترین manifest فعلی density engine.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: مجموعهٔ گستردهٔ samplerها، unary/binary ops، caches، bulk/scalar paths، splines، intervals، graph compiler، seeded noise و range propagation با fixtures بسیار متنوع..
+- Findings: manifest فیلد صریح minecraft ندارد؛ manifest_sha1 پین 26.3 را مشخص می‌کند. Blend غیرخالی، باقی graph definitions، codecs و terrain integration هنوز pending هستند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable architecture/test methodology; Version-specific density graph.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: ابتدا manifest pin و source revisions را تأیید کنید؛ برای 1.20.1 graph schemas/noise seeds/routers از نو بسازید؛ full terrain parity جداست. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 268. `benchmarks/rust-disk-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `ca6034e0692c478279daeb7f20a42290ebb47500`.
+- Size: 22,842 bytes; 206 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: DiskFeature و post-processing requests.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷۶٬۴۰۹ fixture؛ codec، replacement columns، candidate states، markAboveForPostProcessing، chunk resolution، RNG و partial failures..
+- Findings: 26.3؛ manifest درخواست mark را ثبت می‌کند، نه اجرای کامل post-processing بعدی؛ full generation pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable feature/storage test; Version-specific height/state data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: DiskFeature و postprocess semantics را مطابق world-height و chunk pipeline 1.20.1 مقایسه کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 269. `benchmarks/rust-dynamic-support-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `2b1faf4b7dac22fc314a727b6fcbbbb4510fe956`.
+- Size: 20,035 bytes; 183 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Dynamic support/collision برای blockهای خاص.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۰۷٬۳۰۸ fixture؛ ۱۹۹ uncached states، bamboo، speleothem، scaffolding، powder snow، shulker و moving piston..
+- Findings: 26.3؛ entity lifecycle، ticking/pushing و full gameplay خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable dynamic-shape tests; Version-specific block/entity rules.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: block entities، piston state و support rules نسخهٔ 1.20.1 از نو bind شوند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 270. `benchmarks/rust-edge-backoff-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `b6f01a985cdd67d2b0e6b8dbdb41cf9f588b69fc`.
+- Size: 23,688 bytes; 215 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Player.maybeBackOffFromEdge و canFallAtLeast.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۱٬۱۶۸ fixture؛ step/staying/ground getters، probe bounds، axis/diagonal reductions، fall-distance و floating point..
+- Findings: 26.3؛ live crouch state، attribute provisioning و integrated ledge behavior خارج scope هستند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable movement test; Version-specific player mechanics.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: movement input و player state در 1.20.1 را با collision/world provider واقعی ادغام کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 271. `benchmarks/rust-effect-attribute-modifiers-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `fe86b1eb8f6cf542eea6eb06cbf95937b25280c1`.
+- Size: 34,397 bytes; 305 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: MobEffect attribute modifier lifecycle.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳٬۳۱۷ fixture؛ fastutil definition map، AttributeInstance permanent modifiers، identity، map mutation، cache/dirty callbacks..
+- Findings: 26.3؛ effect registry definitions، pending sets ownership، notifications و full gameplay جدا باقی‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable modifier test; Version-specific effects/attributes.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: effect modifiers و attribute registry 1.20.1 از منبع همان نسخه تولید شوند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 272. `benchmarks/rust-effect-notifications-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `12c3a466f375dab6148c4ffe4fdab6aea853be4f`.
+- Size: 34,107 bytes; 302 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: LivingEntity effect notifications و packet construction.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۴٬۴۷۶ fixture؛ eligibility، pending sets، passenger list، add/update/remove notifications و mutation/failure prefixes..
+- Findings: manifest فیلد top-level rust_output_sha256 ندارد؛ هر دو JAR reference خروجی یکسان و ۱٬۶۶۷٬۶۱۶ matched lines دارند، اما digest مشترک Rust در سند مستقل ثبت نشده است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable notification ordering; Version-specific packet/effect schema; Evidence gap.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: digest مشترک Rust را در manifest تکمیل کنید؛ سپس packet/state flow را برای 1.20.1 دوباره بسازید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 273. `benchmarks/rust-effect-sync-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `13abd78c4d7c9941131fc9b6b3a2c4289e0b29df`.
+- Size: 36,091 bytes; 320 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Synchronize active effects و SynchedEntityData.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۶٬۰۰۴ fixture، ۴۰ registered effect و ۶ factory؛ particles/invisibility/glowing flags، dirty clearing، reentrant writes و holder identities..
+- Findings: فیلد top-level rust_output_sha256 وجود ندارد؛ دو reference خروجی برابر با ۲٬۷۵۴٬۷۴۴ matched lines ثبت کرده‌اند، اما digest تجمیعی Rust جداگانه نیست..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable sync-state testing; Version-specific serializer/effect schema; Evidence gap.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: digest Rust را صریح اضافه کنید؛ serializer IDs و effect registry 1.20.1 را مستقل تولید و packet tests اجرا کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 274. `benchmarks/rust-effect-sync-2026-10-07/synced-bytes-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `bdaba19970478cd00ac2f5e74ee8ecb177d8e799`.
+- Size: 34,653 bytes; 308 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: SynchedEntityData byte fields.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷٬۸۴۲ fixture؛ byte values، signed masks، dirty/default extraction، reentrant writes و callback failure prefixes..
+- Findings: 26.3؛ heterogeneous serializer maps، entity schema/network codecs و complete item-use flow خارج scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable state-sync test; Version-specific serializer IDs.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: byte serializer و entity data IDs را برای 1.20.1 استخراج و round-trip wire tests بسازید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 275. `benchmarks/rust-effect-sync-2026-10-07/synced-floats-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `b8a0e1b61750c98a2de28b2561283b4294a35c21`.
+- Size: 34,647 bytes; 308 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: SynchedEntityData Float fields.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳٬۰۱۹ fixture؛ boxed equality، forced updates، dirty flags، received assignment، batch callbacks و reentrancy..
+- Findings: 26.3؛ سایر serializers، type mismatch handling، wire codecs و player absorption integration pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable state-sync test; Version-specific serializer IDs.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: Float serializer semantics و field IDs را با 1.20.1 Java oracle مقایسه کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 276. `benchmarks/rust-end-gateway-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a7f1d5fa95df8c696cce2026f6f2199d3c017038`.
+- Size: 24,684 bytes; 220 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: EndGatewayFeature و block entity exit.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۵٬۸۲۰ fixture؛ gateway placement box، optional codecs، exit position mutation، dirty notification و failure boundaries..
+- Findings: 26.3؛ entity lifecycle، dirty propagation، teleport/search و complete End generation خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable feature/block-entity test; Version-specific End behavior.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: gateway block entity/NBT/teleport و feature generation را برای 1.20.1 مستقلاً port کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 277. `benchmarks/rust-end-podium-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d1fe43b06691801e0d26ee92fce807d9ef901ee4`.
+- Size: 23,624 bytes; 213 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: EndPodiumFeature generation.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۸٬۲۰۷ fixture؛ podium/portal/bedrock/end-stone geometry، torch placement، distance cutoff و partial failures..
+- Findings: 26.3؛ destruction outcome کنترل‌شده است؛ drops، block entities، neighbor updates و dragon/portal gameplay خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable feature test; Version-specific End worldgen.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: End podium و dragon fight integration در 1.20.1 را جداگانه بازتولید کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 278. `benchmarks/rust-entity-attributes-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `1778d89c7ddfb63d9c4475528a2d22f42496674d`.
+- Size: 27,059 bytes; 244 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Entity DefaultAttributes و AttributeMap regression.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۴٬۷۲۰ fixture؛ تمام attribute/entity suppliers، lazy lookup، mutations، base reset و sync membership؛ output هم‌پوشان با entry 203..
+- Findings: 26.3؛ bulk assignment، custom suppliers، save/network codecs، entity live و gameplay pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Reference/Adaptable regression; Version-specific data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: overlap با entry203 را در matrix نشان دهید؛ برای 1.20.1 یک oracle یکتا برای supplier و attribute mapping بسازید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 279. `benchmarks/rust-entity-collision-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `dc3c48b46e2eae817b121354ce650d1be4b063c4`.
+- Size: 23,135 bytes; 209 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: EntityGetter.getEntityCollisions.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۰٬۶۴۸ fixture؛ ordered entity snapshots، bounds, spectator/root-vehicle exclusion، collision geometry و failure cases..
+- Findings: 26.3؛ snapshots و vehicle links کنترل‌شده‌اند؛ live storage، broad-phase indexing و entity lifecycle خارج scope هستند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable collision query test; Version-specific entity rules.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: entity spatial index و canCollideWith policy را در 1.20.1 runtime واقعی بیازمایید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 280. `benchmarks/rust-entity-fluid-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d597b4aa68828efd5b8aaeaa69945fbe41c3cc81`.
+- Size: 25,834 bytes; 234 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: EntityFluidInteraction update.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷٬۶۴۶ fixture؛ tracker pruning، body/eye depth، loaded-chunk preflight، tags، ordered current accumulation و delta movement..
+- Findings: 26.3؛ height/flow و camera-support کنترل‌شده؛ live fluid propagation/world integration pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable fluid/entity test; Version-specific fluid tags/physics.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: fluid height/flow، tag registry و entity motion را با Java 1.20.1 oracle بازتولید کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 281. `benchmarks/rust-entity-fluid-tick-2026-10-07/immersion-regression.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `b7cdd18e5dfa13e5b47664cf4aa3c73d2b118c33`.
+- Size: 26,187 bytes; 237 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Regression immersion برای fluid interaction.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷٬۶۴۶ fixture؛ همان output hash و دامنهٔ اصلی entry280؛ ثبت مسیر immersion و رفتار EntityFluidInteraction..
+- Findings: این regression به entry280 هم‌پوشانی دارد؛ مستقل ثبت شده اما نباید به‌عنوان قابلیت دوم یا پوشش کامل fluid tick شمرده شود..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Reference/Adaptable regression; Version-specific behavior.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: تکرار و overlap با entry280 را مستند کنید؛ برای 1.20.1 behavior تست مستقل بسازید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 282. `benchmarks/rust-entity-fluid-tick-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `749f5f5819d84e0843eff8a1d0939d4ac95f93ba`.
+- Size: 26,401 bytes; 238 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Entity.updateFluidInteraction و current application.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۷٬۳۴۶ fixture؛ water-entry fall reset، splash dispatch، first tick، water/lava currents، FAST_LAVA و mutation/failure..
+- Findings: 26.3؛ splash render/audio و live world/entity binding و gameplay کامل خارج scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable tick integration test; Version-specific fluid behavior.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: current coefficients، dimension attributes و splash behavior را مطابق 1.20.1 بررسی کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 283. `benchmarks/rust-entity-move-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `fcef52f2473d632ef51feee1126df7893ecc30a9`.
+- Size: 24,514 bytes; 221 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Entity.move و collision resolution.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۲۱٬۶۵۶ fixture؛ no-physics/piston exits، movement clipping، ground/fall callbacks، passenger guard و partial mutations..
+- Findings: 26.3؛ step height صفر و بسیاری از world providers کنترل‌شده‌اند؛ full player/world movement integration باقی است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable movement test; Version-specific collision/motion.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 step height، player movement، velocity and collision pipeline را در runtime واقعی یکپارچه کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 284. `benchmarks/rust-entity-obstruction-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `64dcf886b7f2eb330b7dd5437019ad9c25643950`.
+- Size: 17,712 bytes; 165 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: EntityGetter.isUnobstructed.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۵٬۲۵۴ fixture؛ ordered entity snapshots، spectators/removal, same-root exclusions، voxel intersection و provider errors..
+- Findings: 26.3؛ entity construction/lifecycle، spatial indexing، vehicle maintenance و complete gameplay خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable collision query test; Version-specific entity rules.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: با entity store و broad-phase واقعی 1.20.1 تست کنید؛ snapshot tests کافی نیستند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 285. `benchmarks/rust-extra-items-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5955ee6aeed03aa2be04b87095e5465289d14dbd`.
+- Size: 32,423 bytes; 288 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: آیتم‌های اضافه پس از مصرف و inventory insertion.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۶٬۷۰۸ fixture؛ finishUsingItem، ServerPlayer.handleExtraItemsCreatedOnUse، Inventory/Equipment، partial insertion و drop fallback..
+- Findings: 26.3؛ item handlers، full component schemas و actual dropped-entity creation/lifecycle pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable inventory lifecycle test; Version-specific ItemStack model.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 remainders/cooldowns/inventory و drop entity را با legacy ItemStack/NBT دوباره بسازید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 286. `benchmarks/rust-face-support-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5fc4479435ac25c4ba2b5c7b83bed4a86f5cfaf0`.
+- Size: 17,958 bytes; 168 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: VoxelShape face slicing و SupportType.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱٬۶۱۵ fixture؛ getFaceShape، nested slices، identity/cache، extrema و FULL/CENTER/RIGID support algorithms..
+- Findings: 26.3؛ انتخاب support shape برای هر block، world/entity context و survival خارج scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable geometry tests; Version-specific shape semantics.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: VoxelShape و support APIs را با 1.20.1 geometry implementation و world context تست کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 287. `benchmarks/rust-face-visibility-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `bedf33f290fb4cfc2ff0f6af02df4ab388451438`.
+- Size: 23,296 bytes; 218 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: BlockState.skipRendering و Block.shouldRenderFace.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۵٬۷۲۳ states، ۱٬۲۸۶ definitions، ۱٬۴۴۱٬۸۱۶ pairs و بیش از ۱۷ میلیون حالت جهت/leaf؛ tags و occlusion geometry..
+- Findings: 26.3؛ chunk mesh integration، lighting، translucent sorting، fluid surfaces، GPU pixels و gameplay ثابت نشده‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable face-culling tests; Version-specific model/tag data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 state pairs/tags و renderer mesh pipeline را مستقل و روی GPU هدف validate کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 288. `benchmarks/rust-fall-damage-2026-10-07/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5252c4586b6b86db4749a1cd9bf884f4fad1dc2c`.
+- Size: 23,807 bytes; 216 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Entity.checkFallDamage.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷٬۲۴۸ fixture؛ float displacement، grounded branches، support lookup، HIT_GROUND event و partial state on failure..
+- Findings: 26.3؛ LivingEntity fluid updates، Block.fallOn، health/damage/attributes و full movement lifecycle در این تست نیست..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable physics test; Version-specific entity/block hooks.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 fall-distance، landing callbacks و damage application را در integrated movement tests اجرا کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 289. `benchmarks/rust-feature-catalog-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `e4c6b60df85a3659cbb9c08134304ee98e386a3c`.
+- Size: 20,835 bytes; 194 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature.CODEC، PlacedFeature.CODEC و registry catalog.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۷٬۴۸۸ fixture؛ ۳ basic و ۷ composition features، ۱۰ named features، tags/holders، filters و برخی registry-bound placements..
+- Findings: 26.3؛ unused/cyclic registry resources، reload/lifecycle، encoding کامل، همهٔ feature algorithms و generated worlds خارج scope..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable registry/codec test; Version-specific worldgen registry.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: feature catalog، tags، holder resolution و configured feature data را برای 1.20.1 از نو استخراج کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 290. `benchmarks/rust-feature-graph-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `4f6ee1181804fa563e56fe64dd7dc085154cf5e5`.
+- Size: 19,961 bytes; 185 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature graph composition.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۴٬۷۳۶ fixture؛ sequence/overlay/random selectors/weighted selectors، nested inline holders، ordering و random draw consumption..
+- Findings: 26.3؛ named registry holders/tags، encoders، full feature registries و complete generated worlds pending..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable graph execution tests; Version-specific codecs.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: graph node types و codecs را با Feature/PlacedFeature 1.20.1 تطبیق و کامل کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 291. `benchmarks/rust-feature-placement-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `b0c66f7aece8d66d7e479bb70cd77afe2a85fe19`.
+- Size: 17,639 bytes; 161 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: FeaturePlacer و placement-modifier chains.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۵٬۵۴۴ fixture، ۸۰ modifier chains و ۲۲٬۱۷۶ requested placements؛ random choices، heightmap scans، filters و failure buffers..
+- Findings: 26.3؛ configured feature algorithms, registry, nested features, Gaussian providers, encoding و complete worldgen خارج scope..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable placement pipeline test; Version-specific modifiers.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: modifier catalogue/heightmaps/providers را از 1.20.1 استخراج و به feature algorithmهای همان نسخه وصل کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 292. `benchmarks/rust-feature-region-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `dbb26ff03c231582a18bc8e2ae89bd0a16ca39e5`.
+- Size: 18,211 bytes; 170 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature placement در region متشکل از ۹ ProtoChunk.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۹۲ fixture؛ basic block-writing features، fill layers، replacement، ore، heightmaps و final raw sections/words..
+- Findings: 26.3؛ storage proxy جای WorldGenRegion واقعی است؛ write-zone، POI، block entities، postprocessing، lighting و complete worldgen بیرون scope..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable worldgen integration harness; Version-specific region behavior.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: port باید به WorldGenRegion semantics و save/lighting lifecycle 1.20.1 متصل شود؛ proxy تست کافی نیست. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 293. `benchmarks/rust-feature-region-destroy-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `bf0c8d12cb810c2d6704938e03505fad9131993b`.
+- Size: 24,154 bytes; 211 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature-region destroy، tick requests و state queries.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۹۲ fixture، ۳۵٬۷۲۳ state، ۳۰۰ block tags و ۱۴٬۷۸۴ direct tick requests؛ destroyBlock، queues، fluids و writes..
+- Findings: 26.3؛ WorldGenRegion واقعی، POI، block entity lifecycle، lighting و اجرای واقعی tickها خارج scope هستند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable region mutation test; Version-specific chunk/tick policy.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 block/fluid tick queues، destroy semantics و region lifecycle را جداگانه oracle کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 294. `benchmarks/rust-feature-region-queries-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `0500ddb6b92369056379a4bde856a42c8c94e994`.
+- Size: 23,402 bytes; 207 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature-region block/fluid queries.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۹۲ fixture و ۹ resident chunks؛ feature writes، state queries، contained-fluid flags، block tags و tick queues..
+- Findings: 26.3؛ actual WorldGenRegion، postprocessing execution، lighting و complete generation هنوز بیرون scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable world proxy test; Version-specific block/fluid data.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: query provider را با resident chunk world 1.20.1 و chunk boundary/error behavior واقعی ادغام کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 295. `benchmarks/rust-feature-region-ticks-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `87ab83c2415817d06bf81020cbe64a8679823eb9`.
+- Size: 22,830 bytes; 205 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature-region block/fluid tick scheduling.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۹۲ fixture؛ feature placement همراه scheduleTick/createTick، deduplication، order advancement، priorities و persisted queue state..
+- Findings: 26.3؛ tick execution، WorldGenRegion واقعی، lighting و complete feature registry خارج scope است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable tick queue test; Version-specific scheduler semantics.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: tick queue persistence/order و execution را با chunk tick scheduler نسخهٔ 1.20.1 تطبیق دهید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 296. `benchmarks/rust-feature-region-upgrade-height-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `df95798dfa465d26a4f97985b958a2dca52fb675`.
+- Size: 25,344 bytes; 217 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: Feature region upgrade-height و retrogen bounds.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۱۹٬? cases including write-zone and upgrade-height tests; ensureCanWrite، below-zero retrogen data، height bounds و region feature mutation بررسی شده‌اند..
+- Findings: 26.3؛ retrogen activation caller-owned است؛ full retrogen replacement/masking، biome behavior و complete worlds pending؛ شمارش دقیق caseها در manifest ثبت شده است..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable height-gate tests; Version-specific height/retrogen.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: 1.20.1 build limits و retrogen semantics را دقیقاً از DataVersion 3465 و Java source استخراج کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 297. `benchmarks/rust-feature-region-write-zone-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `add2dbfed382bfbb003fbb967390cc7b7d267ef0`.
+- Size: 24,664 bytes; 214 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: WorldGenRegion horizontal write-zone.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۲۰٬۱۲۵ write-zone cases؛ horizontal radius، wrapped subtraction/abs، feature callback acceptance و rejected region writes..
+- Findings: 26.3؛ vertical upgrade restriction، region construction، POIs, lighting, ticks و full worldgen بیرون scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable boundary-condition tests; Version-specific region rules.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: write-zone policy را از WorldGenRegion 1.20.1 استخراج و chunk-neighbor limits را روی world واقعی تست کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 298. `benchmarks/rust-feature-sort-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9ace2a9c107de1e291b9e9ad745190c958c2beef`.
+- Size: 16,638 bytes; 157 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: FeatureSorter.buildFeaturesPerStep.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳٬۸۷۱ fixture و ۶۷ biome؛ ordering، identity-distinct holders، cycles، repeated references، empty steps و DFS..
+- Findings: 26.3؛ diagnostic minimization، complete registry ownership، decoration seeds و feature execution خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable graph-ordering algorithm; Version-specific feature graph.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: تمام biome feature lists در 1.20.1 مستقل استخراج و با actual registry lifecycle تست شوند. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 299. `benchmarks/rust-fill-layer-2026-10-06/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8488d5e8670992cdbe4f647320fe27bf0135159e`.
+- Size: 16,797 bytes; 158 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: FillLayerFeature codec و placement.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: ۳۹٬۵۴۱ fixture؛ ۳۵٬۷۲۳ state، ۱۴۶ integer properties و ۷٬۶۳۶ placement؛ height lookup، X/Z reads، writes و RNG..
+- Findings: 26.3؛ world side effects و other configured features/full worlds خارج scope‌اند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable feature test; Version-specific block states.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: fill layers و height limits را از 1.20.1 data/codec استخراج و با chunk storage ادغام کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### 300. `benchmarks/rust-float-log-2026-10-05/scoped-parity.json`
+- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `df00917924433d4f9e30dc8d55a99e8dcb54950e`.
+- Size: 7,926 bytes; 88 lines.
+- Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
+- Purpose: UnaryFunction.LogSampler exhaustive parity.
+- Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
+- Implementation / logic: تمام ۲^۳۲ الگوی bit ورودی float با دو pinned JAR مقایسه شده؛ signed zero، subnormal، infinities و NaN شامل‌اند..
+- Findings: تست فقط scalar float log روی یک JDK/platform است؛ double Math.log، دیگر platformها، bulk composition، terrain یا performance را ثابت نمی‌کند..
+- RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
+- Decision: **Adaptable exhaustive numeric test; Version-specific runtime math.**
+- 1.20.1 implications: این artifact مربوط به Minecraft 26.3 است؛ برای RustChunk Vanilla 1.20.1 باید schema، داده‌ها، oracle و رفتارهای نسخه‌ای دوباره تولید شوند. شباهت نام API یا subsystem دلیل parity نیست.
+- Follow-up checks: برای 1.20.1 و toolchain هدف، binary32 math path را دوباره oracle کنید؛ NaN canonicalization و platform dependence را مستند کنید. کلاس/متد معادل را از JARهای رسمی 1.20.1 استخراج کنید؛ داده و fixture نسخه‌ای را دوباره بسازید؛ Java oracle و Rust را مقایسه کنید؛ سپس integration و تست ARM64 را جدا انجام دهید.
+- RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
+- Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
+- Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
