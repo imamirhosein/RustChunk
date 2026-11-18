@@ -712,21 +712,21 @@
 | 580 | `crates/horizon-chat-filter/src/lib.rs` | Exclude from client | Server moderation policy, not client chat rendering |
 | 581 | `crates/horizon-chat-filter/src/normalise.rs` | Reference only | Language-dependent; can false-positive |
 | 582 | `crates/horizon-chat-filter/src/tests.rs` | Reference tests only | One server policy, not general language semantics |
-| 583 | `crates/horizon-client-core/src/block_entity_nbt.rs` | Adaptable boundary | Useful boundary; 26.3 schema |
-| 584 | `crates/horizon-client-core/src/bossbar.rs` | High-value architecture; rewrite schema | 26.3-only types/defaults; rebuild exact 1.20.1 ids |
-| 585 | `crates/horizon-client-core/src/component.rs` | Adaptable state model | No packet sync/HUD integration; color mappings 26.3 |
-| 586 | `crates/horizon-client-core/src/fastutil_order.rs` | Adaptable tree; reimplement codecs | Later 26.3 component forms; 1.20.1 differs |
-| 587 | `crates/horizon-client-core/src/gamerules.rs` | Reference only where target oracle needs | Collection internals not universal semantics |
-| 588 | `crates/horizon-client-core/src/identifier.rs` | Adaptable typed model | 26.3 catalog; regenerate 1.20.1 table |
-| 589 | `crates/horizon-client-core/src/key_display.rs` | Adaptable validation | Two helpers differ in strictness; compare target JVM |
-| 590 | `crates/horizon-client-core/src/lang.rs` | Adaptable presentation | SDL/US layout assumptions; Android APIs differ |
-| 591 | `crates/horizon-client-core/src/nbt_path.rs` | Adaptable translation architecture | Load target 1.20.1 language resources |
-| 592 | `crates/horizon-client-core/src/nbt_value.rs` | Adaptable layering | Module aggregation, not game integration |
-| 593 | `crates/horizon-client-core/src/particle_type.rs` | Highly adaptable NBT engine | Need Java 1.20.1 oracle incl mutation/depth edges |
-| 594 | `crates/horizon-client-core/src/pattern.rs` | Adaptable utility | Numeric conversion version-specific |
-| 595 | `crates/horizon-client-core/src/potions.rs` | Reference schema; rebuild table | Later ids; regenerate 1.20.1 registry/layers |
-| 596 | `crates/horizon-client-core/src/registries.rs` | Adaptable parser with conformance tests | No groups/braces; only a subset supported |
-| 597 | `crates/horizon-client-core/src/scoreboard.rs` | Adaptable architecture; rewrite tables | Later effect ids/mod registration; regenerate 1.20.1 |
-| 598 | `crates/horizon-client-core/src/snbt.rs` | Reference map layout; rebuild ids | 26.3 catalog cannot be used as 1.20.1 truth |
-| 599 | `crates/horizon-client-core/src/sound_source.rs` | High-value state/save model; rebuild | 26.3 criteria/stats, no packet/HUD integration |
-| 600 | `crates/horizon-client-core/src/text.rs` | Adaptable formatting utility | Hash order heuristic; exact serialization needs Java oracle |
+| 583 | `crates/horizon-client-core/src/block_entity_nbt.rs` | High-value architecture; rewrite schema | Includes 26.3-only block entities and fields; exact IDs/defaults must be rebuilt from 1.20.1. |
+| 584 | `crates/horizon-client-core/src/bossbar.rs` | Adaptable state model; rebuild target ids/colors | No packet synchronization or HUD rendering; color/catalog details are 26.3-specific. |
+| 585 | `crates/horizon-client-core/src/component.rs` | Adaptable text tree; reimplement target codecs | Later component forms differ from 1.20.1; not a full chat screen/renderer. |
+| 586 | `crates/horizon-client-core/src/fastutil_order.rs` | Reference regression; use Rust ordering where possible | JDK collection internals are implementation details; do not port blindly unless 1.20.1 oracle shows observable behavior. |
+| 587 | `crates/horizon-client-core/src/gamerules.rs` | Adaptable typed model; replace data table | 26.3 rule names/defaults differ; rebuild full 1.20.1 catalog. |
+| 588 | `crates/horizon-client-core/src/identifier.rs` | Adaptable parsing; enforce target validation | The helpers differ in strictness; compare each with exact 1.20.1 Identifier constructors/codecs. |
+| 589 | `crates/horizon-client-core/src/key_display.rs` | Adaptable presentation idea; use Android input APIs | SDL/US symbol tables are upstream choices; Android hardware/IME input handling needs native adaptation. |
+| 590 | `crates/horizon-client-core/src/lang.rs` | Adaptable translation architecture; replace resources | The table is 26.3; load target 1.20.1 language assets and key names. |
+| 591 | `crates/horizon-client-core/src/nbt_path.rs` | Highly adaptable NBT path engine; differential-test semantics | Path parser, array mutation and max-depth details need exact 1.20.1 Java oracle. |
+| 592 | `crates/horizon-client-core/src/nbt_value.rs` | Adaptable utility; verify numeric edge cases | Truncation, float/double conversion and wrong-type fallbacks are version-sensitive. |
+| 593 | `crates/horizon-client-core/src/particle_type.rs` | Reference table layout; rebuild target catalog | Includes many later particle IDs; regenerate 1.20.1 registry and rendering layers. |
+| 594 | `crates/horizon-client-core/src/pattern.rs` | Adaptable minimal parser with conformance tests | Groups/braces are unsupported; must preserve only verified subset semantics. |
+| 595 | `crates/horizon-client-core/src/potions.rs` | Adaptable table/lookup design; rewrite catalog | Contains later effects and mod registration; regenerate all 1.20.1 potion/effect data. |
+| 596 | `crates/horizon-client-core/src/registries.rs` | Adaptable data model; rebuild target registry ownership | Server-provided registry state and 26.3 resource sets are version-specific; completion UI and packet lifecycle are external. |
+| 597 | `crates/horizon-client-core/src/scoreboard.rs` | High-value state/save architecture; rebuild criteria and packets | Criteria/stat catalog is 26.3; no full network packet synchronization or HUD integration. |
+| 598 | `crates/horizon-client-core/src/snbt.rs` | Adaptable serialization utilities; verify exact output | Hash iteration order is heuristic/insertion-based; exact formatting requires a pinned Java 1.20.1 oracle. |
+| 599 | `crates/horizon-client-core/src/sound_source.rs` | Adaptable registry table; validate 1.20.1 list | Small static table; verify target ordering and server/client use sites rather than importing blindly. |
+| 600 | `crates/horizon-client-core/src/text.rs` | Highly adaptable text engine; rewrite event/schema compatibility | The 824-line implementation includes newer event/object fields; `open_file` is explicitly restricted to locally-created text, never server/LAN text. Rebuild 1.20.1 component schema and preserve this trust boundary. |
