@@ -3814,3 +3814,180 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
 - Completion state: Complete source review and structural JSON checks; no benchmark run, RustChunk build, APK or phone test was performed.
 
+## Batch checkpoint — entries 181–190 — 2026-11-18
+
+- Completed full source review for entries 181–190 at the pinned source snapshot `5432370d573642041585c69b40fb045b27133488`; all paths and source blob SHAs were checked.
+- All long JSONs were read consecutively in chunks of at most 400 lines; internal frame-summary/histogram consistency checks passed.
+- The Mac report explicitly identifies loaded/offscreen/mismatched-size conditions. Mac and Windows performance records are 26.3 host data, not Android A22 evidence.
+- No benchmark, RustChunk build, APK or device test was performed.
+
+### 181. `benchmarks/perf/horizon-win-9800x3d-5080-rd8.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `4afe983607ebf1d0f245bf15468181230af1e15b`
+- Size: 774 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–774.
+- Purpose: Horizon 26.3 performance report at render distance 8.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Windows 11 Ryzen 7 9800X3D/RTX5080, Vulkan, 1280×720; average FPS 2942/3495/3346/3376; peak working set about 1.17 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Horizon uses Metal/offscreen on Mac or Vulkan on high-end Windows RTX hardware. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 182. `benchmarks/perf/macmini-m4pro-loaded-2026-11-01.md`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `9e259be38425ee498ee7da5716f6b3274558e1e6`
+- Size: 69 lines; full file fetched and read.
+- Coverage: Complete; all 69 lines read.
+- Purpose: Interpretation report comparing Horizon, vanilla 26.3 and vanilla with performance mods on a heavily loaded Mac mini M4 Pro.
+- Implementation / logic: Documents three-repeat RD8/16/32 tests, four scenes, load averages 15–114 across 14 cores, offscreen rendering, actual size mismatch (Horizon 1920×1080 vs vanilla 1920×930), and startup/FPS/memory tables plus QoS/graphics differences.
+- Findings: The report explicitly says it is not a fair player comparison: system contention differs; vanilla draws 14% fewer pixels; the compare script rejects different window sizes but the table was manually produced with that guard skipped. The main value is its cautionary analysis.
+- RustChunk relevance: Reference-only for benchmark caveats; raw performance ranking should not guide RustChunk engine choices.
+- 1.20.1 implications: 26.3/M4 Pro/macOS offscreen results cannot infer 1.20.1 or Galaxy A22 performance.
+- Decision: Reference; Limited comparison
+- Dependencies / cross-references: Adjacent Mac perf JSONs; tools/perf_bench.py; docs/benchmark.md; macOS QoS/footprint measurements.
+- Follow-up checks: Keep these caveats tied to the associated JSONs. For a fair comparison, repeat with identical actual dimensions, controlled load and visible presentation.
+- RustChunk implementation mapping: Maps to future RustChunk benchmark report caveats; no runtime code component.
+- Evidence required before adoption: Require matched render dimensions, controlled load, comparable APIs/presentation, repeated runs and full condition matching before cross-client comparison.
+- Completion state: Complete source review; no benchmark was run and no RustChunk build/APK/device test was performed.
+
+### 183. `benchmarks/perf/vanilla-m4pro-1080p-rd16.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `11e07fd5fc551d1cb4be7ae62b0893c5ff3cbdc6`
+- Size: 708 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–708.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 16.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Vanilla 26.3 plus Fabric benchmark driver, M4 Pro/OpenGL/offscreen; mean FPS 45.5/23.3/51.3/44.3; peak RSS ~2.55 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 184. `benchmarks/perf/vanilla-m4pro-1080p-rd32.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `40dff2a3fd0368a796344f41bb2a372922cfbbc3`
+- Size: 708 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–708.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 32.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same Mac/OpenGL/offscreen setup at RD32; mean FPS 81.4/67.8/44.1/28.7; peak RSS ~2.96 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 185. `benchmarks/perf/vanilla-m4pro-1080p-rd8.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5b6895d515431c4ce4d5382db6b371b3950af492`
+- Size: 708 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–708.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 8.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same Mac/OpenGL/offscreen setup at RD8; mean FPS 42.2/66.4/49.9/45.9; peak RSS ~1.88 GB; high sample variance.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 186. `benchmarks/perf/vanilla-mods-m4pro-1080p-rd16.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `ffe027750cc27ffc7da36fed874144dbe6ed5fc8`
+- Size: 724 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–724.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 16.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. 26.3 Fabric plus Sodium/Lithium/FerriteCore/ImmediatelyFast on M4 Pro/OpenGL/offscreen; mean FPS 46.2/61.9/75.5/35.9; peak RSS ~2.57 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 187. `benchmarks/perf/vanilla-mods-m4pro-1080p-rd32.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `7d3c160902647e01a3adbce06e300b137eaf705f`
+- Size: 724 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–724.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 32.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same 26.3 mod set at RD32; mean FPS 91.8/113.9/119.1/56.9; peak RSS ~4.08 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 188. `benchmarks/perf/vanilla-mods-m4pro-1080p-rd8.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `eecf394e4fb02b56f7d426bc1eab0a5baa4067bc`
+- Size: 724 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–724.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 8.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same 26.3 mod set at RD8; mean FPS 33.2/47.3/34.9/67.0; peak RSS ~2.02 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 189. `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd16.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `36bb115554375f00b8cc5710fa1e743b62493be3`
+- Size: 707 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 16.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Windows 11 Ryzen 9800X3D/RTX5080 OpenGL with 26.3 Fabric performance mods; mean FPS 1282/1746/1815/1500; peak working set ~2.50 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
+### 190. `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd32.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `8ad8074e14af2226251e7b922867a189b0583499`
+- Size: 707 lines; full file fetched and read.
+- Coverage: complete; read consecutively in ranges 1–400 and 401–707.
+- Purpose: Vanilla Minecraft 26.3 performance report at render distance 32.
+- Implementation / logic: Stores app/mod metadata, machine/OS/GPU/backend, seed 1234, simulation distance 12, window/presentation state, three repetitions of village/forest/ocean/mountain scenes, startup/chunk loading, memory and 12 raw frame records. Same Windows modded vanilla setup at RD32; mean FPS 926/929/1017/645; peak working set ~2.96 GB.
+- Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
+- RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
+- 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
+- Decision: Reference; Version-specific.
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
+- Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
+- RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
+- Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
+- Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
+
