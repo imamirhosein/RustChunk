@@ -24,6 +24,14 @@
 - Mapping language distinguishes current RustChunk code from planned native-engine destinations. At this branch snapshot, the RustChunk Cargo workspace contains only the JNI-oriented `rustchunk-engine` package (download, installer, workspace, Forge launch-plan and Java/JLI helpers); it does not yet contain a playable native Minecraft game, protocol, world or renderer crate. Planned destinations are not claims of implemented functionality.
 - Evidence requirements are acceptance gates, not reports of tests already run. A source review alone does not satisfy them; each requirement must be met by version-pinned 1.20.1 evidence and the appropriate automated/device test.
 
+### Backfill verification — entries 1–120 (2026-11-18)
+
+- Structural check: all 120 entries contain exactly one each of the 15 required fields, including `RustChunk implementation mapping` and `Evidence required before adoption`. No entry was missing either new field.
+- Provenance check: all 120 recorded source paths and blob SHAs were compared with the exact pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; all 120 SHA values matched.
+- Content check: both new fields were reviewed across entries 1–120. Mappings distinguish the current RustChunk workspace from future/planned native-game modules; evidence statements define target-version acceptance checks rather than claiming those checks have passed.
+- Workspace cross-check: the current RustChunk Cargo workspace contains only `engine`; `engine/Cargo.toml` is the JNI/installer-oriented package. The mappings therefore do not claim that native protocol, world, gameplay, input or renderer crates already exist in RustChunk.
+- Scope of this verification: it confirms ledger structure, source provenance and the quality/scope of the two backfilled fields. It does not execute builds, tests, benchmarks, server sessions or Android device validation, and it does not upgrade any entry's implementation completion state.
+
 ## Completed files
 
 ### 1. `README.md`
