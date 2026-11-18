@@ -3458,3 +3458,182 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Main findings: the parity-ledger process is valuable only after rebuilding a 1.20.1 oracle; Git hooks/public-tree checks are useful but require CI; CODEOWNERS/trusted reviewers need protected GitHub permissions; general CI patterns are adaptable but do not prove game parity; Starling native-mod workflows are out of scope for the vanilla milestone and are not Forge support.
 - The release-line value remains undetermined pending consumer tracing. The native-mod build pipeline is a security-sensitive future reference, not a current implementation candidate.
 - Tests/checkers/workflows were read but not executed. No Cargo build, actionlint run, Docker build, hook test, native-mod build, artifact publication, Azure VM operation, RustChunk gameplay change, Android APK build or device test was performed.
+
+## Batch checkpoint — entries 161–170 — 2026-11-18
+
+- Completed full source review for entries 161–170 from pinned Starling snapshot `5432370d573642041585c69b40fb045b27133488`; all ten paths and blob SHAs were checked.
+- Files longer than 400 lines were read in consecutive chunks of no more than 400 lines.
+- Findings cover privileged PR workflow safety, resource/server benchmark patterns, synthetic model fixtures and suspicious renderer counters.
+- These files document Starling 26.3 behavior; nothing here establishes RustChunk 1.20.1 gameplay or Android performance.
+- No workflow, benchmark, Cargo build, test, APK or device run was executed.
+
+### 161. `.github/workflows/overlap-note.yml`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `bfa6a0446695ccaeaeda0c8b621225157488d51f`
+- Size: 44 lines; full file fetched and read.
+- Coverage: Complete; all 44 lines read.
+- Purpose: Workflow that posts pull-request overlap notes for changes targeting main.
+- Implementation / logic: Uses pull_request_target and per-PR concurrency; checks out only a trusted main-branch script with persisted credentials disabled; fetches PR heads as Git objects for diff analysis; permissions are contents:read and pull-requests:write. It does not checkout or execute PR-head code.
+- Findings: The trusted-script boundary is important, but pull_request_target and optional self-hosted runner make token scope, runner isolation and untrusted diff handling security-critical. The invoked overlap script was not reviewed here; YAML alone does not prove safe behavior.
+- RustChunk relevance: Optional PR-review automation for intersecting RustChunk changes; not a client/runtime subsystem.
+- 1.20.1 implications: No Minecraft semantics. RustChunk must keep privileged workflows isolated from PR-controlled scripts and build files.
+- Decision: Adaptable; Security reference
+- Dependencies / cross-references: GitHub Actions event payload; trusted main-branch overlap script; GitHub PR API; optional self-hosted runner.
+- Follow-up checks: Inspect the called script, fork PR behavior, head-ref fetch and diff flags. Test opened/synchronize/reopened PRs, hostile diff paths, least-privilege token and runner isolation.
+- RustChunk implementation mapping: Possible future `.github/workflows/` review helper. No RustChunk runtime or gameplay component depends on it.
+- Evidence required before adoption: Require adversarial fork-PR tests, diff-only behavior, no checkout/exec of PR head, minimum token permissions and verified runner isolation.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 162. `.github/workflows/pack-bench.yml`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3fb1e1671d7a7faaa88fa0cb55b8427a58effbce`
+- Size: 62 lines; full file fetched and read.
+- Coverage: Complete; all 62 lines read.
+- Purpose: Workflow comparing resource-pack load performance on a PR branch against the base branch.
+- Implementation / logic: Runs manually or for pack-bench path changes; installs Linux dependencies and Rust; runs a client-render pack-load benchmark on the branch, then uses a base worktree and the branch's harness against base code; publishes a summary with read-only workflow permissions.
+- Findings: Useful isolated comparison pattern, but the benchmark binary, renderer crate and test inputs are Starling-specific. YAML does not establish output equivalence or fairness of cache state.
+- RustChunk relevance: Adaptable to a future RustChunk resource/model-load benchmark once a native resource manager exists; low priority before single-player gameplay.
+- 1.20.1 implications: Fixtures/schema are 26.3. RustChunk needs 1.20.1-compatible resources and separate Android storage/memory measurements.
+- Decision: Adaptable; Optional/future
+- Dependencies / cross-references: GitHub Actions; Rust toolchain/cache; horizon-client-render pack-load example; Linux packages; base worktree and report script.
+- Follow-up checks: Inspect benchmark example and pack licensing; verify base/branch use identical fixtures and warm/cold policy; add repetitions and target Android measurements.
+- RustChunk implementation mapping: Future host benchmark in RustChunk tools or a resource crate; no native renderer benchmark target currently exists.
+- Evidence required before adoption: Require semantic output equality, pinned 1.20.1 fixtures, deterministic runs, cold/warm separation and Galaxy A22 load/RAM measurements.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 163. `.github/workflows/parity-main.yml`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `4840b98be6afec567393ff49d9f448e21a4625f5`
+- Size: 78 lines; full file fetched and read.
+- Coverage: Complete; all 78 lines read.
+- Purpose: Main-branch integration workflow for changed-scope parity tests and failure bisection.
+- Implementation / logic: Runs on main pushes/manual dispatch; serializes on a persistent self-hosted macOS runner; checks out the exact commit, prepares vanilla data, calculates a last-green base, runs selected parity scopes, bisects failures, comments and uploads logs.
+- Findings: Self-hosted persistent state (`clean:false`, `.local`/target caches) risks stale or compromised evidence. Continue-on-error means release gating must explicitly interpret the result. Workflow was not executed.
+- RustChunk relevance: Strong pattern for a future 1.20.1 parity gate; current RustChunk CI covers selected exporters/registry/tag tests, not full gameplay parity.
+- 1.20.1 implications: All inherited oracles are 26.3. Rebuild source/data fixtures for 1.20.1; a green 26.3 run is not evidence of 1.20.1 support.
+- Decision: Adaptable; Rewrite required
+- Dependencies / cross-references: GitHub Actions; self-hosted macOS runner; parity_main.py/parity.py; vanilla-data prep; Git bisect; log artifacts.
+- Follow-up checks: Inspect parity scripts, cache keys, last-green selection and bisect. Verify branch protection actually blocks on failure; test runner cleanup and isolation.
+- RustChunk implementation mapping: Future GitHub Actions 1.20.1 parity gate after native Rust gameplay and Java oracle probes exist.
+- Evidence required before adoption: Require pinned 1.20.1 oracle, explicit scopes/dependencies, cache fingerprinting, deterministic reruns, tested bisect/failure handling and enforced branch protection.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 164. `.github/workflows/pr-labels.yml`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `d596166740105a266c8ab763321e7eb467aeda05`
+- Size: 40 lines; full file fetched and read.
+- Coverage: Complete; all 40 lines read.
+- Purpose: Workflow that labels pull requests from trusted repository metadata and changed paths.
+- Implementation / logic: Uses pull_request_target but checks out workflow/script from main, not PR head. Reads event data as input and applies labels through GitHub API with contents:read and pull-requests:write; credentials are not persisted.
+- Findings: The key security rule is not executing PR code. Label mapping/API behavior is in a separate script not reviewed here; titles, body and paths remain untrusted strings.
+- RustChunk relevance: Optional RustChunk triage automation; not a game feature or evidence of a test pass.
+- 1.20.1 implications: No version dependence. Labels must describe RustChunk work and never imply compatibility or completion.
+- Decision: Adaptable; Security reference
+- Dependencies / cross-references: GitHub Actions; trusted main-branch label script; event payload and changed-files API.
+- Follow-up checks: Inspect script for shell injection and malformed fields; test hostile PR titles, bodies, filenames and fork events; verify label allowlist.
+- RustChunk implementation mapping: Optional workflow-only addition; no native engine code depends on labels.
+- Evidence required before adoption: Require adversarial input tests, no PR-head execution, strict label allowlist, minimal token and fork-safe behavior.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 165. `AGENTS.md`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `2578901a07556cf0432bec11e7fbcb46ef73618c`
+- Size: 214 lines; full file fetched and read.
+- Coverage: Complete; all 214 lines read.
+- Purpose: Repository-level agent/developer instructions and navigation guide for Starling's Rust-native Minecraft 26.3 codebase.
+- Implementation / logic: Requires reading CONTRIBUTING first; describes project boundaries, crate/tool navigation, coding/testing practices, licensing restrictions, private-data hygiene, source ownership and validation commands.
+- Findings: Strong governance reference, but paths, crates, version, Java/toolchain and commands are Starling-specific. License restrictions are Starling's policy, not automatically RustChunk policy. Instructions are not proof that CI/hooks enforce them.
+- RustChunk relevance: Highly adaptable as a RustChunk root agent guide for native 1.20.1 scope, provenance, review completeness, Android target and truthful reporting.
+- 1.20.1 implications: Replace all 26.3, Java25 and Starling paths/commands. State Forge/JAR mods are deferred and JNI installer code is not the native game engine.
+- Decision: Adaptable; Rewrite required
+- Dependencies / cross-references: CONTRIBUTING.md; Cargo workspace; architecture/version-port docs; parity probes; hooks/CI; licensing/public-tree checks.
+- Follow-up checks: Trace every cited path and command against RustChunk; choose its own contribution/license policy; verify CI enforcement; include Galaxy A22/API33 and 1.20.1 oracle rules.
+- RustChunk implementation mapping: Future RustChunk root AGENTS.md; Starling-specific crate paths must not be presented as existing RustChunk paths.
+- Evidence required before adoption: Require each instruction to map to a real path/tool or be labelled policy; run listed commands in clean CI; verify private-data protection and README consistency.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 166. `bench/bench.py`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `1f463bca5b77f53ab5195c322098b8cb7df8cec8`
+- Size: 458 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–200, 201–400 and 401–458.
+- Purpose: Python harness for dedicated-server load benchmarks of Horizon, vanilla 26.3 and Pumpkin with optional bot clients.
+- Implementation / logic: Creates disposable runs, configures offline/creative local servers, optionally copies a prepared world, launches bots in staggered joins, waits for readiness and samples TPS/MSPT, process RSS/CPU, network bytes and join times. Produces JSON/Markdown; it is a server-load benchmark, not client FPS.
+- Findings: Process/pipe cleanup needs review: exceptional paths can leave child processes/reader threads; captured pipes can block if not drained; ps-based accounting is not a Windows implementation. Console parsing is version/locale-sensitive.
+- RustChunk relevance: Optional server stress methodology only; not needed for first single-player milestone.
+- 1.20.1 implications: Server commands, bot behavior and protocol are 26.3/Horizon/Pumpkin-specific. A later test needs protocol-763 server/bots.
+- Decision: Optional/future; Adaptable methodology
+- Dependencies / cross-references: Python standard library; Horizon/Pumpkin/vanilla server binaries; horizon-bots; ps; isolated worlds/logs.
+- Follow-up checks: Test timeout/crash/bot-failure cleanup; drain pipes; verify disposable world isolation, OS support, units and repeated load metrics.
+- RustChunk implementation mapping: Future developer-only tools/server_load_bench.py after RustChunk gains a protocol-763 client; current RustChunk has no native game server/network client.
+- Evidence required before adoption: Require real protocol-763 server/bot, no process leaks/deadlocks, deterministic world, exact version pins and reproducible TPS/network measurements.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 167. `benchmarks/entity-model-document-2026-10-14/generate_fixture.py`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `624a7abe1787406ea3d154723ac784c46714f83f`
+- Size: 29 lines; full file fetched and read.
+- Coverage: Complete; all 29 lines read.
+- Purpose: Generator for a large synthetic entity-model JSON fixture used to test shared-document loading.
+- Implementation / logic: Generates a deterministic resource-like document with boat/chest-boat, minecart, armor/player and filler layers; expands parts/quads/normals to a target file size and reports fixture shape.
+- Findings: The fixture is synthetic and includes test identifiers such as test_wood; size alone does not prove every real schema branch is represented.
+- RustChunk relevance: Adaptable host-side parser/model-loader stress fixture; not shipping resource data.
+- 1.20.1 implications: Model/layer structure is 26.3-specific. Generate separate 1.20.1 fixtures from official data and label synthetic extensions.
+- Decision: Adaptable; Test-only reference
+- Dependencies / cross-references: Python JSON/path libraries; entity-model README/results; Starling model-document schema.
+- Follow-up checks: Regenerate twice and compare hashes; inspect schema branch coverage, counts/depth and real 1.20.1 compatibility.
+- RustChunk implementation mapping: Possible host-side fixture generator under RustChunk tools; no native model/resource loader exists in current workspace.
+- Evidence required before adoption: Require deterministic fixture, explicit version/schema, parser boundary tests and parity with independent 1.20.1 resource oracle.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 168. `benchmarks/entity-model-document-2026-10-14/README.md`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `eeb8f66730ae16f36f9849475fac0ba0e2ebee29`
+- Size: 61 lines; full file fetched and read.
+- Coverage: Complete; all 61 lines read.
+- Purpose: Methodology/results for comparing repeated per-model JSON parsing with a shared parsed entity-model document.
+- Implementation / logic: Describes synthetic 2.47 MB document with 458 layers and 42 selected models; warmups, alternating order and 15 sample pairs. Equality compares parts, poses, polygons, normals, vertices and children. Reports 1434.974 ms vs 33.420 ms (~42.94×) for the isolated path.
+- Findings: Speedup is only for synthetic parsing/selection; textures, full startup and GPU are excluded. Test commands in the note were not run in this audit.
+- RustChunk relevance: Strong method: prove equality, warm up, alternate ordering, preserve raw samples and scope performance claims.
+- 1.20.1 implications: Fixture and parser are 26.3-specific. Rebuild with 1.20.1 resources and measure on A22; do not generalize 42.94× to total game performance.
+- Decision: Adaptable; Reference
+- Dependencies / cross-references: generate_fixture.py; results.json; model loader; benchmark harness and Cargo tests.
+- Follow-up checks: Inspect comparator/test sources; run with actual 1.20.1 models; separate cold/warm and allocation costs; measure A22 RAM/thermal impact.
+- RustChunk implementation mapping: Future benchmark docs beside RustChunk 1.20.1 model parser tests; no such native engine component currently.
+- Evidence required before adoption: Require field equality, source/input hashes, repeatable raw samples, cold/warm separation and target-device measurements.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 169. `benchmarks/entity-model-document-2026-10-14/results.json`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `1ef0c6576a1c731871b629c57e14ead554791d57`
+- Size: 44 lines; full file fetched and read.
+- Coverage: Complete; all 44 lines read.
+- Purpose: Raw timing samples and summary for the shared entity-model parsing experiment.
+- Implementation / logic: Stores 15 baseline timings, 15 optimized timings, three warmups, 2,473,695-byte fixture, 42 selected models, medians and approximately 42.94× computed speedup.
+- Findings: Raw values are consistent with the README medians, but there is no independent fixture SHA, tested source commit or hardware/toolchain metadata. It is not a whole-client startup/FPS result.
+- RustChunk relevance: Useful raw-sample/report schema only, not a RustChunk target.
+- 1.20.1 implications: Data belongs to Starling 26.3 and a synthetic model document.
+- Decision: Reference; Adaptable schema
+- Dependencies / cross-references: Companion README/generator; tested parser implementations; benchmark runner.
+- Follow-up checks: Any RustChunk report should include fixture/source hashes, commit, device, toolchain, cache state and independently recalculated summaries.
+- RustChunk implementation mapping: Potential future RustChunk benchmark artifact in benchmarks/ for 1.20.1 resource parsing; current engine does not consume it.
+- Evidence required before adoption: Require provenance-bound inputs/code, independent statistic recomputation, output equality and Android measurements.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
+### 170. `benchmarks/graphics/after-4080.json`
+- Source repository/ref: starling-client/starling / starling / pinned snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `223449dd8c1849185eb6a3f57ecf3d593ae6de6a`
+- Size: 547 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–547.
+- Purpose: Post-change graphics benchmark report for Horizon on RTX4080 at render distances 8/16/32.
+- Implementation / logic: Records fixed-seed four-scene 12-second flights, Vulkan, 1280×720/offscreen, section counts, upload bytes, FPS and frame diagnostics; identifies commit 9006566b.
+- Findings: RD32 throughput falls sharply. At RD16 drawn_sections is zero despite nonzero upload bytes and frame activity; trace the counter semantics. Single snapshot, no repeated statistical samples.
+- RustChunk relevance: Renderer telemetry/regression-triage reference only; no reusable mobile FPS target.
+- 1.20.1 implications: Starling 26.3, RTX4080/Vulkan desktop/offscreen does not represent 1.20.1 Mali-G52/OpenGL ES.
+- Decision: Adaptable methodology; Raw values not reusable
+- Dependencies / cross-references: tools/graphics_bench.py; Horizon renderer counters; fixed world/seed; NVIDIA driver.
+- Follow-up checks: Inspect counter implementation and benchmark harness; reproduce both commits with repeated conditions; investigate RD16 zero counter.
+- RustChunk implementation mapping: Future RustChunk GPU benchmark records after native renderer exists; no RustChunk renderer currently produces these metrics.
+- Evidence required before adoption: Require 1.20.1 fixtures, valid draw/submit counters, repeated runs, driver/API metadata and Galaxy A22 measurements.
+- Completion state: Complete source review. No upstream workflow dispatch, benchmark run, parity rerun, Cargo build, APK build or device test was performed as part of this audit.
+
