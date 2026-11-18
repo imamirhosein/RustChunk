@@ -1,9 +1,9 @@
-# Starling → RustChunk Audit Ledger — Entries 601–620
+# Starling → RustChunk Audit Ledger — Entries 601–800
 
 - Source repository: `starling-client/starling`.
 - Source ref: `5432370d573642041585c69b40fb045b27133488` (pinned snapshot; do not follow the moving default branch).
 - Target project: RustChunk, Minecraft Java 1.20.1-first audit.
-- Selection rule: next 20 unique source paths after entry 600; paths already covered by entries 1–600 were skipped, not duplicated.
+- Scope correction: six duplicate source paths in slots 631, 632, 633, 754, 762 and 766 were replaced with six unique source files immediately following the previous endpoint at entry 1000 in the pinned Starling tree. The original copies remain documented in their earlier entries; this ledger now has 200 unique paths across 601–800.
 - Scope: complete source files were read; this ledger is an architecture/portability review, not a claim that tests, builds or device runs passed.
 
 ### 601. `crates/horizon-client-core/src/uuid.rs`
@@ -529,56 +529,59 @@
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
 
-### 631. `crates/horizon-client-render/src/chunk.rs`
-- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
-- Source SHA: `923a2a0832b84ae93a03c431d1288cb70443400b`
-- Size: 42084 bytes (upstream Git blob size).
-- Coverage: Complete source blob fetched from the pinned commit and inspected; tests, where present, were not executed.
-- Purpose: OptiFine-style Custom Item Textures rule engine
-- Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
-- Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Parses CIT rules and selects item texture substitutions based on stack/context properties.
-- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
-- Decision: Optional compatibility extension; do not include in vanilla core.
-- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
-- Follow-up checks: Rule predicates and item metadata rely on newer item-component formats; 1.20.1 item NBT/tags require a dedicated adapter.
-- RustChunk implementation mapping: Rule predicates and item metadata rely on newer item-component formats; 1.20.1 item NBT/tags require a dedicated adapter.
-- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
-- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+### 631. `crates/horizon-client/examples/probe/pick_block_data_fixture.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `7496ceb8e97d24f18453a4f0bfbae2bd276a5591`
+- Size: 3284 bytes; 97 lines
+- Coverage: Complete source text reviewed, lines 1–97.
+- Purpose: Fixture for block-entity data copied onto an item and then placed back into the world.
+- Dependencies / cross-references: `block_entity_item::{pick, place}`, canonical block-entity NBT helpers, SNBT parser, Java float/double text formatting and JSON case input.
+- Implementation / logic: Reads one JSON case per line, canonicalizes source/target SNBT, calls `pick` to produce an item patch and `place` to reconstruct the target block entity, then emits canonical paired output.
+- Findings: Deterministic key ordering and typed numeric formatting support parity comparisons. The patch-oriented item representation is from a newer item-component era; parser failures collapse to `error`, and trailing SNBT remainder is not validated here.
+- RustChunk relevance: Useful as a differential-test shape for pick-block and block-entity placement; the fixture format itself is not a game protocol or production path.
+- Decision: Use as a test-harness reference only; rebuild the item/block-entity representation for Java 1.20.1 instead of adopting newer component-patch semantics.
+- 1.20.1 implications: Java 1.20.1 predates the 1.20.5 item data-component system. Verify `BlockEntityTag`, item NBT, `keepPacked` and pick/place rules against exact 1.20.1 behavior.
+- Follow-up checks: Generate Java 1.20.1 oracle cases for signs, banners, skulls, containers and command blocks; test malformed/trailing SNBT and canonical round trips.
+- RustChunk implementation mapping: Candidate RustChunk test fixture under `tests/parity/pick_block_data`; keep serialization adapters versioned and out of the renderer.
+- Evidence required before adoption: Pinned 1.20.1 Java oracle output, edge-case fixtures and proof that no post-1.20.1 item-component fields leak into the target schema.
+- Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented; no test, build or runtime execution is claimed.
 
-### 632. `crates/horizon-client-render/src/chunk/block_entity.rs`
-- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
-- Source SHA: `9f50876e831d035f10430918a04b9c0ad94ae7af`
-- Size: 26927 bytes (upstream Git blob size).
-- Coverage: Complete source blob fetched from the pinned commit and inspected; tests, where present, were not executed.
-- Purpose: CIT armor texture/render integration
-- Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
-- Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Applies custom armor texture rules across equipment/model layers.
-- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
-- Decision: Optional renderer extension; defer until vanilla armor rendering is stable.
-- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
-- Follow-up checks: Layer names, armor materials, component/equipment structure and model variants differ across game versions.
-- RustChunk implementation mapping: Layer names, armor materials, component/equipment structure and model variants differ across game versions.
-- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
-- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
 
-### 633. `crates/horizon-client-render/src/chunk_map.rs`
-- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
-- Source SHA: `484bd96756d5d21493e879a10abd2146c793d5b4`
-- Size: 13867 bytes (upstream Git blob size).
-- Coverage: Complete source blob fetched from the pinned commit and inspected; tests, where present, were not executed.
-- Purpose: CIT item asset loading
-- Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
-- Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Discovers, decodes and associates custom item texture resources with matching rules.
-- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
-- Decision: Adapt bounded resource loading after 1.20.1 rules are defined.
-- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
-- Follow-up checks: Resource path resolution, model layers and item metadata are version-specific; untrusted packs need size and decode limits.
-- RustChunk implementation mapping: Resource path resolution, model layers and item metadata are version-specific; untrusted packs need size and decode limits.
-- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
-- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+### 632. `crates/horizon-client/examples/probe/place_recipe_fixture.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `798182cff12403148678deb4560ba6fe7f336793`
+- Size: 3938 bytes; 99 lines
+- Coverage: Complete source text reviewed, lines 1–99.
+- Purpose: Headless fixture for recipe-book placement into crafting menus and player inventory.
+- Dependencies / cross-references: `Recipes`, `Items`, `Menu`, `Env`, `PostPlace`, brewing/banner/station/enchantment registries, pack overlay and JSON case/order files.
+- Implementation / logic: Loads resources, constructs a menu for each input case, loads inventory/grid state, invokes `Menu::place_recipe` and prints post-placement menu/inventory/drop state.
+- Findings: The harness captures ghost-recipe versus no-op outcomes and item movement. `cases.lines().zip(orders.lines())` silently truncates if the two inputs have different line counts; `PackOverlay::NONE` excludes enabled pack overlays.
+- RustChunk relevance: Useful for deterministic recipe-placement parity and regression fixtures, not a standalone gameplay implementation.
+- Decision: Adapt the parity-harness architecture only; recreate recipe catalogues, menu rules and item formats for the exact 1.20.1 target.
+- 1.20.1 implications: Recipe placement exists in 1.20.1, but item stack serialization, recipe registries, menu IDs and packet behavior must match 1.20.1 rather than the pinned newer snapshot.
+- Follow-up checks: Add unequal-input-length rejection, test all 1.20.1 crafting and machine menus, verify survival/creative and full/partial inventory cases, then compare to Java 1.20.1.
+- RustChunk implementation mapping: Candidate RustChunk test fixture under `tests/parity/recipe_placement`; call the eventual versioned menu core without binding it to renderer code.
+- Evidence required before adoption: Java 1.20.1 oracle cases and exact output comparisons for slot ordering, remaining items, drops and ghost recipe behavior.
+- Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented; no test, build or runtime execution is claimed.
+
+
+### 633. `crates/horizon-client/examples/probe/player_sync_fixture.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `034aa64009f5bcbc29023f2ae421aa4184e87e20`
+- Size: 2844 bytes; 73 lines
+- Coverage: Complete source text reviewed, lines 1–73.
+- Purpose: Deterministic fixture for client movement packet emission and server teleport-velocity handling.
+- Dependencies / cross-references: `PositionSender`, `teleport_velocity`, `Vec3`, `PlayerPosition`, serverbound play packets, JSON and binary packet encoder.
+- Implementation / logic: Reads movement operations or relative teleport cases, logs the emitted packet variant and encoded payload, or prints the resulting velocity as exact floating-point bit patterns.
+- Findings: Separates movement-state decisions from packet bytes and preserves float precision. Packet variants, relative flags and encoded fields are protocol-version-specific; the harness strips the first encoded byte as packet ID.
+- RustChunk relevance: High-value networking parity fixture for movement and synchronization; keep protocol mapping separate from generic movement math.
+- Decision: Strong candidate for RustChunk movement tests, but regenerate packet schema and byte expectations for Java 1.20.1 before adoption.
+- 1.20.1 implications: Movement and relative teleport semantics are present in 1.20.1, but packet IDs, field order, flags and packet classes must be sourced from the 1.20.1 protocol.
+- Follow-up checks: Build 1.20.1 fixtures for position-only, rotation-only, combined movement, on-ground changes, teleport relative flags, extreme coordinates and rounding boundaries.
+- RustChunk implementation mapping: Candidate RustChunk modules: `protocol::play::serverbound` and `client::player_sync`; split pure movement-state logic from the versioned encoder.
+- Evidence required before adoption: Exact 1.20.1 protocol mapping and byte-for-byte comparison with a Java client/server oracle; no network test was executed in this review.
+- Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented; no test, build or server connection is claimed.
+
 
 ### 634. `crates/horizon-client-render/src/cit.rs`
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
@@ -2620,22 +2623,23 @@
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
 
-### 754. `crates/horizon-client-render/src/lib.rs`
-- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
-- Source SHA: `4abc362410c18ceb8723f0ed6f33e330c525f807`
-- Size: 3653 bytes (upstream Git blob size).
-- Coverage: Complete source blob fetched from the pinned commit and inspected; tests, where present, were not executed.
-- Purpose: Far-terrain greedy mesh builder
-- Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
-- Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Builds distant exposed voxel faces from sampled columns, merging faces while preserving material and UV phase.
-- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
-- Decision: High-value independent mesh design; rederive from 1.20.1 block/biome/lighting data.
-- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
-- Follow-up checks: Coarse surface simplification drops underground detail and cannot be used for collision or near chunks.
-- RustChunk implementation mapping: Coarse surface simplification drops underground detail and cannot be used for collision or near chunks.
-- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
-- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+### 754. `crates/horizon-client/examples/probe/raid_fixture.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `faf0eedf54d88a78a4da262f8d142b4becbf5580`
+- Size: 39654 bytes; 1043 lines
+- Coverage: Complete source text reviewed in consecutive ranges: lines 1–400, 401–800 and 801–1043.
+- Purpose: Large deterministic parity fixture for pillager patrol spawning, raid lifecycle, raider membership, boss-bar state, victory and raid NBT codec behavior.
+- Dependencies / cross-references: `Assets`, `BlockFacts`, `MobData`, `Items`, spawn rules/selection, `PatrolSpawner`, `Raids`, `RaidLevel`, `LegacyRandom`, world/biome/light/chunk stubs and SNBT.
+- Implementation / logic: Builds a synthetic world, parses scripted events, runs patrol or raid ticks, records spawn/horn/effect/leave/state events, and supports a codec mode for raid NBT round trips.
+- Findings: The fixture covers many interacting states and is useful for scenario construction. It deliberately stubs world seed, thunder, player-near and some world interactions; `Bx::parse` and several scenario parsers assume well-formed lengths. Raid timing and Bad Omen behavior are snapshot-sensitive.
+- RustChunk relevance: Valuable as a simulator/parity-test blueprint for vanilla raids and patrols; not a production world implementation and not safe to transplant wholesale.
+- Decision: Adapt as a test-harness architecture only; re-derive patrol/raid state transitions and scenario outputs from the Java 1.20.1 oracle.
+- 1.20.1 implications: Pillager patrols and raids exist in 1.20.1, but the pinned snapshot is newer. Validate Bad Omen triggering, raid waves, spawning, victory effects, dimensions, serialization and boss-bar behavior against 1.20.1.
+- Follow-up checks: Create exhaustive 1.20.1 oracle cases for patrol eligibility, village/POI selection, chunk ticking, unload/reload, raid extension/stop, wave composition, raider removal, victory/defeat and NBT persistence; harden malformed test-input handling.
+- RustChunk implementation mapping: Candidate test harness under `tests/parity/raids`; reusable pure parts may map to `gameplay::patrol` and `gameplay::raid`, with synthetic world traits isolated from real world state.
+- Evidence required before adoption: Full Java 1.20.1 source comparison and differential outputs for every state transition; dedicated tests for stubbed world assumptions and NBT migration. This review did not execute the fixture.
+- Completion state: FULL TEXT REVIEW COMPLETE — all 1,043 lines read in ordered chunks; no tests, build, server or device execution is claimed.
+
 
 ### 755. `crates/horizon-client-render/src/light.rs`
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
@@ -2756,22 +2760,23 @@
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
 
-### 762. `crates/horizon-client-render/src/mesher.rs`
-- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
-- Source SHA: `a5aff352590f344ef169db790386b7256e6ece4f`
-- Size: 84402 bytes (upstream Git blob size).
-- Coverage: Complete source blob fetched from the pinned commit and inspected; tests, where present, were not executed.
-- Purpose: Mesher padded-neighbour reuse tests
-- Dependencies / cross-references: Depends on renderer/game state, versioned registries or resource data as indicated by the module; verify all callers before integration.
-- Implementation / logic: Defines the module's data model and functions described in the purpose field, with version-specific constants/resources and local regression cases.
-- Findings: Compares reused padded snapshots/light with fresh chunk geometry across section/resource reloads.
-- RustChunk relevance: Potentially useful as a reference subsystem; adopt only when required by RustChunk's 1.20.1 scope.
-- Decision: Reference tests only; high-value for chunk seam correctness.
-- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
-- Follow-up checks: Requires chunk layout and resource pack fixture; no tests run.
-- RustChunk implementation mapping: Requires chunk layout and resource pack fixture; no tests run.
-- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
-- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+### 762. `crates/horizon-client/examples/probe/random_tick_sections_probe.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `27eaf81961280096ed56d3b037df90a9ebbc4331`
+- Size: 5050 bytes; 133 lines
+- Coverage: Complete source text reviewed, lines 1–133.
+- Purpose: Deterministic probe for chunk-section selection and block-position reads during random ticking.
+- Dependencies / cross-references: `RandomTickSections`, `Chunk`, `Section`, `BlockFacts`, `LegacyRandom`, `Ticks`, `LevelAccess`, block/fluid registries and prepared resource data.
+- Implementation / logic: Loads the target registry, creates a synthetic air-only level that records block reads, applies section/block edits to a chunk, invokes random-tick behavior and serializes sampled positions plus ticking/fluid flags.
+- Findings: The fake level intentionally records reads rather than simulating full block updates. The section-fill operation derives a periodic block pattern from a divisor; malformed zero divisors or invalid section indices are not guarded in this fixture.
+- RustChunk relevance: Useful for understanding and regression-testing random-tick section selection, including cache behavior; it is a probe, not the scheduler itself.
+- Decision: Use as a parity-test reference; implement only after confirming section selection and random sequence against Java 1.20.1.
+- 1.20.1 implications: The random-tick system exists in 1.20.1, but section bounds, chunk height, registry IDs and seeded random call order must match the 1.20.1 world model.
+- Follow-up checks: Compare seeded oracle cases at min/max build height, empty/non-empty sections, mixed ticking/non-ticking blocks, lava and random-tick-speed changes; add malformed-input validation.
+- RustChunk implementation mapping: Candidate RustChunk test harness under `tests/parity/random_tick_sections`; keep `RandomTickSections` cache separate from chunk mesh/LOD caches.
+- Evidence required before adoption: Exact Java 1.20.1 sampled-position traces and RNG-state parity across supported dimensions; no probe execution is claimed.
+- Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented; no test, build or runtime execution is claimed.
+
 
 ### 763. `crates/horizon-client-render/src/mesher/fluid.rs`
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
@@ -2824,22 +2829,23 @@
 - Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
 - Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
 
-### 766. `crates/horizon-client-render/src/mesher/lighting.rs`
-- Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
-- Source SHA: `84677087b5f715bb67274480ec6db061749cabfa`
-- Size: 17980 bytes (upstream Git blob size).
-- Coverage: Complete source blob fetched from the pinned commit and inspected; tests, where present, were not executed.
-- Purpose: Minimap tile/image model
-- Dependencies / cross-references: Depends on chunk sections, block/biome registries, voxel shapes, light tables, mesh data and section residency.
-- Implementation / logic: CPU world/mesh algorithm, usually operating on section/palette snapshots and emitting cached or visible geometry.
-- Findings: Builds map-colour tiles per loaded chunk, shades height/water depth and composes a 128px view.
-- RustChunk relevance: Relevant to chunk, world, meshing or lighting correctness; preserve authoritative near-world state and conservative fallbacks.
-- Decision: Optional UI feature; not core engine.
-- 1.20.1 implications: Pinned Starling source is from the newer 26.3 line, not Minecraft 1.20.1. Rebuild versioned IDs, registries, packets, codecs, assets and observable behavior from exact 1.20.1 sources.
-- Follow-up checks: Map palette/colour and scan rules are current version data.
-- RustChunk implementation mapping: Map palette/colour and scan rules are current version data.
-- Evidence required before adoption: Required before adoption: Java 1.20.1 golden/differential fixtures, malformed-input tests where relevant, and backend/device-specific validation for GPU code. None were run in this audit.
-- Completion state: Source review and ledger entry complete; no code port, build, test execution or device validation claimed.
+### 766. `crates/horizon-client/examples/probe/recipe_book_fixture.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `59733317b32e6313488a637e6662749d095bf557`
+- Size: 6554 bytes; 164 lines
+- Coverage: Complete source text reviewed, lines 1–164.
+- Purpose: Headless parity fixture for recipe-book known/seen state, filtering/open flags, persistence and settings packet serialization.
+- Dependencies / cross-references: `RecipeIndex`, `Settings`, `BookType`, `RecipeBookChangeSettings`, protocol `Reader`/`Writer`, NBT `Tag`, pack overlay and JSON inputs.
+- Implementation / logic: Applies give/take/seen/set/save/load operations, encodes then decodes recipe-book settings packets, and prints deterministic counts, hashes, settings and NBT summaries.
+- Findings: The fixture exercises the four standard book categories and filters unknown recipe IDs. The fallback for an unrecognized type silently selects Smoker; the load case deliberately injects invalid IDs. Wire packet layout is protocol-specific.
+- RustChunk relevance: Strong test-harness reference for recipe-book persistence and state transitions; do not reuse its packet bytes across protocol versions.
+- Decision: Adapt the recipe-book state model as a test reference and rebuild packet/registry fixtures for Java 1.20.1.
+- 1.20.1 implications: Crafting, furnace, blast-furnace and smoker recipe-book categories exist in 1.20.1; confirm packet fields, NBT keys, recipe-ID validation and defaults with the 1.20.1 client.
+- Follow-up checks: Test all four book categories, duplicate/unknown IDs, save-load cycles, open/filter combinations, missing NBT keys and byte-for-byte 1.20.1 packet encoding.
+- RustChunk implementation mapping: Candidate RustChunk modules: `gameplay::recipe_book` and versioned `protocol::play` settings packet; keep UI presentation separate from persisted state.
+- Evidence required before adoption: Java 1.20.1 state/packet oracle comparisons and resource registry parity. No tests were run during this review.
+- Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented; no test, build or runtime execution is claimed.
+
 
 ### 767. `crates/horizon-client-render/src/mesher/particle_tests.rs`
 - Source repository/ref: `starling-client/starling` / `5432370d573642041585c69b40fb045b27133488`
