@@ -16,6 +16,14 @@
 - Starling is pinned to Minecraft Java 26.3. Its version-specific game rules, assets, registries, world formats and packet schemas must be reconciled with 1.20.1; changing a version string is not a port.
 - Minecraft Java 1.20.1 uses protocol 763 and has Handshake, Status, Login and Play states. It does **not** have the separate post-login Configuration state introduced in later protocol generations.
 
+
+## Audit standard and backfill rule
+
+- The original entries 1–120 were reviewed under the then-current 13-part standard. Their prior source analysis, decisions and completion claims are preserved; this backfill does not invalidate those reviews.
+- The current standard adds two mandatory fields to every file: **RustChunk implementation mapping** and **Evidence required before adoption**. Entries 1–120 have now been brought into that same 15-part structure.
+- Mapping language distinguishes current RustChunk code from planned native-engine destinations. At this branch snapshot, the RustChunk Cargo workspace contains only the JNI-oriented `rustchunk-engine` package (download, installer, workspace, Forge launch-plan and Java/JLI helpers); it does not yet contain a playable native Minecraft game, protocol, world or renderer crate. Planned destinations are not claims of implemented functionality.
+- Evidence requirements are acceptance gates, not reports of tests already run. A source review alone does not satisfy them; each requirement must be met by version-pinned 1.20.1 evidence and the appropriate automated/device test.
+
 ## Completed files
 
 ### 1. `README.md`
@@ -37,9 +45,12 @@
 - **Important incompatibility / risk:** the documented target is 26.3, not 1.20.1. The README is a product/requirements map, not evidence that Starling's game rules, registries, assets, protocol, world data or resource formats are already compatible with 1.20.1. The native/content mod formats are also Starling-specific and must not be assumed to be part of the initial RustChunk base client.
 - Decision: **adaptable** for high-level Android product design, diagnostics, touch controls, resource acquisition/verification, and build organization; **rewrite required** for any feature whose implementation assumes Starling/Horizon internals or version 26.3; Forge compatibility is outside the current milestone and is deferred. **Forge classification:** current conclusion: Forge compatibility is outside the current milestone and deferred.
 - Follow-up checks: validate each documented capability against source code; inspect Cargo workspace/crates and build pipeline; trace how 26.3 files are prepared and consumed; inspect account/auth and offline-mode semantics; verify the Rust-native 1.20.1 data, protocol, world and rendering requirements; compare supported ABIs and graphics APIs to RustChunk's target hardware.
-- Completion state: complete documentation review; implementation claims not yet validated.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: This is a requirements/navigation source for `README.md` and `docs/STARLING_1_20_1_ENGINE_MAP.md`; it does not map to a runtime module. Keep product scope, device constraints, resource ownership and milestone order synchronized there. No current native gameplay module is present.
+- Evidence required before adoption: Before using any README claim as an implementation requirement, trace it to source, a pinned 1.20.1 input or a passing CI/device result. Confirm that 26.3 baseline claims, native-mod formats and future Forge goals are not presented as 1.20.1 capabilities.
+- Completion state: complete documentation review; implementation claims not yet validated.
+
 ### 2. `LICENSE`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `e959a076e9fa4b8c1fcf990b2253a935da5bb5f4`
@@ -52,11 +63,14 @@
 - RustChunk relevance: critical due-diligence input before copying or adapting code. MIT is permissive, but the copyright notice and license text must be retained for substantial copied portions; dependencies and upstream code may have separate obligations.
 - **Limitations:** a root MIT license alone does not establish the license of every vendored/generated/resource file or third-party dependency. Do not infer that game assets, Minecraft binaries, or third-party libraries are covered.
 - Decision: **adaptable** as a licensing model reference; copying Starling/Horizon code requires preserving notices and checking each dependency's actual license. Minecraft files remain outside this license scope.
-- Completion state: complete license-text review; third-party notices and dependency metadata still require separate review.
 
 - 1.20.1 implications: the MIT license is version-independent, but it covers only the licensed project code; it does not grant rights to Minecraft 1.20.1 binaries/assets or third-party dependencies. Preserve notices for any code actually reused.
 
 - Follow-up checks: No additional follow-up check is recorded in this entry.
+- RustChunk implementation mapping: Maps to RustChunk root `LICENSE` and its future third-party notice/provenance records; no runtime subsystem. Any reused Starling/Horizon source must be traceable to its exact license and source revision.
+- Evidence required before adoption: Require a per-file/per-dependency license inventory, preserved notices, confirmation of asset/JAR exclusion and review of any non-MIT component before accepting copied code or distributing a build.
+- Completion state: complete license-text review; third-party notices and dependency metadata still require separate review.
+
 ### 3. `THIRD_PARTY_NOTICES.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `825d4bb50daf691d9049b3d4cfdbc62dbc285ec2`
@@ -80,9 +94,11 @@
 - **Risks / limitations:** this document is a self-authored notice, not a substitute for validating each file, bundled license text, upstream commit, or redistribution terms. The notice records code adapted from Horizon Android; RustChunk should preserve attribution and inspect the relevant source history before reusing it. The Minecraft/Bedrock assets and Create assets must not be assumed redistributable with the app. GPLv2 + Classpath Exception for OpenJDK does not automatically license the Starling app itself, but the exact runtime distribution and build arrangement still require checking.
 - Decision: **essential** as a compliance/attribution checklist; **adaptable** as a model for RustChunk's own third-party notices and on-device fetching policy. Individual libraries/features are not approved for reuse until their code and license files are checked.
 - Follow-up checks: compare notices against `Cargo.toml`/`Cargo.lock` and actual vendored directories; inspect all referenced license files; trace the Create asset fetch; inspect JDK archive acquisition/checksum code; validate Mojang touch assets are never bundled; identify which Horizon Android adaptations exist in current Starling tree and their exact source diffs.
-- Completion state: complete review of the notice document; individual licenses, code, and runtime distribution mechanisms remain open audits.
 
 - 1.20.1 implications: license obligations do not change with Minecraft version. Any RustChunk reuse must trace the exact source file and dependency to its own license; Minecraft 1.20.1 and Mojang assets remain separately governed.
+- RustChunk implementation mapping: Maps to RustChunk third-party provenance and packaging policy, alongside root `LICENSE`, dependency manifests and resource-download tooling. It is a compliance gate, not an engine module.
+- Evidence required before adoption: Reconcile every declared component with actual source, lockfiles and bundled license text; verify remote asset/runtime acquisition, hashes, attribution and redistribution terms. The notice alone is insufficient evidence.
+- Completion state: complete review of the notice document; individual licenses, code, and runtime distribution mechanisms remain open audits.
 
 ### 4. `CONTRIBUTING.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
@@ -103,9 +119,11 @@
 - **Compatibility warning:** the stated build targets 26.3 and its NDK/SDK/JDK versions are not automatically transferable to a Rust-native 1.20.1 client. The license whitelist is Starling's own contributor policy, not a universal statement of copyright law; RustChunk should establish and document its own policy rather than silently assuming Starling's restrictions are legal requirements for every case.
 - Decision: **adaptable** for core-vs-Android separation, device testing, PR gates, provenance records and public-tree protection. **Rewrite required** for toolchain/version policy and project-specific paths. The exact third-party policy is a candidate governance rule, not code to copy.
 - Follow-up checks: inspect the named build and check scripts; inspect the repository's game/Android workspace boundaries; verify which tests and linters are actually run in CI; compare Starling's license policy with actual third-party notices for consistency.
-- Completion state: complete guide review; referenced scripts and source modules not yet validated.
 
 - 1.20.1 implications: the contribution guide describes a 26.3-oriented toolchain and Horizon/Starling split. Its process ideas may transfer, but the target game version, Java resource preparation, build tools and RustChunk architecture must be specified independently for 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk `CONTRIBUTING.md`, CI workflows, public-tree checks and patch-review rules. Its core/platform split can guide future engine crates; it is not a gameplay implementation.
+- Evidence required before adoption: Require `cargo metadata`, formatting/lint/test results, public-tree scans, provenance/license checks and a successful ARM64 build; verify each workflow actually enforces the documented gates.
+- Completion state: complete guide review; referenced scripts and source modules not yet validated.
 
 ### 5. `Cargo.toml`
 - Source repository/ref: `starling-client/starling` / `starling`.
@@ -128,9 +146,11 @@
 - **Notable configuration observation:** README/CONTRIBUTING demand Rust 1.90+, but this workspace manifest advertises `rust-version = 1.85`. That is not necessarily a build defect (toolchain may be pinned elsewhere or a dependency may need newer Rust), but it is a documentation/configuration discrepancy to resolve when the toolchain files are audited.
 - Decision: **adaptable** for crate boundaries, Android-specific target isolation, local patch rationale tracking, and quick-vs-release profiles; **rewrite required** for version-specific game crates and preparation inputs; keep the crate-boundary pattern only where the 1.20.1 port validates it.
 - Follow-up checks: inspect member crate manifests, Android NativeActivity source and JNI/NDK integration; verify `third_party` patch diffs and removal conditions; inspect toolchain files and CI to explain Rust 1.85 vs 1.90; map which crates are needed for Starling's phone app versus optional server/tools.
-- Completion state: complete root manifest review; dependency graph and crate internals remain pending.
 
 - 1.20.1 implications: workspace members, feature boundaries and dependency patches are built around the 26.3 implementation. The manifest is an architecture reference, not a 1.20.1-compatible workspace to copy wholesale; only crates proven version-neutral should be considered.
+- RustChunk implementation mapping: Maps to the RustChunk Cargo workspace boundary. The current workspace has only `engine`; future native-game crates for core/world/protocol/render/input/preparation must be introduced deliberately rather than treating Starling's workspace as already present.
+- Evidence required before adoption: Before adopting any crate boundary, inspect the actual dependency graph and feature tree, then pass host and `aarch64-linux-android` checks for the selected minimal workspace. Confirm no launcher/JVM dependency leaks into the native game core.
+- Completion state: complete root manifest review; dependency graph and crate internals remain pending.
 
 ### 6. `Cargo.lock`
 - Source repository/ref: `starling-client/starling` / `starling`.
@@ -147,11 +167,14 @@
 - **Limitations / risks:** a lockfile alone does not show which target-specific packages are compiled into a particular APK, enabled Cargo features, runtime behavior, binary size, license compatibility, or whether a dependency is actually required at runtime. Registry checksums establish package identity, not safety or suitability. Platform-specific entries should not be mistaken for Android shipping dependencies. The presence of mod-related crates does not imply Forge/FML support; the package graph shows Horizon's native/content mod infrastructure instead. **Forge classification:** current conclusion: the dependency graph does not establish Forge/FML support.
 - Decision: **adaptable** as a shortlist/reference for specific Android Rust subsystems after reviewing manifests and licenses; **unnecessary** to copy wholesale. Every dependency must be justified against RustChunk's narrower Rust-native 1.20.1 objective.
 - Follow-up checks: inspect per-crate manifests and Cargo features to identify the Android build graph; verify patched vendor crates and licenses; map which dependencies are needed for the 1.20.1 renderer/input/auth/archive pipeline; check minimum toolchain and MSRV;
-- Completion state: complete lockfile inventory review; feature activation, Android-specific resolution and runtime dependency necessity remain pending.
 
 - 1.20.1 implications: this lockfile pins the current Starling/Horizon dependency graph, not a validated RustChunk 1.20.1 graph. Re-resolve and test only the dependencies selected for RustChunk; do not copy this lockfile as a compatibility mechanism.
 
 - Dependencies / cross-references: No separate dependency list is recorded in this entry.
+- RustChunk implementation mapping: Use only as a dependency-selection reference for the future RustChunk workspace; do not copy Starling's lockfile. Current `engine/Cargo.toml` is a separate, small JNI/installer-oriented package.
+- Evidence required before adoption: For each selected dependency, verify license, active feature path, transitive footprint, Android ARM64 compatibility and reproducible resolution. A successful lockfile parse is not proof that a dependency is needed or safe.
+- Completion state: complete lockfile inventory review; feature activation, Android-specific resolution and runtime dependency necessity remain pending.
+
 ### 7. `.gitignore`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `29d00d0368c76edd3115dbca57ce0901e55860a9`
@@ -165,11 +188,14 @@
 - **Risks / limitations:** `.gitignore` does not untrack files already committed and is not a complete public-tree/security enforcement mechanism. Broad rules such as `*.jar` and `/assets/` can also hide legitimate project files; RustChunk should define narrow, reviewed exceptions rather than copy these patterns without checking its own folder layout. A separate CI/pre-commit scan is needed for robust protection.
 - Decision: **adaptable** for generated/private-data protection, with paths and ignore breadth rewritten for RustChunk.
 - Follow-up checks: inspect `tools/check_public_tree.py`, hooks and CI to see how they complement ignore rules; examine actual Starling asset/prepared-resource directories and packaging behavior.
-- Completion state: complete ignore-rule review; enforcement implementation remains pending.
 
 - 1.20.1 implications: ignore rules are independent of protocol version, but must be adapted to RustChunk's own resource, save, mod and build paths. They do not prove that private Minecraft data is excluded from all commits; CI/public-tree checks are still needed.
 
 - Dependencies / cross-references: No separate dependency list is recorded in this entry.
+- RustChunk implementation mapping: Maps to RustChunk root `.gitignore` plus public-tree validation in CI. Adapt exclusions for private JARs, mappings, decompilation, generated facts, local worlds, logs and device profiles.
+- Evidence required before adoption: Test ignore patterns against representative private inputs and verify the public-tree checker catches files that are force-added or placed outside ignored paths. Confirm no user worlds or Mojang files enter commits.
+- Completion state: complete ignore-rule review; enforcement implementation remains pending.
+
 ### 8. `.github/workflows/android.yml`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `3638a951d8489e040d9a37d22dab86526a6bf4e8`
@@ -188,9 +214,11 @@
 - **Risks / limitations:** workflow results are not established by reading YAML; no run was executed or checked here. Several GitHub Actions are referenced by mutable major tags (e.g. `@v4`, `@v5`, `@v2`) rather than immutable commit SHAs, so supply-chain hardening could pin action commits. `ubuntu-latest` and stable Rust are moving targets; reproducibility depends on script/toolchain details. The documented four-ABI matrix may be overkill for RustChunk's specific devices and will increase build time. Do not copy release-secret assumptions without configuring environment protection.
 - Decision: **adaptable** for matrix builds, preview/release separation, signing discipline, symbols, and release gating; **rewrite required** for RustChunk package IDs, supported ABIs, secrets, branch policy, toolchain versions, and Rust-native 1.20.1 packaging and resource preparation.
 - Follow-up checks: inspect build/release scripts and actual CI history; verify signing behavior and package IDs; inspect environment protection and tag rulesets; assess whether RustChunk needs all four ABIs or only ARM64/ARMv7.
-- Completion state: complete workflow source review; execution and security settings not independently tested.
 
 - 1.20.1 implications: the workflow builds the current Starling 26.3 app with its own Android SDK/NDK/JDK and ABI matrix. RustChunk needs its own 1.20.1 resource-preparation and runtime pipeline; copying this workflow would not supply a compatible game client.
+- RustChunk implementation mapping: Maps to RustChunk Android CI/release workflows, especially `.github/workflows/android.yml` and the pinned Starling baseline workflow. Reuse matrix/signing/artifact ideas only after replacing Starling package and toolchain assumptions.
+- Evidence required before adoption: Require a complete build for every declared RustChunk ABI, verify package identity/signature/symbol artifacts, and confirm release publication is gated on all required jobs and protected credentials.
+- Completion state: complete workflow source review; execution and security settings not independently tested.
 
 ### 9. `packaging/android/build_apk.py`
 - Source repository/ref: `starling-client/starling` / `starling`.
@@ -223,9 +251,12 @@
   - Script assumes all expected source/resource files exist; its missing SDK checks are explicit, but some later missing inputs surface as lower-level exceptions.
 - Decision: **adaptable** as an APK orchestration pattern; **rewrite required** for RustChunk's 1.20.1 game-data preparation, engine integration, package identity and supported ABI set. Keep asset/legal boundaries and symbol/signing ideas.
 - Follow-up checks: inspect native/java_launcher.c, Android manifest and Activities, exporter helper and manifests, install/update code, and release assets; verify all ABI outputs and exact Android package identity; map required source-owned 1.20.1 data, registry and resource inputs for the Rust-native engine.
-- Completion state: complete script review; helper scripts, referenced sources and actual build results remain pending.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk's Android packaging/build pipeline (current Gradle app plus `engine` native library and CI workflows). The Starling Python orchestrator is a reference, not an existing RustChunk build script.
+- Evidence required before adoption: Require a clean reproducible ARM64 APK build, package/ABI/native-library inspection, install and launch on the target Android version, plus a later test proving the packaged binary is the 1.20.1 engine rather than a launcher/bootstrap.
+- Completion state: complete script review; helper scripts, referenced sources and actual build results remain pending.
+
 ### 10. `packaging/lowbudget/make.py`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: f226619fcac0e0d1d61e75273d29e0f5772bc36d
@@ -246,9 +277,12 @@
 - **Potential issues / verification points:** this script was inspected but not run; the generated pack was not validated in-game. It relies on Pillow and imported hand.py behavior, neither of which is part of this file's implementation. Image-noise determinism should be tested rather than inferred from seeding Python's random module. Rebuilding destroys the previous generated output directory, as expected for a derived artifact but worth guarding if RustChunk's output path could contain user data.
 - Decision: **unnecessary** for the core Rust-native 1.20.1 client; **adaptable** only if RustChunk needs a pre-game setup theme or generated placeholder UI pack. Rewrite pack schema and resource identifiers for Minecraft 1.20.1.
 - Follow-up checks: inspect hand.py and strings.json if setup theme is in scope; inspect pack output and test its compatibility with Minecraft 1.20.1; verify build_apk.py's ZIP integration.
-- Completion state: complete generator source review; output generation and runtime visual behavior untested.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: No first-release runtime mapping. At most this can inform an optional pre-game setup/placeholder UI asset generator under RustChunk packaging; it must not be confused with Minecraft 1.20.1 resources.
+- Evidence required before adoption: Only adopt after a setup-theme requirement exists; generate twice and compare outputs, validate the pack schema/resource identifiers against 1.20.1 and confirm no Mojang or other restricted assets are bundled.
+- Completion state: complete generator source review; output generation and runtime visual behavior untested.
+
 ### 11. `research-lock.json`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 719c266401fe962746965fb33c07abbb91f8a656
@@ -269,9 +303,12 @@
 - **Security / reliability notes:** checksums let consumers detect unexpected content changes only if the expected digest itself is obtained/trusted. SHA-1 remains in Mojang's lock fields and is weaker than SHA-256 for collision resistance; use SHA-256 where the upstream metadata provides it, and preserve the official manifest chain where it does not. Release URLs plus hashes are more robust than URLs alone. This document contains no actual game binaries/assets or license grants.
 - Decision: **essential** as a concept for external-input pinning and deterministic preparation; **rewrite required** for RustChunk's 1.20.1 source artifacts, preparation tools and supported platforms.
 - Follow-up checks: inspect every reader of research-lock.json, verify how the hashes are checked and how republished manifests are handled; map Mojang metadata and exact 1.20.1 client/resource dependencies; inspect input verification and cache lifecycle.
-- Completion state: complete lockfile-document review; verification consumers and exact 1.20.1 pins remain pending.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk's reviewed `tools/minecraft_1_20_1_lock.json` and the preparation/download verification path. It provides a model for pinning external artifacts, not a file to copy unchanged.
+- Evidence required before adoption: Verify every URL, version field and digest against official 1.20.1 metadata; test rejection of altered JARs/mappings, stale pins, path traversal and incomplete downloads before any artifact is accepted.
+- Completion state: complete lockfile-document review; verification consumers and exact 1.20.1 pins remain pending.
+
 ### 12. `roadmap/starling.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: a3742a8f994dd266355428b1621747f642d36e76
@@ -289,9 +326,12 @@
 - **Version/compatibility warning:** roadmap behavior is for Minecraft Java 26.3 through Horizon. Protocol packets, resource-pack schemas, chat signing rules, renderer assumptions, and mod formats differ across versions. The listed Horizon native mods are source mixins against a Horizon revision—not Java Forge mods and not binary compatibility with 1.20.1. **Forge classification:** historical comparison: Horizon-native mods are explicitly distinguished from Java Forge mods.
 - Decision: **adaptable** for mobile feature sequencing and clear Done/Left records; **rewrite required** for the 1.20.1 feature plan and integration assumptions. The roadmap is a planning source, not implementation proof.
 - Follow-up checks: compare roadmap claims with README and code; inspect the account, update, IME, touch, server protocol, shader pipeline, native-mod build flow and test reports; establish exact feature status for the RustChunk hardware and Rust-native 1.20.1 target.
-- Completion state: complete roadmap-document review; documented statuses and claims are not yet source-verified.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk `README.md` target order and `docs/STARLING_1_20_1_ENGINE_MAP.md` implementation gates. Use it as planning methodology only; do not copy Starling's 26.3 priorities.
+- Evidence required before adoption: Every milestone must name a concrete artifact, reproducible test and pass condition. Verify status against CI/device evidence; no feature may be marked done from roadmap wording alone.
+- Completion state: complete roadmap-document review; documented statuses and claims are not yet source-verified.
+
 ### 13. `docs/horizon-parity.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 4783c14f65966eb407b51f89cea5c847c9758bf7
@@ -307,9 +347,12 @@
 - **Critical caveats:** 100% is a scoped test metric, not total parity and not Android validation. The test date and current status need rechecking. The parity target is the Horizon version based on Minecraft 26.3, not Minecraft 1.20.1. The page's Microsoft-auth statement conflicts with README's Starling Android sign-in claims; likely app-specific integration has moved beyond Horizon core, but that explanation is not proven here and must be checked in source. README's 100% server row also should not be read as online-mode parity.
 - Decision: **essential** as a testing philosophy and differential-harness model; the actual 26.3 test suite is **rewrite required** for the Rust-native 1.20.1 target.
 - Follow-up checks: inspect parity harness definitions, CI invocation and latest results; locate how Starling adds Microsoft sign-in around Horizon; inspect the implementation of the listed gaps; define RustChunk's version-pinned golden fixtures and offline/online test matrix.
-- Completion state: complete parity-document review; harness claims and implementation not independently executed or validated.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to a future RustChunk 1.20.1 parity specification and dedicated Java-oracle/Rust-probe tests. Current 1.20.1 exports and integration tests are partial inputs, not a complete parity suite.
+- Evidence required before adoption: Require version-pinned vanilla 1.20.1 oracle outputs, deterministic fixtures and subsystem coverage; demonstrate that tests fail on a deliberate mismatch and that all reported passes correspond to executed CI runs.
+- Completion state: complete parity-document review; harness claims and implementation not independently executed or validated.
+
 ### 14. `docs/android-armv7.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 17cfb5fe88d6dceff4a5df1a73ba83f17ef06aa4
@@ -327,9 +370,12 @@
 - **Limitations / risks:** this is documentation; claims about rendering fallbacks, runtime FP correctness, heap limits, and byte-for-byte preparation output require source/test verification. Per-ABI release failure blocking is a deliberate quality/release policy but could slow RustChunk releases if unsupported ABIs are included.
 - Decision: **adaptable** for ABI-aware packaging/update selection, low-memory controls, GPU capability checks and resource budgets; **rewrite required** for RustChunk's 1.20.1 resource preparation and renderer integration.
 - Follow-up checks: inspect actual shader/backend fallback code, heap/worker limits, updater ABI selection, Java runtime checksums, native-mod ABI gating and build matrix; test on real Mali/Adreno devices and each ABI actually supported.
-- Completion state: complete architecture-doc review; implementation and device tests not independently verified.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk Android ABI policy and packaging configuration. The current target is ARM64 Galaxy A22; ARMv7 support is optional and should not enter the first release merely because Starling documents it.
+- Evidence required before adoption: Adopt ARMv7 only after selecting supported physical devices, building and installing the ABI-specific APK, verifying native dependencies and measuring memory/performance. Otherwise explicitly document ARM64-only support.
+- Completion state: complete architecture-doc review; implementation and device tests not independently verified.
+
 ### 15. `docs/android-controls.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: bde1e376a8910d910a93566c492fca1413f5eaec
@@ -348,9 +394,12 @@
 - **Potential inconsistency:** this document describes Controller as an input-device option, while the roadmap still lists physical controllers on Android as Next and README reports controllers as complete. It may distinguish a UI option from a working Android backend; source inspection is required before claiming controller support.
 - Decision: **adaptable** for input architecture, editable layouts, lifecycle handling and IME focus contracts; **rewrite required** for Rust-native Minecraft input integration and version-specific UI hooks.
 - Follow-up checks: inspect touch engine/editor/preset persistence, Android input event routing, IME/TextMirror/focus APIs, Bedrock touch manifest verification, and whether the Android controller backend actually works.
-- Completion state: complete document review; underlying implementation and physical-device behavior remain unverified.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to the future Android input/touch adapter and the app's control-layout UI; keep input actions separate from Minecraft gameplay. Existing Kotlin UI is not proof that native game touch actions work.
+- Evidence required before adoption: Require pointer-ownership/cancel/rotation/focus tests, GUI-scale checks and parity tests that map each touch action to vanilla 1.20.1 input/game-mode behavior on the target device.
+- Completion state: complete document review; underlying implementation and physical-device behavior remain unverified.
+
 ### 16. `docs/android-accounts.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 253bcebee21e4962b4f317f6a6d1c61d5078e9b9
@@ -368,9 +417,12 @@
 - **Compatibility / safety caveats:** this document describes Starling's custom integration. vanilla 1.20.1 online-mode servers and Microsoft authentication have distinct session/entitlement requirements; Ely.by/offline identity should not be presented as Microsoft authentication or a way to bypass ownership. Microsoft entitlement and online-mode server behavior must be implemented and tested independently.
 - Decision: **essential** as a set of account-security and profile-management requirements; **adaptable** as architecture, but **rewrite required** for RustChunk APIs, Rust-native profile/authentication and Android account integration, storage encryption and provider support.
 - Follow-up checks: inspect account manager, device-code flow, Minecraft entitlement/session join, Ely.by auth/session, Keystore bridge, token rotation/revocation, account selection/cancel races, PNG normalization and setup flow; confirm what offline mode means for target servers.
-- Completion state: complete account documentation review; implementation and security properties not yet independently verified.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to a future RustChunk account/profile/authentication boundary and Android account UI, not to the current JNI workspace or a Forge feature. Keep offline profile behavior separate from online session authentication.
+- Evidence required before adoption: Verify online authentication and server-join tokens against the 1.20.1 flow, test offline/local-world behavior without misrepresenting it as authenticated online access, and review secret storage, log redaction and account switching.
+- Completion state: complete account documentation review; implementation and security properties not yet independently verified.
+
 ### 17. `docs/android-diagnostics.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: f4d250d2449634f2f6ef8125ebdc2a6a4b021365
@@ -390,9 +442,12 @@
 - **Risks / limitations:** diagnostics can themselves consume resources; GPU profiling overhead is explicitly noted. Redaction is not guaranteed for arbitrary third-party logs. The described host test command and device build were not run here; this is documentation review only. Some diagnostic implementation is Starling-specific and will need adaptation to RustChunk's Android lifecycle, renderer and Rust game loop.
 - Decision: **essential** as reliability, observability and privacy requirements; **adaptable** for data model, retention limits and recovery workflow; **rewrite required** for RustChunk crash capture and Android integration.
 - Follow-up checks: inspect test_android_diagnostics.py and production writers/exporter/tombstone parser; inspect BuildId and CI artifact retention; inspect resource lock, validation and rollback; verify Android 11+ behavior and resource limits on low-RAM devices.
-- Completion state: complete diagnostics-document review; implementation and tests not independently verified.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk diagnostics, crash reporting and Android log collection. The current launcher status messages are not a complete game-engine diagnostics system.
+- Evidence required before adoption: Require crash/restart/lifecycle tests, bounded log storage, secret/token/path redaction and privacy review; confirm Android diagnostics can be retrieved without exposing user worlds or credentials.
+- Completion state: complete diagnostics-document review; implementation and tests not independently verified.
+
 ### 18. `docs/native-mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 8236ea99847bdfb5d4f64679565e8d96e7527440
@@ -428,9 +483,12 @@
   - A mod may be client-only when joining another server; server-side hooks require the host/server to run the mod. Dedicated server exports are separate host builds and have no compatibility handshake yet (per doc).
 - Decision: **unnecessary** for the first vanilla 1.20.1 milestone; **adaptable later** for extension API governance, versioned hook contracts, build reproducibility/cache design, code/content separation, opt-in trust and diagnostics practices. If the goal changes to a fully native Rust Minecraft fork with its own non-Forge mod ecosystem, this document becomes a major architectural reference, but that is a different product target. **Forge classification:** historical architecture comparison: NeoForge-like hook semantics are implemented inside Horizon, not through Forge/FML.
 - Follow-up checks: inspect native-hooks.json and hook generator; inspect horizon-mixins security notes and manifest validator; trace Rust toolchain/source downloads and hash verification; inspect staging/cache/build scripts and native post-build runner; compare docs with real code and tests; verify which features are Android-specific vs desktop; defer native mod API design until the vanilla 1.20.1 core and stable public abstractions are implemented.
-- Completion state: complete document review and line coverage verified; implementation claims, security behavior and build measurements are not independently tested in this audit.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: No first-release implementation mapping. Starling's native-mod hook system is not Forge and is outside the vanilla 1.20.1 milestone; retain only as future extension-governance research.
+- Evidence required before adoption: Do not adopt in the vanilla client. Any future native extension proposal must have a threat model, ABI/version contract, permission model, signature/trust policy, rollback tests and independent security review.
+- Completion state: complete document review and line coverage verified; implementation claims, security behavior and build measurements are not independently tested in this audit.
+
 ### 19. `docs/starling-native-mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: d84abf4d4497bea2c4ef343287825256bce16477
@@ -462,9 +520,12 @@
 - Critical limitation for RustChunk: this system remotely compiles Starling's Rust mixins into a Rust Horizon 26.3 engine. It is a remote build path for Starling's native Rust mods, not a necessary part of the first RustChunk 1.20.1 milestone. It may be useful later only if RustChunk adopts a comparable native extension system.
 - Decision: **adaptable** for remote build delivery, APK-bound cache invalidation, resumable verified downloads, rollback and explicit service trust; **unnecessary** for the base 1.20.1 client; consider only after a native Rust extension system is designed.
 - Follow-up checks: inspect native_build.sh, the three Python service/gateway/sandbox scripts, native_mod_permissions.py, NativeMods.java and StarlingActivity; confirm runtime library loading order and JNI binding behavior; test failure/rollback and APK stamp logic; verify sandbox OS controls and clean-cache isolation; examine source/data filtering and transport privacy; verify SHA-256 provenance and gateway address trust chain.
-- Completion state: complete document review; no service, Android build, sandbox or native library was executed or security-tested in this audit.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: No first-release mapping. Remote native-mod build delivery/cache logic is unrelated to a playable vanilla 1.20.1 engine and does not implement Java Forge mod loading.
+- Evidence required before adoption: Keep excluded until a separately approved native-extension design exists; before adoption require authenticated artifact provenance, checksum/signature verification, cache invalidation, rollback and hostile-package tests.
+- Completion state: complete document review; no service, Android build, sandbox or native library was executed or security-tested in this audit.
+
 ### 20. `docs/mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 6b6c04640da7292c3a4a60217347d5acd487ebd1
@@ -503,9 +564,12 @@
   - Some advertised entity/menu/block features remain explicitly incomplete; e.g. entity types are only snowball-template projectiles; menu slot behavior and some lifecycle hooks are still marked not yet.
 - Decision: **unnecessary** for the base vanilla 1.20.1 milestone; **adaptable later** for a separate data-only import/porting layer and integrity/compatibility checks. This content importer does not implement the current 1.20.1 game core and does not execute Java mod code; Forge integration remains deferred. **Forge classification:** historical importer capability/reference; the current Java Forge runtime remains deferred.
 - Follow-up checks: inspect mod-content parsing/validation, archive format and signatures; compare the listed data forms against actual 1.20.1 resource/data schemas; assess whether a later importer can safely extract data without claiming Java-code compatibility; inspect protocol mod-list handling and client/server side rules; create a version-aware importer only after the Forge runtime strategy is fixed. **Forge classification:** historical importer capability/reference; the current Java Forge runtime remains deferred.
-- Completion state: complete document review; no JAR import, registry validation, multiplayer handshake or Forge compatibility test was run in this audit. **Forge classification:** historical importer capability/reference; the current Java Forge runtime remains deferred.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps only to a possible future data-only content-import/validation layer. Starling `.hmod`/`.hnmod` packages are not equivalent to Java Forge JAR mods and must not be described as Forge compatibility.
+- Evidence required before adoption: Require a 1.20.1-specific format specification, parser fuzzing/size/path limits, compatibility tests and a clear statement of unsupported Java/Forge APIs. Do not accept it as a substitute for Forge.
+- Completion state: complete document review; no JAR import, registry validation, multiplayer handshake or Forge compatibility test was run in this audit. **Forge classification:** historical importer capability/reference; the current Java Forge runtime remains deferred.
+
 ### 21. `docs/version-ports.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `31c77d4d63bb45c648b8ec24134ad6141dd2628c`.
@@ -535,9 +599,12 @@
 - RustChunk relevance: **critical**. This document describes the workflow RustChunk needs conceptually to turn a 26.3-based Rust game implementation into a version-accurate 1.20.1 implementation, and it exposes the key incompatibility in the current automated route: its assumption of modern unobfuscated releases. It supports a data-driven port plan rather than a simple version-string replacement.
 - Decision: **adaptable** as the porting methodology (version pinning, provenance/hash verification, generated constants/tables, data diffs, oracle mapping, parity gates and ranked blockers); **rewrite/substantial adaptation required** for the current tooling and historical 1.20.1 input. Do not treat the 26.2→26.3 results as evidence of 1.20.1 compatibility.
 - Follow-up checks: inspect `horizon-prepare` and its Java invocation, JAR extraction, asset export and data generation; inspect the generated version-constant and packet-ID pipeline; inspect `horizon-protocol`'s version adapter and packet tables; inspect datafix/world-data loading; inspect the code's pinned Java version and build toolchain; then independently verify 1.20.1's official version metadata, mappings, protocol, data version and formats before designing the port.
-- Completion state: complete document review; no version-port script, download, decompilation, generator, parity harness, candidate build or release switch was executed.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk's reverse-port methodology in `docs/STARLING_1_20_1_ENGINE_MAP.md`, the pinned 1.20.1 JAR/mappings and per-subsystem port ledger. Starling's forward-port automation must not be run unchanged for this downgrade.
+- Evidence required before adoption: Require exact 1.20.1 source/mapping hashes, class/method inventory coverage, generated-diff reproducibility and oracle-backed tests for every accepted subsystem; identify all unresolved/moved/changed symbols.
+- Completion state: complete document review; no version-port script, download, decompilation, generator, parity harness, candidate build or release switch was executed.
+
 ### 22. `docs/versioning.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `261f462e35f6797c97b4108e8572734ecdf4326a`.
@@ -556,9 +623,12 @@
 - Decision: **unnecessary** for the 1.20.1 game-engine port; **adaptable** as an optional launcher/application release-management pattern. No need to reproduce Horizon's historical bridge tags or its release workflow.
 - Dependencies / cross-references: `.github/release-line.txt`; `.github/workflows/release.yml`; `.github/workflows/launcher.yml`; `tools/release_train.py`; `crates/horizon-server/src/update.rs`; `launcher/src/backend.rs`; `release-flow.md`; website release ordering and external updater consumers.
 - Follow-up checks: none required for the Minecraft 1.20.1 compatibility investigation; revisit only when RustChunk's own update and release policy is designed.
-- Completion state: complete document review; no release, tag, workflow, update or migration command was executed.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to RustChunk's target-version/build identity, the 1.20.1 lock and generated version facts. Application-release semantics may remain separate; Starling historical bridge tags are not needed for the native engine.
+- Evidence required before adoption: Confirm the game version, protocol 763, DataVersion 3465 and pack-format constants all come from one reviewed 1.20.1 source of truth; test that stale or mixed-version generated files are rejected.
+- Completion state: complete document review; no release, tag, workflow, update or migration command was executed.
+
 ### 23. `docs/world-data.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `59b6049b77df9e7c1faa1c545a6707cb3d234446`.
@@ -585,6 +655,8 @@
 - Dependencies / cross-references: `crates/horizon-world`; its `datafix`, `nbt`, `region`, `chunk`, `registry` and fluid modules; `horizon-prepare` registry exporter; local vanilla oracle; `tools/test_datafix_parity.py`; world/tick/fluid parity suites; docs/block-state-codecs.md and docs/scheduled-ticks.md.
 - Decision: **adaptable** for generic NBT/Anvil/palette mechanics and the methodology of DataFixer parity; **rewrite/version-gate required** for registries, DataVersion, block-state tables, chunk schema and any 1.20.1 world semantics. The crate itself is not evidence of a complete playable 1.20.1 engine.
 - Follow-up checks: inspect `horizon-world/Cargo.toml`, `nbt.rs`, `region.rs`, `chunk.rs`, `registry.rs`, the DataFixer implementation and its version schema; inspect generated 26.3 registry artifacts and how `horizon-prepare` produces them. Compare actual 1.20.1 data version, registry exports, palettes, DataFixer schemas and world fixtures.
+- RustChunk implementation mapping: Maps to the future native world-data layer plus `docs/STARLING_1_20_1_ENGINE_MAP.md`; current RustChunk block facts/tags are partial foundations, not a complete world implementation.
+- Evidence required before adoption: Require byte-compatible 1.20.1 NBT/Anvil/chunk schemas, DataVersion 3465, palette/registry and world-data oracle fixtures, plus save-close-reopen tests before treating world support as accepted.
 - Completion state: complete document review; no world tool, DataFixer, world conversion, vanilla oracle or parity suite was run.
 
 ### 24. `docs/native-client.md`
@@ -617,9 +689,12 @@
 - Dependencies / cross-references: `horizon-client`; `horizon-prepare`; `horizon-assets`; `horizon-world`; `horizon-client-core`; `.local/horizon-client/26.3`; `research-lock.json`; `horizon-ctl`; `tools/test_native_scene_collision.py`; scene motion/health/hunger/sprint/crouch parity harnesses; model/blockstate/animation parity tests; `docs/rust-parity.md`; `docs/graphics.md`; Android and renderer-specific docs.
 - Decision: **adaptable** as a Rust-native client architecture, resource-preparation design, scoped Java-oracle methodology and module decomposition; **major rewrite/version adaptation required** for 1.20.1 semantics and Android ARM64/Mali deployment. The current client is neither a ready-made 1.20.1 client nor proven Android game runtime.
 - Follow-up checks: inspect `horizon-client` crate entry point, launch/render loop, `horizon-prepare` resource exporters, version constants, renderer backend/platform features, networking/protocol integration, worldgen/game loop and unfinished client lifecycle; inspect Android packaging and compare actual ABIs/GPU backend requirements. Verify 1.20.1 Java oracle/resources and differential tests separately.
-- Completion state: complete document review; no client build, gameplay session, renderer, Java oracle, test suite, Android package or hardware performance run was executed in this audit.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to the future Rust-native game runtime and its resource-preparation boundary. Current `engine/src/lib.rs` exposes JNI operations for download/install/launch-plan work; it is not yet the native Minecraft gameplay client.
+- Evidence required before adoption: Require an actual native client build that reaches a playable 1.20.1 single-player world, performs movement/block interaction and saves/reopens it. A successful JNI/JVM launch is not acceptance evidence.
+- Completion state: complete document review; no client build, gameplay session, renderer, Java oracle, test suite, Android package or hardware performance run was executed in this audit.
+
 ### 25. `docs/architecture.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `838ff3bcf985a689c0732ccb9e80deb89ed4d4b8`.
@@ -638,6 +713,8 @@
 - Decision: **adaptable** as an audit/navigation map and modular architecture reference; **insufficient by itself** to establish 1.20.1 support. No implementation decision should be made from this index without reading the actual referenced source and versioned data.
 - Dependencies / cross-references: `crates/horizon-client`; `crates/horizon-client-lib`; `crates/horizon-world`; `crates/horizon-protocol`; `crates/horizon-client-render`; `crates/horizon-client-input`; `crates/horizon-client-core`; `crates/horizon-command`; `crates/horizon-items`; `tools/parity.py`; the harnesses named in the table; `AGENTS.md`.
 - Follow-up checks: use the map to guide source-level audits of startup/resource loading, game loop, worldgen, save/load, packet processing, renderer and launcher integration; run no harness until its environment and 1.20.1 oracle are confirmed.
+- RustChunk implementation mapping: Maps to RustChunk's authoritative architecture document `docs/STARLING_1_20_1_ENGINE_MAP.md`; treat the Starling document as navigation/evidence of upstream organization only.
+- Evidence required before adoption: Trace each claimed subsystem to current RustChunk code or explicitly label it planned. Confirm dependencies and direction with source-level evidence; architecture prose alone cannot establish runtime behavior.
 - Completion state: complete document review; no test selection, build or parity command was executed.
 
 ### 26. `docs/how-horizon-is-built.md`
@@ -658,6 +735,8 @@
 - Decision: **adaptable** for user-owned asset preparation, public-source hygiene, signed release checksums and scoped parity gates; **no direct runtime code reuse decision** from this policy page. Reconfirm actual license and contribution constraints from the governing LICENSE/CONTRIBUTING files before any port or copying.
 - Dependencies / cross-references: root LICENSE and CONTRIBUTING.md; THIRD_PARTY_NOTICES.md; `tools/check_public_tree.py`; `.github/workflows/ci.yml`; `.github/workflows/release.yml`; `crates/horizon-release-sign`; `horizon-prepare`; research-lock.json; docs/security.md; docs/mods.md and docs/native-mods.md.
 - Follow-up checks: inspect the actual legal notices and the preparation/checksum implementation; verify Minecraft 1.20.1 ownership/manifest handling and local data-generation support independently. No reliance should be placed solely on this summary page for legal conclusions.
+- RustChunk implementation mapping: Maps to RustChunk's resource-acquisition, build and source-hygiene documentation. Reuse process safeguards only where they match the current Kotlin/JNI app and future native build; do not inherit undocumented upstream assumptions.
+- Evidence required before adoption: Require reproducible acquisition of user-owned inputs, verified hashes, clean public artifacts and CI checks. Independently validate every security/legal assertion against actual scripts and configuration.
 - Completion state: complete document review; no license review beyond this document, checksum verification, build, release or asset import was performed in this file review.
 
 ### 27. `docs/decompilation-status.md`
@@ -679,6 +758,8 @@
 - Decision: **adaptable** as a bytecode research/decompilation workflow and as a warning to validate coverage; **rewrite/adapt required** for the 1.20.1 mapping and toolchain inputs. Decompilation is an analysis tool, not a route to redistribute or directly execute recovered Java source.
 - Dependencies / cross-references: `tools/lab.py`; `tools/rea_vanilla.py`; `research-lock.json`; Vineflower; REA/JADX; `.local/minecraft/26.3/sources/`; local class inventories and coverage reports; `docs/version-ports.md`.
 - Follow-up checks: inspect `tools/lab.py` and `tools/rea_vanilla.py`; inspect the actual 1.20.1 manifest's client/server mapping fields and JAR hashes; assess a remapped class inventory and decompiler report for 1.20.1 before depending on class-based diffing.
+- RustChunk implementation mapping: Maps to the private 1.20.1 decompilation/class-index research workflow and its compact public reports; decompiled sources remain research inputs, not distributable application files.
+- Evidence required before adoption: Require reviewed JAR/mapping SHA pins, class/method coverage report, mapping/decompiler diagnostics and private-workspace hygiene. Verify source coverage before using any decompiled method as an implementation oracle.
 - Completion state: complete document review; no JAR decompilation, bytecode query, mapping application or build was executed.
 
 ### 28. `docs/port-ledger.md`
@@ -703,9 +784,12 @@
 - Decision: **adaptable** as a core audit tool/concept (method mapping, verdict map, gap taxonomy and harness reachability); **rewrite/version-adapt required** for historical 1.20.1 JAR/mappings and its different Java API. The ledger is a planning/coverage instrument, not a game engine feature.
 - Dependencies / cross-references: `tools/port_ledger.py`; `tools/vanilla_map.py`; `tools/port_map/*.tsv`; `tools/lab.py`; local Minecraft JAR and decompiled sources; `tools/parity.py`; Java parity oracles; Rust crates and doc comments; `tools/test_*_parity.py`.
 - Follow-up checks: inspect `tools/port_ledger.py`, `tools/vanilla_map.py`, the verdict-map schema, class/method inventory generator and parity runner; then evaluate whether mapping-aware 1.20.1 bytecode can feed a trustworthy adapted ledger.
-- Completion state: complete document review; no ledger build, bytecode scan, gap report, harness or branch check was run.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to a RustChunk 1.20.1 method/class port ledger connecting official Java methods to future Rust functions and parity probes. Existing `docs/STARLING_1_20_1_ENGINE_MAP.md` is the higher-level system map, not method-level proof.
+- Evidence required before adoption: Require complete method inventory, explicit implemented/missing/rewrite verdicts, Rust source locations and reachable passing Java-oracle tests for accepted methods; no unmapped critical method may be silently counted as ported.
+- Completion state: complete document review; no ledger build, bytecode scan, gap report, harness or branch check was run.
+
 ### 29. `docs/parity-workflow.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `45ab857edfa8662e62d30d0a87bfaa8dac798433`.
@@ -730,6 +814,8 @@
 - Decision: **adaptable** for differential testing, dependency fingerprinting, repeat/flake gates, deterministic scene fixtures and staged integration; **rewrite/version-adapt required** for a 1.20.1 vanilla oracle, fixtures, baselines, toolchains and expected data. Do not treat the existing 26.3 pass count as evidence of 1.20.1 parity.
 - Dependencies / cross-references: `tools/parity.py`; `tools/parity_shim.py`; `tools/parity_reach.py`; `tools/gate.py`; `tools/parity_main.py`; `tools/supervise.py`; `tools/parity_hosts.json`; `lab.game_env`; Rust probe crates; Java oracle sources under `mods/horizon`; `.local/parity-runner/`; `shared-local/` and `PARITY_SHARED`.
 - Follow-up checks: inspect parity runner, oracle shim, host scheduler, cache key/fingerprint logic, scope closure/reachability, baseline format and gate integration. Then construct a separate 1.20.1 oracle fixture matrix; never blend results from distinct Minecraft versions.
+- RustChunk implementation mapping: Maps to a future 1.20.1 differential-test runner and CI gates. Reuse caching, deterministic fixtures and dependency-scope ideas only after replacing every 26.3 oracle and baseline.
+- Evidence required before adoption: Require 1.20.1-specific fixtures, immutable oracle fingerprints, stable repeat runs, failure-on-drift tests and proof that cached results invalidate when source, data, toolchain or target-version inputs change.
 - Completion state: complete document review; no test, runner, cache, host, gate, harness, or integration command was executed.
 
 ### 30. `crates/horizon-prepare/Cargo.toml`
@@ -749,6 +835,8 @@
 - Decision: **adaptable** as a resource-preparer dependency pattern; **no direct version-port decision** can be made from the manifest alone.
 - Dependencies / cross-references: `crates/horizon-prepare/src/main.rs`; `java.rs`; `artifacts.rs`; `lib.rs`; `check.rs`; root Cargo workspace; `research-lock.json`.
 - Follow-up checks: inspect the preparer's command flow, Java version selection, expected official launcher files, archive verification, exporters, and resource version stamp; separately confirm Android runtime feasibility.
+- RustChunk implementation mapping: Maps to the future RustChunk preparation/tooling package, separate from the current `rustchunk-engine` JNI launcher. Reuse only dependencies shown necessary for 1.20.1 artifact/data preparation.
+- Evidence required before adoption: Run dependency/license/feature analysis and compile the selected preparation tool for its actual host/Android targets; prove it consumes the 1.20.1 lock and does not pull server/game-only dependencies unnecessarily.
 - Completion state: complete manifest review; no Cargo resolution, build, target compilation or dependency audit was executed.
 
 ### 31. `crates/horizon-prepare/src/check.rs`
@@ -773,6 +861,8 @@
 - Decision: **adaptable** as a preparation-completeness/stamp/version guard. It is mostly version-agnostic; exact 1.20.1 support depends on the manifest, lock reader, exporters, resources and checks in other modules.
 - Dependencies / cross-references: `research-lock.json`; `artifacts::Lock`; `OUTPUT_VERSION`; `SCHEMA`; `horizon-resources.json`; `horizon-prepare.json`; `missing_extras`; launcher backend completion checks; resource commands `packs`, `panorama`, `fonts`, `languages`, `sounds`.
 - Follow-up checks: inspect `main.rs`, `lib.rs`, `artifacts.rs`, the manifest writer and resource exporter implementations to verify that the stamp and Minecraft version are written only after all mandatory 1.20.1 artifacts are verified.
+- RustChunk implementation mapping: Maps to a future resource-preparation validation/stamp stage and current 1.20.1 exporter/integration tests. It must validate generated artifacts before they are consumed by the native runtime.
+- Evidence required before adoption: Test missing, stale, wrong-version, hash-mismatched and partially generated bundles; prove the completion stamp is written only after every mandatory 1.20.1 artifact passes validation.
 - Completion state: complete source and unit-test review; unit tests were read but not executed.
 
 ### 32. `crates/horizon-prepare/src/main.rs`
@@ -798,6 +888,8 @@
 - Decision: **adaptable** as the preparation CLI and launch API; **version-specific implementation changes required** in the lock/artifact resolver, Java selection, exporters, and output resource contracts before it can prepare 1.20.1 resources.
 - Dependencies / cross-references: `horizon_prepare::Options`; `artifacts::Lock`; `prepare_with_progress`; `add_assets`; `compile_exporters`; `check`; `launch_api`; `research-lock.json`; `horizon-resources.json`; launcher Launch API.
 - Follow-up checks: inspect `java.rs`, `artifacts.rs`, `lib.rs`, exporters, output manifest/stamping, and the precise 1.20.1 version metadata/JDK requirement. Confirm whether the preparer's asset path expects 26.3-only layouts.
+- RustChunk implementation mapping: Maps to a future RustChunk resource-import/preparation CLI or orchestration entry point; do not merge it conceptually with `engine/src/installer.rs`, which belongs to the current launcher workflow.
+- Evidence required before adoption: Require end-to-end preparation from verified user-owned 1.20.1 inputs, correct progress/error reporting and an output manifest accepted by the Rust engine; test interrupted and repeated runs.
 - Completion state: complete source and test review; no preparation, Java invocation, asset import, build or test was executed.
 
 ### 33. `crates/horizon-prepare/src/java.rs`
@@ -824,6 +916,8 @@
 - Decision: **adaptable** for Android-supplied Java, JDK discovery, controlled batch execution and timeout handling; **version/toolchain policy changes and device-specific memory validation required** for 1.20.1. No claim is made that the game engine needs Java at runtime; Java here supports vanilla exporters/data prep.
 - Dependencies / cross-references: `research-lock.json` Java major; `Supplied`/`supply`; `find`/`find_runtime`; `horizon-prepare` `Options.java_home`; `horizon-prepare/src/lib.rs`; `artifacts.rs`; exporter compilation and vanilla datagen; Android launcher runtime provisioning.
 - Follow-up checks: inspect the source of runtime provisioning and `artifacts.rs` to verify major selection; confirm 1.20.1's version JSON/JDK baseline; inspect the Java exporter compile path; measure heap/time on Android ARM64 and ensure no unbounded concurrent JVMs.
+- RustChunk implementation mapping: Maps to an optional host/on-device Java helper used only for 1.20.1 extraction/export/oracle work, not to the Rust gameplay engine. Current `engine/src/jli.rs` tests Java runtime loading and must remain clearly labelled launcher/tooling.
+- Evidence required before adoption: Prove the exact Java major required by each helper, bounded heap/concurrency/timeouts and ARM64 feasibility. Verify the native game reaches gameplay without launching a JVM in the first milestone.
 - Completion state: complete source and unit-test review; tests and actual Java/Javac commands were not executed.
 
 ### 34. `crates/horizon-prepare/src/artifacts.rs`
@@ -856,9 +950,12 @@
 - Decision: **major adaptation required** for 1.20.1. Reuse the secure path handling, checksum verification, manifest validation, explicit user-provided game files and local-only artifact storage; replace or extend the blanket mappings rejection with a verified 1.20.1 remapping workflow and version-aware handling of libraries/server bundling.
 - Dependencies / cross-references: `research-lock.json`; `Lock`; `GameFiles`; `Inputs`; `game_files`; `import_manifest`; `import`; `unpack_server`; `client_library_artifacts`; `safe_relative`; `launcher_library`; `verify`; `client_libraries`; `inventory`; `files::Import`; ZIP helpers; `pool::map`; `.local/minecraft/<version>`.
 - Follow-up checks: inspect `lib.rs`/`java.rs` and all exporter consumers; verify the actual 1.20.1 version JSON's mappings, SHA pins, Java major, libraries and server archive; determine the mapping namespace needed by Java oracles and Rust-source correspondence; test client and server remapping independently and record source/output hashes.
-- Completion state: complete source and unit-test review; no actual game artifacts were imported, checksum-verified, unpacked or remapped, and no tests/build were run.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to the 1.20.1 artifact-import/download verification boundary. Current `engine/src/downloader.rs` is a launcher downloader; any reuse must be reviewed for official metadata, safe paths and strict digest checks.
+- Evidence required before adoption: Test official 1.20.1 manifest/JAR/library hashes, malicious archive paths, interrupted downloads, symlinks and cache corruption; verify mappings are handled intentionally and private game files never enter public artifacts.
+- Completion state: complete source and unit-test review; no actual game artifacts were imported, checksum-verified, unpacked or remapped, and no tests/build were run.
+
 ### 35. `crates/horizon-prepare/src/lib.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `00ff58173199fa11d717243ed2614e9cfb002618`.
@@ -892,9 +989,12 @@
 - Decision: **reuse the pipeline architecture**, especially provenance, content hashes, reproducible generation, output stamps, lock protection, local-only source data and explicit staged preparation; **substantial version-specific rewrite required** for Java oracles/exporters, modern item components, registries, worldgen, resource manifest contract and Android memory policy.
 - Dependencies / cross-references: `artifacts.rs`; `java.rs`; `exporters.rs`; `sounds.rs`; `survival.rs`; `worker.rs`; `pool.rs`; `pyjson.rs`; `mods/horizon/src/test/java/dev/horizonlab/parity`; `horizon-world`; `horizon-assets`; `horizon-client`; `research-lock.json`; `horizon-resources.json`; `output-versions.txt`.
 - Follow-up checks: inspect `exporters.rs`, `survival.rs`, `sounds.rs`, `worker.rs`, `pool.rs`, build-time source hashing; inspect the Java parity oracle classes actually compiled; compare 1.20.1's `version.json`, datagen reports, registries, item model and worldgen JSON with the current generated resource contract; design a separate resource schema for 1.20.1 where necessary.
-- Completion state: complete source and test review; no exporter compilation, JVM process, data generation, resource extraction, preparation, build or test was executed.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to a future resource-export pipeline that supplies registry, block-state, biome and world-generation facts to native Rust. Existing 1.20.1 block facts/tag tests are proven partial pieces; the full exporter/runtime contract is not complete.
+- Evidence required before adoption: Require deterministic exports from the pinned 1.20.1 Java oracle, schema/version stamps, full required-field validation and Rust consumer tests for every artifact type. Preserve private source/output hygiene.
+- Completion state: complete source and test review; no exporter compilation, JVM process, data generation, resource extraction, preparation, build or test was executed.
+
 ### 36. `crates/horizon-protocol/Cargo.toml`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `377b6d997e84642646aca16b3762485ff14b73ff`.
@@ -916,6 +1016,8 @@
 - Decision: **adaptable** at the transport/serialization/cryptography library level; **rewrite/introduce a 1.20.1 protocol adapter** and reconcile shared core/world types. Protocol 777 must not be reused for 1.20.1.
 - Dependencies / cross-references: `horizon-core`; `horizon-world`; protocol `adapter.rs`; packet modules; compression, crypto, login and connection handling; `protocol_probe`; `item_wire_probe`; vanilla protocol report/packet-ID generation.
 - Follow-up checks: inspect `adapter.rs` and its version modules, packet ID table and packet bodies for handshake/login/configuration/play, then compare against an authoritative 1.20.1 protocol schema and a real vanilla 1.20.1 server handshake.
+- RustChunk implementation mapping: Maps to a future protocol crate only after the single-player engine gates; the current RustChunk Cargo workspace has no Minecraft packet/protocol implementation. Multiplayer is deferred in the engineering map.
+- Evidence required before adoption: Require a complete protocol-763 specification and codecs, verified packet/state inventory, golden byte vectors and successful real vanilla 1.20.1 server interoperability before claiming network support.
 - Completion state: complete manifest review; no Cargo build, dependency resolution, packet probe, network connection or server test was run.
 
 ### 37. `crates/horizon-protocol/src/adapter.rs`
@@ -940,6 +1042,8 @@
 - Decision: **adaptable** as a multi-version routing and ID-map pattern; **insufficient and unsafe** as a 1.20.1 compatibility layer without a complete packet-body/state adapter.
 - Dependencies / cross-references: `horizon-protocol` `PROTOCOL_VERSION`, `GAME_VERSION`, `State`, `Direction`, `buf::Reader`, `write_varint`, `ids`; `adapter/v26_2.rs`; connection handshake/status/server detection; protocol probes.
 - Follow-up checks: inspect `adapter/v26_2.rs` and connection startup/state handling; build a full authoritative 1.20.1 packet table and body codecs from protocol data; test with a real vanilla 1.20.1 server instead of assuming 26.2 mappings generalize.
+- RustChunk implementation mapping: Maps to a later protocol-version routing layer, not the current milestone. The 1.20.1 client should use a native protocol-763 implementation, not translate 26.x packet IDs as a shortcut.
+- Evidence required before adoption: Require an authoritative 1.20.1 packet/state table and payload-level codec tests; demonstrate correct handshake/login/play transitions against a vanilla 1.20.1 server.
 - Completion state: complete source and test review; tests and network interoperability were not run.
 
 ### 38. `crates/horizon-protocol/src/adapter/v26_2.rs`
@@ -963,6 +1067,8 @@
 - Decision: **adaptable** as a code-generation/output pattern; **not reusable as data** for 1.20.1. Generate a fresh 1.20.1 packet table from authoritative version-specific data only after its complete packet schemas and state transitions are understood.
 - Dependencies / cross-references: `adapter.rs`; `tools/generate_packet_id_adapter.py`; 26.2 and 26.3 `packets.json` reports; `State`; `Direction`; `PROTOCOL_VERSION`; packet codecs and connection state machine.
 - Follow-up checks: inspect the generator and packet report format, then derive/verify a full 1.20.1 packet inventory and real handshake/login/play flow. Add payload-level tests; do not use this file as a compatibility shim.
+- RustChunk implementation mapping: No reusable packet-table data mapping. Only the generator/output pattern may be considered for a later protocol-763 table; the v26_2 IDs are not usable in RustChunk 1.20.1.
+- Evidence required before adoption: Regenerate all IDs from a version-pinned 1.20.1 oracle and verify each state/direction against packet schemas and a real server trace. Reject any output still containing 26.2/26.3 identifiers.
 - Completion state: complete generated-file review; no generator, packet table test, protocol connection or network interoperability run was performed.
 
 ### 39. `crates/horizon-protocol/src/packets/handshake.rs`
@@ -985,6 +1091,8 @@
 - Decision: **mostly adaptable** for the basic handshake field codec; **version-gate protocol constant and intent options** for 1.20.1. Do not carry forward protocol 777 or later-only transfer semantics.
 - Dependencies / cross-references: `buf::StrN`; `UShort`; `VarInt`; `packet!`; `packet_enum!`; `ids::handshake::serverbound`; `State::Handshake`; protocol connection startup; `adapter.rs`.
 - Follow-up checks: inspect the connection state machine and generated IDs; verify 1.20.1 handshake bytes against an authoritative protocol specification and a vanilla 1.20.1 server.
+- RustChunk implementation mapping: Maps to the future protocol-763 Handshake packet codec and connection bootstrap. This is multiplayer work and not required for the first local single-player vertical slice.
+- Evidence required before adoption: Verify exact 1.20.1 handshake bytes, protocol value 763, host/port/intent encoding and status/login selection against both golden vectors and a vanilla 1.20.1 server.
 - Completion state: complete source/test review; no packet encoding test, handshake or network connection was executed.
 
 ### 40. `crates/horizon-protocol/src/packets/login.rs`
@@ -1008,7 +1116,6 @@
 - Decision: **reuse low-level codecs and cryptographic primitives only where protocol semantics match**; **rewrite the Login state packet set and connection transition for 1.20.1**. Do not expose current cookie/acknowledgement/session fields to the 1.20.1 adapter by default.
 - Dependencies / cross-references: `ids::login`; `buf` codecs; `crypto`; `packets::Empty`; login connection state machine; encryption/compression negotiation; authentication/offline UUID generation; `adapter.rs`.
 - Follow-up checks: inspect `connection.rs`, crypto and status packets; verify the precise 1.20.1 Login Start, Encryption Request/Response, Plugin Request/Response, Set Compression, Login Success and Disconnect packet structures and phase transition against a real 1.20.1 server.
-- Completion state: complete source and test review; no packet test, login, encryption exchange, compression negotiation or server interoperability run was performed.
 
 
 ## Scope correction — 2026-11-17
@@ -1018,6 +1125,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Java code/JARs may still be used locally as version-matched research/oracle/export tooling; that does not change the goal into a JVM game runtime. The Rust engine is the implementation under review.
 - Native Rust mods, Java mod loaders and Forge integration are not blockers for the first 1.20.1 milestone. Their relevance can be reassessed only after the base 1.20.1 client is working. **Forge classification:** current project conclusion: Java mod-loader/Forge integration is deferred until the vanilla 1.20.1 Rust client works.
 - From this point, classify each file by whether it is reusable, version-specific, requires rewrite, or unnecessary for the **Rust-native 1.20.1 port**. Prioritize the observed current blocker: `horizon-prepare/src/artifacts.rs` deliberately rejects manifests with client/server mappings; then audit the protocol, datagen/exporters, data schemas, engine behavior and platform/runtime integration.
+- RustChunk implementation mapping: Maps to the future 1.20.1 Login state codec and authentication transition in the protocol crate; do not port modern cookies/configuration packets wholesale.
+- Evidence required before adoption: Verify all 1.20.1 Login packet fields, online encryption/session flow, disconnect cases and Login-to-Play transition against official source and real server tests; confirm no separate Configuration state is introduced.
+- Completion state: complete source and test review; no packet test, login, encryption exchange, compression negotiation or server interoperability run was performed.
 
 ### 41. `crates/horizon-protocol/src/lib.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
@@ -1038,6 +1148,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **adaptable** as the central protocol crate structure, shared state/direction/error model and safe Rust module boundaries; **substantial version-specific adaptation required** across nearly every exposed module. Keep version ownership centralized only if all modules select coherent 1.20.1 schemas.
 - Dependencies / cross-references: `horizon-core::version`; `adapter`; `attachment_sync`; `buf`; `chunk`; `connection`; `crypto`; `entity_data`; `frame`; `ids`; `item`; `mod_list`; `mod_net`; `packets`; `registry`; `resolver`; `rsa`; `secure_chat`; `servers`; `text`.
 - Follow-up checks: inspect each public module, especially connection state transitions, packet payload codecs, registry sync, chunk data, item wire encoding, entity metadata, encryption and server-list/status handling; validate against 1.20.1 protocol data.
+- RustChunk implementation mapping: Maps to the future protocol crate root: state/direction/error types and module boundaries. No such native Minecraft protocol crate exists in the current RustChunk workspace.
+- Evidence required before adoption: Require a complete 1.20.1 public API inventory, compile-time exclusion of later-only states/types and integration tests covering every supported handshake/login/play path.
 - Completion state: complete source review; no build, test or live protocol exchange was run.
 
 ### 42. `crates/horizon-protocol/src/ids.rs`
@@ -1061,6 +1173,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **do not reuse data**; **regenerate entirely for 1.20.1** using a verified 1.20.1 vanilla report. The generator pattern and `name()` lookup API are adaptable, provided all packet consumers switch atomically to coherent version-specific definitions.
 - Dependencies / cross-references: `tools/generate_packet_ids.py`; vanilla datagen `packets.json`; `State`; `Direction`; packet enums in `packets/*.rs`; `adapter.rs`; protocol probes; `horizon-core::version`.
 - Follow-up checks: inspect the generator and packet report schema, all consumers of numeric constants and `NAMES`, and the handshake/login/configuration transitions for 1.20.1. Confirm whether a unified `Configuration` state is even valid for the target version.
+- RustChunk implementation mapping: Maps to generated protocol-763 packet IDs and reverse name tables in a future protocol crate. Do not check in Starling's 26.3 IDs as RustChunk data.
+- Evidence required before adoption: Generate from a reviewed 1.20.1 packet report; test complete state/direction coverage, duplicate IDs/names, unknown-ID handling and parity with real vanilla packet captures.
 - Completion state: complete source review; no packet report generation, protocol tests, codegen or network interoperability run was performed.
 
 ### 43. `crates/horizon-protocol/src/connection.rs`
@@ -1091,6 +1205,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **largely adaptable** as transport and packet framing infrastructure; **verify and adapt boundaries** for 1.20.1 frame/compression rules, crypto activation and connection-state orchestration. Do not confuse the in-memory Pipe with remote server networking.
 - Dependencies / cross-references: `frame`; `crypto::Cfb8`; `buf::Reader`; `resolver`; `State` consumers; login packet flow; `ConnReader`; `ConnWriter`; `Closer`; `Counters`.
 - Follow-up checks: inspect `frame.rs`, `crypto.rs`, `resolver.rs`, login/connection state machine and packet size limits; validate handshake/login/encryption/compression with a vanilla 1.20.1 server.
+- RustChunk implementation mapping: Maps to future TCP transport, connection lifecycle, framing handoff and online-mode encryption/compression plumbing. The current downloader networking is not a Minecraft protocol connection.
+- Evidence required before adoption: Test connect/disconnect/error lifecycle, handshake/login, encryption activation, negotiated compression and bounded packet sizes against a vanilla 1.20.1 server on desktop and Android.
 - Completion state: complete source and test review; no connection unit tests or real TCP server interoperability were run.
 
 ### 44. `crates/horizon-protocol/src/buf.rs`
@@ -1121,6 +1237,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **largely adaptable** for primitive codecs and macro composition; **method-by-method validation and selective replacement required** for special packed/vector/NBT codecs and version-specific structures.
 - Dependencies / cross-references: `horizon_world::nbt`; `Reader`; `Writer`; `Codec`; `packet!`; `frame`; packet modules; `chunk.rs`; `item.rs`; `entity_data.rs`; NBT quota and Java's FriendlyByteBuf/ByteBufCodecs.
 - Follow-up checks: compare each specialized codec's source behavior with 1.20.1 vanilla methods; inspect NBT read/write and packet decode strictness; add a 1.20.1 golden-byte corpus for boundary and malformed inputs.
+- RustChunk implementation mapping: Maps to a future protocol codec library for VarInt, strings, arrays, NBT and typed fields. The current RustChunk engine has no Minecraft wire codec.
+- Evidence required before adoption: Build a 1.20.1 golden-byte corpus for every primitive and special codec; test boundaries, malformed/truncated input, trailing bytes, overflows and parity with vanilla serialization.
 - Completion state: complete source/macro/test review; no codec tests or 1.20.1 byte comparison was run.
 
 ### 45. `crates/horizon-protocol/src/frame.rs`
@@ -1142,6 +1260,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **likely reusable with targeted parity verification**. Keep framing separate from version-specific packet codecs and add 1.20.1 boundary vectors before trusting interoperability.
 - Dependencies / cross-references: `buf::Reader`; `buf::write_varint`; `connection.rs`; `Inflater`; `flate2` zlib; packet-size limits.
 - Follow-up checks: verify Java 1.20.1 VarInt21FrameDecoder/LengthFieldPrepender and CompressionDecoder/Encoder edge behavior, including empty frames and declared-size limits; test actual compressed traffic with vanilla 1.20.1.
+- RustChunk implementation mapping: Maps to future protocol framing/compression below the 1.20.1 packet codecs; it is separate from world/chunk storage compression.
+- Evidence required before adoption: Verify VarInt21 framing and zlib threshold behavior with byte vectors, empty/oversized frames, corrupt streams and real server traffic; enforce bounded allocation before decompression.
 - Completion state: complete source/test review; tests and actual packet framing/compression were not run.
 
 ### 46. `crates/horizon-protocol/src/packets/mod.rs`
@@ -1165,6 +1285,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **adaptable** as typed-packet macro and unknown-packet representation; **regenerate/reorganize state-specific enums and IDs** for 1.20.1. Preserve strict decode guarantees only where the reference client does so.
 - Dependencies / cross-references: `buf::Codec`; `Reader`; `Writer`; `ids.rs`; packet modules; `State`; `Direction`; `packet!`; `round_trip` tests.
 - Follow-up checks: compare the generated macro's strictness and enum routing with Minecraft 1.20.1's connection dispatch; map packet modules to the target's actual states and typed packet catalog.
+- RustChunk implementation mapping: Maps to typed packet dispatch for the 1.20.1 protocol states and directions. Reuse a macro/pattern only if it does not assume modern Configuration state or packet IDs.
+- Evidence required before adoption: Require exhaustive packet-enum-to-ID mapping, round-trip codec tests, unknown-packet policy tests and compile/test evidence that state transitions match 1.20.1.
 - Completion state: complete source/macro/test-helper review; no macro expansion, protocol tests or packet exchange was run.
 
 ### 47. `crates/horizon-protocol/src/packets/status.rs`
@@ -1185,6 +1307,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **body codecs largely adaptable**; **IDs and response metadata must be version-specific** for 1.20.1.
 - Dependencies / cross-references: `ids::status`; `buf::Str`; `buf::Long`; `packets::Empty`; status response builder; `Connection` and server list ping code.
 - Follow-up checks: inspect status packet construction/server-list code and protocol version reporting; compare JSON and status/ping flow with a vanilla 1.20.1 server.
+- RustChunk implementation mapping: Maps to a future optional server-list ping path in the protocol/UI layer; it is not needed to create a local single-player world.
+- Evidence required before adoption: Verify protocol-763 Status packet IDs, JSON version metadata and ping/pong round trips against a vanilla 1.20.1 server; test malformed response and timeout handling.
 - Completion state: complete source/test review; no status ping or 1.20.1 server connection was run.
 
 ### 48. `crates/horizon-protocol/src/packets/configuration.rs`
@@ -1211,6 +1335,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **do not reuse this module as a 1.20.1 Configuration state**. Extract only genuinely shared packet/data structures and primitive codecs; design 1.20.1 Status/Login/Play packets and move any compatible configuration-like messages into their historically correct state.
 - Dependencies / cross-references: `ids::configuration`; `buf` codecs; `Tag`; `packets::Empty`; `packet!`/`packet_enum!`; `registry.rs`; `item.rs`; `connection.rs`; `State::Configuration`.
 - Follow-up checks: inspect current login and play codecs, registry/chunk login payloads and state-transition handling; compare exact 1.20.1 clientbound Login/Join Game, Update Tags, Client Settings, Resource Pack, Keep Alive and Plugin Message structures against vanilla 1.20.1.
+- RustChunk implementation mapping: No 1.20.1 Configuration-state mapping: protocol 763 goes from Login to Play without a separate post-login Configuration state. Reuse only independently verified primitive/data codecs in their actual 1.20.1 context.
+- Evidence required before adoption: Prove the state machine has no Configuration state and test the full Login-to-Play transition, including registry/game-join data, against vanilla 1.20.1 source and a real server.
 - Completion state: complete source/test review; no round-trip tests or 1.20.1 packet capture/interoperability run was performed.
 
 ### 49. `crates/horizon-protocol/src/packets/play.rs`
@@ -1244,9 +1370,12 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **do not port the current Play packet structs as a set**. Keep the typed packet design and generic codecs, but build a dedicated 1.20.1 Play packet catalogue with independently sourced IDs, payload schemas, registry assumptions and golden-byte/parity tests. Separate the reusable game concepts from their wire representations. The existing modern code may remain a reference for behavior only where method-level comparison proves equivalence.
 - Dependencies / cross-references: `ids::play`; `buf`; `chunk::{ChunkData,LightData,Paletted}`; `entity_data`; `item::{Component,Slot,Stack,Hashed}`; `packets::configuration`; `packets::login::Property`; `packets::recipes`; `horizon-world::nbt`; `registry`; connection state machine and vanilla packet reports.
 - Follow-up checks: inspect `chunk.rs`, `entity_data.rs`, `item.rs`, `registry.rs`, `packets/recipes.rs` and `packets/play.rs` consumers; obtain 1.20.1 serverbound/clientbound packet schemas and mappings; create separate 1.20.1 golden traces for login, join game, chunk load/light, inventory, entity metadata, movement, chat and common interactions.
-- Completion state: complete source/test review; the numerous unit tests were read but not executed, and no 1.20.1 packet capture, server connection or byte-level comparison was performed.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to a future protocol-763 Play packet catalogue, split by direction and packet family. It is deferred until after the single-player runtime and must be sourced afresh, not copied from 26.3.
+- Evidence required before adoption: Require a complete 1.20.1 packet inventory with payload schemas, IDs and golden vectors; test critical join, chunk, entity, inventory, movement and disconnect paths against vanilla.
+- Completion state: complete source/test review; the numerous unit tests were read but not executed, and no 1.20.1 packet capture, server connection or byte-level comparison was performed.
+
 ### 50. `crates/horizon-protocol/src/chunk.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `f961b1b230dd57f05532844869db6a4c755166aa`.
@@ -1273,6 +1402,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **adapt the palette/storage and light primitives**, but **rewrite the chunk packet envelope, section structure, heightmap format and registry integration** for 1.20.1. Keep a dedicated version-specific chunk decoder rather than a shared struct with unchecked modern fields.
 - Dependencies / cross-references: `buf::{BitSet,Longs,Bytes,VarInt}`; `horizon_world::nbt::Tag`; `packets::play::{LevelChunkWithLight,ChunksBiomes,LightUpdate}`; registry state/biome widths; world section dimensions; renderer chunk loader.
 - Follow-up checks: inspect `registry.rs`, `packets/play.rs` chunk packet call sites and `horizon-world` palette representation; compare against 1.20.1 `LevelChunkPacketData`, `LevelChunkSection`, `Heightmap` and `ClientboundLightUpdatePacket` serializers, including actual captures for overworld/nether/end and negative/minimum-height chunks.
+- RustChunk implementation mapping: Maps to the future network chunk decoder and its adapter into the 1.20.1 world/chunk model. This is distinct from local chunk generation/storage and is later multiplayer work.
+- Evidence required before adoption: Compare chunk packet bytes/fields, section palettes, heightmaps, biomes, block entities and light arrays against a vanilla 1.20.1 server; test malformed counts and registry mismatches.
 - Completion state: complete source/test review; tests, generated chunk packets and live 1.20.1 terrain/light reception were not run.
 
 ### 51. `crates/horizon-protocol/src/registry.rs`
@@ -1303,6 +1434,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **adaptable** as registry name/ID lookup and data-storage architecture; **rebuild registry inputs and rewire dynamic registry acquisition** for 1.20.1's Login/Play packet flow. Exclude modern dialog/component/default-clock semantics from the target.
 - Dependencies / cross-references: `registries.json`; `packets::configuration::{RegistryData,UpdateTags}`; `item::Names`; `item::custom`; `horizon-world::nbt`; `packets/play.rs`; `chunk.rs`; `horizon-prepare` datagen; `horizon-core::version`.
 - Follow-up checks: inspect `Join Game`/login packet in the target version and data-driven dimension registry serialization; map all 1.20.1 built-in network registry reports; ensure no modern-only registry IDs leak into item/chunk/entity packet decoding.
+- RustChunk implementation mapping: Maps to 1.20.1 block/biome/dimension registries shared by future protocol and world systems. Existing verified facts/tags provide only part of the required registry pipeline.
+- Evidence required before adoption: Require complete version-pinned registry names/IDs/defaults and dynamic registry payloads; prove consistent IDs across resource export, local world and protocol decoding with Java-oracle tests.
 - Completion state: complete source/test review; no registry reports, dynamic packets, 1.20.1 world registry or protocol tests were run.
 
 ### 52. `crates/horizon-protocol/src/entity_data.rs`
@@ -1330,6 +1463,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **reuse the generic metadata-list mechanism and primitive codecs**, but **replace serializer IDs, value codecs, particle IDs/data, item/profile handling and registry bindings** with a 1.20.1-specific implementation. Do not share the current numeric serializer table.
 - Dependencies / cross-references: `packets/play.rs::SetEntityData`; `buf`; `item::{Slot,Stack,Template}`; `packets/login::Property`; `Tag`; `registry` particle/entity/block/item IDs; `MOD_PARTICLE_ID`.
 - Follow-up checks: extract 1.20.1 `EntityDataSerializers` registry order and serializer read/write methods; create exhaustive version-specific metadata and particle fixtures; verify unknown-ID handling and metadata termination against vanilla.
+- RustChunk implementation mapping: Maps to future 1.20.1 entity metadata decoding and the native entity model/render bridge. It is not an existing RustChunk entity runtime.
+- Evidence required before adoption: Extract the exact 1.20.1 serializer order/types and particle payloads; create exhaustive metadata fixtures, unknown-ID tests and vanilla comparison traces for representative entities.
 - Completion state: complete source/test review; no metadata, particle or 1.20.1 wire tests were executed.
 
 ### 53. `crates/horizon-protocol/src/item.rs`
@@ -1361,9 +1496,12 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **do not adapt current item.rs by editing component IDs**. Implement a separate legacy 1.20.1 ItemStack/NBT codec and version-specific inventory synchronization. Reuse the safe Reader/Writer, NBT library, nesting protections and selected semantic helper concepts only where matching 1.20.1 behavior is demonstrated. Keep modern item components for a future 1.20.5+ version, not in the 1.20.1 path.
 - Dependencies / cross-references: `component` table; `Component`; `Stack`; `Slot`; `DelimitedSlot`; `Template`; `HashedSlot`; `WirePatch`; `custom.rs`; `hash.rs`; `skip.rs`; `buf`; `registry`; `packets/play.rs` item-bearing packets; `packets/recipes.rs`; `entity_data.rs`.
 - Follow-up checks: inspect `hash.rs`, `skip.rs`, `custom.rs` and Play packet consumers. Then source 1.20.1 FriendlyByteBuf/ItemStack read/write semantics and implement byte-golden tests for empty/ordinary/enchanted/damaged/named/potion/book/container/map/banner/shulker stacks; verify container clicks and creative slot packets with vanilla 1.20.1.
-- Completion state: complete source and unit-test review; no item codec tests, 1.20.1 serialization, network interaction or game session was run.
 
 - 1.20.1 implications: No separate 1.20.1-specific implication is recorded in this entry. Treat the version-related caveats above as unverified until checked against Minecraft Java 1.20.1.
+- RustChunk implementation mapping: Maps to a future legacy 1.20.1 ItemStack/NBT model shared by inventory, world drops and protocol. Do not reuse the modern Data Components wire model.
+- Evidence required before adoption: Verify empty/non-empty slot and ItemStack/NBT encodings byte-for-byte against 1.20.1; test counts, unknown item IDs, nested NBT, limits and inventory packet round trips.
+- Completion state: complete source and unit-test review; no item codec tests, 1.20.1 serialization, network interaction or game session was run.
+
 ### 54. `crates/horizon-protocol/src/item/custom.rs`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `1ae7bd8166a692f4ccbefd1d9e2ec0d76ab4d06b`.
@@ -1386,6 +1524,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **unnecessary for the current 1.20.1 vanilla protocol milestone**. Defer or omit this feature until a future item extension design exists; reuse only generic NBT validation ideas if required by a separate 1.20.1 feature.
 - Dependencies / cross-references: `item.rs` component registry and Stack model; `Component::Stacks`; `Template`; `horizon_world::identifier`; network NBT APIs and `NBT_QUOTA`; registry `SyncedNames`; negotiation state.
 - Follow-up checks: inspect whether any current client startup path unconditionally calls `custom::install`, and ensure the future 1.20.1 branch does not require component negotiation or custom-component metadata to complete login or item decoding.
+- RustChunk implementation mapping: No base 1.20.1 mapping. This modern custom data-component registry is not a vanilla 1.20.1 feature; only generic NBT validation ideas may inform a separately scoped extension later.
+- Evidence required before adoption: Confirm all references to data-component registration/negotiation are absent from the vanilla 1.20.1 core. Any later extension requires a distinct spec and compatibility/security tests.
 - Completion state: complete source review; no custom component registration, NBT validation, negotiation or protocol test was run.
 
 ### 55. `crates/horizon-protocol/src/packets/recipes.rs`
@@ -1411,6 +1551,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **rewrite the recipe networking codecs for 1.20.1**. Retain only generic codec patterns and possibly recipe UI concepts after translating them into the older recipe model. Treat current recipe display/slot display IDs as unusable target-version data.
 - Dependencies / cross-references: `item::{Stack,Template}`; `buf::{Codec,Reader,Writer}`; `horizon_world::nbt::Tag`; `packets/play.rs` recipe book variants; `ids::play`; recipe and item registries; `recipe_display`/`slot_display` data.
 - Follow-up checks: inspect 1.20.1 serverbound/clientbound recipe-book packet classes and serializers; trace recipe definitions, ingredient encoding and recipe identifiers; implement and compare legacy recipe-book add/remove/settings/ghost/place packets against a vanilla 1.20.1 oracle.
+- RustChunk implementation mapping: Maps to a future 1.20.1 recipe/recipe-book model and packet codecs, after the base gameplay/inventory model exists. Current recipe display IDs and structures are not reusable data.
+- Evidence required before adoption: Compare 1.20.1 recipe serializers, ingredients, identifiers and recipe-book actions to vanilla source; require client/server golden vectors and functional book/update tests.
 - Completion state: complete source/test review; no tests, packet traces or 1.20.1 recipe-book interoperability run was performed.
 
 ### 56. `crates/horizon-protocol/src/crypto.rs`
@@ -1438,6 +1580,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **largely adaptable/reusable** for 1.20.1 cryptographic primitives and offline UUID derivation. Keep key exchange and login state ordering version-specific; audit platform AES backend separately.
 - Dependencies / cross-references: `crypto::blocks`; `LANES`; `getrandom`; `sha1`; `horizon-protocol::connection::enable_encryption`; `rsa.rs`; `packets/login.rs`; authentication/session service; offline account identity.
 - Follow-up checks: inspect `blocks.rs` and `rsa.rs`; trace the 1.20.1 Encryption Request/Response sequence and signed server hash inputs against vanilla; verify ARM64 Android AES backend and OS RNG availability.
+- RustChunk implementation mapping: Maps to future online-mode login cryptography and offline UUID derivation, not to local world simulation. Select only primitives whose exact 1.20.1 usage is verified.
+- Evidence required before adoption: Run published algorithm vectors and 1.20.1 login/server-hash vectors; review RNG, key handling and ARM64 AES dispatch; verify successful online-mode login without leaking secrets.
 - Completion state: complete source/test review; no crypto test, login exchange, RNG probe or ARM64 device test was executed.
 
 ### 57. `crates/horizon-protocol/src/rsa.rs`
@@ -1466,6 +1610,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **cryptographic standards and data model are adaptable**, but **version-specific login/chat wiring and security review required**. Prefer vetted constant-time implementations for private operations where feasible; do not treat test vectors as a complete security audit.
 - Dependencies / cross-references: `crypto.rs`; `secure_chat.rs`; `packets/login.rs`; `packets/play.rs` chat/session packets; `rsa::SignatureHash`; `getrandom`; SHA-1/SHA-256; `Cfb8`; service-signed profile public keys.
 - Follow-up checks: inspect `secure_chat.rs` and authentication call sites; determine 1.20.1's exact signed-chat/profile-key requirements, key sizes and trust chain; review private-key timing behavior, malformed DER handling and maximum key lengths; consider replacing private operations with a vetted crypto crate.
+- RustChunk implementation mapping: Maps only to the cryptographic support needed by future online login/profile-key verification. Prefer vetted constant-time libraries over carrying custom private-key arithmetic without review.
+- Evidence required before adoption: Require independent cryptographic review, standard RSA test vectors, key-size/format validation, constant-time assessment where applicable and a full 1.20.1 login/profile-key interoperability test.
 - Completion state: complete source/test review; no RSA key generation, private operation, login exchange, signature verification test or security assessment was executed.
 
 ### 58. `crates/horizon-protocol/src/secure_chat.rs`
@@ -1497,6 +1643,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **adapt selected cryptographic primitives and abstract concepts**, but **rewrite 1.20.1 signed payload, login/player-info key exchange, chain protocol, last-seen updates and packet integration** from target-version vanilla. Keep modern 26.3 state machine isolated from the 1.20.1 path.
 - Dependencies / cross-references: `rsa::{RsaPrivateKey,RsaPublicKey,SignatureHash}`; `packets::play::LastSeenUpdate`; modern Login/Play chat packets; profile public key/session; chat message signing; `crypto.rs`.
 - Follow-up checks: inspect `packets/play.rs` chat structs and `packets/login.rs` against exact 1.20.1 source; establish profile key signature payload, message signing payload, session/index behavior, last-seen window, acknowledgement and enforcement modes using a 1.20.1 oracle/server.
+- RustChunk implementation mapping: Maps to future 1.20.1 secure-chat signing, profile-key and message-chain handling in protocol/game UI. It must be rewritten for 1.20.1 rather than inherited from the modern implementation.
+- Evidence required before adoption: Compare signed payloads, session/profile keys, last-seen acknowledgements and chat packet behavior against official 1.20.1 Java source; test valid, invalid, expired and unsigned-message cases with a server.
 - Completion state: complete source/test review; no signature validation, chat signing, secure-chat session, or vanilla 1.20.1 message exchange was run.
 
 ### 59. `crates/horizon-protocol/src/resolver.rs`
@@ -1523,6 +1671,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **largely adaptable/reusable** for 1.20.1 and Android. Keep the SRV selection rules and injected DNS provider; verify target-version behavior and ensure the Android host supplies current DNS servers.
 - Dependencies / cross-references: `resolver::dns`; `NAME_SERVERS`; `dns::system_name_servers`; `dns::query_srv`; `connection::connect_server`; `connect_server_with_address`; Android activity/network DNS callback.
 - Follow-up checks: inspect `resolver/dns.rs`, DNS response parsing, retry/timeout and name-server selection; verify 1.20.1 server redirect behavior against vanilla. Confirm Android integration fetches DNS servers from the current active network without stale caching.
+- RustChunk implementation mapping: Maps to a later multiplayer server-address resolver and connection bootstrap. It is not used by the first offline single-player milestone.
+- Evidence required before adoption: Test direct host resolution, SRV target/port selection, IPv4/IPv6, malformed DNS and timeouts on desktop and Android; compare SRV behavior with vanilla client.
 - Completion state: complete source/test review; no live DNS query, SRV lookup, Android DNS callback or connection test was run.
 
 ### 60. `crates/horizon-protocol/src/resolver/dns.rs`
@@ -1549,6 +1699,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **largely reusable/adaptable** for 1.20.1, including query, UDP/TCP fallback and platform DNS-source abstraction. Verify parser edge behavior and Android active-network wiring; no protocol-version-specific rewrite is indicated by this file.
 - Dependencies / cross-references: `resolver.rs`; `getrandom`; `ipconfig` on Windows; `std::net::{UdpSocket,TcpStream}`; `NAME_SERVERS`; `SERVER_TIMEOUT`; SRV query target `_minecraft._tcp`.
 - Follow-up checks: inspect Android network integration that calls `set_name_servers`; validate DNS timeouts and malformed response handling on Android; run resolver comparisons and a real SRV-enabled 1.20.1 server connection. Review whether DNS answer owner name/class/priority/weight handling is sufficiently faithful to the Java resolver.
+- RustChunk implementation mapping: Maps to the DNS SRV implementation used by the future server resolver. Keep it platform-aware and independent of the game state machine.
+- Evidence required before adoption: Test compressed DNS names, UDP/TCP fallback, malformed/truncated responses, injected Android DNS servers and timeouts; verify behavior on a real SRV-enabled 1.20.1 server.
 - Completion state: complete source/test review; no DNS query, TCP fallback test, Android resolver call or live SRV resolution was executed.
 
 ### 61. `crates/horizon-protocol/src/attachment_sync.rs`
@@ -1564,6 +1716,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the base 1.20.1 milestone; bounded NBT-payload handling is a reusable pattern for a future extension protocol.**
 - Dependencies / cross-references: horizon_world::attachments::{AttachmentSync,Holder}, horizon_world::nbt, protocol::{Reader,Writer}; docs/native-mods.md, server attachment hook/sync lifecycle.
 - Follow-up checks: Later, inspect the client attachment-cache lifecycle and server dispatcher. For the RustChunk core, retain only the NBT network bounds and trailing-byte policy in the design notes.
+- RustChunk implementation mapping: No vanilla 1.20.1 runtime mapping. Starling's native-mod synced-attachment channel is a custom extension and is excluded from the base client; retain only generic bounded-NBT lessons.
+- Evidence required before adoption: Confirm the base protocol implementation emits/accepts no such custom packet. Any future extension must have an explicit negotiated namespace, schema, limits and compatibility tests.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 62. `crates/horizon-protocol/src/hash_ops.rs`
@@ -1579,6 +1733,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Version-specific and unsuitable for protocol 1.20.1; retain only as a reference for implementing the newer Codec-hash scheme.**
 - Dependencies / cross-references: horizon_world::nbt::Tag; crates horizon-protocol::item/hash.rs and modern Data Component codecs/HashedPatchMap; Guava HashOps reference.
 - Follow-up checks: When porting the 1.20.1 ItemStack, omit the Data Component hash path entirely and compare against that version's own serialization and NBT behavior.
+- RustChunk implementation mapping: No base 1.20.1 item mapping. This CRC32C/Data Component hash path is not a replacement for legacy ItemStack/NBT serialization or integrity checks.
+- Evidence required before adoption: Verify the 1.20.1 item/network model has no dependency on modern component hashes; add regression tests ensuring legacy NBT parsing and item packets do not call this path.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 63. `crates/horizon-protocol/src/mod_list.rs`
@@ -1594,6 +1750,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the vanilla 1.20.1 core; file-hash parity is a reusable concept for a future mod-compatibility layer.**
 - Dependencies / cross-references: horizon:mod_list, protocol Reader/Writer, game/mods.rs LOCAL setter, configuration custom payload, docs/mods.md and content identity checks.
 - Follow-up checks: Later, inspect the server/client dispatch for this channel and `content_identity.rs`. For 1.20.1, first complete the vanilla packet IDs and handshake independently; do not assume a Configuration state.
+- RustChunk implementation mapping: No vanilla protocol mapping. The Horizon content-mod list/handshake is custom and must not be sent to ordinary 1.20.1 servers; possible future mod parity is separate.
+- Evidence required before adoption: Capture a vanilla 1.20.1 handshake/login/play session and prove no custom mod-list packet is emitted. Any future extension needs explicit negotiation and independent server compatibility tests.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 64. `crates/horizon-protocol/src/mod_net.rs`
@@ -1609,6 +1767,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the base milestone; the codec design and strict validation are reusable for a future extension protocol.**
 - Dependencies / cross-references: protocol Reader/Writer; custom payload packet schemas in packets/configuration.rs and packets/play.rs; native mod net hooks; docs/native-mods.md API 40.
 - Follow-up checks: In a later network-integration audit, inspect caller-side rate limits, mod identity checks, and enforcement of server/client message direction.
+- RustChunk implementation mapping: No first-release mapping. Native-mod networking is not Forge networking and is outside the vanilla protocol-763 client.
+- Evidence required before adoption: Require a separately approved extension design, server/client schema, version negotiation, authentication, payload bounds and interoperability tests before implementing any custom mod channel.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 65. `crates/horizon-protocol/src/quiet.rs`
@@ -1624,6 +1784,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the base milestone; batching and size checks are reusable for a future extension protocol.**
 - Dependencies / cross-references: protocol Reader/Writer; horizon:quiet_commands custom payload registration; docs/mods.md command.run-quiet; server command dispatcher and player permissions.
 - Follow-up checks: In the future, inspect the server caller for trust in mod IDs, per-player throttling, command-length semantics, and chat fallback. Do not implement an endpoint for this in the current milestone.
+- RustChunk implementation mapping: No first-release mapping. This custom quiet/extension packet path is not part of vanilla 1.20.1; generic batching/size-limit ideas can be documented without porting the protocol.
+- Evidence required before adoption: Verify no 1.20.1 packet or state depends on this channel; if reused as a generic helper, test exact limits, malformed data and backpressure independently of protocol code.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 66. `crates/horizon-protocol/src/servers.rs`
@@ -1639,6 +1801,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Adaptable after verifying the 1.20.1 schema and filesystem semantics.**
 - Dependencies / cross-references: horizon_world::nbt::{read_named,write_named,Tag,JavaString}; local game server list screen; server status favicon and server resource pack preference.
 - Follow-up checks: Inspect the `save`/`prepend` callers and server-list UI; compare the full vanilla 1.20.1 `servers.dat` schema, including fields and malformed-file behavior; test atomic rename on Android.
+- RustChunk implementation mapping: Maps to the future server-list model/UI and persistent address metadata, not to a game-protocol primitive. It can be postponed until multiplayer UI is scheduled.
+- Evidence required before adoption: Test server entry serialization, migration, invalid addresses and safe storage; verify user-visible status uses 1.20.1 protocol metadata and no credentials are stored in plain text.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 67. `crates/horizon-protocol/src/text.rs`
@@ -1654,6 +1818,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Adaptable only as a plain-text fallback; the 1.20.1 rich-component parser/renderer must be implemented separately.**
 - Dependencies / cross-references: horizon_world::nbt::{JavaString,Tag}; language `en_us.json`; protocol chat/status packet handling and UI chat renderer.
 - Follow-up checks: Compare component serialization and `TranslatableContents` in 1.20.1; test selectors, score, style inheritance, nested extras, malformed arguments, and signed-chat rendering.
+- RustChunk implementation mapping: Maps to the future 1.20.1 text/component model used by chat, UI, titles and server messages. The existing renderer/font layer must supply shaping; this source is not a complete RTL text engine.
+- Evidence required before adoption: Build JSON text-component fixtures from 1.20.1, including styles, nesting, translations and click/hover behavior; verify rendering, sanitization, Unicode and Persian/RTL shaping separately.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 68. `crates/horizon-protocol/src/crypto/blocks.rs`
@@ -1669,6 +1835,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The CFB8 algorithm is adaptable; the custom ARM AES backend is usable only after security review and safe feature dispatch.**
 - Dependencies / cross-references: protocol::crypto.rs, aes crate, ARMv8 AES/NEON intrinsics, RustCrypto AES, target CPU feature configuration.
 - Follow-up checks: Inspect Android arm64-v8a build target flags and device crypto-extension support; test NIST AES vectors and CFB8 known-answer vectors; compare with a constant-time RustCrypto backend and assess the S-box key schedule.
+- RustChunk implementation mapping: Maps to the future AES/CFB8 protocol encryption primitive or vetted replacement. It is not needed for local single-player and must not be accepted solely on architecture review.
+- Evidence required before adoption: Compare encrypt/decrypt vectors with Java 1.20.1, test ARM64 feature dispatch and fallback paths, and review side-channel/constant-time properties before online-mode use.
 - Completion state: complete source review; no tests, build, runtime session or network interoperability test executed.
 
 ### 69. `crates/horizon-protocol/src/item/hash.rs`
@@ -1684,6 +1852,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Version-specific and unusable for 1.20.1; unnecessary for the target protocol. The ItemStack+NBT path must be rewritten.**
 - Dependencies / cross-references: hash_ops.rs, item.rs::{Component,Stack,WirePatch,Hashed}, registry name lookup, packets/play.rs ItemStack encoders and vanilla DataComponent Codec definitions.
 - Follow-up checks: Compare the complete 1.20.1 ItemStack Codec and NBT layout against a vanilla oracle; keep all `HashedPatchMap` references outside the base-milestone scope.
+- RustChunk implementation mapping: No 1.20.1 ItemStack mapping. This file hashes modern Data Component item content; RustChunk must use the legacy 1.20.1 item ID/count/NBT path.
+- Evidence required before adoption: Prove the item codec and inventory model for 1.20.1 do not reference this hash scheme; validate legacy slot/NBT golden vectors instead.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
 
 ### 70. `crates/horizon-protocol/src/item/hash/exact.rs`
@@ -1699,6 +1869,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Version-specific and unnecessary for the 1.20.1 core; predicate parsing for the target version must be rewritten separately.**
 - Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs PREDICATE_BOOLS, HashOps, NBT Compound/Tag, DataComponentPredicate/ExactPredicate codecs.
 - Follow-up checks: When designing 1.20.1 loot/item predicates, separately verify NBT matching semantics and the distinction between exact and partial predicates.
+- RustChunk implementation mapping: No base mapping. The nested/exact Data Component predicate hash model is not the 1.20.1 vanilla item-predicate representation.
+- Evidence required before adoption: If 1.20.1 loot/item predicates are later needed, derive their schema from 1.20.1 source and test exact-vs-partial NBT matching; do not accept modern hash tables.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
 
 ### 71. `crates/horizon-protocol/src/item/hash/gameplay.rs`
@@ -1714,6 +1886,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Version-specific and unusable for 1.20.1; the legacy implementation must be written separately.**
 - Dependencies / cross-references: item/hash.rs, item/hash/raw.rs, item/hash/exact.rs, HashOps, Reader, Registry Names, modern component stream codecs.
 - Follow-up checks: Extract ItemStack, FoodProperties, AttributeModifiers, and item-specific NBT independently from 1.20.1 source, then prepare separate golden vectors.
+- RustChunk implementation mapping: No base mapping. These gameplay component hashes describe the modern item component model, not 1.20.1 ItemStack metadata.
+- Evidence required before adoption: Require a 1.20.1-derived item behavior/NBT schema and golden fixtures for food, attributes and item-specific tags before building any equivalent feature.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
 
 ### 72. `crates/horizon-protocol/src/item/hash/raw.rs`
@@ -1729,6 +1903,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Version-specific and unusable for 1.20.1; the golden-vector/oracle-testing method is reusable.**
 - Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs, item/hash/exact.rs, item/skip.rs, HashOps, Item::Component::Raw, registry name tables, vanilla 26.3 StreamCodec and persistent Codec.
 - Follow-up checks: Record the 1.20.1 vanilla StreamCodec/packet schema for ItemStack and NBT; create golden vectors for every item form and specify unknown/trailing-field behavior precisely.
+- RustChunk implementation mapping: No direct runtime mapping. The reverse-engineering and golden-vector methodology may be reused for a future version-specific serializer, but none of the modern component IDs/data are portable.
+- Evidence required before adoption: Build 1.20.1 byte vectors from official Java serializers and demonstrate exact round trips; ensure generated dispatch tables contain no modern-only component registry entries.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
 
 ### 73. `crates/horizon-protocol/src/item/skip.rs`
@@ -1744,6 +1920,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Version-specific and unnecessary for 1.20.1; the legacy ItemStack decoder must be implemented separately.**
 - Dependencies / cross-references: item.rs Component/Template/Reader, buf::Reader, horizon_world NBT, packet slot/item readers and 26.3 DataComponents registry order.
 - Follow-up checks: During the 1.20.1 packet/item audit, extract the empty/non-empty Slot paths and NBT limits/terminator from vanilla source, then write malformed-NBT tests.
+- RustChunk implementation mapping: No base mapping. The component skip table is specific to a wire schema absent from 1.20.1; unknown item data must be handled according to the 1.20.1 Slot/NBT grammar.
+- Evidence required before adoption: Test empty/non-empty slot decoding, NBT boundaries, unknown item IDs and truncated payloads against 1.20.1 oracle vectors; reject malformed streams rather than guessing lengths.
 - Completion state: complete source review; no tests or runtime interoperability were executed.
 
 ### 74. `crates/horizon-client/src/chunk_io.rs`
@@ -1759,6 +1937,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Adaptable; the current code is tied to Horizon's save/toast systems and must be rewritten.**
 - Dependencies / cross-references: horizon_client::save::low_disk_space, toasts::SystemToast, lang translation keys, HUD rgba, world region/chunk I/O and server writer thread.
 - Follow-up checks: Audit `save.rs` and the region writer; establish thread ownership, failure propagation, retry policy, and Android storage-permission/space handling.
+- RustChunk implementation mapping: Maps to future asynchronous chunk/world save-load error reporting and the Android UI notification channel. There is no current native world-storage worker in RustChunk.
+- Evidence required before adoption: Inject disk-full, permission, corrupt-region and interrupted-write failures; verify errors reach the UI safely, are not lost across thread boundaries and never corrupt a previously saved world.
 - Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
 
 ### 75. `crates/horizon-client/src/content_identity.rs`
@@ -1774,6 +1954,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Adaptable only as an idea for future mod-content parity; the current implementation is version-specific and outside the base milestone.**
 - Dependencies / cross-references: horizon_protocol::registry::Builtin; facts.json / registries.json generated by horizon-prepare; item::custom registry; horizon_world::item_defaults; channel horizon:block_registry.
 - Follow-up checks: Later, trace the handshake caller on both client and server, the `facts.json`/`registries.json` generators, and whether the resource root can change after startup. Do not add any SHA handshake to vanilla login now.
+- RustChunk implementation mapping: No base vanilla mapping. The current content-mod registry fingerprint/custom handshake is unnecessary for a vanilla 1.20.1 client; a future mod-content identity layer must be separately specified.
+- Evidence required before adoption: Prove vanilla startup/world join does not depend on a custom fingerprint. For any later mod support, test deterministic registry hashes, ordering, collision handling and client/server mismatch rejection.
 - Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
 
 ### 76. `crates/horizon-client/src/player_sync.rs`
@@ -1789,6 +1971,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The baseline and delta-handling algorithm is adaptable; packet IDs, thresholds, and the steering extension must be validated or rewritten for 1.20.1.**
 - Dependencies / cross-references: horizon_protocol::packets::play::{MovePlayer*,PlayerPosition,relative}, horizon_core::geometry::Vec3, local player tick/input, teleport acknowledgement path.
 - Follow-up checks: Inspect the 1.20.1 `MovePlayer` and `ClientboundPlayerPosition` dispatch paths; produce a vanilla comparison trace for the stationary 20-tick heartbeat, on-ground/collision flags, and relative velocity rotation.
+- RustChunk implementation mapping: Maps to future local-player simulation and, later, protocol-763 movement/teleport synchronization. The movement algorithm may inform simulation, but packet thresholds/flags are server-version-specific.
+- Evidence required before adoption: Compare input-to-motion and movement/teleport packet traces against vanilla 1.20.1; test stationary heartbeat, collisions, relative teleport flags, mounted movement and on-ground state.
 - Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
 
 ### 77. `crates/horizon-client/src/client_lib.rs`
@@ -1804,6 +1988,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **A reference/adaptable example for crate organization; this file contains no runtime code to port directly.**
 - Dependencies / cross-references: Cargo workspace manifests, horizon-client-render, horizon-client-core, horizon-client-input, horizon-command, horizon-items, horizon-server-files and modules declared in this root.
 - Follow-up checks: Inspect the workspace Cargo.toml files and the entry point/game loop that consumes this crate; define the minimal RustChunk crate graph before moving subsystems.
+- RustChunk implementation mapping: Maps as a crate-boundary reference for separating reusable client systems from application/platform startup. Do not assume a corresponding `client_lib` crate exists in RustChunk yet.
+- Evidence required before adoption: Before creating a library boundary, show an acyclic `cargo metadata` dependency graph and compile/test the public API on host and Android; document which modules are actually shared.
 - Completion state: complete source review; no tests/build/runtime/device interoperability test was run.
 
 ### 78. `crates/horizon-client/src/heartbeat.rs`
@@ -1819,6 +2005,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the base milestone and for Minecraft 1.20.1 compatibility.**
 - Dependencies / cross-references: horizon_telemetry::live::{session_id,INTERVAL,Ping,send}, telemetry::version, telemetry endpoint config, LAN/friends world lifecycle.
 - Follow-up checks: No port is needed. If telemetry is added in the future, review the privacy notice, consent, disable switch, shutdown lifecycle, and exact data sent.
+- RustChunk implementation mapping: No runtime mapping. Anonymous player-count/LAN telemetry is not required for the first native 1.20.1 client and should be omitted unless RustChunk defines an explicit opt-in telemetry policy.
+- Evidence required before adoption: For the initial release, verify no periodic telemetry request is made. Any later telemetry needs consent/disable tests, payload minimization, endpoint security and token/path redaction.
 - Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
 
 ### 79. `crates/horizon-client/src/reconnect.rs`
@@ -1834,6 +2022,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The backoff logic is adaptable; the classification table and 1.20.1 login/disconnect integration must be rewritten or verified.**
 - Dependencies / cross-references: net.rs disconnect/auth result, multiplayer connection lifecycle, localized component/translation keys, server list selected address, Retry UI scheduler.
 - Follow-up checks: After auditing network/login, map all 1.20.1 disconnect reason keys, online-mode/session failures, and server-shutdown cases; verify that intentional disconnect/cancel clears the retry state.
+- RustChunk implementation mapping: Maps to future multiplayer connection recovery and UI status handling. It is not needed for local single-player world creation.
+- Evidence required before adoption: Test transient timeout, refused connection, server kick/ban, authentication failure, intentional cancel and app pause/resume; verify bounded backoff and no retry after permanent failure.
 - Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
 
 ### 80. `crates/horizon-client/src/server_packs.rs`
@@ -1849,6 +2039,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The state machine and recovery design are adaptable; status codes, the download/security pipeline, and pack-priority semantics must be verified or rewritten for 1.20.1.**
 - Dependencies / cross-references: server_packs::download submodule, ServerboundResourcePackPacket actions, servers.dat acceptTextures, pack reload scheduler, local resourcepack source and resource reload callbacks.
 - Follow-up checks: Fully audit `server_packs/download.rs` and the ZIP/resource manager; compare the packet-status enum with 1.20.1; inspect URL redirects, TLS, file size, archive traversal, SHA-1 policy, and preservation of user-pack priority.
+- RustChunk implementation mapping: Maps to future 1.20.1 server resource-pack negotiation/download/reload, using the resource manager and protocol-763 packet layer. This is later multiplayer functionality.
+- Evidence required before adoption: Test 1.20.1 pack-status packets, redirect/TLS handling, size and archive-traversal limits, hash validation, activation priority, reload failure and removal against a vanilla server.
 - Completion state: complete source review; no tests, builds, network downloads, resource reloads or Android device tests were executed.
 
 ### 81. `crates/horizon-client-input/src/lib.rs`
@@ -1864,6 +2056,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The crate structure is adaptable; this file itself is only an organizational reference.**
 - Dependencies / cross-references: `crates/horizon-client/Cargo.toml`, `client_lib.rs` re-exports, and child modules listed above.
 - Follow-up checks: Review each module's public API, platform feature gates, and actual Android/desktop backends in the following files in this audit.
+- RustChunk implementation mapping: Maps to a future platform-neutral input crate boundary. Existing Android/Kotlin controls are application UI only; a Rust gameplay input crate is not yet present.
+- Evidence required before adoption: Require architecture/dependency checks proving the input layer does not depend on renderer/game internals, plus host and Android tests for event translation and lifecycle.
 - Completion state: complete source review; no tests or build were run.
 
 ### 82. `crates/horizon-client-input/src/input.rs`
@@ -1879,6 +2073,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The vector-normalization approach and multiplier concept are adaptable; the multiplier values and lifecycle logic must be reviewed against 1.20.1.**
 - Dependencies / cross-references: winit KeyCode/ModifiersState; LocalPlayer.modifyInput semantics; key event state provider; sprint/pose/riding lifecycle not implemented here.
 - Follow-up checks: Compare movement-input functions with vanilla 1.20.1; locate the item-use/sneaking calculations; inspect NaN/infinite input and add diagonal/analog-controller tests.
+- RustChunk implementation mapping: Maps to future normalized movement/action input feeding vanilla 1.20.1 local-player simulation; this is not an existing game-logic function in RustChunk.
+- Evidence required before adoption: Compare movement input, diagonal normalization, sneak/sprint/use modifiers and analog values against 1.20.1 vanilla fixtures; test NaN/infinity and focus-loss cleanup.
 - Completion state: complete source review; no tests or build were run.
 
 ### 83. `crates/horizon-client-input/src/input_mode.rs`
@@ -1894,6 +2090,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The mode-switching design and modifier reconstruction are adaptable; the Android keycode/source allowlist must be validated on target devices.**
 - Dependencies / cross-references: winit KeyCode/ModifiersState; `crate::gamepad::android::from_pad`; Android key event source/device/scan-code mapping; touch overlay and keyboard event dispatch.
 - Follow-up checks: Inspect the Android input-event bridge, key-up/focus-loss cleanup, device-specific scan codes, and real HID/gamepad devices.
+- RustChunk implementation mapping: Maps to a future Android/desktop input-mode adapter that distinguishes touch, keyboard/mouse and controller sources. No equivalent native Rust mode manager is present yet.
+- Evidence required before adoption: Validate Android key/source codes and physical-device behavior on the Galaxy A22 plus at least one HID device; test focus loss, virtual keyboard and input-mode switching.
 - Completion state: complete source review; no tests or device input tests were run.
 
 ### 84. `crates/horizon-client-input/src/interaction_input.rs`
@@ -1909,6 +2107,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Tick buffering and a stable hit result are adaptable patterns; lifecycle behavior and edge cases must be rewritten/validated against 1.20.1 code.**
 - Dependencies / cross-references: Minecraft.handleKeybinds, MultiPlayerGameMode startAttack/startDestroyBlock/releaseUsingItem, hitResult/pick lifecycle, screen set/release key mappings, player item-use state.
 - Follow-up checks: Match the exact vanilla 1.20.1 input-tick order; test overflow/capacity, focus loss, touch cancellation, and multiple taps before a tick; inspect server acknowledgements for break/use synchronization.
+- RustChunk implementation mapping: Maps to a future tick-boundary interaction queue for attack/use/pick actions, connecting input edges to 1.20.1 hit results and game-mode actions.
+- Evidence required before adoption: Test taps shorter than one tick, multi-tap ordering, pointer cancellation, focus loss, queue overflow and exact vanilla 1.20.1 action/tick ordering.
 - Completion state: complete source review; no tests or gameplay/server run were executed.
 
 ### 85. `crates/horizon-client-input/src/key_names.rs`
@@ -1924,6 +2124,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Equivalent data can be generated/adapted; this 26.3 table must be regenerated for 1.20.1.**
 - Dependencies / cross-references: SDL scancode definitions, winit keyboard backend, VanillaOptionsTableExporter, language resource keys, keybinding options UI.
 - Follow-up checks: Extract the 1.20.1 table with an oracle; define separate mappings for winit/Android/SDL; check non-US layouts and physical-versus-logical key naming.
+- RustChunk implementation mapping: Maps to generated key-name/translation data in a future input/settings layer; regenerate values from 1.20.1 rather than copying modern translation-key tables.
+- Evidence required before adoption: Compare the complete 1.20.1 key/mouse name inventory with an oracle; test non-US layouts, unknown keys, Android mappings and stable saved identifiers.
 - Completion state: complete source review; no tests or build were run.
 
 ### 86. `crates/horizon-client-input/src/keybinds.rs`
@@ -1939,6 +2141,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The KeyBinds abstraction and physical-key-to-action translation are adaptable; MAPPINGS/KEYS and container behavior must be regenerated or adapted for 1.20.1.**
 - Dependencies / cross-references: winit KeyCode/MouseButton and KeyEvent; horizon_client_core::key_display; SDL/translation key names; Options.keyMappings ordering; screen container hotbar checks; debug_keys physical key handling.
 - Follow-up checks: Compare the exact mapping list with 1.20.1; test keyboard layouts, persistence of unknown keys, other mouse-button IDs, duplicate bindings, focus loss, and Android touch-action routing.
+- RustChunk implementation mapping: Maps to future keybind defaults, persistence and action translation in the input/settings layer. Existing app settings are not a replacement for vanilla 1.20.1 game keybinds.
+- Evidence required before adoption: Verify defaults/categories/toggle behavior against 1.20.1 Options; test persistence/migration, duplicate bindings, unknown keys, mouse buttons and touch-action mappings.
 - Completion state: complete source review; tests/build not executed.
 
 ### 87. `crates/horizon-client-input/src/keymapping.rs`
@@ -1954,6 +2158,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The base state machine is adaptable; pad toggling and event/screen semantics must be aligned with the 1.20.1 and Android implementations.**
 - Dependencies / cross-references: Options toggleKeySneak/toggleKeySprint/toggleKeyAttack/toggleKeyUse; KeyMapping and ToggleKeyMapping; input event dispatch; winit keyboard/mouse events; controller toggle-sneak extension.
 - Follow-up checks: Match the exact 1.20.1 `KeyMapping`/`ToggleKeyMapping`; inspect repeat semantics, focus loss, pointer cancellation, controller disconnection, and click-counter bounds.
+- RustChunk implementation mapping: Maps to future held/click/toggle key state management across screens, respawn and Android focus changes.
+- Evidence required before adoption: Compare KeyMapping/ToggleKeyMapping behavior with 1.20.1; test key repeat, open/close screens, focus loss, pointer cancel, respawn and controller disconnect without stuck actions.
 - Completion state: complete source review; no tests or build were run.
 
 ### 88. `crates/horizon-client-input/src/modifiers.rs`
@@ -1969,6 +2175,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Modifier reconciliation and paired-key logic are adaptable; snapshot restoration must be synchronous/serialized and tested against the 1.20.1 key lifecycle.**
 - Dependencies / cross-references: winit ModifiersState/KeyCode; keybinds KeyBinds; keymapping ToggleKeys; Android key event bridge; controller agent/touch synthesized input.
 - Follow-up checks: Test interleaving of real modifier events during hold/restore, IME/Android modifier state, focus loss, and key cancellation; inspect keybindings rebound to Shift/Control themselves.
+- RustChunk implementation mapping: Maps to the future input platform adapter's modifier-state reconciliation, particularly synthetic touch/controller modifiers versus physical keyboard state.
+- Evidence required before adoption: Test real modifier events interleaved with synthetic hold/restore, focus loss, Android IME, paired modifiers and exception/cancel paths; no modifier may remain stuck.
 - Completion state: complete source review; tests/build not executed.
 
 ### 89. `crates/horizon-client-input/src/mouse.rs`
@@ -1984,6 +2192,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **core mouse delta aggregation, sensitivity curve and scroll accumulation are adaptable; 1.20.1 constants and platform-specific grab semantics require verification**.
 - Dependencies / cross-references: winit pointer events, MouseHandler/Entity.turn behavior, sensitivity/smoothCamera/invertMouseX/invertMouseY/scoping options, spectator abilities, window DPI scale and macOS Control-click option.
 - Follow-up checks: verify 1.20.1 exact mouse sensitivity and smoothing; guard positive scroll limit and nonzero scale; compare Android touch-look conversion and DPI/rotation with game coordinate space.
+- RustChunk implementation mapping: Maps to future camera look/scroll input and desktop pointer handling; Android touch-look should feed a common camera-action API rather than assume desktop pointer grab.
+- Evidence required before adoption: Compare sensitivity/smoothing/scroll semantics with 1.20.1 vanilla; test zero/invalid scale, DPI/rotation, touch-look conversion and focus/pointer-grab lifecycle.
 - Completion state: complete source review; no tests/build/input-device runs executed.
 
 ### 90. `crates/horizon-client-input/src/window.rs`
@@ -1999,6 +2209,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **GUI scaling and throttling concepts are adaptable; the FPS limiter needs Android-specific design and measurement; fullscreen/video-mode implementation is primarily desktop-only and must be adapted or omitted.**
 - Dependencies / cross-references: winit Window/MonitorHandle/VideoModeHandle/Fullscreen, renderer surface capabilities, game loop end_frame, Options GUI scale/VSync/FPS cap/fullscreen, embedded PNG theme asset, system clock/sleep and thread interruption.
 - Follow-up checks: validate positive limits/scales and strict JSON; measure CPU/battery/frame pacing on ARM64 Android; confirm winit/GPU present modes for GLES/Vulkan; verify 1.20.1 scale and throttle constants; skip desktop fullscreen assumptions on Android.
+- RustChunk implementation mapping: Maps to future Android display/window abstraction, GUI scale and frame-pacing controls. Current app Activity is not the Starling window/game loop implementation.
+- Evidence required before adoption: Measure frame pacing and input/GUI scale on the target device; test resize/rotation/background throttling/VSync and verify no busy-wait strategy harms thermals or battery.
 - Completion state: complete source review; no tests/build, benchmark or Android device measurement performed.
 
 ### 91. `crates/horizon-client-input/src/clipboard.rs`
@@ -2014,6 +2226,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The Clipboard trait and append-selection pattern are adaptable; filter/chat/shortcut rules and the Android bridge must be reviewed against 1.20.1 and the Android platform.**
 - Dependencies / cross-references: winit Key/PhysicalKey; arboard desktop clipboard; Android platform clipboard callbacks; horizon_client::platform::set; EditBox/TextFieldHelper/ChatFormatting/StringUtil and sign/book text input.
 - Follow-up checks: validate clipboard callbacks thread affinity and lifecycle; check append_limited return contract; test Unicode codepoint/UTF-16/byte cursor behavior, multi-line filters and 1.20.1 text length rules.
+- RustChunk implementation mapping: Maps to a future clipboard/text-editing interface between Android APIs and in-game chat/book/sign fields. Existing UI clipboard code, if any, must be traced before reuse.
+- Evidence required before adoption: Test Android copy/paste, Unicode and UTF-16 cursor positions, selection, multiline filters, formatting removal and 1.20.1 chat/book/sign length limits.
 - Completion state: complete source review; no tests/build or Android clipboard session executed.
 
 ### 92. `crates/horizon-client-input/src/gamepad.rs`
@@ -2029,6 +2243,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **PadState/Edges/action-map architecture and radial deadzone are adaptable; layout, tuning, navigation, and haptics should be rewritten/ported as optional features, not required parts of the 1.20.1 core.**
 - Dependencies / cross-references: gilrs/SDL controller layout (documented in module), android submodule, horizon-controller.txt, horizon_dualsense optional feature, KeyBinds/KeyMapping/KeyboardInput, Player movement packet/remote prediction, UI focus rectangles, health/dimension/item state.
 - Follow-up checks: If gamepad support is added to RustChunk, choose gilrs or the Android native event path, normalize HID axis maps, and handle disconnect `release_all` and focus loss. Validate radial-deadzone boundaries, analog-vs-eight-direction server behavior, frame-time units, rumble limits, and DualSense firmware behavior on real hardware.
+- RustChunk implementation mapping: Optional future controller input backend; keep it separate from the first touchscreen/keyboard path. Do not make gamepad support a prerequisite for the native 1.20.1 core.
+- Evidence required before adoption: Only adopt after choosing Android/desktop backend and validating HID mappings, axis calibration/deadzone, disconnect release-all, haptics policy and gameplay action parity.
 - Completion state: complete source review; no tests, controller hardware, haptics, Android backend or network interoperability tests were executed.
 
 ### 93. `crates/horizon-client-input/src/gamepad/android.rs`
@@ -2044,6 +2260,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The common-state adapter structure is adaptable; Android key/source codes and noise/takeover thresholds require device testing and a complete disconnect lifecycle.**
 - Dependencies / cross-references: Android InputDevice.SOURCE_GAMEPAD/SOURCE_CLASS_JOYSTICK; KeyEvent.KEYCODE_BUTTON_*; MotionEvent AXIS_X/Y/Z/RZ/HAT/LTRIGGER/RTRIGGER/BRAKE/GAS; gamepad::PadState/Edges/PadSettings; horizon-android event bridge and game/pad/android.rs poller.
 - Follow-up checks: Inspect disconnect/remove-device and pause/resume paths; validate HID axis maps and keycodes on several Android controllers; verify that zeroed axes are delivered to the active pad on focus loss and controller removal.
+- RustChunk implementation mapping: Maps to a future Android `InputDevice`/`MotionEvent` adapter feeding the common input-action state. This is not implemented by the current JNI downloader/installer crate.
+- Evidence required before adoption: Validate keycodes/source masks/axis values on physical Android controllers, including device removal, app pause/resume, noisy axes and release-all; test on the target API level.
 - Completion state: complete source review; no Android device tests or controller hardware tests were executed.
 
 ### 94. `crates/horizon-client/src/control.rs`
@@ -2059,6 +2277,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **unnecessary for the base 1.20.1 client; optional tooling only after a separate security hardening pass**.
 - Dependencies / cross-references: std Unix/TCP sockets, mpsc/threading, serde_json, horizon client renderer StaticCacheFrameStats, logging/private_home path, screenshot reply and external horizon-ctl client.
 - Follow-up checks: audit command dispatcher/allowlist in game.rs; replace token source with CSPRNG; enforce bounded lines/requests/connections/timeouts; strict RFC 4648 decoding and bounded GPU stats; verify file permissions and shutdown behavior on Android.
+- RustChunk implementation mapping: No production mapping. A control socket is optional developer/test tooling only and must not be exposed as an unauthenticated game control surface.
+- Evidence required before adoption: Keep absent from the first release. Before any adoption require CSPRNG authentication, loopback/ADB-only binding, bounded messages/queues/timeouts, command allowlist and adversarial protocol tests.
 - Completion state: complete source review; no socket server was launched and no security tests/build were executed.
 
 ### 95. `crates/horizon-client/src/touch.rs`
@@ -2074,6 +2294,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The touch-event state machine and ownership/action abstraction are highly adaptable; layout/UI gestures and Bedrock-specific interactions must be rewritten as a separate Android layer and matched to vanilla 1.20.1.**
 - Dependencies / cross-references: winit Touch/WindowEvent/MouseInput; settings CustomAction/CustomButton; LayoutConfig JSON storage at touch-layout.json; own_buttons registry; horizon-android event bridge; game/touch.rs action consumer; GameMode interaction and MouseHandler; GUI-scaled hotbar.
 - Follow-up checks: Inspect all Action consumers in `game/touch.rs`; review screen/background/rotation lifecycle in the Android activity; test multi-touch cancellation/pointer IDs and GUI scaling across several aspect ratios; compare Tap/Crosshair interactions with a 1.20.1 oracle and NBT/world-interaction path.
+- RustChunk implementation mapping: High-priority future Android touch adapter. The planned engine map already identifies Android input as a separate platform layer; Starling pointer ownership/action buffering can inform it, not be copied blindly.
+- Evidence required before adoption: On the Galaxy A22, test simultaneous joystick/look/action fingers, cancellation, rotation, overlays and GUI scaling; compare each emitted action with vanilla 1.20.1 movement and interaction behavior.
 - Completion state: complete source review; no tests, build, touch-device validation or gameplay/server interaction test was executed.
 
 ### 96. `crates/horizon-client/src/bedrock_touch.rs`
@@ -2089,6 +2311,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the 1.20.1 core; pinned revisions, hash verification, and optional asset fallback are adaptable patterns, but the Bedrock touch-sprite pack itself is not directly portable.**
 - Dependencies / cross-references: embedded assets/bedrock-touch.json; ureq HTTP client; SHA-1 Git blob hashing; PNG encoder/decoder; horizon_client::hud decode helpers and touch_sprite_names; resource packs and Starling texture namespace.
 - Follow-up checks: Review manifest content/revision/license and asset-distribution policy. If adapted, add size/count limits, redirect/TLS policy, and validation that marker contents match the actual files.
+- RustChunk implementation mapping: No use of Bedrock sprite assets in the 1.20.1 base. Only the idea of pinned, verified, optional external assets may inform a future RustChunk-owned control-art pipeline.
+- Evidence required before adoption: Verify all included art is original or properly licensed; enforce revision/hash/size/redirect checks if fetching any asset. Confirm no Bedrock/Mojang sample files are bundled without permission.
 - Completion state: complete source review; no network fetch or ignored integration test was run.
 
 ### 97. `crates/horizon-client/src/osk.rs`
@@ -2104,6 +2328,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Unnecessary for the 1.20.1 gameplay core; an optional gamepad OSK fallback is adaptable, while Android IME should remain the primary text-input path.**
 - Dependencies / cross-references: gamepad::{Button,GlyphStyle}; ui_theme::{Ui,Face,color}; language keys horizon.osk.* and gui.done; focused UI text field caller and gamepad focus navigation.
 - Follow-up checks: Inspect callers that apply Output to the focused field. Separately audit Android native IME composition/cursor/selection/RTL and the input connection; if ported, review locale layouts and codepoint/UTF-16 length handling.
+- RustChunk implementation mapping: No first-release game mapping. Android IME should be the primary text-entry path; a controller-specific on-screen keyboard is optional future UI.
+- Evidence required before adoption: Test native IME composition, commit/delete, cursor/selection, multiline and Persian/RTL text in the app and game text fields; verify no duplicate or lost input on resume.
 - Completion state: complete source review; no tests/build or Android IME session was run.
 
 ### 98. `crates/horizon-client/src/android_control_keyboard.rs`
@@ -2119,6 +2345,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Optional for the Android control editor; touch hit-testing/output design is adaptable, but the keyboard layout is duplicated and Latin-only. Attribution/license compliance is required.**
 - Dependencies / cross-references: winit::keyboard::KeyCode; gamepad::{Button,GlyphStyle}; android_control_theme::{Ui,Face,color}; Android control editor text/key binding fields; LICENSE and THIRD_PARTY_NOTICES.md.
 - Follow-up checks: Inspect consumers of Output::Key and Text; unify duplicated OSK logic in the RustChunk design; validate geometry values against actual touch-event scaling; review license attribution before copying.
+- RustChunk implementation mapping: Optional future control-layout editor only; a duplicate Latin-only virtual keyboard is not required for the native engine and must not replace Android IME.
+- Evidence required before adoption: Before adoption, unify with the primary text editor, test touch hit targets/scaling and physical-key selection, and validate Unicode/RTL text paths plus license provenance.
 - Completion state: complete source review; no tests/build or Android editor interaction was run.
 
 ### 99. `crates/horizon-client/src/android_control_text.rs`
@@ -2134,6 +2362,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **The linear helper is adaptable for simple labels; it is not a replacement for a text-layout engine for rich/RTL text or shaping. MIT attribution is required.**
 - Dependencies / cross-references: font advance callback; UI catalog description rendering; UTF-8 Rust str slicing; THIRD_PARTY_NOTICES.md and LICENSE.
 - Follow-up checks: Inspect the caller/source font metrics; in RustChunk, ensure truncation occurs at grapheme boundaries for combined emoji and RTL text.
+- RustChunk implementation mapping: Maps only to simple label truncation in future mobile settings/control UI. It is not a substitute for RustChunk's text shaping, bidi or grapheme-aware layout.
+- Evidence required before adoption: Test measurement against the actual font backend and grapheme clusters, emoji and Persian/RTL strings; ensure truncation never splits a composed character or corrupts shaping.
 - Completion state: complete source review; no tests or build were run.
 
 ### 100. `crates/horizon-client/src/net.rs`
@@ -2149,7 +2379,6 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: **Thread/event/writer architecture and the high-level state-machine structure are adaptable; all wire packet IDs/schemas and 26.3 registry/auth extensions must be rewritten for 1.20.1.**
 - Dependencies / cross-references: horizon_protocol connection/packets/crypto/rsa/registry/text/servers; horizon_auth AuthSession/session join; horizon_friends relay; content_identity and mod_list custom channels; lod_net; reconnect reason classifier; client event polling and game-thread packet handling; resource-pack/dialog/code-of-conduct UI.
 - Follow-up checks: Audit `AuthSession`/`join_server` and DNS/SRV/Connection connect methods; extract exact 1.20.1 handshake/login encryption/compression/keep-alive/registry/resource-pack packet vectors (without assuming a Configuration state); fix spawn-failure handling and use a bounded event queue; define fatal-versus-skippable packet-decode policy; test reconfiguration races, Android disconnect/cancellation, and thread shutdown.
-- Completion state: complete source review; no tests, build, live server connection, online authentication or Android network run was executed.
 
 
 ## 100-file checkpoint review — 2026-11-18
@@ -2170,6 +2399,9 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Final structural checks: exactly one entry for each number 1–100; all 100 have source SHA and all 13 common fields; all headings use `### N. \`path\``; no duplicate `##` headings; no Persian-script text; all 100 index rows are in sequence and partitioned 25/25/25/25.
 - Revalidated all 100 source paths and blob SHAs against the complete pinned Starling Git tree at `5432370d573642041585c69b40fb045b27133488`; no missing paths or SHA mismatches were found.
 - Verification boundary: this pass revalidated the ledger and source identities, but did not repeat a fresh line-by-line semantic read of all 100 source files. Existing semantic notes remain the findings from their recorded original source audits. No tests, build, Android device run, or live-server run was performed.
+- RustChunk implementation mapping: Maps to a future protocol-763 multiplayer session/state machine after the local single-player gate. Current `engine/src/lib.rs` JNI functions/downloaders are not a Minecraft network client.
+- Evidence required before adoption: Require end-to-end vanilla 1.20.1 server tests for handshake, login/encryption, Login-to-Play, keepalive, packets, disconnect and reconnect; confirm no later-only Configuration state or custom Horizon extensions.
+- Completion state: complete source review; no tests, build, live server connection, online authentication or Android network run was executed.
 
 ### 101. `crates/horizon-client-core/Cargo.toml`
 - Source repository/ref: starling-client/starling / starling.
@@ -2184,6 +2416,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a minimal client-core crate boundary; version-specific module implementations must be validated or rewritten for 1.20.1.
 - Dependencies / cross-references: horizon-world; serde_json; src/lib.rs; horizon-client-lib; generated resource/registry data; workspace Cargo.toml and lockfile.
 - Follow-up checks: Inspect the modules re-exported by src/lib.rs and trace their callers; identify every DATA_VERSION-bound table and compare its source schema with 1.20.1; verify that the core remains free of renderer/gameplay dependencies.
+- RustChunk implementation mapping: Maps to a future minimal native client-core crate for shared text/NBT/identifiers/registries and version-neutral utilities. The current workspace does not yet contain this crate.
+- Evidence required before adoption: Use `cargo metadata` to confirm dependency direction and no renderer/platform cycles; test the versioned data tables against 1.20.1 oracles and compile the crate independently.
 - Completion state: Complete manifest review; no Cargo resolution, build, test, or runtime execution was performed.
 
 ### 102. `crates/horizon-client-input/Cargo.toml`
@@ -2199,6 +2433,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a platform-input boundary; key tables and backends require target-specific validation, and controller support should remain optional.
 - Dependencies / cross-references: horizon-client-core; winit; horizon-theme; png; optional horizon-dualsense; arboard on non-Android; src/lib.rs; gamepad/android.rs; clipboard.rs; keybinds.rs.
 - Follow-up checks: Trace feature forwarding from horizon-client and horizon-client-lib; inspect the Android input bridge and clipboard implementation; test focus loss, pointer cancellation, controller disconnect and physical-versus-virtual keyboard classification on real devices.
+- RustChunk implementation mapping: Maps to a future platform-neutral input crate, not the current Android Activity. Keep controller support feature-gated and optional.
+- Evidence required before adoption: Verify feature forwarding and target-specific dependency trees; run host and `aarch64-linux-android` builds, and exercise keyboard/touch lifecycle tests before adding optional controller dependencies.
 - Completion state: Complete manifest review; no dependency resolution, build, device input test, or Cargo test was executed.
 
 ### 103. `crates/horizon-client-lib/Cargo.toml`
@@ -2214,6 +2450,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as an integration/workspace pattern; major dependency, feature and game-version pruning is required before using it as RustChunk's 1.20.1 client library.
 - Dependencies / cross-references: All local crates listed in this manifest, especially horizon-client-core/input/render, horizon-world, horizon-protocol, horizon-items, horizon-prepare, horizon-server-files, horizon-mods, horizon-mcp and horizon-threads; client_lib.rs; horizon-client/Cargo.toml; workspace Cargo.toml.
 - Follow-up checks: Generate Android-specific Cargo feature trees for default and no-default-features builds; determine which server-only crates are linked into the APK; inspect client_lib.rs module wiring and every manually registered target; audit wgpu backend selection, JNI/native dependencies, minimum Rust toolchain and binary size.
+- RustChunk implementation mapping: Maps to a future application-facing client library composing core, world, input and renderer; current `rustchunk-engine` is an installer/JNI package and is not equivalent.
+- Evidence required before adoption: Require a minimal acyclic crate graph, Android feature-tree inspection and build tests showing only needed game subsystems are linked into the target APK.
 - Completion state: Complete manifest review; no cargo metadata/tree, dependency resolution, APK build, test, benchmark or runtime link inspection was executed.
 
 ### 104. `crates/horizon-client-render/Cargo.toml`
@@ -2229,6 +2467,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a render/UI crate boundary; version-specific world, mesh, lighting, asset and packet consumers must be ported, and Android backend selection must be verified.
 - Dependencies / cross-references: horizon-client-core/input; horizon-world; horizon-protocol; horizon-assets; horizon-items; horizon-shaders/shader-api; horizon-command; wgpu; winit; crates/horizon-client-render/src/lib.rs; crates/horizon-client-render/src/chunk.rs; horizon-client-lib.
 - Follow-up checks: Trace imports to verify the no-gameplay dependency rule; inspect renderer startup and adapter selection; validate GLES/Vulkan on Android; inspect audio feature forwarding and pack-overlay filesystem behavior; compare all world/render facts and chunk formats with 1.20.1.
+- RustChunk implementation mapping: Maps to a future renderer/UI crate. The architecture map proposes preserving Starling's wgpu/chunk pipeline while adapting all 1.20.1-facing mesh/light/model data; RustChunk has no independent renderer crate yet.
+- Evidence required before adoption: Require a correct 1.20.1 block/model/biome/light input contract, headless render-data tests, Vulkan/GLES device validation and Android frame/RAM measurements before adoption.
 - Completion state: Complete manifest review; no Cargo build, shader compilation, renderer startup, Android GPU test or performance benchmark was run.
 
 ### 105. `crates/horizon-client/Cargo.toml`
@@ -2244,6 +2484,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as the native executable and Android platform boundary; the dependency graph, features and game-facing implementation require substantial 1.20.1-specific pruning and rewrite.
 - Dependencies / cross-references: horizon-client-lib; client-core/input/render; horizon-world/protocol; JNI; winit Android NativeActivity; starling-catalog; src/lib.rs; src/main.rs; Android android.rs and entry.rs; workspace Cargo configuration.
 - Follow-up checks: Inspect build.rs, Android packaging and Gradle/NDK integration; trace which optional features actually compile into the APK; verify how JNI/native library naming and activity lifecycle are wired; check the APK's runtime/API/ABI requirements and the separation between game and launcher.
+- RustChunk implementation mapping: Maps to the future native game executable/platform composition crate. Do not treat current `engine/Cargo.toml` or JNI launch-plan exports as the gameplay executable.
+- Evidence required before adoption: Require a native Rust build and playable single-player 1.20.1 vertical slice; audit feature/link outputs to prove the build does not route through Java/JVM for game simulation.
 - Completion state: Complete manifest review; no Cargo resolution, binary build, Android APK, JNI launch or integration test was performed.
 
 ### 106. `crates/horizon-world/Cargo.toml`
@@ -2259,6 +2501,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a dedicated world-data crate; the versioned world formats and resource pipeline must be rebuilt or verified for 1.20.1.
 - Dependencies / cross-references: horizon-core; NBT, compression, region, chunk and registry modules; DATA_VERSION; horizon-worldgen-parity; examples/probe/main.rs; cargo workspace and Android target configuration.
 - Follow-up checks: Audit DATA_VERSION and world registry generation; inspect Android builds of zlib-rs/lz4 and xxhash; compare Anvil external chunk compression and 1.20.1 section/data-version schemas; decide whether probe binaries/examples are excluded from release builds.
+- RustChunk implementation mapping: Maps to a future world-data/storage crate, with 1.20.1 NBT, Anvil, palette, registry and worldgen schemas. Current verified registry facts are only inputs to that crate.
+- Evidence required before adoption: Require chunk/NBT/region round-trip tests, DataVersion 3465 validation, 1.20.1 registry/worldgen oracle fixtures and save/reopen tests on host before Android integration.
 - Completion state: Complete manifest review; no Cargo build, compression test, world load/save, or Android target build was performed.
 
 ### 107. `packaging/android/java/io/github/juanluci/starling/NativeMods.java`
@@ -2274,6 +2518,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Unnecessary for the vanilla 1.20.1 base; the APK-stamp/startup-rollback pattern is adaptable later, while the current native-mod integration is Horizon-specific.
 - Dependencies / cross-references: StarlingActivity; native_builds.rs; native_build.sh; native_mod_permissions.py; build.json; STARLING_APK; android manifest permissions; app-private files/native layout.
 - Follow-up checks: Inspect StarlingActivity permission prompting and library loading order; validate permission strings against Android manifest/runtime permission mappings; inspect build-key generation and remote build-server parsing on the Rust side; review signature/integrity verification for downloaded .so files and atomic metadata recovery.
+- RustChunk implementation mapping: No first-release mapping. Starling's Android NativeMods manager is native-extension plumbing, not a Forge mod loader; RustChunk's Forge launch-plan code is a separate legacy launcher path.
+- Evidence required before adoption: Keep excluded from the vanilla native APK. Any later native extension feature requires a separate ABI/trust/permission/rollback design and security tests; it does not prove Forge JAR compatibility.
 - Completion state: Complete source review; no Android build, native library load, permission prompt, build-server connection or device test was executed.
 
 ### 108. `packaging/android/native_mod_permissions.py`
@@ -2289,6 +2535,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Unnecessary for the vanilla 1.20.1 base; the idea of predeclaring native-extension permissions is adaptable, but this scanner is heuristic and Horizon-specific.
 - Dependencies / cross-references: NativeMods.java; native_build.sh; build.json; Android manifest permission declarations; native-mod source layout; cpal/AAudio/OpenSL ES/Android media APIs.
 - Follow-up checks: Compare scanner patterns with actual native-mod APIs and Android manifest requests; test false-positive/false-negative cases; verify recursive scan boundaries and symlink behavior; decide whether a future RustChunk extension API should use an explicit permission declaration file.
+- RustChunk implementation mapping: No first-release mapping. Permission scanning for Starling native modules is not Java Forge permission discovery and is irrelevant without an approved native extension ABI.
+- Evidence required before adoption: Do not add to the vanilla build. If a native extension system is later designed, validate scanner accuracy with positive/negative fixtures, symlink/path boundaries and manifest/runtime permission tests.
 - Completion state: Complete source review; no script execution, sample-mod scan, Android build or runtime permission request was performed.
 
 ### 109. `crates/horizon-client-render/src/chunk.rs`
@@ -2304,6 +2552,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Highly adaptable as a memory-efficient resident chunk representation; global layout, section indexing, light/heightmap semantics and registry data require validation or rewrite for 1.20.1.
 - Dependencies / cross-references: horizon-world palette/storage and registry types; ColumnLayout; Light; BlockStateId; horizon-client-render chunk map, mesher, lighting and streaming; MIN_Y; memory diagnostics.
 - Follow-up checks: Trace every caller of section_blocks() and test custom min_y layouts; compare dimension section ranges and heightmap predicates with 1.20.1; test concurrent read/COW mutation rules; verify cache invalidation for every block mutation path; benchmark memory and lookup costs on Android ARM64.
+- RustChunk implementation mapping: Maps to the future resident render-chunk representation and chunk-streaming worker interfaces described in `docs/STARLING_1_20_1_ENGINE_MAP.md`; no corresponding RustChunk runtime struct exists yet.
+- Evidence required before adoption: Compare section range/min_y, palettes, biome containers, heightmaps, light and block-entity layouts with 1.20.1 Java; add memory/COW/concurrency tests and verify on target ARM64.
 - Completion state: Complete source review; included source was read but tests, renderer build, memory benchmark, Android device run and gameplay chunk load were not executed.
 
 ### 110. `crates/horizon-world/src/chunk.rs`
@@ -2319,6 +2569,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as storage algorithms and palette machinery; the existing data version, registry IDs and serialized chunk layout require a 1.20.1-specific rewrite/adapter.
 - Dependencies / cross-references: horizon-world NBT/registry/compression/tick_data; horizon-core PackedStorage and position types; DATA_VERSION; client-render Chunk/Section; world save/load and region storage.
 - Follow-up checks: Compare palette packing and section NBT against 1.20.1 vanilla ChunkSerializer; inspect DATA_VERSION and datafix requirements; verify fill_run callers and non-air counts; add round-trip fixtures from genuine 1.20.1 chunks; test missing/unknown block states and tick lists.
+- RustChunk implementation mapping: Maps to the future persisted world/chunk model in the world-data crate, including 1.20.1 Anvil/NBT section/tick schemas; keep it separate from renderer-resident chunk caches.
+- Evidence required before adoption: Require byte/semantic parity with 1.20.1 ChunkSerializer, palette packing and DataVersion 3465; test malformed data, migration policy and save/reopen round trips.
 - Completion state: Complete source review; embedded tests were read but not run; no world save/load, datafix, build or benchmark was executed.
 
 ### 111. `crates/horizon-world/src/nbt.rs`
@@ -2334,6 +2586,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Essential reusable subsystem for a Java client, but version-sensitive edge semantics and custom mixed-list behavior must be separated and validated before use in RustChunk 1.20.1.
 - Dependencies / cross-references: horizon-world compression, chunk, registry, region, block-entity and item serialization; NbtAccounter/NbtIo/TagParser equivalents; BlockTableFile streaming; network protocol NBT codecs.
 - Follow-up checks: Compare byte-for-byte against 1.20.1 NbtIo/FriendlyByteBuf and TagParser; confirm whether mixed-list wrappers are actually required by target data; make invalid typed-array elements return errors if vanilla does; test trailing input policy, UTF edge cases and decompression/node budget interaction.
+- RustChunk implementation mapping: Maps to an essential future shared NBT/SNBT crate used by world saves, entities, block entities, items and protocol. Current block-fact tests do not establish complete NBT support.
+- Evidence required before adoption: Run byte-for-byte tests against 1.20.1 NbtIo/TagParser for all tag types, modified UTF-8, root names, arrays, lists, malformed lengths, limits and network/file variants.
 - Completion state: Complete source review; embedded tests were read but not run; no fuzzing, NBT corpus round-trip, build or 1.20.1 oracle comparison was performed.
 
 ### 112. `crates/horizon-world/src/region.rs`
@@ -2349,6 +2603,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a region-storage implementation; verify 1.20.1 compression/repair semantics and replace or supplement hard-link publication if Android filesystem support is insufficient.
 - Dependencies / cross-references: horizon-world compression and NBT; ChunkRecord; ChunkPos; world save/load; .mca and .mcc files; Android app-private storage.
 - Follow-up checks: Compare malformed header/overlap handling with 1.20.1 RegionFile; test sectors crossing EOF, duplicate/overlapping offsets and external files; inject failures at every write/header/sync point; test hard-link and rename behavior on Android/Linux/Windows; validate all compression methods.
+- RustChunk implementation mapping: Maps to future Anvil region storage and save publication in the world-data crate, including external `.mcc` chunks where 1.20.1 requires them.
+- Evidence required before adoption: Test region headers/sectors/compression/external chunks and recovery from interrupted writes; run fault injection and Android filesystem tests for atomicity, permissions and storage exhaustion.
 - Completion state: Complete source review; no test module is included in this file, and no filesystem fault-injection, world save/load, build or Android storage test was run.
 
 ### 113. `crates/horizon-world/src/registry.rs`
@@ -2364,6 +2620,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Essential concept for the client core, but the current registry data and exporters are version-specific and require a 1.20.1 registry pipeline.
 - Dependencies / cross-references: horizon-world chunk and NBT; DATA_VERSION; facts.json generation; BlockState/BlockStateId; BlockTableFile; horizon-prepare exporters; client-render chunk and mesher.
 - Follow-up checks: Locate DATA_VERSION and facts.json generator; compare 1.20.1 block-state and default-state ordering; test collisions and cross-version reproducibility; evaluate streaming from a bounded reader instead of reading entire tables into memory; audit packet registry synchronization.
+- RustChunk implementation mapping: Maps to the core 1.20.1 registry/state tables that feed world storage, rendering and later protocol decoding. Existing block facts/BlockRegistry tests are partial validated components only.
+- Evidence required before adoption: Prove exact 1.20.1 block/state ordering, defaults and registry IDs from official source; test all 1,003 block records/24,135 states and collision/lookup consistency in every consumer.
 - Completion state: Complete source review; no build, data import, generated-registry validation or tests were executed.
 
 ### 114. `crates/horizon-client-core/src/lib.rs`
@@ -2379,6 +2637,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a module-boundary/reference only; the underlying module implementations must be audited individually for 1.20.1.
 - Dependencies / cross-references: horizon-client-core/Cargo.toml; all public child modules; horizon-client/src/client_lib.rs; horizon-client/src/lib.rs; horizon-client-lib.
 - Follow-up checks: Inspect module-level dependencies and re-export paths; identify version constants and generated tables used by registries/potions/game rules; keep stable APIs separate from protocol-specific DTOs.
+- RustChunk implementation mapping: Maps to a future low-level client-core public API grouping versioned data and shared utilities. No equivalent crate root currently exists in RustChunk.
+- Evidence required before adoption: Demonstrate clean module boundaries, no unsafe/platform dependency leakage and versioned table coverage; build and test the core independently of Android and rendering.
 - Completion state: Complete source review; no module tests, Cargo build or downstream API compilation were run.
 
 ### 115. `crates/horizon-client-render/src/lib.rs`
@@ -2394,6 +2654,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a rendering/UI module boundary; prune the broad API and reimplement version-specific modules for 1.20.1.
 - Dependencies / cross-references: horizon-client-render/Cargo.toml; horizon-world; horizon-client-core; horizon-client-input; horizon-command; horizon-items; horizon-client-lib; renderer startup and game crate imports.
 - Follow-up checks: Trace actual import direction between rendering, gameplay and protocol; identify unused or feature-gated modules; map Android controls/keypad lifecycle; verify that no renderer module calls into gameplay through callbacks or global state.
+- RustChunk implementation mapping: Maps to a future render/world-presentation API surface. It should expose stable render inputs without pulling protocol/storage implementation into UI.
+- Evidence required before adoption: Verify dependency direction with `cargo metadata`; test the public API with 1.20.1 scene fixtures and prove mobile backends compile without desktop-only modules.
 - Completion state: Complete source review; no Cargo build, renderer test or Android UI run was performed.
 
 ### 116. `crates/horizon-client/examples/probe/main.rs`
@@ -2409,6 +2671,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a parity-test harness registry; the listed probes and fixture semantics are version-specific and need 1.20.1 replacements.
 - Dependencies / cross-references: horizon-client-lib; dispatch.rs; all declared probe modules; tools/parity.py; tools/test_*_parity.py; tools/oracle_harness.py; Cargo example target.
 - Follow-up checks: Inspect dispatch.rs and representative probe fixtures; confirm probe target is excluded from release builds; identify oracle version and expected output format for each probe; measure binary link/build time against separate examples.
+- RustChunk implementation mapping: Maps to a future client parity-probe registry/runner for gameplay and client behavior. The existing `tests/` directory currently tests exporters and repository tooling, not a full client runtime.
+- Evidence required before adoption: Require each probe to identify its 1.20.1 Java oracle, deterministic inputs and expected output; prove probe targets are excluded from release APKs and that failures propagate to CI.
 - Completion state: Complete source review; no probe binary build, parity harness run, test or benchmark was executed.
 
 ### 117. `crates/horizon-client/src/bin/horizon-ctl/main.rs`
@@ -2424,6 +2688,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Unnecessary for the vanilla 1.20.1 gameplay core; adaptable later as a separately secured developer/test-control tool after the runtime and command API stabilize.
 - Dependencies / cross-references: horizon-client control socket; commands, launch and mcp modules; horizon_core::no_ai; logging; JSON line protocol; screenshot/base64 helpers; Cargo target registered in horizon-client-lib.
 - Follow-up checks: Reject NaN/infinity/overflow numeric values before Duration conversion; make script read errors nonzero; inspect server-side command allowlist and no-AI gate; test remote socket authentication, screenshot size/path bounds and MCP capability scoping.
+- RustChunk implementation mapping: No production mapping. A local control CLI may later support deterministic device/regression testing, but it is not required for the vanilla gameplay core.
+- Evidence required before adoption: Keep absent until a stable command API exists. Before adoption require strict allowlisting/authentication, bounded numeric/input parsing, no unsafe remote exposure and end-to-end tests on host/device.
 - Completion state: Complete source review; embedded tests were read but not run; no control server, MCP session, script, screenshot, build or live game command was executed.
 
 ### 118. `crates/horizon-client/src/lib.rs`
@@ -2439,6 +2705,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a thin platform composition layer; Android unsafe/JNI boundary and all game-specific modules require independent implementation and review.
 - Dependencies / cross-references: horizon-client-lib; android.rs; entry.rs; game.rs; mod_api.rs; diagnostics.rs; performance.rs; src/main.rs; Android activity/JNI bridge.
 - Follow-up checks: Inspect android.rs and entry.rs; audit every unsafe block behind the Android cfg; trace NativeActivity pause/resume/surface/destroy lifecycle; narrow public re-exports if the client library API is not intended to be stable.
+- RustChunk implementation mapping: Maps to the future thin native application/platform composition layer. Current `engine/src/lib.rs` is a JNI bridge to download/installer/Forge/JLI routines, not the native game library.
+- Evidence required before adoption: Require lifecycle tests for JNI/NativeActivity or chosen entry path, safe/isolated unsafe boundaries, correct initialization order and a 1.20.1 native gameplay launch; distinguish launcher test results.
 - Completion state: Complete source review; no Android compile, JNI launch, lifecycle test or gameplay run was performed.
 
 ### 119. `crates/horizon-client/src/main.rs`
@@ -2454,6 +2722,8 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a minimal executable/bootstrap pattern; the 26.3 mod marker and allocator feature set are Horizon-specific and must be reconsidered.
 - Dependencies / cross-references: horizon_threads allocator; horizon_mods API level marker; horizon_client entry::main; horizon-client Cargo features; launcher version inspection.
 - Follow-up checks: Inspect entry::main and Android launch bridge; verify allocator feature precedence and memory-accounting overhead; define RustChunk's own version/build identity marker and decide whether a native extension API exists.
+- RustChunk implementation mapping: Maps to a future minimal native game executable/bootstrap and deliberate allocator configuration. Current RustChunk exposes a JNI cdylib; it does not yet contain a native game `main` entry point.
+- Evidence required before adoption: Require host and Android native builds, allocator feature tests/benchmarks and proof the executable starts the 1.20.1 game runtime without launching a Java game process.
 - Completion state: Complete source review; no executable build, allocator benchmark or runtime launch was performed.
 
 ### 120. `crates/horizon-world/examples/probe/main.rs`
@@ -2469,7 +2739,10 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Decision: Adaptable as a parity harness organization pattern; every child fixture must be replaced or versioned for 1.20.1.
 - Dependencies / cross-references: horizon-world crate; dispatch.rs; support/common; support/decoration_storage; support/placement_queries; support/shapes; all declared fixture modules; tools/parity.py; horizon-worldgen-parity; Cargo example target.
 - Follow-up checks: Inspect dispatch.rs and representative chunk/NBT/worldgen fixtures; identify how vanilla oracle outputs are generated and version-pinned; verify probes are not included in production APK; measure compile/link time and output determinism.
+- RustChunk implementation mapping: Maps to a future world-data parity-probe binary/registry, validating chunk, NBT, block, entity and worldgen subsystems against 1.20.1 Java outputs. It is test-only, not production gameplay code.
+- Evidence required before adoption: Require representative probes for each world subsystem, exact 1.20.1 oracle provenance, deterministic output and CI failure on mismatch; prove the test binary is never bundled into the release APK.
 - Completion state: Complete source review; no probe build, parity run, datafix test, world generation, benchmark or Android runtime execution was performed.
+
 
 ## Batch checkpoint — entries 101–120 — 2026-11-18
 
@@ -2479,6 +2752,13 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Extended `AUDIT_INDEX.md` to all 120 reviewed files, split into five parts of 25, 25, 25, 25 and 20 entries.
 - Risks recorded for follow-up include the render chunk section-index/min_y relationship, SNBT typed-array invalid-value behavior, registry hash stability assumptions, region-file failure recovery and Android hard-link support, native-mod permission validation, and finite numeric bounds in horizon-ctl.
 - Tests found in source were read but not run. No Cargo build, APK build, Android device run, filesystem fault-injection, parity probe or live Minecraft connection was executed.
+
+## Backfill checkpoint — entries 1–120 — 2026-11-18
+
+- All 120 earlier source reviews and their original findings/decisions are preserved.
+- Added the two current-standard fields to every entry 1–120: 120 implementation mappings and 120 evidence gates (240 new field records total).
+- The mappings explicitly mark future native gameplay/protocol/world/render/input modules as planned, not implemented; the current RustChunk JNI/installer/Forge launch-plan code is distinguished from the native game target.
+- Evidence gates are requirements only. This documentation change did not run Cargo tests, build an APK, test a device or establish Forge/multiplayer support.
 
 ### 121. `crates/horizon-client/src/entry.rs`
 - Source repository/ref: starling-client/starling / starling.
