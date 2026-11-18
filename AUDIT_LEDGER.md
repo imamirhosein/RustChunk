@@ -3991,3 +3991,180 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Evidence required before adoption: Exact build/resource hashes, repeated target-device runs, validated raw records, explicit presentation conditions, chunk-visible latency and thermal/memory acceptance.
 - Completion state: Complete source review and structural report checks; no benchmark run, RustChunk build/APK or phone test was performed.
 
+## Batch checkpoint — entries 191–200 — 2026-11-18
+
+- Completed source review for entries 191–200 from the pinned Starling snapshot `5432370d573642041585c69b40fb045b27133488`; each source path and blob SHA was checked.
+- The final four Windows performance records were read in consecutive chunks of at most 400 lines and checked for raw-frame/summary consistency.
+- Five scoped parity manifests (196–200) were read completely. They are 26.3 reports; two manifests lack explicit Rust-output hash fields and are described accordingly.
+- No benchmark/parity test, Cargo build, APK build or device test was performed.
+
+### 191. `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd8.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `a12d6c059da2cc1ca89a49bf221534675d52e848`
+- Size: 707 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–707.
+- Purpose: Vanilla 26.3 with Fabric performance mods benchmark report at render distance 8.
+- Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Windows 11 Ryzen 9800X3D/RTX5080 OpenGL with 26.3 Fabric performance mods; mean FPS 2104/2425/2432/2538; peak working set ~2.05 GB.
+- Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
+- RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
+- 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
+- Decision: Reference; Version-specific
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
+- Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
+- RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
+- Evidence required before adoption: Require a correct 1.20.1 reference, source/resource hashes, equivalent controlled workload, repeated target-device runs, raw frame validation and chunk-arrival/thermal measurements.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 192. `benchmarks/perf/vanilla-win-9800x3d-5080-rd16.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `4aa077830a2d9d613e6ef8d6c8b8d4f74a0af35c`
+- Size: 691 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–691.
+- Purpose: Vanilla Minecraft 26.3 benchmark report at render distance 16.
+- Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Vanilla 26.3 plus Fabric benchmark driver on Windows 11/RTX5080 OpenGL; mean FPS 1218/1912/1861/1653; peak working set ~2.54 GB.
+- Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
+- RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
+- 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
+- Decision: Reference; Version-specific
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
+- Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
+- RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
+- Evidence required before adoption: Require a correct 1.20.1 reference, source/resource hashes, equivalent controlled workload, repeated target-device runs, raw frame validation and chunk-arrival/thermal measurements.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 193. `benchmarks/perf/vanilla-win-9800x3d-5080-rd32.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `e46e411c8ced366ee3a31e8fab862e2367173f84`
+- Size: 691 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–691.
+- Purpose: Vanilla Minecraft 26.3 benchmark report at render distance 32.
+- Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Same Windows vanilla setup at RD32; mean FPS 882/1203/1223/815; peak working set ~2.89 GB.
+- Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
+- RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
+- 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
+- Decision: Reference; Version-specific
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
+- Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
+- RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
+- Evidence required before adoption: Require a correct 1.20.1 reference, source/resource hashes, equivalent controlled workload, repeated target-device runs, raw frame validation and chunk-arrival/thermal measurements.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 194. `benchmarks/perf/vanilla-win-9800x3d-5080-rd8.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `b2cf1f926a98f3099fdc7993055afe93b22f5db4`
+- Size: 691 lines; full file fetched and read.
+- Coverage: Complete; read in consecutive ranges 1–400 and 401–691.
+- Purpose: Vanilla Minecraft 26.3 benchmark report at render distance 8.
+- Implementation / logic: Stores client/driver and mod metadata, Windows 11/Ryzen 9800X3D/RTX5080/OpenGL, 1280×720 on-screen setup, seed 1234 and four scenes, three repeats, startup/chunk loading, raw frame percentiles/histograms and working-set memory. Same Windows vanilla setup at RD8; mean FPS 2217/2457/2470/2605; peak working set ~2.12 GB.
+- Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
+- RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
+- 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
+- Decision: Reference; Version-specific
+- Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
+- Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
+- RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
+- Evidence required before adoption: Require a correct 1.20.1 reference, source/resource hashes, equivalent controlled workload, repeated target-device runs, raw frame validation and chunk-arrival/thermal measurements.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 195. `benchmarks/perf/windows-9800x3d-5080-2026-10-29.md`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `ff1703d1a6aa4eee0a008acdef937babaa488852`
+- Size: 107 lines; full file fetched and read.
+- Coverage: Complete; all 107 lines read.
+- Purpose: Detailed benchmark methodology/interpretation report comparing Horizon v0.2.97, vanilla 26.3 and vanilla with performance mods on Windows 11.
+- Implementation / logic: Documents Ryzen 7 9800X3D/RTX5080, 1280×720, fresh worlds, RD8/16/32, four scenes, three repetitions and fixed 12-second flights. It explains idle-machine screening, FPS/low-percentile, startup/chunk-load and working-set results, plus Horizon Vulkan versus vanilla OpenGL.
+- Findings: Better controlled than the loaded Mac report, but RD16 has a weaker external-load check. The report also identifies an RD32 ocean low-percentile regression despite higher averages. It remains desktop 26.3 evidence only.
+- RustChunk relevance: Strong methodology checklist for fixed scenarios, controlled load, raw frame tails and honest caveats; no numerical result transfers directly.
+- 1.20.1 implications: Windows desktop 26.3/Java25/RTX5080 cannot validate 1.20.1 correctness or A22/Mali frame pacing.
+- Decision: Adaptable; Rewrite required for version/device
+- Dependencies / cross-references: Adjacent Windows performance JSONs; tools/perf_bench.py; docs/benchmark.md; Fabric driver and pinned performance mods.
+- Follow-up checks: Keep same-machine idle checks and low-percentile reporting. Build a 1.20.1 reference and RustChunk run on the target phone; measure thermals, RAM and chunk-to-visible delay.
+- RustChunk implementation mapping: Future RustChunk benchmark specification and acceptance criteria once native game loop/renderer exists; current JNI installer cannot run this test.
+- Evidence required before adoption: Require matching 1.20.1 baseline, exact build/resource hashes, comparable conditions, repeated target-device runs and explicit GPU API limitations.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 196. `benchmarks/rust-active-effect-tick-2026-10-07/scoped-parity.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `95b71795f212b72c098cef4a6e3d87dd77824951`
+- Size: 300 lines; full file fetched and read.
+- Coverage: Complete; all 300 lines read.
+- Purpose: Scoped Java/Rust parity provenance manifest for active-effect ticking.
+- Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 4036 fixtures, 266 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: Active-effect ticking: LivingEntity.tickEffects/MobEffectInstance, effect map mutation, particles and RNG behavior, with explicit controlled callbacks and incomplete full player/entity lifecycle.
+- Findings: Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded client/server/Rust output hashes match. This manifest is not the underlying fixture corpus or complete CI log.
+- RustChunk relevance: Very useful provenance format: exact game/runtime/toolchain, source and fixture hashes, reference outputs, matched-line counts and explicit scope/exclusions. The tested subsystem ideas can guide RustChunk decomposition after deriving 1.20.1 behavior.
+- 1.20.1 implications: All fixtures/source hashes and behavior belong to Minecraft 26.3. They are not 1.20.1 evidence. Rebuild the Java oracle and fixtures from pinned 1.20.1 JARs/mappings; do not port modern schemas as code.
+- Decision: Adaptable format; Version-specific content
+- Dependencies / cross-references: tools/test_rust_parity.py and subsystem-specific scripts; Java vanilla oracle classes; Horizon core/world crates; pinned 26.3 JARs; private fixture bundles.
+- Follow-up checks: Inspect referenced source SHA files, fixture generator and output pipeline; test rejection of altered hashes. Recreate equivalent tests from 1.20.1 official methods, define exact exclusions and produce Rust/client/server output artifacts.
+- RustChunk implementation mapping: Future versioned 1.20.1 parity manifests/tests in RustChunk tests/tools. Current RustChunk validation covers selected block facts/tags, not active effects or attribute gameplay.
+- Evidence required before adoption: Require exact 1.20.1 JAR/mapping pins, full method coverage, fixture provenance, independent Java oracle and Rust output hashes, explicit scope, deterministic reruns and CI failure on mismatch.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 197. `benchmarks/rust-active-effects-2026-10-07/scoped-parity.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `1fabbddc3df370f5e0bfd7da751f63aa4e4de748`
+- Size: 298 lines; full file fetched and read.
+- Coverage: Complete; all 298 lines read.
+- Purpose: Scoped Java/Rust parity provenance manifest for active-effect add/remove/query.
+- Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 1266 fixtures, 264 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: Active-effect add/remove/query/blend behavior, cache/identity and callback ordering; eligibility, attribute/packet side effects and full lifecycle are outside scope.
+- Findings: Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded client/server/Rust output hashes match. This manifest is not the underlying fixture corpus or complete CI log.
+- RustChunk relevance: Very useful provenance format: exact game/runtime/toolchain, source and fixture hashes, reference outputs, matched-line counts and explicit scope/exclusions. The tested subsystem ideas can guide RustChunk decomposition after deriving 1.20.1 behavior.
+- 1.20.1 implications: All fixtures/source hashes and behavior belong to Minecraft 26.3. They are not 1.20.1 evidence. Rebuild the Java oracle and fixtures from pinned 1.20.1 JARs/mappings; do not port modern schemas as code.
+- Decision: Adaptable format; Version-specific content
+- Dependencies / cross-references: tools/test_rust_parity.py and subsystem-specific scripts; Java vanilla oracle classes; Horizon core/world crates; pinned 26.3 JARs; private fixture bundles.
+- Follow-up checks: Inspect referenced source SHA files, fixture generator and output pipeline; test rejection of altered hashes. Recreate equivalent tests from 1.20.1 official methods, define exact exclusions and produce Rust/client/server output artifacts.
+- RustChunk implementation mapping: Future versioned 1.20.1 parity manifests/tests in RustChunk tests/tools. Current RustChunk validation covers selected block facts/tags, not active effects or attribute gameplay.
+- Evidence required before adoption: Require exact 1.20.1 JAR/mapping pins, full method coverage, fixture provenance, independent Java oracle and Rust output hashes, explicit scope, deterministic reruns and CI failure on mismatch.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 198. `benchmarks/rust-anchor-2026-10-06/scoped-parity.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `3444235025997c89b6272abe9e70785d1ff9db78`
+- Size: 119 lines; full file fetched and read.
+- Coverage: Complete; all 119 lines read.
+- Purpose: Scoped Java/Rust parity provenance manifest for world-generation vertical anchors.
+- Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 192 fixtures, 86 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: VerticalAnchor.CODEC and WorldGenerationContext: four anchor kinds, overflow and JSON boundary cases; broader level/material-condition behavior remains pending.
+- Findings: Client/server reference records have matching output hashes, but the `references` records do not include an explicit Rust-output hash field; this manifest alone must not be described as separately hash-attested Rust parity. The file is a provenance/scope manifest, not the fixture corpus or full test log.
+- RustChunk relevance: Very useful provenance format: exact game/runtime/toolchain, source and fixture hashes, reference outputs, matched-line counts and explicit scope/exclusions. The tested subsystem ideas can guide RustChunk decomposition after deriving 1.20.1 behavior.
+- 1.20.1 implications: All fixtures/source hashes and behavior belong to Minecraft 26.3. They are not 1.20.1 evidence. Rebuild the Java oracle and fixtures from pinned 1.20.1 JARs/mappings; do not port modern schemas as code.
+- Decision: Adaptable format; Version-specific content
+- Dependencies / cross-references: tools/test_rust_parity.py and subsystem-specific scripts; Java vanilla oracle classes; Horizon core/world crates; pinned 26.3 JARs; private fixture bundles.
+- Follow-up checks: Inspect referenced source SHA files, fixture generator and output pipeline; test rejection of altered hashes. Recreate equivalent tests from 1.20.1 official methods, define exact exclusions and produce Rust/client/server output artifacts.
+- RustChunk implementation mapping: Future versioned 1.20.1 parity manifests/tests in RustChunk tests/tools. Current RustChunk validation covers selected block facts/tags, not active effects or attribute gameplay.
+- Evidence required before adoption: Require exact 1.20.1 JAR/mapping pins, full method coverage, fixture provenance, independent Java oracle and Rust output hashes, explicit scope, deterministic reruns and CI failure on mismatch.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 199. `benchmarks/rust-attribute-health-2026-10-07/scoped-parity.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `5de4a377d3009cc381d20f1b0c0ee111750d59c8`
+- Size: 249 lines; full file fetched and read.
+- Coverage: Complete; all 249 lines read.
+- Purpose: Scoped Java/Rust parity provenance manifest for attribute/health behavior.
+- Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 3918 fixtures, 217 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: Attributes/health/regeneration: 93 default suppliers, health and FoodData updates, starvation requests; absorption synchronization, complete damage and live gameplay remain pending.
+- Findings: Client/server reference records have matching output hashes, but the `references` records do not include an explicit Rust-output hash field; this manifest alone must not be described as separately hash-attested Rust parity. The file is a provenance/scope manifest, not the fixture corpus or full test log.
+- RustChunk relevance: Very useful provenance format: exact game/runtime/toolchain, source and fixture hashes, reference outputs, matched-line counts and explicit scope/exclusions. The tested subsystem ideas can guide RustChunk decomposition after deriving 1.20.1 behavior.
+- 1.20.1 implications: All fixtures/source hashes and behavior belong to Minecraft 26.3. They are not 1.20.1 evidence. Rebuild the Java oracle and fixtures from pinned 1.20.1 JARs/mappings; do not port modern schemas as code.
+- Decision: Adaptable format; Version-specific content
+- Dependencies / cross-references: tools/test_rust_parity.py and subsystem-specific scripts; Java vanilla oracle classes; Horizon core/world crates; pinned 26.3 JARs; private fixture bundles.
+- Follow-up checks: Inspect referenced source SHA files, fixture generator and output pipeline; test rejection of altered hashes. Recreate equivalent tests from 1.20.1 official methods, define exact exclusions and produce Rust/client/server output artifacts.
+- RustChunk implementation mapping: Future versioned 1.20.1 parity manifests/tests in RustChunk tests/tools. Current RustChunk validation covers selected block facts/tags, not active effects or attribute gameplay.
+- Evidence required before adoption: Require exact 1.20.1 JAR/mapping pins, full method coverage, fixture provenance, independent Java oracle and Rust output hashes, explicit scope, deterministic reruns and CI failure on mismatch.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
+### 200. `benchmarks/rust-attribute-map-queries-2026-10-07/scoped-parity.json`
+- Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
+- Source SHA: `096656bdce94fc826b748dd792172448b623a345`
+- Size: 314 lines; full file fetched and read.
+- Coverage: Complete; all 314 lines read.
+- Purpose: Scoped Java/Rust parity provenance manifest for attribute-map queries.
+- Implementation / logic: Pins Minecraft 26.3, Mojang manifest SHA-1, Linux platform, OpenJDK 25.0.4.1 and rustc 1.99.0. It records 3261 fixtures, 277 source-file SHA-256 records, fixture hashes, client/server JAR digests, reference output hashes/line counts and an explicit behavioral scope: AttributeMap query/cache/supplier behavior with FastUtil provenance, 34,531,715 reported matched lines; some entity callback/default-sync and full gameplay/platform cases remain outside scope.
+- Findings: Reference records include client/server JAR hashes, output hashes and explicit Rust-output hashes; the recorded client/server/Rust output hashes match. This manifest is not the underlying fixture corpus or complete CI log.
+- RustChunk relevance: Very useful provenance format: exact game/runtime/toolchain, source and fixture hashes, reference outputs, matched-line counts and explicit scope/exclusions. The tested subsystem ideas can guide RustChunk decomposition after deriving 1.20.1 behavior.
+- 1.20.1 implications: All fixtures/source hashes and behavior belong to Minecraft 26.3. They are not 1.20.1 evidence. Rebuild the Java oracle and fixtures from pinned 1.20.1 JARs/mappings; do not port modern schemas as code.
+- Decision: Adaptable format; Version-specific content
+- Dependencies / cross-references: tools/test_rust_parity.py and subsystem-specific scripts; Java vanilla oracle classes; Horizon core/world crates; pinned 26.3 JARs; private fixture bundles.
+- Follow-up checks: Inspect referenced source SHA files, fixture generator and output pipeline; test rejection of altered hashes. Recreate equivalent tests from 1.20.1 official methods, define exact exclusions and produce Rust/client/server output artifacts.
+- RustChunk implementation mapping: Future versioned 1.20.1 parity manifests/tests in RustChunk tests/tools. Current RustChunk validation covers selected block facts/tags, not active effects or attribute gameplay.
+- Evidence required before adoption: Require exact 1.20.1 JAR/mapping pins, full method coverage, fixture provenance, independent Java oracle and Rust output hashes, explicit scope, deterministic reruns and CI failure on mismatch.
+- Completion state: Complete source review. No benchmark/parity run, RustChunk build, APK or device test was performed.
+
