@@ -5798,7 +5798,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Coverage: JSON کامل دریافت و parse شد؛ هیچ بخش یا بازه‌ای حذف نشد.
 - Purpose: Feature region upgrade-height و retrogen bounds.
 - Dependencies / cross-references: artifact شامل hashهای source/fixture و در صورت تعریف، referenceهای JAR client/server است؛ فایل، dependency اجرایی نیست. لیست دقیق source inputs در `sources_sha256` خود سند ثبت شده است.
-- Implementation / logic: ۱۹٬? cases including write-zone and upgrade-height tests; ensureCanWrite، below-zero retrogen data، height bounds و region feature mutation بررسی شده‌اند..
+- Implementation / logic: 20,125 write-zone cases و 10,098 upgrade-height cases; ensureCanWrite، below-zero retrogen data، height bounds و region feature mutation بررسی شده‌اند..
 - Findings: 26.3؛ retrogen activation caller-owned است؛ full retrogen replacement/masking، biome behavior و complete worlds pending؛ شمارش دقیق caseها در manifest ثبت شده است..
 - RustChunk relevance: الگوی differential testing، ثبت provenance/hash و مشخص کردن مرز پوشش قابل اقتباس است؛ داده‌ها، registry IDs، resourceها و نتایج 26.3 قابل انتقال مستقیم نیستند.
 - Decision: **Adaptable height-gate tests; Version-specific height/retrogen.**
@@ -5875,3 +5875,13 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - RustChunk implementation mapping: این JSON ماژول اجرایی نیست؛ فقط شاهد/fixture برای parity suite نسخه‌دار RustChunk است. مقصد آینده subsystem متناظر در نقشهٔ مهندسی 1.20.1 است؛ workspace فعلی RustChunk هنوز فقط package `engine` دارد و native gameplay implementation در آن وجود ندارد.
 - Evidence required before adoption: برای پذیرش، ورودی و منبع رسمی 1.20.1 با SHA pin‌شده، fixtureهای مستقل، hash خروجی oracle و Rust، اجرای تکرارپذیر CI و آزمون integration واقعی لازم است. هر رفتار خارج از scope این manifest باید test جدا داشته باشد.
 - Completion state: بازبینی کامل JSON انجام شد؛ در این ممیزی هیچ build، test، benchmark، server session یا تست دستگاه اجرا نشده است. completion فقط به معنای بررسی و ثبت artifact است.
+
+### Batch verification — entries 201–300 (2026-11-18)
+
+- Selection: the recursive pinned Starling tree was complete (not truncated; 5,749 tree nodes / 4,968 file blobs). Entries 201–300 are the next 100 blob paths after entry 200 in that pinned tree order; no path duplicates an earlier ledger entry.
+- Coverage/provenance: all 100 JSON artifacts were fetched in full and parsed successfully. Their recorded source SHAs are the Git blob SHAs from pinned snapshot `5432370d573642041585c69b40fb045b27133488`; each selected path exists in that tree.
+- Ledger structure: all 100 entries contain exactly one each of the 15 required fields. The ledger now contains 300 sequential file entries.
+- Scope finding: most parity artifacts explicitly target Minecraft 26.3 (manifest SHA-1 `4fe1aa1ef8da1cb95c5bad1fb98890ca56dd8ca3`), with Linux x86_64 / OpenJDK 25 / Rust 1.99 test context. These are upstream reports, not RustChunk 1.20.1 test results or Android Galaxy A22 measurements.
+- Evidence gaps: parity manifests 205, 272 and 273 omit a top-level `rust_output_sha256`. Their client/server reference objects do carry matching output hashes, but the manifest does not provide an explicit aggregate Rust-output digest to link them. Entry 267 has no explicit `minecraft` field and relies on its pinned manifest hash. Entries 201–202 are process-memory reports rather than parity output manifests.
+- Memory comparison: the paired report records median RSS changing from 175,820 to 12,848 KiB in the default case (−92.69%), and 175,800 to 29,076 KiB in the four-active-attributes case (−83.46%). These are whole-process Linux RSS readings for the stated synthetic workload, not Android memory or full-game measurements.
+- Verification boundary: this batch review did not rerun upstream tests, build RustChunk, run an APK, connect to a server or measure the target device. The manifest scopes and their explicit exclusions remain in force.
