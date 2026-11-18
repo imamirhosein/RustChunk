@@ -172,3 +172,41 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 - Next range: **301–400**.
 - Continue only on `starling-1.20.1-port-audit`.
 - Keep the original backup branch unchanged. The duplicate archive branch is still present because the available GitHub connection has no branch-deletion action.
+
+
+## QA batch 301–400 — 2026-11-18
+
+### Scope and checks
+
+- Completed the full source review for ledger entries 301–400 (100 files), using the pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Verified exactly 100 sequential entries, 100 unique source paths, and no missing source paths in the pinned, non-truncated Git tree.
+- Verified all 100 recorded source blob SHAs and byte sizes against the pinned Git tree.
+- Retrieved all 100 source JSON artifacts and parsed each in full: all 100 are valid JSON.
+- Recomputed logical line counts from the complete source text. The prior ledger count included the terminal newline as an extra blank line; corrected the count by one for each of the 100 entries. Byte sizes and source SHAs remain unchanged.
+- Verified all 100 Ledger entries contain the 15 required audit fields exactly once.
+- Verified the 100 Index rows match the Ledger entry numbers and source paths.
+- Standardized decision labels in both Ledger and Index: reusable test/algorithm/architecture material is marked `Adaptable; Version-specific`; evidence-only artifacts are marked `Reference; Version-specific`. Each original descriptive assessment is preserved in the Ledger and each detailed Index reason remains intact.
+- Reviewed native smoke reports as evidence, not as proof of release readiness. The reviewed runs are Linux x86_64 resident-scene/software-renderer checks; they do not establish Android ARM64 performance, 1.20.1 gameplay completeness, Windows/macOS release readiness, or Aternos multiplayer compatibility.
+- Key remaining integration gaps recur across fluid/world binding, 1.20.1 registries and item/component schema, complete entity/player tick lifecycle, networking, renderer pixel parity and device/hardware validation.
+
+### Verification limits
+
+- No Rust build, unit-test suite, benchmark execution, APK build, Android device test, Minecraft launch, or multiplayer-server connection was performed in this audit pass.
+- The smoke-test evidence and source parity artifacts are inputs for future implementation and test design, not proof that the corresponding complete subsystem exists in RustChunk.
+
+### Corrections
+
+1. Corrected logical line counts for entries 301–400 (100 entries, each prior count minus one).
+2. Standardized all 100 decision labels in Ledger and Index while preserving the original descriptive decision text and Index reasons.
+3. No source artifact, path, source SHA, or byte-size record was changed.
+
+### Repository safety
+
+- Active work branch: `starling-1.20.1-port-audit`.
+- Stable backup branch: `backup/audit-1000-unique-2026-11-18`.
+- The duplicate archive branch was deleted by the repository owner and is no longer present.
+- The backup branch was not modified.
+
+### Next range
+
+- Next audit/QA range: **401–500**.
