@@ -2476,5 +2476,6 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Completed full source reviews for entries 101–120. All 20 paths and blob SHAs match the pinned Starling source tree snapshot `5432370d573642041585c69b40fb045b27133488`.
 - Files longer than 400 lines were read in consecutive chunks with no gaps; the 1,076-line render chunk, 999-line world chunk, 1,152-line NBT and 695-line control CLI files received complete-range coverage.
 - Added each file's source identity, size/coverage, purpose, implementation, findings, RustChunk relevance, 1.20.1 implications, decision, dependencies, follow-up checks and completion state.
+- Extended `AUDIT_INDEX.md` to all 120 reviewed files, split into five parts of 25, 25, 25, 25 and 20 entries.
 - Risks recorded for follow-up include the render chunk section-index/min_y relationship, SNBT typed-array invalid-value behavior, registry hash stability assumptions, region-file failure recovery and Android hard-link support, native-mod permission validation, and finite numeric bounds in horizon-ctl.
 - Tests found in source were read but not run. No Cargo build, APK build, Android device run, filesystem fault-injection, parity probe or live Minecraft connection was executed.
