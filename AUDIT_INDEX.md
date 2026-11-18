@@ -200,3 +200,52 @@
 | 158 | `.github/workflows/mojang-republish.yml` | Adaptable | Useful pinned-metadata change alert; rewrite and test against RustChunk's 1.20.1 acquisition lock. |
 | 159 | `.github/workflows/native-hook-stamp.yml` | Unnecessary; Optional/future | Generated native-hook ID service is irrelevant until an extension ABI is approved. |
 | 160 | `.github/workflows/native-mods.yml` | Unnecessary; Security reference | High-risk Starling native-code pipeline; not Forge and not part of the vanilla client. |
+
+## Part 8 — Entries 161–175
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 161 | `.github/workflows/overlap-note.yml` | Adaptable; Security reference | Trusted main-branch, diff-only PR overlap automation; privileged event/runner isolation needs security tests. |
+| 162 | `.github/workflows/pack-bench.yml` | Adaptable; Optional/future | Resource-pack branch/base benchmark pattern; replace 26.3 fixtures and add Android measurements. |
+| 163 | `.github/workflows/parity-main.yml` | Adaptable; Rewrite required | Useful parity gate/bisect pattern; requires complete 1.20.1 oracle and protected cache/runner gates. |
+| 164 | `.github/workflows/pr-labels.yml` | Adaptable; Security reference | Metadata-only PR labeling; test untrusted event data and never execute PR-head code. |
+| 165 | `AGENTS.md` | Adaptable; Rewrite required | Strong navigation/governance template; rewrite Starling paths, versions, tools and policy assumptions. |
+| 166 | `bench/bench.py` | Optional/future; Adaptable methodology | Server-load benchmark only; later needs protocol-763 bots/server and process-cleanup hardening. |
+| 167 | `benchmarks/entity-model-document-2026-10-14/generate_fixture.py` | Adaptable; Test-only reference | Deterministic synthetic model fixture; regenerate using 1.20.1 resource schema. |
+| 168 | `benchmarks/entity-model-document-2026-10-14/README.md` | Adaptable; Reference | Output-equality and warm/alternating method; 42.94× result is only a synthetic parser segment. |
+| 169 | `benchmarks/entity-model-document-2026-10-14/results.json` | Reference; Adaptable schema | Raw timings agree with README but lack independent fixture/source/hardware provenance. |
+| 170 | `benchmarks/graphics/after-4080.json` | Adaptable methodology; Raw values not reusable | RTX4080/Vulkan post-change report; RD16 drawn_sections=0 requires investigation. |
+| 171 | `benchmarks/graphics/after-lavapipe.json` | Reference; Adaptable test method | Software Vulkan stress data only; RD16 drawn_sections=0 and RD32 lows need context. |
+| 172 | `benchmarks/graphics/baseline-4080.json` | Reference; Version-specific | Historical RTX4080 baseline; zero/near-zero draw counters limit interpretation. |
+| 173 | `benchmarks/graphics/baseline-lavapipe.json` | Reference; Version-specific | Historical llvmpipe baseline; not a physical GPU or phone proxy. |
+| 174 | `benchmarks/model-state-parse-2026-10-14.md` | Adaptable; Reference | Shared parse reuse gives a scoped synthetic 1.306× result; validate 1.20.1 and A22. |
+| 175 | `benchmarks/overlay-real-packs-2026-10-15.json` | Adaptable; Reference | Cache-hit/cold overlay methodology; pack schema is 26.3 and licenses remain separate. |
+## Part 9 — Entries 176–200
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 176 | `benchmarks/perf/horizon-m4pro-1080p-rd16.json` | Reference; Adaptable methodology | 26.3 Horizon M4 Pro/Metal report; no Galaxy A22 evidence. |
+| 177 | `benchmarks/perf/horizon-m4pro-1080p-rd32.json` | Reference; Adaptable methodology | 26.3 Horizon M4 Pro RD32 report; methodology only. |
+| 178 | `benchmarks/perf/horizon-m4pro-1080p-rd8.json` | Reference; Adaptable methodology | 26.3 Horizon M4 Pro RD8; recorded host load was high. |
+| 179 | `benchmarks/perf/horizon-win-9800x3d-5080-rd16.json` | Reference; Adaptable methodology | 26.3 Horizon Windows RTX5080/Vulkan report; desktop only. |
+| 180 | `benchmarks/perf/horizon-win-9800x3d-5080-rd32.json` | Reference; Adaptable methodology | 26.3 Horizon Windows RD32; desktop only. |
+| 181 | `benchmarks/perf/horizon-win-9800x3d-5080-rd8.json` | Reference; Adaptable methodology | 26.3 Horizon Windows RD8; desktop only. |
+| 182 | `benchmarks/perf/macmini-m4pro-loaded-2026-11-01.md` | Reference; Limited comparison | Loaded/offscreen Mac comparison with window mismatch; cautionary evidence only. |
+| 183 | `benchmarks/perf/vanilla-m4pro-1080p-rd16.json` | Reference; Version-specific | 26.3 vanilla Mac/OpenGL/offscreen baseline; Fabric driver and load affect results. |
+| 184 | `benchmarks/perf/vanilla-m4pro-1080p-rd32.json` | Reference; Version-specific | 26.3 vanilla Mac RD32; not a 1.20.1/mobile proxy. |
+| 185 | `benchmarks/perf/vanilla-m4pro-1080p-rd8.json` | Reference; Version-specific | 26.3 vanilla Mac RD8; sample variance is high. |
+| 186 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd16.json` | Reference; Version-specific | 26.3 Fabric performance-mod Mac baseline; no Forge/mobile inference. |
+| 187 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd32.json` | Reference; Version-specific | 26.3 Fabric modded Mac RD32; host-specific. |
+| 188 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd8.json` | Reference; Version-specific | 26.3 Fabric modded Mac RD8; method only. |
+| 189 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd16.json` | Reference; Version-specific | 26.3 Fabric modded Windows baseline; desktop only. |
+| 190 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd32.json` | Reference; Version-specific | 26.3 Fabric modded Windows RD32; desktop only. |
+| 191 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd8.json` | Reference; Version-specific | 26.3 Fabric modded Windows RD8; desktop only. |
+| 192 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd16.json` | Reference; Version-specific | 26.3 vanilla Windows baseline; Fabric driver included. |
+| 193 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd32.json` | Reference; Version-specific | 26.3 vanilla Windows RD32; high-end desktop only. |
+| 194 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd8.json` | Reference; Version-specific | 26.3 vanilla Windows RD8; high-end desktop only. |
+| 195 | `benchmarks/perf/windows-9800x3d-5080-2026-10-29.md` | Adaptable; Rewrite required for version/device | Good benchmark method with API caveats; rebuild for 1.20.1/A22. |
+| 196 | `benchmarks/rust-active-effect-tick-2026-10-07/scoped-parity.json` | Adaptable format; Version-specific content | 26.3 active-effect tick manifest: 4,036 fixtures/266 source hashes; rebuild for 1.20.1. |
+| 197 | `benchmarks/rust-active-effects-2026-10-07/scoped-parity.json` | Adaptable format; Version-specific content | 26.3 active-effect mutation/query manifest; not a 1.20.1 test result. |
+| 198 | `benchmarks/rust-anchor-2026-10-06/scoped-parity.json` | Adaptable format; Version-specific content | 26.3 vertical-anchor manifest; no explicit Rust-output hash field. |
+| 199 | `benchmarks/rust-attribute-health-2026-10-07/scoped-parity.json` | Adaptable format; Version-specific content | 26.3 attribute/health manifest; no explicit Rust-output hash field. |
+| 200 | `benchmarks/rust-attribute-map-queries-2026-10-07/scoped-parity.json` | Adaptable format; Version-specific content | 26.3 AttributeMap manifest with fixture/source hashes and matched-line count. |
