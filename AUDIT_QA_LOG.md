@@ -210,3 +210,56 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 ### Next range
 
 - Next audit/QA range: **401–500**.
+
+
+## QA batch 401–500 — 2026-11-18
+
+### Scope and checks
+
+- Reviewed exactly 100 existing entries (401–500); this was a QA correction pass, not a new source-audit batch. No entry was renumbered and no new source path was added.
+- Verified the 100 entry numbers are sequential, each of the 15 required fields appears exactly once, and the 100 Index rows match the Ledger entry numbers and paths.
+- Verified all 100 paths exist in the pinned Starling commit `5432370d573642041585c69b40fb045b27133488`. The recursive source tree contained 5,749 entries and was not truncated.
+- Verified all 100 recorded source blob SHAs and byte sizes against the pinned Git tree.
+- Retrieved all 100 source files in full: 94 JSON artifacts parsed successfully; the six Markdown/text files were read completely. This validates retrieval and parseability, not that any upstream test was rerun.
+- Compared the batch with the complete 1,000-entry audit index/ledgers: the 1,000 paths remain unique, and the 401–500 paths are not repeated elsewhere.
+- Checked the Minecraft/platform provenance in the parity artifacts: the scoped parity data targets Minecraft 26.3 and Linux x86_64; server measurements are dedicated-server workloads and cannot establish Android client FPS, Galaxy A22 performance or Minecraft 1.20.1 compatibility.
+- Standardized all 100 Ledger Decision labels and matching Index decision cells to the approved primary/secondary taxonomy. Original descriptive assessments remain in the Ledger after the standardized label; detailed reasons remain in the Index.
+- Rechecked all multi-range Coverage endpoints and corrected the seven terminal-line overcounts listed below.
+
+### Corrections made on the active audit branch
+
+1. Corrected final Coverage ranges to the actual final logical line:
+   - 489 — `benchmarks/server-2026-10-17/earlier-002f14ce/walk-explore.json`: 401–696 → 401–695.
+   - 492 — `benchmarks/server-2026-10-17/walk-explore.json`: 401–696 → 401–695.
+   - 494 — `benchmarks/server-equal-mixed-2026-10-18/load.txt`: 401–703 → 401–702.
+   - 495 — `benchmarks/server-equal-mixed-2026-10-18/mixed-equal.json`: 401–422 → 401–421.
+   - 498 — `benchmarks/server-equal-work-2026-10-17/horizon.json`: 401–416 → 401–415.
+   - 499 — `benchmarks/server-equal-work-2026-10-17/run-1-before-chunk-cache.json`: 401–694 → 401–693.
+   - 500 — `benchmarks/server-equal-work-2026-10-17/run-2-chunk-cache.json`: 401–414 → 401–413.
+2. Normalized all 100 decisions in Ledger and Index to the approved vocabulary:
+   - Adaptable entries use `Adaptable; Version-specific`.
+   - Test/method/reference entries use `Adaptable; Reference; Version-specific`.
+   - Historical, context-only and server-only result artifacts use `Unnecessary; Reference; Version-specific`.
+   - Entries 457–458 remain `Undetermined; Reference; Version-specific` because the stored-effect artifacts explicitly lack sufficient aggregate parity evidence.
+3. Corrected entry 494's load-trace finding: the bot host samples range from 64–95% CPU, while sampled ThinkPad CPU values range from 2–100%; host-load variability remains a caveat.
+4. Corrected entry 496's finding: the README compares Horizon and Vanilla only; it contains no Paper results. The previous "Paper often faster" statement was removed. The source reports a Vanilla watchdog stop at 100 bots and contains no client/Android measurements.
+5. Clarified RustChunk relevance for server benchmark and load-trace entries 486–500 so server-side data is not presented as evidence of client FPS, chunk rendering or Android performance.
+
+### Verification after writes
+
+- Re-read the updated Ledger, Index and QA log from GitHub.
+- Confirmed entries 401–500 remain sequential, all 15 fields are present exactly once, all 100 Ledger and Index paths match, and each standardized Ledger decision matches its Index decision cell.
+- Confirmed all seven Coverage endpoints now terminate at their actual final logical lines.
+- The original backup branch `backup/audit-1000-unique-2026-11-18` remains at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; it was not modified. GitHub reports `protected: false`, so it is procedurally read-only, not server-locked.
+- The duplicate archive branch is absent from the current GitHub branch list, consistent with its deletion by the repository owner.
+- No Rust build, unit-test suite, benchmark execution, APK build, Android device test, Minecraft client launch or multiplayer-server connection was performed.
+
+### Limits of this QA result
+
+- This is a provenance, structure, coverage, parseability and targeted claim-correction pass. It is not a fresh exhaustive semantic re-audit of every fixture value or upstream implementation, and reading benchmark artifacts is not running the benchmarks.
+- None of these results establishes RustChunk runtime readiness for Minecraft 1.20.1 Forge, Android ARM64 or Aternos multiplayer.
+
+### Next QA range
+
+- Next range: **501–600**.
+- Continue only on `starling-1.20.1-port-audit`; keep the original backup branch unchanged.

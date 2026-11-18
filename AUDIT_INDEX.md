@@ -494,121 +494,121 @@
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 401 | `benchmarks/rust-noise-2026-10-05/scoped-parity.json` | Adaptable; rebuild version data | Selected maths only; no complete terrain/world proof |
-| 402 | `benchmarks/rust-object-open-map-2026-10-07/scoped-parity.json` | Reference; prefer Rust ownership | Collection parity is not game integration |
-| 403 | `benchmarks/rust-object-open-set-2026-10-07/scoped-parity.json` | Reference; use Rust set if equivalent | Not proof of integrated attribute queues |
-| 404 | `benchmarks/rust-pillar-2026-10-06/scoped-parity.json` | Adaptable feature algorithm | No complete chunk mutation/biome generation |
-| 405 | `benchmarks/rust-piston-movement-2026-10-07/movement-registry-regression.json` | Reference; regenerate target data | 26.3 table; no live piston event |
-| 406 | `benchmarks/rust-piston-movement-2026-10-07/scoped-parity.json` | Adaptable numeric regression | No piston activation/block lifecycle/network |
-| 407 | `benchmarks/rust-piston-shape-2026-10-06/scoped-parity.json` | Adaptable shape tests | No live block entity/piston lifecycle |
-| 408 | `benchmarks/rust-placement-2026-10-06/scoped-parity.json` | Adaptable codecs | No full configured-feature composition/world mutation |
-| 409 | `benchmarks/rust-player-equipment-2026-10-07/scoped-parity.json` | Adaptable ownership model | No full synchronized/use/save lifecycle |
-| 410 | `benchmarks/rust-player-food-2026-10-07/scoped-parity.json` | Adaptable state tests | No full player tick/regeneration/damage/persistence |
-| 411 | `benchmarks/rust-player-health-2026-10-07/scoped-parity.json` | Adaptable state composition | No full damage source/wire/player lifecycle |
-| 412 | `benchmarks/rust-player-hurt-2026-10-07/scoped-parity.json` | Adaptable damage tests | Downstream damage/effect services controlled |
-| 413 | `benchmarks/rust-player-inventory-2026-10-07/scoped-parity.json` | Adaptable inventory algorithms | No menus/recipes/pickup or all components |
-| 414 | `benchmarks/rust-player-travel-2026-10-07/scoped-parity.json` | Adaptable movement sequencing | No live fluid/collision/vehicle/effect full tick |
-| 415 | `benchmarks/rust-powder-snow-collision-2026-10-06/scoped-parity.json` | Adaptable collision tests | No freezing/sinking/durability/live movement |
-| 416 | `benchmarks/rust-registered-entity-fluid-2026-10-07/immersion-regression.json` | Adaptable query/order regression | No live fluid propagation or broad entity index |
-| 417 | `benchmarks/rust-registered-entity-fluid-2026-10-07/scoped-parity.json` | Adaptable fluid tests | Providers fixture-controlled; no complete liquid movement |
-| 418 | `benchmarks/rust-registered-entity-fluid-2026-10-07/tick-regression.json` | Adaptable tick ordering | No particle/audio playback or live propagation |
-| 419 | `benchmarks/rust-registered-player-combat-2026-10-07/scoped-parity.json` | Adaptable combat harness | PvP/blocking/durability/effect consumers controlled |
-| 420 | `benchmarks/rust-registry-fall-ray-2026-10-07/scoped-parity.json` | Adaptable ray tests | No live chunk provider or complete consumer |
-| 421 | `benchmarks/rust-registry-fluid-2026-10-07/scoped-parity.json` | Reference query design | 26.3 ids/data; no live spreading |
-| 422 | `benchmarks/rust-replace-blobs-2026-10-06/scoped-parity.json` | Adaptable feature tests | No complete chunk mutation/biome generation |
-| 423 | `benchmarks/rust-replace-block-2026-10-06/scoped-parity.json` | Adaptable placement logic | No region effects/structure processors/decorations |
-| 424 | `benchmarks/rust-resident-collision-scan-2026-10-06/scoped-parity.json` | Adaptable collision harness | Controlled proxy; no live chunk/entity broad-phase |
-| 425 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-baking.json` | Adaptable geometry oracle | CPU geometry only; no atlas/shader/GPU pixels |
+| 401 | `benchmarks/rust-noise-2026-10-05/scoped-parity.json` | Adaptable; Version-specific | Selected maths only; no complete terrain/world proof |
+| 402 | `benchmarks/rust-object-open-map-2026-10-07/scoped-parity.json` | Adaptable; Reference; Version-specific | Collection parity is not game integration |
+| 403 | `benchmarks/rust-object-open-set-2026-10-07/scoped-parity.json` | Adaptable; Reference; Version-specific | Not proof of integrated attribute queues |
+| 404 | `benchmarks/rust-pillar-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No complete chunk mutation/biome generation |
+| 405 | `benchmarks/rust-piston-movement-2026-10-07/movement-registry-regression.json` | Adaptable; Reference; Version-specific | 26.3 table; no live piston event |
+| 406 | `benchmarks/rust-piston-movement-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No piston activation/block lifecycle/network |
+| 407 | `benchmarks/rust-piston-shape-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No live block entity/piston lifecycle |
+| 408 | `benchmarks/rust-placement-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No full configured-feature composition/world mutation |
+| 409 | `benchmarks/rust-player-equipment-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full synchronized/use/save lifecycle |
+| 410 | `benchmarks/rust-player-food-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full player tick/regeneration/damage/persistence |
+| 411 | `benchmarks/rust-player-health-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full damage source/wire/player lifecycle |
+| 412 | `benchmarks/rust-player-hurt-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Downstream damage/effect services controlled |
+| 413 | `benchmarks/rust-player-inventory-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No menus/recipes/pickup or all components |
+| 414 | `benchmarks/rust-player-travel-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No live fluid/collision/vehicle/effect full tick |
+| 415 | `benchmarks/rust-powder-snow-collision-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No freezing/sinking/durability/live movement |
+| 416 | `benchmarks/rust-registered-entity-fluid-2026-10-07/immersion-regression.json` | Adaptable; Version-specific | No live fluid propagation or broad entity index |
+| 417 | `benchmarks/rust-registered-entity-fluid-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Providers fixture-controlled; no complete liquid movement |
+| 418 | `benchmarks/rust-registered-entity-fluid-2026-10-07/tick-regression.json` | Adaptable; Version-specific | No particle/audio playback or live propagation |
+| 419 | `benchmarks/rust-registered-player-combat-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | PvP/blocking/durability/effect consumers controlled |
+| 420 | `benchmarks/rust-registry-fall-ray-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No live chunk provider or complete consumer |
+| 421 | `benchmarks/rust-registry-fluid-2026-10-07/scoped-parity.json` | Adaptable; Reference; Version-specific | 26.3 ids/data; no live spreading |
+| 422 | `benchmarks/rust-replace-blobs-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No complete chunk mutation/biome generation |
+| 423 | `benchmarks/rust-replace-block-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No region effects/structure processors/decorations |
+| 424 | `benchmarks/rust-resident-collision-scan-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Controlled proxy; no live chunk/entity broad-phase |
+| 425 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-baking.json` | Adaptable; Version-specific | CPU geometry only; no atlas/shader/GPU pixels |
 
 ## Part 19 — Entries 426–450
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 426 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-decoding.json` | Adaptable parser fixture | No parent resolution/atlas/GPU rendering |
-| 427 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-resolution.json` | Adaptable resolver fixture | No final quad bake/light/render pixels |
-| 428 | `benchmarks/rust-resource-number-scanner-2026-10-06/sprite-animation.json` | Adaptable state tests | No image decode/atlas upload/GPU |
-| 429 | `benchmarks/rust-restitution-2026-10-07/scoped-parity.json` | Adaptable numeric tests | No live grounding/tags/effects/world lifecycle |
-| 430 | `benchmarks/rust-retained-upgrade-status-2026-10-06/scoped-parity.json` | Adaptable metadata model | No save-dirty scheduling/biome migration/full retrogen |
-| 431 | `benchmarks/rust-retrogen-biome-fill-2026-10-06/scoped-parity.json` | Adaptable section updates | No target palette/full biome generation |
-| 432 | `benchmarks/rust-retrogen-biome-generation-2026-10-06/scoped-parity.json` | Adaptable generator pattern | Not full generation; holder placeholders limit fidelity |
-| 433 | `benchmarks/rust-retrogen-chunk-2026-10-06/scoped-parity.json` | Adaptable chunk state | No persistence/scheduler/full lifecycle |
-| 434 | `benchmarks/rust-retrogen-data-2026-10-06/scoped-parity.json` | Adaptable codec tests | No automatic schedule or end-to-end upgrade |
-| 435 | `benchmarks/rust-rule-test-2026-10-06/scoped-parity.json` | Adaptable codec tests | No processor execution or structure mutation |
-| 436 | `benchmarks/rust-scaffolding-collision-2026-10-06/scoped-parity.json` | Adaptable shape matrix | No placement/support/fall/live movement |
-| 437 | `benchmarks/rust-scattered-ore-2026-10-06/scoped-parity.json` | Adaptable feature test | No complete veins/chunk decoration |
-| 438 | `benchmarks/rust-server-player-combat-2026-10-07/scoped-parity.json` | Adaptable damage composition | Effects/durability/PvP/network/death controlled |
-| 439 | `benchmarks/rust-server-player-combat-immunity-2026-10-07/inner-damage-regression.json` | Adaptable regression | Outer gates and attribution/world integration separate |
-| 440 | `benchmarks/rust-server-player-combat-immunity-2026-10-07/scoped-parity.json` | Adaptable boundary tests | No complete damage/effects/packets/player tick |
-| 441 | `benchmarks/rust-server-player-damage-2026-10-07/scoped-parity.json` | Adaptable damage flow | Criteria/effects/durability/death controlled |
-| 442 | `benchmarks/rust-shared-item-use-2026-10-07/item-use-lifecycle.json` | Adaptable lifecycle tests | Start/network/concrete consumables/full player lifecycle pending |
-| 443 | `benchmarks/rust-shared-item-use-2026-10-07/item-use-start.json` | Adaptable dispatch tests | Transport and synced flag consumers absent |
-| 444 | `benchmarks/rust-shared-item-use-2026-10-07/item-use.json` | Adaptable blocking tests | Full lifecycle/durability/combat integration absent |
-| 445 | `benchmarks/rust-simple-block-2026-10-06/scoped-parity.json` | Adaptable feature implementation | Chunk writes/neighbors/full generation not tested |
-| 446 | `benchmarks/rust-simple-container-2026-10-07/scoped-parity.json` | Adaptable container pattern | No persistence/menu transactions/full components |
-| 447 | `benchmarks/rust-snow-freeze-2026-10-06/scoped-parity.json` | Adaptable terrain feature | Lighting/broad mutation/surface generation absent |
-| 448 | `benchmarks/rust-speleothem-2026-10-06/scoped-parity.json` | Adaptable feature geometry | No neighbor updates/falling/fluid/full caves |
-| 449 | `benchmarks/rust-spike-2026-10-06/scoped-parity.json` | Adaptable deterministic feature | No complete End chunk/world lifecycle |
-| 450 | `benchmarks/rust-spring-2026-10-06/scoped-parity.json` | Adaptable feature tests | Tick execution/spreading/full worldgen absent |
+| 426 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-decoding.json` | Adaptable; Version-specific | No parent resolution/atlas/GPU rendering |
+| 427 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-resolution.json` | Adaptable; Version-specific | No final quad bake/light/render pixels |
+| 428 | `benchmarks/rust-resource-number-scanner-2026-10-06/sprite-animation.json` | Adaptable; Version-specific | No image decode/atlas upload/GPU |
+| 429 | `benchmarks/rust-restitution-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No live grounding/tags/effects/world lifecycle |
+| 430 | `benchmarks/rust-retained-upgrade-status-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No save-dirty scheduling/biome migration/full retrogen |
+| 431 | `benchmarks/rust-retrogen-biome-fill-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No target palette/full biome generation |
+| 432 | `benchmarks/rust-retrogen-biome-generation-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Not full generation; holder placeholders limit fidelity |
+| 433 | `benchmarks/rust-retrogen-chunk-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No persistence/scheduler/full lifecycle |
+| 434 | `benchmarks/rust-retrogen-data-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No automatic schedule or end-to-end upgrade |
+| 435 | `benchmarks/rust-rule-test-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No processor execution or structure mutation |
+| 436 | `benchmarks/rust-scaffolding-collision-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No placement/support/fall/live movement |
+| 437 | `benchmarks/rust-scattered-ore-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No complete veins/chunk decoration |
+| 438 | `benchmarks/rust-server-player-combat-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Effects/durability/PvP/network/death controlled |
+| 439 | `benchmarks/rust-server-player-combat-immunity-2026-10-07/inner-damage-regression.json` | Adaptable; Version-specific | Outer gates and attribution/world integration separate |
+| 440 | `benchmarks/rust-server-player-combat-immunity-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No complete damage/effects/packets/player tick |
+| 441 | `benchmarks/rust-server-player-damage-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Criteria/effects/durability/death controlled |
+| 442 | `benchmarks/rust-shared-item-use-2026-10-07/item-use-lifecycle.json` | Adaptable; Version-specific | Start/network/concrete consumables/full player lifecycle pending |
+| 443 | `benchmarks/rust-shared-item-use-2026-10-07/item-use-start.json` | Adaptable; Version-specific | Transport and synced flag consumers absent |
+| 444 | `benchmarks/rust-shared-item-use-2026-10-07/item-use.json` | Adaptable; Version-specific | Full lifecycle/durability/combat integration absent |
+| 445 | `benchmarks/rust-simple-block-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Chunk writes/neighbors/full generation not tested |
+| 446 | `benchmarks/rust-simple-container-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No persistence/menu transactions/full components |
+| 447 | `benchmarks/rust-snow-freeze-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Lighting/broad mutation/surface generation absent |
+| 448 | `benchmarks/rust-speleothem-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No neighbor updates/falling/fluid/full caves |
+| 449 | `benchmarks/rust-spike-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No complete End chunk/world lifecycle |
+| 450 | `benchmarks/rust-spring-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Tick execution/spreading/full worldgen absent |
 
 ## Part 20 — Entries 451–475
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 451 | `benchmarks/rust-sprite-animation-2026-10-06/scoped-parity.json` | Adaptable animation logic | No image decode/atlas/GPU frame interpolation |
-| 452 | `benchmarks/rust-sprite-animation-2026-10-06/startup-smoke.json` | Reference visual smoke only | No player gameplay/device hardware/FPS |
-| 453 | `benchmarks/rust-state-provider-2026-10-06/scoped-parity.json` | Adaptable codec architecture | No registry reload/placement/worldgen integration |
-| 454 | `benchmarks/rust-status-effect-2026-10-07/scoped-parity.json` | Adaptable value semantics | Effect tick/registry/UI lifecycle separate |
-| 455 | `benchmarks/rust-status-tick-2026-10-07/scoped-parity.json` | Adaptable tick algorithm | Real dispatch/registry/full gameplay outside harness |
-| 456 | `benchmarks/rust-stored-consume-2026-10-07/scoped-parity.json` | Adaptable regression; evidence gap | No aggregate Rust hash; registration/notification/sound controlled |
-| 457 | `benchmarks/rust-stored-effect-attributes-2026-10-07/scoped-parity.json` | Reference only pending evidence | No top-level hash and reference outputs differ |
-| 458 | `benchmarks/rust-stored-effect-notifications-2026-10-07/scoped-parity.json` | Reference only pending evidence | No top-level hash; reference output hashes differ |
-| 459 | `benchmarks/rust-structure-density-2026-10-06/scoped-parity.json` | Adaptable numeric provider | No structure discovery/placement/terrain integration |
-| 460 | `benchmarks/rust-suffocation-2026-10-06/contextual-regression.json` | Adaptable shape tests | No live entity/minecart/world lifecycle |
-| 461 | `benchmarks/rust-suffocation-2026-10-06/scoped-parity.json` | Adaptable query tests | No live chunk provider/entity movement |
-| 462 | `benchmarks/rust-swimming-2026-10-07/scoped-parity.json` | Adaptable predicates | No full water physics/player tick |
-| 463 | `benchmarks/rust-synced-bytes-2026-10-07/float-regression.json` | Adaptable sync design | Other types/packet codecs/entity schema absent |
-| 464 | `benchmarks/rust-synced-bytes-2026-10-07/scoped-parity.json` | Adaptable typed tests | Other types/schema/wire codecs pending |
-| 465 | `benchmarks/rust-synced-floats-2026-10-07/scoped-parity.json` | Adaptable numeric serialization | Only float serializer; no protocol/wire schema |
-| 466 | `benchmarks/rust-teleport-consume-2026-10-07/scoped-parity.json` | Adaptable random algorithm | Actual teleport/passenger/world events controlled |
-| 467 | `benchmarks/rust-terrain-2026-10-06/scoped-parity.json` | Adaptable terrain architecture | Material rules/carvers/structures/full blend absent |
-| 468 | `benchmarks/rust-ticks-2026-10-05/scoped-parity.json` | Adaptable scheduler tests | No block/fluid tick execution/full scheduler |
-| 469 | `benchmarks/rust-underwater-magma-2026-10-06/scoped-parity.json` | Adaptable feature placement | Chunk updates/postprocessing/full generation absent |
-| 470 | `benchmarks/rust-use-flag-reaction-2026-10-07/scoped-parity.json` | Adaptable event ordering | Other sync keys/packet delivery/full item use absent |
-| 471 | `benchmarks/rust-use-remainder-2026-10-07/scoped-parity.json` | Adaptable component contract | No full component schema/insertion/drop/consumables |
-| 472 | `benchmarks/rust-value-provider-2026-10-06/scoped-parity.json` | Adaptable provider algorithms | Gaussian/full height provider/terrain incomplete |
-| 473 | `benchmarks/rust-view-direction-2026-10-07/scoped-parity.json` | Adaptable numeric fixtures | No platform numeric/action integration proof |
-| 474 | `benchmarks/rust-vines-2026-10-06/scoped-parity.json` | Adaptable feature logic | No growth tick/neighbor/live chunk |
-| 475 | `benchmarks/rust-water-splash-2026-10-07/scoped-parity.json` | Adaptable event request model | No audio mixer/particle renderer/live movement |
+| 451 | `benchmarks/rust-sprite-animation-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No image decode/atlas/GPU frame interpolation |
+| 452 | `benchmarks/rust-sprite-animation-2026-10-06/startup-smoke.json` | Unnecessary; Reference; Version-specific | No player gameplay/device hardware/FPS |
+| 453 | `benchmarks/rust-state-provider-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No registry reload/placement/worldgen integration |
+| 454 | `benchmarks/rust-status-effect-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Effect tick/registry/UI lifecycle separate |
+| 455 | `benchmarks/rust-status-tick-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Real dispatch/registry/full gameplay outside harness |
+| 456 | `benchmarks/rust-stored-consume-2026-10-07/scoped-parity.json` | Adaptable; Reference; Version-specific | No aggregate Rust hash; registration/notification/sound controlled |
+| 457 | `benchmarks/rust-stored-effect-attributes-2026-10-07/scoped-parity.json` | Undetermined; Reference; Version-specific | No top-level hash and reference outputs differ |
+| 458 | `benchmarks/rust-stored-effect-notifications-2026-10-07/scoped-parity.json` | Undetermined; Reference; Version-specific | No top-level hash; reference output hashes differ |
+| 459 | `benchmarks/rust-structure-density-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No structure discovery/placement/terrain integration |
+| 460 | `benchmarks/rust-suffocation-2026-10-06/contextual-regression.json` | Adaptable; Version-specific | No live entity/minecart/world lifecycle |
+| 461 | `benchmarks/rust-suffocation-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No live chunk provider/entity movement |
+| 462 | `benchmarks/rust-swimming-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full water physics/player tick |
+| 463 | `benchmarks/rust-synced-bytes-2026-10-07/float-regression.json` | Adaptable; Version-specific | Other types/packet codecs/entity schema absent |
+| 464 | `benchmarks/rust-synced-bytes-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Other types/schema/wire codecs pending |
+| 465 | `benchmarks/rust-synced-floats-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Only float serializer; no protocol/wire schema |
+| 466 | `benchmarks/rust-teleport-consume-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Actual teleport/passenger/world events controlled |
+| 467 | `benchmarks/rust-terrain-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Material rules/carvers/structures/full blend absent |
+| 468 | `benchmarks/rust-ticks-2026-10-05/scoped-parity.json` | Adaptable; Version-specific | No block/fluid tick execution/full scheduler |
+| 469 | `benchmarks/rust-underwater-magma-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Chunk updates/postprocessing/full generation absent |
+| 470 | `benchmarks/rust-use-flag-reaction-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Other sync keys/packet delivery/full item use absent |
+| 471 | `benchmarks/rust-use-remainder-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full component schema/insertion/drop/consumables |
+| 472 | `benchmarks/rust-value-provider-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Gaussian/full height provider/terrain incomplete |
+| 473 | `benchmarks/rust-view-direction-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No platform numeric/action integration proof |
+| 474 | `benchmarks/rust-vines-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No growth tick/neighbor/live chunk |
+| 475 | `benchmarks/rust-water-splash-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No audio mixer/particle renderer/live movement |
 
 ## Part 21 — Entries 476–500
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 476 | `benchmarks/rust-world-2026-10-05/scoped-parity.json` | Reference only | No output hash/reference pair; not implementation evidence |
-| 477 | `benchmarks/rust-world-border-2026-10-07/scoped-parity.json` | Adaptable geometry/state tests | No persistence/listener/damage/network integration |
-| 478 | `benchmarks/rust-world-collision-check-2026-10-07/movement-regression.json` | Adaptable physics tests | Providers/entity lists/border controlled; no live broad phase |
-| 479 | `benchmarks/rust-world-collision-check-2026-10-07/scoped-parity.json` | Adaptable collision composition | Live entity broad phase/minecart/world lifecycle incomplete |
-| 480 | `benchmarks/rust-world-edge-backoff-2026-10-07/scoped-parity.json` | Adaptable edge regression | Isolated query, not integrated Player physics/world |
-| 481 | `benchmarks/rust-world-movement-2026-10-07/geometry-regression.json` | Adaptable geometry suite | No live World shape selection/integrated movement |
-| 482 | `benchmarks/rust-world-movement-2026-10-07/scoped-parity.json` | Adaptable movement kernel | No live provider/full movement tick/input lifecycle |
-| 483 | `benchmarks/rust-world-ray-2026-10-07/scoped-parity.json` | Adaptable ray traversal | No live world/chunk provider/complete consumers |
-| 484 | `benchmarks/rust-worldgen-2026-10-06/scoped-parity.json` | Architecture reference; rebuild data | Selected codec/query manifests only; no full terrain/chunk/world proof |
-| 485 | `benchmarks/rust-worldgen-random-2026-10-06/scoped-parity.json` | Adaptable deterministic RNG tests | Gaussian/concurrent/full decoration outside scope |
-| 486 | `benchmarks/server-2026-10-17/README.md` | Reference method only | Bot host overloaded, unequal workloads and vanilla watchdog; not Android client |
-| 487 | `benchmarks/server-2026-10-17/earlier-002f14ce/explore-equal-rate.json` | Reference server data | Server only, one pass; not A22/client FPS |
-| 488 | `benchmarks/server-2026-10-17/earlier-002f14ce/load.txt` | Context only | Remote bot host high load/ThinkPad variability confound |
-| 489 | `benchmarks/server-2026-10-17/earlier-002f14ce/walk-explore.json` | Reference throughput only | Vanilla watchdog/broken pipe at high load; unequal chunks |
-| 490 | `benchmarks/server-2026-10-17/explore-equal-rate.json` | Reference comparison | Server tick/RSS/CPU only |
-| 491 | `benchmarks/server-2026-10-17/load.txt` | Benchmark context | Mac mini bot host often saturated |
-| 492 | `benchmarks/server-2026-10-17/walk-explore.json` | Reference server result | Vanilla watchdog high counts; remote bots |
-| 493 | `benchmarks/server-equal-mixed-2026-10-18/README.md` | Reference only; fairness caveat | At25 new-chunk rate still differs; vanilla50 watchdog; remote bot host busy |
-| 494 | `benchmarks/server-equal-mixed-2026-10-18/load.txt` | Context only | Bot host CPU 70–93%; server host spikes |
-| 495 | `benchmarks/server-equal-mixed-2026-10-18/mixed-equal.json` | Reference server data | Horizon 1.77/4.74/11.72/23.82ms; vanilla 11.34/34.3/50.45 then watchdog; 25 work differs |
-| 496 | `benchmarks/server-equal-work-2026-10-17/README.md` | Reference method | Paper often faster in walking; vanilla watchdog at100; server-only |
-| 497 | `benchmarks/server-equal-work-2026-10-17/explore-equal-rate.json` | Reference measurements | Both 20TPS; ThinkPad Linux/OpenJDK25 only |
-| 498 | `benchmarks/server-equal-work-2026-10-17/horizon.json` | Reference server benchmark | At100 walking ~114.5ms MSPT/8.7TPS; no client data |
-| 499 | `benchmarks/server-equal-work-2026-10-17/run-1-before-chunk-cache.json` | Historical reference | High-load outliers/watchdog; server revision specific |
-| 500 | `benchmarks/server-equal-work-2026-10-17/run-2-chunk-cache.json` | Historical reference | No matched vanilla baseline |
+| 476 | `benchmarks/rust-world-2026-10-05/scoped-parity.json` | Unnecessary; Reference; Version-specific | No output hash/reference pair; not implementation evidence |
+| 477 | `benchmarks/rust-world-border-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No persistence/listener/damage/network integration |
+| 478 | `benchmarks/rust-world-collision-check-2026-10-07/movement-regression.json` | Adaptable; Version-specific | Providers/entity lists/border controlled; no live broad phase |
+| 479 | `benchmarks/rust-world-collision-check-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Live entity broad phase/minecart/world lifecycle incomplete |
+| 480 | `benchmarks/rust-world-edge-backoff-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Isolated query, not integrated Player physics/world |
+| 481 | `benchmarks/rust-world-movement-2026-10-07/geometry-regression.json` | Adaptable; Version-specific | No live World shape selection/integrated movement |
+| 482 | `benchmarks/rust-world-movement-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No live provider/full movement tick/input lifecycle |
+| 483 | `benchmarks/rust-world-ray-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No live world/chunk provider/complete consumers |
+| 484 | `benchmarks/rust-worldgen-2026-10-06/scoped-parity.json` | Adaptable; Reference; Version-specific | Selected codec/query manifests only; no full terrain/chunk/world proof |
+| 485 | `benchmarks/rust-worldgen-random-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Gaussian/concurrent/full decoration outside scope |
+| 486 | `benchmarks/server-2026-10-17/README.md` | Adaptable; Reference; Version-specific | Bot host overloaded, unequal workloads and vanilla watchdog; not Android client |
+| 487 | `benchmarks/server-2026-10-17/earlier-002f14ce/explore-equal-rate.json` | Unnecessary; Reference; Version-specific | Server only, one pass; not A22/client FPS |
+| 488 | `benchmarks/server-2026-10-17/earlier-002f14ce/load.txt` | Unnecessary; Reference; Version-specific | Remote bot host high load/ThinkPad variability confound |
+| 489 | `benchmarks/server-2026-10-17/earlier-002f14ce/walk-explore.json` | Unnecessary; Reference; Version-specific | Vanilla watchdog/broken pipe at high load; unequal chunks |
+| 490 | `benchmarks/server-2026-10-17/explore-equal-rate.json` | Unnecessary; Reference; Version-specific | Server tick/RSS/CPU only |
+| 491 | `benchmarks/server-2026-10-17/load.txt` | Unnecessary; Reference; Version-specific | Mac mini bot host often saturated |
+| 492 | `benchmarks/server-2026-10-17/walk-explore.json` | Unnecessary; Reference; Version-specific | Vanilla watchdog high counts; remote bots |
+| 493 | `benchmarks/server-equal-mixed-2026-10-18/README.md` | Adaptable; Reference; Version-specific | At25 new-chunk rate still differs; vanilla50 watchdog; remote bot host busy |
+| 494 | `benchmarks/server-equal-mixed-2026-10-18/load.txt` | Unnecessary; Reference; Version-specific | Bot host CPU 64–95%; ThinkPad CPU 2–100%; host-load variability caveat |
+| 495 | `benchmarks/server-equal-mixed-2026-10-18/mixed-equal.json` | Unnecessary; Reference; Version-specific | Horizon 1.77/4.74/11.72/23.82ms; vanilla 11.34/34.3/50.45 then watchdog; 25 work differs |
+| 496 | `benchmarks/server-equal-work-2026-10-17/README.md` | Adaptable; Reference; Version-specific | Horizon/Vanilla server method; Vanilla watchdog at 100 bots; no client measurements |
+| 497 | `benchmarks/server-equal-work-2026-10-17/explore-equal-rate.json` | Unnecessary; Reference; Version-specific | Both 20TPS; ThinkPad Linux/OpenJDK25 only |
+| 498 | `benchmarks/server-equal-work-2026-10-17/horizon.json` | Unnecessary; Reference; Version-specific | At100 walking ~114.5ms MSPT/8.7TPS; no client data |
+| 499 | `benchmarks/server-equal-work-2026-10-17/run-1-before-chunk-cache.json` | Unnecessary; Reference; Version-specific | High-load outliers/watchdog; server revision specific |
+| 500 | `benchmarks/server-equal-work-2026-10-17/run-2-chunk-cache.json` | Unnecessary; Reference; Version-specific | No matched vanilla baseline |
 
 ## Part 22 — Entries 501–525
 
