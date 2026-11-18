@@ -61,3 +61,16 @@ Before reporting a batch complete:
 - Only then report the completed range and stop at the batch boundary.
 
 The next batch after 801–1000 is **1001–1200**.
+
+
+## QA review and canonical file-size accounting
+
+- QA reviews of existing entries are separate from new source-audit stages. QA may be reported in 100-entry ranges; it must not renumber entries, reselect paths, or create duplicate source paths.
+- For each QA range, verify sequential numbering, path uniqueness against the full index, exactly one occurrence of each of the 15 required fields, ledger/index path and decision alignment, and source SHA equality with the pinned upstream tree.
+- Canonical logical line count is the number of LF-terminated lines, plus one only when the source blob does not end in LF. Do not count the synthetic empty split element after a final newline as a source line.
+- Source byte size must match the pinned Git tree/blob metadata. Optional character counts must use one consistent UTF-8 decoding convention.
+- Coverage ranges must not extend beyond the canonical logical line count. Multi-range reads must be consecutive, gap-free, and end exactly at the canonical final line.
+- Primary Decision labels are **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, and **undetermined**. Approved secondary qualifiers are **reference**, **version-specific**, and **optional/future**; they supplement a primary decision and do not replace it.
+- The Decision field and Index decision column must use one or more primary decision labels. Do not use placeholders such as "See ledger decision" or sentiment wording such as "Highly relevant/adaptable" as decision labels.
+- Every QA correction must be recorded in `AUDIT_QA_LOG.md`, including the baseline commit, affected entry numbers, exact correction and verification result.
+- QA may correct active-branch records, but must never modify the frozen archive branch.
