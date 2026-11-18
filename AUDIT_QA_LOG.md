@@ -130,3 +130,45 @@ This log records quality-control reviews of existing Starling audit entries. QA 
 - All three requests returned source SHA `b27bf4fda2c50ec7b81adb316aa0d12359e2dc56`.
 - Ranges contain 400 + 400 + 351 = 1,151 logical lines, with no gaps or overlaps.
 - Updated entry 111 Coverage to record these exact ranges. No source implementation claim or completion status was promoted by this re-read.
+
+
+## QA batch 201–300 — 2026-11-18
+
+### Scope and checks
+
+- Reviewed entries 201–300 in `AUDIT_LEDGER_1_400.md`; this was a QA correction pass, not a new source-audit batch.
+- Verified exactly 100 sequential ledger entries (201–300), each with all 15 required fields exactly once.
+- Compared the Index rows 201–300 with the ledger: all 100 entry numbers and source paths agree.
+- Compared the batch against entries 1–200 and all remaining ledgers through 1000: all 100 paths are unique within the batch and absent from the previous 200; the full 1,000-entry set still has 1,000 unique paths.
+- Verified every source path exists in the pinned Starling tree at commit `5432370d573642041585c69b40fb045b27133488` (5,749 tree entries; not truncated).
+- All 100 recorded source blob SHAs match the pinned Git tree exactly.
+- All 100 recorded byte sizes match the pinned Git tree exactly.
+- Fetched and parsed each of the 100 source JSON files. All 100 parse successfully; no invalid JSON was found.
+- For all 100 source files, the prior recorded line count was one greater than the canonical logical line count because the terminal LF was counted as an additional blank line. Corrected all 100 line counts by one. No path, source SHA or byte size changed.
+- Coverage entries describe complete JSON retrieval and contain no numeric chunk ranges; source blobs were retrieved in full for parse and line-count checks.
+- Standardized all 100 Ledger Decision labels and matching Index decision cells to the approved taxonomy. The exact original descriptive assessment is retained alongside each Ledger decision, and contextual reasons remain in the Index reason column.
+
+### Corrections made on the active audit branch
+
+1. Corrected logical line counts for entries 201–300 (all 100 entries: prior count minus one). Byte sizes were retained because all matched the pinned Git tree.
+2. Standardized 100 Decision labels:
+   - Adaptable primary decision with Version-specific qualifier for reusable test methods, algorithms, data structures and benchmark patterns.
+   - Added Reference qualifier where the original entry explicitly limited the artifact to reference use.
+   - Used Unnecessary; Reference; Version-specific for the two component-model reports explicitly marked "Reference only" and incompatible with 1.20.1's legacy item-data model.
+3. Kept original descriptive assessment text in every Ledger Decision line and preserved the detailed Index reason column. No technical conclusion was silently dropped.
+
+### Verification
+
+- All 100 JSON sources parsed successfully.
+- All 100 SHAs and byte sizes match the pinned upstream tree.
+- All 100 source paths are present in the pinned tree.
+- 1,000 ledger entries remain sequential and globally path-unique.
+- All 100 Index paths still match the Ledger; all 100 decisions use approved labels.
+- No changes were made to either the original backup branch or the duplicate archive branch.
+- No Rust build, unit-test suite, benchmark execution, APK build, Android device test, Minecraft launch, or multiplayer-server connection was performed.
+
+### Next QA batch
+
+- Next range: **301–400**.
+- Continue only on `starling-1.20.1-port-audit`.
+- Keep the original backup branch unchanged. The duplicate archive branch is still present because the available GitHub connection has no branch-deletion action.
