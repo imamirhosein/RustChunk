@@ -1252,7 +1252,7 @@
 | 1086 | `crates/horizon-client/src/entity_culling.rs` | adaptable; reference; optional/future | Fail-open is safe; partial blocks/leaves/glass/openings must not be treated fully opaque; mobile CPU cost matters. |
 | 1087 | `crates/horizon-client/src/entity_nbt.rs` | rewrite required; reference; version-specific | 26.3 schema uses Item Components/modern entities; 1.20.1 uses old ItemStack NBT and different fields. |
 | 1088 | `crates/horizon-client/src/entity_rules.rs` | adaptable; reference; version-specific | Per-entity overrides/constants must come from 1.20.1; blanket defaults are unsafe. |
-| 1089 | `crates/horizon-client/src/entry.rs` | adaptable; reference; version-specific | Horizon desktop/Android/native-mod facilities are mixed; native hooks aren't vanilla requirements; Unix file-limit changes may not help Android. |
+| 1089 | `crates/horizon-client/src/game/blockctl.rs` | unnecessary; reference; optional/future | Horizon-only scripted test controls; exclude from the 1.20.1 core and consider only as bounded development tooling. |
 | 1090 | `crates/horizon-client/src/equipment.rs` | unnecessary; reference; version-specific | New equipment/equippable format, not Java 1.20.1 armor layers. |
 | 1091 | `crates/horizon-client/src/extras_hud.rs` | adaptable; reference; optional/future | Panel layout generic; minimap data/assets need target validation; not vanilla HUD. |
 | 1092 | `crates/horizon-client/src/falling_block.rs` | adaptable; reference; version-specific | Mostly vanilla; exact formula/caps/wear/event order need 1.20.1. Mob impact test ignored, not passed. |

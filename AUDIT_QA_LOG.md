@@ -676,11 +676,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Every new Ledger entry contains all 15 required fields exactly once; all Index rows match their Ledger paths and decisions.
 - Findings distinguish vanilla 1.20.1 behavior from Create 6.0.10, Horizon-only APIs and later-version data/features.
 
-### Historical duplicate path discovered
+### Historical duplicate path — corrected and closed
 
-- Full-index validation found a pre-existing duplicate: `crates/horizon-client/src/entry.rs` appears at entries 121 and 1089.
-- None of the 20 new paths duplicates an existing path, but global Index path uniqueness is not satisfied until entry 1089 is replaced. Earlier QA for 1081–1100 missed this older duplicate.
-- Corrective closure is required before checkpoint 1121–1140. Keep other numbers unchanged; inspect a unique replacement source fully, correct entry 1089 and its Index row, record the correction and add the replacement to the skip set.
+- The full Index initially contained `crates/horizon-client/src/entry.rs` at both entries 121 and 1089. The duplicate at 1089 has now been replaced without changing any other entry number.
+- Replacement: `crates/horizon-client/src/game/blockctl.rs`, from pinned source commit `5432370d573642041585c69b40fb045b27133488`; source SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`; 7136 bytes; 179 logical lines.
+- The replacement was fully read, lines 1–179 to EOF. Pinned-tree SHA and byte size match. Findings classify it as Horizon-only scripted test tooling, not vanilla 1.20.1 gameplay; no tests or builds were run.
+- This is the first eligible unindexed source path immediately after the former 1120 endpoint (`crates/horizon-client/src/game/block_items.rs`). It is now indexed at slot 1089 and must remain in the full skip set so it is not audited again as an ordinary next entry.
+- Global Index validation now reports 1120 numbered rows and 1120 distinct source paths, with no duplicate paths. Entry 121 remains the sole audited occurrence of `crates/horizon-client/src/entry.rs`.
+- Resume the deterministic source-tree scan at `crates/horizon-client/src/game/boat_authority_fixture.rs` for the next checkpoint, after rebuilding the skip set from the corrected full Index.
 
 ### Limits
 
@@ -690,7 +693,7 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 - Appended exactly 20 complete 15-field entries (1101–1120), 20 Index rows and this QA record.
 - Continuity is updated to 120/200 and records the duplicate-path hold; Protocol status is updated through 1120.
-- Pre-commit checks cover sequential numbering, new-path uniqueness, 15 fields and pinned SHA/byte sizes. Post-commit read-back of all five docs is required.
+- Pre-commit checks cover sequential numbering, 15 fields and pinned SHA/byte sizes. The checkpoint was committed as `03bf34e57055632975deb0185b10363b807a1b51`; all five documents were re-read from the branch and their updated content and blob SHAs were verified. The separate duplicate correction is recorded above.
 - Existing backups are untouched; next backup only after entries 1001–2000 are fully audited and globally verified.
 
 ### Next action

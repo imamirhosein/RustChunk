@@ -1514,23 +1514,22 @@
 - Completion state: 33 logical lines read to EOF. No tests.
 
 
-### 1089. `crates/horizon-client/src/entry.rs`
+### 1089. `crates/horizon-client/src/game/blockctl.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `7bc456b6ffdc89d055d8428db37dc371d5c44233`
-- Size: 9374 bytes; 245 logical lines
-- Coverage: 1–245
-- Purpose: Application entry for process setup, logging/crash/memory and run loop.
-- Dependencies / cross-references: Launcher options, threads, telemetry, crash reporting, native hooks and platform startup.
-- Implementation / logic: Prepares services/thread priorities, parses options and enters game loop.
-- Findings: Horizon desktop/Android/native-mod facilities are mixed; native hooks aren't vanilla requirements; Unix file-limit changes may not help Android.
-- RustChunk relevance: Architecture reference for startup separation.
-- Decision: **adaptable; reference; version-specific — separate RustChunk process startup from target-specific platform/game initialization.**
-- 1.20.1 implications: Build RustChunk-owned Android/desktop startup; exclude Horizon hooks/telemetry from baseline.
-- Follow-up checks: Map startup per OS; test resource failure, cleanup and memory/thread settings.
-- RustChunk implementation mapping: Separate app/entry, platform/android/startup, platform/desktop/startup and engine/session.
-- Evidence required before adoption: Startup lifecycle/failure tests and Android cold-start/resource validation.
-- Completion state: 245 logical lines read to EOF. No build/runtime test.
-
+- Source SHA: `94b3853a94ceb4d905e477434553f0a84b4730e5`
+- Size: 7136 bytes; 179 logical lines
+- Coverage: 1–179
+- Purpose: Internal control-socket commands for scripted block tests: setblock, fill, getblock and container inspection/item insertion.
+- Dependencies / cross-references: Game command dispatcher, integrated-server owner-level thread, block-state parser and registry resolver, world block/entity storage, ItemStack, and JSON command responses.
+- Implementation / logic: Parses namespaced block states and key=value properties; resolves states through the asset registry; formats state IDs; removes/recreates block entities around level_set; routes integrated singleplayer work to the server owner level; forwards remote setblock/fill through chat; reads local block/container state and inserts into the first empty container slot.
+- Findings: This is a Horizon developer/test-control interface, not a player-facing vanilla block interaction or a 1.20.1 vanilla command implementation. Remote writes are delegated to the remote server rather than performed locally. The fill loop has no visible volume cap in this file, and container insertion has no visible stack-size validation.
+- RustChunk relevance: No baseline gameplay requirement; possible reference for deterministic developer-side world fixtures and inspection tooling only.
+- Decision: **unnecessary; reference; optional/future — exclude from the 1.20.1 client core; consider only a separately gated and bounded developer test tool.**
+- 1.20.1 implications: Do not implement client-side remote-world mutation. For singleplayer tests, use a local test harness or an explicitly development-only server-side path; resolve state and item identifiers from 1.20.1 registries and enforce command authorization, fill-volume and stack limits.
+- Follow-up checks: Review control-socket authentication and release exposure; cap fill volume; validate item counts and slot limits; verify owner-thread execution, block-entity replacement, and remote command delegation. These checks were not run.
+- RustChunk implementation mapping: No core mapping; possible `devtools/block_commands.rs` behind an explicit development feature, not created.
+- Evidence required before adoption: Threat model and access-control tests, bounded-fill/inventory tests, owner-thread guarantees, and differential fixtures against a 1.20.1 local server.
+- Completion state: COMPLETE — all 179 logical lines read to EOF; source SHA and byte size match the pinned tree; no tests, builds or game runs performed.
 
 ### 1090. `crates/horizon-client/src/equipment.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488

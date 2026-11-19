@@ -15,6 +15,7 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 - Continue in deterministic source-tree path order from the last audited path.
 - A source path may appear only once in the audit. Before selecting new files, build the skip set from every path already present in the current index (currently entries 1–1120); do not give a path a second audit number.
 - Corrective closure for entries 1–1000: six duplicate slots (631, 632, 633, 754, 762 and 766) were replaced with the six next unique paths after the former entry-1000 endpoint: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`. Those six files are already audited and must be skipped by future batches.
+- Corrective closure for the 1001–1200 stage: the duplicate at entry 1089 was replaced, without renumbering other entries, by the next eligible unique source path after the former 1120 endpoint, `crates/horizon-client/src/game/blockctl.rs` (pinned SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`; 179 lines). This replacement is already audited and must be skipped; the next scan begins at `crates/horizon-client/src/game/boat_authority_fixture.rs`.
 - Each file must be inspected completely before moving on. For long files, read consecutive sections of at most 400 lines until the end of that file.
 - If a source file cannot be read completely, record the exact limitation and do not mark it as fully reviewed.
 
@@ -61,7 +62,7 @@ Before reporting a batch complete:
 - Do not proceed to the next 20 until the current checkpoint commit is confirmed.
 - Report progress at each saved checkpoint; report the 200-entry stage complete only after checkpoint 1200 is committed and globally revalidated.
 
-Current continuation state (2026-11-19): entries **1001–1120** are committed. Checkpoint 1101–1120 is saved. Correct the historical duplicate at entry 1089 before starting checkpoint 1121–1140. Read `AUDIT_CONTINUITY.md` before each new chat.
+Current continuation state (2026-11-19): entries **1001–1120** are committed. Checkpoint 1101–1120 is saved and read-back verified. The historical duplicate at entry 1089 is corrected; the full Index has 1120 unique paths. Skip `crates/horizon-client/src/game/blockctl.rs` and resume checkpoint 1121–1140 at `crates/horizon-client/src/game/boat_authority_fixture.rs`. Read `AUDIT_CONTINUITY.md` before each new chat.
 
 
 ## QA review and canonical file-size accounting

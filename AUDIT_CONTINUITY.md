@@ -62,12 +62,17 @@ The previous long chat branch was interrupted while reviewing the large Horizon/
 
 ## Current task
 
-Resume with the next not-yet-audited unique upstream path after the last path recorded for entry 1100. Build the skip set from the full Index through 1120. Correct entry 1089 (path also used at 121) before continuing with checkpoint **1121–1140**.
+- Stage 1001–1200: 120/200 numbered entries complete (60%); checkpoint 1101–1120 is committed and read-back verified.
+- The historical duplicate at entry 1089 is corrected: it now records `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only occurrence of `crates/horizon-client/src/entry.rs`.
+- The full Index now contains 1120 rows and 1120 unique source paths. Keep `blockctl.rs` in the skip set; it is a corrective replacement in slot 1089, not a future new entry.
+- Resume checkpoint **1121–1140** at the next eligible pinned-tree path: `crates/horizon-client/src/game/boat_authority_fixture.rs`. Rebuild the skip set from the full corrected Index before selecting subsequent files.
+- Both existing backups remain untouched. The next backup is due only after entries 1001–2000 are fully committed and globally verified.
 
+## Historical duplicate-path correction — 2026-11-19
 
-## Historical duplicate-path hold — 2026-11-19
+- Duplicate found: `crates/horizon-client/src/entry.rs` at entries 121 and 1089.
+- Corrective replacement: entry 1089 is now `crates/horizon-client/src/game/blockctl.rs` (pinned SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`, 7136 bytes, 179 logical lines), read fully to EOF.
+- No other entry numbers changed. Global Index path uniqueness is restored: 1120 entries, 1120 unique paths, zero duplicates.
+- The replacement path is included in the skip set. Next scan starts at `crates/horizon-client/src/game/boat_authority_fixture.rs`.
+- Backups were not modified.
 
-- Full Index validation found `crates/horizon-client/src/entry.rs` at entries 121 and 1089.
-- New entries 1101–1120 are unique and SHA/byte-size verified. Global path uniqueness remains blocked by the historical duplicate.
-- Replace entry 1089 with the next eligible unique source path, inspect it fully, update Ledger/Index/QA and add it to the skip set before checkpoint 1121–1140.
-- Do not touch either backup.
