@@ -1380,7 +1380,7 @@
 - Implementation / logic: Connects, sends/updates presence, reconnects and rate-limits updates.
 - Findings: Optional desktop feature, not gameplay or Android runtime; never expose addresses, world names or invite codes.
 - RustChunk relevance: No baseline dependency; queue/reconnect patterns are generic only.
-- Decision: unnecessary; reference; optional/future
+- Decision: **unnecessary; reference; optional/future — keep out of core; optional desktop IPC only with strict privacy controls.**
 - 1.20.1 implications: Java 1.20.1 does not require Discord Rich Presence; isolate any future integration from mobile/game core.
 - Follow-up checks: Only revisit with explicit opt-in, fake IPC, reconnect/backoff and privacy tests.
 - RustChunk implementation mapping: No core mapping; optional platform/desktop/discord_presence.
@@ -1398,7 +1398,7 @@
 - Implementation / logic: Computes vertical bob and time-driven model rotation.
 - Findings: Rotation order/model-space convention must match Java 1.20.1 exactly.
 - RustChunk relevance: Narrow rendering reference for an existing entity; not lifecycle or beam logic.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — reuse the isolated transform only after 1.20.1 transform-order parity.**
 - 1.20.1 implications: Validate 1.20.1 bob period, rotation axis and matrix order.
 - Follow-up checks: Compare fixed tick/partial-tick transforms and beam attachment.
 - RustChunk implementation mapping: Candidate render/entities/end_crystal helper.
@@ -1416,7 +1416,7 @@
 - Implementation / logic: Detects crossing, resolves destination and handles cooldown/entity/pearl travel.
 - Findings: Swept-AABB is reusable; destination search/cooldown/tick order require Java 1.20.1 parity.
 - RustChunk relevance: Useful narrow gameplay reference; End Gateway exists in 1.20.1.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — retain swept-crossing geometry, rebuild gateway destination and cooldown from 1.20.1.**
 - 1.20.1 implications: Reproduce 1.20.1 destination, exit placement, cooldown and eligibility.
 - Follow-up checks: Test direction/fast crossing/entity size/pearl/cooldown/blocked exit/unloaded chunks.
 - RustChunk implementation mapping: Candidate world/portal/end_gateway using shared swept-volume geometry.
@@ -1434,7 +1434,7 @@
 - Implementation / logic: Updates entity movement/interactions, item merge/pickup, XP collection and frame/painting/armor stand state.
 - Findings: Modern Item Components/later entity types are mixed in; ItemStack merging must use 1.20.1 NBT; resource-dependent early returns are skipped, not passed.
 - RustChunk relevance: Important entity lifecycle/physics reference, not drop-in.
-- Decision: rewrite required; reference; version-specific
+- Decision: **rewrite required; reference; version-specific — decompose vanilla entity behavior and rebuild on the 1.20.1 NBT ItemStack/entity model.**
 - 1.20.1 implications: Rebuild only Java 1.20.1 entities/fields; exclude later types/components.
 - Follow-up checks: Add item/XP/painting/frame/armor-stand oracle cases; treat early returns as skipped.
 - RustChunk implementation mapping: Decompose world/entities/items, experience_orbs, paintings, item_frames and armor_stands (proposed).
@@ -1452,7 +1452,7 @@
 - Implementation / logic: Calculates fluid contact/submersion and water/lava flow for entities and boats.
 - Findings: Fluid heights/vectors/tags, eye-height and chunk rules are version-specific.
 - RustChunk relevance: Relevant 1.20.1 physics reference with target data.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — rebuild fluid facts, tags and immersion rules from 1.20.1.**
 - 1.20.1 implications: Rebuild with 1.20.1 tags, source/flowing states and shapes.
 - Follow-up checks: Test partial immersion, water/lava, unloaded neighbors, boats and current direction.
 - RustChunk implementation mapping: Candidate world/fluids/entity_interaction helper fed by target facts.
@@ -1470,7 +1470,7 @@
 - Implementation / logic: Checks full occlusion; invalid inputs or exhausted budget fail open.
 - Findings: Fail-open is safe; partial blocks/leaves/glass/openings must not be treated fully opaque; mobile CPU cost matters.
 - RustChunk relevance: Optional rendering optimization, not core correctness.
-- Decision: adaptable; reference; optional/future
+- Decision: **adaptable; reference; optional/future — optional optimization only after conservative occlusion and mobile-cost tests.**
 - 1.20.1 implications: Use only with 1.20.1 target shapes; false culling is a rendering bug.
 - Follow-up checks: Test partial blocks/slabs/stairs/leaves/glass/gaps/unloaded chunks/budget and Android CPU cost.
 - RustChunk implementation mapping: Optional render/culling/entity_occlusion, disabled until parity and device benchmarks.
@@ -1488,7 +1488,7 @@
 - Implementation / logic: Dispatches NBT reads/writes by entity type and reconstructs nested entity/item state.
 - Findings: 26.3 schema uses Item Components/modern entities; 1.20.1 uses old ItemStack NBT and different fields.
 - RustChunk relevance: Persistence is essential, but this is a schema reference only.
-- Decision: rewrite required; reference; version-specific
+- Decision: **rewrite required; reference; version-specific — rebuild the entity save schema from Java 1.20.1; do not port the 26.3 serializer.**
 - 1.20.1 implications: Rebuild 1.20.1 entity NBT fields, old ItemStack, UUID/Pos/Motion/Rotation and passenger data.
 - Follow-up checks: Per-entity Java 1.20.1 round-trip fixtures, absent fields, equipment, projectiles and corrupt NBT.
 - RustChunk implementation mapping: Versioned persistence/nbt/entity_1_20_1 dispatcher; generic NBT primitives separate.
@@ -1506,7 +1506,7 @@
 - Implementation / logic: Provides small policy/default queries for gravity and fluid push.
 - Findings: Per-entity overrides/constants must come from 1.20.1; blanket defaults are unsafe.
 - RustChunk relevance: Useful abstraction separating policy from physics.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — keep the policy abstraction and populate it from 1.20.1 per-entity rules.**
 - 1.20.1 implications: Verify gravity, NoGravity and fluid-push exclusions for 1.20.1.
 - Follow-up checks: Table-test player, mobs, items/XP, projectiles and vehicles.
 - RustChunk implementation mapping: Candidate world/entities/rules consumed by physics.
@@ -1524,7 +1524,7 @@
 - Implementation / logic: Prepares services/thread priorities, parses options and enters game loop.
 - Findings: Horizon desktop/Android/native-mod facilities are mixed; native hooks aren't vanilla requirements; Unix file-limit changes may not help Android.
 - RustChunk relevance: Architecture reference for startup separation.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — separate RustChunk process startup from target-specific platform/game initialization.**
 - 1.20.1 implications: Build RustChunk-owned Android/desktop startup; exclude Horizon hooks/telemetry from baseline.
 - Follow-up checks: Map startup per OS; test resource failure, cleanup and memory/thread settings.
 - RustChunk implementation mapping: Separate app/entry, platform/android/startup, platform/desktop/startup and engine/session.
@@ -1542,7 +1542,7 @@
 - Implementation / logic: Parses modern definitions and resolves texture/layer references.
 - Findings: New equipment/equippable format, not Java 1.20.1 armor layers.
 - RustChunk relevance: Not suitable for 1.20.1 armor rendering.
-- Decision: unnecessary; reference; version-specific
+- Decision: **unnecessary; reference; version-specific — exclude modern equipment assets/components; implement 1.20.1 armor layers.**
 - 1.20.1 implications: Implement old 1.20.1 armor models/layers; exclude modern components.
 - Follow-up checks: Inspect target armor models, textures, trims/dye and overrides.
 - RustChunk implementation mapping: No direct mapping; render/equipment/armor_1_20_1.
@@ -1560,7 +1560,7 @@
 - Implementation / logic: Places panels and draws minimap/marker/compass overlays.
 - Findings: Panel layout generic; minimap data/assets need target validation; not vanilla HUD.
 - RustChunk relevance: Potential optional UI extension, not baseline.
-- Decision: adaptable; reference; optional/future
+- Decision: **adaptable; reference; optional/future — retain only optional panel layout; minimap/extras remain outside baseline.**
 - 1.20.1 implications: Keep disabled in baseline; any map data uses target conventions.
 - Follow-up checks: Test GUI scale/aspect/overlap and marker orientation if later scoped.
 - RustChunk implementation mapping: Optional ui/hud/extras; gameplay independent.
@@ -1578,7 +1578,7 @@
 - Implementation / logic: Updates motion/landing, computes damage, applies anvil wear and placement/drop.
 - Findings: Mostly vanilla; exact formula/caps/wear/event order need 1.20.1. Mob impact test ignored, not passed.
 - RustChunk relevance: High-value simulation reference separate from render.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — port the falling-block state machine after exact 1.20.1 formula/order checks.**
 - 1.20.1 implications: Validate 1.20.1 fields, damage, anvil wear, landing/drop and web/bubble.
 - Follow-up checks: Test sand/gravel/anvil, damage bounds, landing, water/web/bubble and save/load.
 - RustChunk implementation mapping: Candidate world/entities/falling_block plus render adapter.
@@ -1596,7 +1596,7 @@
 - Implementation / logic: Creates camera-facing flame quads from animated sprites.
 - Findings: Sprite paths/timing, transforms and light must match 1.20.1; first-person overlay elsewhere.
 - RustChunk relevance: Narrow render effect separate from burn simulation.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — recreate the flame effect with 1.20.1 atlas, transforms and lighting.**
 - 1.20.1 implications: Rebuild using 1.20.1 fire sprites and renderer conventions.
 - Follow-up checks: Compare fixed frames/entity sizes/light against target captures.
 - RustChunk implementation mapping: Candidate render/entities/fire_overlay.
@@ -1614,7 +1614,7 @@
 - Implementation / logic: Builds hand/item poses and coordinates mining/attack/use/pick actions.
 - Findings: Spear/kinetic/modern item components are out of 1.20.1; HandWorld is a useful boundary.
 - RustChunk relevance: Core presentation/interaction reference needing target schema.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — extract pose patterns and rebuild supported item/interaction contracts for 1.20.1.**
 - 1.20.1 implications: Use 1.20.1 item types/use durations/cooldown; exclude later mechanics.
 - Follow-up checks: Fixed-tick pose fixtures for hands, swing, food, shield, bow, crossbow, map/mining; touch/keyboard separate.
 - RustChunk implementation mapping: Separate render/first_person/poses from gameplay/input_actions.
@@ -1632,7 +1632,7 @@
 - Implementation / logic: Resolves layer stack/biome/settings and void spawn platform/decorations.
 - Findings: Layer/spawn logic useful; modern structure overrides need 1.20.1 validation; missing-resource test early-return is not pass.
 - RustChunk relevance: Useful vanilla worldgen reference, not drop-in.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — rebuild flat-world codec/registries and keep only validated 1.20.1 generation logic.**
 - 1.20.1 implications: Rebuild 1.20.1 settings/codec/registries.
 - Follow-up checks: Test defaults/custom layers/biomes/structures/void/platform/negative Y/packs.
 - RustChunk implementation mapping: Candidate worldgen/flat_1_20_1.
@@ -1650,7 +1650,7 @@
 - Implementation / logic: Renders invite/guest state and handles copy/stop/help/done.
 - Findings: Not vanilla multiplayer; tokens/network addresses sensitive.
 - RustChunk relevance: Not baseline; UI pattern only.
-- Decision: unnecessary; reference; optional/future
+- Decision: **unnecessary; reference; optional/future — exclude Horizon invite/friends service from vanilla engine.**
 - 1.20.1 implications: Exclude from engine; direct server joining remains independent.
 - Follow-up checks: Only revisit with consent, expiry, local storage and threat model.
 - RustChunk implementation mapping: No engine mapping; future launcher UI calls secure sharing service.
@@ -1668,7 +1668,7 @@
 - Implementation / logic: Advances cooking, selects recipe, checks output, consumes fuel and grants XP.
 - Findings: Component equality/new fuel data must become 1.20.1 NBT ItemStack/fuel rules.
 - RustChunk relevance: Relevant vanilla block-entity logic if target APIs used.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — port furnace state machine using 1.20.1 ItemStack, fuel and recipe rules.**
 - 1.20.1 implications: Validate recipe, cook/burn time, remainder, stack limits and XP.
 - Follow-up checks: Test blocked output, recipe changes, fuel exhaustion, lava bucket, max stack and save/load.
 - RustChunk implementation mapping: Candidate world/block_entities/furnace using target APIs.
@@ -1686,7 +1686,7 @@
 - Implementation / logic: Coordinates ticks/input/interactions, entity/block updates, streaming/LOD, frame extraction, reload, save/exit, startup and platform lifecycle.
 - Findings: Monolith mixes vanilla-like behavior with LAN/friends, native hooks, Discord, Bedrock inventory, LOD and later mechanics; ItemStack/NBT uses components.
 - RustChunk relevance: Architecture reference only; decompose responsibilities behind explicit interfaces.
-- Decision: rewrite required; reference; version-specific
+- Decision: **rewrite required; reference; version-specific — decompose and rebuild the vanilla game/session coordinator; do not copy the Horizon monolith.**
 - 1.20.1 implications: Build 1.20.1 coordinator around tick/input/save/entities/chunks/render; exclude Horizon-only/later features.
 - Follow-up checks: Map tick/input/save/chunk/frame/startup against Java 1.20.1; isolate platform adapters.
 - RustChunk implementation mapping: Proposed split: engine/session, world, player, entities, streaming, save, render/frame_extract and platform adapters.
@@ -1704,7 +1704,7 @@
 - Implementation / logic: Caches visible tree, prefers server positions, draws tabs/connectors/frame icons and progress tooltips.
 - Findings: Five roots match vanilla; visibility/assets/text wrapping/server positions need 1.20.1 parity. UI separate from trigger service.
 - RustChunk relevance: Useful UI reference fed by target tree/progress.
-- Decision: adaptable; reference; version-specific
+- Decision: **adaptable; reference; version-specific — reuse the advancement screen only with 1.20.1 tree/assets/protocol.**
 - 1.20.1 implications: Use 1.20.1 roots, hidden/progress rules, sprites, locales and packets.
 - Follow-up checks: Test long descriptions, hidden/complete nodes, tabs, scroll, server positions and missing icons at multiple scales.
 - RustChunk implementation mapping: Candidate ui/screens/advancements over target view model.
@@ -1722,7 +1722,7 @@
 - Implementation / logic: Loads/saves progress JSON, indexes inventory criteria, evaluates predicates, tracks travel/effects and grants/revokes/rewards.
 - Findings: Modern predicate/trigger schema, spear_mobs, entity variants and ItemStack components are not 1.20.1; tests unexecuted.
 - RustChunk relevance: Required vanilla feature, but requires target trigger catalogue and views.
-- Decision: rewrite required; reference; version-specific
+- Decision: **rewrite required; reference; version-specific — rebuild advancement criteria, predicates, item/entity views and packets for 1.20.1.**
 - 1.20.1 implications: Rebuild 1.20.1 criteria/predicates/views/rewards/timestamps/progress JSON/packets; exclude later fields.
 - Follow-up checks: Golden cases for tick/location, inventory, kill, damage, recipe, dimension, effects, fall, loot and save/load.
 - RustChunk implementation mapping: Split gameplay/advancements/state, predicates_1_20_1, triggers_1_20_1, persistence and UI.

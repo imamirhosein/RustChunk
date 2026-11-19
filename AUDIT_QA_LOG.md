@@ -652,3 +652,9 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 ### Next checkpoint
 
 - Continue with entries **1101–1120**, one file at a time.
+
+### Checkpoint 1081–1100 Decision-format correction — 2026-11-19
+
+- Standardized the 20 new Ledger Decision fields to the canonical bold primary-label plus em-dash rationale format.
+- The Index already contained the correct primary labels; this correction aligns the Ledger representation for exact parity checks. The 15 required fields were all present; no field was missing.
+- No source review, SHA, byte-size, coverage or classification changed.
