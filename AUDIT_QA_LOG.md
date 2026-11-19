@@ -604,3 +604,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 ### Next checkpoint
 
 - Continue with entries **1061–1080**. Do not restart or renumber the current 200-file stage.
+
+## Audit checkpoint 1061–1080 — 2026-11-19
+
+- Completed exactly 20 new unique source reviews (entries 1061–1080) from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Every source was read through EOF. Long files were read in consecutive sections of at most 400 lines: cauldron (410), clock (628), crafting (2,497), creative (1,622), debug chart (644), debug entries (506), debug keys (490), debug overlay (711), dialog screen (552) and dialog (895).
+- All 20 records contain the 15 standard fields, source SHA, byte size and canonical logical line count. Source metadata was checked against the pinned upstream tree before writing.
+- Key version findings: crafting and creative inventory need 1.20.1 recipe/ItemStack/NBT reconstruction; cauldron metadata must not use modern components; /data operations need target Unicode/error/path parity; debug systems are optional and 26.3 catalogues are not target data; debug-world is a useful QA preset; native breathing hooks/custom armor are not vanilla requirements; Cushion applicability remains unverified.
+- Server Dialogs are not part of Java 1.20.1: official Java 1.21.6 release notes introduce the feature. Entries 1079–1080 are excluded from the target baseline; local UI ideas do not imply server-dialog compatibility.
+- Android exit reports are useful optional reliability tooling, but raw trace/log content can be sensitive and should remain local until explicit user-controlled redaction/export.
+- No tests, builds, benchmarks, APKs, Android-device tests, Minecraft/Forge launches, server connections or audio/GPU execution were performed.
+- The 20 entries are sequential (1061–1080), unique against entries 1–1060, all 15 fields occur exactly once, and SHA/byte sizes match the pinned upstream tree. Matching Index rows and this QA checkpoint are committed.
+- Next checkpoint: entries 1081–1100. Backup branches remain untouched; next backup is due only after entry 2000.
