@@ -1066,3 +1066,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected only, not run. No build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join, LAN, UPnP or relay test was run.
 - Only the audit branch was changed. `main` and existing backup refs remain untouched. No backup was taken; the next backup remains due only after entries 1001–2000 are complete and globally verified.
 - STOP at 1450. The next proposed section is 1451–1500 and requires explicit user authorization before any file in that range is inspected.
+
+
+## Source-audit checkpoint 1451–1475 — 2026-11-19
+
+- Completed entries 1451–1475 inclusive (25/25) from the pinned Starling tree at `5432370d573642041585c69b40fb045b27133488`.
+- Every source was read completely through EOF. Files over 400 logical lines were re-read in consecutive, gap-free chunks of at most 400 lines; final partial chunks and EOF probes were checked.
+- Pinned source SHA and byte sizes are recorded for all 25 files; canonical line counts and coverage are in the Ledger.
+- All 25 new Ledger entries contain the 15 required fields exactly once. Index rows 1451–1475 match their Ledger paths and Decision values.
+- Global Index validation: 1–1475 sequential with 1,475 unique paths. Active Ledger: 75 entries (1401–1475), each containing all 15 fields.
+- Compatibility findings: sign editing, sniffers, spawners, water splash, containers and structure blocks need 1.20.1/legacy-data adaptation; spear, copper chest, trial-spawner and TestInstanceBlock paths are later-version content. Desktop split-screen is excluded from Android baseline. The station engine is reference only, not Forge support.
+- Embedded tests were inspected as source only, not run. No build, unit test, benchmark, APK, Forge launch, Android device, Minecraft join, LAN, UPnP or relay test was run.
+- Only the audit branch is changed. `main` and backups remain untouched. No backup is due; next backup remains after entries 1001–2000 are globally verified.
+- The user's authorization covers section 1451–1500. Continue with 1476–1500; stop at 1500 for fresh authorization.

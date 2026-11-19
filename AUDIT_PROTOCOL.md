@@ -20,14 +20,14 @@ This is the single authoritative protocol for the Starling source audit on `star
 - Do not ask for permission between the two 25-file checkpoints inside an already authorized 50-file section. Do not cross a 50-file boundary on assumed or implied permission.
 - Do not change the 200 / 50 / 25 cadence unless the user explicitly changes it.
 
-## 3. Active stage state after 1450
+## 3. Active stage state after checkpoint 1451–1475
 
-- Entries 1–1450 are complete. The 200-file stage 1401–1600 is 50/200 complete.
-- Reporting section **1401–1450** is closed; checkpoints 1401–1425 and 1426–1450 are committed and verified.
-- Next proposed reporting section: **1451–1500**. It is **not authorized yet**.
-- STOP at 1450. Do not inspect files 1451–1500 until the user explicitly authorizes that 50-file section.
-- Subsequent sections remain 1501–1550 and 1551–1600, each requiring fresh authorization at the preceding boundary.
-- Preserve historical Ledger/QA records; do not re-audit or renumber completed paths.
+- Entries 1–1475 are complete. The 200-file stage 1401–1600 is 75/200 complete.
+- Reporting section **1401–1450** is closed.
+- The user explicitly authorized section **1451–1500**. Checkpoint **1451–1475** is complete and checkpoint **1476–1500** remains authorized.
+- Continue through entry 1500, then STOP and wait for explicit authorization before section 1501–1550.
+- The following section 1551–1600 also requires fresh authorization at the preceding 50-file boundary.
+- Preserve historical records; do not re-audit or renumber completed paths.
 
 ## 4. Deterministic source selection and uniqueness
 
@@ -135,16 +135,16 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Completed entries: **1–1450**.
+- Completed entries: **1–1475**.
 - Closed reporting sections include **1201–1250**, **1251–1300**, **1301–1350**, **1351–1400**, and **1401–1450**.
-- Active 200-file stage: **1401–1600**; completed 50/200.
-- Next proposed section: **1451–1500**, pending explicit user authorization.
-- Stop at 1450; no file beyond this boundary may be inspected until the next section is explicitly authorized.
+- Active 200-file stage: **1401–1600**; completed 75/200.
+- Current authorized section: **1451–1500**; checkpoint 1451–1475 committed, checkpoint 1476–1500 remains authorized.
+- Stop at 1500; no file beyond this boundary may be inspected until section 1501–1550 is explicitly authorized.
 - Active Ledger: `AUDIT_LEDGER_1401_1600.md`; Index: `AUDIT_INDEX.md`; QA: `AUDIT_QA_LOG.md`; Continuity: `AUDIT_CONTINUITY.md`.
-- Index: 1,450 sequential entries and 1,450 unique paths. Active Ledger: 50 entries (1401–1450), each with exactly 15 required fields.
+- Index: 1,475 sequential entries and 1,475 unique paths. Active Ledger: 75 entries (1401–1475), each with exactly 15 required fields.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
-- Existing backups: `backup/audit-1000-unique-2026-11-18` at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; `backup/audit-1000-final-2026-11-19` at `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`. Do not modify them.
-- `main` remains untouched. No tests/builds/device/server validation were performed. Next backup is due after entries 1001–2000 are complete and globally verified.
+- Existing backup refs remain read-only and untouched: `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19`.
+- `main` remains untouched. No tests/builds/device/server validation was performed. Next backup is due after entries 1001–2000 are complete and globally verified.
 
 ## 13. Historical corrections preserved
 
@@ -168,3 +168,13 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Inspect files serially, with consecutive chunks of at most 400 lines for larger files. Keep user reports very short.
 - Do not alter `main`, existing backup refs or deleted archive branch. No backup is due at 1450; next backup is at the 1000-entry cadence.
 
+
+
+## 14. Authorization and resume update — checkpoint 1451–1475 — 2026-11-19
+
+- The user explicitly authorized section **1451–1500**.
+- Checkpoint **1451–1475** is documented in all five audit documents and committed/read-back verified.
+- Continue with the already-authorized checkpoint **1476–1500** without requesting intermediate permission.
+- After 1500, stop and wait for explicit user authorization before 1501–1550.
+- Preserve the exact 200 / 50 / 25 cadence, serial file inspection and maximum 400-line chunk rule.
+- No build/test/device/server validation and no backup is due at this checkpoint.
