@@ -1023,3 +1023,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - RustChunk decision remains that Horizon's native Rust mod API is not Forge 1.20.1 compatibility. Its validation and architecture patterns are references only; these files do not provide Java classloading, Forge/FML, ModLauncher, Mixin, or JVM execution.
 - Only the audit branch is changed. main and backup branches remain untouched. No backup is due at this checkpoint.
 - The user has authorized the full section 1351–1400. Continue with checkpoint 1376–1400, then stop at 1400.
+
+## Source-audit checkpoint 1376–1400 — 2026-11-19
+
+- Completed entries 1376–1400 inclusive (25/25); the authorized 50-file section 1351–1400 is now complete.
+- Largest files were read in contiguous chunks through EOF: native_server.rs (1,217 lines), nether_portal.rs (1,396), pad_menu.rs (1,594), and persist.rs (1,879). All files over 400 lines include their final partial chunk.
+- All 25 source SHAs match the pinned Starling tree; byte sizes and logical line counts were checked.
+- Index read-back: 1–1400 sequential, 1,400 unique paths, no duplicates.
+- Ledger read-back: 1–1400 contains 200 records; all 15 required fields appear exactly once per record. Entries 1376–1400 align with the Index paths.
+- Compatibility decisions distinguish native-mod-only APIs, later-version-only features, optional controller/diagnostic features and core 1.20.1 behavior requiring version-specific adaptation. In particular, Nautilus and Ominous Item Spawner are excluded from the 1.20.1 baseline.
+- Source review only: embedded tests were inspected, not run. No build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join or server test was performed.
+- Only the audit branch was changed. main and backup branches remain untouched. The next backup is still governed by the 1000-entry cadence; no backup was taken here.
+- STOP at entry 1400. The next section is 1401–1450 and requires explicit user authorization.
