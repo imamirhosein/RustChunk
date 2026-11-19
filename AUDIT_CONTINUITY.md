@@ -6,22 +6,22 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed and committed entries: **1–1300**.
+- Completed and committed entries: **1–1325**.
 - Closed 200-file stage: **1001–1200** (200/200).
 - Active 200-file stage: **1201–1400**.
-- Completed in the active stage: **1201–1300** (100/200).
-- Authorization state: **STOP**. Do not inspect entry 1301 or later until the user explicitly authorizes the next 50-file section.
+- Completed in the active stage: **1201–1325** (125/200).
+- Authorization state: **CONTINUE within authorized section 1301–1350**. The user explicitly authorized this 50-file section; checkpoint 1301–1325 is committed and verified. Do not cross 1350.
 - Exact cadence: each 200-file stage has **four 50-file reporting sections**; each 50 has **two exact 25-file checkpoints**. Thus each 200 has eight 25-file checkpoints.
 - A 25-file checkpoint is committed and re-read/verified before the next 25 begins.
 - A 50-file boundary is the report/pause boundary. Do not ask permission between the two 25-file checkpoints inside an authorized 50. Stop after the 50 and wait for explicit approval.
 
 ## Next section (not yet authorized)
 
-- Next section: **1301–1350**.
-- Checkpoints: **1301–1325**, then **1326–1350**.
+- Authorized active section: **1301–1350**.
+- Completed checkpoint: **1301–1325** (25/50), committed and read-back verified.
+- Next checkpoint, already authorized: **1326–1350**. Complete it without asking for intermediate approval.
 - After 1350: report 150/200 for stage 1201–1400 and STOP. Wait for explicit authorization before 1351–1400.
 - After authorization, checkpoints 1351–1375 and 1376–1400 complete the stage. Revalidate globally before reporting 200/200.
-- Naming the next range here is not authorization to inspect it. Explicit user start instruction is required.
 
 ## Stage layout from 1401 onward
 
@@ -83,9 +83,9 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 
 - Entries 1–1000: completed and historically QA-reviewed in documented ranges.
 - Entries 1001–1200: all ten former 20-file checkpoints completed and verified; stage closed.
-- Entries 1201–1300: completed; final recorded checkpoint is 1281–1300. The 20 files, paths, source SHAs, byte sizes, line counts and EOF ranges are recorded in the Ledger and QA log.
-- Index at 1300: 1300 sequential rows, 1300 unique paths, zero duplicate paths.
-- Active Ledger: 100 entries (1201–1300), exactly 15 required fields per entry.
+- Entries 1201–1325: completed; entries 1201–1300 retain their historical 20-file checkpoint records; the new 25-file checkpoint 1301–1325 is recorded in the Ledger and QA log.
+- Index at 1325: 1325 sequential rows, 1325 unique paths, zero duplicate paths.
+- Active Ledger: 125 entries (1201–1325), exactly 15 required fields per entry.
 - The 1281–1300 checkpoint includes mobile touch/input, mod-related systems, mounts, name tags, audio and native-mod extension files. Several native/Horizon-only capabilities were explicitly classified unnecessary or optional for the Forge 1.20.1 baseline; see entries 1284–1300.
 - No claim is made that the Starling audit means RustChunk has built or launched Minecraft/Forge or passed an Android/server test.
 
@@ -103,3 +103,13 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Chat reports stay minimal: completed range/status, verification result or blocker, and exact next point/authorization. Do not volunteer file-by-file descriptions, architecture recaps, file-dependency explanations or internal change lists unless the user asks.
 - Keep detailed evidence in the audit documents rather than repeating it in chat. At 25-file commits, a short confirmation is enough; after each 50-file section, report briefly and STOP for approval.
 - On interruption or chat change, resume from the latest verified commit and this Continuity record; never repeat completed work or infer an unverified state.
+
+
+## Latest verified checkpoint — 1301–1325
+
+- Branch head before this checkpoint commit: `62695e4d2f1d41630f4ba90c792ee0569c7d3b4b`.
+- Completed new entries: 1301–1325 inclusive (25/25).
+- Index: 1325 sequential entries and 1325 unique source paths.
+- Active Ledger: entries 1201–1325, 125 records; every entry has exactly 15 required fields.
+- Current authorized section: 1301–1350. The second checkpoint 1326–1350 is already authorized; continue without an interim permission request.
+- Stop after 1350 and wait for explicit authorization before 1351–1400.

@@ -135,15 +135,15 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Branch head before this protocol normalization: `369cf95ab040b720a15af96ca514231ad03c3352`.
-- Completed entries: **1–1300**.
+- Branch head before this source-audit checkpoint commit: `${head}`.
+- Completed entries: **1–1325**.
 - Closed stage: **1001–1200** (200/200).
-- Active stage: **1201–1400**; completed **1201–1300** (100/200).
-- Authorization state: **STOP**. No entry 1301 or later may be inspected until explicit user authorization.
-- Next section after authorization: **1301–1350**, checkpoints **1301–1325** and **1326–1350**.
+- Active stage: **1201–1400**; completed **1201–1325** (125/200).
+- Authorization state: **CONTINUE** within the user-authorized section **1301–1350**. Checkpoint **1301–1325** is committed and verified; checkpoint **1326–1350** is the next authorized work.
+- After 1350, STOP and wait for explicit authorization before 1351–1400.
 - Active Ledger: `AUDIT_LEDGER_1201_1400.md`; Index: `AUDIT_INDEX.md`; QA: `AUDIT_QA_LOG.md`; Continuity: `AUDIT_CONTINUITY.md`.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
-- Index: 1300 sequential entries and 1300 unique paths. Active Ledger: 100 entries (1201–1300), each with exactly 15 required fields.
+- Index: 1325 sequential entries and 1325 unique paths. Active Ledger: 125 entries (1201–1325), each with exactly 15 required fields.
 - Existing backups: `backup/audit-1000-unique-2026-11-18` at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; `backup/audit-1000-final-2026-11-19` at `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`. Do not modify them.
 
 ## 13. Historical corrections preserved

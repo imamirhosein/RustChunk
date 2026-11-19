@@ -975,3 +975,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Chat reports are intentionally minimal: completed range/status, verification result or blocker, and the exact next point or required authorization. Do not volunteer file-by-file details, architecture explanations, file dependency descriptions or internal change lists unless requested.
 - Detailed evidence belongs in the audit documents. A 25-file checkpoint needs only a compact confirmation in chat; a 50-file reporting boundary requires a brief report and STOP for explicit authorization.
 - On interruption/chat transition, resume only from the latest verified commit and Continuity record. Do not repeat completed work or infer an unverified state.
+
+
+## Source-audit checkpoint 1301–1325 — 2026-11-19
+
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Exactly 25 new source paths (1301–1325) were selected in pinned-tree lexical order after entry 1300; none duplicates an earlier Index path.
+- Each source file was read completely through EOF. Files over 400 logical lines were read in consecutive, gap-free ranges of at most 400 lines. The recorded source SHA and byte size match the pinned tree; logical line counts and EOF coverage were checked.
+- The Ledger has 25 sequential new entries, each with exactly the 15 required fields. Index rows 1301–1325 match the Ledger paths and decisions.
+- Global Index validation: 1325 sequential entry numbers, 1325 unique source paths, zero duplicates.
+- The 25-file checkpoint is the first half of the authorized 50-file section 1301–1350. Checkpoint 1301–1325 is committed and read-back verified; continue within the already authorized section with 1326–1350, then report and STOP at 1350.
+- Findings in this range include client rendering/UX subsystems, several server-only LAN encoders/host features, and later-version extensions. All 26.3/Horizon-specific packet structures and content were kept separate from 1.20.1 compatibility claims.
+- Embedded tests were inspected as source only, not executed. No build, unit tests, benchmark, APK, Forge launch, Android-device validation, Minecraft join, LAN host, UPnP or relay test was run.
+- Existing backups and main branch were not modified. Next backup remains due only after entries 1001–2000 are completed and globally verified.
