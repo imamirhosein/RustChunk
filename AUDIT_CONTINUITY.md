@@ -6,19 +6,17 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed and committed entries: **1–1425**.
-- Closed prior 200-file stages: **1–1000**, **1001–1200** and **1201–1400**.
-- Active 200-file stage: **1401–1600**; completed **1401–1425** (25/200).
-- Authorized reporting section: **1401–1450**. Checkpoint **1401–1425** is complete and verified; checkpoint **1426–1450** is already authorized.
-- Continue at entry **1426**. Do not ask for another permission request between 1426 and 1450.
-- STOP at **1450**. Do not inspect entry 1451 or later until the user explicitly authorizes 1451–1500.
-- Cadence: four 50-file sections per 200-file stage; two exact 25-file checkpoints per 50. Commit and verify each checkpoint; stop for approval after every 50.
+- Completed and committed entries: **1–1450**.
+- Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**.
+- Active 200-file stage: **1401–1600**; completed **1401–1450** (50/200).
+- Reporting section **1401–1450** is closed (50/50); its two checkpoints 1401–1425 and 1426–1450 are each committed and verified.
+- **STOP at 1450.** Do not inspect entry 1451 or later until the user explicitly authorizes section **1451–1500**.
+- Cadence: four 50-file sections per 200-file stage; two exact 25-file checkpoints per 50. Commit/read-back/verify each checkpoint; stop for approval after every 50.
 
 ## Active stage layout
 
-- Stage 1401–1600: sections 1401–1450, 1451–1500, 1501–1550 and 1551–1600.
-- Current section 1401–1450: checkpoint 1401–1425 complete; next checkpoint 1426–1450.
-- After 1450, report briefly and wait for explicit approval before 1451–1500.
+- Stage 1401–1600: sections 1401–1450 (complete), 1451–1500 (pending authorization), 1501–1550 and 1551–1600.
+- Next proposed section: **1451–1500**. Permission is not yet granted.
 - Backup cadence remains once per 1,000 newly completed entries, not at 25/50/200 boundaries.
 
 ## Source pin and selection
@@ -74,9 +72,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 
 - Entries 1–1000: complete and historically QA-reviewed.
 - Entries 1001–1200: complete; stage closed.
-- Entries 1201–1400: complete; prior 200-file stage closed and globally QA-verified.
-- Entries 1401–1425: first checkpoint of current stage complete; new Ledger has 25 entries, each with exactly 15 fields.
-- Index at this checkpoint: 1,425 sequential entries and 1,425 unique paths.
+- Entries 1201–1400: complete; stage closed and globally QA-verified.
+- Entries 1401–1450: complete; both 25-file checkpoints committed and the 50-file section closed.
+- Active Ledger `AUDIT_LEDGER_1401_1600.md`: 50 entries (1401–1450), each with exactly 15 fields.
+- Index at this boundary: 1,450 sequential entries and 1,450 unique paths.
 - No source or application code was modified. No tests/builds/device/server validation was run.
 
 ## Historical duplicate corrections
@@ -143,13 +142,14 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Prior 1201–1400 Ledger/Index alignment, 15-field count and global unique-path checks were verified.
 - Prior final QA/alignment commit: `90d23fa8ccd599d4c8726b08849689e903f374fc`; branch head before this checkpoint: `6f6235a17c7ccf8abc7033400c81c5b44089840b`.
 
-## Latest verified checkpoint — 1401–1425
+## Latest verified boundary — 1450
 
-- Completed entries: **1401–1425 inclusive (25/25)**.
-- New Ledger: `AUDIT_LEDGER_1401_1600.md`, 25 records, each with the 15 required fields exactly once.
-- Index: **1,425 sequential entries and 1,425 unique paths**.
-- All 25 pinned source SHAs, byte sizes, canonical line counts and EOF coverages match the complete recursive tree.
-- Index/Ledger path and Decision alignment: verified for all 25 entries.
-- Authorized continuation: proceed with **1426–1450**. Stop after this 50-file section; obtain explicit authorization before 1451–1500.
-- Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1401–1450 inclusive (50/50)**.
+- Checkpoint 1401–1425 and checkpoint 1426–1450 are both complete, committed and read-back verified.
+- Active Ledger: `AUDIT_LEDGER_1401_1600.md`, 50 entries, each with the 15 required fields exactly once.
+- Index: **1,450 sequential entries and 1,450 unique paths**.
+- All 50 source SHAs, byte sizes, logical line counts and EOF coverages align with the pinned upstream tree.
+- Index/Ledger path and Decision alignment verified for entries 1401–1450.
+- **STOP.** Next proposed section is 1451–1500; wait for explicit user authorization before inspecting it.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
 - No tests/builds/device/server validation was run. `main` and backups remain untouched; next backup remains at the 1000-entry cadence.
