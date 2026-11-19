@@ -621,3 +621,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 - Rechecked the newly appended Index decision column against the Ledger. The first write had included explanatory text after the primary decision labels; normalized all 20 rows so the Index carries only the approved primary decision plus optional qualifiers, while the reason remains in the final column.
 - Re-read and verified the corrected Index rows for entries 1061–1080. This is a documentation-format correction; the Ledger decisions and source reviews are unchanged.
+
+## Audit continuation reconciliation and Coverage normalization — 2026-11-19
+
+- Reconciled the concurrent duplicate append in `AUDIT_LEDGER_1001_1200.md`: retained one canonical copy of entries 1001–1080; removed the duplicate second copy of 1041–1060; preserved the already recorded, QA-logged entries 1061–1080. The resulting ledger contains 80 unique sequential entries 1001–1080.
+- Revalidated the retained entries 1001–1080 against the pinned Starling tree: all 80 paths are unique; all 80 source paths exist; all 80 SHA and byte-size pairs match; every entry contains each of the 15 required fields exactly once; all 80 Index rows match the Ledger paths and primary decisions.
+- Corrected the Index/Ledger qualifier alignment for entry 1056 and the Index primary decision rows for 1043 and 1056. The 1057 source byte size is the Git tree's canonical 26,500 bytes.
+- Replaced generic whole-file Coverage statements with exact consecutive ranges of at most 400 lines for long files in the retained range, including entries 1006, 1007, 1026, 1038–1040, 1042–1043, 1045–1046, 1051–1053, 1057, 1063–1064, 1068–1069, 1073–1076 and 1079–1080. All recorded ranges are contiguous and end at each source file's canonical EOF.
+- Verified both immutable backup refs remain unchanged. No backup was created at 1080; the next backup remains due only after entry 2000 is fully audited and globally verified.
+- Next checkpoint: **1081–1100**. Continue only after the current 1001–1080 read-back checks remain green.
