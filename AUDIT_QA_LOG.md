@@ -658,3 +658,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Standardized the 20 new Ledger Decision fields to the canonical bold primary-label plus em-dash rationale format.
 - The Index already contained the correct primary labels; this correction aligns the Ledger representation for exact parity checks. The 15 required fields were all present; no field was missing.
 - No source review, SHA, byte-size, coverage or classification changed.
+
+## Cross-chat continuity record established — 2026-11-19
+
+- Added `AUDIT_CONTINUITY.md` as the authoritative resume note for new chats and interrupted sessions.
+- Updated `AUDIT_PROTOCOL.md` so every verified 20-file checkpoint must update Ledger, Index, QA Log and Continuity together in one commit, followed by GitHub read-back verification.
+- Added the Continuity link to the Index and removed its duplicate 1001–1200 ledger link.
+- Resume state at creation: entries 1–1100 committed; current stage 1001–1200 is 100/200 complete; next checkpoint 1101–1120.
+- Pinned Starling baseline remains `5432370d573642041585c69b40fb045b27133488`. Existing backup refs remain unchanged; next backup remains due only after entry 2000 is fully audited and globally verified.
+- This setup commit changes documentation only. No source files were audited, no entry numbers were added, and no backup refs were modified.

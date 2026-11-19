@@ -7,13 +7,13 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 - Each audit stage is a continuous batch of **exactly 200 new, unique source files** whenever at least 200 eligible files remain.
 - Divide each 200-file stage into **ten durable checkpoints of 20 files**. For the current stage the checkpoints are 1001–1020, 1021–1040, 1041–1060, 1061–1080, 1081–1100, 1101–1120, 1121–1140, 1141–1160, 1161–1180 and 1181–1200.
 - Do not ask for approval or stop between checkpoints in an already-authorized 200-file stage. Report briefly after each checkpoint is saved and verified.
-- Immediately after each 20 files are fully inspected, append their complete 15-field entries to the range Ledger, append matching Index rows, append a dated checkpoint record to `AUDIT_QA_LOG.md`, validate, commit, and re-read the committed files from GitHub. Never leave more than 20 inspected files uncommitted.
+- Immediately after each 20 files are fully inspected, append their complete 15-field entries to the range Ledger, append matching Index rows, append a dated checkpoint record to `AUDIT_QA_LOG.md`, and update `AUDIT_CONTINUITY.md` with the new durable resume point. Validate all four records, commit them together in one checkpoint commit, and re-read the committed files from GitHub. Never leave more than 20 inspected files uncommitted.
 
 ## File selection and inspection
 
 - Use the pinned Starling commit recorded by the audit, not the moving default branch.
 - Continue in deterministic source-tree path order from the last audited path.
-- A source path may appear only once in the audit. Before selecting new files, build the skip set from every path already present in the current index (currently entries 1–1080); do not give a path a second audit number.
+- A source path may appear only once in the audit. Before selecting new files, build the skip set from every path already present in the current index (currently entries 1–1100); do not give a path a second audit number.
 - Corrective closure for entries 1–1000: six duplicate slots (631, 632, 633, 754, 762 and 766) were replaced with the six next unique paths after the former entry-1000 endpoint: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`. Those six files are already audited and must be skipped by future batches.
 - Each file must be inspected completely before moving on. For long files, read consecutive sections of at most 400 lines until the end of that file.
 - If a source file cannot be read completely, record the exact limitation and do not mark it as fully reviewed.
@@ -25,6 +25,7 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 - Entries 601–800: `AUDIT_LEDGER_601_800.md`.
 - Entries 801–1000: `AUDIT_LEDGER_801_1000.md`.
 - `AUDIT_INDEX.md` is the navigation/decision summary; keep its ledger links and entry ranges synchronized with every continuation file.
+- `AUDIT_CONTINUITY.md` is the durable cross-chat resume record. It must always match the latest verified checkpoint and current branch state.
 - Name every future continuation `AUDIT_LEDGER_<first>_<last>.md` using its exact inclusive entry range; do not use an unqualified ledger filename.
 
 ## Ledger and evidence
@@ -55,12 +56,12 @@ Before reporting a batch complete:
 - Verify exactly 200 new sequential entry numbers.
 - Verify no duplicate source paths against every previous entry.
 - Verify all 15 fields are present for every new entry.
-- For each 20-file checkpoint, append the 20 entries to `AUDIT_LEDGER_1001_1200.md`, the 20 matching rows to `AUDIT_INDEX.md`, and a checkpoint record to `AUDIT_QA_LOG.md`.
-- Before each checkpoint commit, verify the 20 numbers are sequential, all paths are unique against entries 1–1200, every entry has all 15 fields exactly once, and source SHA/byte sizes match the pinned upstream tree. Re-read the committed Ledger/Index/QA log and verify the saved contents.
+- For each 20-file checkpoint, append the 20 entries to `AUDIT_LEDGER_1001_1200.md`, the 20 matching rows to `AUDIT_INDEX.md`, a checkpoint record to `AUDIT_QA_LOG.md`, and the updated resume state to `AUDIT_CONTINUITY.md`.
+- Before each checkpoint commit, verify the 20 numbers are sequential, all paths are unique against every prior entry plus the current checkpoint, every entry has all 15 fields exactly once, and source SHA/byte sizes match the pinned upstream tree. Re-read the committed Ledger/Index/QA/Continuity files and verify the saved contents.
 - Do not proceed to the next 20 until the current checkpoint commit is confirmed.
 - Report progress at each saved checkpoint; report the 200-entry stage complete only after checkpoint 1200 is committed and globally revalidated.
 
-The next batch after 801–1000 is **1001–1200**.
+Current continuation state (2026-11-19): entries **1001–1100** are committed and verified. The active 200-file stage is **1001–1200**; the next checkpoint is **1101–1120**. Read `AUDIT_CONTINUITY.md` before every new chat or resumed session.
 
 
 ## QA review and canonical file-size accounting
