@@ -214,7 +214,7 @@
 
 ### 1013. `crates/horizon-client/examples/probe/sound_engine_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `327a8e9d1465a6fd80b6e236fe759417f7e42fe`
+- Source SHA: `327a8e9d1465a6fd80b6e236fe759417f7e42fe2`
 - Size: 6621 bytes; 145 logical lines
 - Coverage: Complete text file reviewed, lines 1–145.
 - Purpose: Replay harness for the client SoundEngine state machine, recording what a fake OpenAL-like backend would hold after sound operations.
