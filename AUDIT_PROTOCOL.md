@@ -218,3 +218,18 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - **STOP at 1550. Section 1551–1600 is not authorized and requires explicit user approval before inspecting any source in that range.**
 - Preserve the four 50-file sections per 200-file stage, two 25-file checkpoints per section, serial file review and maximum 400-line chunks.
 - No tests/builds/device/server validation was performed. No backup is due; next backup after entries 1001–2000 are completed and globally verified. Do not modify `main` or backups.
+
+## Latest authoritative resume state — checkpoint 1551–1575 — 2026-11-19
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1–1575**.
+- Active 200-file stage: **1401–1600**, completed **175/200**.
+- Active reporting section: **1551–1600**. Checkpoint **1551–1575** is complete and committed; **1576–1600 is already authorized** by the same user instruction. Proceed without asking for mid-section permission.
+- Active Ledger: `AUDIT_LEDGER_1401_1600.md`, **175 entries** (1401–1575), with exactly 15 fields each. Index: **1,575 sequential unique paths**.
+- The 25 files 1551–1575 were read through EOF in serial order; each file above 400 lines was read in continuous chunks no larger than 400. SHA/size/coverage are in the Ledger.
+- **Next source file is entry 1576**, the next unindexed blob in the pinned tree. Verify the remaining source-tree order and no duplicate paths before reading.
+- Preserve exact 200 / 50 / 25 cadence, serial review, complete EOF and max 400-line chunks. After entries 1576–1600, update all five audit docs in one atomic commit, read all five back individually and verify branch HEAD.
+- **STOP at entry 1600** and wait for new explicit authorization before 1601 or any later source file.
+- No source/application code changed. Embedded tests are inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
+- `main` and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.

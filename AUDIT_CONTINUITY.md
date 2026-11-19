@@ -201,3 +201,17 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Checkpoint 1501–1525 commit: `f01cc32175cc1e8d2f6fdda573e214232d2b1eb4`.
 - Checkpoint 1526–1550 commit SHA will be added after commit/read-back.
 - **STOP at 1550.** Next section 1551–1600 requires explicit user authorization. `main` and backup refs remain untouched; no backup is due at this boundary.
+
+## Latest verified checkpoint — 1551–1575 — 2026-11-19
+
+- Completed entries: **1551–1575 inclusive (25/25)** from pinned source `5432370d573642041585c69b40fb045b27133488`.
+- Active 200-file stage: **1401–1600**, now **175/200 complete**.
+- Active 50-file section: **1551–1600**. The first checkpoint, **1551–1575**, is complete; the second checkpoint, **1576–1600**, remains covered by the same explicit user authorization. Do not ask for intermediate authorization.
+- Active Ledger: **175 entries**, 1401–1575, each with exactly 15 fields. Index: **1,575 sequential entries and 1,575 unique paths**.
+- All 25 files were read completely through EOF. Exact line counts, contiguous coverage, source SHAs and byte sizes are in the Ledger and match the pinned tree.
+- Index/Ledger path and Decision alignment is verified for 1551–1575.
+- Findings: target-era mob behaviors remain candidates for adaptation after 1.20.1 parity checks; Happy Ghast, Breeze/Creaking Brain and Nautilus are excluded. Mob physics and A* navigation are core references but are not yet implemented or benchmarked.
+- No source/application code changed. Embedded tests were inspected but not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
+- Checkpoint commit SHA will be added after atomic five-document commit and read-back.
+- **Next: inspect 1576–1600**, serially and with maximum 400-line chunks. Stop at **1600** and wait for fresh authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.

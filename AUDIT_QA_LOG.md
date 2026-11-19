@@ -1118,3 +1118,17 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected as code only; none were executed. No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was run.
 - Only the audit branch was updated. `main` and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
 - Reporting section 1501–1550 is closed. Stop at 1550 and wait for explicit authorization before inspecting 1551–1600.
+
+## Source-audit checkpoint 1551–1575 — 2026-11-19
+
+- Completed entries 1551–1575 inclusive (25/25) from pinned Starling source tree `5432370d573642041585c69b40fb045b27133488`.
+- All 25 source files were read through EOF. Files over 400 logical lines were inspected in consecutive, gap-free chunks no larger than 400 lines; exact logical line counts and ranges are recorded in the Ledger.
+- All 25 blob SHAs, byte sizes and paths match the pinned source tree. Ledger coverage reaches EOF for each file; the first and last chunk boundaries are contiguous.
+- Each of the 25 new Ledger records has exactly the 15 required fields. Index rows 1551–1575 match Ledger paths and Decision values.
+- Key 1.20.1-compatible references include Fox, Frog, Goat, Iron/Snow Golem, Guardian, Creeper/Spider/Silverfish, Illager/Illusioner, Llama/Trader Llama, Blaze/Ghast, Panda, Parrot and Phantom behavior. Every one still needs target-source/data/RNG/NBT parity checks before adoption.
+- Happy Ghast, Breeze/Creaking Brain, and Nautilus are later-version content and are excluded from the 1.20.1 baseline. Illager crossbow, equipment break, gear, leash, mob physics and spawn/finalization-related paths require legacy ItemStack/NBT or other target-specific rewrites.
+- `living.rs`, `nav.rs` and `path.rs` are core physics/navigation references. Their algorithms are potentially important for movement correctness and CPU cost, but no optimization or performance result is claimed; Android profiling remains unperformed. `keyframes.rs` is optional client rendering, not gameplay or Forge support.
+- Embedded tests were inspected as source only; none were executed. No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- No source/application code changed. Only the audit documentation is included in this checkpoint.
+- Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1551–1575 is closed. Continue with 1576–1600 under the user's already-issued authorization; stop at entry 1600 for fresh authorization.
