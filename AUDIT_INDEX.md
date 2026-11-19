@@ -1198,7 +1198,7 @@
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 1041 | `crates/horizon-client/src/android_control_assets.rs` | unnecessary; reference; optional/future | Android control-asset downloader; Mojang/Bedrock assets are not open-licensed. Hash verification is not redistribution permission. |
+| 1041 | `crates/horizon-client/src/android_control_assets.rs` | adaptable; reference; version-specific | Use the integrity and pinned-revision download pattern only; Bedrock sample artwork is subject to Mojang terms and is not approved for redistribution. |
 | 1042 | `crates/horizon-client/src/android_control_theme.rs` | adaptable; reference; optional/future | Horizon-specific theme/raster/widget system; reuse only generic UI drawing ideas in an independently designed Android theme. |
 | 1043 | `crates/horizon-client/src/android_control_ui.rs` | adaptable; reference; optional/future | Editable touch-layout/editor and multi-pointer patterns are relevant, but the 8,506-line Horizon screen/input implementation must be redesigned. |
 | 1044 | `crates/horizon-client/src/android_lib.rs` | adaptable; reference; version-specific | JNI/Android entry-boundary pattern; package, callbacks and lifecycle are app-specific. |
@@ -1207,17 +1207,17 @@
 | 1047 | `crates/horizon-client/src/attack_strength.rs` | adaptable; reference; version-specific | Small attack-cooldown model; verify legacy ItemStack identity, attack-speed and exact 1.20.1 thresholds. |
 | 1048 | `crates/horizon-client/src/attribute_updates.rs` | adaptable; reference; version-specific | Thin player attribute/health update bridge; omit newer waypoint attributes and validate server-level semantics. |
 | 1049 | `crates/horizon-client/src/auto_jump.rs` | adaptable; reference; version-specific | Auto-jump geometry/decision model; rebuild collision shapes and movement conditions from 1.20.1. |
-| 1050 | `crates/horizon-client/src/banner.rs` | adaptable; reference; version-specific | Banner/loom transformation patterns are relevant, but rebuild registry data and legacy BlockEntityTag NBT instead of modern item components. |
+| 1050 | `crates/horizon-client/src/banner.rs` | rewrite required; reference; version-specific | Rebuild the banner data bridge for 1.20.1 legacy NBT; only the ordered layer/rendering model is reusable. |
 | 1051 | `crates/horizon-client/src/beehive.rs` | adaptable; reference; version-specific | Beehive storage/release/honey logic is relevant; replace 26.x environment attributes with 1.20.1 weather/time/obstruction rules. |
 | 1052 | `crates/horizon-client/src/benchmark.rs` | adaptable; reference; optional/future | Reproducible scene/FPS/memory benchmark design; Horizon scenes/backend hooks are not RustChunk or Galaxy A22 measurements. Destructive benchmark world requires isolation. |
-| 1053 | `crates/horizon-client/src/bin/horizon-ctl/commands.rs` | adaptable; reference; optional/future | Typed command registry and schema generation are useful only for a future RustChunk control/MCP allowlist; high-impact operations need explicit enforcement. |
+| 1053 | `crates/horizon-client/src/bin/horizon-ctl/commands.rs` | unnecessary; reference; optional/future | Horizon desktop control CLI is not core runtime; borrow a typed command registry only for a separately scoped developer tool. |
 | 1054 | `crates/horizon-client/src/bin/horizon-ctl/launch.rs` | adaptable; reference; optional/future | Process discovery/readiness patterns are useful; binary layout, launcher manifests and desktop process model are Horizon-specific. |
-| 1055 | `crates/horizon-client/src/bin/horizon-ctl/mcp.rs` | adaptable; reference; optional/future | Optional MCP bridge pattern only; command allowlist, consent, filesystem and network restrictions must be RustChunk-owned. |
+| 1055 | `crates/horizon-client/src/bin/horizon-ctl/mcp.rs` | unnecessary; reference; optional/future | Optional desktop MCP automation is not a mobile client dependency; any future endpoint needs a restricted RustChunk allowlist. |
 | 1056 | `crates/horizon-client/src/block_contact.rs` | unnecessary; reference; optional/future | Custom/modded block contact hook; not vanilla 1.20.1 behavior or Forge compatibility. |
 | 1057 | `crates/horizon-client/src/block_entity_item.rs` | rewrite required; reference; version-specific | 26.3 data components cannot be used for 1.20.1 ItemStack/BlockEntityTag; rewrite legacy pick/place NBT and operator restrictions. |
 | 1058 | `crates/horizon-client/src/block_pattern.rs` | adaptable; reference; version-specific | Generic oriented block-pattern matching can support 1.20.1 golems/Wither after target pattern/orientation verification. |
 | 1059 | `crates/horizon-client/src/block_predictions.rs` | adaptable; reference; version-specific | Client block prediction/ack model useful; sequence, teleport and correction behavior must match the 1.20.1 protocol. |
-| 1060 | `crates/horizon-client/src/block_transform.rs` | unnecessary; reference; version-specific | 26.3 block_transformer registry is not vanilla 1.20.1; implement axe/hoe/shovel transformations using legacy target rules. |
+| 1060 | `crates/horizon-client/src/block_transform.rs` | rewrite required; reference; version-specific | Reimplement 1.20.1 axe/hoe/shovel interactions independently; the newer block_transformer registry is not target data. |
 
 ## Part 44 — Entries 1061–1080
 
