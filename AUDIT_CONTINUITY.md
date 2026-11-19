@@ -62,18 +62,19 @@ The previous long chat branch was interrupted while reviewing the large Horizon/
 
 ## Current task
 
-- Stage 1001–1200: 120/200 numbered entries complete (60%); checkpoint 1101–1120 is committed and read-back verified.
-- The historical duplicate at entry 1089 is corrected: it now records `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only occurrence of `crates/horizon-client/src/entry.rs`.
-- Corrective commit: `31158be7259f80ff8e5c30665c539c8fcba3e145`; its five-document read-back is verified.
-- The full Index now contains 1120 rows and 1120 unique source paths. Keep `blockctl.rs` in the skip set; it is a corrective replacement in slot 1089, not a future new entry.
-- Resume checkpoint **1121–1140** at the next eligible pinned-tree path: `crates/horizon-client/src/game/boat_authority_fixture.rs`. Rebuild the skip set from the full corrected Index before selecting subsequent files.
-- Both existing backups remain untouched. The next backup is due only after entries 1001–2000 are fully committed and globally verified.
+- Stage 1001–1200: **140/200 numbered entries complete (70%)**. Checkpoint 1121–1140 has been fully reviewed and is included in this commit.
+- Entries 1121–1140 cover the next twenty unique paths from boat_authority_fixture.rs through clipboard.rs; every file was read to EOF and its blob SHA/tree size matched the pinned source tree.
+- The historical duplicate at entry 1089 remains corrected to crates/horizon-client/src/game/blockctl.rs; entry 121 remains the only occurrence of crates/horizon-client/src/entry.rs.
+- The full corrected Index will contain 1140 rows and 1140 unique paths after this checkpoint is saved. Keep blockctl.rs and all already indexed paths in the skip set.
+- Resume checkpoint **1141–1160** at crates/horizon-client/src/game/code_of_conduct.rs, then continue in deterministic pinned-tree order after rebuilding the skip set from the full Index.
+- Both existing backup branches remain untouched. The next backup is due only after entries 1001–2000 are committed and globally verified.
+
 
 ## Historical duplicate-path correction — 2026-11-19
 
 - Duplicate found: `crates/horizon-client/src/entry.rs` at entries 121 and 1089.
 - Corrective replacement: entry 1089 is now `crates/horizon-client/src/game/blockctl.rs` (pinned SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`, 7136 bytes, 179 logical lines), read fully to EOF.
 - No other entry numbers changed. Global Index path uniqueness is restored: 1120 entries, 1120 unique paths, zero duplicates.
-- The replacement path is included in the skip set. Next scan starts at `crates/horizon-client/src/game/boat_authority_fixture.rs`.
+- The replacement path is included in the skip set. The 1121–1140 checkpoint has since completed; next scan starts at `crates/horizon-client/src/game/code_of_conduct.rs`.
 - Backups were not modified.
 

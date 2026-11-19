@@ -1284,3 +1284,23 @@
 | 1118 | `crates/horizon-client/src/game/block_entity_anims.rs` | adaptable; version-specific | preserve vanilla animations and exclude custom/later paths. |
 | 1119 | `crates/horizon-client/src/game/block_entity_ticks.rs` | rewrite required; reference; version-specific | rebuild target ticker registry/order and omit later/custom entities. |
 | 1120 | `crates/horizon-client/src/game/block_items.rs` | rewrite required; reference; version-specific | replace modern components with 1.20.1 item NBT/BlockEntityTag. |
+| 1121 | `crates/horizon-client/src/game/boat_authority_fixture.rs` | unnecessary; reference; optional/future | Boat authority test fixture only; no client code to port. |
+| 1122 | `crates/horizon-client/src/game/boat_leads.rs` | unnecessary; reference; optional/future | Later boat-leash extension for happy-ghast-era behavior; exclude. |
+| 1123 | `crates/horizon-client/src/game/boat_passengers.rs` | adaptable; version-specific | Adapt vanilla boat passenger/collision subset; remove LAN and newer hooks. |
+| 1124 | `crates/horizon-client/src/game/boats.rs` | essential; rewrite required; version-specific | Essential vehicle feature area; implement anew for 1.20.1. |
+| 1125 | `crates/horizon-client/src/game/books.rs` | adaptable; rewrite required; version-specific | Book and lectern features are relevant, but legacy NBT/protocol/UI must be rebuilt. |
+| 1126 | `crates/horizon-client/src/game/bossbars.rs` | adaptable; version-specific | Boss-bar concepts adapt; version-specific packets and viewer logic require rebuilding. |
+| 1127 | `crates/horizon-client/src/game/breezes.rs` | unnecessary; reference; optional/future; version-specific | Later Breeze-specific particles; exclude from 1.20.1 vanilla. |
+| 1128 | `crates/horizon-client/src/game/brush.rs` | adaptable; version-specific | Archaeology is in target version; adapt legacy loot/NBT and interaction APIs. |
+| 1129 | `crates/horizon-client/src/game/build_mining.rs` | unnecessary; optional/future | Unrelated build waiting-room mini-game; exclude from game client. |
+| 1130 | `crates/horizon-client/src/game/bundles.rs` | unnecessary; reference; optional/future; version-specific | Modern bundle selection; optional only after target-version support is confirmed. |
+| 1131 | `crates/horizon-client/src/game/campfire.rs` | adaptable; version-specific | Vanilla campfire cooking/rendering; adapt recipes, NBT and block-entity sync. |
+| 1132 | `crates/horizon-client/src/game/campfire_douse.rs` | adaptable; version-specific | Vanilla dousing; adapt target tags and interaction prediction. |
+| 1133 | `crates/horizon-client/src/game/cartography.rs` | adaptable; version-specific | Vanilla cartography; adapt map persistence/menu and omit native custom icons. |
+| 1134 | `crates/horizon-client/src/game/cat_spawner.rs` | adaptable; version-specific | Vanilla cat spawner; rebuild POI, structures and RNG against 1.20.1. |
+| 1135 | `crates/horizon-client/src/game/chat.rs` | adaptable; rewrite required; version-specific | Chat UI is important, but module must be split and secure-chat rebuilt for 1.20.1. |
+| 1136 | `crates/horizon-client/src/game/chat_filter.rs` | unnecessary; optional/future | Horizon-only server moderation; exclude from client baseline. |
+| 1137 | `crates/horizon-client/src/game/chiseled_bookshelf.rs` | adaptable; version-specific | Vanilla chiseled bookshelf; adapt slot geometry and entity/state sync. |
+| 1138 | `crates/horizon-client/src/game/chutes.rs` | undetermined; reference; version-specific | Create-only chute; pending explicit 1.20.1 mod compatibility scope. |
+| 1139 | `crates/horizon-client/src/game/client_ambient.rs` | adaptable; version-specific | Ambient particle framework adapts; exclude later effect identifiers and verify RNG. |
+| 1140 | `crates/horizon-client/src/game/clipboard.rs` | adaptable; reference | Generic edit shortcut handling adapts; Android clipboard/IME requires native integration. |

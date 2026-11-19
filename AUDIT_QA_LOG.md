@@ -699,4 +699,21 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 ### Next action
 
-- Correct historical duplicate entry 1089 before checkpoint 1121–1140.
+- Checkpoint 1121–1140 is complete; continue with 1141–1160 from `crates/horizon-client/src/game/code_of_conduct.rs`.
+
+### Checkpoint 1121–1140 — 2026-11-19
+
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; the recursive Git tree SHA matches the pinned commit.
+- Exactly 20 new source files were reviewed completely, with no path overlap against entries 1–1120. All 20 blob SHAs and byte sizes match pinned Git-tree metadata.
+- Complete line coverage: 1121 (51), 1122 (535), 1123 (458), 1124 (1634), 1125 (1164), 1126 (793), 1127 (67), 1128 (352), 1129 (242), 1130 (136), 1131 (192), 1132 (91), 1133 (290), 1134 (138), 1135 (1599), 1136 (283), 1137 (183), 1138 (183), 1139 (263), 1140 (139). Long files were read in consecutive, gap-free chunks of at most 400 lines.
+- Every new Ledger entry contains exactly the 15 required fields. Index validation before commit: 1140 sequential rows, 1140 unique paths and zero duplicates.
+- The corrective replacement at entry 1089 (blockctl.rs) remains in the skip set; entry.rs occurs only at entry 121.
+- Decisions separate vanilla 1.20.1 vehicles/books/archaeology/campfires/chat from later Breeze/bundle behavior and Create/Horizon-only modules. Create chute support remains undetermined pending the target 1.20.1 mod list.
+- Tests, builds, APKs, Forge launches, Android device runs and server joins were not performed. Embedded source tests were read only.
+- No backup branch was created or modified. The next backup remains due only after entries 1001–2000 are fully committed and globally verified.
+
+### Durable checkpoint
+
+- Appended exactly 20 complete 15-field Ledger entries and 20 matching Index rows; QA, Continuity and Protocol were updated together.
+- Continuity advances stage 1001–1200 to 140/200 (70%); next checkpoint 1141–1160 starts at crates/horizon-client/src/game/code_of_conduct.rs.
+- Post-commit read-back of all five documents and blob-SHA verification are required before considering the checkpoint saved.
