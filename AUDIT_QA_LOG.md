@@ -1035,3 +1035,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Source review only: embedded tests were inspected, not run. No build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join or server test was performed.
 - Only the audit branch was changed. main and backup branches remain untouched. The next backup is still governed by the 1000-entry cadence; no backup was taken here.
 - STOP at entry 1400. The next section is 1401–1450 and requires explicit user authorization.
+
+### Final ledger/index alignment recheck — 2026-11-19
+
+- Corrected the 1376–1400 field alignment before closing the checkpoint.
+- Re-read all 200 Ledger entries: each of the 15 required fields occurs exactly once.
+- Re-read Index and compared every Ledger path and Decision: all 25 entries 1376–1400 match exactly.
+- Index remains 1–1400 sequential with 1,400 unique paths. No source or application code was modified.
