@@ -98,3 +98,11 @@ At the end of the second 100-file half:
 - The Decision field and Index decision column must use one or more primary decision labels. Do not use placeholders such as "See ledger decision" or sentiment wording such as "Highly relevant/adaptable" as decision labels.
 - Every QA correction and every 20-file audit checkpoint must be recorded in `AUDIT_QA_LOG.md`, including the pinned baseline commit, inclusive entry numbers, source-count, validation results and resulting commit SHA.
 - **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries, 100-entry half-stages or 20-file checkpoints. The next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
+
+
+## Checkpoint status update — 2026-11-19
+
+- Entries 1261–1280 committed and verified; active stage 1201–1400 is now 80/200, with first-half 1201–1300 at 80/100.
+- Next authorized checkpoint remains 1281–1300 under the existing 20-file rule. Do not change checkpoint size before this checkpoint closes.
+- After 1300, apply the user's proposed cadence: four 50-file reporting sections per 200-file stage, each made of two exact 25-file checkpoints. Stop at each 50-file boundary and await explicit authorization before starting the next section.
+- Backup policy unchanged: next backup only after entries 1001–2000 are complete and globally verified.

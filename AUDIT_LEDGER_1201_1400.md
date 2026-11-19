@@ -1030,3 +1030,343 @@
 - Evidence required before adoption: 1.20.1 server/Forge lifecycle, packet captures, registry/tag fixtures, chunk/entity tests, thread teardown and security review.
 - Completion state: COMPLETE — 2982 lines to EOF in 12 contiguous ranges 1–400, 401–800, 801–1000, 1001–1200, 1201–1400, 1401–1600, 1601–2000, 2001–2200, 2201–2400, 2401–2600, 2601–2800 and 2801–2982; SHA and 129988-byte size match; no LAN host operation run.
 
+### 1261. `crates/horizon-client/src/game/launch_api.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `6ec77eb621fcef70836333a89d0f2a26b345cfbd`
+- Size: 9924 bytes; 271 logical lines
+- Coverage: 1–271 (EOF)
+- Purpose: Defines the public command-line Launch API, launcher options, JSON capability reply, exit codes and generated Markdown reference.
+- Dependencies / cross-references: Game Options parser, session-file/stdin handling, game-dir/home/player-dir paths, quick-play startup, crash-report contract and docs/api/launch.md.
+- Implementation / logic: Publishes a versioned allow-list of promised arguments, serializes the supported options and Minecraft/build versions, and standardizes usage/error/panic exit codes.
+- Findings: Launcher contract is useful but explicitly tied to Horizon 26.3 and its filesystem layout. Session-file is read once then deleted; credential handling and deletion semantics need a security review before reuse.
+- RustChunk relevance: Adaptable launcher-integration reference; not game simulation or Minecraft wire protocol.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Define a RustChunk-owned, versioned launcher contract; map Android SAF/storage, server selection and authentication securely, without copying Horizon paths or session JSON blindly.
+- Follow-up checks: Review parser, symlink/path handling, session-file permissions/deletion, stdin failure, quick-play path validation, exit codes and compatibility negotiation.
+- RustChunk implementation mapping: Possible launcher/cli_contract.rs and android/launch_intent.rs; not created.
+- Evidence required before adoption: RustChunk CLI/Android launch spec, path traversal tests, credential lifecycle review and launcher integration fixtures.
+- Completion state: COMPLETE — 271 logical lines read to EOF; source SHA and 9924-byte size match pinned tree; embedded tests inspected, not run.
+
+### 1262. `crates/horizon-client/src/game/leads.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `26d4ecc1073bba00674e6e981e7dca08d5e887b5`
+- Size: 28659 bytes; 680 logical lines
+- Coverage: 1–400, 401–680 (contiguous to EOF)
+- Purpose: Implements lead attachment, leash knot creation/removal, entity and fence leashing, leash following, drops and leash rendering.
+- Dependencies / cross-references: Living entities, leash holder UUID/entity IDs, fence knot entities, player interaction, entity movement/AI, NBT, packets and renderer.
+- Implementation / logic: Maintains holder/holder-position state, creates knot entities at fence anchors, updates tether movement and releases/drops leads when the link breaks or holder disappears.
+- Findings: Lead and leash-knot behavior exists in 1.20.1; Starling's entity roster, leash data model and newer leash mechanics cannot be copied wholesale.
+- RustChunk relevance: Target-era mob interaction and entity-link behavior; adapt data synchronization and rendering.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 lead item use, leash knot, holder UUID/packet state, fence interaction, range/break/drop rules and vanilla mob AI constraints.
+- Follow-up checks: Compare player-to-mob, mob-to-mob, fence knot, dimension transfer, unload/reload, death, range break, item drop and server correction.
+- RustChunk implementation mapping: Possible game/entities/leash_1_20_1.rs, game/items/lead_1_20_1.rs and network/leash_packets.rs; not created.
+- Evidence required before adoption: 1.20.1 Java mappings/source, leash NBT and packet captures, deterministic tether traces and Forge interaction-event tests.
+- Completion state: COMPLETE — 680 logical lines read in contiguous ranges 1–400 and 401–680; SHA and 28659-byte tree size match; embedded tests inspected, not run.
+
+### 1263. `crates/horizon-client/src/game/level_particles.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c1a5a97c4171a2156a9da221b5b5d2f3d5f6e784`
+- Size: 18814 bytes; 439 logical lines
+- Coverage: 1–400, 401–439 (contiguous to EOF)
+- Purpose: Translates level events and server/world actions into particle effects, sounds and local visual feedback.
+- Dependencies / cross-references: Level event IDs, particle registry/options, block/item/entity state, world RNG, sound engine, local player and packet dispatch.
+- Implementation / logic: Maps event payloads and positions to particle batches, including block destruction, potion/splash, smoke, item and entity-related effects.
+- Findings: Client feedback is target-relevant, but event IDs, payload encoding, particle names and random ordering must match 1.20.1; later event cases need filtering.
+- RustChunk relevance: Adaptable client-side rendering/effect subsystem, driven by authoritative server events.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Implement only 1.20.1 level-event IDs and particle option codecs; preserve deterministic counts/offsets where vanilla specifies them and keep effects cosmetic.
+- Follow-up checks: Verify all 1.20.1 event IDs, integer payloads, block-state IDs, sound pairing, RNG sequence, missing particle fallback and malformed packet bounds.
+- RustChunk implementation mapping: Possible network/level_events_1_20_1.rs plus render/particles/level_events.rs; not created.
+- Evidence required before adoption: 1.20.1 packet captures, particle registry fixtures, seeded effect snapshots and Forge client event tests.
+- Completion state: COMPLETE — 439 logical lines read in contiguous ranges 1–400 and 401–439; SHA and 18814-byte tree size match; no particles were run.
+
+### 1264. `crates/horizon-client/src/game/levels.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4bdbdce35c39239d0549dce17382cb2771bcb7d4`
+- Size: 30120 bytes; 731 logical lines
+- Coverage: 1–400, 401–731 (contiguous to EOF)
+- Purpose: Manages multiple loaded levels/dimensions, active and parked worlds, transitions and per-level world state.
+- Dependencies / cross-references: Dimension registry, world/chunk storage, level metadata, player transfer, integrated server, world generation and renderer/streaming lifecycle.
+- Implementation / logic: Keeps non-active worlds parked, switches the active dimension/world and coordinates the level-owned data needed when changing dimension.
+- Findings: Dimension/world separation is foundational, but this is Horizon's integrated multi-world server model; remote clients must not locally create or authoritatively switch server dimensions.
+- RustChunk relevance: Essential architectural reference for a complete integrated/singleplayer runtime; remote Aternos sessions consume server-authoritative dimension changes.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Implement 1.20.1 dimension keys, dimension-type effects, world bounds/biomes and respawn/respawn-packet transitions; keep remote session state distinct from integrated worlds.
+- Follow-up checks: Check unload/reload, dimension IDs, respawn packets, pending chunk cancellation, entity reset, resource/lighting state and memory release.
+- RustChunk implementation mapping: Possible runtime/worlds/level_store_1_20_1.rs and network/dimension_transition.rs; not created.
+- Evidence required before adoption: 1.20.1 dimension registry data, respawn/chunk packet traces, world-switch fixtures and lifecycle stress tests.
+- Completion state: COMPLETE — 731 logical lines read in contiguous ranges 1–400 and 401–731; SHA and 30120-byte tree size match; no dimension switch was run.
+
+### 1265. `crates/horizon-client/src/game/lightning.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `08c7ebc8f3a7b566300c423e85ed757f9fd59966`
+- Size: 29736 bytes; 736 logical lines
+- Coverage: 1–400, 401–736 (contiguous to EOF)
+- Purpose: Implements lightning strike selection, bolt lifecycle, fire placement, entity damage/transformations and lightning-rod interactions.
+- Dependencies / cross-references: Weather/thunder RNG, heightmaps, block tags/states, fire rules, entities/creepers/piglins/skeleton horses, lightning rods, events and particles.
+- Implementation / logic: Finds strike positions, advances bolt flashes, applies strike effects to nearby entities, handles channeling and lightning-rod redirection/power events.
+- Findings: Lightning and lightning-rod behavior is target-era. Newer entity roster and data/feature gates are version-bound; server owns strike results.
+- RustChunk relevance: Adaptable world simulation reference; remote client should render server-sent lightning and events rather than simulate strikes.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 bolt timing, weather RNG, fire placement, rod redirection, channeling trident, creeper charge and skeleton-horse trap semantics.
+- Follow-up checks: Compare strike RNG/radius, rod target selection, fire placement/gamerules, entity transforms/damage, bolt flash packet cadence and unload timing.
+- RustChunk implementation mapping: Possible game/world/lightning_1_20_1.rs for integrated server and render/lightning_bolt.rs for client visuals; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, seeded weather fixtures, entity-event packet captures and Forge lightning event tests.
+- Completion state: COMPLETE — 736 logical lines read in contiguous ranges 1–400 and 401–736; SHA and 29736-byte tree size match; embedded tests inspected, not run.
+
+### 1266. `crates/horizon-client/src/game/llamas.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `be216e2daec2744d5dbfc196b80d6e43f5fe7dda`
+- Size: 6356 bytes; 159 logical lines
+- Coverage: 1–159 (EOF)
+- Purpose: Implements llama spit projectile behavior, caravan following and llama-specific interaction/state helpers.
+- Dependencies / cross-references: Llama species/AI, caravan leader UUID, projectile entity, target selection, movement and entity NBT/metadata.
+- Implementation / logic: Maintains caravan relationships and emits/updates llama spit when attack behavior targets a hostile entity.
+- Findings: Llama caravan and spit are present in 1.20.1; exact AI timing, target selection and projectile synchronization need target-version comparison.
+- RustChunk relevance: Adaptable mob behavior reference, mainly for an integrated server; remote client renders authoritative mobs/projectiles.
+- Decision: **adaptable; version-specific**
+- 1.20.1 implications: Preserve 1.20.1 caravan limits, lead interaction, spit projectile type/trajectory and server-side AI; omit any later roster assumptions.
+- Follow-up checks: Check caravan attach/detach/death/unload, leader replacement, spit speed/gravity/hit effects, target filters and packet ordering.
+- RustChunk implementation mapping: Possible game/mobs/llama_1_20_1.rs and network/projectiles/llama_spit.rs; not created.
+- Evidence required before adoption: 1.20.1 mob source/mappings, seeded AI tests, projectile packet traces and Forge mob interaction hooks.
+- Completion state: COMPLETE — 159 logical lines read to EOF; SHA and 6356-byte tree size match; no mob AI was run.
+
+### 1267. `crates/horizon-client/src/game/locator_bar.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `aa69f7e7d790b020678c1f8400c5009f905e77f9`
+- Size: 5035 bytes; 126 logical lines
+- Coverage: 1–126 (EOF)
+- Purpose: Implements the later locator-bar HUD that shows directional player/entity indicators and related target markers.
+- Dependencies / cross-references: New locator-bar game feature, player tracking, HUD layout, entity visibility and modern packet/state sources.
+- Implementation / logic: Builds and updates a compact directional marker strip from tracked targets and renders marker state in the HUD.
+- Findings: The locator-bar feature is later than Minecraft 1.20.1 and is not part of the baseline client HUD.
+- RustChunk relevance: Exclude from 1.20.1 core; optional future feature only if a server/mod explicitly adds it.
+- Decision: **unnecessary; optional/future; version-specific**
+- 1.20.1 implications: Do not add the locator-bar feature or its protocol assumptions to the 1.20.1 baseline.
+- Follow-up checks: Only revisit if a specific Forge mod requires equivalent HUD data; then define a separate extension and permissions model.
+- RustChunk implementation mapping: No baseline mapping; possible optional ui/extensions/locator_bar.rs, not created.
+- Evidence required before adoption: A concrete 1.20.1 Forge mod requirement and a separately specified extension packet/UI contract.
+- Completion state: COMPLETE — 126 logical lines read to EOF; SHA and 5035-byte tree size match; no HUD rendering was run.
+
+### 1268. `crates/horizon-client/src/game/loom.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `5d8c7ae771567a8ae2b6bdacb995467e6bf56649`
+- Size: 13356 bytes; 385 logical lines
+- Coverage: 1–385 (EOF)
+- Purpose: Implements loom menu inputs, banner pattern selection, dyeing, result creation and client-side loom screen rendering.
+- Dependencies / cross-references: Banner item data, dye items, pattern registry/tags, container menu packets, recipe/result logic, UI widgets and atlas textures.
+- Implementation / logic: Validates banner/dye/pattern slots, applies selected patterns to a banner stack and updates the loom menu result/selection.
+- Findings: The loom and banner customization exist in 1.20.1, but newer banner-pattern registry entries and component-based item state must be filtered/replaced with legacy BlockEntityTag NBT.
+- RustChunk relevance: Adaptable target-era menu and item-data behavior; useful for server-side menu synchronization and client UI.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Use 1.20.1 loom menu slot IDs, banner pattern registry and legacy BlockEntityTag patterns; preserve server-authoritative crafting and Forge menu hooks.
+- Follow-up checks: Compare pattern limit, dye/banner validation, selection cycling, result NBT, shift-click, close/reopen and packet/container IDs.
+- RustChunk implementation mapping: Possible ui/menus/loom_1_20_1.rs and game/items/banner_patterns_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 LoomMenu Java source, banner NBT fixtures, menu packet captures and Forge container tests.
+- Completion state: COMPLETE — 385 logical lines read to EOF; SHA and 13356-byte tree size match; no UI/menu test was run.
+
+### 1269. `crates/horizon-client/src/game/mace.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `46e97e950f40e1af2c500f5e867494d5a4612a14`
+- Size: 26195 bytes; 646 logical lines
+- Coverage: 1–400, 401–646 (contiguous to EOF)
+- Purpose: Implements the mace weapon's smash/fall-distance damage, knockback, wind-burst effects and mace-specific attack behavior.
+- Dependencies / cross-references: Mace item, smash damage enchantments, fall distance, entity attack pipeline, wind charge/wind burst, effects and combat events.
+- Implementation / logic: Computes smash eligibility and bonus damage from fall distance, applies knockback/launch and triggers mace enchantment effects.
+- Findings: Mace and its smash mechanics were added in 1.21, after the 1.20.1 target. The weapon and its enchantments are not baseline content.
+- RustChunk relevance: Exclude from 1.20.1 core; optional future mod extension only.
+- Decision: **unnecessary; version-specific**
+- 1.20.1 implications: Do not add mace item IDs, smash packets, wind-burst or enchantment behavior to the 1.20.1 vanilla baseline.
+- Follow-up checks: If a Forge mod supplies a mace, inspect its actual item hooks and custom packets independently; do not port later vanilla assumptions.
+- RustChunk implementation mapping: No baseline mapping; optional future game/extensions/mace.rs only if required by a named mod.
+- Evidence required before adoption: Specific Forge mod source, registered item/attribute definitions and server-side combat tests.
+- Completion state: COMPLETE — 646 logical lines read in contiguous ranges 1–400 and 401–646; SHA and 26195-byte tree size match; no combat test was run.
+
+### 1270. `crates/horizon-client/src/game/machine_entities.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `eaf66d87764429413ae79d8c716f3068ea5febc0`
+- Size: 11443 bytes; 292 logical lines
+- Coverage: 1–292 (EOF)
+- Purpose: Stores custom content-mod machine block-entity state such as Create depots, basins, belts, millstones, presses, mixers, saws, bearings and arms.
+- Dependencies / cross-references: Create/Starling kinetic registry, block-entity NBT, item/fluid inventories, belts, contraptions, arms, felling trees and block-entity update packets.
+- Implementation / logic: Reads/writes non-vanilla machine tags, reconstructs typed slot/tank layouts and preserves machine contents for saving, nearby updates and rendering.
+- Findings: This is content-mod machinery, not vanilla Minecraft. Its NBT schema and Create-specific types cannot be assumed compatible with arbitrary Forge mods.
+- RustChunk relevance: Exclude from vanilla baseline; a generic mod block-entity adapter may later support actual Forge machine mods.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Do not hard-code Create/Starling machine IDs or NBT into the 1.20.1 core; support modded block entities through Forge-aware registry/data adapters.
+- Follow-up checks: Audit spill/save handling, unknown NBT preservation, item drops, chunk save/load and block-entity update packets before any Create compatibility work.
+- RustChunk implementation mapping: Possible mod_api/block_entities.rs abstraction only; no Create-specific mapping created.
+- Evidence required before adoption: Named target Forge mod/version, its block-entity NBT and packet contract, plus save/load and drop fixtures.
+- Completion state: COMPLETE — 292 logical lines read to EOF; SHA and 11443-byte tree size match; embedded tests inspected, not run.
+
+### 1271. `crates/horizon-client/src/game/machines.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `878471ede9add0549e68e73a5ba78921596b350c`
+- Size: 69842 bytes; 1841 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1841 (contiguous to EOF)
+- Purpose: Implements vanilla container transfer and block behavior: hoppers, dispensers/droppers, container slot rules, item movement, cooldowns and comparator signals; also houses native-mod extensions.
+- Dependencies / cross-references: Container/block-entity models, item stack limits, directional slot rules, dispenser behaviors, random ticks, redstone/comparators, item entities, chunk/world mutation and native mod API modules.
+- Implementation / logic: Builds container views for single/double chests and special containers, moves items across faces, performs hopper push/pull and dispenser/dropper behavior, and derives comparator fullness.
+- Findings: Core hopper/dispenser/dropper/comparator behavior is target-relevant. The crafter submodule and modern item max-stack components are later; native mod hooks are Horizon-specific.
+- RustChunk relevance: Essential gameplay subsystem; modularly rewrite against 1.20.1 container semantics and Forge item/block capabilities.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 hopper cooldown/transfer ordering, double chest rules, sided inventories, dispenser behavior registry, dropper and comparator signals; exclude Crafter and Horizon native API.
+- Follow-up checks: Compare all face slot rules, blocked chests, hopper timing/cooldowns, item stack caps, special dispenser behaviors, comparator rounding, item entities and Forge IItemHandler integration.
+- RustChunk implementation mapping: Possible game/containers/{views,hopper,dispenser,dropper,comparator}_1_20_1.rs plus Forge capability adapter; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, sided-container fixtures, dispenser behavior traces, redstone tests and Forge capability conformance suite.
+- Completion state: COMPLETE — 1841 logical lines read in contiguous ranges 1–400, 401–800, 801–1200, 1201–1600 and 1601–1841; SHA and 69842-byte tree size match; embedded tests inspected, not run.
+
+### 1272. `crates/horizon-client/src/game/machines/crafter.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `20e146575a7b97f8bf2fac9824bbd416226c822b`
+- Size: 15545 bytes; 404 logical lines
+- Coverage: 1–400, 401–404 (contiguous to EOF)
+- Purpose: Implements the redstone-triggered crafter block, crafting animation, result/remainder ejection and crafter menu UI.
+- Dependencies / cross-references: Crafter block/entity/menu packets, 3x3 recipe engine, disabled-slot state, hopper/container insertion, advancements and level events.
+- Implementation / logic: Finds a matching recipe, starts a six-tick animation, ejects output/remainders, consumes ingredients and manages the toggleable grid slots.
+- Findings: Crafter was introduced in 1.21, not 1.20.1. The module is nested under machines.rs but must be excluded from the target baseline.
+- RustChunk relevance: Exclude target core; useful only as a later-version reference if a mod adds a crafter-like machine.
+- Decision: **unnecessary; version-specific**
+- 1.20.1 implications: Do not register crafter block/entity/menu/packet IDs for 1.20.1; a Forge mod's own machine must be implemented through its own schema.
+- Follow-up checks: Only revisit for a named mod; compare its recipe, slot-disable and output semantics independently.
+- RustChunk implementation mapping: No baseline mapping; possible optional mod_api/crafter_extension.rs if a concrete Forge mod requires it.
+- Evidence required before adoption: A specific Forge 1.20.1 mod implementation and its block, menu and packet definitions.
+- Completion state: COMPLETE — 404 logical lines read in contiguous ranges 1–400 and 401–404; SHA and 15545-byte tree size match; embedded tests inspected, not run.
+
+### 1273. `crates/horizon-client/src/game/machines/native_energy.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `80b11473904e3b47558fcd46d11d53241cbb58a7`
+- Size: 10748 bytes; 275 logical lines
+- Coverage: 1–275 (EOF)
+- Purpose: Implements a Horizon native-mod energy-buffer API for reading, inserting, extracting and moving energy between mod block entities.
+- Dependencies / cross-references: Native mod declarations, per-side insert/extract permissions, block-entity NBT energy field, dimension checks and server-only world simulation.
+- Implementation / logic: Simulates and applies bounded transfers, respects capacity and side limits, and moves energy by offering to the target before extracting from the source.
+- Findings: This is a proprietary Horizon native-mod API, not Minecraft Forge's standard energy capability; do not confuse it with Forge Energy (IEnergyStorage).
+- RustChunk relevance: Exclude from baseline; only the transaction-ordering idea is a generic reference.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Implement Forge Energy capability integration only against the actual 1.20.1 Forge API; do not adopt Horizon native buffer NBT or method names.
+- Follow-up checks: Review integer overflow, simulation consistency, side permissions, chunk/dimension guards and atomic transfer behavior if an analogous adapter is built.
+- RustChunk implementation mapping: Possible forge/capabilities/energy_1_20_1.rs using IEnergyStorage; not created.
+- Evidence required before adoption: Forge 47.4.x API signatures, a real mod capability contract and adversarial transfer/overflow tests.
+- Completion state: COMPLETE — 275 logical lines read to EOF; SHA and 10748-byte tree size match; embedded tests inspected, not run.
+
+### 1274. `crates/horizon-client/src/game/machines/native_fluids.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `46c4fba0e8bfa4e347e9af97f5411cd380cde7d6`
+- Size: 26851 bytes; 673 logical lines
+- Coverage: 1–400, 401–673 (contiguous to EOF)
+- Purpose: Implements a Horizon native-mod fluid tank API with sided tank access, cauldron conversion, insertion/extraction and block-to-block fluid transfer.
+- Dependencies / cross-references: Native mod tank declarations, block-entity NBT, direction faces, water/lava registry, cauldron levels, world mutation and native server simulation.
+- Implementation / logic: Reads/writes tank lists, applies side/capacity filters, moves millibuckets, treats cauldrons in bottle thirds and attempts to return any refused fluid.
+- Findings: This is not Forge's standard fluid capability; it stores a Horizon-specific NBT shape. Potential concerns include unvalidated tank indices/capacities and negative saved amounts.
+- RustChunk relevance: Exclude Horizon API itself; transaction/rollback patterns can inform a Forge FluidHandler adapter after review.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Use Forge 1.20.1 IFluidHandler/IFluidTankProperties and FluidStack contracts; do not copy this native NBT schema or cauldron-specific server logic.
+- Follow-up checks: Check tank table bounds, capacity invariants, malformed NBT, negative/overflow amounts, face indexes, rollback correctness and fluid registry identity.
+- RustChunk implementation mapping: Possible forge/capabilities/fluid_1_20_1.rs backed by IFluidHandler; not created.
+- Evidence required before adoption: Forge 47.4.x fluid API, mod tank fixtures, malformed NBT/property tests and simulated-vs-actual transfer traces.
+- Completion state: COMPLETE — 673 logical lines read in contiguous ranges 1–400 and 401–673; SHA and 26851-byte tree size match; embedded tests inspected, not run.
+
+### 1275. `crates/horizon-client/src/game/machines/native_items.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `84228d1727093b63a62f5d65a8e483b15b8a483a`
+- Size: 10273 bytes; 279 logical lines
+- Coverage: 1–279 (EOF)
+- Purpose: Implements Horizon native-mod sided container access, item insertion/extraction and loss-avoiding item movement.
+- Dependencies / cross-references: Native mod container declarations, vanilla container views, sided slot rules, item stack, composter behavior and server-side world simulation.
+- Implementation / logic: Reads slots through a face, extracts permitted items and moves one at a time; if the target refuses an item it restores it to the original source slot.
+- Findings: The extension is Horizon-specific and not Forge's IItemHandler capability. Vanilla hopper logic lives in the parent module and is independently relevant.
+- RustChunk relevance: Exclude the native API; preserve lossless transfer as a design principle for Forge inventory adapters.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Implement Forge 1.20.1 IItemHandler sided insertion/extraction with actual slot validity and simulation semantics; do not adopt Horizon's API/permissions.
+- Follow-up checks: Review re-entrant container changes, double-chest identity, composter special cases, item count bounds and restore-on-failure behavior.
+- RustChunk implementation mapping: Possible forge/capabilities/item_handler_1_20_1.rs; not created.
+- Evidence required before adoption: Forge 47.4.x IItemHandler signatures, mod inventory fixtures, sided slot tests and transfer rollback tests.
+- Completion state: COMPLETE — 279 logical lines read to EOF; SHA and 10273-byte tree size match; embedded tests inspected, not run.
+
+### 1276. `crates/horizon-client/src/game/maps.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `39ee40df18751ee751569f799ec3960c05bf80e1`
+- Size: 76657 bytes; 1962 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1962 (contiguous to EOF)
+- Purpose: Implements map creation, exploration-map resolution, terrain color sampling, saved map data, player/banner/frame decorations, remote map packets and map rendering.
+- Dependencies / cross-references: Map item IDs/data, legacy and modern stack metadata, world heightmaps/biomes, banners, item frames, compass/lodestone tracker, map packets, atlas slots and NBT save files.
+- Implementation / logic: Creates/scales map centers, incrementally samples terrain, computes color/shading, tracks decorations and holders, serializes map data, applies remote patches and draws map textures/markers.
+- Findings: Maps, map packets, banners, item frames and lodestone compasses are 1.20.1 features. This implementation references later map decoration types, item components, trial chambers and Horizon LAN/native callbacks.
+- RustChunk relevance: Essential client feature for item rendering and remote map packet handling; world map generation is integrated-server scope.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 map item NBT (map ID/decorations), map saved-data format, packet patch codec, 1.20.1 decoration registry, banner/frame tracking and lodestone tracker; exclude later marker types and LAN APIs.
+- Follow-up checks: Compare map scale/center rounding, terrain colors/height/water shading, patch bounds, decoration rotation/order, NBT DataVersion, map ID persistence, frame markers and unloaded chunks.
+- RustChunk implementation mapping: Possible game/maps/{data,terrain,decorations,packets,render}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/assets/mappings, map NBT fixtures, clientbound map packet captures, seeded color goldens and Forge item tests.
+- Completion state: COMPLETE — 1962 logical lines read in contiguous ranges 1–400, 401–800, 801–1200, 1201–1600 and 1601–1962; SHA and 76657-byte tree size match; embedded tests inspected, not run.
+
+### 1277. `crates/horizon-client/src/game/memory.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `303b5e616efa821ef5cd12dd60ef1da7b29a3b67`
+- Size: 7363 bytes; 179 logical lines
+- Coverage: 1–179 (EOF)
+- Purpose: Builds a diagnostic memory census for client/server worlds, shared chunk sections, generation buffers, renderer CPU/GPU allocations and allocator tags.
+- Dependencies / cross-references: Chunk census, integrated server, Arc section identity, renderer memory labels, allocator hooks, GPU allocation labels and JSON diagnostics.
+- Implementation / logic: Counts unique sections across worlds and returns a structured JSON report of process residency, world columns, renderer and heap categories.
+- Findings: Pure diagnostics, not Minecraft behavior. GPU and allocator labels are implementation-specific and the report can expose operational details if exported.
+- RustChunk relevance: Exclude from game core; optional developer diagnostics if privacy and performance costs are acceptable.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Do not port the Horizon control/report interface; build an opt-in, privacy-safe RustChunk memory diagnostic with Android GPU-driver limitations.
+- Follow-up checks: Measure census overhead, Arc identity assumptions, missing allocation categories, GPU API availability and accidental exposure in logs/telemetry.
+- RustChunk implementation mapping: Possible diagnostics/memory_census.rs behind a developer flag; not created.
+- Evidence required before adoption: Profiling overhead measurements, privacy policy, Android GPU allocator support and bounded diagnostic output tests.
+- Completion state: COMPLETE — 179 logical lines read to EOF; SHA and 7363-byte tree size match; no memory profile was run.
+
+### 1278. `crates/horizon-client/src/game/minecarts.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `dd2bfe751f4cd9445ee4720c9bbeeea951f6bb52`
+- Size: 122348 bytes; 2895 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–2895 (contiguous to EOF)
+- Purpose: Implements minecart entities, rail shapes and movement, powered/activator rails, collisions, riders, variants, containers, TNT explosions, persistence and rendering.
+- Dependencies / cross-references: Rail/block states, collision engine, entities/mobs, player input, vehicle packets, item/container models, TNT/explosion rules, NBT and minecart renderer.
+- Implementation / logic: Ticks carts along rail segments, applies slope/boost/slowdown, collision and pickup/push, manages chest/hopper/furnace/TNT/rideable/command/spawner variants and serializes/render them.
+- Findings: Core minecart, rail, chest/hopper/furnace/TNT behavior is 1.20.1-relevant. Experimental minecart_improvements, step interpolation packets and Horizon LAN/native callbacks are not safe baseline assumptions.
+- RustChunk relevance: Essential vehicle simulation and rendering domain; remote client must follow server entity movement and not authoritatively simulate rails.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild classic 1.20.1 OldMinecartBehavior and vehicle packet handling, preserve variant NBT and rider/collision semantics; exclude experimental feature-gated physics unless negotiated by target server.
+- Follow-up checks: Compare all rail shapes/slopes, powered/activator rail, max speed, water/gravity, collisions, push/pickup, passenger offsets, dismount, TNT thresholds, hopper suction and NBT round-trip.
+- RustChunk implementation mapping: Possible game/vehicles/minecart_{physics,variants,containers,render}_1_20_1.rs and network/vehicles.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, rail fixture world, entity/vehicle packet captures, seeded TNT traces, NBT fixtures and Forge vehicle event tests.
+- Completion state: COMPLETE — 2895 logical lines read in contiguous ranges 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800 and 2801–2895; SHA and 122348-byte tree size match; embedded tests inspected, not run.
+
+### 1279. `crates/horizon-client/src/game/mob_blocks.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `6c4106c832d80207afccb66e2f6df5c78b6e78fb`
+- Size: 33450 bytes; 782 logical lines
+- Coverage: 1–400, 401–782 (contiguous to EOF)
+- Purpose: Renders items and blocks held/worn by mobs, including enderman carried blocks, snow-golem pumpkin, mooshroom mushrooms, iron-golem poppy and raid-captain banners.
+- Dependencies / cross-references: Mob species/equipment, item-model resolver, block baked models, entity pose transforms, banner textures, lighting/overlay and GPU skinning.
+- Implementation / logic: Builds per-mob transforms for hand/head/carried/worn models, submits item/block geometry and culls back-facing quads for cutout cross models.
+- Findings: Several layers are target-era (enderman, snow golem, mooshroom, iron golem, raid captain). Copper-golem antenna rendering and newer species/item components are later-version additions.
+- RustChunk relevance: Adaptable rendering subsystem reference; separate vanilla 1.20.1 layers from later entities and item-component data.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 held-item contexts, legacy equipment metadata, enderman block state, snow-golem pumpkin, mooshroom mushrooms and captain banner; exclude copper-golem and modern component paths.
+- Follow-up checks: Compare model transforms, left/right hand, spyglass use, item contexts/seeds, hurt overlays, invisibility, block culling, banner patterns and Forge-added mob equipment.
+- RustChunk implementation mapping: Possible render/mobs/{held_items,carried_blocks,worn_blocks,head_items}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 renderer source/assets, mob equipment packet fixtures, render goldens and Forge entity-layer registration tests.
+- Completion state: COMPLETE — 782 logical lines read in contiguous ranges 1–400 and 401–782; SHA and 33450-byte tree size match; embedded tests inspected, not run.
+
+### 1280. `crates/horizon-client/src/game/mob_gear.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4e7a2a0fd1f5c97c591034fd0d02fcb21270625a`
+- Size: 8737 bytes; 227 logical lines
+- Coverage: 1–227 (EOF)
+- Purpose: Handles mob spawn equipment enchantments, equipment-table loot rolls, Halloween heads and raid-specific pillager/vindicator buffs.
+- Dependencies / cross-references: Mob species/finalization, equipment slots/drop chances, loot tables and random sequences, local difficulty, enchantment registry and raid wave rules.
+- Implementation / logic: Rolls equipment tables into mob slots, applies difficulty-scaled enchantment chances/costs, handles the rare pillager piercing crossbow and raid wave buffs.
+- Findings: Mob spawn gear and raid buffs are target-era, but this implementation uses modern mob_spawn_equipment providers and newer data-driven enchantment selection; target 1.20.1 source/data must replace them.
+- RustChunk relevance: Adaptable integrated-server mob-spawn behavior reference; remote clients only render synchronized equipment.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Use 1.20.1 mob equipment finalization, local-difficulty enchantment rules, raid wave thresholds and legacy enchantment NBT; remove modern provider assumptions.
+- Follow-up checks: Compare mob eligibility, RNG draw order, local difficulty, chance/cost bounds, slot drop chances, Halloween conditions and raid wave enchantment timing.
+- RustChunk implementation mapping: Possible game/mobs/spawn_equipment_1_20_1.rs and game/raids/equipment_buffs.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/data, seeded mob-spawn fixtures, loot/enchantment NBT and Forge finalize/raid event traces.
+- Completion state: COMPLETE — 227 logical lines read to EOF; SHA and 8737-byte tree size match; embedded tests inspected, not run.
+

@@ -881,3 +881,36 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Newer-only systems identified include modern reach attributes, later projectile/entity/particle fields, Nautilus, mace PvP, 26.3 WorldOptions/locator behavior, Horizon `horizon:lod` and `horizon:quiet_commands`; do not treat these as vanilla 1.20.1 support.
 - Embedded tests were inspected only, not executed. No build, APK, Forge launch, Android-device run, Minecraft server join, LAN host, port mapping, LOD worker or relay action was performed.
 - Both existing backup branches remain untouched. Next backup remains due only after entries 1001–2000 are fully committed and globally verified.
+
+
+### Checkpoint 1261–1280 — 2026-11-19
+
+- Source pinned to starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree SHA matched and was not truncated. All 20 selected files were present, unique against the previous Index, and their Git blob SHA and byte sizes match the pinned tree.
+- Files audited completely to EOF:
+- 1261 `crates/horizon-client/src/game/launch_api.rs` — 271 lines, 9924 bytes, SHA `6ec77eb621fcef70836333a89d0f2a26b345cfbd`; Coverage: 1–271 (EOF).
+- 1262 `crates/horizon-client/src/game/leads.rs` — 680 lines, 28659 bytes, SHA `26d4ecc1073bba00674e6e981e7dca08d5e887b5`; Coverage: 1–400, 401–680 (contiguous to EOF).
+- 1263 `crates/horizon-client/src/game/level_particles.rs` — 439 lines, 18814 bytes, SHA `c1a5a97c4171a2156a9da221b5b5d2f3d5f6e784`; Coverage: 1–400, 401–439 (contiguous to EOF).
+- 1264 `crates/horizon-client/src/game/levels.rs` — 731 lines, 30120 bytes, SHA `4bdbdce35c39239d0549dce17382cb2771bcb7d4`; Coverage: 1–400, 401–731 (contiguous to EOF).
+- 1265 `crates/horizon-client/src/game/lightning.rs` — 736 lines, 29736 bytes, SHA `08c7ebc8f3a7b566300c423e85ed757f9fd59966`; Coverage: 1–400, 401–736 (contiguous to EOF).
+- 1266 `crates/horizon-client/src/game/llamas.rs` — 159 lines, 6356 bytes, SHA `be216e2daec2744d5dbfc196b80d6e43f5fe7dda`; Coverage: 1–159 (EOF).
+- 1267 `crates/horizon-client/src/game/locator_bar.rs` — 126 lines, 5035 bytes, SHA `aa69f7e7d790b020678c1f8400c5009f905e77f9`; Coverage: 1–126 (EOF).
+- 1268 `crates/horizon-client/src/game/loom.rs` — 385 lines, 13356 bytes, SHA `5d8c7ae771567a8ae2b6bdacb995467e6bf56649`; Coverage: 1–385 (EOF).
+- 1269 `crates/horizon-client/src/game/mace.rs` — 646 lines, 26195 bytes, SHA `46e97e950f40e1af2c500f5e867494d5a4612a14`; Coverage: 1–400, 401–646 (contiguous to EOF).
+- 1270 `crates/horizon-client/src/game/machine_entities.rs` — 292 lines, 11443 bytes, SHA `eaf66d87764429413ae79d8c716f3068ea5febc0`; Coverage: 1–292 (EOF).
+- 1271 `crates/horizon-client/src/game/machines.rs` — 1841 lines, 69842 bytes, SHA `878471ede9add0549e68e73a5ba78921596b350c`; Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1841 (contiguous to EOF).
+- 1272 `crates/horizon-client/src/game/machines/crafter.rs` — 404 lines, 15545 bytes, SHA `20e146575a7b97f8bf2fac9824bbd416226c822b`; Coverage: 1–400, 401–404 (contiguous to EOF).
+- 1273 `crates/horizon-client/src/game/machines/native_energy.rs` — 275 lines, 10748 bytes, SHA `80b11473904e3b47558fcd46d11d53241cbb58a7`; Coverage: 1–275 (EOF).
+- 1274 `crates/horizon-client/src/game/machines/native_fluids.rs` — 673 lines, 26851 bytes, SHA `46c4fba0e8bfa4e347e9af97f5411cd380cde7d6`; Coverage: 1–400, 401–673 (contiguous to EOF).
+- 1275 `crates/horizon-client/src/game/machines/native_items.rs` — 279 lines, 10273 bytes, SHA `84228d1727093b63a62f5d65a8e483b15b8a483a`; Coverage: 1–279 (EOF).
+- 1276 `crates/horizon-client/src/game/maps.rs` — 1962 lines, 76657 bytes, SHA `39ee40df18751ee751569f799ec3960c05bf80e1`; Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1962 (contiguous to EOF).
+- 1277 `crates/horizon-client/src/game/memory.rs` — 179 lines, 7363 bytes, SHA `303b5e616efa821ef5cd12dd60ef1da7b29a3b67`; Coverage: 1–179 (EOF).
+- 1278 `crates/horizon-client/src/game/minecarts.rs` — 2895 lines, 122348 bytes, SHA `dd2bfe751f4cd9445ee4720c9bbeeea951f6bb52`; Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–2895 (contiguous to EOF).
+- 1279 `crates/horizon-client/src/game/mob_blocks.rs` — 782 lines, 33450 bytes, SHA `6c4106c832d80207afccb66e2f6df5c78b6e78fb`; Coverage: 1–400, 401–782 (contiguous to EOF).
+- 1280 `crates/horizon-client/src/game/mob_gear.rs` — 227 lines, 8737 bytes, SHA `4e7a2a0fd1f5c97c591034fd0d02fcb21270625a`; Coverage: 1–227 (EOF).
+- Long-file coverage was consecutive and gap-free, each read range at most 400 lines: leads.rs (1–400, 401–680); level_particles.rs (1–400, 401–439); levels.rs (1–400, 401–731); lightning.rs (1–400, 401–736); mace.rs (1–400, 401–646); machines.rs (1–400, 401–800, 801–1200, 1201–1600, 1601–1841); crafter.rs (1–400, 401–404); native_fluids.rs (1–400, 401–673); maps.rs (1–400, 401–800, 801–1200, 1201–1600, 1601–1962); minecarts.rs (1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–2895); mob_blocks.rs (1–400, 401–782). All other files were read once from line 1 through EOF.
+- Ledger validation: entries 1261–1280 are sequential and each has all 15 required fields exactly once. Index validation: 1280 sequential rows, 1280 unique paths, zero duplicates. Previous 1260 entries were preserved.
+- First-half progress for stage 1201–1400: 80/100 (four of five 20-file checkpoints). Next checkpoint 1281–1300 starts at the next unindexed source path. After it is committed and globally verified, stop at 100/200 and await separate authorization for 1301–1350 under the user's new proposed 50-file cadence; do not begin 1301 yet.
+- 1.20.1 findings: core target behavior includes leads, level particles, dimensions, lightning, llamas, loom, hopper/dispenser/dropper, maps, classic minecart behavior, mob equipment rendering and spawn/raid gear. Later features excluded include locator bar, mace, copper golem, crafter and experimental minecart improvements. Horizon-native energy/fluid/item APIs and Create-specific machine entities are not substitutes for Forge capabilities.
+- Tests embedded in source were inspected only, not executed. No build, APK, Forge launch, Android-device test, multiplayer join, LAN host, UPnP or relay action was performed.
+- Backup branches remain untouched. Backup cadence remains only after entries 1001–2000 are complete and globally verified.
+
