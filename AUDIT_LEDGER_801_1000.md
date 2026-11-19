@@ -96,7 +96,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `727b7ca1e1c11cba5d2c6b6a067bf13f95bdb61a`
 - Size: 45157 bytes; 1268 lines
-- Coverage: Complete text file reviewed, lines 1–1268; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1268. Total: 1268 logical lines.
 - Purpose: Defines GUI draw commands and screen-space composition helpers.
 - Dependencies / cross-references: Text/font, HUD atlas, screen transforms and clipping.
 - Implementation / logic: Emits ordered sprite/fill/text/blit/scissor/tooltip draw operations.
@@ -113,7 +113,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `81addea96c7cca12db7fd52d86e6959f4dc4a1ef`
 - Size: 16265 bytes; 434 lines
-- Coverage: Complete text file reviewed, lines 1–434; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–434. Total: 434 logical lines.
 - Purpose: Builds full-screen visual overlays such as fire, portal, underwater and spyglass.
 - Dependencies / cross-references: Camera, status effects, textures and screen shader.
 - Implementation / logic: Selects effect quads, transforms, opacity and timing.
@@ -130,7 +130,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `1ce8a1a8e8d9e51be6d6492de9ecc45a854b76c2`
 - Size: 30555 bytes; 858 lines
-- Coverage: Complete text file reviewed, lines 1–858; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–858. Total: 858 logical lines.
 - Purpose: Maps sculk-related block and vibration visual state.
 - Dependencies / cross-references: Block tags/states, vibration events, Warden/sculk events.
 - Implementation / logic: Produces sculk effect/render state and associated events.
@@ -164,7 +164,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `377bd68f7bccf108af6d619159e58578d17e9f02`
 - Size: 37115 bytes; 997 lines
-- Coverage: Complete text file reviewed, lines 1–997; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–997. Total: 997 logical lines.
 - Purpose: Connects server-provided far terrain tiles to renderer caches.
 - Dependencies / cross-references: Network extension messages, far tiles and GPU uploads.
 - Implementation / logic: Decodes/updates distant terrain separately from resident chunks.
@@ -181,7 +181,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `1ccdbe942ab8bcc9f1873c7f6703bc67347abc09`
 - Size: 39912 bytes; 1059 lines
-- Coverage: Complete text file reviewed, lines 1–1059; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1059. Total: 1059 logical lines.
 - Purpose: Defines client/renderer settings, ranges, persistence and UI.
 - Dependencies / cross-references: Options file, graphics settings, controls and platform paths.
 - Implementation / logic: Loads, validates, edits and serializes many option values.
@@ -249,7 +249,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `209ee8c18198c0616289817cfdb3b0eebbc1e939`
 - Size: 60707 bytes; 1508 lines
-- Coverage: Complete text file reviewed, lines 1–1508; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1508. Total: 1508 logical lines.
 - Purpose: Resolves, decodes, caches and applies player/entity skins.
 - Dependencies / cross-references: Profile services, skin URLs, texture decoding and player model.
 - Implementation / logic: Loads skin data, updates player textures and manages cache.
@@ -266,7 +266,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `45cd4a2f0cf6e2650696600e6d18c5986c96143b`
 - Size: 57469 bytes; 1638 lines
-- Coverage: Complete text file reviewed, lines 1–1638; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1600; 1601–1638. Total: 1638 logical lines.
 - Purpose: Runtime mixer, source/channel tracking, spatial playback and audio output.
 - Dependencies / cross-references: Sound event registry, codec decode, listener state and platform backend.
 - Implementation / logic: Maintains sources, loops, pitch/gain, distance attenuation, pause/stop and output device state.
@@ -283,7 +283,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `9b06ff310f437676197e1174755d2e75faeccdb3`
 - Size: 20140 bytes; 553 lines
-- Coverage: Complete text file reviewed, lines 1–553; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–553. Total: 553 logical lines.
 - Purpose: Loads sound-event names, subtitles and weighted sound variants.
 - Dependencies / cross-references: Pack sound JSON, language strings and audio assets.
 - Implementation / logic: Builds registry of event variants and referenced sound resources.
@@ -317,7 +317,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `8bd8cab0e92f185a018139aaa689cc827fa48be8`
 - Size: 24032 bytes; 687 lines
-- Coverage: Complete text file reviewed, lines 1–687; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–687. Total: 687 logical lines.
 - Purpose: Represents styled text spans and run operations.
 - Dependencies / cross-references: Text components, font layout and GUI draw commands.
 - Implementation / logic: Stores character/style runs and provides merge/slice/iteration.
@@ -334,7 +334,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `6331d37caef8c7f7078d8d5346ace5e3586947c9`
 - Size: 28342 bytes; 758 lines
-- Coverage: Complete text file reviewed, lines 1–758; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–758. Total: 758 logical lines.
 - Purpose: Computes split-screen viewports and layout rectangles.
 - Dependencies / cross-references: Display size, orientation, player count and split settings.
 - Implementation / logic: Partitions output area into per-player screen rectangles.
@@ -368,7 +368,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `7f0945be47ff16719ac9230daa1e62d0e49c074b`
 - Size: 24936 bytes; 691 lines
-- Coverage: Complete text file reviewed, lines 1–691; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–691. Total: 691 logical lines.
 - Purpose: Defines split-screen profiles and presets.
 - Dependencies / cross-references: Split settings schema, input slots and persistent state.
 - Implementation / logic: Selects/migrates profile settings for multiple local players.
@@ -402,7 +402,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `91af553b876a7b5b8611307bea57e9c4d51d5083`
 - Size: 62018 bytes; 1630 lines
-- Coverage: Complete text file reviewed, lines 1–1630; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1600; 1601–1630. Total: 1630 logical lines.
 - Purpose: Routes UI interactions and draw layout for split-screen players.
 - Dependencies / cross-references: Split layout/profiles, HUD and per-player input focus.
 - Implementation / logic: Composes per-view GUI and focus state.
@@ -436,7 +436,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `264c816c0e0d59cc9027340e8091dab3861b973a`
 - Size: 56438 bytes; 1319 lines
-- Coverage: Complete text file reviewed, lines 1–1319; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1319. Total: 1319 logical lines.
 - Purpose: Loads textures, atlas sprite sources, animations and UV mappings.
 - Dependencies / cross-references: Atlas JSON, images, pack overlays and GPU atlas.
 - Implementation / logic: Decodes sprite source types and builds atlas/animation frames.
@@ -470,7 +470,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f89a6f4438d4e9bade145672a0c3e69bdd31ebb9`
 - Size: 173677 bytes; 4045 lines
-- Coverage: Complete text file reviewed, lines 1–4045; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2800; 2801–3200; 3201–3600; 3601–4000; 4001–4045. Total: 4045 logical lines.
 - Purpose: Schedules chunk generation, lighting, mesh compilation, updates, unload and worker results.
 - Dependencies / cross-references: Chunk/section state, async workers, mesher, lighting and resource snapshots.
 - Implementation / logic: Uses bounded queues, distance priority/reranking, per-column sequences, nonblocking mailbox, stale-result rejection, neighbor-light readiness and mesh pooling.
@@ -487,7 +487,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0951f2e5628365b9e74aa63d5170947a54c26dcf`
 - Size: 17509 bytes; 496 lines
-- Coverage: Complete text file reviewed, lines 1–496; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–496. Total: 496 logical lines.
 - Purpose: Implements Structure Block state/data and actions.
 - Dependencies / cross-references: Structure NBT/templates, block states and UI controls.
 - Implementation / logic: Loads/saves structure data and handles placement/scan/save modes.
@@ -521,7 +521,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `6e5b580ffe6a5f6fce638890263bdda66dc55eb7`
 - Size: 23564 bytes; 689 lines
-- Coverage: Complete text file reviewed, lines 1–689; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–689. Total: 689 logical lines.
 - Purpose: Renders multiplayer player list and row status/skin details.
 - Dependencies / cross-references: Player-info packets, teams, latency, skins and HUD atlas.
 - Implementation / logic: Sorts and renders player rows, skins and latency indicators.
@@ -538,7 +538,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `89fd1f324e319fdd9fbaa2d6199db53d39c4c859`
 - Size: 21065 bytes; 585 lines
-- Coverage: Complete text file reviewed, lines 1–585; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–585. Total: 585 logical lines.
 - Purpose: Collects and scrubs optional diagnostic telemetry.
 - Dependencies / cross-references: Settings/consent, event schemas and platform metadata.
 - Implementation / logic: Filters and serializes telemetry events.
@@ -555,7 +555,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `905b4547fceacb851201bc8489a6f45c5bec5ba6`
 - Size: 39721 bytes; 796 lines
-- Coverage: Complete text file reviewed, lines 1–796; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–796. Total: 796 logical lines.
 - Purpose: Main terrain shader for lighting, fog, sky, cutout/translucency, emissive and HDR.
 - Dependencies / cross-references: WGSL pipeline, sprites/lightmap, terrain vertices, fog/HDR uniforms and sky fan.
 - Implementation / logic: Transforms terrain data and computes light, visibility, fog, emission, sky/sunrise and fragment output.
@@ -623,7 +623,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e27cf042f7d89c6c77eee61f64b5bc446408dc94`
 - Size: 17645 bytes; 490 lines
-- Coverage: Complete text file reviewed, lines 1–490; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–490. Total: 490 logical lines.
 - Purpose: Builds title edition/build branding.
 - Dependencies / cross-references: Client metadata, title UI and translations.
 - Implementation / logic: Selects label text for title screen.
@@ -657,7 +657,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `241d51c5a485caa28fe1effafee087dd6113eb34`
 - Size: 81677 bytes; 2363 lines
-- Coverage: Complete text file reviewed, lines 1–2363; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2363. Total: 2363 logical lines.
 - Purpose: Top-level GUI screen routing, event dispatch and draw orchestration.
 - Dependencies / cross-references: Input, screen models, menus, HUD, chat, inventory and rendering.
 - Implementation / logic: Routes key/mouse/text/scroll actions, updates screens and produces draw commands.
@@ -674,7 +674,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ca5c08a7f527f2d26a239fba77b50884af08fbbb`
 - Size: 26576 bytes; 747 lines
-- Coverage: Complete text file reviewed, lines 1–747; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–747. Total: 747 logical lines.
 - Purpose: Implements Vault block-entity key/reward lifecycle.
 - Dependencies / cross-references: Trial Chamber blocks, loot tables, player keys and NBT.
 - Implementation / logic: Tracks players, reward state, cooldown and loot ejection.
@@ -691,7 +691,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f15ae028dcacb2e910c976da49cff00aef9707bb`
 - Size: 19713 bytes; 564 lines
-- Coverage: Complete text file reviewed, lines 1–564; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–564. Total: 564 logical lines.
 - Purpose: Builds weather/cloud/rain/snow visual state.
 - Dependencies / cross-references: World time, biome climate, precipitation and renderer.
 - Implementation / logic: Computes weather strength and render descriptors.
@@ -708,7 +708,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0e6482b5f3f41abe58dae255afd35b841b1907d0`
 - Size: 40243 bytes; 1200 lines
-- Coverage: Complete text file reviewed, lines 1–1200; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–800; 801–1200. Total: 1200 logical lines.
 - Purpose: Provides reusable UI widgets for menus/settings.
 - Dependencies / cross-references: Screen draw lists, mouse/key/text input and font metrics.
 - Implementation / logic: Buttons, sliders, toggles, lists and text controls.
@@ -759,7 +759,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a2fc726100ef54e36675aa8ddefb6faf3bdc59d7`
 - Size: 29431 bytes; 703 lines
-- Coverage: Complete text file reviewed, lines 1–703; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–703. Total: 703 logical lines.
 - Purpose: Reads ZIP resource-pack containers and file entries.
 - Dependencies / cross-references: ZIP central directory, Stored/Deflate decoders and overlay filesystem.
 - Implementation / logic: Parses entries and reads requested file streams.
@@ -827,7 +827,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `d6f1112fee20a296db733e2952d640fc462ec322`
 - Size: 44704 bytes; 629 lines
-- Coverage: Complete text file reviewed, lines 1–629; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–629. Total: 629 logical lines.
 - Purpose: English base strings for Horizon-specific UI.
 - Dependencies / cross-references: JSON strings, placeholders and UI consumers.
 - Implementation / logic: 627 keys used as base for locale comparison.
@@ -861,7 +861,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `34600a6008894330d4644bdd53907c23ea1dfad4`
 - Size: 31656 bytes; 408 lines
-- Coverage: Complete text file reviewed, lines 1–408; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–408. Total: 408 logical lines.
 - Purpose: French Horizon UI translations.
 - Dependencies / cross-references: JSON strings and placeholder patterns.
 - Implementation / logic: 406 keys; 221 absent vs English; shared placeholders match.
@@ -878,7 +878,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `db2e0b14ea04242cb1201b03a1208057e6216094`
 - Size: 44853 bytes; 629 lines
-- Coverage: Complete text file reviewed, lines 1–629; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–629. Total: 629 logical lines.
 - Purpose: Malay Horizon UI translations.
 - Dependencies / cross-references: JSON strings and placeholder patterns.
 - Implementation / logic: 627 keys; key count matches English and shared placeholder sequences match; semantic quality was not human-reviewed.
@@ -963,7 +963,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `6571ce05c05ee1aae6d92ec6fadc0f5984b817ec`
 - Size: 44733 bytes; 460 lines
-- Coverage: Complete text file reviewed, lines 1–460; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–460. Total: 460 logical lines.
 - Purpose: Ukrainian Horizon UI translations.
 - Dependencies / cross-references: JSON strings and placeholder patterns.
 - Implementation / logic: 458 keys; 169 absent vs English; shared placeholders match.
