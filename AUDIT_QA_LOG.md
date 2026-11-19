@@ -949,3 +949,19 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected only, not run. No build, APK, Forge launch, Android device, multiplayer server, LAN, UPnP or relay action was performed.
 - Backup branches untouched. Backup cadence remains only after entries 1001–2000 are fully committed and globally verified.
 
+
+
+## Protocol normalization — 2026-11-19
+
+### Authoritative cadence clarification
+
+- This is a protocol/document-consistency amendment only. It creates no new source-audit entries and does not renumber or reclassify any existing entry.
+- The controlling cadence is four consecutive 50-file reporting sections per 200-file stage.
+- Each 50-file section consists of two exact 25-file checkpoints. A complete 200-file stage therefore contains eight 25-file checkpoints.
+- After each 25-file checkpoint, update the applicable Ledger, Index, QA Log, Continuity and Protocol together in one commit; re-fetch and verify all five documents from GitHub.
+- After the second 25-file checkpoint completes a 50-file section, run the 50-file boundary checks, report and stop for explicit user authorization. Do not ask for approval between the two 25-file checkpoints inside an already authorized 50.
+- The active stage 1201–1400 has 1201–1300 complete (100/200). Those historical entries were recorded under the former 20-file checkpoint cadence and remain unchanged. The next section is 1301–1350, with checkpoints 1301–1325 and 1326–1350; it remains unauthorized until the user explicitly starts it.
+- At 1350, stop and wait before 1351–1400. For later stages, apply 4 × 50 / 2 × 25 from the first entry.
+- Backup policy is unchanged: next backup only after entries 1001–2000 are complete, committed and globally verified. No backup at a 25-, 50-, 100- or 200-entry boundary.
+- The Index currently contains 1300 sequential entries and 1300 unique paths. The active Ledger contains entries 1201–1300 with exactly 15 required fields each. No source files beyond entry 1300 were started as part of this amendment.
+- No source build, unit tests, APK, Forge launch, Android-device validation or multiplayer/server test was performed as part of this policy/document amendment.

@@ -1,120 +1,140 @@
 # RustChunk Starling Audit Protocol
 
-This protocol governs the Starling source audit on branch `starling-1.20.1-port-audit`.
+This is the single authoritative protocol for the Starling source audit on `starling-1.20.1-port-audit`. If an older note, heading, QA entry or Ledger preamble conflicts with this file, this protocol and the matching `AUDIT_CONTINUITY.md` govern future work. Historical QA records remain historical evidence and must not be silently rewritten.
 
-## Stage, half-stage and checkpoint boundaries
+## 1. Scope and pinned source
 
-- The accounting and closure boundary remains **exactly 200 new, unique source files** per stage, whenever at least 200 eligible files remain.
-- Split each 200-file stage into **two consecutive halves of 100 files**. Each half contains exactly **five checkpoints of 20 files**.
-- The first half is the only part authorized by a new stage-start instruction. Complete its five 20-file checkpoints without asking for approval between them. After the 100th file is committed and verified, stop, report **“half-stage complete: 100/200”**, identify the five completed checkpoints and the exact next file/range, and wait for a new explicit user instruction before starting files 101–200 of that stage.
-- After that new instruction, complete the second half as five more 20-file checkpoints. Do not stop for approval between those five checkpoints. Close the 200-file stage only after file 200 is committed and globally revalidated.
-- A 100-file midpoint is a **pause/report boundary only**. It does not close the 200-file stage, renumber entries, create a new ledger range, or trigger a backup.
-- Every 20-file checkpoint remains durable: after its 20 files are fully inspected, append the complete 15-field entries to the applicable range Ledger, append matching Index rows, append a dated checkpoint record to `AUDIT_QA_LOG.md`, and update `AUDIT_CONTINUITY.md`. Keep `AUDIT_PROTOCOL.md` synchronized when a governing rule or durable state changes. Validate all five documents, commit the checkpoint documents together in one checkpoint commit, and re-read the committed files from GitHub. Never leave more than 20 inspected files uncommitted.
-- After every checkpoint read-back, report briefly. At the fifth checkpoint of the first 100-file half, report and pause for the user's next instruction. At the tenth checkpoint, report that the full 200-file stage is complete.
+- Project: `imamirhosein/RustChunk`; audit branch: `starling-1.20.1-port-audit`. Do not put audit ledgers or audit-only changes on `main`.
+- Upstream: `starling-client/starling`, ref `starling`; pinned commit: `5432370d573642041585c69b40fb045b27133488`.
+- Inspect only this exact pinned snapshot, never the moving upstream branch.
+- The audit assesses which Starling/Horizon architecture is reusable, adaptable, version-specific, unnecessary or requires rewriting for RustChunk's Minecraft Java 1.20.1 / Forge 47.x target. Starling 26.3 behavior, registries, IDs, packets and assets are not proof of 1.20.1 compatibility.
 
-## File selection and inspection
+## 2. Authoritative 200 / 50 / 25 cadence
 
-- Use the pinned Starling commit recorded by the audit, not the moving default branch.
-- Continue in deterministic source-tree path order from the last audited path.
-- Before selecting new files, build the skip set from every path already present in the current Index (currently entries 1–1260). A source path may appear only once in the audit; never assign a second audit number to an existing path.
-- Corrective closure for entries 1–1000: six duplicate slots (631, 632, 633, 754, 762 and 766) were replaced with the six next unique paths after the former entry-1000 endpoint: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`. Those six files are already audited and must be skipped by future batches.
-- Corrective closure for the 1001–1200 stage: duplicate entry 1089 was replaced, without renumbering other entries, by `crates/horizon-client/src/game/blockctl.rs` (pinned SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`; 179 logical lines). This replacement is already audited and must be skipped.
-- The first source path after entry 1200 was `crates/horizon-client/src/game/events.rs` (entry 1201). The next source path after committed entry 1260 is `crates/horizon-client/src/game/launch_api.rs` (entry 1261); verify every next path against the pinned tree and full Index.
-- Inspect each file completely before moving on. For files longer than 400 logical lines, read consecutive, gap-free sections of at most 400 lines until EOF.
-- If a source file cannot be read completely, record the exact limitation and do not mark it fully reviewed.
+- The accounting and closure unit is **200 new, unique source files**.
+- Every 200-file stage has **four consecutive 50-file reporting sections**.
+- Every 50-file section contains **exactly two 25-file checkpoints**.
+- One complete 200-file stage therefore contains four 50-file sections and eight 25-file checkpoints.
+- The **25-file checkpoint** is the durable Git commit and verification unit. Complete exactly 25 new files, update all five audit documents together, commit them together, re-fetch them from GitHub and verify the committed contents before inspecting the next 25 files.
+- The **50-file boundary** is the user-facing report and authorization boundary. After the two 25-file checkpoints are committed and verified, report the completed section, identify the exact next 50-file range, and **STOP**. Do not inspect the next section until the user explicitly authorizes it.
+- Do not ask for permission between the two 25-file checkpoints inside an already authorized 50-file section. Do not cross a 50-file boundary on assumed or implied permission.
+- Do not change the 200 / 50 / 25 cadence unless the user explicitly changes it.
 
-## Ledger file layout
+## 3. Transition for the active stage 1201–1400
 
-- Entries 1–400: `AUDIT_LEDGER_1_400.md`.
-- Entries 401–600: `AUDIT_LEDGER_401_600.md`.
-- Entries 601–800: `AUDIT_LEDGER_601_800.md`.
-- Entries 801–1000: `AUDIT_LEDGER_801_1000.md`.
-- Entries 1001–1200: `AUDIT_LEDGER_1001_1200.md`.
-- Entries 1201–1400: `AUDIT_LEDGER_1201_1400.md` (one Ledger for both 100-file halves).
-- Keep `AUDIT_INDEX.md` as the navigation/decision summary; keep its ledger links and entry ranges synchronized with every continuation file.
-- `AUDIT_CONTINUITY.md` is the durable cross-chat resume record. It must always match the latest verified checkpoint, current half-stage pause state, and branch state.
-- Name each future continuation `AUDIT_LEDGER_<first>_<last>.md` using its exact inclusive entry range. The 100-file midpoint does not split a 200-entry ledger into two new ledgers.
+- Entries 1201–1300 are already complete and committed. They were historically recorded using the former 20-file checkpoint cadence. Preserve those entries and historical QA records; do not renumber, split, rewrite or re-audit them merely to make old checkpoint sizes match the new cadence.
+- The first 100 entries of the active stage (1201–1300) are complete. For stage accounting, these cover the first two 50-file sections even though historical Git commits within that completed range were made at 20-file intervals.
+- The next section is **1301–1350**, checkpoints **1301–1325** and **1326–1350**. It is currently unauthorized. Do not inspect source file 1301 or later until the user explicitly says to begin.
+- After 1301–1350 is completed, committed and verified, report 150/200 for the active stage and STOP. Wait for separate explicit authorization before 1351–1400.
+- After authorization, complete 1351–1375 and 1376–1400, then report 200/200 only after global validation.
+- Starting with stage 1401–1600, apply the new cadence from the beginning: 1401–1450, 1451–1500, 1501–1550, 1551–1600. Each section contains two exact 25-file checkpoints and ends with a stop for authorization.
 
-## Ledger and evidence
+## 4. Deterministic source selection and uniqueness
 
-- Every entry must contain all 15 standard fields:
-  1. Source repository/ref
-  2. Source SHA
-  3. Size
-  4. Coverage
-  5. Purpose
-  6. Dependencies / cross-references
-  7. Implementation / logic
-  8. Findings
-  9. RustChunk relevance
-  10. Decision
-  11. 1.20.1 implications
-  12. Follow-up checks
-  13. RustChunk implementation mapping
-  14. Evidence required before adoption
-  15. Completion state
-- Record source SHA and size from the pinned source tree.
-- Distinguish adaptable architecture from Starling/Horizon-only features and from Minecraft 1.20.1 behavior. Never treat 26.3 registries, IDs, packets or assets as 1.20.1 data.
-- Reading a test is not running it. Never claim a test, build, APK, Forge client, server connection or device validation succeeded unless it was actually executed.
+- Fetch the recursive tree for the pinned upstream commit and confirm it is complete and not truncated.
+- Select source files in deterministic lexical path order from that pinned tree, excluding every path already present in the complete `AUDIT_INDEX.md`.
+- A source path may appear exactly once in the full audit. Never assign a second entry number to a previously audited path. Never renumber an earlier entry to conceal duplication.
+- Verify each selected path exists in the pinned tree and obtain its exact blob SHA and byte size there.
+- Keep the full Index as the durable skip set, including all historical duplicate corrections recorded in the ledgers and QA log.
 
-## Checkpoint and half-stage completion checks
+## 5. Complete file inspection
 
-Before reporting a 20-file checkpoint complete:
-- Verify exactly 20 new sequential entry numbers.
-- Verify no duplicate source paths against every previous entry and the current checkpoint.
-- Verify all 15 fields are present exactly once for every new entry.
-- Verify source SHA, byte size and complete Coverage against the pinned upstream tree.
-- Verify Ledger and Index path/decision alignment.
-- Update the applicable Ledger, Index, QA Log and Continuity; synchronize Protocol if the governing state changed.
-- Commit the checkpoint documents together in one commit, re-read the committed documents from GitHub, and verify the saved blob SHAs/content before proceeding to the next 20 files.
+- Read each selected source file completely, from the first logical line through EOF, before marking it complete or moving on.
+- Files longer than 400 logical lines must be read in consecutive, gap-free ranges of at most 400 lines (for example 1–400, 401–800, then onward through EOF).
+- Record exact read ranges in Coverage. No omitted lines, overlaps, skipped tails or inferred completion.
+- If a file cannot be fetched or read completely, record the exact limitation. Do not mark it COMPLETE or count it among the 25 files.
+- Inspect embedded tests and examples as source evidence, but reading a test is not running it.
 
-At the end of the first 100-file half:
-- Verify exactly 100 new sequential entries across five verified 20-file checkpoints.
-- Verify full path uniqueness against the entire Index and exactly 15 fields per entry.
-- Confirm the 200-file stage remains open at 100/200.
-- Record the exact next entry number, next source path and second-half checkpoint ranges in Continuity.
-- Report the midpoint and stop. Do not start the second half without a new explicit user instruction.
+## 6. Evidence and the exact 15 Ledger fields
 
-At the end of the second 100-file half:
-- Verify exactly 200 new sequential entries across ten verified 20-file checkpoints.
-- Run the full-stage uniqueness, field-count, source-SHA/size, Coverage and Ledger/Index alignment checks.
-- Report the 200-file stage complete only after the tenth checkpoint has been committed and globally revalidated.
+Every entry must contain each of these 15 fields exactly once:
+1. Source repository/ref
+2. Source SHA
+3. Size
+4. Coverage
+5. Purpose
+6. Dependencies / cross-references
+7. Implementation / logic
+8. Findings
+9. RustChunk relevance
+10. Decision
+11. 1.20.1 implications
+12. Follow-up checks
+13. RustChunk implementation mapping
+14. Evidence required before adoption
+15. Completion state
 
-## Current continuation state (2026-11-19)
+For every entry:
+- Verify source SHA and byte size against the pinned tree/blob.
+- Record canonical logical line count and complete EOF coverage.
+- Canonical logical line count is the number of LF-terminated lines, plus one only when the blob does not end in LF. Do not count the synthetic empty split element after a final LF.
+- Multi-range coverage must be consecutive, gap-free and end at the canonical final line.
+- Separate observed source behavior from interpretation, suspected defects, target-version implications and proposed RustChunk design. Do not claim a suspected issue was reproduced unless it was.
+- Primary Decision vocabulary: **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, **undetermined**. Secondary qualifiers may include **reference**, **version-specific**, **optional/future**. Qualifiers do not replace a primary decision. Index decisions must agree with the Ledger.
 
-- Entries **1001–1200** are committed. The 1001–1200 stage is complete with 1200 sequential Index entries and 1200 unique source paths.
-- Historical entry 1089 remains corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 is the only `entry.rs` occurrence.
-- Stage 1201–1400 is active. Entries 1201–1260 are committed and verified (60/100 in the authorized first half). Next checkpoint is 1261–1280, beginning at `crates/horizon-client/src/game/launch_api.rs`. Continue through 1300 in five total 20-file checkpoints, then stop and await a separate explicit instruction before 1301–1400.
-- Both existing backup refs remain untouched. The next backup is due only after entries 1001–2000 are fully committed and globally verified. Read `AUDIT_CONTINUITY.md` before each new chat.
+## 7. Five-document checkpoint transaction
 
-## QA review and canonical file-size accounting
+At the end of every exact 25-file checkpoint, update these five documents together:
+1. The applicable `AUDIT_LEDGER_<first>_<last>.md`.
+2. `AUDIT_INDEX.md`.
+3. `AUDIT_QA_LOG.md`.
+4. `AUDIT_CONTINUITY.md`.
+5. `AUDIT_PROTOCOL.md`, whenever current state or a governing rule needs synchronization; keep it consistent with Continuity.
 
-- QA reviews of existing entries are separate from new source-audit stages. QA may be reported in 100-entry ranges; it must not renumber entries, reselect paths, or create duplicate source paths.
-- For each QA range, verify sequential numbering, path uniqueness against the full Index, exactly one occurrence of each of the 15 required fields, Ledger/Index path and decision alignment, and source SHA equality with the pinned upstream tree.
-- Canonical logical line count is the number of LF-terminated lines, plus one only when the source blob does not end in LF. Do not count the synthetic empty split element after a final newline as a source line.
-- Source byte size must match the pinned Git tree/blob metadata. Optional character counts must use one consistent UTF-8 decoding convention.
-- Coverage ranges must not extend beyond the canonical logical line count. Multi-range reads must be consecutive, gap-free, and end exactly at the canonical final line.
-- Primary Decision labels are **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, and **undetermined**. Approved secondary qualifiers are **reference**, **version-specific**, and **optional/future**; they supplement a primary decision and do not replace it.
-- The Decision field and Index decision column must use one or more primary decision labels. Do not use placeholders such as "See ledger decision" or sentiment wording such as "Highly relevant/adaptable" as decision labels.
-- Every QA correction and every 20-file audit checkpoint must be recorded in `AUDIT_QA_LOG.md`, including the pinned baseline commit, inclusive entry numbers, source-count, validation results and resulting commit SHA.
-- **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries, 100-entry half-stages or 20-file checkpoints. The next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
+Before committing, verify:
+- Exactly 25 new sequential entry numbers were added.
+- All 25 paths are unique against the entire previous Index and within the checkpoint.
+- All 25 entries contain all 15 required fields exactly once.
+- Source SHAs and byte sizes match the pinned upstream tree.
+- Coverage ranges are complete, consecutive and end at EOF.
+- Ledger and Index paths, numbering and decisions align.
+- The Index is globally sequential and contains no repeated paths.
+- Active Ledger entry count and Continuity resume state are correct.
 
+Commit the five-document checkpoint as one Git commit. Re-fetch all five documents from GitHub and verify their saved contents/blob SHAs and expected state. Do not call a checkpoint durable until read-back succeeds.
 
-## Checkpoint status update — 2026-11-19
+## 8. Reporting and cross-chat continuity
 
-- Entries 1261–1280 committed and verified; active stage 1201–1400 is now 80/200, with first-half 1201–1300 at 80/100.
-- Next authorized checkpoint remains 1281–1300 under the existing 20-file rule. Do not change checkpoint size before this checkpoint closes.
-- After 1300, apply the user's proposed cadence: four 50-file reporting sections per 200-file stage, each made of two exact 25-file checkpoints. Stop at each 50-file boundary and await explicit authorization before starting the next section.
-- Backup policy unchanged: next backup only after entries 1001–2000 are complete and globally verified.
+- Never leave more than one 25-file checkpoint inspected but uncommitted.
+- After the first 25 files of an authorized 50, commit and verify that checkpoint, then continue to the second 25 without crossing the 50-file boundary.
+- After the second 25, run the 50-file boundary checks, report the exact result and next range, then STOP for explicit user authorization.
+- `AUDIT_CONTINUITY.md` is the durable cross-chat resume record. Read it and the latest branch head before every continuation. Update it in each 25-file checkpoint commit.
+- If a new chat or lost context makes the state uncertain, re-fetch branch head and all five audit documents before source work. Never guess a resume point from conversational memory alone.
+- Historical QA entries describing old cadence remain historical evidence, not current instructions.
 
+## 9. QA scope and claim discipline
 
-## Cadence amendment — effective after entry 1300 (2026-11-19)
+- QA of existing entries is separate from new source-audit checkpoints. QA must not silently create, renumber or duplicate source entries.
+- Structural QA checks sequential numbering, global path uniqueness, exact 15-field counts, source SHA/byte-size matches, canonical line counts, EOF coverage, Ledger/Index alignment and five-document consistency.
+- Structural/provenance QA is not automatically a fresh exhaustive semantic re-audit. State the actual scope.
+- Never claim a Rust build, unit test, benchmark, APK build, Forge launch, Android-device test, Minecraft multiplayer join, LAN host, UPnP or relay validation unless actually executed. Record unrun checks as pending.
+- Preserve security findings. Do not treat Starling/Horizon native-mod build and app-library replacement mechanisms as ordinary Forge mod loading or adopt them without a separate security design and review.
 
-- The accounting/closure boundary remains 200 unique files.
-- Divide each 200-file stage into four 50-file reporting sections.
-- Each 50-file section consists of two exact 25-file checkpoints. Complete both, update and verify the five audit documents, report the 50-file boundary, then STOP and wait for explicit user authorization before beginning the next 50.
-- For the active stage 1201–1400, entries 1201–1300 were completed under the former 20-file cadence. The next section is 1301–1350 (checkpoints 1301–1325 and 1326–1350); pause at 1350. Then, only after authorization, 1351–1400 (checkpoints 1351–1375 and 1376–1400); pause at 1400.
-- From stage 1401–1600 onward, apply the new cadence from the first entry: 1401–1450, 1451–1500, 1501–1550 and 1551–1600, each with two 25-file checkpoints and a user-approval pause after every 50.
-- Each 25-file checkpoint updates Ledger, Index, QA, Continuity and Protocol in one commit, followed by read-back verification of all five.
-- Backup cadence unchanged: only after entries 1001–2000 are fully committed and globally verified. No backup after 25 or 50.
+## 10. Backup policy
 
+- Create a new backup only after each additional **1,000 newly completed audit entries** have been committed and globally verified.
+- The audit currently has entries 1–1300. The next backup is due only after entries **1001–2000** are complete and the entire 1–2000 audit passes global validation.
+- Do not create backups at 200-entry stage boundaries, 100-entry points, 50-file reporting boundaries or 25-file checkpoints.
+- Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
+- Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
+
+## 11. Current authoritative resume state (2026-11-19)
+
+- Repository: `imamirhosein/RustChunk`.
+- Working branch: `starling-1.20.1-port-audit`.
+- Branch head before this protocol normalization: `369cf95ab040b720a15af96ca514231ad03c3352`.
+- Completed entries: **1–1300**.
+- Closed stage: **1001–1200** (200/200).
+- Active stage: **1201–1400**; completed **1201–1300** (100/200).
+- Authorization state: **STOP**. No entry 1301 or later may be inspected until explicit user authorization.
+- Next section after authorization: **1301–1350**, checkpoints **1301–1325** and **1326–1350**.
+- Active Ledger: `AUDIT_LEDGER_1201_1400.md`; Index: `AUDIT_INDEX.md`; QA: `AUDIT_QA_LOG.md`; Continuity: `AUDIT_CONTINUITY.md`.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Index: 1300 sequential entries and 1300 unique paths. Active Ledger: 100 entries (1201–1300), each with exactly 15 required fields.
+- Existing backups: `backup/audit-1000-unique-2026-11-18` at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; `backup/audit-1000-final-2026-11-19` at `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`. Do not modify them.
+
+## 12. Historical corrections preserved
+
+- In entries 1–1000, duplicate slots 631, 632, 633, 754, 762 and 766 were replaced with unique paths: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`.
+- Entry 1089 was corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only `entry.rs` occurrence.
+- Preserve these corrections and all prior QA evidence; never repeat those paths.

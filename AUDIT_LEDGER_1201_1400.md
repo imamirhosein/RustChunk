@@ -2,10 +2,12 @@
 
 - Source repository/ref: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Entry range: 1201–1400 (200 new unique source files; one shared Ledger for both halves)
-- Current first-half progress: entries 1201–1260 committed (60/100); next checkpoint 1261–1280.
-- Stage cadence: five 20-file checkpoints to entry 1300, then pause at 100/200 and wait for a separate user instruction before 1301–1400.
-- Persistence rule: validate and commit every exact 20 completed entries.
+- Entry range: 1201–1400 (200 new unique source files; one shared Ledger for the complete stage).
+- Current progress: entries 1201–1300 committed (100/200); the first two 50-file reporting sections are complete.
+- Next section: 1301–1350, split into checkpoints 1301–1325 and 1326–1350; do not start until explicit user authorization.
+- Current cadence: four 50-file reporting sections per 200-file stage; two exact 25-file checkpoints per 50.
+- Persistence rule: validate and commit all five audit documents together after every exact 25-file checkpoint, then re-fetch and verify them from GitHub.
+- Reporting rule: report and stop after each 50-file section; no approval pause between the two 25-file checkpoints inside an authorized 50.
 - Backup rule: next backup only after entries 1001–2000 are all committed and globally verified.
 - Each entry contains the 15 required fields defined in `AUDIT_PROTOCOL.md`.
 - Long files are read completely in consecutive sections of at most 400 logical lines. Tests were inspected, not executed.
