@@ -1304,3 +1304,23 @@
 | 1138 | `crates/horizon-client/src/game/chutes.rs` | undetermined; reference; version-specific | Create-only chute; pending explicit 1.20.1 mod compatibility scope. |
 | 1139 | `crates/horizon-client/src/game/client_ambient.rs` | adaptable; version-specific | Ambient particle framework adapts; exclude later effect identifiers and verify RNG. |
 | 1140 | `crates/horizon-client/src/game/clipboard.rs` | adaptable; reference | Generic edit shortcut handling adapts; Android clipboard/IME requires native integration. |
+| 1141 | `crates/horizon-client/src/game/code_of_conduct.rs` | unnecessary; reference; optional/future | Server-specific conduct prompt; exclude from baseline protocol unless the target server requires it. |
+| 1142 | `crates/horizon-client/src/game/combat.rs` | adaptable; version-specific | Vanilla combat tracker concepts adapt; rebuild damage registry, save and event integration for 1.20.1. |
+| 1143 | `crates/horizon-client/src/game/command_blocks.rs` | essential; rewrite required; version-specific | Command blocks are core gameplay/admin compatibility; rebuild execution, scheduling, editor and packets for 1.20.1. |
+| 1144 | `crates/horizon-client/src/game/command_harness.rs` | unnecessary; reference; optional/future | Horizon-only headless test harness; keep outside the client core. |
+| 1145 | `crates/horizon-client/src/game/command_minecarts.rs` | adaptable; version-specific | Vanilla command minecart behavior adapts; rebuild packet, cart NBT and tick scheduling for 1.20.1. |
+| 1146 | `crates/horizon-client/src/game/commands.rs` | essential; rewrite required; version-specific | Command compatibility is important; rebuild modularly from the 1.20.1 dispatcher and protocol, excluding later commands. |
+| 1147 | `crates/horizon-client/src/game/commands/admin.rs` | adaptable; reference; version-specific | Feedback broadcast classification is useful; rebuild the 1.20.1 key list rather than copy newer entries. |
+| 1148 | `crates/horizon-client/src/game/commands/compute.rs` | unnecessary; reference; optional/future; version-specific | Later /compute command and context provider registries; exclude from vanilla 1.20.1. |
+| 1149 | `crates/horizon-client/src/game/commands/data.rs` | essential; rewrite required; version-specific | NBT command support matters for maps/datapacks; rewrite serializers and entity mutation for 1.20.1. |
+| 1150 | `crates/horizon-client/src/game/commands/effects.rs` | adaptable; version-specific | Vanilla effect/enchant command behavior adapts; translate registry and item data to target 1.20.1. |
+| 1151 | `crates/horizon-client/src/game/commands/execute.rs` | essential; rewrite required; version-specific | /execute semantics are foundational; rebuild source/fork/condition/store logic against 1.20.1. |
+| 1152 | `crates/horizon-client/src/game/commands/extra.rs` | unnecessary; reference; optional/future; version-specific | Mixed Horizon and later command collection; split and omit non-1.20.1 command surfaces. |
+| 1153 | `crates/horizon-client/src/game/commands/items.rs` | essential; rewrite required; version-specific | Item command/slot behavior is useful, but rewrite component-based mutations to 1.20.1 ItemStack NBT. |
+| 1154 | `crates/horizon-client/src/game/commands/misc.rs` | adaptable; version-specific | Team messaging is a target feature; isolate it from newer tick/stopwatch controls. |
+| 1155 | `crates/horizon-client/src/game/commands/place.rs` | adaptable; version-specific | Vanilla /place operations adapt; target worldgen registries and NBT templates must be used. |
+| 1156 | `crates/horizon-client/src/game/commands/players.rs` | adaptable; reference; version-specific | Player selector/display semantics adapt; LAN guest swapping is not client-core behavior. |
+| 1157 | `crates/horizon-client/src/game/commands/pregen.rs` | unnecessary; reference; optional/future | Horizon server pregeneration extension; exclude from the 1.20.1 client core. |
+| 1158 | `crates/horizon-client/src/game/commands/profiles.rs` | unnecessary; reference; optional/future | Dedicated-server user-list commands; keep outside Android client core. |
+| 1159 | `crates/horizon-client/src/game/commands/raid.rs` | unnecessary; reference; optional/future | Developer raid-control command; omit from vanilla 1.20.1 command surface. |
+| 1160 | `crates/horizon-client/src/game/commands/terrain_cmds.rs` | adaptable; version-specific | Forceload, fillbiome, worldborder and loot are target-relevant; rebuild against 1.20.1 world and item APIs. |

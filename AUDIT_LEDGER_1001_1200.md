@@ -2406,3 +2406,343 @@
 - RustChunk implementation mapping: Proposed input/edit_shortcuts.rs plus Android clipboard bridge; not created.
 - Evidence required before adoption: Android IME/device tests and platform bridge/permission review.
 - Completion state: COMPLETE — all 139 lines read to EOF; source SHA and Git-tree size verified; no Android device tests run.
+
+### 1141. `crates/horizon-client/src/game/code_of_conduct.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6340bf593084dc4c1d0bfef8c8354277502b1eb2`
+- Size: 11193 bytes; 298 logical lines
+- Coverage: 1–298
+- Purpose: Client-side acknowledgement flow for a server code-of-conduct requirement before normal play.
+- Dependencies / cross-references: Server connection state, code-of-conduct packet/configuration, text components and confirmation UI.
+- Implementation / logic: Receives the server's conduct requirement, presents its content, remembers the acknowledgement for the connection and sends the acceptance response.
+- Findings: This is a server policy/configuration handshake and UI, not part of vanilla 1.20.1's normal play protocol. A current protocol packet or acceptance token cannot be assumed to exist on the target.
+- RustChunk relevance: Not needed for baseline 1.20.1 world simulation. Add only as a separately negotiated server-specific protocol extension.
+- Decision: **unnecessary; reference; optional/future — Server-specific conduct prompt; exclude from baseline protocol unless the target server requires it.**
+- 1.20.1 implications: Do not send or expect this handshake when connecting to ordinary 1.20.1 Forge servers; gate any future implementation by explicit protocol capability.
+- Follow-up checks: Identify the exact server packet/config extension and rejection flow; test with a server that requires the prompt and one that does not.
+- RustChunk implementation mapping: No core mapping; possible optional ui/server_conduct.rs and protocol extension adapter, not created.
+- Evidence required before adoption: Exact target server protocol specification, packet captures and compatibility test proving vanilla 1.20.1 joins without the extension.
+- Completion state: COMPLETE — all 298 logical lines read to EOF; source SHA and 11193-byte size match pinned Git tree; no protocol sessions or tests run.
+
+### 1142. `crates/horizon-client/src/game/combat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `53cdca68b5cbc1b722095a09c5f0e73639109446`
+- Size: 33603 bytes; 777 logical lines
+- Coverage: 1–400; 401–777
+- Purpose: Tracks recent combat participants, damage/death attribution, death messages, combat entry/exit and projectile/stinger state associated with victims.
+- Dependencies / cross-references: Player and mob health/damage state, damage-type registry, combat tracker timers, projectile and bee-stinger ownership, entity NBT, text components and death/kill events.
+- Implementation / logic: Records eligible attacks, maintains attacker/victim timestamps and combat timeout, derives combat/death causes, formats death messages, handles stuck arrow/stinger persistence and updates player combat statistics.
+- Findings: Combat tracking, damage attribution and death-message behavior are established vanilla features. The source is coupled to Starling's damage-type registry, latest entity set and current save/network model; newer pet/entity cases must be filtered.
+- RustChunk relevance: Adapt the target's combat state and death attribution; keep it separate from damage calculation and entity AI.
+- Decision: **adaptable; version-specific — Vanilla combat tracker concepts adapt; rebuild damage registry, save and event integration for 1.20.1.**
+- 1.20.1 implications: Use 1.20.1 DamageSource/DamageType IDs, CombatTracker timeout and message rules, stuck projectile NBT and player statistics. Omit post-target entity cases.
+- Follow-up checks: Compare combat entry/exit, timer refresh, environmental vs player damage, player/mob death messages, fall variants, projectile attribution, reload and statistic triggers.
+- RustChunk implementation mapping: Proposed game/combat/combat_tracker_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, deterministic attack/death traces, combat NBT fixtures and statistics/event captures.
+- Completion state: COMPLETE — all 777 logical lines read in consecutive chunks 1–400 and 401–777; source SHA/tree size verified; no tests or builds run.
+
+### 1143. `crates/horizon-client/src/game/command_blocks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6d81d87536fb6986d4813bd0e2ef898b283a279d`
+- Size: 42285 bytes; 1117 logical lines
+- Coverage: 1–400; 401–800; 801–1117
+- Purpose: Implements command-block block entities and scheduling, redstone/conditional/chain execution, output tracking, command-block minecart editing integration and the command editor screen.
+- Dependencies / cross-references: CommandBlock block entities and modes, redstone signals, scheduled ticks, execute command engine/source, gamerules, text fields/suggestions, screen widgets, EditCommandBlock packet and LAN host handlers.
+- Implementation / logic: Loads/saves command metadata, tests activation/conditional state, runs command chains with per-tick safeguards, updates success count and last output, changes block mode/conditional state, schedules auto blocks and opens/edits command-block UI.
+- Findings: Command blocks are a long-standing vanilla feature and important for server/map compatibility. The current module assumes Starling's command dispatcher, screen framework, LAN host layer and current packet representation.
+- RustChunk relevance: Essential feature area when aiming to join command-block-enabled 1.20.1 servers; the behavior and packet layer require a target-version implementation.
+- Decision: **essential; rewrite required; version-specific — Command blocks are core gameplay/admin compatibility; rebuild execution, scheduling, editor and packets for 1.20.1.**
+- 1.20.1 implications: Implement 1.20.1 command-block entity NBT, mode/conditional/auto properties, chain tick ordering, command-block-output rules, permission checks and target SetCommandBlock packet encoding.
+- Follow-up checks: Compare impulse/repeating/chain modes, facing order, redstone activation, conditional success, auto scheduling, chain length limit, output gamerule, editor packet and command minecart split.
+- RustChunk implementation mapping: Proposed game/command_blocks_1_20_1.rs with separate ui/command_block_screen.rs and protocol packet adapter; not created.
+- Evidence required before adoption: Java 1.20.1 command-block traces, packet captures, NBT snapshots and deterministic redstone-chain fixtures.
+- Completion state: COMPLETE — all 1117 logical lines read in consecutive chunks 1–400, 401–800 and 801–1117; source SHA/tree size verified; embedded tests read only.
+
+### 1144. `crates/horizon-client/src/game/command_harness.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9a3f5f43370d29c157b2d893f83f2659621b3eab`
+- Size: 13346 bytes; 291 logical lines
+- Coverage: 1–291
+- Purpose: Headless scripted parity harness for testing command execution, ticks, terrain settling, block breaking, portals and falling-block state.
+- Dependencies / cross-references: Integrated server, LAN owner/guest swaps, command execution state, chat capture, chunk streaming, world tick and JSON script/result files controlled by environment variables.
+- Implementation / logic: Reads line-oriented JSON operations, runs each on the simulated owner, waits for world/tick readiness, captures command messages and result callbacks, then writes JSON output for an external parity script.
+- Findings: This is developer test infrastructure, not a player feature or game runtime subsystem. Environment-variable driven script execution and headless server lifecycle should not be exposed in release builds.
+- RustChunk relevance: Useful testing pattern for RustChunk's command parity suite only; no runtime implementation to port.
+- Decision: **unnecessary; reference; optional/future — Horizon-only headless test harness; keep outside the client core.**
+- 1.20.1 implications: Build an independent RustChunk test harness around a 1.20.1 Java/Forge oracle; do not carry the Horizon LAN server or env-var control path into production.
+- Follow-up checks: If recreated, isolate test-only features, validate scripts, guarantee owner-state restoration on all errors and prevent release builds from exposing the harness.
+- RustChunk implementation mapping: Possible tests/command_parity_harness.rs behind a test-only feature; not created.
+- Evidence required before adoption: A dedicated CI requirement, deterministic Java 1.20.1 reference output and proof harness entry points are absent from release binaries.
+- Completion state: COMPLETE — all 291 logical lines read to EOF; SHA and byte size match pinned tree; no harness scripts, tests or builds run.
+
+### 1145. `crates/horizon-client/src/game/command_minecarts.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c2f90ce4dbf6a4d7cf0653ed82e1c2bbaf059a66`
+- Size: 7807 bytes; 194 logical lines
+- Coverage: 1–194
+- Purpose: Executes command-minecart commands from activator-rail ticks, syncs command and last-output data, and handles the command-minecart edit packet/screen.
+- Dependencies / cross-references: Minecart entity and command block state, activator rail scheduling, command source with cart position/rotation, command feedback gamerules, LAN guests and SetCommandMinecart packet.
+- Implementation / logic: Runs a command at most once per game tick, applies game-master permission context, records success and timestamp, sends output updates, opens the editor and applies command/track-output changes received locally or from a guest.
+- Findings: Command minecarts and activator-rail execution are vanilla 1.20.1 behaviors. This code depends on current Starling cart abstractions, command source, protocol structs and host/guest swapping.
+- RustChunk relevance: Adapt as a narrow extension of the minecart and command-block subsystems; avoid duplicating command execution logic.
+- Decision: **adaptable; version-specific — Vanilla command minecart behavior adapts; rebuild packet, cart NBT and tick scheduling for 1.20.1.**
+- 1.20.1 implications: Verify 1.20.1 command-minecart entity data, activator rail pulse ordering, permissions, track-output behavior and SetCommandMinecart packet.
+- Follow-up checks: Test repeated activator pulses within a tick, empty/disabled command, Searge easter egg, last-execution persistence, output disabled, edit permission and minecart removal.
+- RustChunk implementation mapping: Proposed game/vehicles/command_minecart_1_20_1.rs sharing the command execution core; not created.
+- Evidence required before adoption: 1.20.1 Java tick traces, minecart NBT fixtures, command packet capture and activator-rail test world.
+- Completion state: COMPLETE — all 194 logical lines read to EOF; SHA and Git-tree byte size verified; no packet or gameplay tests run.
+
+### 1146. `crates/horizon-client/src/game/commands.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f05884a1de8931fa7bbb74f703b47f3cf8e6cee4`
+- Size: 160547 bytes; 3926 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2800; 2801–3200; 3201–3600; 3601–3926
+- Purpose: Central command execution layer: command dispatch, source/target modelling, selectors, feedback/errors and a broad set of vanilla-like gameplay/server commands.
+- Dependencies / cross-references: Command dispatcher/context/arguments, command modules, entity lists and target adapters, world/registry/loot/recipe state, gamerules, scoreboards, data/NBT, inventory, structures/worldgen and Play packets.
+- Implementation / logic: Parses and dispatches commands, builds execution context and selectors, resolves coordinates/targets, routes feedback, performs entity/block/item operations, handles weather/time/gamerules/spawn/loot/locate and connects to nested command handlers.
+- Findings: A command engine is important to client-side commands and server parity, but this file is an enormous mixed-version implementation. It contains later commands and registry concepts (e.g. compute, dialog, waypoint, post effect, timeline/stopwatch/tick-related paths) and Horizon server/console hooks. Copying it wholesale would create a false 1.20.1 command surface.
+- RustChunk relevance: Essential feature domain, but split into parser/source/selector/command modules and implement an explicit 1.20.1 command whitelist; server-supplied command tree must remain authoritative when connected.
+- Decision: **essential; rewrite required; version-specific — Command compatibility is important; rebuild modularly from the 1.20.1 dispatcher and protocol, excluding later commands.**
+- 1.20.1 implications: Use 1.20.1 Brigadier tree and permission levels, entity selector rules, command feedback semantics, signed-chat/server packet behavior, target registry and gamerules. Do not register newer commands just because source includes them.
+- Follow-up checks: Build a command-by-command target matrix; compare parse errors/cursors, permission filtering, selector order/filters, source rotation/anchor, command forks, return/store, feedback broadcast, block/item/loot changes and target packet sequence.
+- RustChunk implementation mapping: Proposed command/{source,selector,dispatcher,feedback,world,inventory}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 command dispatcher export, Java command traces, protocol captures, registry snapshots and per-command deterministic world diffs.
+- Completion state: COMPLETE — all 3926 logical lines read in ten consecutive chunks of at most 400 lines through EOF; pinned source SHA/byte size verified; no command tests or server runs performed.
+
+### 1147. `crates/horizon-client/src/game/commands/admin.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1a5115f4da31af963cf5780e6a95893f15b344b2`
+- Size: 3689 bytes; 92 logical lines
+- Coverage: 1–92
+- Purpose: Defines command feedback translation keys whose successful responses should not be broadcast to other server operators.
+- Dependencies / cross-references: Vanilla command success messages, CommandSourceStack.sendSuccess broadcast flag, admin feedback routing and translation catalogue.
+- Implementation / logic: Maintains a static allowlist of query/list/status translation keys that are private to the issuing source; other success messages may be routed to operators/console.
+- Findings: The quiet-vs-broadcast distinction is a vanilla command-source semantic, but the allowlist is tied to Starling's broad and newer command set. It should not drive the target command surface.
+- RustChunk relevance: Use the principle when implementing command feedback, but generate the allowlist only from commands actually supported by 1.20.1.
+- Decision: **adaptable; reference; version-specific — Feedback broadcast classification is useful; rebuild the 1.20.1 key list rather than copy newer entries.**
+- 1.20.1 implications: Follow 1.20.1 CommandSourceStack broadcast flags and dedicated-server log_admin_commands semantics; omit newer query keys.
+- Follow-up checks: For every supported command, compare private query output vs broadcast success, command block/minecart output and dedicated-console visibility.
+- RustChunk implementation mapping: Proposed command/feedback_policy_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 command source mappings and golden message-routing traces for player, command block, console and operator viewers.
+- Completion state: COMPLETE — all 92 logical lines read to EOF; SHA and tree byte size verified; no tests run.
+
+### 1148. `crates/horizon-client/src/game/commands/compute.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c7b2355e3e0508f285f78985db9b74cdd35b4881`
+- Size: 23704 bytes; 542 logical lines
+- Coverage: 1–400; 401–542
+- Purpose: Implements /compute integer and float context providers, nested numeric operations, conditional/weighted providers and loot-context conditions.
+- Dependencies / cross-references: New context_int_provider/context_float_provider/condition registries, data-pack JSON, command source, block/entity context, world RNG, loot predicates and numeric formatting.
+- Implementation / logic: Loads inline or registered provider definitions, recursively evaluates arithmetic and random numeric providers, chooses conditional/weighted branches, and evaluates logical, block-state and random conditions.
+- Findings: This command and provider registry family is later than the 1.20.1 target; target 1.20.1 does not provide this command/registry contract. Some arithmetic helpers may be generic but are not required.
+- RustChunk relevance: Exclude from the 1.20.1 vanilla core. Retain only as a future extension reference if a Forge mod explicitly supplies matching provider registries.
+- Decision: **unnecessary; reference; optional/future; version-specific — Later /compute command and context provider registries; exclude from vanilla 1.20.1.**
+- 1.20.1 implications: Do not register context provider resource types or expose /compute in the 1.20.1 dispatcher absent a server/mod protocol extension.
+- Follow-up checks: Verify target dispatcher/registry export; if a mod adds it, identify schema revision, condition types and deterministic RNG behavior.
+- RustChunk implementation mapping: No baseline mapping; optional command/compute_provider.rs only for a future explicit extension, not created.
+- Evidence required before adoption: Target Forge mod/version, provider JSON schema, registry IDs and Java parity fixtures.
+- Completion state: COMPLETE — all 542 logical lines read in consecutive chunks 1–400 and 401–542; source SHA/tree size verified; embedded code not executed.
+
+### 1149. `crates/horizon-client/src/game/commands/data.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7b5858d0fc4dfb8ce3643037de830ca129815431`
+- Size: 36888 bytes; 906 logical lines
+- Coverage: 1–400; 401–800; 801–906
+- Purpose: Implements /data entity/block/storage operations, /tag entity tags and entity spawning from SNBT/NBT compounds.
+- Dependencies / cross-references: Target entity serializers and loaders, block entities, storage/scoreboard, NBT paths/SNBT, loot-table roll state, UUID/persistence maps, entity lists and command feedback.
+- Implementation / logic: Builds saved NBT views of entities and block entities, applies or rejects NBT updates, resolves source/target data references, performs merge/get/remove/modify path operations, mutates entity tags and recursively spawns passenger stacks from NBT.
+- Findings: `/data`, `/tag` and `/summon <nbt>` are core vanilla command behaviors, but all serializers reflect Starling's current entity set and current item/entity representations; modern spawner and component fields are not portable as-is.
+- RustChunk relevance: Adapt the command and NBT-path algorithms, while rebuilding entity/block-entity serializers against 1.20.1 save schemas and supported entity types.
+- Decision: **essential; rewrite required; version-specific — NBT command support matters for maps/datapacks; rewrite serializers and entity mutation for 1.20.1.**
+- 1.20.1 implications: Use 1.20.1 Entity.saveWithoutId, BlockEntity.saveWithFullMetadata and ItemStack NBT; match target NBT path limits/merge semantics and preserve unknown mod data safely.
+- Follow-up checks: Golden /data get/modify/merge/remove, /tag cap and order, entity passenger summon, block-entity lock/loot-table preservation, malformed NBT, UUID persistence and save/reload.
+- RustChunk implementation mapping: Proposed command/data_1_20_1.rs backed by nbt/entity_nbt_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 NBT snapshots, Java command traces, entity/BE round-trip tests and Forge custom-entity unknown-tag fixtures.
+- Completion state: COMPLETE — all 906 logical lines read in consecutive chunks 1–400, 401–800 and 801–906; source SHA and size verified; no NBT tests run.
+
+### 1150. `crates/horizon-client/src/game/commands/effects.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a1b7fab7b75778755e06c153f47826da0e659047`
+- Size: 11725 bytes; 286 logical lines
+- Coverage: 1–286
+- Purpose: Implements /effect give/clear for players and mobs and /enchant for supported targets.
+- Dependencies / cross-references: Mob-effect registry and duration definitions, player/mob effect state, enchantment registry/compatibility, ItemStack enchant data, entity selectors and command feedback.
+- Implementation / logic: Resolves effects, computes tick duration/amplifier/particle visibility, adds or clears effects, maintains hidden/ambient mob effect state, checks held-item enchantability/compatibility and applies enchant levels.
+- Findings: Both commands are vanilla 1.20.1 features. Current registry and item representation are modernized and target entity coverage is broader; enchantment storage and effect application require target APIs.
+- RustChunk relevance: Adapt as command handlers after the effect/enchantment registries and ItemStack NBT layer are in place.
+- Decision: **adaptable; version-specific — Vanilla effect/enchant command behavior adapts; translate registry and item data to target 1.20.1.**
+- 1.20.1 implications: Use 1.20.1 MobEffectInstance duration rules, target effect IDs, EnchantmentHelper and legacy ItemStack enchantment NBT; omit later-only effects.
+- Follow-up checks: Verify instant/infinite/default duration, hidden particles, replacing/clearing effects, peaceful/invalid targets, enchant max levels, curse compatibility and enchantment table persistence.
+- RustChunk implementation mapping: Proposed command/effects_1_20_1.rs integrated with game/effects and items/enchantments modules; not created.
+- Evidence required before adoption: 1.20.1 Java command traces, effect registry fixtures, enchantability compatibility and ItemStack NBT snapshots.
+- Completion state: COMPLETE — all 286 logical lines read to EOF; SHA/tree byte size verified; no command tests run.
+
+### 1151. `crates/horizon-client/src/game/commands/execute.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2a67a44f62fdd041653dfa764654cdbe203b4b39`
+- Size: 45910 bytes; 1130 logical lines
+- Coverage: 1–400; 401–800; 801–1130
+- Purpose: Implements /execute source chains, source modifiers/forks, conditions, return semantics and store callbacks to scores, bossbars or NBT.
+- Dependencies / cross-references: Command source entity/position/rotation/anchor, selector engine, dimensions/levels, command sequence/fork gamerules, scoreboards, bossbars, NBT paths, predicates, loot/biome/block data and function execution.
+- Implementation / logic: Walks the parsed execute redirect chain, maps each source through as/at/positioned/rotated/facing/align/in/summon/on/store, evaluates if/unless conditions and invokes terminal commands or function callbacks.
+- Findings: Execute chaining is an essential vanilla command language feature, but current sources include newer relations, dimensions, commands and Horizon server-level swapping. Some conditions and store targets are newer or project-specific.
+- RustChunk relevance: Essential command parser/runtime area; implement the exact 1.20.1 source, fork and callback semantics before broader command coverage.
+- Decision: **essential; rewrite required; version-specific — /execute semantics are foundational; rebuild source/fork/condition/store logic against 1.20.1.**
+- 1.20.1 implications: Match 1.20.1 Brigadier redirect chain, maxCommandForks/sequence limits, coordinate anchors, dimension coordinate scaling, selector predicates, store success/result and function return; omit post-target conditions and relations.
+- Follow-up checks: Golden tests for nested as/at/in/positioned/rotated/facing/anchored/on/store, empty forks, fork-limit errors, if blocks/items/data/entity, function return and source feedback.
+- RustChunk implementation mapping: Proposed command/execute_1_20_1.rs with stable `CommandSource` type; not created.
+- Evidence required before adoption: 1.20.1 Java execute traces, Brigadier parse contexts, selector/condition oracle, gamerule defaults and store side-effect snapshots.
+- Completion state: COMPLETE — all 1130 logical lines read in consecutive chunks 1–400, 401–800 and 801–1130; source SHA/tree size verified; no execute tests run.
+
+### 1152. `crates/horizon-client/src/game/commands/extra.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0126514a7152dff98fdd1b7a54a2a0602a2a63f1`
+- Size: 51146 bytes; 903 logical lines
+- Coverage: 1–400; 401–800; 801–903
+- Purpose: Groups server/player-oriented commands including spectate, waypoint, dialog, post effects, test controls, kick, profile fetch, LAN publish/unpublish, debug, JFR and version reporting.
+- Dependencies / cross-references: ServerPlayer camera/post-effect/waypoint state, dialogs and registry, selectors, test framework, LAN host and guests, skins/profile resolver, filesystem, profiler/clock, management and client packets.
+- Implementation / logic: Dispatches these commands, changes spectator camera, tracks waypoint transmitters/icons, opens/clears dialogs, applies post effects, invokes test harnesses, kicks published-world guests, asynchronously fetches player profiles, publishes LAN worlds and records debug/JFR reports.
+- Findings: The module is a mixed collection. Spectator camera, debug and some administrative primitives have older vanilla counterparts, but waypoint/dialog/posteffect/profile-fetch APIs, modern registries and much of the publishing/management layer are Horizon or post-1.20.1 features.
+- RustChunk relevance: Do not port this file wholesale. Select only verified 1.20.1 command branches (e.g. spectate/debug) and design LAN/publishing separately if RustChunk later hosts worlds.
+- Decision: **unnecessary; reference; optional/future; version-specific — Mixed Horizon and later command collection; split and omit non-1.20.1 command surfaces.**
+- 1.20.1 implications: Do not expose waypoint, dialog, post-effect, modern profile-fetch or test commands in the 1.20.1 vanilla dispatcher. Rebuild spectator camera and debug semantics from target source.
+- Follow-up checks: Cross-reference every command against 1.20.1 dispatcher; verify spectate target restrictions, dedicated vs integrated command registration, server permissions and packet support.
+- RustChunk implementation mapping: No single mapping; possible command/spectate_1_20_1.rs and separately scoped server hosting module; not created.
+- Evidence required before adoption: Target dispatcher snapshot, Java command traces and explicit product scope for any server-hosting/profile/modern UI extension.
+- Completion state: COMPLETE — all 903 logical lines read in consecutive chunks 1–400, 401–800 and 801–903; pinned SHA/tree size verified; no commands executed.
+
+### 1153. `crates/horizon-client/src/game/commands/items.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e3ec7fb6645c2a4157b0e37036def2ef9bb1c7d7`
+- Size: 43847 bytes; 1037 logical lines
+- Coverage: 1–400; 401–800; 801–1037
+- Purpose: Implements /item replace/fill/modify and `if items`/`if slots`, with slot address resolution across players, mobs, armor stands, frames, minecarts and block containers.
+- Dependencies / cross-references: ItemStack and item modifier data, inventory/equipment/container abstractions, entity ownership, item predicates, loot/item modifier JSON, selectors, command source and NBT/component codec.
+- Implementation / logic: Maps slot name patterns to owner slots, gets/sets stacks, evaluates loot item modifiers, applies count/damage/name/enchantment/potion/lore/custom-data changes, handles source/target transfers and evaluates slot/item-count conditions.
+- Findings: The `/item` and item-slot command concepts are vanilla, but this source is based on modern item components, 26.3 loot modifier formats, current entity slot coverage and modern max-stack-size behavior. A direct port would serialize incompatible item data.
+- RustChunk relevance: Important command area for datapacks/admin and modded inventory; preserve slot-routing algorithms but translate all item mutations to 1.20.1 NBT and target slot/equipment contracts.
+- Decision: **essential; rewrite required; version-specific — Item command/slot behavior is useful, but rewrite component-based mutations to 1.20.1 ItemStack NBT.**
+- 1.20.1 implications: Replace component patches with 1.20.1 damage/tag/enchantment/display/potion NBT, respect target slot names and equipment restrictions, and use target loot modifier schema.
+- Follow-up checks: Golden /item replace/fill/modify, wildcard slot aliases, player/armor/offhand/ender chest/mob/stand/frame/cart/container targets, item count predicates, stack limits and NBT round-trip.
+- RustChunk implementation mapping: Proposed command/items_1_20_1.rs with dedicated item_modifier_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 item modifier JSON, slot selector source, ItemStack NBT snapshots, Java command traces and Forge custom-slot tests.
+- Completion state: COMPLETE — all 1037 logical lines read in consecutive chunks 1–400, 401–800 and 801–1037; SHA/tree size verified; no item tests run.
+
+### 1154. `crates/horizon-client/src/game/commands/misc.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9a7b3f9f3e1b1391f8550d7ae256118bd54b03c6`
+- Size: 13498 bytes; 347 logical lines
+- Coverage: 1–347
+- Purpose: Implements stopwatch/tick controls, random sequence reset/roll/sample and team chat messaging.
+- Dependencies / cross-references: Server tick clock and sprint reports, random sequence registry/world seed, scoreboard teams, command source/player display names and chat text components.
+- Implementation / logic: Creates/queries/restarts/removes stopwatch entries, controls tick rate/freeze/step/sprint, resets and samples seeded random sequences and routes /teammsg to members of the source's team.
+- Findings: The module mixes target-compatible team-message behavior and random features with newer `/tick`/stopwatch controls and random-sequence semantics. The exact source tick clock and command registry should not be treated as 1.20.1.
+- RustChunk relevance: Extract /teammsg and any random behavior only where confirmed in target 1.20.1; exclude the modern server tick controls and stopwatch extension.
+- Decision: **adaptable; version-specific — Team messaging is a target feature; isolate it from newer tick/stopwatch controls.**
+- 1.20.1 implications: Rebuild team-message permissions, display components and random command availability/sequence support from 1.20.1; do not import modern /tick and stopwatch command roots.
+- Follow-up checks: Compare team membership and chat visibility, random range boundary/seed behavior, command tree availability and permission levels; ensure no tick freeze/rate command leaks into ordinary client.
+- RustChunk implementation mapping: Proposed command/teammsg_1_20_1.rs and target-gated random handler; no /tick/stopwatch module created.
+- Evidence required before adoption: 1.20.1 dispatcher source, random sequence packet/resource availability and multi-player team chat traces.
+- Completion state: COMPLETE — all 347 logical lines read to EOF; source SHA/tree size verified; no clock or random tests run.
+
+### 1155. `crates/horizon-client/src/game/commands/place.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1ce7c59e7148ca05d9423ba9c4e0391b5133b12f`
+- Size: 10769 bytes; 256 logical lines
+- Coverage: 1–256
+- Purpose: Implements /place feature, jigsaw, structure and template operations with chunk-loading checks, structure transforms and integrity/seed options.
+- Dependencies / cross-references: Worldgen feature/structure/template-pool registries, locator/generator, compressed NBT templates, block state transforms, structure placement settings and level events.
+- Implementation / logic: Resolves placement position and validates loaded chunks; places configured features, generates jigsaw pieces or starts a structure; loads saved template NBT and places with mirror/rotation/integrity/seed/strict flags.
+- Findings: Template placement and the feature/jigsaw/structure command family are relevant in 1.20.1, but runtime generator, registries, placement settings and template assets must match the target data pack.
+- RustChunk relevance: Adapt as a worldgen command feature after the 1.20.1 structure/template loading and placement pipeline exists.
+- Decision: **adaptable; version-specific — Vanilla /place operations adapt; target worldgen registries and NBT templates must be used.**
+- 1.20.1 implications: Use 1.20.1 StructureTemplateManager format, template pools, feature registries, Mirror/Rotation transforms and target chunk bounds; check Forge worldgen hooks.
+- Follow-up checks: Verify missing/invalid templates, unloaded chunk edges, template bounding boxes, integrity RNG, block entities/entities/passengers, jigsaw depth and feature placement against Java.
+- RustChunk implementation mapping: Proposed command/place_1_20_1.rs integrated with worldgen/template_placement_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 data pack worldgen JSON, NBT template fixtures, Java placement snapshots and Forge structure hooks.
+- Completion state: COMPLETE — all 256 logical lines read to EOF; pinned source SHA/tree byte size verified; no worldgen tests run.
+
+### 1156. `crates/horizon-client/src/game/commands/players.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b327592c99f723d4ae4bb92a6748a39e2ec93cc6`
+- Size: 9182 bytes; 229 logical lines
+- Coverage: 1–229
+- Purpose: Models player targets for selectors/commands in a hosted world and swaps guest state into the active game while commands run against another player.
+- Dependencies / cross-references: Target enum, LAN hub Guest connection/UUID/name/game mode, selectors and source entity, team display names, chat capture, dimension entry and Play SystemChat packets.
+- Implementation / logic: Resolves names and UUIDs, lists candidate players in join order, filters by dimension/alive state, creates player display text and executes operations under a guest's saved state before restoring the host and forwarding messages.
+- Findings: PlayerList name/UUID lookup, selector player filtering and target display concepts are vanilla-adjacent. The connection-keyed guests, host swapping and chat forwarding are specific to Starling's embedded LAN server design.
+- RustChunk relevance: Use the player target abstraction and vanilla selector rules, but design a protocol-backed remote-player representation instead of the local state-swap mechanism.
+- Decision: **adaptable; reference; version-specific — Player selector/display semantics adapt; LAN guest swapping is not client-core behavior.**
+- 1.20.1 implications: Use 1.20.1 PlayerList/ServerPlayer data and server packets for remote players; never locally simulate or mutate another server player's full state on the client.
+- Follow-up checks: Compare name case folding, UUID resolution, selector join order/world limitation/alive filters and display hover/click; verify remote command results arrive only through server packets.
+- RustChunk implementation mapping: Proposed command/player_targets_1_20_1.rs and protocol/remote_player_refs.rs; no LAN guest state swapping in client core.
+- Evidence required before adoption: 1.20.1 selector oracle and multi-client packet traces for name/UUID/permission/chat updates.
+- Completion state: COMPLETE — all 229 logical lines read to EOF; source SHA/tree size verified; no LAN or selector tests run.
+
+### 1157. `crates/horizon-client/src/game/commands/pregen.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dfe66238e8cfc27a84ee72706c5986591dcb92d5`
+- Size: 11189 bytes; 288 logical lines
+- Coverage: 1–288
+- Purpose: Horizon-only /pregen job that generates, lights and saves chunk bands over a square or circular region and reports progress/stalls.
+- Dependencies / cross-references: Horizon Pregen scheduler, streaming band and lighting workers, dedicated/LAN reporting, server tick pump, chunk postprocessing and task timers.
+- Implementation / logic: Creates and controls a background pre-generation task, advances the band when chunks are lit/postprocessed, un-sticks stalled light jobs, pumps workers and reports progress/ETA to the owner or console.
+- Findings: This is a custom Horizon server operation, not a vanilla 1.20.1 client command. It assumes server-side control of world generation, streaming and worker scheduling.
+- RustChunk relevance: No baseline client-core mapping. Could inform a future standalone admin utility only if RustChunk includes a server-hosting product.
+- Decision: **unnecessary; reference; optional/future — Horizon server pregeneration extension; exclude from the 1.20.1 client core.**
+- 1.20.1 implications: Do not attempt client-side remote chunk pre-generation; world/chunk generation remains server authoritative. A future integrated-server feature would need separate safe job limits.
+- Follow-up checks: No client follow-up; future server tooling requires max area/radius, cancellation, chunk ticket and save/load stress testing.
+- RustChunk implementation mapping: No gameplay mapping; a separate server/pregen service only if explicitly scoped, not created.
+- Evidence required before adoption: Explicit RustChunk server-hosting requirement, target server scheduler model and bounded-generation/resource test plan.
+- Completion state: COMPLETE — all 288 logical lines read to EOF; source SHA/tree byte size verified; no chunks generated or server tools run.
+
+### 1158. `crates/horizon-client/src/game/commands/profiles.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `42c0577c5d846ab108412cb30788d02a6ce2adfe`
+- Size: 16194 bytes; 419 logical lines
+- Coverage: 1–400; 401–419
+- Purpose: Dedicated-server /op, /deop, /ban, /pardon, IP bans, banlist and whitelist commands over persistent user lists.
+- Dependencies / cross-references: Dedicated server user lists, online player/profile lookup, LAN guest IP addresses and UUIDs, op permission sync, kick/disconnect packets and feedback messages.
+- Implementation / logic: Resolves online selectors or cached profiles, mutates operator/ban/IP-ban/whitelist lists, synchronizes permissions, lists entries and kicks banned or no-longer-whitelisted guests.
+- Findings: These are vanilla dedicated-server administration commands, but this module explicitly rejects integrated-server use and relies on server filesystem/user-list state and direct guest address access. It is not a normal multiplayer client feature.
+- RustChunk relevance: Exclude from RustChunk client. If RustChunk later contains a dedicated server, implement them in the server/admin layer, not the Android client.
+- Decision: **unnecessary; reference; optional/future — Dedicated-server user-list commands; keep outside Android client core.**
+- 1.20.1 implications: A client joining Aternos/Forge servers must receive permission and ban outcomes from the server; it must not manage the server's ops/bans/whitelist locally.
+- Follow-up checks: If server-hosting enters scope, verify 1.20.1 user-list JSON formats, op-level handling, IP address privacy, whitelist kick timing and persistence.
+- RustChunk implementation mapping: No client mapping; future server/admin/user_lists_1_20_1.rs only in a distinct server target, not created.
+- Evidence required before adoption: Explicit server-hosting requirement, 1.20.1 Java user-list files/commands and integration test against a dedicated server.
+- Completion state: COMPLETE — all 419 logical lines read in consecutive chunks 1–400 and 401–419; source SHA/tree size verified; no server lists or packets mutated.
+
+### 1159. `crates/horizon-client/src/game/commands/raid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `762ae7e906d647b0c08519521773a76da1308d0b`
+- Size: 4322 bytes; 108 logical lines
+- Coverage: 1–108
+- Purpose: Provides /raid start/stop/check/spawnleader/setomen/glow/sound developer-style controls for raids near the current player.
+- Dependencies / cross-references: Raid manager and village checks, raid omen state, pillager spawn/finalization, raider patrol-leader behavior, entity state and raid horn audio.
+- Implementation / logic: Finds a nearby raid, creates/stops/reports it, spawns a raid captain, sets an omen level, invokes glow and plays the raid horn.
+- Findings: Raid gameplay exists in vanilla 1.20.1, but this `/raid` command family and hard-coded English feedback are not a baseline 1.20.1 vanilla dispatcher feature; they are a test/admin extension.
+- RustChunk relevance: Do not add this command root to the 1.20.1 dispatcher. Raid mechanics should be implemented through normal raid simulation and server-provided state.
+- Decision: **unnecessary; reference; optional/future — Developer raid-control command; omit from vanilla 1.20.1 command surface.**
+- 1.20.1 implications: No `/raid` command should be assumed for the target; avoid direct local manipulation of remote server raids.
+- Follow-up checks: Confirm target dispatcher has no raid root; test normal raid triggering/spawn/status through 1.20.1 world simulation independently.
+- RustChunk implementation mapping: No command mapping; raid mechanics are a separate game/raids subsystem, not implemented by this file.
+- Evidence required before adoption: 1.20.1 dispatcher snapshot and ordinary raid behavior traces; any future debug command must be explicitly development-only.
+- Completion state: COMPLETE — all 108 logical lines read to EOF; SHA and byte size match pinned tree; no raid/world tests run.
+
+### 1160. `crates/horizon-client/src/game/commands/terrain_cmds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cb27c65da76f62f9886fce96f902962e29d153f6`
+- Size: 31956 bytes; 771 logical lines
+- Coverage: 1–400; 401–771
+- Purpose: Implements /forceload, /fillbiome, /worldborder and /loot, including border ticking/collision/damage and loot delivery to players/entities/blocks.
+- Dependencies / cross-references: Chunk streaming forced tickets, biome registry/chunk palette, world border geometry/listeners, loot tables/sequences, item slot APIs, entities, block states and dedicated/LAN packet updates.
+- Implementation / logic: Adds/removes forced chunks with a bounded area; changes biome cells and resends updates; ticks and edits border size/center/damage/warnings; evaluates loot/fish/kill/mine tables and routes drops to inventory, world or container slots.
+- Findings: All four command areas are relevant to the 1.20.1 world/command surface. The current code uses Starling chunk streaming and loot/item models, plus some newer resource and LAN update helpers.
+- RustChunk relevance: Adapt the target command algorithms once chunk ticketing, biome palettes, border packet handling and loot evaluation exist.
+- Decision: **adaptable; version-specific — Forceload, fillbiome, worldborder and loot are target-relevant; rebuild against 1.20.1 world and item APIs.**
+- 1.20.1 implications: Use 1.20.1 forced-chunk ticket behavior/limits, biome quart-cell encoding, WorldBorder packet interpolation/damage and LootContext/loot sequence RNG. Replace modern item-component tool parsing with legacy target NBT.
+- Follow-up checks: Compare forced region bounds/count, fillbiome quantization/filter, border lerp/warnings/damage packets, loot fish/kill/mine results, random sequence, insert/replace/give/spawn routing and item slots.
+- RustChunk implementation mapping: Proposed command/terrain_commands_1_20_1.rs split into chunks, biome, border and loot handlers; not created.
+- Evidence required before adoption: 1.20.1 Java command traces, chunk-ticket/biome packet captures, worldborder packet sequence, loot table fixtures and item NBT snapshots.
+- Completion state: COMPLETE — all 771 logical lines read in consecutive chunks 1–400 and 401–771; source SHA/tree size verified; no world or loot tests run.

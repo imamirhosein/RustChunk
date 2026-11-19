@@ -717,3 +717,20 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Appended exactly 20 complete 15-field Ledger entries and 20 matching Index rows; QA, Continuity and Protocol were updated together.
 - Continuity advances stage 1001–1200 to 140/200 (70%); next checkpoint 1141–1160 starts at crates/horizon-client/src/game/code_of_conduct.rs.
 - Post-commit read-back of all five documents and blob-SHA verification are required before considering the checkpoint saved.
+
+### Checkpoint 1141–1160 — 2026-11-19
+
+- Pinned source: `starling-client/starling` @ 5432370d573642041585c69b40fb045b27133488; recursive Git tree SHA matched the requested source commit.
+- Exactly 20 new and previously unindexed Rust files were read completely to EOF. Every source blob SHA and byte size matches pinned Git-tree metadata.
+- Complete logical-line coverage: 1141 (298), 1142 (777), 1143 (1117), 1144 (291), 1145 (194), 1146 (3926), 1147 (92), 1148 (542), 1149 (906), 1150 (286), 1151 (1130), 1152 (903), 1153 (1037), 1154 (347), 1155 (256), 1156 (229), 1157 (288), 1158 (419), 1159 (108), 1160 (771). Files longer than 400 lines were read in consecutive, gap-free chunks of at most 400 lines.
+- Each Ledger record contains exactly the 15 required fields. Pre-commit Index validation: 1160 sequential numbered rows, 1160 unique paths and zero duplicate paths against entries 1–1140 or within this checkpoint.
+- The replacement at entry 1089 (`blockctl.rs`) remains in the skip set; `entry.rs` remains unique at entry 121.
+- The command engine, execute chain, command blocks, NBT data and item-slot commands are important feature areas but require target 1.20.1 packet, registry, permission and legacy NBT rebuilding. Test harness, server pregeneration, dedicated user-list commands and later command roots are excluded from the client baseline.
+- No source tests, builds, APKs, Forge launches, Android device runs, multiplayer joins or server operations were run. Embedded tests were inspected only.
+- Existing backup branches were not modified. Next backup remains due only after entries 1001–2000 are complete and globally verified.
+
+### Durable checkpoint
+
+- Appended exactly 20 complete Ledger entries (1141–1160) with 15 fields each and 20 matching Index rows; QA, Continuity and Protocol updated in the same checkpoint operation.
+- Stage 1001–1200 advances to 160/200 (80%). The next checkpoint is 1161–1180, starting at `crates/horizon-client/src/game/commands/test_locate.rs`.
+- Commit and post-commit read-back are required before treating this checkpoint as saved.
