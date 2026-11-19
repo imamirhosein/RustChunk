@@ -630,3 +630,25 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Replaced generic whole-file Coverage statements with exact consecutive ranges of at most 400 lines for long files in the retained range, including entries 1006, 1007, 1026, 1038–1040, 1042–1043, 1045–1046, 1051–1053, 1057, 1063–1064, 1068–1069, 1073–1076 and 1079–1080. All recorded ranges are contiguous and end at each source file's canonical EOF.
 - Verified both immutable backup refs remain unchanged. No backup was created at 1080; the next backup remains due only after entry 2000 is fully audited and globally verified.
 - Next checkpoint: **1081–1100**. Continue only after the current 1001–1080 read-back checks remain green.
+
+## Audit checkpoint 1081–1100 — 2026-11-19
+
+### Scope and source verification
+
+- Inspected exactly 20 new files one at a time in deterministic pinned-tree order from `starling-client/starling@5432370d573642041585c69b40fb045b27133488`.
+- Every file was read through EOF. Files over 400 logical lines were read in contiguous sections no larger than 400 lines: 1081 (623; 2), 1084 (2,927; 8), 1085 (560; 2), 1087 (5,683; 15), 1092 (447; 2), 1094 (1,428; 4), 1095 (591; 2), 1098 (23,159; 58), 1099 (805; 2) and 1100 (2,341; 6).
+- The missing 3,601–4,000 window in the first pass of 1098 was fetched before completion; final coverage is contiguous from line 1 through 23,159.
+- All 20 paths exist in the pinned upstream tree; each Source SHA and byte size recorded in the Ledger matches that tree.
+- Findings distinguish optional Horizon desktop features from 1.20.1 behavior. End Gateway, falling-block, Furnace, Superflat and advancement behavior have target relevance; modern Item Components, later entities, modern equipment assets and the monolithic Horizon coordinator require reconstruction/exclusion.
+- No source code/assets were copied into RustChunk. No tests, builds, benchmarks, APKs, Android-device runs, Minecraft/Forge launches, multiplayer joins or GPU/audio executions were performed.
+
+### Durable checkpoint persistence
+
+- Appended exactly 20 complete 15-field entries (1081–1100), 20 matching Index rows and this dated QA record.
+- Validated sequential numbering, unique paths against entries 1–1080, exactly one occurrence of each required field, upstream SHA/byte-size matches and Ledger/Index parity.
+- Re-read the three committed files from GitHub after the checkpoint commit.
+- Existing backups remain untouched. No backup is due here; the next backup is after entry 2000 is fully audited and globally verified.
+
+### Next checkpoint
+
+- Continue with entries **1101–1120**, one file at a time.
