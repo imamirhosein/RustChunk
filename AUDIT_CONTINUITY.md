@@ -134,7 +134,7 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 ## Latest verified checkpoint — 1351–1375
 
 - Branch head before checkpoint work: 38dab3b1018f4b023c22dcb549da1b1024588f4a.
-- Latest checkpoint documentation commit: 9098ab72dabbea4ca59d5ace32460e511b8127bb.
+- QA checkpoint record commit: 9098ab72dabbea4ca59d5ace32460e511b8127bb; protocol update commit: e07a228ee304b36fe0002a394103ad64c010c6f7.
 - Completed entries: 1351–1375 inclusive (25/25).
 - Index: 1375 sequential entries and 1375 unique source paths.
 - Active Ledger: entries 1201–1375, 175 records; each has exactly 15 required fields.
@@ -143,3 +143,5 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Authorization: the user's “start” instruction authorized the full section 1351–1400. Continue with 1376–1400 without asking for another permission at 1375.
 - Next checkpoint: 1376–1400. Stop after entry 1400 and wait for explicit authorization for 1401–1450.
 - No builds/tests/device checks were run. main and backups remain untouched; next backup remains governed by the existing 1000-entry cadence.
+
+- Final read-back QA: Index/Ledger paths and decisions align for all 25 new entries; the full Index remains sequential and unique, and all 15 Ledger fields are present exactly once.
