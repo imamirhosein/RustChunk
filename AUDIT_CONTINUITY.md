@@ -187,3 +187,17 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Commit/read-back SHA will be added after the transaction.
 - Next checkpoint: **1526–1550** (authorized). Stop at 1550 and wait for explicit approval before 1551–1600.
 - `main` and backup refs remain untouched; no backup is due.
+
+
+## Closed reporting section — 1501–1550 — 2026-11-19
+
+- Completed entries: **1501–1550 inclusive (50/50)** in two 25-file checkpoints: 1501–1525 and 1526–1550.
+- Active 200-file stage: **1401–1600**, now **150/200 complete**.
+- Active Ledger: **150 entries**, 1401–1550, each with exactly 15 required fields.
+- Index: **1,550 sequential entries and 1,550 unique source paths**.
+- All 50 source SHAs/byte sizes match the pinned source tree; exact logical line counts and contiguous EOF coverage are recorded. Index/Ledger path and Decision alignment is checked for 1501–1550.
+- The prior version note remains: Tadpole itself is 1.20.1 content; only its newer brain redesign and other later species branches are excluded.
+- No source/application code changed. Embedded tests were inspected but not run. No build, test, APK, device, Forge or server validation was performed.
+- Checkpoint 1501–1525 commit: `f01cc32175cc1e8d2f6fdda573e214232d2b1eb4`.
+- Checkpoint 1526–1550 commit SHA will be added after commit/read-back.
+- **STOP at 1550.** Next section 1551–1600 requires explicit user authorization. `main` and backup refs remain untouched; no backup is due at this boundary.

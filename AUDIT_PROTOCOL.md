@@ -205,3 +205,16 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
 - Preserve four 50-file sections per 200 and two 25-file checkpoints per section; inspect serially in chunks no larger than 400 lines.
 - No build/test/device/server validation. No backup due; next backup after 1001–2000 complete and verified. Do not modify `main` or backups.
+
+
+## Current authoritative resume state — section 1501–1550 closed — 2026-11-19
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Completed entries: **1–1550**.
+- Active 200-file stage: **1401–1600**, completed **150/200**.
+- Closed section: **1501–1550**; both 25-file checkpoints are complete and committed.
+- Active Ledger: `AUDIT_LEDGER_1401_1600.md`, 150 entries (1401–1550), each with 15 required fields. Index: 1,550 sequential unique paths.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- **STOP at 1550. Section 1551–1600 is not authorized and requires explicit user approval before inspecting any source in that range.**
+- Preserve the four 50-file sections per 200-file stage, two 25-file checkpoints per section, serial file review and maximum 400-line chunks.
+- No tests/builds/device/server validation was performed. No backup is due; next backup after entries 1001–2000 are completed and globally verified. Do not modify `main` or backups.

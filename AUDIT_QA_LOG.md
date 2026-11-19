@@ -1106,3 +1106,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected as source only, not run. No Rust build, unit test, benchmark, APK, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
 - Only the audit branch was updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
 - Authorization covers section 1501–1550. Continue with checkpoint 1526–1550, then stop at 1550 for fresh authorization.
+
+
+## Source-audit checkpoint 1526–1550 — 2026-11-19
+
+- Completed entries 1526–1550 inclusive (25/25) from the pinned Starling source tree `5432370d573642041585c69b40fb045b27133488`.
+- All source files were read fully through EOF. Files over 400 logical lines were read in consecutive, gap-free chunks of at most 400 lines; final partial chunks and empty EOF probes are recorded in the Ledger.
+- All 25 source blob SHAs and byte sizes match the non-truncated pinned recursive tree. Logical line counts and complete coverage are recorded for each entry.
+- All 25 new Ledger records contain the 15 required fields exactly once. Index rows 1526–1550 match the corresponding Ledger paths and Decision values.
+- Compatibility findings: vanilla 1.20.1 mob behavior such as bees, equines, dolphins, Endermen, doors, combat tracking, farm animals, loot and spawn finalization requires target-era data/RNG/NBT mapping. Breeze, Copper Golem, Creaking/Heart and later entities/reasons are excluded. CEM is optional resource-pack rendering, not Forge support. The mob-data loader must consume generated 1.20.1 exports, not source-snapshot exports.
+- Embedded tests were inspected as code only; none were executed. No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was run.
+- Only the audit branch was updated. `main` and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
+- Reporting section 1501–1550 is closed. Stop at 1550 and wait for explicit authorization before inspecting 1551–1600.
