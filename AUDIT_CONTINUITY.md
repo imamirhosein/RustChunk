@@ -145,3 +145,16 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - No builds/tests/device checks were run. main and backups remain untouched; next backup remains governed by the existing 1000-entry cadence.
 
 - Final read-back QA: Index/Ledger paths and decisions align for all 25 new entries; the full Index remains sequential and unique, and all 15 Ledger fields are present exactly once.
+
+## Latest verified state — 1400 complete
+
+- Completed entries: 1–1400.
+- Current authorized 200-boundary audit range 1201–1400: complete (200/200).
+- 50-file sections completed in this boundary: 1201–1250, 1251–1300, 1301–1350 and 1351–1400.
+- The final 50-file section had checkpoints 1351–1375 and 1376–1400; both are recorded in QA.
+- Index: 1400 sequential entries, 1400 unique paths, no duplicate source paths.
+- Ledger: 200 records for 1201–1400; all 15 required fields exactly once per record.
+- Latest checkpoint QA commit: c79e6368688ac31d5576d26521911424230c9363.
+- Pinned Starling source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488.
+- STOP. Next proposed range is 1401–1450. No authorization for that range exists yet; wait for the user's explicit instruction.
+- No tests/builds/device/server validation were run. main and backup branches remain untouched. Backup cadence remains every 1000 entries.
