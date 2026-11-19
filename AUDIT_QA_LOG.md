@@ -1093,3 +1093,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected only, not executed. No build, unit test, benchmark, APK, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was run.
 - Only the audit branch was updated. `main` and backups remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
 - Section 1451–1500 is closed. Stop at 1500 and wait for explicit authorization before 1501–1550.
+
+
+## Source-audit checkpoint 1501–1525 — 2026-11-19
+
+- Completed entries 1501–1525 inclusive (25/25) from pinned Starling tree `5432370d573642041585c69b40fb045b27133488`.
+- Every source file was read through EOF. Files over 400 logical lines were read in consecutive, gap-free chunks no larger than 400 lines; final partial chunks and EOF probes are recorded in the Ledger.
+- All 25 source blob SHAs and byte sizes match the non-truncated pinned recursive tree. Exact logical line counts and coverage are recorded per Ledger entry.
+- Each of the 25 new Ledger records contains exactly the 15 required fields once. Index rows 1501–1525 match corresponding Ledger paths and Decision values.
+- Findings: Horizon world-content manifests/restart are not a Forge loader; `horizon:lod` is custom protocol, not vanilla 1.20.1; menu/merchant/mob engines need target reconstruction. Wind Charge/Breeze, released bundle behavior and Armadillo are later than vanilla 1.20.1. Mobile touch-independent references in menu, animation, world-loading and AI are architectural only.
+- Version correction: Tadpole itself is present in Minecraft 1.20.1. The later Copper Golem/Happy Ghast branches and this snapshot's redesigned Tadpole brain are excluded; target 1.20.1 Tadpole goal behavior must be retained/rebuilt, not removed.
+- Embedded tests were inspected as source only, not run. No Rust build, unit test, benchmark, APK, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- Only the audit branch was updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
+- Authorization covers section 1501–1550. Continue with checkpoint 1526–1550, then stop at 1550 for fresh authorization.

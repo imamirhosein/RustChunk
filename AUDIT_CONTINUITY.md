@@ -172,3 +172,18 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - No source/application code changed. Embedded tests were inspected but not run. No build, test, APK, device, Forge or server validation occurred.
 - **STOP at 1500.** Next proposed section: 1501–1550; wait for explicit user authorization.
 - Active 200-file stage 1401–1600 is **100/200 complete**. Backup remains due only after entries 1001–2000 are complete and globally verified. Main and backup refs remain untouched.
+
+
+## Latest verified checkpoint — 1501–1525 — 2026-11-19
+
+- Completed entries: **1501–1525 inclusive (25/25)**.
+- Active 200-file stage: **1401–1600**, now **125/200 complete**.
+- Section **1501–1550** is authorized; checkpoint **1501–1525** is complete and **1526–1550** remains within authorization.
+- Active Ledger: **125 entries**, 1401–1525, 15 required fields per entry.
+- Index: **1,525 sequential entries and 1,525 unique source paths**.
+- All 25 source SHAs/byte sizes match the pinned tree; complete EOF coverage is recorded. Index/Ledger path and Decision alignment is verified for 1501–1525.
+- Correction recorded: Tadpole is 1.20.1 content; its later brain redesign is excluded, while target goal AI must be retained. Copper Golem/Happy Ghast branches are excluded.
+- No application/source code changed. Embedded tests were inspected but not run. No build/test/APK/device/Forge/server validation.
+- Commit/read-back SHA will be added after the transaction.
+- Next checkpoint: **1526–1550** (authorized). Stop at 1550 and wait for explicit approval before 1551–1600.
+- `main` and backup refs remain untouched; no backup is due.

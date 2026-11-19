@@ -192,3 +192,16 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - **Next proposed section 1501–1550 is not authorized. Stop and wait for explicit user approval.**
 - Preserve 200 / 50 / 25 cadence, serial review and maximum 400-line chunks. Do not modify main or backup refs.
 - No tests/builds/device/server validation were performed. No backup is due; next backup remains after 1001–2000 complete and globally verified.
+
+
+## Current authorized section and resume state — 1501–1525 — 2026-11-19
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Completed entries: **1–1525**.
+- Active 200-file stage: **1401–1600**, completed **125/200**.
+- Section **1501–1550** is authorized. Checkpoint **1501–1525** is complete; proceed to **1526–1550** without intermediate permission.
+- Stop at **1550**. Section **1551–1600** requires new explicit authorization.
+- Active Ledger: `AUDIT_LEDGER_1401_1600.md`, 125 entries (1401–1525), each with 15 fields. Index: 1,525 sequential unique paths.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Preserve four 50-file sections per 200 and two 25-file checkpoints per section; inspect serially in chunks no larger than 400 lines.
+- No build/test/device/server validation. No backup due; next backup after 1001–2000 complete and verified. Do not modify `main` or backups.
