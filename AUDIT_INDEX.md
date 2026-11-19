@@ -1200,7 +1200,7 @@
 |---:|---|---|---|
 | 1041 | `crates/horizon-client/src/android_control_assets.rs` | adaptable; reference; version-specific | Use the integrity and pinned-revision download pattern only; Bedrock sample artwork is subject to Mojang terms and is not approved for redistribution. |
 | 1042 | `crates/horizon-client/src/android_control_theme.rs` | adaptable; reference; optional/future | Horizon-specific theme/raster/widget system; reuse only generic UI drawing ideas in an independently designed Android theme. |
-| 1043 | `crates/horizon-client/src/android_control_ui.rs` | adaptable; reference; optional/future | Editable touch-layout/editor and multi-pointer patterns are relevant, but the 8,506-line Horizon screen/input implementation must be redesigned. |
+| 1043 | `crates/horizon-client/src/android_control_ui.rs` | adaptable; reference; version-specific | Editable touch-control editor and multi-pointer patterns are relevant; build a smaller RustChunk-owned UI/input subsystem. |
 | 1044 | `crates/horizon-client/src/android_lib.rs` | adaptable; reference; version-specific | JNI/Android entry-boundary pattern; package, callbacks and lifecycle are app-specific. |
 | 1045 | `crates/horizon-client/src/animate_tick.rs` | adaptable; reference; version-specific | Ambient tick architecture is useful, but newer block types and 26.x biome environment attributes must be rebuilt for 1.20.1. |
 | 1046 | `crates/horizon-client/src/arrows.rs` | adaptable; reference; version-specific | Projectile physics and collision architecture useful; modern item components, registries and exact 1.20.1 arrow/trident hit flow need rebuild. |
@@ -1213,7 +1213,7 @@
 | 1053 | `crates/horizon-client/src/bin/horizon-ctl/commands.rs` | unnecessary; reference; optional/future | Horizon desktop control CLI is not core runtime; borrow a typed command registry only for a separately scoped developer tool. |
 | 1054 | `crates/horizon-client/src/bin/horizon-ctl/launch.rs` | adaptable; reference; optional/future | Process discovery/readiness patterns are useful; binary layout, launcher manifests and desktop process model are Horizon-specific. |
 | 1055 | `crates/horizon-client/src/bin/horizon-ctl/mcp.rs` | unnecessary; reference; optional/future | Optional desktop MCP automation is not a mobile client dependency; any future endpoint needs a restricted RustChunk allowlist. |
-| 1056 | `crates/horizon-client/src/block_contact.rs` | unnecessary; reference; optional/future | Custom/modded block contact hook; not vanilla 1.20.1 behavior or Forge compatibility. |
+| 1056 | `crates/horizon-client/src/block_contact.rs` | unnecessary; reference; version-specific | Custom/modded block-contact callback is not part of vanilla 1.20.1; reconsider only with a separately designed extension ABI. |
 | 1057 | `crates/horizon-client/src/block_entity_item.rs` | rewrite required; reference; version-specific | 26.3 data components cannot be used for 1.20.1 ItemStack/BlockEntityTag; rewrite legacy pick/place NBT and operator restrictions. |
 | 1058 | `crates/horizon-client/src/block_pattern.rs` | adaptable; reference; version-specific | Generic oriented block-pattern matching can support 1.20.1 golems/Wither after target pattern/orientation verification. |
 | 1059 | `crates/horizon-client/src/block_predictions.rs` | adaptable; reference; version-specific | Client block prediction/ack model useful; sequence, teleport and correction behavior must match the 1.20.1 protocol. |
