@@ -16,10 +16,10 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 
 - Use the pinned Starling commit recorded by the audit, not the moving default branch.
 - Continue in deterministic source-tree path order from the last audited path.
-- Before selecting new files, build the skip set from every path already present in the current Index (currently entries 1–1240). A source path may appear only once in the audit; never assign a second audit number to an existing path.
+- Before selecting new files, build the skip set from every path already present in the current Index (currently entries 1–1260). A source path may appear only once in the audit; never assign a second audit number to an existing path.
 - Corrective closure for entries 1–1000: six duplicate slots (631, 632, 633, 754, 762 and 766) were replaced with the six next unique paths after the former entry-1000 endpoint: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`. Those six files are already audited and must be skipped by future batches.
 - Corrective closure for the 1001–1200 stage: duplicate entry 1089 was replaced, without renumbering other entries, by `crates/horizon-client/src/game/blockctl.rs` (pinned SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`; 179 logical lines). This replacement is already audited and must be skipped.
-- The first source path after entry 1200 is `crates/horizon-client/src/game/events.rs` (entry 1201). The next source path after committed entry 1220 is `crates/horizon-client/src/game/ghasts.rs` (entry 1221); verify every next path against the pinned tree and full Index.
+- The first source path after entry 1200 was `crates/horizon-client/src/game/events.rs` (entry 1201). The next source path after committed entry 1260 is `crates/horizon-client/src/game/launch_api.rs` (entry 1261); verify every next path against the pinned tree and full Index.
 - Inspect each file completely before moving on. For files longer than 400 logical lines, read consecutive, gap-free sections of at most 400 lines until EOF.
 - If a source file cannot be read completely, record the exact limitation and do not mark it fully reviewed.
 
@@ -84,7 +84,7 @@ At the end of the second 100-file half:
 
 - Entries **1001–1200** are committed. The 1001–1200 stage is complete with 1200 sequential Index entries and 1200 unique source paths.
 - Historical entry 1089 remains corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 is the only `entry.rs` occurrence.
-- Stage 1201–1400 is active. Entries 1201–1240 are committed and verified (40/100 in the authorized first half). Next checkpoint is 1241–1260, beginning at `crates/horizon-client/src/game/kinetic_machines.rs`. Continue through 1300 in five total 20-file checkpoints, then stop and await a separate explicit instruction before 1301–1400.
+- Stage 1201–1400 is active. Entries 1201–1260 are committed and verified (60/100 in the authorized first half). Next checkpoint is 1261–1280, beginning at `crates/horizon-client/src/game/launch_api.rs`. Continue through 1300 in five total 20-file checkpoints, then stop and await a separate explicit instruction before 1301–1400.
 - Both existing backup refs remain untouched. The next backup is due only after entries 1001–2000 are fully committed and globally verified. Read `AUDIT_CONTINUITY.md` before each new chat.
 
 ## QA review and canonical file-size accounting

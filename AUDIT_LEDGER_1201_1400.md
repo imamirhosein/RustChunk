@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1201–1400 (200 new unique source files; one shared Ledger for both halves)
-- Current first-half progress: entries 1201–1220 committed (20/100); next checkpoint 1221–1240.
+- Current first-half progress: entries 1201–1260 committed (60/100); next checkpoint 1261–1280.
 - Stage cadence: five 20-file checkpoints to entry 1300, then pause at 100/200 and wait for a separate user instruction before 1301–1400.
 - Persistence rule: validate and commit every exact 20 completed entries.
 - Backup rule: next backup only after entries 1001–2000 are all committed and globally verified.
@@ -689,4 +689,344 @@
 - RustChunk implementation mapping: Possible ui/focus/navigation.rs as optional accessibility feature, not created.
 - Evidence required before adoption: 1.20.1 Screen/AbstractWidget source, key traces, geometry and Android accessibility/controller tests.
 - Completion state: COMPLETE — 518 logical lines in ranges 1–400 and 401–518; SHA/19617 bytes match; tests inspected only.
+
+### 1241. `crates/horizon-client/src/game/kinetic_machines.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4e229a928f7f87fc44a58607230d2d61eb1175c4`
+- Size: 41962 bytes; 1024 logical lines
+- Coverage: 1–400; 401–600; 601–800; 801–1024 (complete, EOF)
+- Purpose: Implements Create kinetic-machine entity behavior and integration for moving mechanical blocks and machines.
+- Dependencies / cross-references: Create registries and block entities, kinetic speed/rotation state, moving contraptions, inventories/fluids/energy, chunk ticking, collision and renderer.
+- Implementation / logic: Updates custom machine entities, movement and rotation, and their interactions with kinetic networks and machine state.
+- Findings: Entirely Create mod functionality, coupled to a specific Create API, registries and data model; not vanilla behavior and not directly compatible by assumption with Forge 1.20.1.
+- RustChunk relevance: Exclude from core client; consider only as a later Create-for-1.20.1 adapter after vanilla and Forge mod boundaries exist.
+- Decision: **unnecessary; optional/future — Do not register these entity or block IDs in vanilla 1.20.1. Pin the precise Create 1.20.1 release and rebuild entity, block-entity, capability and render adapters.**
+- 1.20.1 implications: Do not register these entity or block IDs in vanilla 1.20.1. Pin the precise Create 1.20.1 release and rebuild entity, block-entity, capability and render adapters.
+- Follow-up checks: Compare target Create source/license, registry IDs, NBT, kinetic tick order, chunk lifecycle, capability/menu sync and renderer.
+- RustChunk implementation mapping: No core mapping; possible mods/create/kinetic_machines_1_20_1.rs after mod-adapter infrastructure, not created.
+- Evidence required before adoption: Exact Create 1.20.1 source/API, Forge fixtures, NBT snapshots, deterministic kinetic traces, mod assets and license review.
+- Completion state: COMPLETE — 1024 lines to EOF in contiguous ranges 1–400, 401–600, 601–800 and 801–1024; SHA and 41962-byte size match; no Create runtime run.
+
+### 1242. `crates/horizon-client/src/game/kinetics.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `6b71bc90ba550a480a28568fa4edbd783030fbfe`
+- Size: 61786 bytes; 1442 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1400; 1401–1442 (complete, EOF)
+- Purpose: Implements Create kinetic network propagation, connected rotational networks, stress/speed calculation and mechanical movement.
+- Dependencies / cross-references: Create kinetic block entities, shaft/gear connectivity, block states, network graph/IDs, stress capacity, rotation speed, chunk updates and renderer.
+- Implementation / logic: Builds, merges and splits connected kinetic networks, propagates speed/stress through components, handles source changes and updates rotational state.
+- Findings: Entirely Create-specific mechanics. Graph algorithms are generic architecture references, but stress units, block topology and tick semantics are mod-defined.
+- RustChunk relevance: Exclude from vanilla baseline; possible future mod adapter only.
+- Decision: **unnecessary; reference; optional/future — No vanilla 1.20.1 registry or protocol behavior. Keep the graph and stress model behind a version-pinned Create/Forge adapter.**
+- 1.20.1 implications: No vanilla 1.20.1 registry or protocol behavior. Keep the graph and stress model behind a version-pinned Create/Forge adapter.
+- Follow-up checks: Compare graph merge/split, chunk unload/reload, source rotation, overstress, speed caps, block removal and deterministic tick order against Create 1.20.1.
+- RustChunk implementation mapping: No core mapping; possible mods/create/kinetic_network_1_20_1.rs, not created.
+- Evidence required before adoption: Create 1.20.1 source, graph property tests, seeded network fixtures, stress/speed traces and Android performance measurements.
+- Completion state: COMPLETE — 1442 lines to EOF in contiguous ranges 1–400, 401–800, 801–1200, 1201–1400 and 1401–1442; SHA and 61786-byte size match; no network simulations run.
+
+### 1243. `crates/horizon-client/src/game/lan_actions.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e567c82690937f4f2cfa2da5ebd3d595c2b9ea6e`
+- Size: 235964 bytes; 5365 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2800; 2801–3200; 3201–3600; 3601–4000; 4001–4400; 4401–4800; 4801–5200; 5201–5365 (complete, EOF)
+- Purpose: Routes actions from Horizon LAN guests to the local host world: movement, interactions, attacks, block breaking, item use, menus, chat, commands and respawn.
+- Dependencies / cross-references: LAN Hub/guest identity, server Game/player state, entity/mob systems, menu engine, command permissions, inventory, world mutation, play packets and network limits.
+- Implementation / logic: Temporarily applies a guest state as acting player, executes server-side handlers, captures resulting events/updates and restores host state; dispatches incoming play packets into server gameplay paths.
+- Findings: This is a LAN-host server packet listener, not a remote multiplayer client connection. Guest-state swapping, host mutation and LAN session assumptions must not be transplanted into RustChunk's Aternos client path.
+- RustChunk relevance: Exclude from runtime; use only as server-side behavior reference for packet semantics and authority boundaries.
+- Decision: **unnecessary; reference — Implement the 1.20.1 client protocol directly: send client actions and consume server-authoritative corrections. Do not impersonate or mutate a local host player.**
+- 1.20.1 implications: Implement the 1.20.1 client protocol directly: send client actions and consume server-authoritative corrections. Do not impersonate or mutate a local host player.
+- Follow-up checks: Cross-check each packet family against 1.20.1: movement/vehicle, interact/attack, digging, use item, container click, chat/command, respawn and acknowledgements.
+- RustChunk implementation mapping: No runtime mapping; possible research/server_packet_semantics/lan_actions_reference.md; remote-session code must not depend on it.
+- Evidence required before adoption: 1.20.1 packet schemas, client/server traces, permission cases, correction packets and Java-client differential fixtures.
+- Completion state: COMPLETE — 5365 lines to EOF in 14 contiguous chunks from 1–400 through 4801–5200, then 5201–5365; SHA and 235964-byte size match; no server action or LAN session run.
+
+### 1244. `crates/horizon-client/src/game/lan_attributes.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `8c082d982a3f986590767e335024056a9ddc97e4`
+- Size: 13076 bytes; 336 logical lines
+- Coverage: 1–120; 121–336 (complete, EOF)
+- Purpose: Builds server-synchronized attribute snapshots for mobs, armor stands and players, including item/effect modifiers and creative reach changes.
+- Dependencies / cross-references: Attribute registry, mob defaults, effect modifiers, equipment modifiers, slot groups, /attribute command state, entity metadata and UpdateAttributes packet.
+- Implementation / logic: Creates existing attribute instances, applies base values and equipment/effect modifiers in slot order, then emits synchronized snapshots.
+- Findings: Useful attribute packet reference, but uses newer block_interaction_range and entity_interaction_range attributes and modern slot groups; these IDs must not enter 1.20.1.
+- RustChunk relevance: Adapt client-side attribute-map updates and modifier evaluation, while server-sent values remain authoritative.
+- Decision: **adaptable; rewrite required; version-specific — Use only 1.20.1 attribute registry IDs/defaults/operations and legacy item modifiers. Do not assume modern reach attributes exist in 1.20.1.**
+- 1.20.1 implications: Use only 1.20.1 attribute registry IDs/defaults/operations and legacy item modifiers. Do not assume modern reach attributes exist in 1.20.1.
+- Follow-up checks: Compare 1.20.1 UpdateAttributes fields, modifier UUIDs/operations, equipment changes, potion add/remove, horse jump, armor stands and respawn.
+- RustChunk implementation mapping: Proposed network/attributes/update_1_20_1.rs and game/attributes/modifiers_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 attribute registry/mappings, packet captures, target ItemStack NBT, modifier snapshots and effect/equipment traces.
+- Completion state: COMPLETE — 336 lines read in 1–120 and 121–336; SHA and 13076-byte size match; embedded slot-group test inspected, not run.
+
+### 1245. `crates/horizon-client/src/game/lan_camera.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `8c64cf2bb8ac075c2869bfda37a4071862d157d3`
+- Size: 10043 bytes; 262 logical lines
+- Coverage: 1–120; 121–262 (complete, EOF)
+- Purpose: Implements spectator guest camera selection, target tracking and reset when the camera dies, the player sneaks, leaves spectator mode or teleports.
+- Dependencies / cross-references: Spectator state, entity IDs/targets, hitboxes, pickability, reach, /spectate, SetCamera packet, entity movement and dimensions.
+- Implementation / logic: Resolves clicked/commanded camera entity, validates range/border/pickability, sends SetCamera and follows entity until a reset condition occurs.
+- Findings: Spectator camera and SetCamera packet behavior are valuable target references. This file is server-side LAN bookkeeping and includes newer entity types.
+- RustChunk relevance: Adapt client behavior to consume camera-target updates and restore player view on server update; server remains authoritative.
+- Decision: **adaptable; reference; version-specific — Use 1.20.1 SetCamera and supported entity roster; remove later projectile and Horizon guest-camera state. Validate camera target removal and teleport.**
+- 1.20.1 implications: Use 1.20.1 SetCamera and supported entity roster; remove later projectile and Horizon guest-camera state. Validate camera target removal and teleport.
+- Follow-up checks: Test camera changes to mobs/players/vehicles, entity despawn, spectator exit, sneak, teleport, dimension switch and invalid IDs.
+- RustChunk implementation mapping: Proposed network/play/set_camera_1_20_1.rs and render/camera/spectator_target.rs; not created.
+- Evidence required before adoption: 1.20.1 SetCamera packet/mappings, tracking fixtures, spectator traces and camera-render goldens.
+- Completion state: COMPLETE — 262 lines read in 1–120 and 121–262; SHA and 10043-byte size match; embedded lifecycle test inspected, not run.
+
+### 1246. `crates/horizon-client/src/game/lan_chat.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a1d8720b9530afd27b89e23340f85423733df8b0`
+- Size: 9907 bytes; 242 logical lines
+- Coverage: 1–120; 121–242 (complete, EOF)
+- Purpose: Handles LAN guest signed/unsigned chat commands, signed arguments, last-seen acknowledgements, secure-chat validation and spam throttling.
+- Dependencies / cross-references: Chat command packet types, signature chain, last-seen acknowledgements, command parser/signable ranges, permission, broadcast/whisper and disconnect.
+- Implementation / logic: Parses commands at guest permission, verifies signable arguments, consumes signatures/acks, routes say/me/msg and applies spam thresholds.
+- Findings: Secure chat and signed commands exist in target-era protocol; this is server-side and its payloads/signing context must match exactly 1.20.1. Not a client signing implementation.
+- RustChunk relevance: Essential protocol domain; use as behavioral reference while implementing client signing and acknowledgements independently.
+- Decision: **essential; rewrite required; version-specific — Implement exact 1.20.1 chat session init, message signatures, signed command arguments, last-seen and acknowledgement packets; exclude server kick policy.**
+- 1.20.1 implications: Implement exact 1.20.1 chat session init, message signatures, signed command arguments, last-seen and acknowledgement packets; exclude server kick policy.
+- Follow-up checks: Compare codecs, signature canonicalization, timestamp/salt, last-seen window, command ranges, disconnect semantics and unsigned-server compatibility.
+- RustChunk implementation mapping: Proposed network/chat/session_signing_last_seen_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 protocol/mappings, signed chat captures, deterministic signature fixtures and acknowledgement traces.
+- Completion state: COMPLETE — 242 lines read in 1–120 and 121–242; SHA and 9907-byte size match; no chat session or connection run.
+
+### 1247. `crates/horizon-client/src/game/lan_crafting.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `9ab819fffe7c50c8d4136a86e58f29e6aad15856`
+- Size: 29151 bytes; 729 logical lines
+- Coverage: 1–400; 401–729 (complete, EOF)
+- Purpose: Implements LAN guest crafting and container operations with the host menu engine, including crafting and furnace-like menus.
+- Dependencies / cross-references: Guest inventory, menu engine, recipes, container slots/data, block entities, crafting inputs/results, click actions, window IDs and container packets.
+- Implementation / logic: Creates server menus, applies click/button/quick-move operations to authoritative state, updates result slots and sends inventory/container changes.
+- Findings: Menu/crafting packet concepts matter to the 1.20.1 client, but this is a server-side implementation using Starling's current recipe/menu internals.
+- RustChunk relevance: Adaptable client menu and slot/state-ID reference; do not port server menu execution into the client.
+- Decision: **adaptable; rewrite required; version-specific — Use 1.20.1 menu types, slot layouts, container state IDs, recipe-book packets and legacy ItemStack NBT; accept server corrections as authoritative.**
+- 1.20.1 implications: Use 1.20.1 menu types, slot layouts, container state IDs, recipe-book packets and legacy ItemStack NBT; accept server corrections as authoritative.
+- Follow-up checks: Build menu matrix for crafting, furnace, blast furnace, smoker, brewing, inventory and recipe book; verify slot indices, shift-click, button/data and cursor updates.
+- RustChunk implementation mapping: Proposed ui/menus/crafting_furnace_brewing_1_20_1.rs and network/play/container_click_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 Java menu source, packet traces, slot snapshots, recipes and legacy ItemStack NBT.
+- Completion state: COMPLETE — 729 lines read in 1–400 and 401–729; SHA and 29151-byte size match; no menu tests run.
+
+### 1248. `crates/horizon-client/src/game/lan_entities.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `fc5cce5f058b622e7df773f3bae50db8260006ff`
+- Size: 34957 bytes; 853 logical lines
+- Coverage: 1–400; 401–800; 801–853 (complete, EOF)
+- Purpose: Builds and serializes tracked non-mob entities including boats, minecarts, armor stands, item frames and paintings, plus passenger/leash relationships.
+- Dependencies / cross-references: Entity type registry, EntityState/Riding, ID/UUID allocation, metadata serializers, velocity/pose/equipment, leashes, block state and tracking lifecycle.
+- Implementation / logic: Creates spawn states and metadata deltas, allocates identities, forms passenger links, serializes non-default data and reports tracking start/stop.
+- Findings: Highly valuable entity protocol evidence, but generated by a modern server with later types and current metadata conventions. IDs, serializers, defaults and packet order differ by game version.
+- RustChunk relevance: Essential reference for RustChunk entity model/decoder: spawn, movement, metadata, equipment, passengers, leashes and removal require exact target handling.
+- Decision: **essential; rewrite required; version-specific — Rebuild 1.20.1 entity roster, spawn codecs, metadata indices/serializer types/defaults and passenger/leash/equipment packets; exclude newer entity IDs.**
+- 1.20.1 implications: Rebuild 1.20.1 entity roster, spawn codecs, metadata indices/serializer types/defaults and passenger/leash/equipment packets; exclude newer entity IDs.
+- Follow-up checks: Create per-entity 1.20.1 metadata tables; test spawn/remove, velocity/teleport, metadata reset, passengers, leash, stands, frames, boats, carts and dragon parts.
+- RustChunk implementation mapping: Proposed network/entities/{spawn,metadata,relationships,tracking}_1_20_1.rs and game/entity_registry_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 entity registry/mappings, packet captures, metadata serializer fixtures and Forge entity extension contract.
+- Completion state: COMPLETE — 853 lines read in 1–400, 401–800 and 801–853; SHA and 34957-byte size match; tracking tests not run.
+
+### 1249. `crates/horizon-client/src/game/lan_far.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `84bb02ad267bbb8c3df3f5ee6f12a23bfd28eb62`
+- Size: 3080 bytes; 79 logical lines
+- Coverage: 1–79 (complete, EOF)
+- Purpose: Provides Horizon-only far-terrain requests over horizon:lod custom payload, samples distant terrain on a worker and returns bounded replies.
+- Dependencies / cross-references: Horizon LOD codec/channel, player position/dimension, sampler worker, connection backlog, custom-payload packet and client brand.
+- Implementation / logic: Validates Horizon client requests, serves/refuses/ignores/kicks, queues sampling jobs and applies backpressure above a 1 MiB pending-send backlog.
+- Findings: Proprietary extension, not vanilla chunk protocol and not a replacement for nearby chunk loading. Cannot solve missing main chunks without correct regular chunk streaming.
+- RustChunk relevance: Optional performance reference only; keep authoritative nearby chunk decoding/render readiness independent.
+- Decision: **unnecessary; optional/future — Do not require horizon:lod on ordinary 1.20.1 servers. Decode standard chunk/section packets and prioritize nearby chunks first.**
+- 1.20.1 implications: Do not require horizon:lod on ordinary 1.20.1 servers. Decode standard chunk/section packets and prioritize nearby chunks first.
+- Follow-up checks: If optional LOD is explored, bound requests/bytes, validate coordinates/dimension, cancel on unload/disconnect and prove nearby chunks remain authoritative.
+- RustChunk implementation mapping: Possible optional render/lod/horizon_extension.rs after negotiated capability, not created.
+- Evidence required before adoption: Custom payload spec, worker/backlog tests, chunk-distance correctness and Android latency/memory profiles.
+- Completion state: COMPLETE — 79 logical lines read to EOF; SHA and 3080-byte size match; no LOD request or worker run.
+
+### 1250. `crates/horizon-client/src/game/lan_mobs.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `5b83f8e0b179aef3b6553b9ba27f45a51a010b39`
+- Size: 20265 bytes; 545 logical lines
+- Coverage: 1–400; 401–545 (complete, EOF)
+- Purpose: Chooses which player a mob targets in a hosted LAN world and builds player snapshots for host/guests, including effects, equipment and combat attribution.
+- Dependencies / cross-references: Mob AI/anger, LAN Hub guest roster, player pose/bounds/inventory/effects, dimension, team/allies and damage attribution.
+- Implementation / logic: Builds guest PlayerView snapshots, chooses eligible survival targets or maintains attacker/angry targets, and derives omen/effect state.
+- Findings: Server-side LAN mob AI rather than client entity rendering; includes Trial Omen state newer than 1.20.1. Remote client must not authoritatively choose mob targets.
+- RustChunk relevance: Exclude from remote client; a future integrated server may use it only as behavior reference after target-version validation.
+- Decision: **unnecessary; reference; optional/future — Remote client consumes server-sent mob state; do not run target selection locally. Remove Trial Omen and later effect assumptions from 1.20.1.**
+- 1.20.1 implications: Remote client consumes server-sent mob state; do not run target selection locally. Remove Trial Omen and later effect assumptions from 1.20.1.
+- Follow-up checks: For future integrated AI, compare target priority, anger/last-hurt, creative/spectator filtering, teams, dimensions and target effect roster.
+- RustChunk implementation mapping: No client mapping; possible future game/server_ai/target_players_1_20_1.rs only for integrated server, not created.
+- Evidence required before adoption: 1.20.1 mob AI source, deterministic target traces, anger timers, UUID and entity metadata fixtures.
+- Completion state: COMPLETE — 545 lines read in 1–400 and 401–545; SHA and 20265-byte size match; embedded AI tests inspected, not run.
+
+### 1251. `crates/horizon-client/src/game/lan_mount_menu.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `d63ac07471237491dca2d51370162ea8c14fb762`
+- Size: 9211 bytes; 232 logical lines
+- Coverage: 1–232 (complete, EOF)
+- Purpose: Implements a guest horse/mount inventory menu, slot sync, click handling, mount inventory and validity checks.
+- Dependencies / cross-references: Horse/donkey/mule/llama/camel/nautilus mount inventory, saddle/body/chest slots, cursor stack, menu engine, OpenScreen and container packets.
+- Implementation / logic: Opens mount menu after range/permission checks, constructs slots, applies server-side clicks, stores mount inventory and closes on invalid mount/range.
+- Findings: Mount menus and container sync are relevant. File is server-side and also has later Nautilus support; current menu/window handling is not a 1.20.1 client implementation.
+- RustChunk relevance: Adapt client UI/packet handling for target horse-family mounts; useful slot-layout reference.
+- Decision: **adaptable; rewrite required; version-specific — Use 1.20.1 horse, donkey, mule, llama and camel menus/slot order; exclude Nautilus and match target horse screen packet and legacy item NBT.**
+- 1.20.1 implications: Use 1.20.1 horse, donkey, mule, llama and camel menus/slot order; exclude Nautilus and match target horse screen packet and legacy item NBT.
+- Follow-up checks: Test target mount types, saddle/armor/chest slots, shift-click, cursor recovery, mount death/range close and server correction.
+- RustChunk implementation mapping: Proposed ui/menus/mount_inventory_1_20_1.rs and network/play/horse_screen_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 Java mount menu source, horse packet captures, slot fixtures and GUI tests.
+- Completion state: COMPLETE — 232 logical lines read to EOF; SHA and 9211-byte size match; no menu session run.
+
+### 1252. `crates/horizon-client/src/game/lan_particles.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `20efad5dfb17ba21a70b6dece9285a02d5000947`
+- Size: 33025 bytes; 884 logical lines
+- Coverage: 1–400; 401–800; 801–884 (complete, EOF)
+- Purpose: Constructs and sends server particle packets near LAN guests, including option serialization, spread/randomization, effects and explosion particles.
+- Dependencies / cross-references: Particle type/options registry, block states, RandomSource, LevelParticles/Explosion packets, guest range and mod-particle payload.
+- Implementation / logic: Builds particle payloads, samples positions/velocities via Gaussian or uniform spread, selects recipients by dimension/range and restricts unsupported mod IDs to Horizon clients.
+- Findings: Useful particle packet reference, but includes later randomization fields and custom mod IDs; unsupported negative or mod IDs must never reach vanilla clients.
+- RustChunk relevance: Adapt client packet decoder and particle renderer, not the server fanout logic.
+- Decision: **adaptable; rewrite required; version-specific — Decode exactly 1.20.1 LevelParticles/Explosion fields and supported particle codecs. Keep unknown mod payloads isolated behind negotiated Forge channels.**
+- 1.20.1 implications: Decode exactly 1.20.1 LevelParticles/Explosion fields and supported particle codecs. Keep unknown mod payloads isolated behind negotiated Forge channels.
+- Follow-up checks: Compare every target particle serializer, item/block payload, count-zero semantics, spread/velocity, explosion burst and long-distance flag.
+- RustChunk implementation mapping: Proposed network/play/level_particles_1_20_1.rs and render/particles/registry_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 protocol schema, particle registry fixtures, packet captures and deterministic render goldens.
+- Completion state: COMPLETE — 884 lines read in 1–400, 401–800 and 801–884; SHA and 33025-byte size match; particle tests not run.
+
+### 1253. `crates/horizon-client/src/game/lan_pvp.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `539b2f478e2e56fb00318e70975d3d40e9d39979`
+- Size: 19326 bytes; 490 logical lines
+- Coverage: 1–400; 401–490 (complete, EOF)
+- Purpose: Implements server-side PvP melee/projectile damage including critical/sweep, shields, armor, knockback, teams and PvP rule.
+- Dependencies / cross-references: LAN guest identities, PvP settings, teams, attack strength, weapons/enchantments, damage sources, projectiles, shields, armor/effects and movement.
+- Implementation / logic: Checks PvP eligibility, calculates strike/critical/knockback/sweep and resolves arrows/thrown projectiles hitting another player.
+- Findings: Authoritative server combat logic; includes later mace smash. Remote client must not treat local damage calculation as final or apply authoritative HP changes.
+- RustChunk relevance: Exclude from client runtime; reference only for future integrated server and understanding server corrections.
+- Decision: **unnecessary; reference; optional/future — Do not simulate authoritative PvP damage on client. Render server-confirmed health, velocity, hurt animation and equipment; exclude mace-specific branches.**
+- 1.20.1 implications: Do not simulate authoritative PvP damage on client. Render server-confirmed health, velocity, hurt animation and equipment; exclude mace-specific branches.
+- Follow-up checks: For integrated server, compare cooldown, critical/sweep, projectile hit order, shield disable, armor/enchant modifiers, team/friendly fire and damage packets.
+- RustChunk implementation mapping: No remote-client mapping; possible separate game/server_combat/pvp_1_20_1.rs for integrated server, not created.
+- Evidence required before adoption: 1.20.1 Java combat source, seeded hit traces, damage/velocity packets and shield/armor fixtures.
+- Completion state: COMPLETE — 490 lines read in 1–400 and 401–490; SHA and 19326-byte size match; combat tests not run.
+
+### 1254. `crates/horizon-client/src/game/lan_quiet.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e893ed5610d690c81d941755047a4b9d94dca130`
+- Size: 6209 bytes; 176 logical lines
+- Coverage: 1–176 (complete, EOF)
+- Purpose: Implements Horizon horizon:quiet_commands batch API for mods, queueing quiet commands with per-player limits and suppressed output.
+- Dependencies / cross-references: Horizon custom payload decoder, guest permissions, command dispatcher, mod hooks, queued batches and server logs.
+- Implementation / logic: Accepts batches, caps pending lines at 4096 and execution at 64 lines per player/tick, refuses signed chat commands and executes without chat output.
+- Findings: Proprietary automation behavior. Not a vanilla packet and must never be implicitly enabled on ordinary multiplayer servers.
+- RustChunk relevance: Exclude baseline; bounded queue ideas only for explicit mod protocol later.
+- Decision: **unnecessary; optional/future — Do not send horizon:quiet_commands to ordinary 1.20.1 servers. Forge custom channels require exact negotiation and permission gates.**
+- 1.20.1 implications: Do not send horizon:quiet_commands to ordinary 1.20.1 servers. Forge custom channels require exact negotiation and permission gates.
+- Follow-up checks: If future support desired, audit authentication, line length, permissions, rate limits, disconnect cleanup, fairness and capability negotiation.
+- RustChunk implementation mapping: Possible opt-in mods/horizon/quiet_commands.rs, not created.
+- Evidence required before adoption: Custom payload spec, threat model, permission matrix, bounded queue tests and negotiation fixtures.
+- Completion state: COMPLETE — 176 logical lines to EOF; SHA and 6209-byte size match; embedded queue test inspected, not run.
+
+### 1255. `crates/horizon-client/src/game/lan_screen.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `56eb7d47602dc4e717afc7c3fcd984cbf28da22f`
+- Size: 75611 bytes; 1879 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–1879 (complete, EOF)
+- Purpose: Implements the 26.3 WorldOptionsScreen with modes, cheats, difficulty lock, game rules, restrictions and modern Open-to-LAN controls.
+- Dependencies / cross-references: Client screen/widgets, integrated server options, LAN settings, game rules, difficulty, command access, port input, restrictions and serverbound settings packets.
+- Implementation / logic: Builds options UI with host-only/remote sections, validates port, snapshots edits and applies hosting/configuration changes.
+- Findings: Explicit 26.3 replacement for the old Open-to-LAN screen; not the 1.20.1 UI and belongs to hosting rather than ordinary remote server play.
+- RustChunk relevance: Exclude initial client baseline; optional UX reference if integrated world hosting is later implemented.
+- Decision: **unnecessary; optional/future — Do not reuse 26.3 buttons, settings or packet payloads. Rebuild the old 1.20.1 options/Open-to-LAN flow only if host mode is required.**
+- 1.20.1 implications: Do not reuse 26.3 buttons, settings or packet payloads. Rebuild the old 1.20.1 options/Open-to-LAN flow only if host mode is required.
+- Follow-up checks: Compare target 1.20.1 options screen, host permissions, port, difficulty lock, gamerules, LAN publication and Android touch controls.
+- RustChunk implementation mapping: Possible ui/world_options/open_to_lan_1_20_1.rs if hosting is later required, not created.
+- Evidence required before adoption: 1.20.1 screen source/mappings, LAN host API, settings packet captures, port-boundary tests and UI goldens.
+- Completion state: COMPLETE — 1879 lines to EOF in 1–400, 401–800, 801–1200, 1201–1600 and 1601–1879; SHA and 75611-byte size match; no UI tests run.
+
+### 1256. `crates/horizon-client/src/game/lan_stations.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `b18a64b0b56b95c010d22c8a554c4f968073627e`
+- Size: 35160 bytes; 879 logical lines
+- Coverage: 1–400; 401–800; 801–879 (complete, EOF)
+- Purpose: Implements LAN guest work-station and lectern menus, including open, slots, data sync, button clicks and inventory return on close.
+- Dependencies / cross-references: MenuType registry, block entities, recipes, inventory, lectern book/pages, container IDs, OpenScreen, ContainerClick, SetContent and data packets.
+- Implementation / logic: Opens station menus, applies authoritative click operations, syncs changed slots/data and returns carried/input stacks when menu closes.
+- Findings: Client menu/packet families matter, but this is server-side Starling menu logic. Slot layouts and smithing/crafter behavior must be checked against 1.20.1; newer Crafter menu does not belong in target.
+- RustChunk relevance: Adaptable client menu and slot-synchronization reference; rebuild target screens and codecs.
+- Decision: **adaptable; rewrite required; version-specific — Use 1.20.1 menu types/slots for loom, stonecutter, grindstone, anvil, smithing, enchanting, beacon, cartography and lectern; exclude post-target Crafter.**
+- 1.20.1 implications: Use 1.20.1 menu types/slots for loom, stonecutter, grindstone, anvil, smithing, enchanting, beacon, cartography and lectern; exclude post-target Crafter.
+- Follow-up checks: Test menu open/close, slot/state IDs, button clicks, quick move, lectern pages, beacon, smithing template slot, invalid windows and cursor correction.
+- RustChunk implementation mapping: Proposed ui/menus/{loom,stonecutter,grindstone,anvil,smithing,enchanting,beacon,cartography,lectern}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 menu source, packet traces, slot snapshots, recipe fixtures, legacy ItemStack NBT and UI goldens.
+- Completion state: COMPLETE — 879 lines to EOF in 1–400, 401–800 and 801–879; SHA and 35160-byte size match; no menu tests run.
+
+### 1257. `crates/horizon-client/src/game/lan_trading.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `bf94369c80ff12ca680aaaeebcee1e6816e67ee2`
+- Size: 17384 bytes; 465 logical lines
+- Coverage: 1–400; 401–465 (complete, EOF)
+- Purpose: Implements villager and wandering trader menus, offer synchronization, selecting trades, payment slots, XP and reputation.
+- Dependencies / cross-references: Villager/trader state, MerchantOffers, reputation/gossip, player UUID, menu, inventory, trade packets, ItemStacks and updates.
+- Implementation / logic: Creates merchant session, sends offers/level, handles selection and container clicks, executes trade and updates slots/XP.
+- Findings: Merchant screen and offer packets are core client behavior, but this is server authoritative and uses modern item/merchant models; offer fields/NBT/packet IDs must match target.
+- RustChunk relevance: Adaptable reference for merchant UI, trade selection and synchronized result/payment slots; server owns trade and reputation.
+- Decision: **adaptable; rewrite required; version-specific — Implement 1.20.1 MerchantOffers/MerchantOffer codecs, container state/content, trade selection, villager level/XP and legacy item NBT.**
+- 1.20.1 implications: Implement 1.20.1 MerchantOffers/MerchantOffer codecs, container state/content, trade selection, villager level/XP and legacy item NBT.
+- Follow-up checks: Compare disabled/locked offers, uses/maxUses, demand/special price, XP/level, restock, payment slots, quick move and result correction.
+- RustChunk implementation mapping: Proposed ui/menus/merchant_1_20_1.rs and network/play/merchant_offers_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 merchant/menu source, offer packet captures, villager NBT, price fixtures and UI goldens.
+- Completion state: COMPLETE — 465 lines in 1–400 and 401–465; SHA and 17384-byte size match; no trade session run.
+
+### 1258. `crates/horizon-client/src/game/lan_vehicles.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `d3cf0cafea56f0da1df387f2b0572009b88d7025`
+- Size: 22898 bytes; 564 logical lines
+- Coverage: 1–400; 401–564 (complete, EOF)
+- Purpose: Handles server-side LAN guest driving of boats/minecarts, rider input, paddling, dismount and vehicle movement events.
+- Dependencies / cross-references: Boat/minecart state and physics, input flags, collisions, passenger relations, guest position, teleport/dismount and vehicle callbacks.
+- Implementation / logic: Maps player input flags to keys, simulates vehicle movement for riders, tracks movement and resolves dismount destinations.
+- Findings: Vehicle input/packet concepts matter for target client, but this is the server authority path and uses Horizon guest state. New entity/input kinds require target validation.
+- RustChunk relevance: Adaptable reference for outbound vehicle input and client prediction; remote server remains authoritative for position/collision.
+- Decision: **adaptable; rewrite required; version-specific — Use exact 1.20.1 steer-boat, paddle and move-vehicle packets, target vehicle roster and server correction; do not simulate host guest state locally.**
+- 1.20.1 implications: Use exact 1.20.1 steer-boat, paddle and move-vehicle packets, target vehicle roster and server correction; do not simulate host guest state locally.
+- Follow-up checks: Compare paddle flags, input ordering, minecart movement, passenger packets, dismount search, collision and correction under latency.
+- RustChunk implementation mapping: Proposed network/play/{steer_boat,move_vehicle}_1_20_1.rs and game/vehicles/client_prediction.rs; not created.
+- Evidence required before adoption: 1.20.1 vehicle source/mappings, outbound packet traces, passenger/movement packets and deterministic collision fixtures.
+- Completion state: COMPLETE — 564 lines in 1–400 and 401–564; SHA and 22898-byte size match; no vehicle test or session run.
+
+### 1259. `crates/horizon-client/src/game/lan_waypoints.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4481d49fb94b42542e9701e2950db204565e24ce`
+- Size: 4063 bytes; 98 logical lines
+- Coverage: 1–98 (complete, EOF)
+- Purpose: Maintains per-dimension player locator-bar waypoints for hosted world, including team colors, hide conditions, range and respawn tracking.
+- Dependencies / cross-references: Horizon waypoint manager, UUID/dimension/position, scoreboard teams, crouching/invisibility/head equipment, view distance and custom updates.
+- Implementation / logic: Builds player snapshots, chooses transmit/receive ranges, hides players based on pose/effects/head item, ticks managers and sends waypoint updates.
+- Findings: Horizon-specific later locator/waypoint server feature, not vanilla 1.20.1 client functionality. Its range/visibility policy is custom.
+- RustChunk relevance: Exclude baseline. Future optional waypoint UI must use negotiated compatible server support or local-only markers.
+- Decision: **unnecessary; optional/future — Do not require/send Horizon waypoint payloads to ordinary 1.20.1 servers; use only target packets or separately negotiated Forge/mod channels.**
+- 1.20.1 implications: Do not require/send Horizon waypoint payloads to ordinary 1.20.1 servers; use only target packets or separately negotiated Forge/mod channels.
+- Follow-up checks: For future waypoint work, verify protocol, permissions, visibility, teams, teleport/dimension lifecycle and hidden-player privacy.
+- RustChunk implementation mapping: Possible optional ui/waypoints/compat.rs behind capability negotiation, not created.
+- Evidence required before adoption: Custom waypoint spec, capability negotiation, privacy/visibility tests and target-version feature check.
+- Completion state: COMPLETE — 98 logical lines to EOF; SHA and 4063-byte size match; no waypoint manager run.
+
+### 1260. `crates/horizon-client/src/game/lan.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `dda3e7a1da90209d6e40b40eed21018b5c90fc25`
+- Size: 129988 bytes; 2982 logical lines
+- Coverage: 1–400; 401–800; 801–1000; 1001–1200; 1201–1400; 1401–1600; 1601–2000; 2001–2200; 2201–2400; 2401–2600; 2601–2800; 2801–2982 (complete, EOF)
+- Purpose: Hosts an integrated world on LAN, manages Hub/server threads, syncs registries/tags/packs, streams chunks/entities and dispatches guest events.
+- Dependencies / cross-references: LAN Hub/network threads, chunk encoder, SyncData/registries/tags, entity serializers, player data, mobs/vehicles/menus/particles/chat/commands, dimensions and world lifecycle.
+- Implementation / logic: Starts/stops LAN host, prepares/reloads sync data, preloads registries, ticks Hub, streams world/entity/chunk state, processes guest join/leave and coordinates server subsystems.
+- Findings: Horizon LAN host core, not a remote Minecraft client. Contains custom registry/dialog/LOD assumptions, server ownership and guest state. Copying it conflates server/client authority and does not help Aternos connectivity.
+- RustChunk relevance: Exclude remote client baseline; use as a map of server packet families only if an integrated server is later considered.
+- Decision: **unnecessary; reference; optional/future — Implement a distinct 1.20.1 remote handshake/configuration/play protocol. Do not start a LAN Hub/server thread or Horizon custom registry sync when joining an external server.**
+- 1.20.1 implications: Implement a distinct 1.20.1 remote handshake/configuration/play protocol. Do not start a LAN Hub/server thread or Horizon custom registry sync when joining an external server.
+- Follow-up checks: If hosting is later planned, split registry sync, chunk/entity tracking, login/respawn, reload and shutdown; compare every packet/registry with Forge 1.20.1 and add resource limits.
+- RustChunk implementation mapping: No client mapping; possible future runtime/integrated_server/lan_host_1_20_1.rs isolated from network/remote_session.rs, not created.
+- Evidence required before adoption: 1.20.1 server/Forge lifecycle, packet captures, registry/tag fixtures, chunk/entity tests, thread teardown and security review.
+- Completion state: COMPLETE — 2982 lines to EOF in 12 contiguous ranges 1–400, 401–800, 801–1000, 1001–1200, 1201–1400, 1401–1600, 1601–2000, 2001–2200, 2201–2400, 2401–2600, 2601–2800 and 2801–2982; SHA and 129988-byte size match; no LAN host operation run.
 

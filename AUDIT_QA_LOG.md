@@ -847,3 +847,37 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected, not executed. No build, APK, Forge launch, Android device run, multiplayer join, LAN host, UPnP or relay action was performed.
 - Existing backup refs untouched. Backup remains due only after entries 1001–2000 are committed and globally verified.
 
+
+
+### Checkpoint 1241–1260 — 2026-11-19
+
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`. The recursive tree was not truncated and its SHA matched the pinned commit. Before this checkpoint, the Index had 1240 sequential rows and 1240 unique paths.
+- Exactly 20 new source files (1241–1260) were inspected completely to EOF in deterministic source-tree order. Every blob SHA and byte size matches the pinned source tree:
+- 1241 `crates/horizon-client/src/game/kinetic_machines.rs` — 1024 logical lines; 41962 bytes; SHA `4e229a928f7f87fc44a58607230d2d61eb1175c4`.
+- 1242 `crates/horizon-client/src/game/kinetics.rs` — 1442 logical lines; 61786 bytes; SHA `6b71bc90ba550a480a28568fa4edbd783030fbfe`.
+- 1243 `crates/horizon-client/src/game/lan_actions.rs` — 5365 logical lines; 235964 bytes; SHA `e567c82690937f4f2cfa2da5ebd3d595c2b9ea6e`.
+- 1244 `crates/horizon-client/src/game/lan_attributes.rs` — 336 logical lines; 13076 bytes; SHA `8c082d982a3f986590767e335024056a9ddc97e4`.
+- 1245 `crates/horizon-client/src/game/lan_camera.rs` — 262 logical lines; 10043 bytes; SHA `8c64cf2bb8ac075c2869bfda37a4071862d157d3`.
+- 1246 `crates/horizon-client/src/game/lan_chat.rs` — 242 logical lines; 9907 bytes; SHA `a1d8720b9530afd27b89e23340f85423733df8b0`.
+- 1247 `crates/horizon-client/src/game/lan_crafting.rs` — 729 logical lines; 29151 bytes; SHA `9ab819fffe7c50c8d4136a86e58f29e6aad15856`.
+- 1248 `crates/horizon-client/src/game/lan_entities.rs` — 853 logical lines; 34957 bytes; SHA `fc5cce5f058b622e7df773f3bae50db8260006ff`.
+- 1249 `crates/horizon-client/src/game/lan_far.rs` — 79 logical lines; 3080 bytes; SHA `84bb02ad267bbb8c3df3f5ee6f12a23bfd28eb62`.
+- 1250 `crates/horizon-client/src/game/lan_mobs.rs` — 545 logical lines; 20265 bytes; SHA `5b83f8e0b179aef3b6553b9ba27f45a51a010b39`.
+- 1251 `crates/horizon-client/src/game/lan_mount_menu.rs` — 232 logical lines; 9211 bytes; SHA `d63ac07471237491dca2d51370162ea8c14fb762`.
+- 1252 `crates/horizon-client/src/game/lan_particles.rs` — 884 logical lines; 33025 bytes; SHA `20efad5dfb17ba21a70b6dece9285a02d5000947`.
+- 1253 `crates/horizon-client/src/game/lan_pvp.rs` — 490 logical lines; 19326 bytes; SHA `539b2f478e2e56fb00318e70975d3d40e9d39979`.
+- 1254 `crates/horizon-client/src/game/lan_quiet.rs` — 176 logical lines; 6209 bytes; SHA `e893ed5610d690c81d941755047a4b9d94dca130`.
+- 1255 `crates/horizon-client/src/game/lan_screen.rs` — 1879 logical lines; 75611 bytes; SHA `56eb7d47602dc4e717afc7c3fcd984cbf28da22f`.
+- 1256 `crates/horizon-client/src/game/lan_stations.rs` — 879 logical lines; 35160 bytes; SHA `b18a64b0b56b95c010d22c8a554c4f968073627e`.
+- 1257 `crates/horizon-client/src/game/lan_trading.rs` — 465 logical lines; 17384 bytes; SHA `bf94369c80ff12ca680aaaeebcee1e6816e67ee2`.
+- 1258 `crates/horizon-client/src/game/lan_vehicles.rs` — 564 logical lines; 22898 bytes; SHA `d3cf0cafea56f0da1df387f2b0572009b88d7025`.
+- 1259 `crates/horizon-client/src/game/lan_waypoints.rs` — 98 logical lines; 4063 bytes; SHA `4481d49fb94b42542e9701e2950db204565e24ce`.
+- 1260 `crates/horizon-client/src/game/lan.rs` — 2982 logical lines; 129988 bytes; SHA `dda3e7a1da90209d6e40b40eed21018b5c90fc25`.
+- Canonical line-count correction: `lan_far.rs` has 79 logical lines, as confirmed by the complete source read; earlier planning notes stating 98 were incorrect. Its SHA and 3080-byte size match the tree.
+- Long-file coverage was contiguous, gap-free, and no range exceeded 400 lines: `kinetic_machines.rs` 1–400, 401–600, 601–800, 801–1024; `kinetics.rs` 1–400, 401–800, 801–1200, 1201–1400, 1401–1442; `lan_actions.rs` 1–400 through 4801–5200, then 5201–5365; `lan_entities.rs` 1–400, 401–800, 801–853; `lan_mobs.rs` 1–400, 401–545; `lan_particles.rs` 1–400, 401–800, 801–884; `lan_screen.rs` 1–400, 401–800, 801–1200, 1201–1600, 1601–1879; `lan_stations.rs` 1–400, 401–800, 801–879; `lan_trading.rs` 1–400, 401–465; `lan_vehicles.rs` 1–400, 401–564; `lan.rs` 1–400, 401–800, 801–1000, 1001–1200, 1201–1400, 1401–1600, 1601–2000, 2001–2200, 2201–2400, 2401–2600, 2601–2800 and 2801–2982. Shorter files were fully read through EOF, including `lan_attributes.rs` 1–120 and 121–336, `lan_camera.rs` 1–120 and 121–262, and `lan_chat.rs` 1–120 and 121–242.
+- Ledger validation: exactly 20 new sequential entries, each with all 15 fields exactly once. Index validation: 1260 sequential rows, 1260 unique source paths and zero duplicates; new paths and decisions align with the Ledger.
+- The stage Ledger `AUDIT_LEDGER_1201_1400.md` now contains 60 entries (1201–1260). The authorized first half is 60/100 complete; next checkpoint is 1261–1280 starting at `crates/horizon-client/src/game/launch_api.rs`. Do not begin 1301–1400 before the user separately authorizes the second half after 1300.
+- Main version boundary: Create kinetic machinery/network code (1241–1242) is mod-specific, not vanilla; LAN host packet/action/Hub code (1243 and 1254–1260, plus parts of 1244–1253) is Horizon server infrastructure. Useful target-client references include entity spawn/metadata/relationships (1248), attribute sync (1244), secure chat (1246), camera/vehicle/particle packet families and menu synchronization (1245, 1247, 1251–1253, 1256–1258); each needs exact 1.20.1 packet/registry reconstruction.
+- Newer-only systems identified include modern reach attributes, later projectile/entity/particle fields, Nautilus, mace PvP, 26.3 WorldOptions/locator behavior, Horizon `horizon:lod` and `horizon:quiet_commands`; do not treat these as vanilla 1.20.1 support.
+- Embedded tests were inspected only, not executed. No build, APK, Forge launch, Android-device run, Minecraft server join, LAN host, port mapping, LOD worker or relay action was performed.
+- Both existing backup branches remain untouched. Next backup remains due only after entries 1001–2000 are fully committed and globally verified.
