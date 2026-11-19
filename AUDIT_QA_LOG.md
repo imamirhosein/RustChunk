@@ -455,3 +455,30 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 - Next range: **801–900**.
 - Continue only on `starling-1.20.1-port-audit`; do not modify the original backup branch.
+
+
+## QA batch 801–900 — 2026-11-19
+
+### Scope and verification
+
+- Reviewed exactly 100 existing entries (801–900); no source paths were renumbered or reselected.
+- Verified 100 sequential entries, 100 unique paths in the range, no duplicates against the full 1,000-entry Index, and all 100 paths present in the pinned Starling tree.
+- Verified all 100 Source SHAs and byte sizes against the pinned tree, exactly one occurrence of each of the 15 required Ledger fields, and Ledger/Index path alignment.
+- Corrected the Index decision column for all 100 entries to use the protocol's primary decision labels; explanatory text remains in the reason column.
+- Repaired RustChunk implementation mappings across entries 801–858 so they point to the actual subsystem represented by each source file; corrected shifted/malformed mappings including the section-mask, server-terrain, settings, skins, sound, split-screen and weather records.
+
+### Touch asset correction (859–900)
+
+- Visually inspected all 42 PNGs from the pinned source commit. The files are compact 24×24 RGBA control glyphs; default/pressed pairs were checked against the actual filenames and rendered pixels.
+- Corrected the shifted glyph descriptions and candidate destination mappings. The image records are now reference-only; they do not imply that RustChunk will copy or ship these assets.
+- Inspected `bedrock-touch.json`: it pins Mojang/bedrock-samples revision `15701fa9c13923f12662984c32c124327e40e3d3`. Retrieved its referenced `LICENSE.md`, which states Mojang AB retains all rights and that the files are subject to the Minecraft EULA. This is not an open asset license; no Bedrock asset should be redistributed without EULA review/permission.
+- RustChunk's touch layout/editor remains an independent, editable implementation; the PNGs may serve only as visual references pending provenance/license approval.
+
+### Limits and backup
+
+- Source provenance, byte sizes, ledger structure, decision labels and all 42 image pixels were checked. No Rust tests, build, benchmark, APK, Android-device run, Minecraft launch or Forge/server connection was performed.
+- Original backup `backup/audit-1000-unique-2026-11-18` remains unchanged; no archive branch was recreated. The agreed second backup remains deferred until QA reaches 1,000/1,000.
+
+### Next QA range
+
+- Next range: **901–1000**.
