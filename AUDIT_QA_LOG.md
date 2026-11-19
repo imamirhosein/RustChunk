@@ -768,3 +768,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Appended exactly 20 complete Ledger entries (1181–1200) with 15 fields each and 20 matching Index rows. QA, Continuity and Protocol were updated together.
 - Stage 1001–1200 is now **200/200 (100%) complete**. This closes the authorized 200-file stage; no files from 1201 onward were started.
 - The five updated documents must be fetched again from GitHub and their blob SHAs, Index uniqueness and Ledger field counts verified before this checkpoint is considered saved.
+
+
+## Protocol amendment — 2026-11-19: 100-file midpoint pause
+
+- Governance-only change; no new Starling source file was inspected, no audit entry was added or renumbered, and no existing Ledger or Index row was altered.
+- The 200-file stage remains the accounting and closure boundary. Each stage is now divided into two 100-file halves, each containing five exact 20-file checkpoints.
+- Complete the first five checkpoints, commit/read-back verify each checkpoint, then stop at 100/200 and wait for a separate explicit user instruction before beginning the second half.
+- After the second-half instruction, complete its five checkpoints without approval pauses between them; close the 200-file stage only after the tenth checkpoint and global QA.
+- The 100-file midpoint does not split the Ledger range and does not trigger a backup. Backup cadence remains once per 1,000 newly completed entries.
+- Current state remains closed at entry 1200. The next stage 1201–1400 has not started; its first half will be 1201–1300 and the second half will be 1301–1400. Neither existing backup branch was modified.
