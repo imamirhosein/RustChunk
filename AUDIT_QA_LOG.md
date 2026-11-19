@@ -548,3 +548,9 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Confirmed no source paths duplicate entries 1–1000 or each other; the checkpoint's 20 entries are sequential.
 - This is source inspection only. No tests, build, benchmark, APK, Android device, Minecraft client, Forge client or server were executed.
 - Next checkpoint: entries 1021–1040. Continue only after re-reading this saved checkpoint from GitHub.
+
+### Checkpoint 1001–1020 post-commit correction
+
+- Re-read the committed first checkpoint and compared all 20 Source SHAs and byte sizes again against the pinned source tree.
+- Found and corrected one transcription error in entry 1013's SHA: the ledger had omitted the final two characters. Correct value: `327a8e9d1465a6fd80b6e236fe759417f7e42fe2`; pinned tree SHA and fetched file SHA both agree. The file size remains 6,621 bytes and 145 logical lines.
+- This is a metadata correction only; source content, decision and implementation mapping were not changed. Checkpoint remains 20 complete entries.
