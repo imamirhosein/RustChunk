@@ -687,3 +687,343 @@
 - RustChunk implementation mapping: Candidate `audio/ambience.rs` plus resource adapter for 1.20.1 BiomeEffects; platform output remains RustChunk audio backend. No runtime code copied.
 - Evidence required before adoption: Java 1.20.1 biome effect JSON, sound event definitions, ambient handler source, exact RNG vectors, fake-backend golden outputs and Android audio tests. No test or playback executed.
 - Completion state: FULL TEXT REVIEW COMPLETE — 479 logical lines read consecutively (1–400, 401–479); fake-backend tests inspected only, no audio/device validation.
+
+### 1041. `crates/horizon-client/src/android_control_assets.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f7351faf306f47ed098541b2c2abee1358e4c061`
+- Size: 3893 bytes; 100 logical lines
+- Coverage: Complete text file reviewed, lines 1–100.
+- Purpose: Fetches a curated set of Android touch-control bitmap resources from a pinned Mojang Bedrock samples revision, verifying each downloaded file before accepting it.
+- Dependencies / cross-references: Manifest entries, HTTPS client, redirect policy, bounded timeout/response size, SHA-256, cache/output directory and the referenced Bedrock samples repository/license.
+- Implementation / logic: Downloads listed files into an app-controlled control-asset directory; validates expected size and digest, rejects invalid/oversized responses and follows a pinned source revision rather than an unpinned moving branch.
+- Findings: The download/verification boundary is a sound generic pattern, but the source images are Mojang Bedrock sample assets and are not an open asset pack. Successful hash verification establishes integrity, not redistribution rights. Do not ship or redistribute the bitmaps without EULA/legal clearance.
+- RustChunk relevance: Useful for secure, reproducible acquisition of optional control assets. RustChunk should draw its own editable touch icons by default and treat external images as a separately gated, user-selected resource.
+- Decision: **adaptable; reference; version-specific — reuse the integrity and pinned-revision download pattern, not the source artwork or Bedrock-specific asset set.**
+- 1.20.1 implications: No Minecraft 1.20.1 game data is involved. Keep UI assets independent of the Java-version data pack; do not conflate Bedrock sample provenance with permission to bundle assets.
+- Follow-up checks: Review manifest provenance and Mojang EULA scope; test hash mismatch, truncated file, redirect, timeout, oversized response, path traversal and interrupted download. Provide an independent RustChunk icon set.
+- RustChunk implementation mapping: Possible future isolated Android resource-fetch module; no source images copied. The RustChunk touch editor should use independently authored vector/bitmap artwork.
+- Evidence required before adoption: Written asset-rights clearance before bundling any Mojang image, plus HTTP/path-safety tests and verification that no unpinned remote content is accepted.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1042. `crates/horizon-client/src/android_control_theme.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8ce860eb542ca12f63539c06c8905139688a6103`
+- Size: 103070 bytes; 2840 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–2840, ending at EOF.
+- Purpose: Horizon Android visual-theme and drawing toolkit for panels, typography, control-editor screens, color palettes, borders, rounded shapes, layout helpers and font/atlas-backed text.
+- Dependencies / cross-references: HudAtlas/HudBatch and font faces, display density/scale, Android viewport dimensions, palette/theme settings, UI geometry helpers and touch-control editor screens.
+- Implementation / logic: Defines reusable drawing primitives and theme/layout helpers; resolves text metrics and fit, computes mobile density/scale, paints rounded panels/buttons/borders/swatches and supports multiple Horizon control-editor pages and visual styles.
+- Findings: The file is primarily Horizon product UI, not Minecraft simulation or Java GUI parity. It is tightly coupled to Horizon-specific visual identity, font atlas, screen dimensions and touch-control state. Rendering helpers may be useful, but the theme, labels, hard-coded panel layouts and asset assumptions are not a RustChunk design specification.
+- RustChunk relevance: Useful reference for a reusable mobile drawing abstraction, text fitting, palette separation, rounded controls and density-aware layout. RustChunk should keep its own visual design and separate renderer-independent input state from presentation.
+- Decision: **adaptable; reference; optional/future — selectively reuse generic UI primitive ideas after separating them from Horizon-specific theme and screen code.**
+- 1.20.1 implications: No 1.20.1 game behavior is encoded here. Do not let launcher theme resources or fixed mobile editor dimensions become dependencies of the Minecraft engine.
+- Follow-up checks: Extract a minimal UI API independent of Starling types; test narrow/large aspect ratios, density changes, font fallback, clipping, color contrast and accessibility; author independent RustChunk themes.
+- RustChunk implementation mapping: Future RustChunk Android UI layer, separate from engine/render world modules; do not port this file wholesale.
+- Evidence required before adoption: A standalone RustChunk UI design and device screenshots across target aspect ratios/densities, plus proof that the UI layer builds without Horizon crates.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1043. `crates/horizon-client/src/android_control_ui.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `08e1d02ecc64605adca0f90f60170fc59d76977c`
+- Size: 344501 bytes; 8506 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–8506, ending at EOF.
+- Purpose: Large Android touch-input and control-editor implementation: gameplay virtual mouse/keyboard, on-screen control hub, editable layouts, presets, custom buttons, property inspector and save/undo workflows.
+- Dependencies / cross-references: android_controls settings/layout/editor models; android_control_theme Ui/HudAtlas/HudBatch; keyboard/mouse state; screen/menu lifecycle; filesystem-backed presets; IME and viewport scaling; touch phases and pointer ownership.
+- Implementation / logic: Maps Android pointers to mouse/key actions; tracks pointer ownership, press/release/cancel, scrolling, gesture, virtual cursor and simultaneous button state; draws the floating control hub/editor; supports move/resize, grid snapping, sliders, custom bindings, preset save/load/reset, undo/redo and property edits.
+- Findings: Highly relevant to the editable touch-control requirement, but this is a large Horizon-specific UI/controller integration, not a portable drop-in. It mixes rendering, input routing, persistence and editor state; fixed UI geometry and preset path assumptions require redesign. It contains valuable tests for pointer ownership, cancel, simultaneous keys and screen changes, but reading those tests does not run them.
+- RustChunk relevance: One of the strongest architecture references for RustChunk's touch editor and virtual mouse. Preserve the separation between pointer ownership, key state, gesture and layout editing; do not adopt Horizon styles, fixed dimensions or persistence path directly.
+- Decision: **adaptable; reference; version-specific — use as a behavioral/reference design and build a smaller RustChunk-owned touch subsystem with explicit Android lifecycle contracts.**
+- 1.20.1 implications: Independent of Minecraft protocol version, but the generated key/mouse actions must map to the 1.20.1 client input model. Touch cancellation and pause/menu transitions must never leave stuck keys or clicks.
+- Follow-up checks: Design separate modules for pointer capture, input state, editable layout, custom bindings, persistence and rendering; test ACTION_CANCEL, focus loss, multiple pointers, pointer-up outside bounds, screen transitions, rotation/resize, preset corruption and storage permission.
+- RustChunk implementation mapping: Proposed RustChunk Android modules: touch/input_router, touch/layout_model, touch/editor and UI renderer. No direct file copy or implementation is claimed.
+- Evidence required before adoption: Deterministic input traces, Android multi-pointer/lifecycle tests on the Galaxy A22 class of device, persisted layout round-trip tests and screenshots of independently designed controls.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1044. `crates/horizon-client/src/android_lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `de10b15153c41bacf31f09490bfd6a283a3cebff`
+- Size: 4693 bytes; 137 logical lines
+- Coverage: Complete text file reviewed, lines 1–137.
+- Purpose: JNI boundary for the Android native activity: connects Java/Kotlin Activity lifecycle, shared storage, keyboard/IME input, pointer capture, diagnostics and native game startup.
+- Dependencies / cross-references: JNI/JNIEnv, Android Activity class and method signatures, Java file/URI/string objects, shared storage API, IME bridge and Horizon client initialization.
+- Implementation / logic: Exports native JNI entry points; retrieves the app's storage directory, sends text to and from the native client, translates IME actions/key events, handles pointer-capture loss and wraps native startup with a panic boundary that can emit diagnostics.
+- Findings: The platform bridge is a narrow, useful architecture reference, but JNI symbol names, Java class/method signatures, package and storage behavior are application-specific. A panic catch is useful but must not mask partially initialized state or leave JNI references/resources inconsistent.
+- RustChunk relevance: Useful for RustChunk's Android-native boundary, particularly IME and pointer lifecycle contracts. Rebuild it against RustChunk's package/activity and isolate platform bridge from gameplay logic.
+- Decision: **adaptable; reference; version-specific — retain the JNI boundary and panic/IME integration pattern while generating RustChunk-specific entry points.**
+- 1.20.1 implications: Game protocol behavior is not implemented here. The JNI layer must pass inputs into the 1.20.1 engine without embedding version-specific game logic.
+- Follow-up checks: Check package-qualified JNI signatures, local/global reference lifetimes, UI-thread affinity, rotation/recreation, keyboard hide/show, pointer-capture loss, crash reporting privacy and ABI behavior.
+- RustChunk implementation mapping: Future `android/native_bridge` or `app/src/main/java/...` integration layer in RustChunk; no exact JNI class or package is reused.
+- Evidence required before adoption: Android ARM64 build/load test, Java/Kotlin-to-Rust lifecycle tests, IME/pointer tests and crash-path validation on a physical device.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1045. `crates/horizon-client/src/animate_tick.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `408af1630dc5f52294bbf0192dbb47a9b24da161`
+- Size: 77461 bytes; 2000 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–2000, ending at EOF.
+- Purpose: Implements client-side block/fluid ambient animation ticks and campfire block-entity particle ticks, including deterministic particle positions, probabilities, sounds and biome ambient particles.
+- Dependencies / cross-references: BlockFacts/Fluid facts, BlockRegistry/state properties, block tags and behavior JSON, Biomes, World, BlockCollisionRegistry, model offsets, sky/rain/height/weather inputs, LegacyRandom and ParticleEngine.
+- Implementation / logic: Classifies block states into animation kinds; loads tags/behavior and biome ambient-particle data; simulates torch/furnace/campfire/leaves/portal/redstone/dripstone/fire/cauldron-adjacent and other ambient effects; emits particles/sounds and computes campfire cooking smoke.
+- Findings: The architecture is a high-value client rendering/gameplay reference and uses deterministic RNG ordering. However it includes post-1.20.1 blocks and attributes (copper torches, pale oak, firefly bush, creaking heart, potent sulfur, dried ghast, poplar leaves etc.) and expects the 26.3 biome `attributes.minecraft:visual/ambient_particles` schema. Newer block tags and particle IDs must not be accepted as 1.20.1 facts.
+- RustChunk relevance: Very relevant to particle/ambient effects and block visual fidelity; can inform a modular 1.20.1 animateTick system and help keep particles/sounds consistent with block states.
+- Decision: **adaptable; reference; version-specific — preserve dispatch/RNG/particle architecture selectively, rebuilding the full block classification, tags, biome particle data and effects against Java 1.20.1.**
+- 1.20.1 implications: Only target-era blocks and particle types belong in the baseline. Rebuild biome ambient particles and sound behavior from 1.20.1 resources; newer ambient environment attributes cannot be parsed as target data.
+- Follow-up checks: Create a block-state-to-animate-trigger table from Java 1.20.1; add golden RNG/particle/sound vectors for every supported block; remove later block branches; test unloaded-neighbor/chunk and particle-budget behavior.
+- RustChunk implementation mapping: Proposed `engine/client_effects/animate_tick` and particle event interface; production integration should consume 1.20.1 block facts and a platform-independent particle/audio queue.
+- Evidence required before adoption: Pinned Java 1.20.1 source/resource mapping, deterministic per-block particle/sound oracle traces and Android GPU/audio tests. No tests or particle rendering were executed in this audit.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1046. `crates/horizon-client/src/arrows.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `146dc64d39b0fe7092daca2dc2cd8ec6fc1a8f13`
+- Size: 53941 bytes; 1482 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–1482, ending at EOF.
+- Purpose: Projectile simulation and collision for arrows, tipped/spectral arrows and thrown tridents, including block/entity hits, water/lava, bubble columns, fire, pickup, piercing and hit events.
+- Dependencies / cross-references: Projectile/ProjectileKind, EntityRules and target AABBs, World/BlockFacts/BlockCollisionRegistry, FluidResources/entity-fluid and flow APIs, LegacyRandom, Mob/Who, potion and ItemStack data, game rules and block contact events.
+- Implementation / logic: Defines arrow state/pickup and event output; clips projectile movement against block shapes and entities; updates rotation, velocity, drag/gravity, water inertia, piercing, stuck/despawn/owner-ignore rules, entity-hit outcomes, trident bounce/deflection, TNT/campfire/candle reactions, fluid flow and fire extinguishing.
+- Findings: A broad and valuable physics implementation, but it is coupled to current ItemStack data components (e.g. intangible projectile), current entity/fluid APIs and newer sound/particle registries. Some paths explicitly encode modern state, and projectile collision against a synthetic scene is not proof of server-authoritative hit parity. Need check the entire arrow/trident lifecycle against 1.20.1 rather than copy wholesale.
+- RustChunk relevance: Highly relevant to survival/combat and physics; especially useful for exact block clip, swept collision, arrow pickup and fluid behavior. Separate collision/trajectory math from protocol/item metadata and game-side damage authority.
+- Decision: **adaptable; reference; version-specific — retain the projectile state-machine/test approach and reimplement target-version item, metadata, hit and fluid contracts.**
+- 1.20.1 implications: Rebuild 1.20.1 arrow/trident entity metadata, pickup NBT, item usage/ammo, projectile packet sync, fluid collision/flow and sound/particle IDs. Later component names must not enter legacy ItemStack/NBT.
+- Follow-up checks: Build Java 1.20.1 trajectories for bow/crossbow/tipped/spectral/trident, owner-ignore, piercing, entity/block hit, refusal/deflection, water/lava/rain, bubble column, pickup and despawn; fuzz collision boundaries and unloaded chunks.
+- RustChunk implementation mapping: Proposed `engine/projectiles` with versioned ammo/metadata adapter, collision/trajectory core and emitted effects; no one-file port.
+- Evidence required before adoption: Java 1.20.1 golden trajectory and hit vectors, server-client packet traces, target AABB/block-shape parity and multiplayer integration tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1047. `crates/horizon-client/src/attack_strength.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ef151292c8ce67c3011f1c0b512c38e0593f7102`
+- Size: 7538 bytes; 197 logical lines
+- Coverage: Complete text file reviewed, lines 1–197.
+- Purpose: Player attack cooldown-strength math and related client-side attack feedback, including attack-speed attribute use and hit-strength reset behavior.
+- Dependencies / cross-references: Player attribute values/modifiers, tick counter, last attack tick and the client combat/attack event path.
+- Implementation / logic: Computes elapsed ticks and normalized attack strength from attack speed (20 ticks/sec), clamps the result and supplies the scaling used by attack feedback/strength display.
+- Findings: The core cooldown calculation is small and understandable; its constants/formula are a good candidate for a 1.20.1 differential check. It is not the whole combat algorithm: critical hits, sweep, knockback, invulnerability, shields and server damage are outside this file.
+- RustChunk relevance: Directly relevant to responsive combat feel and accurate attack cooldown display.
+- Decision: **adaptable; reference; version-specific — reuse the formula only after matching Java 1.20.1 attack-strength behavior and attribute defaults.**
+- 1.20.1 implications: Check target attack-speed attributes and 1.20.1 Player attack strength scale/reset semantics; do not infer server damage from client cooldown alone.
+- Follow-up checks: Golden cases for default and modified attack speed, partial ticks, zero/negative/large speed, boundary at full cooldown and repeated attacks; integrate with separate combat tests.
+- RustChunk implementation mapping: Proposed `engine/player/combat/attack_cooldown`; independent of Android UI and server-side damage resolution.
+- Evidence required before adoption: Java 1.20.1 attack-strength vectors and player attribute fixtures; no combat tests were executed in this audit.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1048. `crates/horizon-client/src/attribute_updates.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e4de046ab2ee03c853d230450e70bfd4c3730693`
+- Size: 5236 bytes; 147 logical lines
+- Coverage: Complete text file reviewed, lines 1–147.
+- Purpose: Applies pending player attribute/health updates and reconciles derived movement state after changes.
+- Dependencies / cross-references: PlayerMotion, health/world update traits, live attribute world and waypoint-related state.
+- Implementation / logic: Consumes pending health/attribute changes, recomputes derived movement data and updates associated state such as waypoints after the player attribute set changes.
+- Findings: The attribute/health synchronization seam is useful, but waypoint behavior and current trait graph are Horizon integration details. The file alone does not define authoritative attribute packet parsing or the full 1.20.1 attribute catalogue.
+- RustChunk relevance: Useful for ensuring speed/jump/health values take effect consistently after equipment/effects or server updates.
+- Decision: **adaptable; reference; version-specific — keep the recomputation boundary but wire it to a dedicated 1.20.1 attribute model and packet adapter.**
+- 1.20.1 implications: Rebuild entity attribute IDs, default values, modifiers and update packet semantics from 1.20.1; omit Horizon-only waypoint side effects unless independently needed.
+- Follow-up checks: Test attribute add/remove/replace, modifier operation ordering, equipment/effect changes, health clamping and update timing against Java 1.20.1.
+- RustChunk implementation mapping: Proposed `engine/player/attributes` update coordinator feeding movement/health subsystems; no direct trait dependency on Horizon world state.
+- Evidence required before adoption: 1.20.1 attribute registry/packet golden vectors and deterministic movement/health recalculation tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1049. `crates/horizon-client/src/auto_jump.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bd7bdcbad08703810f846d5ab559b1d4e7c0c4e8`
+- Size: 8784 bytes; 235 logical lines
+- Coverage: Complete text file reviewed, lines 1–235.
+- Purpose: Implements geometry-based automatic jump detection and the decision to trigger a jump while moving toward an obstacle.
+- Dependencies / cross-references: Player movement vector/ground and collision state, AABB/collision shapes and nearby block/world queries.
+- Implementation / logic: Probes ahead/sideways for a traversable obstacle, checks supporting/ceiling collision conditions and jump-boost-adjusted height, then decides whether to request a jump.
+- Findings: The pure geometry/decision structure is useful for mobile movement controls, but collision and shape helpers are coupled to the current world model. Needs edge checks for stairs/slabs/fences, fluids, low ceilings and entity obstruction.
+- RustChunk relevance: Relevant to smooth touch movement and avoiding unnecessary jump presses.
+- Decision: **adaptable; reference; version-specific — preserve the obstacle-probe concept, but reproduce Java 1.20.1 auto-jump conditions over the target collision system.**
+- 1.20.1 implications: Reconstruct the exact 1.20.1 auto-jump setting, player pose, max step, collision shape and jump boost behavior. Do not let it override explicit touch/keyboard input.
+- Follow-up checks: Differential tests for stepable blocks, slabs/stairs, fences/walls, trapdoors, low ceilings, water, ladders, head collision, airborne/vehicle/spectator and intentional user jump.
+- RustChunk implementation mapping: Proposed `engine/player/movement/auto_jump` using the 1.20.1 collision-query interface; user input takes precedence.
+- Evidence required before adoption: Java 1.20.1 movement vectors and collision shapes, setting toggle tests and Android touch-control interaction tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1050. `crates/horizon-client/src/banner.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e50e213f1bf0ee8b3053b9e65de4136c920fd418`
+- Size: 10221 bytes; 280 logical lines
+- Coverage: Complete text file reviewed, lines 1–280.
+- Purpose: Banner, decorated banner and shield pattern presentation/data handling, including pattern layers, item metadata conversion, Loom categories and texture-facing rendering information.
+- Dependencies / cross-references: Current ItemStack component data, banner pattern registry/color mapping, Loom category tables, texture atlas/pattern resource mapping and tooltip presentation.
+- Implementation / logic: Reads the current banner-pattern component representation, resolves pattern IDs and dye colors, builds ordered layers/decoration data for banner/shield and exposes pattern catalog information for UI rendering.
+- Findings: The current file relies on data-component-era item metadata and newer registry/catalogue assumptions. Minecraft 1.20.1 stores banner patterns and related item data via legacy NBT (BlockEntityTag/Patterns); direct component serialization is not compatible. Loom itself exists in 1.20.1, but registry order/resource IDs must be rebuilt.
+- RustChunk relevance: Banner and shield visuals matter for inventory and world rendering; layer ordering and pattern texture concepts can be reused after NBT migration.
+- Decision: **rewrite required; reference; version-specific — reimplement the banner data bridge for 1.20.1 legacy NBT while retaining only the ordered-layer rendering model.**
+- 1.20.1 implications: Use 1.20.1 Pattern NBT entries and dye IDs, legacy BlockEntityTag handling and target banner pattern resources. Do not introduce modern `banner_patterns` components into the vanilla 1.20.1 item model.
+- Follow-up checks: Golden cases for every 1.20.1 banner pattern, color, order, shield decoration, empty/malformed NBT, inventory tooltip and Loom selection; compare texture outputs with Java.
+- RustChunk implementation mapping: Proposed `engine/items/banner_nbt` for legacy parsing plus shared render-layer model; no direct modern ItemStack component adapter.
+- Evidence required before adoption: Java 1.20.1 item/NBT fixtures, registry/pattern texture mapping and screenshot/golden layer parity.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1051. `crates/horizon-client/src/beehive.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `11b47818839abbb9c75ed7a0ffd5951d6842cf0a`
+- Size: 14860 bytes; 461 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–461, ending at EOF.
+- Purpose: Beehive and bee-nest gameplay logic: bee occupants, NBT storage, honey/pollination state, entering/leaving, emergency release and honey-related interactions.
+- Dependencies / cross-references: Bee/entity data, BeehiveBlockEntity NBT, flowers/tags, weather/time/night checks, block states and honey level, campfire/smoke path, sounds/particles and World update hooks.
+- Implementation / logic: Loads bee occupant data, simulates bee entry/exit and hive capacity, tracks nectar/pollen/honey progress and cooldowns, releases bees under normal/emergency conditions, updates hive block state and emits effects.
+- Findings: Beehive mechanics are relevant to 1.20.1 and largely predate the pinned snapshot. However current entity serialization/data structures and some tags/resources may be modern; verify exact 1.20.1 NBT fields, capacity/timing, weather/night and release ordering.
+- RustChunk relevance: Useful survival-gameplay subsystem with block entity persistence and entity behavior; should be ported as state machine plus world events rather than copied with Horizon types.
+- Decision: **adaptable; reference; version-specific — retain the hive state-machine structure after rebuilding NBT, bee entity and tag contracts for Java 1.20.1.**
+- 1.20.1 implications: Reconstruct 1.20.1 bee occupant NBT, max occupants, nectar/cooldown behavior, flower tags, honey level and emergency release semantics from target Java.
+- Follow-up checks: Test load/save roundtrip, full hive, entering/leaving, no flower, rain/night, smoke/soul campfire, fire, emergency release, honey harvest and chunk unload/reload.
+- RustChunk implementation mapping: Proposed `engine/world/block_entities/beehive` plus bee entity AI/event interfaces; all persistence goes through a versioned 1.20.1 NBT adapter.
+- Evidence required before adoption: Java 1.20.1 beehive NBT/state traces, deterministic tick tests and multiplayer block-entity update vectors.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1052. `crates/horizon-client/src/benchmark.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cf2bf02a31b29287c752dd9af3ce7de252e5670e`
+- Size: 23777 bytes; 616 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–616, ending at EOF.
+- Purpose: In-client benchmark scenario runner for repeatable scene setup, camera movement, frame/tick sampling and summary/reporting.
+- Dependencies / cross-references: World setup and seed/markers, chunk loading, camera/player controls, frame statistics, render/tick timing, GPU-pass instrumentation, benchmark state and platform memory/temperature data.
+- Implementation / logic: Defines scenario configuration and stage progression; prepares reproducible benchmark worlds, waits for chunk readiness, drives camera trajectories, collects frame-time/tick-time/CPU/GPU and optional memory/device signals, then emits a summary.
+- Findings: Useful benchmarking harness architecture, but scenarios, renderer hooks and device metric collection are Horizon-specific. Some GPU timing paths are backend-dependent and can be absent; synthetic benchmark data does not establish actual target-device performance unless executed on that device.
+- RustChunk relevance: Good basis for a RustChunk repeatable performance test suite, particularly to catch regressions in chunk loading, rendering and memory on Android.
+- Decision: **adaptable; reference; optional/future — reuse staged scenario/reporting ideas after integrating RustChunk-native metrics; do not import Horizon benchmark results.**
+- 1.20.1 implications: Build target scenarios around Minecraft 1.20.1 world data, target renderer, mobile chunk streaming and the Galaxy A22/Mali-G52 device; metric availability must be explicit.
+- Follow-up checks: Create deterministic scene seeds and readiness barriers, label unsupported GPU counters, measure p50/p95/p99 frame/tick, memory and thermal state, and compare cold/warm/reload scenarios.
+- RustChunk implementation mapping: Future `tools/bench` or in-game RustChunk diagnostics subsystem; not part of gameplay engine itself.
+- Evidence required before adoption: Repeated release-build runs on target Android ARM64/Mali device, raw CSV/trace artifacts, stable scene state and thermal-aware comparisons.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1053. `crates/horizon-client/src/bin/horizon-ctl/commands.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3ac2b1546141cb56ab233ee6be1c5d72fbde92b7`
+- Size: 63753 bytes; 908 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–908, ending at EOF.
+- Purpose: Single source-of-truth command catalogue for the Horizon desktop control CLI and its generated help, Markdown reference and MCP tool schemas.
+- Dependencies / cross-references: Command grouping/parameter type definitions, per-command flags, tool naming, JSON schema generation, line construction, destructive/network command annotations and CLI/MCP consumers.
+- Implementation / logic: Declares command names, usage, summaries, descriptions, examples and typed parameters across screenshots, UI, world editing, multiplayer, account, performance, touch layout, recording and scripting; derives overview/detail/Markdown, MCP schemas and argument-to-command lines.
+- Findings: This is development/automation tooling, not the in-game command parser nor gameplay engine. It exposes powerful operations including connect, account sign-in/files, world edits, LAN, recordings and scripts; generated MCP annotations help surface risk but do not themselves enforce permissions. It is desktop/Horizon CLI-specific.
+- RustChunk relevance: Useful model for a typed command registry and generated docs/tool schemas if RustChunk later needs developer automation. Not needed for the mobile client baseline, and importing the command set would expose unrelated and privileged functionality.
+- Decision: **unnecessary; reference; optional/future — exclude the Horizon CLI command surface from the core client; borrow the typed registry idea only for a separately scoped developer tool.**
+- 1.20.1 implications: No Minecraft 1.20.1 protocol semantics are implemented here. Any future tooling must target RustChunk's actual feature set and separate local-only, destructive and network actions.
+- Follow-up checks: If a CLI is later approved, define explicit allowlists, capability checks, confirmation for destructive/network/account actions, narrow file roots and independent MCP exposure review.
+- RustChunk implementation mapping: No RustChunk runtime mapping. Optional future `tools/rustchunk-cli` command registry, independent from the mobile engine and not created.
+- Evidence required before adoption: Separate product requirement, threat model for command capabilities and tests proving destructive/network/account actions cannot run without explicit permission.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1054. `crates/horizon-client/src/bin/horizon-ctl/launch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3034fe41d36a3865f70381ad8d687c7f65ec4cb7`
+- Size: 12734 bytes; 360 logical lines
+- Coverage: Complete text file reviewed, lines 1–360.
+- Purpose: Implements the Horizon desktop CLI launch path: resolves installed versions and prepared resources, starts the game process and connects to its local control channel.
+- Dependencies / cross-references: Version/install manifests, Java executable and game arguments, resource-preparation stamps, working directory, OS process APIs, stdout/stderr log forwarding and control-socket readiness.
+- Implementation / logic: Selects/validates a launch target, builds process command/environment, configures stdin/stdout/stderr, spawns the client, waits for readiness/control connection and forwards process exit/log state.
+- Findings: The process orchestration and readiness/timeout patterns are generally useful, but the exact binary layout, manifests, Java args, control socket and OS behavior belong to Horizon's desktop CLI. It does not provide Android Activity lifecycle or an Android-native game launch.
+- RustChunk relevance: Potential future desktop development harness reference; not part of RustChunk Android client implementation. The Android app should launch through its own lifecycle/native integration.
+- Decision: **adaptable; reference; optional/future — retain generic readiness/process-supervision ideas only if a desktop RustChunk development CLI is later required.**
+- 1.20.1 implications: The target 1.20.1 Java runtime/library set differs from the pinned Horizon version; this is not a 1.20.1 launch recipe or proof of successful Java/game execution.
+- Follow-up checks: If used for a separate desktop tool, audit process cancellation, socket permissions, inherited environment, working-directory bounds, log redaction and child shutdown/timeout behavior.
+- RustChunk implementation mapping: No Android runtime mapping; optional future `tools/rustchunk-cli/launch` for developer testing only.
+- Evidence required before adoption: A separately scoped desktop CLI requirement and process lifecycle tests on supported desktop OSes; no game launch was executed in this source review.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1055. `crates/horizon-client/src/bin/horizon-ctl/mcp.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `888238e35c64923fba6b59e1e4c32bedb75344cd`
+- Size: 10250 bytes; 256 logical lines
+- Coverage: Complete text file reviewed, lines 1–256.
+- Purpose: Serves the Horizon CLI as a Model Context Protocol stdio endpoint, exposing typed game/control actions and a screenshot tool to automation clients.
+- Dependencies / cross-references: commands.rs registry/schema/line_for, JSON-RPC framing, MCP initialize/tools/list/tools/call methods, CLI command execution and screenshot file access.
+- Implementation / logic: Reads line-delimited JSON-RPC, handles initialize and tool listing/call, validates arguments via generated schemas, maps tool calls to CLI commands and returns text or screenshot content.
+- Findings: This is optional developer automation, not a mobile game dependency. The endpoint can invoke high-impact commands; argument schema is not a substitute for authorization, consent or filesystem/network sandboxing. MCP protocol revision and tool behavior are versioned.
+- RustChunk relevance: Could support future automated RustChunk testing or agent-assisted diagnostics, but should be isolated from the production Android client and designed with explicit capabilities.
+- Decision: **unnecessary; reference; optional/future — exclude MCP server support from the base mobile client; consider a separate restricted testing adapter later.**
+- 1.20.1 implications: No Minecraft 1.20.1 game behavior is implemented. If future tools drive a target client, commands and result schemas must match RustChunk's own APIs and permissions.
+- Follow-up checks: Threat-model tool exposure, enforce action capabilities/consent, restrict paths, redact secrets and test malformed/oversized JSON-RPC, concurrency and process termination.
+- RustChunk implementation mapping: No production mapping. Optional future `tools/rustchunk-mcp` isolated test/diagnostic process, not created.
+- Evidence required before adoption: Separate automation requirement, security review and tests for capability enforcement, secret redaction, path/network boundaries and tool lifecycle.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1056. `crates/horizon-client/src/block_contact.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d2955e06260176427e71cd833d77146cd26d4049`
+- Size: 6654 bytes; 201 logical lines
+- Coverage: Complete text file reviewed, lines 1–201.
+- Purpose: Optional Horizon/NeoForge mod integration hook for block `stepOn`, `inside` and fall-on events, allowing mod blocks to react to entities.
+- Dependencies / cross-references: Horizon/NeoForge extension API, thread-local current level, block contact events, atomic detection flag, block registry/name/state and Entity/Mob context.
+- Implementation / logic: Provides a scoped thread-local level hook and a registered callback; emits contact events while ticking block interactions; records whether the current level contains a mod block and clamps incoming fall damage to finite nonnegative values.
+- Findings: This is an extension/mod compatibility hook, not vanilla client block behavior. It depends on NeoForge/Horizon mod lifecycle and block event contracts, which do not exist in the RustChunk baseline. A future mod bridge would need a separate architecture and security boundary.
+- RustChunk relevance: May inform a later plugin callback interface, but no direct relevance to the vanilla 1.20.1 milestone; do not introduce hidden thread-local hooks into core world simulation.
+- Decision: **unnecessary; version-specific — exclude from the vanilla RustChunk core; reconsider only as a separately scoped mod/plugin extension.**
+- 1.20.1 implications: Does not implement Forge 47.x and is not evidence of running Forge mods. Forge event/lifecycle/transform semantics require separate work.
+- Follow-up checks: If a future mod API is scoped, define explicit event ownership, callback isolation, panic/failure handling, reentrancy/thread model and server-authoritative rules.
+- RustChunk implementation mapping: No current RustChunk mapping. Future plugin API could expose typed block-contact events behind a separate extension crate; not created.
+- Evidence required before adoption: A concrete mod-support product requirement, architecture/security review and parity tests against actual target Forge 1.20.1 mods.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1057. `crates/horizon-client/src/block_entity_item.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2d84fa5808a3c36f4e27f14029def9959aa730b1`
+- Size: 26500 bytes; 662 logical lines
+- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–662, ending at EOF.
+- Purpose: Converts block-entity saved NBT into item data on creative pick-block and restores block-entity state when placing the item; also handles spawn-egg data, spawner entity display and operator-only warnings.
+- Dependencies / cross-references: block_entity_nbt canonicalization, ItemStack data components, NBT Compound/Tag/JavaString, container/loot/waxed/sign/banner/skull/decorated-pot/beehive data and op permissions.
+- Implementation / logic: Splits block-entity NBT into implicit item components and remaining block_entity_data; maps container slots, loot table, sign sides, bees, banner patterns, wax, pot decorations and profile; on placement merges permitted custom data, applies component defaults and canonicalizes; handles spawn-egg entity_data and spawner metadata.
+- Findings: This is deeply tied to the 26.3 data-component item model and includes later block entities such as shelf and trial spawner. Vanilla 1.20.1 uses the legacy ItemStack tag/BlockEntityTag, with different item/BE serialization and spawn-egg/spawner details. The pick/place round-trip idea is valuable, but this component schema is not portable.
+- RustChunk relevance: High-value behavior for creative pick-block, block placement, container contents and entity/spawner data preservation. Must be rebuilt around the 1.20.1 NBT schema rather than copying the component table.
+- Decision: **rewrite required; reference; version-specific — reimplement the pick/place round-trip as a version-specific 1.20.1 legacy NBT adapter.**
+- 1.20.1 implications: Do not emit `minecraft:block_entity_data`, `minecraft:container`, `minecraft:banner_patterns` or other modern components as vanilla 1.20.1 item data. Reconstruct `BlockEntityTag`, item tag and operator restrictions from target Java source.
+- Follow-up checks: Build round-trip fixtures for chest/container, furnace, beacon, sign, banner, skull/profile, beehive, command block/spawner, decorated pot only if present in target, spawn eggs and invalid/mismatched BE IDs; verify op gating and NBT canonicalization.
+- RustChunk implementation mapping: Proposed `engine/items/block_entity_tag_1_20_1` adapter separate from modern item components; no direct port of parts()/component mapping.
+- Evidence required before adoption: Java 1.20.1 pick-block/place-item golden NBT vectors, inventory/item-stack codecs, permission tests and save/load round-trips.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1058. `crates/horizon-client/src/block_pattern.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `291cdd5bd4fa88f5dcbb8238edfbf3ba4804316d`
+- Size: 10532 bytes; 281 logical lines
+- Coverage: Complete text file reviewed, lines 1–281.
+- Purpose: Generic block-pattern matching and consumption for structured constructions such as Wither, snow golem and iron golem patterns.
+- Dependencies / cross-references: BlockRegistry/state properties, World block queries, pattern definitions/orientations, block collision/shape or state predicates and world mutation/removal hooks.
+- Implementation / logic: Defines pattern blocks/predicates and orientation transforms; searches candidate origins/directions, matches required arrangement and returns matched positions/state; consumes or transforms blocks for the construction behavior.
+- Findings: The pattern-matching abstraction is broadly reusable, but pattern catalogue, block predicates, orientations and placement/removal semantics must match the target version. It should not be used to assume modern constructs exist in 1.20.1.
+- RustChunk relevance: Useful generic algorithm for golem/wither construction and future multiblock structures; separate pure pattern matching from world mutation and entity spawning.
+- Decision: **adaptable; reference; version-specific — reuse the generic orientation/match model after rebuilding only the 1.20.1 structure definitions and world update order.**
+- 1.20.1 implications: Confirm all target 1.20.1 patterns, block states and spawn rules; exclude structures and block-state variants introduced later.
+- Follow-up checks: Golden Java 1.20.1 arrangements for every orientation, partial/malformed pattern, nearby obstruction, snow/golem variants, wither skull order and block-consumption order.
+- RustChunk implementation mapping: Proposed `engine/world/patterns` generic matcher plus versioned 1.20.1 construction definitions and game-event hooks.
+- Evidence required before adoption: Java 1.20.1 source/data and deterministic world fixtures proving match result, entity spawn and block mutation order.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1059. `crates/horizon-client/src/block_predictions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f09284331e9356782b02e26c86395c34659a4b3a`
+- Size: 6151 bytes; 179 logical lines
+- Coverage: Complete text file reviewed, lines 1–179.
+- Purpose: Reconciles client-side predicted block changes with authoritative server block updates and sequence acknowledgements.
+- Dependencies / cross-references: World/chunk block state, client block interaction sequence IDs, server acknowledgement/update packets, player movement/teleport state and pending-prediction storage.
+- Implementation / logic: Tracks predicted block states by sequence and position; on authoritative acknowledgement or update, confirms/removes matching predictions, restores or applies server state and suppresses invalid rewinds around teleport/respawn transitions.
+- Findings: Core concept is essential for responsive block placement/breaking without visual disagreement. Current sequence/packet integration is Horizon version-specific; ordering, duplicate updates, sequence wrap and chunk unload handling need target protocol validation.
+- RustChunk relevance: Directly relevant to the user's concern about near chunks and blocks appearing/disappearing: predicted state reconciliation must never corrupt authoritative chunk data or hide missing chunk loads.
+- Decision: **adaptable; reference; version-specific — preserve the prediction/reconciliation state machine, but rebuild packet sequence/ack rules for Java 1.20.1.**
+- 1.20.1 implications: Check exact 1.20.1 block-change acknowledgement packet, sequence counter and handling of single/multi-block updates, failed interactions and teleport. Do not rely on newer packet ordering.
+- Follow-up checks: Test ack success/failure, update before ack, multi-block update, duplicate/stale sequence, wraparound, chunk unload/reload, dimension change, teleport and server correction with deterministic traces.
+- RustChunk implementation mapping: Proposed `engine/world/block_predictions` as a client prediction layer sitting above authoritative chunk storage; maintain explicit source-of-truth separation.
+- Evidence required before adoption: Java 1.20.1 client/server packet traces, deterministic race/order fixtures and Android walk/place/break tests at chunk boundaries.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
+
+### 1060. `crates/horizon-client/src/block_transform.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4cd1d6f94492a7c25846f85c53ef1de023e34b32`
+- Size: 9777 bytes; 269 logical lines
+- Coverage: Complete text file reviewed, lines 1–269.
+- Purpose: Data-driven block transformation registry for item interactions such as axe stripping, hoe tilling and shovel path creation.
+- Dependencies / cross-references: Modern block-transformer registry/resource JSON, block-state property changes, tool/item categories, sounds, particles and loot/result state.
+- Implementation / logic: Loads transformer definitions, resolves eligible block state/tool operations, applies state transformation and emits interaction feedback from data tables.
+- Findings: This is a newer registry-driven system from the pinned 26.3 snapshot. Vanilla 1.20.1 performs axe/hoe/shovel transformations through hard-coded item interaction maps/rules rather than this data-driven transformer registry. Current IDs, data schema and sound/particle tables cannot be adopted directly.
+- RustChunk relevance: The data-driven table architecture could help organize target-version interactions, but actual target rules must come from 1.20.1 item classes and block states.
+- Decision: **rewrite required; reference; version-specific — reconstruct 1.20.1 axe/hoe/shovel interactions independently; use the registry concept only as an internal table design if useful.**
+- 1.20.1 implications: Do not expect `minecraft:block_transformer` resources in 1.20.1. Rebuild axe stripping, wax removal, hoe tilling and shovel path actions, correct block predicates, waterlogging and tool damage/hand swing semantics.
+- Follow-up checks: Create Java 1.20.1 differential cases for all axe/hoe/shovel transformations, invalid states, waterlogged blocks, tool durability, interaction ordering and sound/particle outputs.
+- RustChunk implementation mapping: Proposed `engine/items/tool_interactions_1_20_1` with explicit target-version rules, not a loader for current transformer JSON.
+- Evidence required before adoption: 1.20.1 Java item interaction source and golden block-state/tool durability/event vectors.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android device runs were executed.
