@@ -106,3 +106,15 @@ At the end of the second 100-file half:
 - Next authorized checkpoint remains 1281–1300 under the existing 20-file rule. Do not change checkpoint size before this checkpoint closes.
 - After 1300, apply the user's proposed cadence: four 50-file reporting sections per 200-file stage, each made of two exact 25-file checkpoints. Stop at each 50-file boundary and await explicit authorization before starting the next section.
 - Backup policy unchanged: next backup only after entries 1001–2000 are complete and globally verified.
+
+
+## Cadence amendment — effective after entry 1300 (2026-11-19)
+
+- The accounting/closure boundary remains 200 unique files.
+- Divide each 200-file stage into four 50-file reporting sections.
+- Each 50-file section consists of two exact 25-file checkpoints. Complete both, update and verify the five audit documents, report the 50-file boundary, then STOP and wait for explicit user authorization before beginning the next 50.
+- For the active stage 1201–1400, entries 1201–1300 were completed under the former 20-file cadence. The next section is 1301–1350 (checkpoints 1301–1325 and 1326–1350); pause at 1350. Then, only after authorization, 1351–1400 (checkpoints 1351–1375 and 1376–1400); pause at 1400.
+- From stage 1401–1600 onward, apply the new cadence from the first entry: 1401–1450, 1451–1500, 1501–1550 and 1551–1600, each with two 25-file checkpoints and a user-approval pause after every 50.
+- Each 25-file checkpoint updates Ledger, Index, QA, Continuity and Protocol in one commit, followed by read-back verification of all five.
+- Backup cadence unchanged: only after entries 1001–2000 are fully committed and globally verified. No backup after 25 or 50.
+

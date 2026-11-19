@@ -6,37 +6,44 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed and committed entries: 1–1280.
+- Completed and committed entries: 1–1300.
 - Closed 200-file stage: 1001–1200 (200/200).
 - Active 200-file stage: 1201–1400.
-- Active half-stage: first half, 1201–1300.
-- First-half progress: 80/100 (80%); checkpoints 1201–1220, 1221–1240, 1241–1260 and 1261–1280 are committed and read-back verified.
-- Next checkpoint under the currently authorized old cadence: 1281–1300.
-- After 1281–1300 commits and verifies, stop at 100/200 and wait for a separate explicit user instruction before 1301–1400.
-- User's newly proposed cadence (to be recorded after reaching 1300): four 50-file reporting sections per 200-file stage; each 50 comprises two exact 25-file checkpoints; stop after each 50 and wait for explicit approval to begin the next 50.
-- Do not apply the new 25-file checkpoint size before the first half reaches 1300. Finish 1281–1300 under the old 20-file rule.
-- Active Ledger: AUDIT_LEDGER_1201_1400.md (one file for the complete 200-file stage).
+- Completed first 100-file section: 1201–1300 (100/200 overall).
+- Current authorization boundary: STOP. Do not inspect entry 1301 or later until the user explicitly authorizes the next 50-file section.
+- New cadence: four 50-file reporting sections per 200-file stage; each 50-file section has two exact 25-file checkpoints. After each 50, report and wait for explicit approval.
+- In the active stage, the first 50 (1201–1250) and second 50 (1251–1300) were completed using the old 20-file checkpoint rule because the change was made at 1300. The next 50 is 1301–1350, with checkpoints 1301–1325 and 1326–1350. After 1350, stop and await authorization for 1351–1400.
+- Next stage 1401–1600 follows the new rule from the start: 1401–1450, 1451–1500, 1501–1550, 1551–1600, each 50 composed of two exact 25-file checkpoints.
+- Active Ledger: AUDIT_LEDGER_1201_1400.md.
 - Index: AUDIT_INDEX.md. QA: AUDIT_QA_LOG.md. Protocol: AUDIT_PROTOCOL.md.
 
-The Index contains 1280 sequential rows and 1280 unique source paths. The active Ledger contains 80 entries (1201–1280), each with exactly 15 fields. Never repeat or renumber a source path.
+The Index contains 1300 sequential rows and 1300 unique source paths. The active Ledger contains 100 entries (1201–1300), each with exactly 15 fields. Never repeat or renumber a path.
 
 ## Pinned source
 
 - Upstream: starling-client/starling.
 - Pinned commit: 5432370d573642041585c69b40fb045b27133488.
-- Always inspect this exact revision and verify source SHA and byte size against its recursive tree.
+- Use only this exact revision for source inspection; verify SHA, byte size, line count and EOF.
 
 ## Mandatory cadence
 
 1. A 200-file stage remains the accounting and closure unit.
-2. Until the first half reaches 1300, retain the old cadence: exact 20-file checkpoints 1281–1300; stop and await approval before 1301.
-3. After 1300, record the new rule: four 50-file sections per 200-file stage; each section has two exact 25-file checkpoints. At each 50-file boundary, stop and await explicit approval before starting the next 50.
-4. Read each file fully. Files over 400 lines require contiguous gap-free ranges no larger than 400 lines.
-5. Every Ledger entry has exactly 15 required fields. Verify pinned SHA, byte size, line count and EOF coverage.
-6. After each checkpoint, update Ledger, Index, QA, Continuity and Protocol together in one commit, then re-fetch and verify all five.
-7. Verify sequential Index numbering, Ledger/Index alignment and global path uniqueness before proceeding.
-8. A 50-file pause is a reporting/authorization boundary, not a backup boundary.
-9. Backups remain due only after entries 1001–2000 are complete and globally verified.
+2. Divide each stage into four 50-file reporting sections.
+3. Each 50-file section has exactly two 25-file checkpoints, read completely and committed together as a checkpoint.
+4. After each 50-file section, update/report progress and stop until the user explicitly authorizes the next 50.
+5. Files over 400 lines must be read in contiguous, gap-free ranges of no more than 400 lines.
+6. Every Ledger entry has exactly 15 required fields. Verify source SHA, byte size, line count and complete EOF coverage.
+7. After each 25-file checkpoint, update Ledger, Index, QA, Continuity and Protocol together in one commit; re-fetch all five and verify.
+8. At each 50-file boundary, verify global sequential Index numbering, Ledger alignment and unique source paths before stopping.
+9. A 50-file pause is a reporting/authorization boundary, not a backup boundary.
+10. Backup only after entries 1001–2000 are complete and globally verified.
+
+## Transition rule for the active stage
+
+- Entries 1201–1300 were completed under the former 20-file checkpoint rule.
+- New cadence begins with 1301–1350 (two 25-file checkpoints), then pause.
+- Next after separate approval: 1351–1400 (two 25-file checkpoints), then pause.
+- Do not begin 1301 before explicit user approval.
 
 ## Decision vocabulary
 
@@ -56,18 +63,18 @@ Reading embedded tests is not running them. Never claim build, APK, Forge launch
 ## Closed stage 1001–1200
 
 - All ten exact 20-file checkpoints through 1181–1200 were committed and verified.
-- Index at 1200 was globally checked; historical duplicate 1089 corrected to blockctl.rs, with entry.rs only at entry 121.
+- Historical duplicate 1089 corrected to blockctl.rs; entry.rs only at entry 121.
 - No build, APK, Forge launch, device or server test was run.
 
 ## Active stage 1201–1400
 
-- Checkpoints 1201–1220, 1221–1240, 1241–1260 and 1261–1280 are committed and their five-document read-backs verified.
-- Index has 1280 sequential entries, 1280 unique paths, zero duplicates.
-- First half progress is 80/100. Next and only authorized checkpoint is 1281–1300.
-- After 1300, update protocol to the new 4×50 reporting sections / 2×25 checkpoints rule, then stop and wait for approval before 1301.
-- No files 1281+ have been started in this checkpoint.
+- Entries 1201–1300 complete and committed; Index 1300 rows/1300 unique paths, zero duplicates.
+- First 100 of 200 complete. No files 1301+ have been started.
+- New 4×50 cadence is active from 1301: two exact 25-file checkpoints per 50; pause for approval after each 50.
+- Next authorized work only after user's explicit approval: entries 1301–1325, then 1326–1350; stop at 1350.
+- The current Ledger is one file for all 200 entries; do not split it by 50.
 
 ## Historical duplicate corrections
 
 - In entries 1–1000, duplicate slots 631, 632, 633, 754, 762 and 766 were replaced by six unique paths: pick_block_data_fixture.rs, place_recipe_fixture.rs, player_sync_fixture.rs, raid_fixture.rs, random_tick_sections_probe.rs and recipe_book_fixture.rs.
-- Entry 1089 was corrected from duplicate entry.rs to crates/horizon-client/src/game/blockctl.rs. Entry 121 remains the only entry.rs.
+- Entry 1089 corrected to crates/horizon-client/src/game/blockctl.rs. Entry 121 remains the only entry.rs.

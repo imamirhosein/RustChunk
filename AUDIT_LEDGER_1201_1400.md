@@ -1370,3 +1370,343 @@
 - Evidence required before adoption: 1.20.1 Java source/data, seeded mob-spawn fixtures, loot/enchantment NBT and Forge finalize/raid event traces.
 - Completion state: COMPLETE — 227 logical lines read to EOF; SHA and 8737-byte tree size match; embedded tests inspected, not run.
 
+### 1281. `crates/horizon-client/src/game/mob_index.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `052a292348f361155e100078d07b0bfcabef2a12`
+- Size: 3216 bytes; 90 logical lines
+- Coverage: 1–90 (EOF)
+- Purpose: Provides a cached network-entity-ID to mob-vector-index lookup with validation and rebuild-on-miss.
+- Dependencies / cross-references: Mob vector, spawn/remove/dimension-swap paths and every packet handler that resolves a mob ID.
+- Implementation / logic: Checks a cached index against the current slice; if stale or missing, falls back to linear search and rebuilds the map.
+- Findings: The cache tolerates unannounced vector mutations because every hit is validated. It assumes entity IDs are unique; rebuilding the whole map on every miss may be costly under churn.
+- RustChunk relevance: Highly adaptable optimization for packet-heavy multiplayer entity updates and large farms.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Port only after profiling; retain validation/fallback semantics and confirm all target packet entity IDs are unique within the active level.
+- Follow-up checks: Benchmark 3,000+ entities, mass spawn/removal, ID reuse, dimension swap, duplicate-ID defense and stale-index invalidation.
+- RustChunk implementation mapping: Possible game/entities/mob_index.rs wrapping Vec<Mob> lookup; not created.
+- Evidence required before adoption: Correctness property tests against linear search, packet-load benchmarks and entity-ID lifecycle traces.
+- Completion state: COMPLETE — 90 logical lines read to EOF; SHA and 3216-byte size match pinned tree; embedded tests inspected, not run.
+
+### 1282. `crates/horizon-client/src/game/mob_looting.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `11866dae86d99a8b17d409c5ae56425d5edf9d85`
+- Size: 8461 bytes; 201 logical lines
+- Coverage: 1–201 (EOF)
+- Purpose: Implements mob item pickup and equipment replacement: armor/weapons, drop chance for replaced gear and pickup advancements.
+- Dependencies / cross-references: Dropped item entities, mob species/AI, equipment slots, item attributes/enchantments, item tags, local RNG and mob-griefing gamerule.
+- Implementation / logic: Scans eligible nearby item entities, checks species pickup preferences, compares candidate gear facts with worn gear, equips a stack and may drop the replaced stack.
+- Findings: Mob gear pickup exists in 1.20.1. The code references newer spear and disliked-weapon tags and modern item/equipment data; target-era item tags and attribute/NBT representation differ.
+- RustChunk relevance: Adaptable integrated-server behavior; a remote client should display authoritative equipment and pickup events, not simulate them.
+- Decision: **adaptable; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 pickup reach, mob-griefing gate, equipment preference, armor/weapon comparison, Binding Curse and drop chance using legacy item NBT and target tags.
+- Follow-up checks: Compare mob species eligibility, item tag availability, RNG draw order, armor fallback to main hand, drop chance, persistence and pickup advancement attribution.
+- RustChunk implementation mapping: Possible game/mobs/looting_1_20_1.rs and game/items/equipment_compare.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, target item tags, seeded gear fixtures and Forge mob-pickup event tests.
+- Completion state: COMPLETE — 201 logical lines read to EOF; SHA and 8461-byte size match; embedded tests inspected, not run.
+
+### 1283. `crates/horizon-client/src/game/mob_sounds.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e74ee36e98b6be895c2d10626b363728c846498e`
+- Size: 5601 bytes; 136 logical lines
+- Coverage: 1–136 (EOF)
+- Purpose: Starts and maintains looping bee, guardian and sniffer sounds, plus later Happy Ghast/Nautilus riding loops.
+- Dependencies / cross-references: Mob species/anger/attack state, entity event 21, sound engine instances, rider state, underwater and velocity metadata.
+- Implementation / logic: Tracks per-entity sound loops, restarts bee loops when anger changes, starts guardian attack hum on event 21 and follows riding entity motion.
+- Findings: Bee buzz and guardian attack hum are target-era; Sniffer is 1.20.1. Happy Ghast and Nautilus riding loops are later additions and must be excluded.
+- RustChunk relevance: Adaptable client audio subsystem driven by server entity events and synchronized state.
+- Decision: **adaptable; version-specific**
+- 1.20.1 implications: Keep 1.20.1 bee/guardian/sniffer loops and event mapping; remove Happy Ghast/Nautilus species and ensure pause, unload, death and silent flags stop instances.
+- Follow-up checks: Verify entity event 21, bee anger transitions, sniffer digging condition, silent/unload/death cleanup, audio pause and repeated-start suppression.
+- RustChunk implementation mapping: Possible audio/mob_loops_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 sound event registry, entity-event packet traces and deterministic sound-instance lifecycle tests.
+- Completion state: COMPLETE — 136 logical lines read to EOF; SHA and 5601-byte size match; no audio playback was run.
+
+### 1284. `crates/horizon-client/src/game/mobile_controls.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `3dbb3f39d4a598818876fe0138e97229c3fcec60`
+- Size: 82783 bytes; 2035 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2035 (contiguous to EOF)
+- Purpose: Implements Android touch controls, virtual mouse, custom bindings, keyboard/preset input, haptics, gestures, inventory/menu touch and contextual interaction.
+- Dependencies / cross-references: Android IME/platform bridge, touch-control settings/editor, winit events, gamepad, player/item use, menus, inventory, renderer and custom mod input.
+- Implementation / logic: Maintains touch ownership and control modes, translates gestures and virtual pointer events into keyboard/mouse/gamepad actions, routes touch UI commands and releases held keys on lifecycle/menu changes.
+- Findings: Directly relevant to Android-first UX, but tightly coupled to Horizon UI/JNI and current control library. `native_key_event(key, down, false)` is called twice consecutively in one custom-token path; verify whether this duplicates an event before porting. `ForceKill` exits the process immediately.
+- RustChunk relevance: Essential mobile-input domain; rewrite/adapt into RustChunk-owned Android input state and lifecycle boundaries.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Build a minimal 1.20.1 touch layer first: movement/look, attack/use, jump/sneak, hotbar, inventory, virtual pointer and Android keyboard; remove Horizon-specific GoyControl, preset catalog and mod commands.
+- Follow-up checks: Audit duplicate native key dispatch, touch cancel/focus loss, multi-touch ownership, stuck-key prevention, inventory drag, virtual mouse release, keyboard composition, process exit and Android pause/resume.
+- RustChunk implementation mapping: Possible platform/android/{touch_controls,virtual_pointer,ime}.rs plus game/input/mobile_router.rs; not created.
+- Evidence required before adoption: Android NDK event fixtures, Galaxy A22 touch latency, cancellation/lifecycle tests, keyboard Unicode cases and no-duplicate key-event assertions.
+- Completion state: COMPLETE — 2035 logical lines read in six contiguous ranges through EOF; SHA and 82783-byte size match; embedded tests inspected, not run.
+
+### 1285. `crates/horizon-client/src/game/mobile_controls/mobile_platform.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `df2067cbf3bdd3d4a757a19567da95760b8b460f`
+- Size: 2696 bytes; 86 logical lines
+- Coverage: 1–86 (EOF)
+- Purpose: Bridges the mobile control layer to Android text mirror, keyboard events, vibration and opening the Reports folder.
+- Dependencies / cross-references: Android JNI text mirror, generation IDs, keyboard event queue, platform folder opener, widgets and gamepad haptics.
+- Implementation / logic: Shows/hides an Android text mirror, rejects stale-generation edits, diffs text into backspaces plus insertion, maps action/key events and forwards vibration/document requests.
+- Findings: Useful platform seam, but uses Horizon's Android bridge and a global mutex. Text diff is character-based; cursor/selection semantics are not represented here.
+- RustChunk relevance: Adaptable platform boundary; keep OS/JNI details out of common game logic.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Implement a RustChunk Android input bridge with generation-safe IME updates, SAF folder opening and lifecycle-aware vibration; do not copy Horizon package paths.
+- Follow-up checks: Test stale IME generations, Unicode combining sequences, selection/cursor behavior, concurrent show/hide, mutex poisoning and vibration cancellation on pause.
+- RustChunk implementation mapping: Possible platform/android/text_mirror.rs and platform/android/document_picker.rs; not created.
+- Evidence required before adoption: Android JNI/NDK contract, Unicode IME tests, lifecycle traces and scoped-storage permission tests.
+- Completion state: COMPLETE — 86 logical lines read to EOF; SHA and 2696-byte size match; no Android bridge was run.
+
+### 1286. `crates/horizon-client/src/game/mod_api_host.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `39830ea73f84a0bb43cf2aba041ac2e228294af4`
+- Size: 9587 bytes; 271 logical lines
+- Coverage: 1–271 (EOF)
+- Purpose: Hosts the Horizon native-mod API for level reads/writes, attachments, random ticks, scheduled block/fluid ticks and authoritative entity access.
+- Dependencies / cross-references: Native mod API traits, block/chunk/block-entity NBT, player/guest records, entity UUID/index, world ticks, LAN state and generated Host methods.
+- Implementation / logic: Resolves Level/Chunk/BlockEntity/Entity/Player attachment holders, records sync targets, prunes removed entity attachments and implements LevelHost/LevelRandomHost/LevelTicksHost/LevelWriteHost.
+- Findings: This is a broad proprietary mod host with server-authoritative world mutation and LAN guest state, not Forge's extension API. Attachment data persistence and sync are tightly coupled to Horizon NBT/world internals.
+- RustChunk relevance: Exclude as an implementation; use only as a reference when defining a deliberately smaller Forge-facing API.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Do not expose arbitrary world writes, teleport/kill or command execution through a client-only mod interface. Map only actual Forge 1.20.1 events/capabilities and explicit server-side permissions.
+- Follow-up checks: Threat-model attachment holder spoofing, chunk/block-entity save ordering, guest UUID cleanup, sync floods, stale entity IDs and world mutation authority.
+- RustChunk implementation mapping: No baseline mapping; possible narrowly scoped forge/mod_bridge.rs after Forge API design.
+- Evidence required before adoption: Forge 47.4.x API contract, mod permission model, server-authority boundary and attachment persistence/security tests.
+- Completion state: COMPLETE — 271 logical lines read to EOF; SHA and 9587-byte size match; no mod API was executed.
+
+### 1287. `crates/horizon-client/src/game/mod_api_host_generated.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4f2278e112fe230caea776f68420805d569045a0`
+- Size: 17834 bytes; 543 logical lines
+- Coverage: 1–400, 401–543 (contiguous to EOF)
+- Purpose: Generated implementation of the large Horizon native-mod Host trait, forwarding mod calls to Game's native_* methods.
+- Dependencies / cross-references: mod_api_host.rs, mod API trait schema/generator, entity/world/item/container/recipe/GUI/render/network helpers and xtask mod-api generation.
+- Implementation / logic: Implements dozens of methods for drawing, world mutation, player inventory, commands, mod settings, recipes, fluid/item transfer, entity access and custom networking.
+- Findings: Generated glue is not a standalone subsystem and must not be edited or copied independently of its generator/schema. Its breadth grants mods extensive game and server powers.
+- RustChunk relevance: Exclude from the 1.20.1 baseline; a future mod API should generate its bindings from a RustChunk-owned minimal schema.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not port Horizon's Host surface or native_* names; if a mod bridge is needed, generate a constrained API with explicit capability checks and target-version types.
+- Follow-up checks: Inspect generator/schema before any adoption; inventory every privileged method, thread/side restriction, network payload limit and mod identity check.
+- RustChunk implementation mapping: No direct mapping; possible future mod_api/generated_host.rs generated from RustChunk's own schema.
+- Evidence required before adoption: Reviewed API schema/generator, security model, permission tests, bounded payload tests and Forge 1.20.1 compatibility fixtures.
+- Completion state: COMPLETE — 543 logical lines read in contiguous ranges 1–400 and 401–543; SHA and 17834-byte size match; generated tests were not run.
+
+### 1288. `crates/horizon-client/src/game/mod_assets.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2bdc37dea236ba216723c2a73e5b0c2d062dfc8a`
+- Size: 7364 bytes; 203 logical lines
+- Coverage: 1–203 (EOF)
+- Purpose: Downloads a content mod's asset JAR from Modrinth, resumes partial transfers, checks SHA-512 and unpacks the manifest-selected assets.
+- Dependencies / cross-references: horizon_mods manifest/fetch helpers, Modrinth version/file API, ureq, filesystem cache, progress callback and Mods page failure status.
+- Implementation / logic: Requests a version URL, downloads in byte ranges, retries quiet failures, verifies exact size and SHA-512, renames the verified JAR and delegates unpacking.
+- Findings: Asset-only retrieval is distinct from executing mod code; integrity is checked. Archive extraction safety is delegated to horizon_mods::fetch::unpack and was not audited in this file.
+- RustChunk relevance: Optional launcher/content-mod service, not needed for vanilla multiplayer or protocol compatibility.
+- Decision: **adaptable; optional/future**
+- 1.20.1 implications: If RustChunk supports content packs, use explicit consent, pinned HTTPS sources, verified hashes, strict archive path/size limits and atomic installation; do not require Modrinth.
+- Follow-up checks: Audit unpack() for zip-slip, symlinks, duplicate paths, decompression bombs, manifest allow-list, partial rollback, redirects and cache poisoning.
+- RustChunk implementation mapping: Possible launcher/content_assets.rs isolated from the game runtime; not created.
+- Evidence required before adoption: Archive extraction security review, Modrinth/other provider terms, hash fixtures, interrupted download tests and atomic install/rollback tests.
+- Completion state: COMPLETE — 203 logical lines read to EOF; SHA and 7364-byte size match; no download/unpack was run.
+
+### 1289. `crates/horizon-client/src/game/mod_catalog.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `856be7f82e3e0fd5247e2f63b10fecb4b0f0178f`
+- Size: 34967 bytes; 1010 logical lines
+- Coverage: 1–400, 401–800, 801–1010 (contiguous to EOF)
+- Purpose: Implements the Android in-game catalog screen for mods, resource packs and shader packs: search, paging, install progress and confirmed removal.
+- Dependencies / cross-references: starling_catalog search/install/remove, native_builds UI helpers, Android touch/IME, game directories, installed-file scans, worker threads and Mods/pack/shader state.
+- Implementation / logic: Draws shelves and rows, debounces search, pages a shared feed, runs installs on a worker thread, reports progress/results and confirms destructive removal before deleting files.
+- Findings: This is launcher/catalog UX, not Minecraft 1.20.1 gameplay. It trusts starling_catalog for download/install details; thread completion and folder refresh behavior need the provider's own audit.
+- RustChunk relevance: Optional launcher feature if an in-app catalog is desired; not necessary for connecting to Forge servers.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Keep mod/pack management outside the game core; if built, use SAF/scoped storage, explicit confirmation, signed/hash-verified sources and transactional installs.
+- Follow-up checks: Audit starling_catalog install/remove path validation, archive extraction, duplicate installs, concurrent search/install, worker shutdown, disk-full and deletion rollback.
+- RustChunk implementation mapping: Possible launcher/catalog_screen.rs with provider abstraction; not created.
+- Evidence required before adoption: Catalog provider security audit, Android storage tests, concurrent task tests, install rollback and destructive-action UX review.
+- Completion state: COMPLETE — 1010 logical lines read in contiguous ranges 1–400, 401–800 and 801–1010; SHA and 34967-byte size match; no catalog operation was run.
+
+### 1290. `crates/horizon-client/src/game/mods.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `655897741a6273125f22b91515b56009af21241a`
+- Size: 29203 bytes; 700 logical lines
+- Coverage: 1–400, 401–700 (contiguous to EOF)
+- Purpose: Loads world-tied content mods and their assets, registers mod blocks/items/effects/entities/menus and lists content/native/WebAssembly mod status.
+- Dependencies / cross-references: horizon_mods packages/manifests, resource-root builder, registries, mod-list state, native hooks/builds, item components, world_content and protocol mod list.
+- Implementation / logic: Resolves enabled mods against world registry set, fetches assets, validates and merges content, registers mod effects/entity/menu types and builds a resource overlay.
+- Findings: Content mods and world-specific registry compatibility are useful concepts, but Horizon's .hmod/.hnmod formats, registry sync and native-code model are proprietary. Native mods run with full game access; WASM path is explicitly retired.
+- RustChunk relevance: Adaptable high-level content-mod lifecycle, not a direct Forge loader substitute.
+- Decision: **adaptable; rewrite required; optional/future**
+- 1.20.1 implications: For Forge 1.20.1, rely on the actual Forge mod loader, mod handshake and registry synchronization. Do not invent a parallel .hmod format or run untrusted native libraries.
+- Follow-up checks: Audit package validation, registry mismatch handling, world-tied mod sets, asset cache integrity, duplicate IDs, native hook trust and server/client side enforcement.
+- RustChunk implementation mapping: Possible launcher/mod_inventory.rs only; game-side integration must use Forge 47.4.x semantics; not created.
+- Evidence required before adoption: Forge 1.20.1 mod-list/handshake fixtures, registry sync tests, mod trust model and content asset security review.
+- Completion state: COMPLETE — 700 logical lines read in contiguous ranges 1–400 and 401–700; SHA and 29203-byte size match; embedded tests inspected, not run.
+
+### 1291. `crates/horizon-client/src/game/mount_menu.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `1b967d7db3f8222dd4b6d87bfc627d744e8f1fa0`
+- Size: 23717 bytes; 634 logical lines
+- Coverage: 1–400, 401–634 (contiguous to EOF)
+- Purpose: Implements horse-family mount inventory UI, saddle/armor/chest slots, slot rules, shift-click, remote menu opening and mount preview rendering.
+- Dependencies / cross-references: Horse/donkey/mule/llama species, item stacks, container slot IDs, mount entity metadata, menu packets, inventory clicks and UI atlas.
+- Implementation / logic: Builds a mount-specific inventory view, maps saddle/body/chest slots, validates items, synchronizes local mount state and accepts server-owned remote menu contents.
+- Findings: Horse, donkey, mule and llama inventories are target-era; Nautilus inventory/armor is later and must be removed. Internal slot constants 700/701/710 are local indexes, not vanilla protocol IDs.
+- RustChunk relevance: Essential container UI behavior for mount interaction; server remains authoritative for remote menu content/click results.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Implement 1.20.1 horse/donkey/mule/llama menu layouts and packets, legacy horse armor/carpet NBT and target slot numbering; exclude Nautilus.
+- Follow-up checks: Check llama strength columns, chested donkey/mule rows, saddle/armor acceptance, shift-click ordering, distance/death close, remote slot sync and malformed menu contents.
+- RustChunk implementation mapping: Possible ui/menus/mount_inventory_1_20_1.rs and network/container_menu.rs; not created.
+- Evidence required before adoption: 1.20.1 AbstractHorse/horse menu source, container packet captures, slot fixtures and Forge inventory click tests.
+- Completion state: COMPLETE — 634 logical lines read in contiguous ranges 1–400 and 401–634; SHA and 23717-byte size match; no menu was run.
+
+### 1292. `crates/horizon-client/src/game/mounts.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a4dc01b1caa464b592d6ac179ae1997e8952568a`
+- Size: 43042 bytes; 1086 logical lines
+- Coverage: 1–400, 401–800, 801–1086 (contiguous to EOF)
+- Purpose: Implements mount interaction, feeding, saddling, horse jump charging, rider input/position, dismount collision search, mount fall damage and HUD bars.
+- Dependencies / cross-references: Horse/donkey/mule/camel/pig/strider/llama, later Happy Ghast/Nautilus/CamelHusk, player motion/pose, item durability, world collision/fluid, events and LAN guest state.
+- Implementation / logic: Routes species-specific interaction, applies food/taming/equipment, calculates jump strength, sends rider controls, positions the player and searches safe dismount locations including lava-aware Strider rules.
+- Findings: Horse, donkey, mule, camel, pig, strider and llama behaviors are relevant to 1.20.1. Happy Ghast, Nautilus, Zombie Nautilus and CamelHusk are later additions; LAN guest handling is Horizon-specific.
+- RustChunk relevance: Essential mount gameplay reference; rewrite target species and separate remote client prediction from server authority.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 horse-family feeding/taming/saddle/chest, pig/strider steering, camel dash/sit, jump charge, passenger offsets and safe dismount; exclude later species.
+- Follow-up checks: Compare feeding table, tame/buck events, jump thresholds, rider input, pose/collision dismount candidates, water/lava cases, fall propagation and item durability.
+- RustChunk implementation mapping: Possible game/mounts/{interaction,riding,dismount,inventory}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, seeded interaction fixtures, vehicle packet traces, collision scenes and Forge mount event tests.
+- Completion state: COMPLETE — 1086 logical lines read in contiguous ranges 1–400, 401–800 and 801–1086; SHA and 43042-byte size match; embedded tests inspected, not run.
+
+### 1293. `crates/horizon-client/src/game/moving_pistons.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `654ade5381ccd5cfd4fa585741fd2d43740c38bf`
+- Size: 6974 bytes; 167 logical lines
+- Coverage: 1–167 (EOF)
+- Purpose: Renders moving piston block entities with interpolated block geometry and a temporary fallback while the destination chunk mesh is pending.
+- Dependencies / cross-references: MovingPistonState, piston block states, chunk meshing/dirty sections, pending GPU uploads, camera, block tint/light and renderer vertex buffers.
+- Implementation / logic: Combines live and just-finished piston states, calculates interpolated offsets, builds piston head/base geometry and retains a finished visual until the chunk mesh upload is ready.
+- Findings: Pistons are target-era. The fallback specifically prevents a visual gap/z-fighting while a chunk mesh catches up; this is renderer-specific and must not change server block state.
+- RustChunk relevance: Highly relevant rendering reference for smooth block transitions and avoiding visual holes during asynchronous chunk rebuilds.
+- Decision: **adaptable; version-specific**
+- 1.20.1 implications: Port target piston interpolation and a bounded visual fallback keyed to chunk section mesh/upload state; keep authoritative world/chunk data separate from transient render state.
+- Follow-up checks: Test extend/retract, sticky pull, head shortness threshold, chunk unload, mesh dirty/upload races, light/tint, camera movement and fallback expiry.
+- RustChunk implementation mapping: Possible render/blocks/moving_piston.rs and streaming/section_upload_state.rs; not created.
+- Evidence required before adoption: 1.20.1 piston state fixtures, frame-by-frame render goldens and asynchronous chunk mesh/upload race tests.
+- Completion state: COMPLETE — 167 logical lines read to EOF; SHA and 6974-byte size match; no renderer test was run.
+
+### 1294. `crates/horizon-client/src/game/music.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4b0a0a064eeca8aab274c8ab64aab5350298631b`
+- Size: 13096 bytes; 328 logical lines
+- Coverage: 1–328 (EOF)
+- Purpose: Selects situational/background music, manages music frequency and pause behavior, ambient player sounds, sound engine ticking and now-playing toast.
+- Dependencies / cross-references: Dimension/biome music tables, music options, ambient sound registry, player fluid/light state, sound engine, mob/vehicle loop contexts and UI toast state.
+- Implementation / logic: Chooses music from screen/dimension/biome/boss/underwater situation, applies volume/frequency/off-track filters, pauses/resumes audio and ticks ambient sound handlers.
+- Findings: Music and ambient sound selection are target-era, but native mod music layers and Horizon extras are proprietary extensions; sound registries and option keys must match 1.20.1.
+- RustChunk relevance: Adaptable client audio subsystem; useful after core rendering/input/network stability.
+- Decision: **adaptable; version-specific**
+- 1.20.1 implications: Use 1.20.1 music definitions, biome/dimension tags, music delay/frequency and ambient event data; exclude native mod layers and optional Music page.
+- Follow-up checks: Compare music situation priority, biome lookup, music delay/RNG, pause/resume, underwater transitions, sound listener and toast settings.
+- RustChunk implementation mapping: Possible audio/music_manager_1_20_1.rs and audio/ambient_handlers.rs; not created.
+- Evidence required before adoption: 1.20.1 sounds.json/music data, seeded music-selection traces and audio lifecycle tests on Android.
+- Completion state: COMPLETE — 328 logical lines read to EOF; SHA and 13096-byte size match; no audio playback was run.
+
+### 1295. `crates/horizon-client/src/game/names.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `048b855ce2bef59ea8b861c8b954549eded52c56`
+- Size: 30307 bytes; 757 logical lines
+- Coverage: 1–400, 401–757 (contiguous to EOF)
+- Purpose: Builds and renders mob/player/armor-stand/item-frame name tags, scoreboard team visibility/colors, below-name scores and remote name metadata.
+- Dependencies / cross-references: Mob/player UUID/profile names, scoreboard objectives/teams, item frames, armor stands, entity visibility, camera, font atlas, text layers and mod name hooks.
+- Implementation / logic: Collects eligible names by distance/target/team rules, composes styled text and scores, computes pose-relative positions and submits depth-tested/faded/see-through text geometry.
+- Findings: Name tags, scoreboard visibility and below-name scores are target-era. Mannequin/mod API hooks and custom own-name display are extensions; later text/item metadata must be translated to 1.20.1 components/legacy formatting.
+- RustChunk relevance: Essential rendering and scoreboard presentation for multiplayer clients.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 team visibility rules, custom-name metadata, player profile names, armor-stand/frame name display, below-name objective and camera-facing text geometry.
+- Follow-up checks: Compare 64/10-block thresholds, team visibility modes, invisible entities, discrete crouch tags, pose height, scoreboard formats, frame target rules and remote player lifecycle.
+- RustChunk implementation mapping: Possible render/name_tags_1_20_1.rs with scoreboard/name resolver and text geometry; not created.
+- Evidence required before adoption: 1.20.1 scoreboard/team packets, entity metadata, player-info fixtures and render goldens.
+- Completion state: COMPLETE — 757 logical lines read in contiguous ranges 1–400 and 401–757; SHA and 30307-byte tree size match; embedded tests inspected, not run.
+
+### 1296. `crates/horizon-client/src/game/narrator.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `38d2a892998c292f4421e56a2c7c9a14a387a9dc`
+- Size: 13726 bytes; 340 logical lines
+- Coverage: 1–340 (EOF)
+- Purpose: Integrates text-to-speech narrator status, keyboard hotkey, screen narration, input narration and narrator toggle toast.
+- Dependencies / cross-references: horizon-narrator library, settings/voice volume, clipboard shortcut detection, screen widget narration, keyboard/mouse events and toast manager.
+- Implementation / logic: Initializes narrator, syncs status/volume, cycles Off/All/System, narrates screen and input actions, queues chat/system speech and draws status toast.
+- Findings: Accessibility narration is useful, but the TTS backend and exact screen narration API are platform-specific. This module gracefully continues when TTS fails.
+- RustChunk relevance: Optional accessibility feature; do not block the game from launching if Android TTS is unavailable.
+- Decision: **adaptable; optional/future**
+- 1.20.1 implications: Integrate Android TextToSpeech/accessibility APIs separately from game protocol; preserve keyboard navigation narration and fallback when service is missing.
+- Follow-up checks: Test TTS initialization failure, voice volume, status cycle, focus/edit fields, delayed narration, screen changes, Android language support and lifecycle shutdown.
+- RustChunk implementation mapping: Possible accessibility/narrator.rs plus platform/android/tts.rs; not created.
+- Evidence required before adoption: Android TTS API behavior, TalkBack interaction tests, localization fixtures and no-service fallback tests.
+- Completion state: COMPLETE — 340 logical lines read to EOF; SHA and 13726-byte size match; embedded tests inspected, not run.
+
+### 1297. `crates/horizon-client/src/game/native_biome_colors.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `466fc4be3daab5a1cd11c1ca359a92dc8b9bea20`
+- Size: 1930 bytes; 42 logical lines
+- Coverage: 1–42 (EOF)
+- Purpose: Allows Horizon native mods to recolor biome grass/foliage/water and triggers chunk/LOD resource rebuild when colors change.
+- Dependencies / cross-references: Native mod callback, biome base/current color tables, renderer worker context, LOD cache and section streaming.
+- Implementation / logic: Recomputes biome colors from the base table, compares against current colors, clears LOD and reloads renderer resources when changed.
+- Findings: This is a proprietary mod callback, not vanilla behavior. The invalidation pattern is reusable for dynamic biome tint but rebuilding every loaded section can be expensive.
+- RustChunk relevance: Exclude native API; retain only the renderer invalidation concept if dynamic seasons/colors are implemented.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not expose a Horizon native callback; implement resource-pack/Forge biome color hooks and schedule bounded chunk remeshing on color changes.
+- Follow-up checks: Measure remesh cost, prevent per-frame invalidation, verify world-specific biome tables and synchronize tint updates with far-terrain cache.
+- RustChunk implementation mapping: Possible render/biome_color_invalidation.rs only if required; not created.
+- Evidence required before adoption: 1.20.1 Forge biome color event/API, chunk remesh benchmark and LOD cache consistency tests.
+- Completion state: COMPLETE — 42 logical lines read to EOF; SHA and 1930-byte size match; no renderer rebuild was run.
+
+### 1298. `crates/horizon-client/src/game/native_block_entity_draw.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `582b140b97ddc56ac88156011690e23e7e6db3f9`
+- Size: 28650 bytes; 766 logical lines
+- Coverage: 1–400, 401–766 (contiguous to EOF)
+- Purpose: Provides a native-mod block-entity drawing API with pose stack transforms, custom quads/cubes/blocks/items, culling bounds and cached kept geometry.
+- Dependencies / cross-references: Mod block entities/revisions, render frustum, block/item models, sprite atlas, vertex lighting/diffuse, section render pass and resource reload.
+- Implementation / logic: Builds geometry relative to block origin, culls by mod-provided bounds, reuses cached geometry keyed by dimension/state/light/entity revision and expires unseen entries after 100 ticks.
+- Findings: Useful architecture for modded block-entity rendering, but the API is proprietary. Cache correctness depends on revision/state/light/dimension invalidation and explicit clearing on resource reload; non-finite bounds intentionally bypass frustum culling.
+- RustChunk relevance: Optional future mod rendering extension, not needed for vanilla 1.20.1 client baseline.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not port Horizon's native draw API. If Forge block entities are supported, render through target BER registration and keep a strict cache invalidation key.
+- Follow-up checks: Verify revision changes on NBT updates, resource/atlas reload clearing, chunk unload, bounds changes, kept geometry expiration and malicious huge geometry limits.
+- RustChunk implementation mapping: Possible render/mod_block_entities.rs behind a Forge BER adapter; not created.
+- Evidence required before adoption: Forge 1.20.1 BlockEntityRenderer contract, mod BER fixtures, cache invalidation tests and vertex-count limits.
+- Completion state: COMPLETE — 766 logical lines read in contiguous ranges 1–400 and 401–766; SHA and 28650-byte size match; embedded tests inspected, not run.
+
+### 1299. `crates/horizon-client/src/game/native_builds.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `0e9714064b94183a1c8129b91ca8b55f3ec750a3`
+- Size: 56971 bytes; 1424 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1424 (contiguous to EOF)
+- Purpose: Android UI and workflow for compiling/download/installing native-mod game libraries from Starling or a custom build server, then selecting the library for the next app start.
+- Dependencies / cross-references: Android activity/native library loader, native mod bundles, custom/published build server, GitHub build service, release metadata, APK stamp, SHA-256 and Mods UI.
+- Implementation / logic: Lists available builds, submits native bundles, polls remote compile jobs, downloads libraries with range retries, verifies SHA-256, writes build metadata and selects/restarts into the new shared library.
+- Findings: This is a high-privilege remote native-code supply chain. The resulting library runs with full game/app access; SHA-256 checks integrity against server-provided metadata but do not establish trust. Custom build server is explicitly supported and warned about.
+- RustChunk relevance: Do not adopt for RustChunk. A launcher compiling arbitrary native mods remotely is not equivalent to Forge's normal mod loading and creates a major supply-chain/security boundary.
+- Decision: **unnecessary; optional/future**
+- 1.20.1 implications: Exclude remote native library builds and activity library swapping. Use Forge 1.20.1 mod loading with signed/trusted mod JARs and user consent; never load an untrusted downloaded .so into the launcher.
+- Follow-up checks: If ever reconsidered, threat-model build server compromise, TLS/DNS, metadata authenticity, rollback, APK stamp bypass, custom server, ABI, native library permissions and update channel.
+- RustChunk implementation mapping: No baseline mapping. Prefer Forge mod classloading and a separately isolated build pipeline, not app-library replacement.
+- Evidence required before adoption: Formal threat model, signed build attestations, authenticated server metadata, reproducible builds, provenance and explicit trust/consent UX.
+- Completion state: COMPLETE — 1424 logical lines read in contiguous ranges 1–400, 401–800, 801–1200 and 1201–1424; SHA and 56971-byte size match; no remote build/download/restart was run.
+
+### 1300. `crates/horizon-client/src/game/native_claimed_items.rs`
+- Source repository/ref: starling-client/starling @ `5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `98aac6fc0e8ac0448cc0ad85b7c054824055d567`
+- Size: 12962 bytes; 343 logical lines
+- Coverage: 1–343 (EOF)
+- Purpose: Lets native client mods claim item right-clicks, receive bounded UseStart/UseStop events, inspect held-item data and raycast blocks including far LOD terrain.
+- Dependencies / cross-references: Native mod Host API, item-use pipeline, player inventory/hand, event queue, item custom data SNBT, world clip ray and LOD ground samples.
+- Implementation / logic: Stores up to 64 claimed item IDs per mod and 256 pending events, owns a claimed use by slot/tick, emits stop on release/reset and provides a raycast up to 1024 blocks.
+- Findings: The extension is proprietary and not a Forge protocol feature. Events beyond the queue cap are silently dropped; LOD ray steps in whole blocks and returns terrain ground only, not exact far block geometry. Custom data uses newer component naming.
+- RustChunk relevance: Optional future client-mod input abstraction; not needed for vanilla server play.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Use Forge 1.20.1 item-use hooks and legacy ItemStack NBT; if a client extension exists, bound queues and expose raycast results with explicit LOD approximation semantics.
+- Follow-up checks: Test event overflow/ordering, claim replacement, duplicate item ownership, use interruption, slot changes, respawn/join, ray precision, max distance and server-authority boundaries.
+- RustChunk implementation mapping: Possible mod_api/client_item_input.rs behind explicit opt-in; not created.
+- Evidence required before adoption: Forge 47.4.x item interaction events, legacy NBT fixtures, queue overflow/property tests and far-terrain raycast error bounds.
+- Completion state: COMPLETE — 343 logical lines read to EOF; SHA and 12962-byte size match; embedded tests inspected, not run.
+

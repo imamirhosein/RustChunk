@@ -914,3 +914,38 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Tests embedded in source were inspected only, not executed. No build, APK, Forge launch, Android-device test, multiplayer join, LAN host, UPnP or relay action was performed.
 - Backup branches remain untouched. Backup cadence remains only after entries 1001–2000 are complete and globally verified.
 
+
+
+### Checkpoint 1281–1300 — 2026-11-19
+
+- Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree matched the pin and was not truncated. Exactly 20 new paths were read completely to EOF; every path was unique against the prior 1280 Index rows, and each source Git SHA/byte size matches the pinned tree.
+- Completed files:
+- 1281 `crates/horizon-client/src/game/mob_index.rs` — 90 lines, 3216 bytes, SHA `052a292348f361155e100078d07b0bfcabef2a12`; 1–90 (EOF).
+- 1282 `crates/horizon-client/src/game/mob_looting.rs` — 201 lines, 8461 bytes, SHA `11866dae86d99a8b17d409c5ae56425d5edf9d85`; 1–201 (EOF).
+- 1283 `crates/horizon-client/src/game/mob_sounds.rs` — 136 lines, 5601 bytes, SHA `e74ee36e98b6be895c2d10626b363728c846498e`; 1–136 (EOF).
+- 1284 `crates/horizon-client/src/game/mobile_controls.rs` — 2035 lines, 82783 bytes, SHA `3dbb3f39d4a598818876fe0138e97229c3fcec60`; 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2035 (contiguous to EOF).
+- 1285 `crates/horizon-client/src/game/mobile_controls/mobile_platform.rs` — 86 lines, 2696 bytes, SHA `df2067cbf3bdd3d4a757a19567da95760b8b460f`; 1–86 (EOF).
+- 1286 `crates/horizon-client/src/game/mod_api_host.rs` — 271 lines, 9587 bytes, SHA `39830ea73f84a0bb43cf2aba041ac2e228294af4`; 1–271 (EOF).
+- 1287 `crates/horizon-client/src/game/mod_api_host_generated.rs` — 543 lines, 17834 bytes, SHA `4f2278e112fe230caea776f68420805d569045a0`; 1–400, 401–543 (contiguous to EOF).
+- 1288 `crates/horizon-client/src/game/mod_assets.rs` — 203 lines, 7364 bytes, SHA `2bdc37dea236ba216723c2a73e5b0c2d062dfc8a`; 1–203 (EOF).
+- 1289 `crates/horizon-client/src/game/mod_catalog.rs` — 1010 lines, 34967 bytes, SHA `856be7f82e3e0fd5247e2f63b10fecb4b0f0178f`; 1–400, 401–800, 801–1010 (contiguous to EOF).
+- 1290 `crates/horizon-client/src/game/mods.rs` — 700 lines, 29203 bytes, SHA `655897741a6273125f22b91515b56009af21241a`; 1–400, 401–700 (contiguous to EOF).
+- 1291 `crates/horizon-client/src/game/mount_menu.rs` — 634 lines, 23717 bytes, SHA `1b967d7db3f8222dd4b6d87bfc627d744e8f1fa0`; 1–400, 401–634 (contiguous to EOF).
+- 1292 `crates/horizon-client/src/game/mounts.rs` — 1086 lines, 43042 bytes, SHA `a4dc01b1caa464b592d6ac179ae1997e8952568a`; 1–400, 401–800, 801–1086 (contiguous to EOF).
+- 1293 `crates/horizon-client/src/game/moving_pistons.rs` — 167 lines, 6974 bytes, SHA `654ade5381ccd5cfd4fa585741fd2d43740c38bf`; 1–167 (EOF).
+- 1294 `crates/horizon-client/src/game/music.rs` — 328 lines, 13096 bytes, SHA `4b0a0a064eeca8aab274c8ab64aab5350298631b`; 1–328 (EOF).
+- 1295 `crates/horizon-client/src/game/names.rs` — 757 lines, 30307 bytes, SHA `048b855ce2bef59ea8b861c8b954549eded52c56`; 1–400, 401–757 (contiguous to EOF).
+- 1296 `crates/horizon-client/src/game/narrator.rs` — 340 lines, 13726 bytes, SHA `38d2a892998c292f4421e56a2c7c9a14a387a9dc`; 1–340 (EOF).
+- 1297 `crates/horizon-client/src/game/native_biome_colors.rs` — 42 lines, 1930 bytes, SHA `466fc4be3daab5a1cd11c1ca359a92dc8b9bea20`; 1–42 (EOF).
+- 1298 `crates/horizon-client/src/game/native_block_entity_draw.rs` — 766 lines, 28650 bytes, SHA `582b140b97ddc56ac88156011690e23e7e6db3f9`; 1–400, 401–766 (contiguous to EOF).
+- 1299 `crates/horizon-client/src/game/native_builds.rs` — 1424 lines, 56971 bytes, SHA `0e9714064b94183a1c8129b91ca8b55f3ec750a3`; 1–400, 401–800, 801–1200, 1201–1424 (contiguous to EOF).
+- 1300 `crates/horizon-client/src/game/native_claimed_items.rs` — 343 lines, 12962 bytes, SHA `98aac6fc0e8ac0448cc0ad85b7c054824055d567`; 1–343 (EOF).
+- Long-file coverage was contiguous and gap-free, every range no larger than 400 lines: mobile_controls.rs (1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2035); mod_api_host_generated.rs (1–400, 401–543); mod_catalog.rs (1–400, 401–800, 801–1010); mods.rs (1–400, 401–700); mount_menu.rs (1–400, 401–634); mounts.rs (1–400, 401–800, 801–1086); names.rs (1–400, 401–757); native_block_entity_draw.rs (1–400, 401–766); native_builds.rs (1–400, 401–800, 801–1200, 1201–1424). All other files were read once from line 1 through EOF.
+- Ledger validation: entries 1281–1300 are sequential and each contains all 15 required fields exactly once. Index validation: 1300 sequential rows, 1300 unique paths, zero duplicates. Prior 1280 rows preserved.
+- Stage 1201–1400 first 100-file section is now complete: 100/200 overall (50% of the 200-file stage), 100/100 in the first half. Stop here. Do not begin entry 1301 until the user explicitly authorizes the next 50-file section.
+- Protocol updated to the new cadence: each 200-file stage has four 50-file reporting sections; each 50 contains two exact 25-file checkpoints. Stop and await approval after each 50. For the already-running 1201–1400 stage, 1201–1300 was completed under the old 20-file rule; the next section is 1301–1350 with checkpoints 1301–1325 and 1326–1350. After 1350, wait for approval before 1351–1400.
+- Target implications: mob indexing is a performance optimization; Android touch/input, mobile IME and virtual mouse are core mobile UX; horse-family mounts, name tags, piston transitions and music are target-era systems to rewrite. Native mod host/generated API, native build server and custom item claims are proprietary high-privilege extension systems; do not port them as Forge substitutes. Remote native library compilation is explicitly rejected for RustChunk absent a formal, authenticated supply-chain design.
+- Potential issue to verify before port: duplicate native_key_event dispatch in mobile_controls.rs; no claim is made that it has been reproduced or tested.
+- Embedded tests were inspected only, not run. No build, APK, Forge launch, Android device, multiplayer server, LAN, UPnP or relay action was performed.
+- Backup branches untouched. Backup cadence remains only after entries 1001–2000 are fully committed and globally verified.
+
