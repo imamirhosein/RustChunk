@@ -4,7 +4,7 @@
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488` (source metadata comes from this exact tree, not the moving default branch).
 - Batch: exactly 200 new, unique paths after entry 800, selected in deterministic path order; 4 previously audited paths were skipped during selection.
 - Target: Minecraft Java 1.20.1-first RustChunk audit.
-- Inspection: 130 text files were read fully; files longer than 400 lines were read in consecutive sections no larger than 400 lines. 70 PNG files could not be read as binary through the UTF-8-only GitHub connector and are explicitly metadata-only, not content-reviewed.
+- Inspection: 130 text files were read fully; files longer than 400 logical lines were read in consecutive sections no larger than 400 lines. All 70 PNG touch assets were retrieved as base64 from the pinned blobs, visually inspected as rendered images and checked through their PNG IHDR dimensions; they remain reference-only pending asset-rights and consumer-call-site review.
 - Execution: no tests, build, benchmark, APK, server connection, Forge client or Android device execution is claimed by this audit.
 
 ### 801. `crates/horizon-client-render/src/post_glsl.rs`
@@ -1712,491 +1712,491 @@
 - Source SHA: `70dca324fc172dbbd8cb0a76792e1cfe25a4dabd`
 - Size: 567 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: فهرست آیتم‌ها (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of inventory.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست آیتم‌ها glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/jump.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad down (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the d-pad down control. The image contains presentation pixels only.
+- Findings: D-pad down pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 902. `crates/horizon-client/assets/touch/dpad_left.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `11a9c354a9f8ac02c118ffc3a9c5348bbf7a0cb8`
 - Size: 576 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: پرش (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to jump_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پرش glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/jump_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad left (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the d-pad left control. The image contains presentation pixels only.
+- Findings: D-pad left default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 903. `crates/horizon-client/assets/touch/dpad_left_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e33fd86923acb98ca87c656fcc11a8353cda2fc8`
 - Size: 571 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: پرش (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to offhand_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دست فرعی glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/offhand.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad left (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the d-pad left control. The image contains presentation pixels only.
+- Findings: D-pad left pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 904. `crates/horizon-client/assets/touch/dpad_middle.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `522651c96acaf48c2a0e94604a38c162ce66ff08`
 - Size: 601 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: دست فرعی (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of offhand.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دست فرعی glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pause.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad central/junction tile (non-button center tile).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is a central/junction tile, not a separate action button. The image contains presentation pixels only.
+- Findings: The visual is a D-pad center/junction tile; do not treat it as a standalone button. Actual layout, scaling, tint and alpha handling come from code outside the image. Asset provenance/redistribution permission and its runtime consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 905. `crates/horizon-client/assets/touch/dpad_right.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `26d43a0159c9f44350e192e0ca878a58a77253d5`
 - Size: 611 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مکث (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to pause_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مکث glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pause_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad right (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the d-pad right control. The image contains presentation pixels only.
+- Findings: D-pad right default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 906. `crates/horizon-client/assets/touch/dpad_right_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `1798cb3315d482b447bd40540bd0a4fa811ba31a`
 - Size: 597 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مکث (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of pause.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مکث glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pick.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad right (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the d-pad right control. The image contains presentation pixels only.
+- Findings: D-pad right pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 907. `crates/horizon-client/assets/touch/dpad_up.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `295f1b96e997f22c2a475afc848780cc6c548d71`
 - Size: 574 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: انتخاب/برداشت (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of pick.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a انتخاب/برداشت glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pick_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad up (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the d-pad up control. The image contains presentation pixels only.
+- Findings: D-pad up default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 908. `crates/horizon-client/assets/touch/dpad_up_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0c58a3cb6df9322a0f7affcfe147747862ef043a`
 - Size: 574 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: فهرست بازیکنان (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to players_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست بازیکنان glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/players_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: D-pad up (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the d-pad up control. The image contains presentation pixels only.
+- Findings: D-pad up pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 909. `crates/horizon-client/assets/touch/drop.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a0c8530f60c8ad5472770d555dc671ecfe248d6a`
 - Size: 569 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: فهرست بازیکنان (pressed/active state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the active-state counterpart of players.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست بازیکنان glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/sneak.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Drop item (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the drop item control. The image contains presentation pixels only.
+- Findings: Drop item default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 910. `crates/horizon-client/assets/touch/drop_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `90d75c4edc457af91fa35fb5eade67e7e306bd70`
 - Size: 568 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مخفی‌کاری/خم‌شدن (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to sneak_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مخفی‌کاری/خم‌شدن glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/sneak_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Drop item (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the drop item control. The image contains presentation pixels only.
+- Findings: Drop item pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 911. `crates/horizon-client/assets/touch/inventory.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f106e135a0fc2a32c7861c118620577e40d12439`
 - Size: 573 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 48×48px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: پایهٔ جوی‌استیک (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to stick_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پایهٔ جوی‌استیک glyph; dimensions 48×48, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is the larger 48×48 joystick base. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/stick.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Inventory (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the inventory control. The image contains presentation pixels only.
+- Findings: Inventory default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 912. `crates/horizon-client/assets/touch/inventory_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `718533f2cdbbc44174a1cbf0e3e4506b34bdcd5b`
 - Size: 577 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: دستهٔ جوی‌استیک (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to stick_knob_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دستهٔ جوی‌استیک glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/use.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Inventory (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the inventory control. The image contains presentation pixels only.
+- Findings: Inventory pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 913. `crates/horizon-client/assets/touch/jump.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `5944b88fe417295285ad940b4b67ad4b02ed8f72`
 - Size: 588 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: استفاده از آیتم (default state). Visual inspection confirms a small pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is the default-state counterpart to use_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a استفاده از آیتم glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and the matching control-state family. The set uses compact monochrome pixel-art icons; this is a 24×24 control icon. Runtime sizing, tinting and alpha compositing still depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve the default/pressed state pair and avoid assuming the source UI scale equals RustChunk's density scaling.
-- Decision: Visual asset accepted as a candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking source asset licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace all references in the source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/use_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime screenshot or equivalent layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Jump (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the jump control. The image contains presentation pixels only.
+- Findings: Jump default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 914. `crates/horizon-client/assets/touch/jump_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `3438df2de9a62ba8ce29ec43c20ea5aeba89eccc`
 - Size: 573 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: دکمهٔ پرش (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is jump.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دکمهٔ پرش glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/jump_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Jump (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the jump control. The image contains presentation pixels only.
+- Findings: Jump pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 915. `crates/horizon-client/assets/touch/offhand.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a62a9fca036746ed2499f4d85f393de25647da30`
 - Size: 562 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: دست فرعی (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is offhand_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دست فرعی glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/offhand.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Offhand (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the offhand control. The image contains presentation pixels only.
+- Findings: Offhand default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 916. `crates/horizon-client/assets/touch/offhand_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b26cc4223ae05e1e2c4db86f400d8f8e401a2563`
 - Size: 560 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: دست فرعی (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is offhand.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دست فرعی glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/offhand_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Offhand (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the offhand control. The image contains presentation pixels only.
+- Findings: Offhand pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 917. `crates/horizon-client/assets/touch/pause.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `9624460d13e8922c867eb13444deab85ca8bed7f`
 - Size: 504 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مکث (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is pause_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مکث glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pause.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Pause (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the pause control. The image contains presentation pixels only.
+- Findings: Pause default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 918. `crates/horizon-client/assets/touch/pause_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `c24ef84b1e845af59216b846a6d5d1fe82be8c8f`
 - Size: 474 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مکث (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is pause.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مکث glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pause_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Pause (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the pause control. The image contains presentation pixels only.
+- Findings: Pause pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 919. `crates/horizon-client/assets/touch/pick.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `3e06c223b3cc107d099e4428ec62e9b61e8c66c0`
 - Size: 600 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: انتخاب/برداشت (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is pick_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a انتخاب/برداشت glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pick.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Pick block (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the pick block control. The image contains presentation pixels only.
+- Findings: Pick block default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 920. `crates/horizon-client/assets/touch/pick_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ed28e7eff080ed53d3f3bf6f45ca8fee4a3593bb`
 - Size: 594 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: انتخاب/برداشت (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is pick.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a انتخاب/برداشت glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/pick_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Pick block (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the pick block control. The image contains presentation pixels only.
+- Findings: Pick block pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 921. `crates/horizon-client/assets/touch/players.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `eead5ca582b2fd9549a8b3f1bc2e184e0b0fe944`
 - Size: 507 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: فهرست بازیکنان (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is players_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست بازیکنان glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/players.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Player list (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the player list control. The image contains presentation pixels only.
+- Findings: Player list default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 922. `crates/horizon-client/assets/touch/players_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `fefbc9c72255833f7b2f8ba37e4213da3073ed7f`
 - Size: 507 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: فهرست بازیکنان (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is players.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a فهرست بازیکنان glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/players_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Player list (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the player list control. The image contains presentation pixels only.
+- Findings: Player list pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 923. `crates/horizon-client/assets/touch/sneak.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `61f43780e4a8570e5501dd7aacf7c2155ca72806`
 - Size: 555 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مخفی‌کاری/خم‌شدن (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is sneak_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مخفی‌کاری/خم‌شدن glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/sneak.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Sneak (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the sneak control. The image contains presentation pixels only.
+- Findings: Sneak default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 924. `crates/horizon-client/assets/touch/sneak_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4efa8db2b5666cf86b1a93551ac07b085fe5ae22`
 - Size: 548 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: مخفی‌کاری/خم‌شدن (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is sneak.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a مخفی‌کاری/خم‌شدن glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/sneak_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Sneak (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the sneak control. The image contains presentation pixels only.
+- Findings: Sneak pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 925. `crates/horizon-client/assets/touch/stick.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `776a9f780ff1baef7a574abfc157643c0a60d76c`
 - Size: 1966 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 48×48px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: پایهٔ جوی‌استیک (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is stick_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a پایهٔ جوی‌استیک glyph; dimensions 48×48, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is the larger 48×48 joystick base. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/stick.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Joystick base (base).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 48×48, 8-bit RGBA. This is the base image for the joystick base control. The image contains presentation pixels only.
+- Findings: Joystick base base glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 48×48, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 926. `crates/horizon-client/assets/touch/stick_knob.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `522651c96acaf48c2a0e94604a38c162ce66ff08`
 - Size: 601 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: دستهٔ جوی‌استیک (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is stick_knob_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a دستهٔ جوی‌استیک glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/stick_knob.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Joystick knob (knob).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the knob image for the joystick knob control. The image contains presentation pixels only.
+- Findings: Joystick knob knob glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 927. `crates/horizon-client/assets/touch/use.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `047f073865438c7873c5c2dc147530470d008750`
 - Size: 542 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: استفاده از آیتم (default state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is use_pressed.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a استفاده از آیتم glyph; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Rebuild this file's data and semantics against the exact Minecraft 1.20.1 source; the pinned Starling snapshot is not itself a 1.20.1 contract.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/use.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Use item (default).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the default image for the use item control. The image contains presentation pixels only.
+- Findings: Use item default glyph confirmed against the rendered pixels and filename. It is the default-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 928. `crates/horizon-client/assets/touch/use_pressed.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `748b448fd778374098bda97204700ba9f209ce0b`
 - Size: 530 bytes; PNG, line count not applicable
 - Coverage: Binary content and rendered pixels inspected; PNG IHDR decoded: 24×24px, 8-bit RGBA (color type 6).
-- Purpose: Android touch-UI asset: استفاده از آیتم (pressed/active state). Visual inspection confirms a pixel-art control glyph.
-- Dependencies / cross-references: Belongs to `crates/horizon-client/assets/touch/`; visual pairing is use.png. Exact runtime consumer still requires source-reference tracing.
-- Implementation / logic: Rendered image inspected directly after base64 retrieval from the pinned source blob. It is a استفاده از آیتم glyph in its pressed-state variant; dimensions 24×24, 8-bit RGBA. The image itself contains no executable logic.
-- Findings: Visual identity is consistent with the filename and matching control-state family. This is a 24×24 control icon. Runtime sizing, tinting and alpha compositing depend on the consumer.
-- RustChunk relevance: Potentially reusable for an Android touch overlay; preserve default/pressed state pairing and validate density scaling.
-- Decision: Visual asset candidate for the optional Android touch-control layer; adoption remains conditional on tracing its consumer and checking licensing/provenance.
-- 1.20.1 implications: Not Minecraft Java 1.20.1 content; optional launcher UI asset only.
-- Follow-up checks: Trace references in source touch-control renderer/config; verify runtime scaling, filtering, tint and alpha blend; inspect repository license/asset terms before redistribution.
-- RustChunk implementation mapping: Candidate destination: `android-controls/assets/touch/use_pressed.png`; retain original dimensions and pair naming if adopted. Do not copy into core game assets.
-- Evidence required before adoption: Source call-site/reference trace, runtime layout fixture, alpha/compositing check, and license/provenance clearance.
-- Completion state: VISUAL/BINARY REVIEW COMPLETE — image bytes retrieved; PNG format, dimensions and RGBA IHDR checked; rendered pixels visually inspected. Runtime consumer trace and licensing remain separate adoption gates.
+- Purpose: Android touch-control image: Use item (pressed).
+- Dependencies / cross-references: No code or action is embedded in the PNG; a consumer/layout controller must provide placement, pointer routing, hit target and state switching. The exact source call-site was not accepted as a RustChunk dependency.
+- Implementation / logic: Rendered image inspected from the pinned source blob; PNG IHDR confirms 24×24, 8-bit RGBA. This is the pressed image for the use item control. The image contains presentation pixels only.
+- Findings: Use item pressed glyph confirmed against the rendered pixels and filename. It is a pressed-state visual, not an independent action mapping. Runtime dimensions, tinting, alpha compositing and pointer behavior are not specified by this file. Asset provenance/redistribution permission and exact consumer are not cleared.
+- RustChunk relevance: Visual reference only for RustChunk's independently designed, editable touch controls. The PNG does not provide input semantics, multi-touch routing, scaling, hit-slop, accessibility or control-layout editing.
+- Decision: **unnecessary; reference; optional/future — Do not copy or ship this source image now; retain only as a visual reference while RustChunk designs its own control glyphs and editor.**
+- 1.20.1 implications: These pixels do not establish Minecraft 1.20.1 input semantics or licensing rights. Bind any independently drawn control to the 1.20.1 action map and test pointer-down/up/cancel behavior separately.
+- Follow-up checks: Trace all source call-sites and asset provenance/license; then design an independent RustChunk asset and test density scaling, touch hit targets, state transitions, multiple pointers and ACTION_CANCEL. Do not import the PNG until rights are explicitly cleared.
+- RustChunk implementation mapping: No direct asset mapping. Build independent control artwork and editable layouts in RustChunk's touch UI; do not copy the Starling PNG into an application asset directory.
+- Evidence required before adoption: Written license/provenance clearance plus a complete consumer/call-site trace is required before reuse or redistribution. Independent touch implementation also needs multi-touch, cancellation, density and action-mapping tests.
+- Completion state: VISUAL REVIEW COMPLETE — 24×24, 8-bit RGBA; rendered pixels inspected. No image was copied into RustChunk and no runtime touch interaction was tested.
 
 ### 929. `crates/horizon-client/build.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `de50c33f11df818cef3e1089e106b8cc27cee384`
 - Size: 2038 bytes; 38 lines
 - Coverage: Complete text file reviewed, lines 1–38; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Build hook for embedded desktop resources and platform linker settings.
+- Purpose: Windows desktop build hook for embedded icon resources, a Windows segment-heap manifest and Windows linker stack-size configuration.
 - Dependencies / cross-references: Cargo build script, compile target and Windows linker.
 - Implementation / logic: Embeds icon/resource metadata and applies selected Windows-only link settings.
-- Findings: Windows branches do not directly solve Android Gradle/NDK packaging.
-- RustChunk relevance: Keep platform build hooks separate; do not transplant desktop flags to Android.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Findings: The conditional behavior is Windows-only packaging/linker policy. It does not implement Android Gradle/NDK packaging and should not be imported into Android build scripts.
+- RustChunk relevance: Not a runtime feature. At most, it illustrates keeping host-specific build customization behind target checks.
+- Decision: **unnecessary; version-specific — Do not carry Windows desktop linker/resource settings into Android.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/build.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No Android/runtime mapping. Keep Windows desktop resource/linker flags out of the Android Gradle/NDK path; define any Android packaging logic independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2210,10 +2210,10 @@
 - Implementation / logic: Times pipeline stages over controlled worker counts and checksums.
 - Findings: Synthetic fixtures/newer asset version and desktop timing are not Galaxy A22 performance evidence.
 - RustChunk relevance: Reuse stage-separated harness; rebuild 1.20.1 fixtures.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/chunk_load_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/chunk_load_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2227,10 +2227,10 @@
 - Implementation / logic: Runs synthetic cases and validates a result checksum.
 - Findings: Synthetic query mix may not represent real movement/world geometry.
 - RustChunk relevance: Reuse benchmark methodology only after collision parity.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/collision_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/collision_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2244,10 +2244,10 @@
 - Implementation / logic: Separates raw parse from later validation/typed passes.
 - Findings: Desktop profile and snapshot schema do not establish Android performance.
 - RustChunk relevance: Use as profiling tool only; rebuild target facts schema.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/gameplay_decode_profile.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/gameplay_decode_profile.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2261,10 +2261,10 @@
 - Implementation / logic: Times generation and light stages with optional simulation controls.
 - Findings: Newer data and potentially long-running runs; no benchmark was run.
 - RustChunk relevance: Use as harness pattern, not as measured claim.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/gen_light_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/gen_light_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2278,10 +2278,10 @@
 - Implementation / logic: Benchmarks reader vs byte/text parse and compares failures.
 - Findings: I/O benefits depend on Android storage/allocation; no result was run.
 - RustChunk relevance: Evaluate only with target fixtures and Android profiling.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/json_load_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/json_load_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2290,16 +2290,16 @@
 - Source SHA: `25e8ab5beb6e6129d4566f22d6af32197ba85b57`
 - Size: 13234 bytes; 326 lines
 - Coverage: Complete text file reviewed, lines 1–326; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Reports current mod/loader compatibility surface.
+- Purpose: NeoForge/Horizon mod-content probe for resource and gameplay facts carried into Horizon's content pipeline; it is not a Forge loader or mod runtime.
 - Dependencies / cross-references: Modern NeoForge concepts, registries, recipes, loot and tags.
-- Implementation / logic: Collects probe data for block/item/recipe/tag support.
-- Findings: Targets newer mod API and does not prove Forge 1.20.1 compatibility.
-- RustChunk relevance: Future research aid only; no Forge support conclusion.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
-- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/mod_port_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Implementation / logic: Reads a prepared mod-content root and inspects registry-backed block facts, items/tags, recipes, stations/enchantments and collision data through Horizon loaders. It tests a carried-content representation, not arbitrary Forge mod bytecode, event buses, mixins or mod lifecycle.
+- Findings: The probe demonstrates only a narrow data-conversion/inspection surface tied to Horizon's newer loader/content model. It does not load, execute or establish compatibility with Forge 47.x / Minecraft 1.20.1 mods.
+- RustChunk relevance: Future mod-content research only; this fixture is not a Forge 1.20.1 client or a route to running arbitrary Forge mods.
+- Decision: **undetermined; reference; version-specific — Keep only as a bounded NeoForge/Horizon data probe; it does not establish Forge mod-loader compatibility.**
+- 1.20.1 implications: Forge 1.20.1 requires its own loader, mod discovery, registries, lifecycle/events, networking and transformation semantics. None are implemented or proven by this fixture.
+- Follow-up checks: Only revisit after a separately specified Forge 47.x compatibility scope exists; test actual mod metadata, registries, lifecycle hooks, packets and representative required mods against a real 1.20.1 Forge oracle.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/mod_port_probe.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
+- Evidence required before adoption: A working Forge 47.x compatibility architecture and tests on actual target mods; source inspection of any loader bridge; successful client/server parity. This fixture alone is insufficient.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 936. `crates/horizon-client/examples/model_library_bench.rs`
@@ -2312,10 +2312,10 @@
 - Implementation / logic: Loads models repeatedly and reports duration/allocations.
 - Findings: Desktop allocation instrumentation isn't an Android baseline.
 - RustChunk relevance: Use to locate hot paths after model parity.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/model_library_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/model_library_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2329,10 +2329,10 @@
 - Implementation / logic: Compares repeated resolution with precomputed facts.
 - Findings: Synthetic state corpus and newer registry sizes are not representative of 1.20.1.
 - RustChunk relevance: Adapt benchmark method; rebuild target model state table.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/model_states_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/model_states_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2346,10 +2346,10 @@
 - Implementation / logic: Reads region chunks and writes transformed region fixtures.
 - Findings: Deletes `.mca` files under its destination before writing; destructive outside a disposable directory.
 - RustChunk relevance: Fixture-only tool; never run on user worlds.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **unnecessary; reference; optional/future — Destructive world-fixture generation is not a runtime feature; only consider in an isolated, guarded test directory.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/old_world_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/old_world_fixture.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2363,10 +2363,10 @@
 - Implementation / logic: Compares cached index and scan time with checksum.
 - Findings: Synthetic workload doesn't predict real portals/player session load.
 - RustChunk relevance: Optional optimization if profiling proves portal scan hot.
-- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- Decision: **adaptable; reference; optional/future — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/portal_scan_bench.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: No runtime mapping. If retained, recreate as non-shipping QA/performance tooling at `tests/perf/starling-reference/portal_scan_bench.rs` (proposed path, not created), use Minecraft 1.20.1 inputs and benchmark Android independently.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2375,15 +2375,15 @@
 - Source SHA: `3fd507902130d8c6b121e0ecf5d1ea40b66528af`
 - Size: 7189 bytes; 185 lines
 - Coverage: Complete text file reviewed, lines 1–185; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Fixture for ambient environment output against Java oracle.
+- Purpose: Parity fixture for ambient sound handlers: loop, mood and additional ambience selection through the sound engine.
 - Dependencies / cross-references: World time, biome/environment state and renderer/audio parameters.
-- Implementation / logic: Serializes controlled ambient values.
-- Findings: Current resource data must be regenerated for 1.20.1.
-- RustChunk relevance: Use as a parity harness template.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Feeds scripted sound definitions, player/world state, deterministic light samples and bubble-column state into AmbientContext/Ambience; records loop fades, active sound instances, random state and underwater delay through a fake backend.
+- Findings: This is an ambient-audio state-machine oracle, not a sound playback backend. Event tables and random-call ordering must be rebuilt from 1.20.1.
+- RustChunk relevance: Useful for testing ambient audio scheduling and deterministic selection; keep the platform audio backend separate.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
+- 1.20.1 implications: Recreate 1.20.1 ambience definitions, biome sound data, underwater behavior and RNG sequence; a fake backend does not validate Android audio output.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/ambient_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/ambient_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2397,10 +2397,10 @@
 - Implementation / logic: Ticks scripted seeded arrows and logs projectile-visible state.
 - Findings: Item/effect and entity data may be newer; collision order is observable.
 - RustChunk relevance: Rebuild with 1.20.1 arrow/tipped-arrow semantics.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/arrow_probe.rs`, or an
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/arrow_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2414,10 +2414,10 @@
 - Implementation / logic: Serializes selected audio source settings.
 - Findings: Sound groups/defaults depend on target version.
 - RustChunk relevance: Useful deterministic audio test input.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/audio_attributes_fixture.rs`, or an isolated optional/tooling mo
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/audio_attributes_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2431,10 +2431,10 @@
 - Implementation / logic: Implements fake backend, descriptions and flushing for audio fixture tools.
 - Findings: Fake backend tests internal scheduling only, not actual audio output.
 - RustChunk relevance: Reuse in tests; keep real platform audio separate.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module cor
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/mod.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2448,10 +2448,10 @@
 - Implementation / logic: Replays movement conditions and records auto-jump outcomes.
 - Findings: Thresholds and collision geometry must match 1.20.1.
 - RustChunk relevance: High-value movement parity harness.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/auto_jump_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/auto_jump_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2459,16 +2459,16 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a7bdfab7bb7d705b26f7e0215c246c48b1878e9a`
 - Size: 20522 bytes; 495 lines
-- Coverage: Complete text file reviewed, lines 1–495; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–495. Total: 495 logical lines.
 - Purpose: Fixture for block-entity animation tick/render values.
 - Dependencies / cross-references: Block entity ticker, animation state, block registry and RNG.
 - Implementation / logic: Runs controlled animations and serializes per-tick state.
 - Findings: Contains later-added entity/block states beyond 1.20.1; use version-filtered cases.
 - RustChunk relevance: Use as test transport; rebuild target entity list.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_entity_anim_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/block_entity_anim_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2476,16 +2476,16 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4e437eceb3783601020a8eb3a87db4c0609689fe`
 - Size: 17488 bytes; 435 lines
-- Coverage: Complete text file reviewed, lines 1–435; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Fixture for block-entity render geometry and text output.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–435. Total: 435 logical lines.
+- Purpose: Headless fixture for block-entity renderer output, including generated geometry/quads and text calls for supported rendered block entities.
 - Dependencies / cross-references: Model catalog, block state, sprite atlas, world and light.
 - Implementation / logic: Builds render cases and serializes quads/text output.
-- Findings: Uses current newer model/asset catalog; not an automatic 1.20.1 oracle.
+- Findings: The fixture uses the pinned snapshot's renderer, atlas, texture/model catalog and block-entity set; all of these must be replaced or filtered for Java 1.20.1 before its outputs can serve as an oracle.
 - RustChunk relevance: Rebuild models and states for target.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate module: RustChunk component corresponding to `crates/horizon-client/examples/probe/block_entity_render_fixture.rs`; keep optional or tooling-only features outside the 1.20.1 core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/block_entity_render_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2494,15 +2494,15 @@
 - Source SHA: `d0cb2d8398e386aaa123dff69b9ef63ebe3c331a`
 - Size: 3913 bytes; 103 lines
 - Coverage: Complete text file reviewed, lines 1–103; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Fixture for block-entity ticker registration/order.
+- Purpose: Parity fixture for block-entity ticker lifecycle and ordering when block states are loaded, changed, replaced, removed or unloaded.
 - Dependencies / cross-references: Block state, block entity store and chunk loading.
-- Implementation / logic: Creates ticker cases and logs update order/events.
-- Findings: Registry list is version-pinned.
-- RustChunk relevance: Use only after reproducing 1.20.1 ticker order.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Applies scripted reset/load/place/replace/remove/record/unload/tick operations to BlockEntities and emits the ordered positions returned by its ticker collection.
+- Findings: Ticker registration is derived from a snapshot-specific state table; mutation order and chunk-unload cleanup are observable correctness requirements.
+- RustChunk relevance: The lifecycle/ticker ordering pattern is directly useful for world/block-entity correctness, but not as a runtime module copied from this example.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
+- 1.20.1 implications: Build the ticker table from the 1.20.1 block/entity registry and compare update order with Java; newer states must not leak into the target.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_entity_render_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.icable; no test was executed in this audit.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/block_entity_tickers_fixture.rs` (proposed, not created); no runtime module is implied. Keep ticker bookkeeping in the block-entity/world subsystem and validate its API against 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2511,15 +2511,15 @@
 - Source SHA: `0e58d99ea24274e53e7fd432f941675e4c468421`
 - Size: 2320 bytes; 63 lines
 - Coverage: Complete text file reviewed, lines 1–63; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Fixture for particles emitted by block updates/interactions.
+- Purpose: Headless fixture for terrain break-particle placement and destruction-particle positions derived from block outline shapes.
 - Dependencies / cross-references: Particle engine, block state and random source.
-- Implementation / logic: Replays scripted cases and emits particle records.
-- Findings: Particle ids/resources depend on version.
-- RustChunk relevance: Rebuild target particle set.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Loads assets, BlockFacts and MeshTables, applies per-state outline offsets, samples each of six faces with a seeded legacy RNG, and records breaking_position plus destroy_positions.
+- Findings: Particle placement depends on shape bounds, model offsets, face iteration order and exact random-call sequence; source particle resources/state IDs are version-specific.
+- RustChunk relevance: Useful deterministic test harness for block-breaking visuals after model and collision/shape parity.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
+- 1.20.1 implications: Rebuild the block-state/outline/offset data and compare RNG progression and emitted coordinates to a 1.20.1 Java oracle.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate module: RustChunk component corresponding to `crates/horizon-client/examples/probe/block_particles_fixture.rs`; keep optional or tooling-only features outside the 1.20.1 core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/block_particles_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2528,15 +2528,15 @@
 - Source SHA: `23724453051b88d948cb8a4f283762dae5eee1d3`
 - Size: 1374 bytes; 37 lines
 - Coverage: Complete text file reviewed, lines 1–37; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Probe for block and biome tint colors.
+- Purpose: Probe for default block-model tint values, including grass tint and invalid/blank tint indices, without a loaded world.
 - Dependencies / cross-references: Biome tint tables, block facts and coordinates.
-- Implementation / logic: Queries color outputs at fixed positions.
-- Findings: Color maps/current biomes are from newer assets.
-- RustChunk relevance: Regenerate 1.20.1 colormaps.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Loads assets, render models and BlockFacts, builds MeshTables, samples the grass color and calls default_tint for the supplied state/index pairs.
+- Findings: The result is only the no-level/default tint path; biome/world colormaps and current registry IDs come from the pinned snapshot.
+- RustChunk relevance: Useful for isolating block tint fallback behavior; it is not a complete biome-color implementation.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
+- 1.20.1 implications: Rebuild target block tint indices, grass/foliage/water colormaps and fallback behavior from 1.20.1 assets.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_particles_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/block_tint_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2550,10 +2550,10 @@
 - Implementation / logic: Outputs transformed boxes/faces for scripted states.
 - Findings: State/model catalogue is version-specific.
 - RustChunk relevance: Use as parity harness with 1.20.1 states.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_tint_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.cuted in this audit.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/block_transform_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2567,10 +2567,10 @@
 - Implementation / logic: Generates breaking geometry and serializes quads/stage light.
 - Findings: Requires target-version models and crack sprite rules.
 - RustChunk relevance: Adapt after base mesher and model parity.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/block_transform_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core., edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/breaking_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2584,10 +2584,10 @@
 - Implementation / logic: Runs JSON-line operations and prints bit-level numeric camera outputs.
 - Findings: Exact numeric behavior is visible; source uses current model/input types.
 - RustChunk relevance: High priority for first-person correctness; rebuild 1.20.1 behavior.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/camera_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/camera_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2601,10 +2601,10 @@
 - Implementation / logic: Runs scripted cauldron fill/drain/wash cases.
 - Findings: Item/tag table must be the 1.20.1 version.
 - RustChunk relevance: Good vanilla interaction parity tool.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cauldron_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/cauldron_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2618,10 +2618,10 @@
 - Implementation / logic: Replays text/key/mouse operations and serializes screen state.
 - Findings: Newer chat components/signing flags can appear; separate UI and protocol semantics.
 - RustChunk relevance: Rebuild screen and signed-chat behavior for 1.20.1.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chat_screen_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/chat_screen_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2635,10 +2635,10 @@
 - Implementation / logic: Provides a fixed lookup set for fixture transport.
 - Findings: Registry contents are target-version data.
 - RustChunk relevance: Regenerate from 1.20.1 command/registry tables.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chat_screen_fixture/registries.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/registries.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2652,10 +2652,10 @@
 - Implementation / logic: Creates paired chest states and emits resulting model selection.
 - Findings: Chest state logic should follow 1.20.1 block updates.
 - RustChunk relevance: Useful block-entity adjacency test.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/chest_pair_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/chest_pair_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2669,10 +2669,10 @@
 - Implementation / logic: Serializes generated cloud face points.
 - Findings: Custom cloud rendering may differ from vanilla.
 - RustChunk relevance: Use only as a test if RustChunk adopts the matching algorithm.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cloud_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/cloud_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2681,15 +2681,15 @@
 - Source SHA: `c54e55bebb6d82214dbd4297219cb3c0a767f46c`
 - Size: 11533 bytes; 263 lines
 - Coverage: Complete text file reviewed, lines 1–263; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Fixture for command parsing and Brigadier argument handling.
+- Purpose: Headless differential fixture for the vanilla Brigadier command dispatcher: tree export, command parse success/errors, UTF-16 cursor positions and completion suggestions.
 - Dependencies / cross-references: Command dispatcher, argument codecs and registry data.
-- Implementation / logic: Parses scripted commands and serializes success/error/arguments.
-- Findings: Includes argument types and registry keys newer than 1.20.1.
-- RustChunk relevance: Rebuild command tree from 1.20.1; don't expose newer commands.
-- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Builds a registry-backed command argument context, parses input lines with the release dispatcher, emits parsed node names/errors/suggestion ranges and exports the command tree. It contains many parser IDs and registry fields from the newer snapshot.
+- Findings: The harness structure and UTF-16 cursor handling are valuable; the embedded command tree, argument-type catalogue and registry payload include post-1.20.1 additions and must not be copied as target data.
+- RustChunk relevance: Useful command parser regression harness; command tree, parser IDs and registry inputs must be independently built from Java 1.20.1, preserving Java UTF-16 cursor indexing.
+- Decision: **adaptable; reference; version-specific — Retain the parser oracle pattern, but rebuild the full command tree and registry inputs for Java 1.20.1.**
+- 1.20.1 implications: Use the exact 1.20.1 command dispatcher and protocol registry set; preserve Java UTF-16 cursor indexing and suggestions ordering.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/command_parse_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/command_parse_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2703,10 +2703,10 @@
 - Implementation / logic: Replays clicks/drags and outputs selected slot/actions.
 - Findings: Menu click semantics must match Java 1.20.1.
 - RustChunk relevance: Useful inventory UI parity case.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/container_screen_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/container_screen_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2720,10 +2720,10 @@
 - Implementation / logic: Serializes displayed title output.
 - Findings: Modern text components may differ from 1.20.1 NBT display name.
 - RustChunk relevance: Adapt to 1.20.1 custom-name rules.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/container_title_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/container_title_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2737,10 +2737,10 @@
 - Implementation / logic: Checks if item permits breaking a target block in creative.
 - Findings: Uses newer `can_destroy_blocks_in_creative` component, not 1.20.1 item schema.
 - RustChunk relevance: Do not port the component; implement 1.20.1 creative behavior.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **unnecessary; version-specific — The fixture targets a newer `minecraft:tool` data component; keep the 1.20.1 mining permission model based on the target item/NBT rules instead.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/creative_mining_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/creative_mining_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2754,10 +2754,10 @@
 - Implementation / logic: Builds case-based result ordering.
 - Findings: Tabs and items are pinned to newer registry data.
 - RustChunk relevance: Regenerate target 1.20.1 creative inventory.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/creative_search_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/creative_search_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2769,12 +2769,12 @@
 - Purpose: Probe for cushion placement/placement context.
 - Dependencies / cross-references: Block placement rules, collision shape and item use.
 - Implementation / logic: Replays placement cases and resulting block states.
-- Findings: Verify the named block/feature exists in target registry; may be a newer/mod-specific feature.
-- RustChunk relevance: Do not assume baseline support without 1.20.1 registry evidence.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Findings: This exercises a `cushion` placement/survival abstraction over synthetic outline/collision shapes. Its status as a vanilla Java 1.20.1 feature is not established by this source; do not assume it is vanilla content.
+- RustChunk relevance: Unresolved until the feature is traced to its source definition and proven to exist in the 1.20.1 target or an explicitly supported mod.
+- Decision: **undetermined; reference; version-specific — Do not accept until the underlying cushion feature is proven to exist in the 1.20.1 target and its purpose is scoped.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/cushion_placement_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/cushion_placement_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2788,10 +2788,10 @@
 - Implementation / logic: Runs seeded emitter cases and serializes output.
 - Findings: Particle types and providers are version-specific.
 - RustChunk relevance: Rebuild target particle providers.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/emitter_particles_p
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/emitter_particles_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2805,10 +2805,10 @@
 - Implementation / logic: Creates seeded offers and logs selection behavior.
 - Findings: Enchantments/weights and item data must match 1.20.1.
 - RustChunk relevance: Useful vanilla UI/gameplay parity tool.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: 
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/enchanting_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2816,16 +2816,16 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b446f30859c17a8c8c53ffefd19c2cfb5b36000d`
 - Size: 26816 bytes; 655 lines
-- Coverage: Complete text file reviewed, lines 1–655; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–655. Total: 655 logical lines.
 - Purpose: Fixture for entity model animation transforms.
 - Dependencies / cross-references: Entity species/model list, pose and animation state.
 - Implementation / logic: Runs deterministic animation cases and serializes transforms.
 - Findings: Includes later species (Creaking/Sniffer/Happy Ghast etc.) beyond 1.20.1.
 - RustChunk relevance: Use as harness architecture; filter to 1.20.1 mobs.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate module: RustChunk component corresponding to `crates/horizon-client/examples/probe/entity_anim_fixture.rs`; keep optional or tooling-only features outside the 1.20.1 core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/entity_anim_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2834,15 +2834,15 @@
 - Source SHA: `2b1c3233f9f63a344c170ad1f14c0bf5fc411085`
 - Size: 2740 bytes; 89 lines
 - Coverage: Complete text file reviewed, lines 1–89; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Probe for advancement entity predicates and species variant components.
+- Purpose: Differential fixture for advancement/entity predicates backed by a minimal World view and species-variant component projection.
 - Dependencies / cross-references: Advancement predicates, entity views and species variant data.
-- Implementation / logic: Builds entity component views and evaluates predicates.
-- Findings: Modern entity component variant schema is newer than 1.20.1.
-- RustChunk relevance: Rebuild target advancement predicates; do not import later component model.
-- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Constructs a constrained EntityView for a selected set of species/variant names and applies a list of entity predicates against a minimal world implementation.
+- Findings: The generic predicate harness is useful, but the component IDs and species-variant representation are snapshot-specific; modern component schemas are not 1.20.1 data.
+- RustChunk relevance: Adapt the generic advancement/entity-predicate test pattern and only the predicate/variant fields that exist in Java 1.20.1.
+- Decision: **adaptable; reference; version-specific — Keep the predicate test pattern; rebuild component semantics and species coverage for 1.20.1.**
+- 1.20.1 implications: Do not import modern entity data components. Reconstruct supported advancement predicate fields, entity types, NBT and conditions from 1.20.1.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_anim_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/entity_components_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2856,10 +2856,10 @@
 - Implementation / logic: Runs seeded death cases and records drops.
 - Findings: New item components/species can be present; target loot data must be rebuilt.
 - RustChunk relevance: Adapt to 1.20.1 death/loot ordering.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_components_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.le fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/entity_death_loot_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2873,10 +2873,10 @@
 - Implementation / logic: Runs entity particle cases and logs spawn values.
 - Findings: Event/particle registry is version-dependent.
 - RustChunk relevance: Regenerate 1.20.1 particle map.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate module: RustChunk component corresponding to `crates/horizon-client/examples/probe/entity_particles_probe.rs`; keep optional or tooling-only features outside the 1.20.1 core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/entity_particles_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2885,15 +2885,15 @@
 - Source SHA: `27846fe824d8c05f1dfb93f862dc99dbf05f8edf`
 - Size: 3458 bytes; 80 lines
 - Coverage: Complete text file reviewed, lines 1–80; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Fixture for environment state consumed by gameplay/rendering.
+- Purpose: Parity fixture for sampled environment/sky values as a function of dimension, game time, weather and biome.
 - Dependencies / cross-references: Dimension, biome, weather/time and player context.
-- Implementation / logic: Supplies controlled environmental state and serializes derived values.
-- Findings: Biome/environment data comes from pinned snapshot.
-- RustChunk relevance: Use to build 1.20.1 environment parity tests.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Loads biome and dimension Environment tables, samples sky/fog/cloud/sunrise/moon/star/light/fog-distance outputs, then applies weather for the Overworld.
+- Findings: The fixture serializes environment visuals and the gameplay sky-light factor; all dimension/biome parameters and data files are from the pinned newer snapshot.
+- RustChunk relevance: Useful to verify the weather/environment rendering pipeline independently from geometry and GPU output.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
+- 1.20.1 implications: Rebuild biome effects, dimension environment definitions and weather rules from Java 1.20.1 resources and compare exact sampled outputs.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/entity_particles_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.1.20.1 oracle fixtures, edge-case tests and device checks where applicable; no test was executed in this audit.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/environment_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2901,16 +2901,16 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `38b9748799f7369a6223ec98b0d87f3f3dbf0b36`
 - Size: 18460 bytes; 533 lines
-- Coverage: Complete text file reviewed, lines 1–533; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–533. Total: 533 logical lines.
 - Purpose: Fixture for `finalizeSpawn` variant/attribute behavior.
 - Dependencies / cross-references: Mob types, spawn reason/difficulty, biome, random stream and entity state.
 - Implementation / logic: Creates seeded mobs and logs finalized state/draw order.
 - Findings: Contains species added after 1.20.1 (e.g. newer aquatic/undead variants); filter carefully.
 - RustChunk relevance: High-value test pattern; rebuild only target species.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/finalize_spawn_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/finalize_spawn_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2924,10 +2924,10 @@
 - Implementation / logic: Feeds seed values and logs sound, pitch and next RNG value.
 - Findings: Small but random-call order is observable and version-bound.
 - RustChunk relevance: Adapt to 1.20.1 fire charge semantics.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/fire_starter_sound_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/fire_starter_sound_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2941,10 +2941,10 @@
 - Implementation / logic: Serializes tooltip rows for selected firework cases.
 - Findings: Modern component schema may differ; 1.20.1 uses target NBT forms.
 - RustChunk relevance: Rebuild target NBT/tooltip mapping.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/firework_tooltip_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/firework_tooltip_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2952,16 +2952,16 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `cb4c38e5848150ef263f0b639921ee731d19816a`
 - Size: 15521 bytes; 472 lines
-- Coverage: Complete text file reviewed, lines 1–472; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–400; 401–472. Total: 472 logical lines.
 - Purpose: Probe for first-person hand/action/attack/destroy behavior.
 - Dependencies / cross-references: Camera, item use, attack cooldown and block destruction.
 - Implementation / logic: Replays actions and emits first-person state.
 - Findings: Exact timing and item categories must match target 1.20.1.
 - RustChunk relevance: High priority for player feel and visual parity.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/first_person_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/first_person_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2975,10 +2975,10 @@
 - Implementation / logic: Runs scripted time intervals and outputs tick/partial/delay.
 - Findings: Desktop sleeps are not an Android scheduler; lifecycle and refresh rate differ.
 - RustChunk relevance: Reuse deterministic clock design; implement platform-specific pacing.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/frame_limiter_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/frame_limiter_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -2992,10 +2992,10 @@
 - Implementation / logic: Replays scripted events and logs tick/render order.
 - Findings: Desktop window lifecycle differs from Android activity lifecycle.
 - RustChunk relevance: Match 1.20.1 tick behavior while adapting Android lifecycle.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/game_loop_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/game_loop_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3009,10 +3009,10 @@
 - Implementation / logic: Serializes recipe preview/display output.
 - Findings: Recipe and item data are version-specific.
 - RustChunk relevance: Rebuild from 1.20.1 recipe schema.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/ghost_recipe_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/ghost_recipe_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3026,10 +3026,10 @@
 - Implementation / logic: Runs drop-one/drop-stack inputs and records inventory/result.
 - Findings: Item stack serialization and action order must match 1.20.1.
 - RustChunk relevance: Use as core inventory parity case.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/held_drop_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/held_drop_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3043,10 +3043,10 @@
 - Implementation / logic: Reads selected held stack and serializes state.
 - Findings: New component fields can differ by version.
 - RustChunk relevance: Implement target ItemStack empty/count/copy semantics.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/held_item_stack_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/held_item_stack_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3060,10 +3060,10 @@
 - Implementation / logic: Loads cases and emits slot/selection output.
 - Findings: Inventory/slot serialization is versioned.
 - RustChunk relevance: Adapt hotbar indices and NBT to 1.20.1.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hotbar_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/hotbar_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3077,10 +3077,10 @@
 - Implementation / logic: Builds crosshair/hotbar/health/XP and overlay draw commands.
 - Findings: Some newer HUD indicators/effects may be included; target atlas and behavior needed.
 - RustChunk relevance: High-value visual parity test; rebuild exact 1.20.1 draw list.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hud_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/hud_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3094,10 +3094,10 @@
 - Implementation / logic: Generates overlay-specific outputs and state values.
 - Findings: Overlay set and game fields may contain later additions.
 - RustChunk relevance: Use only 1.20.1 overlay types and ordering.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/hud_fixture/kinds.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/kinds.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3111,10 +3111,10 @@
 - Implementation / logic: Serializes text with inline objects and style runs.
 - Findings: Inline-object resource syntax may be a Horizon extension, not a vanilla 1.20.1 component.
 - RustChunk relevance: Treat as optional extension until target spec confirms.
-- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
+- Decision: **unnecessary; version-specific — Inline atlas-object syntax is not established as a vanilla 1.20.1 text-component feature; leave it out of the baseline.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/inline_object_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/inline_object_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3128,10 +3128,10 @@
 - Implementation / logic: Replays basic action sequence and emits logical state.
 - Findings: Platform bindings should not leak into game actions.
 - RustChunk relevance: Useful input test pattern.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/input_probe.rs`, or an isolated optional/t
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/input_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3145,10 +3145,10 @@
 - Implementation / logic: Replays press/release/action operations.
 - Findings: Must handle touch cancel and multiple pointers to avoid stuck key states.
 - RustChunk relevance: Important for Android control correctness.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk modu
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/interaction_input_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3162,10 +3162,10 @@
 - Implementation / logic: Sends/receives local discovery messages and serializes found servers.
 - Findings: Network permission/multicast behavior differs across Android devices.
 - RustChunk relevance: Optional multiplayer convenience feature.
-- Decision: Keep optional and isolated from the Vanilla 1.20.1 core; do not make it a launch or gameplay dependency.
+- Decision: **adaptable; reference; optional/future — Keep LAN discovery optional; direct-address multiplayer must not depend on multicast.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/lan_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/lan_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3179,10 +3179,10 @@
 - Implementation / logic: Loads chunks, applies light operations and reports differences.
 - Findings: Strong correctness oracle pattern; no test was run during this audit.
 - RustChunk relevance: Very high value for 1.20.1 lighting validation; recreate target fixtures.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/light_parity.rs`, or an isolated optional/tooling module if 
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/light_parity.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3196,10 +3196,10 @@
 - Implementation / logic: Serializes styled tooltip rows.
 - Findings: New component schema may not match 1.20.1 display.Lore NBT.
 - RustChunk relevance: Adapt to target NBT and tooltip ordering.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/lore_tooltip_f
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/lore_tooltip_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3208,15 +3208,15 @@
 - Source SHA: `8dc48c45c7a142fc46c4c3483dff39cb4f589b87`
 - Size: 3631 bytes; 98 lines
 - Coverage: Complete text file reviewed, lines 1–98; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Probe for marker particle state.
+- Purpose: Probe for the item-selected block-marker particle target and the corresponding ambient marker-emission loop in a controlled synthetic world.
 - Dependencies / cross-references: Particle registry, RNG and world position.
-- Implementation / logic: Runs deterministic marker particle cases and logs state.
-- Findings: Particle definitions are target-version data.
-- RustChunk relevance: Regenerate target particle set.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
+- Implementation / logic: Builds a barrier-filled scene, resolves the marker target from game mode and held item, runs animate_tick with a seeded ParticleEngine context and records marker requests and RNG state. It hardcodes a `.local/horizon-client/26.3` resource root.
+- Findings: The testing approach is deterministic, but the hardcoded 26.3 resources, `BlockMarker` setup and supporting ambient tables cannot be assumed to match 1.20.1.
+- RustChunk relevance: Possible particle/animate-tick parity harness after its data path and marker support are verified against the target; not an approved 1.20.1 feature by itself.
+- Decision: **adaptable; reference; version-specific — Verify 1.20.1 marker-particle support and rebuild the hardcoded newer resource path before retaining this probe.**
+- 1.20.1 implications: Confirm the exact block-marker particle and item-selection behavior in Java 1.20.1; replace the hardcoded newer resource root and prune later ambient fields.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/marker_particles_probe.rs`, or an isolated
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/marker_particles_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3230,10 +3230,10 @@
 - Implementation / logic: Replays menu interactions and serializes current state.
 - Findings: Horizon-specific screens should not be mixed with vanilla screen parity.
 - RustChunk relevance: Use as generic UI test harness; target menu set only.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/menu_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/menu_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3247,10 +3247,10 @@
 - Implementation / logic: Creates mipmaps and records sample results.
 - Findings: Filtering/alpha behavior affects foliage/cutout textures and needs Java parity.
 - RustChunk relevance: Use to validate texture pipeline before tuning performance.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mipmap_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/mipmap_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3258,16 +3258,16 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f4947016a0a6ad471bc65c35b874c66fd3a6ff8d`
 - Size: 66543 bytes; 1697 lines
-- Coverage: Complete text file reviewed, lines 1–1697; long files were read in consecutive sections of at most 400 lines.
+- Coverage: Complete text file reviewed in consecutive sections: 1–200; 201–400; 401–600; 601–800; 801–1000; 1001–1200; 1201–1400; 1401–1600; 1601–1697. Total: 1697 logical lines.
 - Purpose: Large deterministic mob AI parity harness.
 - Dependencies / cross-references: Mob types, world/block/biome/light/collision, brains/goals, events and LegacyRandom.
 - Implementation / logic: Builds scenarios and logs every AI-visible field, goals, navigation, movement, events and RNG state per tick.
 - Findings: Includes newer systems/species (Creaking heart, Copper Golem, Happy Ghast, Nautilus etc.) outside 1.20.1; simulation order/data are snapshot-specific.
 - RustChunk relevance: High value test harness; rebuild target 1.20.1 mob subset, never transplant its newer species list.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate module: RustChunk component corresponding to `crates/horizon-client/examples/probe/mob_ai_probe.rs`; keep optional or tooling-only features outside the 1.20.1 core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/mob_ai_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3281,10 +3281,10 @@
 - Implementation / logic: Prints dimensions, scale, max health, speed, attack and related attributes.
 - Findings: Values come from newer registry data and include later attributes.
 - RustChunk relevance: Regenerate only 1.20.1 mob attribute tables.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/mob_attributes_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/mob_attributes_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3298,10 +3298,10 @@
 - Implementation / logic: Replays situation/tick/stop/frequency/toast operations and serializes channel state.
 - Findings: Music list and timing policy are versioned; fake backend isn't actual audio output.
 - RustChunk relevance: Useful scheduling parity harness; rebuild 1.20.1 music events.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/music_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/music_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3309,17 +3309,17 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `d783d339ffffeef4c236d999598224b78eb8d8a3`
 - Size: 52918 bytes; 1430 lines
-- Coverage: Complete text file reviewed, lines 1–1430; long files were read in consecutive sections of at most 400 lines.
-- Purpose: Large natural spawn, spawner, trial-spawner and vault parity fixture.
+- Coverage: Complete text file reviewed in consecutive sections: 1–200; 201–400; 401–600; 601–800; 801–1000; 1001–1200; 1201–1400; 1401–1430. Total: 1430 logical lines.
+- Purpose: Large parity fixture covering natural mob spawning, classic block-based mob spawners, and newer Trial Spawner/Vault paths.
 - Dependencies / cross-references: Biome spawn tables, block/structure tags, collisions, entity counts, loot and SNBT.
-- Implementation / logic: Builds synthetic world and replays spawn selection/spawner/trial/vault ticks and events.
-- Findings: Contains Trial Spawner and Vault (1.21-era), plus newer species; these are not 1.20.1 baseline features.
-- RustChunk relevance: Adapt natural spawning and ordinary spawner only; exclude Trial/Vault from 1.20.1.
-- Decision: Exclude from the Minecraft 1.20.1 baseline; reconsider only if target-version evidence or an explicit extension requires it.
-- 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
-- Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/natural_spawn_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
-- Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
+- Implementation / logic: Builds mock level/spawn contexts and replays seeded spawn checks; also exercises classic spawner state and post-1.20.1 trial-spawner/vault logic through separate fixture branches.
+- Findings: Natural spawning and the ordinary mob spawner are relevant to 1.20.1. Trial Spawner and Vault branches are 1.21-era and must be excluded; species tables and spawn rules must be reconstructed from 1.20.1.
+- RustChunk relevance: Relevant to the 1.20.1 natural spawning rules and the ordinary block-based MobSpawner; Trial Spawner and Vault must be excluded from baseline scope.
+- Decision: **adaptable; reference; version-specific — Use the natural-spawn and ordinary-spawner portions with 1.20.1 data; exclude Trial Spawner and Vault paths.**
+- 1.20.1 implications: Compare natural spawning, spawn placement/restrictions, light/biome/cap checks and classic spawner delay/rotation/entity selection with 1.20.1; Trial Spawner/Vault are outside scope.
+- Follow-up checks: Split the input corpus by mode; retain only natural-spawn and classic-spawner cases for 1.20.1, then compare caps, mob categories, placement rules and seeded RNG against Java.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/natural_spawn_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
+- Evidence required before adoption: 1.20.1 source/data mapping and deterministic Java-oracle parity for natural spawning and classic spawner behavior; independent proof before any later-version extension.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
 ### 996. `crates/horizon-client/examples/probe/options_probe.rs`
@@ -3332,10 +3332,10 @@
 - Implementation / logic: Loads option examples, normalizes Horizon render-distance extension and prints vanilla-like serialization.
 - Findings: Horizon permits render distance 64 then normalizes above 32 for vanilla comparison; this is a deliberate extension.
 - RustChunk relevance: Implement exact 1.20.1 Options defaults/ranges and preserve unknown keys deliberately.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/options_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/options_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3349,10 +3349,10 @@
 - Implementation / logic: Builds overlay and queries files/language/sounds/font/atlas providers.
 - Findings: Resource formats/order must match 1.20.1; silent parse fallback can hide malformed packs.
 - RustChunk relevance: Important resource-pack parity harness; regenerate target resource codecs.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/pack_resources_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/pack_resources_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3366,10 +3366,10 @@
 - Implementation / logic: Applies click/scroll/type/erase actions and serializes draw commands.
 - Findings: Screen labels/compatibility levels and UI structure can be Horizon-specific.
 - RustChunk relevance: Reuse UI model test pattern; implement 1.20.1 pack format labels.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/pack_screen_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/pack_screen_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3383,10 +3383,10 @@
 - Implementation / logic: Replays activate/up/down and outputs selectable flags and committed order.
 - Findings: Pack compatibility policy must be versioned and required/server packs must not be removable.
 - RustChunk relevance: Useful core resource-pack selection tests.
-- Decision: Strong candidate for RustChunk adaptation, but rebuild target data and require the 1.20.1 parity evidence listed below before adoption.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/pack_selection_fixture.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/pack_selection_fixture.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
@@ -3400,10 +3400,10 @@
 - Implementation / logic: Creates particles from cases, ticks them and logs positions/velocities/quads/events.
 - Findings: Includes newer particle types and a fixed local resources path; catalogue/asset paths must be rebuilt for 1.20.1.
 - RustChunk relevance: Use as harness architecture; filter to supported 1.20.1 providers.
-- Decision: Use as architecture or test-harness reference only; no direct port is accepted until the listed 1.20.1 evidence is satisfied.
+- Decision: **adaptable; reference; version-specific — Use only as a QA/reference pattern; port no behavior or newer data without 1.20.1 parity evidence.**
 - 1.20.1 implications: Validate any reused behavior and data against exact Java 1.20.1 source/assets; the pinned Starling snapshot is not itself a 1.20.1 contract.
 - Follow-up checks: Create Java 1.20.1 oracle fixtures, edge-case regression tests and target-device checks where relevant; no test was executed in this audit.
-- RustChunk implementation mapping: Candidate mapping: RustChunk module corresponding to `crates/horizon-client/examples/probe/particle_providers_probe.rs`, or an isolated optional/tooling module if the feature is not vanilla core.
+- RustChunk implementation mapping: QA-only candidate fixture `tests/parity/starling/particle_providers_probe.rs` (proposed path, not created); no production/runtime module is implied. Rebuild case corpus, registries, assets and behavior against Minecraft Java 1.20.1.
 - Evidence required before adoption: Pinned 1.20.1 source comparison, deterministic fixture outputs and targeted regression evidence; on-device evidence for Android/GPU/audio paths where relevant.
 - Completion state: FULL TEXT REVIEW COMPLETE — full source text read and documented. No tests, build, benchmark, APK, server join, Forge client or Android device run was executed in this stage.
 
