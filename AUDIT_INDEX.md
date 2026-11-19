@@ -1539,3 +1539,28 @@
 | 1373 | `crates/horizon-client/src/game/native_projectiles.rs` | unnecessary; reference; optional/future | Routes projectile impacts through native hooks and replays impacts canceled by mods. |
 | 1374 | `crates/horizon-client/src/game/native_quick_move.rs` | unnecessary; reference; optional/future | Routes shift-clicks in native mod containers and settles item remainders safely. |
 | 1375 | `crates/horizon-client/src/game/native_recipes.rs` | unnecessary; reference; optional/future | Builds native-mod recipe catalogues, tracks recipe-book state and syncs selected recipe content. |
+| 1376 | `crates/horizon-client/src/game/native_server.rs` | unnecessary; reference; optional/future | Horizon-specific native server-mod API and server-scoped operations. |
+| 1377 | `crates/horizon-client/src/game/native_shaders.rs` | unnecessary; reference; optional/future | Native shader-pack lifecycle and renderer callbacks. |
+| 1378 | `crates/horizon-client/src/game/native_ticks.rs` | unnecessary; reference; optional/future | Native-mod game/server/player/entity tick callback dispatch. |
+| 1379 | `crates/horizon-client/src/game/native_visuals.rs` | unnecessary; reference; optional/future | Client-only native visual effects and render callbacks. |
+| 1380 | `crates/horizon-client/src/game/native_world_columns.rs` | unnecessary; reference; optional/future | Bounded native-mod world-column and heightmap queries. |
+| 1381 | `crates/horizon-client/src/game/native_world_edit.rs` | unnecessary; reference; optional/future | Validated server-side block/world edits for native mods. |
+| 1382 | `crates/horizon-client/src/game/native_world_read.rs` | unnecessary; reference; optional/future | Read-only world/block queries through Horizon's native API. |
+| 1383 | `crates/horizon-client/src/game/natural_spawning.rs` | essential; adapt; 1.20.1 | Natural mob spawning, spawn placement, category caps and spawn finalization. |
+| 1384 | `crates/horizon-client/src/game/nautili.rs` | unnecessary; version mismatch; future | Nautilus mob AI and interactions; species is absent from Minecraft 1.20.1. |
+| 1385 | `crates/horizon-client/src/game/net_harness.rs` | optional; test only; no runtime | Local networking test harness; not production game runtime. |
+| 1386 | `crates/horizon-client/src/game/nether_portal.rs` | essential; adapt; 1.20.1 | Portal contact, cooldown, destination search and dimension transfer. |
+| 1387 | `crates/horizon-client/src/game/no_resources.rs` | essential; adapt; 1.20.1 | Fallback behavior for absent or not-yet-loaded resources. |
+| 1388 | `crates/horizon-client/src/game/ominous_item_spawner.rs` | unnecessary; version mismatch; future | Ominous item spawner entity and timed item release; later-version feature. |
+| 1389 | `crates/horizon-client/src/game/options.rs` | essential; adapt; 1.20.1 | In-game settings UI, option changes and configuration persistence. |
+| 1390 | `crates/horizon-client/src/game/own_skin.rs` | optional; adapt; offline profile | Local player skin loading/customization; authenticated cloud upload must be gated. |
+| 1391 | `crates/horizon-client/src/game/packs.rs` | essential; adapt; 1.20.1 | Resource-pack discovery, layered server packs and asynchronous resource reload. |
+| 1392 | `crates/horizon-client/src/game/pad_menu.rs` | optional; controller feature | Controller focus/pointer navigation, menu input and on-screen keyboard. |
+| 1393 | `crates/horizon-client/src/game/pad.rs` | optional; controller feature | Controller polling, action mapping, movement/look, rumble and virtual input. |
+| 1394 | `crates/horizon-client/src/game/pad/android.rs` | optional; Android controller feature | Android controller device discovery and vibration bridge. |
+| 1395 | `crates/horizon-client/src/game/pad/hardware.rs` | optional; desktop only | gilrs controller backend and DualSense HID/haptics; exclude from Android baseline. |
+| 1396 | `crates/horizon-client/src/game/paintings.rs` | essential; adapt; 1.20.1 | Painting variants, placement/survival, breaking, ticking and rendering. |
+| 1397 | `crates/horizon-client/src/game/pandas.rs` | essential; adapt; 1.20.1 | Panda food pickup, bamboo interaction, breeding/age effects and particles. |
+| 1398 | `crates/horizon-client/src/game/passengers.rs` | essential; adapt; 1.20.1 | Entity passenger graphs, vehicle seating, jockeys and skeleton horse traps. |
+| 1399 | `crates/horizon-client/src/game/perf.rs` | optional; diagnostics | Performance sampling, GPU memory and stats overlay. |
+| 1400 | `crates/horizon-client/src/game/persist.rs` | essential; adapt; 1.20.1 | Entity/chunk NBT persistence, passenger trees, attachments and scheduled ticks. |
