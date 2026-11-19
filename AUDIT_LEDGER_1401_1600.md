@@ -870,12 +870,12 @@
 - Dependencies / cross-references: Player pose/movement; parrot state/NBT; collision/landing; sound and random source.
 - Implementation / logic: Tracks shoulder occupants, attachment timers and dismount triggers; persists occupant data and emits occasional sounds.
 - Findings: Core parrot feature exists in 1.20.1; exact transition order, NBT keys and later additions need target-era parity.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Implement classic 1.20.1 shoulder attachment/dismount rules and legacy entity NBT; do not import newer fields without source proof.
-- 1.20.1 implications: Compare both shoulders, jump/landing, water, sneaking, death, dimension change, logout/reload and persistence.
-- Follow-up checks: RustChunk 1.20.1 player shoulder state and parrot interaction subsystem.
-- RustChunk implementation mapping: 1.20.1 vanilla source/mappings, deterministic player/parrot fixtures, save/reload and multiplayer traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Vanilla survival gameplay; useful for player/parrot state, not launcher or transport infrastructure.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Implement classic 1.20.1 shoulder attachment/dismount rules and legacy entity NBT; do not import newer fields without source proof.
+- Follow-up checks: Compare both shoulders, jump/landing, water, sneaking, death, dimension change, logout/reload and persistence.
+- RustChunk implementation mapping: RustChunk 1.20.1 player shoulder state and parrot interaction subsystem.
+- Evidence required before adoption: 1.20.1 vanilla source/mappings, deterministic player/parrot fixtures, save/reload and multiplayer traces.
 - Completion state: COMPLETE — 213 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 7912 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1452. `crates/horizon-client/src/game/sign_edit.rs`
@@ -887,12 +887,12 @@
 - Dependencies / cross-references: Sign block entities/text; permissions; item use; LAN guest state; sign-update packets; EditBox/clipboard.
 - Implementation / logic: Maintains side text, filter/style state; handles wax/ink/dye interactions and sends edited text in serverbound packets.
 - Findings: Classic editing is 1.20.1 functionality, but show_dialog/custom actions and newer text/component assumptions are later behavior; current packets are not target wire-format evidence.
-- RustChunk relevance: rewrite required; version-specific
-- Decision: Rebuild with 1.20.1 SignBlockEntity NBT/text and UpdateSign semantics; omit later click actions and filtering behavior absent from target sources.
-- 1.20.1 implications: Check front/back packets, line limits, filtered/unfiltered text, wax/ink/dye/glow, rotation, permissions and click events.
-- Follow-up checks: RustChunk 1.20.1 sign text model, editor UI and legacy protocol adapter.
-- RustChunk implementation mapping: 1.20.1 mappings/source, packet byte fixtures, sign NBT round-trip, permission and hostile text tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Server-visible sign editing/text; important after target text and protocol compatibility are established.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild with 1.20.1 SignBlockEntity NBT/text and UpdateSign semantics; omit later click actions and filtering behavior absent from target sources.
+- Follow-up checks: Check front/back packets, line limits, filtered/unfiltered text, wax/ink/dye/glow, rotation, permissions and click events.
+- RustChunk implementation mapping: RustChunk 1.20.1 sign text model, editor UI and legacy protocol adapter.
+- Evidence required before adoption: 1.20.1 mappings/source, packet byte fixtures, sign NBT round-trip, permission and hostile text tests.
 - Completion state: COMPLETE — 903 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 35787 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1453. `crates/horizon-client/src/game/sniffers.rs`
@@ -904,12 +904,12 @@
 - Dependencies / cross-references: Sniffer AI/state; egg timer; world random/block queries; particle/sound system; player proximity.
 - Implementation / logic: Advances egg hatch and sniff/dig phases, checks nearby conditions and emits effects.
 - Findings: Sniffer and egg exist in 1.20.1; exact ticks and transitions require oracle comparison.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Use 1.20.1 sniffer states, egg timing, AI and archaeology behavior only; exclude later additions.
-- 1.20.1 implications: Verify hatch stages/ticks, support, weather, cooldown, dig duration, drops, unload/reload and authority.
-- Follow-up checks: RustChunk 1.20.1 sniffer entity/egg simulation and effects.
-- RustChunk implementation mapping: 1.20.1 source mapping, fixed-random tick fixtures, save/load and multiplayer traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: A vanilla 1.20.1 mob and related gameplay behavior.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use 1.20.1 sniffer states, egg timing, AI and archaeology behavior only; exclude later additions.
+- Follow-up checks: Verify hatch stages/ticks, support, weather, cooldown, dig duration, drops, unload/reload and authority.
+- RustChunk implementation mapping: RustChunk 1.20.1 sniffer entity/egg simulation and effects.
+- Evidence required before adoption: 1.20.1 source mapping, fixed-random tick fixtures, save/load and multiplayer traces.
 - Completion state: COMPLETE — 110 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 4505 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1454. `crates/horizon-client/src/game/social.rs`
@@ -921,12 +921,12 @@
 - Dependencies / cross-references: Player profiles/UUIDs; server player list; client storage/options; social UI and session lifecycle.
 - Implementation / logic: Stores locally hidden player identities and updates player-tab/session state.
 - Findings: Client-side account/social UX, not packet interoperability; platform social APIs and persistence are host-specific.
-- RustChunk relevance: unnecessary; optional/future
-- Decision: Do not port Horizon service assumptions. A future local hide feature must be independent of auth and cannot claim to block server-side chat.
-- 1.20.1 implications: If retained, test UUID changes, offline profiles, duplicate names, reconnect, deletion and privacy-safe persistence.
-- Follow-up checks: Optional local player-hide settings module; no baseline mapping.
-- RustChunk implementation mapping: Explicit UX requirement, privacy/data-retention design and offline/authenticated identity tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Optional local social preference; not required for multiplayer connectivity.
+- Decision: unnecessary; optional/future
+- 1.20.1 implications: Do not port Horizon service assumptions. A future local hide feature must be independent of auth and cannot claim to block server-side chat.
+- Follow-up checks: If retained, test UUID changes, offline profiles, duplicate names, reconnect, deletion and privacy-safe persistence.
+- RustChunk implementation mapping: Optional local player-hide settings module; no baseline mapping.
+- Evidence required before adoption: Explicit UX requirement, privacy/data-retention design and offline/authenticated identity tests.
 - Completion state: COMPLETE — 244 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 9573 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1455. `crates/horizon-client/src/game/spawner.rs`
@@ -938,12 +938,12 @@
 - Dependencies / cross-references: Spawner block entity; mob registry/spawn rules; collision/difficulty; spawn eggs; renderer clock.
 - Implementation / logic: Ticks delay/count/range checks, samples positions, validates placement and spawns mobs; renders preview entity.
 - Findings: Vanilla BaseSpawner is relevant to 1.20.1. TrialSpawner/Vault paths are not target baseline.
-- RustChunk relevance: rewrite required; version-specific
-- Decision: Implement 1.20.1 BaseSpawner and spawn eggs from target mappings; exclude trial spawner/vault and later spawn data.
-- 1.20.1 implications: Compare delay reset, count/range, nearby cap, spawn potentials, light/placement, egg NBT and unload timing.
-- Follow-up checks: RustChunk 1.20.1 spawner tick, spawn-egg use and preview renderer.
-- RustChunk implementation mapping: 1.20.1 vanilla source, deterministic RNG fixtures, spawner NBT and placement tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Core vanilla mob spawning and spawn-egg behavior.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Implement 1.20.1 BaseSpawner and spawn eggs from target mappings; exclude trial spawner/vault and later spawn data.
+- Follow-up checks: Compare delay reset, count/range, nearby cap, spawn potentials, light/placement, egg NBT and unload timing.
+- RustChunk implementation mapping: RustChunk 1.20.1 spawner tick, spawn-egg use and preview renderer.
+- Evidence required before adoption: 1.20.1 vanilla source, deterministic RNG fixtures, spawner NBT and placement tests.
 - Completion state: COMPLETE — 563 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 23627 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1456. `crates/horizon-client/src/game/spear.rs`
@@ -955,12 +955,12 @@
 - Dependencies / cross-references: Later spear weapon data; attack/damage/knockback; entity collision; item use and durability.
 - Implementation / logic: Computes kinetic attack effects, selects targets and applies piercing/lunge damage or movement.
 - Findings: The weapon mechanic is later-version content absent from vanilla Minecraft 1.20.1.
-- RustChunk relevance: unnecessary; version-specific
-- Decision: Exclude entirely from vanilla 1.20.1; a modded spear needs its own Forge mod specification.
-- 1.20.1 implications: No baseline work unless a named 1.20.1 mod requires this behavior.
-- Follow-up checks: None for vanilla 1.20.1.
-- RustChunk implementation mapping: Specific 1.20.1 mod source, item registration, combat rules and license.
-- Evidence required before adoption: undefined
+- RustChunk relevance: No vanilla 1.20.1 relevance; only potential reference for a specifically selected weapon mod.
+- Decision: unnecessary; version-specific
+- 1.20.1 implications: Exclude entirely from vanilla 1.20.1; a modded spear needs its own Forge mod specification.
+- Follow-up checks: No baseline work unless a named 1.20.1 mod requires this behavior.
+- RustChunk implementation mapping: None for vanilla 1.20.1.
+- Evidence required before adoption: Specific 1.20.1 mod source, item registration, combat rules and license.
 - Completion state: COMPLETE — 402 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 16402 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1457. `crates/horizon-client/src/game/spectator.rs`
@@ -972,12 +972,12 @@
 - Dependencies / cross-references: Spectator mode; player list/entity IDs; teleport-spectator packet; wheel/input state.
 - Implementation / logic: Builds spectator targets, draws selection UI and sends a target-selection packet.
 - Findings: Spectator mode exists in 1.20.1; packet ID/body and target construction must come from its protocol.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Recreate target rules/player list and packet layout with 1.20.1 sources; never reuse current IDs.
-- 1.20.1 implications: Check filtering, disconnected/dead targets, ordering, touch-wheel selection, respawn and packet traces.
-- Follow-up checks: RustChunk spectator HUD/input plus versioned teleport-spectator packet.
-- RustChunk implementation mapping: 1.20.1 mappings/packet captures, spectator state and touch interaction tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Relevant multiplayer game mode/client interaction; packet compatibility is essential.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Recreate target rules/player list and packet layout with 1.20.1 sources; never reuse current IDs.
+- Follow-up checks: Check filtering, disconnected/dead targets, ordering, touch-wheel selection, respawn and packet traces.
+- RustChunk implementation mapping: RustChunk spectator HUD/input plus versioned teleport-spectator packet.
+- Evidence required before adoption: 1.20.1 mappings/packet captures, spectator state and touch interaction tests.
 - Completion state: COMPLETE — 115 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 4664 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1458. `crates/horizon-client/src/game/spill.rs`
@@ -989,12 +989,12 @@
 - Dependencies / cross-references: Block entities/item stacks; loot context/tables; NBT/item serialization; break/explosion; drop entities.
 - Implementation / logic: Selects block-entity contents, serializes data into drops and routes destruction output through loot logic.
 - Findings: Important 1.20.1 behavior, but this snapshot uses later item components and includes non-target types.
-- RustChunk relevance: rewrite required; version-specific
-- Decision: Use 1.20.1 legacy item NBT for shulkers, banners, skulls, pots and inventories; do not assume components or later entities.
-- 1.20.1 implications: Verify every target block entity's drops, loot context, explosion, silk touch/creative and NBT round-trip.
-- Follow-up checks: RustChunk 1.20.1 block-break/drop pipeline and legacy BE-to-ItemStack serializer.
-- RustChunk implementation mapping: 1.20.1 mappings, world fixtures, seeded loot cases and item golden files.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Important vanilla block/container drops and item-persistence correctness.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Use 1.20.1 legacy item NBT for shulkers, banners, skulls, pots and inventories; do not assume components or later entities.
+- Follow-up checks: Verify every target block entity's drops, loot context, explosion, silk touch/creative and NBT round-trip.
+- RustChunk implementation mapping: RustChunk 1.20.1 block-break/drop pipeline and legacy BE-to-ItemStack serializer.
+- Evidence required before adoption: 1.20.1 mappings, world fixtures, seeded loot cases and item golden files.
 - Completion state: COMPLETE — 840 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 33131 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1459. `crates/horizon-client/src/game/splash_water.rs`
@@ -1006,12 +1006,12 @@
 - Dependencies / cross-references: Splash projectile/effects; fire and entity status; axolotl/armor stand; particles/sounds/world state.
 - Implementation / logic: Selects affected targets, applies water-sensitive transitions/extinguishing and emits splash feedback.
 - Findings: Vanilla behavior is relevant to 1.20.1; species and tag assumptions need version matching.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Port the target-era entity list and exact splash/fire semantics; avoid later species/tags.
-- 1.20.1 implications: Test fire, axolotl, armor stands, radius, line of sight, multiple targets and event ordering.
-- Follow-up checks: RustChunk 1.20.1 splash-potion effect handler and water-susceptibility adapter.
-- RustChunk implementation mapping: 1.20.1 source/mappings, entity fixtures, radius tests and server event traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Vanilla potion/entity behavior with moderate gameplay relevance.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Port the target-era entity list and exact splash/fire semantics; avoid later species/tags.
+- Follow-up checks: Test fire, axolotl, armor stands, radius, line of sight, multiple targets and event ordering.
+- RustChunk implementation mapping: RustChunk 1.20.1 splash-potion effect handler and water-susceptibility adapter.
+- Evidence required before adoption: 1.20.1 source/mappings, entity fixtures, radius tests and server event traces.
 - Completion state: COMPLETE — 259 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 10992 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1460. `crates/horizon-client/src/game/split.rs`
@@ -1023,12 +1023,12 @@
 - Dependencies / cross-references: Window/compositor; local guests; gamepad routing; multiple renderers and local server/player lifecycle.
 - Implementation / logic: Creates/removes local participants, computes viewports, routes input and renders synchronized local game views.
 - Findings: Desktop multi-window/local sessions, not external network multiplayer and not needed for Android A22 baseline.
-- RustChunk relevance: unnecessary; optional/future
-- Decision: Exclude; any future mobile multi-instance feature needs Android-specific lifecycle and memory design.
-- 1.20.1 implications: No baseline follow-up; future work needs surface lifecycle, memory, touch focus and state isolation.
-- Follow-up checks: None for Android 1.20.1 baseline.
-- RustChunk implementation mapping: Explicit multi-instance product requirement and Android resource/lifecycle design.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Desktop local split-screen, unrelated to external server connections.
+- Decision: unnecessary; optional/future
+- 1.20.1 implications: Exclude; any future mobile multi-instance feature needs Android-specific lifecycle and memory design.
+- Follow-up checks: No baseline follow-up; future work needs surface lifecycle, memory, touch focus and state isolation.
+- RustChunk implementation mapping: None for Android 1.20.1 baseline.
+- Evidence required before adoption: Explicit multi-instance product requirement and Android resource/lifecycle design.
 - Completion state: COMPLETE — 854 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 35013 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1461. `crates/horizon-client/src/game/split/frames.rs`
@@ -1040,12 +1040,12 @@
 - Dependencies / cross-references: Split-screen compositor/frame state and debug presentation.
 - Implementation / logic: Tracks/displays frame diagnostics for split-screen renderer.
 - Findings: Desktop split-screen-only, no standalone 1.20.1 gameplay role.
-- RustChunk relevance: unnecessary; desktop-only
-- Decision: Do not port to Android baseline.
-- 1.20.1 implications: No baseline follow-up; only consider with independently scoped split-screen system.
-- Follow-up checks: None.
-- RustChunk implementation mapping: Approved split-screen feature and Android diagnostics design.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Diagnostics tied exclusively to desktop split-screen.
+- Decision: unnecessary; desktop-only
+- 1.20.1 implications: Do not port to Android baseline.
+- Follow-up checks: No baseline follow-up; only consider with independently scoped split-screen system.
+- RustChunk implementation mapping: None.
+- Evidence required before adoption: Approved split-screen feature and Android diagnostics design.
 - Completion state: COMPLETE — 44 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 2027 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1462. `crates/horizon-client/src/game/split/hud.rs`
@@ -1057,12 +1057,12 @@
 - Dependencies / cross-references: Local guest/player list; controller state; HUD sprites/widgets.
 - Implementation / logic: Draws per-viewport player labels and context-sensitive gamepad overlays.
 - Findings: Only meaningful for multiple local players and controller navigation.
-- RustChunk relevance: unnecessary; desktop-only
-- Decision: Exclude; implement touch affordances in a separate mobile control layer.
-- 1.20.1 implications: No baseline follow-up; future controller support needs Android input and coexistence tests.
-- Follow-up checks: None now; optional controller HUD later.
-- RustChunk implementation mapping: Approved controller UX specification, supported assets and Android controller tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Desktop split-screen/controller HUD, not Android touch baseline.
+- Decision: unnecessary; desktop-only
+- 1.20.1 implications: Exclude; implement touch affordances in a separate mobile control layer.
+- Follow-up checks: No baseline follow-up; future controller support needs Android input and coexistence tests.
+- RustChunk implementation mapping: None now; optional controller HUD later.
+- Evidence required before adoption: Approved controller UX specification, supported assets and Android controller tests.
 - Completion state: COMPLETE — 231 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 9258 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1463. `crates/horizon-client/src/game/split/pads.rs`
@@ -1074,12 +1074,12 @@
 - Dependencies / cross-references: Desktop gamepad backends; local participants; input polling and player state.
 - Implementation / logic: Enumerates/assigns controllers and handles joining/leaving and reconnects.
 - Findings: Desktop controller model, not Android single-session touch controls.
-- RustChunk relevance: unnecessary; desktop-only
-- Decision: Do not port desktop discovery; future Android controller code must use Android device IDs/lifecycle.
-- 1.20.1 implications: Future: test detach/reattach, multiple pads, vibration and touch focus.
-- Follow-up checks: None for baseline.
-- RustChunk implementation mapping: Android controller request and device-level validation.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Desktop controller assignment, not Android device input.
+- Decision: unnecessary; desktop-only
+- 1.20.1 implications: Do not port desktop discovery; future Android controller code must use Android device IDs/lifecycle.
+- Follow-up checks: Future: test detach/reattach, multiple pads, vibration and touch focus.
+- RustChunk implementation mapping: None for baseline.
+- Evidence required before adoption: Android controller request and device-level validation.
 - Completion state: COMPLETE — 593 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 21882 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1464. `crates/horizon-client/src/game/split/players.rs`
@@ -1091,12 +1091,12 @@
 - Dependencies / cross-references: Split-screen coordinator; profiles; local server guest records; renderer/session ownership.
 - Implementation / logic: Creates/removes local participants and reconciles their profile/world session state.
 - Findings: Local co-op sessions, not external multiplayer client or Forge handshake.
-- RustChunk relevance: unnecessary; desktop-only
-- Decision: Exclude; keep external server-player identity separate from local co-op guests.
-- 1.20.1 implications: No baseline follow-up; do not conflate local IDs with remote entity/player IDs.
-- Follow-up checks: None.
-- RustChunk implementation mapping: No adoption evidence unless local co-op is explicitly scoped.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Local co-op guest/session management, distinct from remote server players.
+- Decision: unnecessary; desktop-only
+- 1.20.1 implications: Exclude; keep external server-player identity separate from local co-op guests.
+- Follow-up checks: No baseline follow-up; do not conflate local IDs with remote entity/player IDs.
+- RustChunk implementation mapping: None.
+- Evidence required before adoption: No adoption evidence unless local co-op is explicitly scoped.
 - Completion state: COMPLETE — 424 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 16857 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1465. `crates/horizon-client/src/game/split/setup.rs`
@@ -1108,12 +1108,12 @@
 - Dependencies / cross-references: Desktop monitor enumeration; window sizing and viewport layout; settings.
 - Implementation / logic: Stores/applies display arrangement and monitor choices for local split-screen.
 - Findings: Desktop display configuration has no direct Android counterpart or game-core role.
-- RustChunk relevance: unnecessary; desktop-only
-- Decision: Do not port; use Android window/inset APIs for any separately designed feature.
-- 1.20.1 implications: No baseline follow-up.
-- Follow-up checks: None.
-- RustChunk implementation mapping: Separately scoped Android multi-window/local co-op feature.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Desktop display setup with no direct Android baseline role.
+- Decision: unnecessary; desktop-only
+- 1.20.1 implications: Do not port; use Android window/inset APIs for any separately designed feature.
+- Follow-up checks: No baseline follow-up.
+- RustChunk implementation mapping: None.
+- Evidence required before adoption: Separately scoped Android multi-window/local co-op feature.
 - Completion state: COMPLETE — 188 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 7892 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1466. `crates/horizon-client/src/game/split/windows.rs`
@@ -1125,12 +1125,12 @@
 - Dependencies / cross-references: Desktop windowing APIs; monitor enumeration; compositor; per-window renderer/input ownership.
 - Implementation / logic: Creates/arranges/destroys multiple native windows linked to local participants.
 - Findings: Desktop window APIs do not map to Android Activity/SurfaceView lifecycle or external multiplayer.
-- RustChunk relevance: unnecessary; desktop-only
-- Decision: Exclude desktop window management; Android rendering remains surface/activity-lifecycle aware.
-- 1.20.1 implications: No baseline follow-up; future Android multi-window needs platform/memory/surface assessment.
-- Follow-up checks: None for baseline.
-- RustChunk implementation mapping: Explicit Android multi-window requirement and device tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Desktop multi-window management cannot be reused for Android surfaces.
+- Decision: unnecessary; desktop-only
+- 1.20.1 implications: Exclude desktop window management; Android rendering remains surface/activity-lifecycle aware.
+- Follow-up checks: No baseline follow-up; future Android multi-window needs platform/memory/surface assessment.
+- RustChunk implementation mapping: None for baseline.
+- Evidence required before adoption: Explicit Android multi-window requirement and device tests.
 - Completion state: COMPLETE — 678 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 27203 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1467. `crates/horizon-client/src/game/startup_menu.rs`
@@ -1142,12 +1142,12 @@
 - Dependencies / cross-references: Resource reload worker; renderer/title; local world/remote server entry; platform events/input; mod/resource restart.
 - Implementation / logic: Runs startup tasks asynchronously, reports errors/progress, retries, waits for first title frame and dispatches local/world/server entry.
 - Findings: Loader/hand-off pattern is useful, but direct port carries Horizon render/assets and later-version assumptions; Android lifecycle needs separate handling.
-- RustChunk relevance: adaptable; reference; rewrite required
-- Decision: Build RustChunk bootstrap for 1.20.1 resources/Java/Forge dependencies with responsive UI, cancellation and readiness gates; do not import Horizon native-mod restart.
-- 1.20.1 implications: Check cancellation, panic/error reports, idempotent retry, partial cleanup, foreground/background, low-memory and connect failure recovery.
-- Follow-up checks: RustChunk Android startup coordinator and versioned resource-preparation state machine.
-- RustChunk implementation mapping: Deterministic worker tests, Android lifecycle tests, failure injection and first-frame/session traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Strong startup/retry/entry architecture reference, but not evidence of Forge compatibility.
+- Decision: adaptable; reference; rewrite required
+- 1.20.1 implications: Build RustChunk bootstrap for 1.20.1 resources/Java/Forge dependencies with responsive UI, cancellation and readiness gates; do not import Horizon native-mod restart.
+- Follow-up checks: Check cancellation, panic/error reports, idempotent retry, partial cleanup, foreground/background, low-memory and connect failure recovery.
+- RustChunk implementation mapping: RustChunk Android startup coordinator and versioned resource-preparation state machine.
+- Evidence required before adoption: Deterministic worker tests, Android lifecycle tests, failure injection and first-frame/session traces.
 - Completion state: COMPLETE — 1794 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 74444 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1468. `crates/horizon-client/src/game/station_control.rs`
@@ -1159,12 +1159,12 @@
 - Dependencies / cross-references: Developer control socket; game/menu engine; inventory/stations; parsing and permission boundary.
 - Implementation / logic: Routes external debug commands to menu clicks, text, XP and entity/effect mutations.
 - Findings: Developer/debug interface and a sensitive command boundary, not player-facing game code.
-- RustChunk relevance: unnecessary; reference; optional/future
-- Decision: Exclude from production baseline; any diagnostic socket must be local, authenticated, allowlisted and absent from release APKs.
-- 1.20.1 implications: If retained, test binding, auth, allowlist, bounds, release exclusion and privacy/log behavior.
-- Follow-up checks: No runtime mapping; optional authenticated developer diagnostics.
-- RustChunk implementation mapping: Threat model, authenticated protocol, dev-build gate and security review.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Developer-facing command surface with security implications.
+- Decision: unnecessary; reference; optional/future
+- 1.20.1 implications: Exclude from production baseline; any diagnostic socket must be local, authenticated, allowlisted and absent from release APKs.
+- Follow-up checks: If retained, test binding, auth, allowlist, bounds, release exclusion and privacy/log behavior.
+- RustChunk implementation mapping: No runtime mapping; optional authenticated developer diagnostics.
+- Evidence required before adoption: Threat model, authenticated protocol, dev-build gate and security review.
 - Completion state: COMPLETE — 239 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 10492 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1469. `crates/horizon-client/src/game/stations.rs`
@@ -1176,12 +1176,12 @@
 - Dependencies / cross-references: Items/inventory/menu; recipes/enchantments/brewing; block entities; UI atlas/tooltips; sound/random; remote menus and native hooks.
 - Implementation / logic: Maintains station inputs/results/offers, handles menu transactions/clicks, draws screens/tooltips and ticks brewing stands.
 - Findings: Core 1.20.1 workstations matter; modern item components, bundles, later smithing templates/entities/blocks and Horizon native hooks make direct reuse unsafe.
-- RustChunk relevance: rewrite required; version-specific; reference
-- Decision: Rebuild target 1.20.1 stations with legacy ItemStack/NBT, target recipe/enchantment registries and 1.20.1 container packet sync; gate later-only branches.
-- 1.20.1 implications: Verify station recipes/results, shift-click/cursor, costs/XP, menu/state IDs, anvil break chance, brewing fuel/ticks and legacy tooltip data.
-- Follow-up checks: RustChunk 1.20.1 station domain modules plus separate legacy remote-menu adapter.
-- RustChunk implementation mapping: 1.20.1 mappings/packet fixtures, station inventory scenarios, recipe/XP goldens and multiplayer click traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: High gameplay relevance for vanilla menus, but target-version rewrite is required.
+- Decision: rewrite required; version-specific; reference
+- 1.20.1 implications: Rebuild target 1.20.1 stations with legacy ItemStack/NBT, target recipe/enchantment registries and 1.20.1 container packet sync; gate later-only branches.
+- Follow-up checks: Verify station recipes/results, shift-click/cursor, costs/XP, menu/state IDs, anvil break chance, brewing fuel/ticks and legacy tooltip data.
+- RustChunk implementation mapping: RustChunk 1.20.1 station domain modules plus separate legacy remote-menu adapter.
+- Evidence required before adoption: 1.20.1 mappings/packet fixtures, station inventory scenarios, recipe/XP goldens and multiplayer click traces.
 - Completion state: COMPLETE — 3120 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 124600 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1470. `crates/horizon-client/src/game/stats_screen.rs`
@@ -1193,12 +1193,12 @@
 - Dependencies / cross-references: Player stats; item/mob registry/translations; UI sprites/widgets; ClientCommand packet; scroll/input.
 - Implementation / logic: Builds custom stat rows, sorts item columns, lists mob kill stats and handles tab/sort/click/scroll.
 - Findings: Statistics UI exists in 1.20.1, but later stat names/species and widget contracts must be filtered/adapted.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Use 1.20.1 stat registry keys and packet format; remove non-target entities/stats and adapt Android input/UI.
-- 1.20.1 implications: Compare ordering, formatting, empty tabs, sort direction, scroll bounds and 1.20.1 request/response.
-- Follow-up checks: RustChunk stats view and Android-adapted statistics screen.
-- RustChunk implementation mapping: 1.20.1 stat mappings, packet traces, locale goldens and touch-scroll tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Optional statistics UI; not a first-join requirement.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use 1.20.1 stat registry keys and packet format; remove non-target entities/stats and adapt Android input/UI.
+- Follow-up checks: Compare ordering, formatting, empty tabs, sort direction, scroll bounds and 1.20.1 request/response.
+- RustChunk implementation mapping: RustChunk stats view and Android-adapted statistics screen.
+- Evidence required before adoption: 1.20.1 stat mappings, packet traces, locale goldens and touch-scroll tests.
 - Completion state: COMPLETE — 654 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 26610 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1471. `crates/horizon-client/src/game/stats.rs`
@@ -1210,12 +1210,12 @@
 - Dependencies / cross-references: Player UUID/world save; JSON storage; entities/mounts; block/fluid facts; LAN guest stats; random/difficulty.
 - Implementation / logic: Maintains stats maps and dirty updates, reads/writes stats JSON, records tick/movement counters and runs time-since-rest phantom spawning.
 - Findings: Basic counters/phantoms are 1.20.1-relevant; later keys/species such as Happy Ghast/Nautilus must be excluded.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Use target 1.20.1 stat keys, player stats path and movement categories; remove new mount species and verify Java integer/JSON semantics.
-- 1.20.1 implications: Test dirty sync/reset, movement thresholds, sleep/death, save/load UUID, phantom interval/difficulty and bounds.
-- Follow-up checks: RustChunk 1.20.1 stat store, counters and phantom routine.
-- RustChunk implementation mapping: 1.20.1 stat source, JSON fixtures, seeded movement/spawn tests and server packet traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Player-stat persistence and phantom behavior are relevant vanilla systems requiring target registries.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use target 1.20.1 stat keys, player stats path and movement categories; remove new mount species and verify Java integer/JSON semantics.
+- Follow-up checks: Test dirty sync/reset, movement thresholds, sleep/death, save/load UUID, phantom interval/difficulty and bounds.
+- RustChunk implementation mapping: RustChunk 1.20.1 stat store, counters and phantom routine.
+- Evidence required before adoption: 1.20.1 stat source, JSON fixtures, seeded movement/spawn tests and server packet traces.
 - Completion state: COMPLETE — 500 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 19209 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1472. `crates/horizon-client/src/game/storage.rs`
@@ -1227,12 +1227,12 @@
 - Dependencies / cross-references: Chest/shulker/barrel block entities; item stacks; world states/mob collision; menus; sound; player reach.
 - Implementation / logic: Checks blocked containers, composes chest halves, maps menu slots to block entities, preserves ender inventory and draws screens.
 - Findings: Shulker/ender chests are 1.20.1 features; copper-chest branches are later content. Local simulation must be separated from remote server menu authority.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Port 1.20.1 chest/shulker/ender-chest types and legacy item NBT; exclude copper chest; separate remote menus from local state.
-- 1.20.1 implications: Verify double chest order, blocked cat/conductor, ender inventory save/close, reach, slot IDs, spectator and sounds.
-- Follow-up checks: RustChunk container model and legacy UI connected to remote menu adapter.
-- RustChunk implementation mapping: 1.20.1 block/BE schemas, packet traces, inventory round-trip and double chest tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Important container/inventory behavior and player interactions.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Port 1.20.1 chest/shulker/ender-chest types and legacy item NBT; exclude copper chest; separate remote menus from local state.
+- Follow-up checks: Verify double chest order, blocked cat/conductor, ender inventory save/close, reach, slot IDs, spectator and sounds.
+- RustChunk implementation mapping: RustChunk container model and legacy UI connected to remote menu adapter.
+- Evidence required before adoption: 1.20.1 block/BE schemas, packet traces, inventory round-trip and double chest tests.
 - Completion state: COMPLETE — 522 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 20803 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1473. `crates/horizon-client/src/game/structure_blocks.rs`
@@ -1244,12 +1244,12 @@
 - Dependencies / cross-references: Structure block entity; NBT/gzip; StructureTemplate; chunks/entities; block registry transforms; permissions/protocol.
 - Implementation / logic: Caches templates, captures block/entity data, writes generated structure NBT, detects corners, transforms/places structures and updates entity state.
 - Findings: Core structure blocks exist in 1.20.1. TestInstanceBlock/later data assumptions are not target baseline; template IO paths need security review.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Use 1.20.1 template NBT/DataVersion/placement; exclude TestInstanceBlock and retain path/permission guards.
-- 1.20.1 implications: Test save/load, corner scan, invalid size, rotations/mirrors, integrity seed, entity/BE persistence and guest permissions.
-- Follow-up checks: RustChunk 1.20.1 creative structure-template manager behind game-master gates.
-- RustChunk implementation mapping: 1.20.1 mappings/NBT fixtures, rotation goldens, traversal tests and permission traces.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Optional creative/admin functionality, not required for normal server joining.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use 1.20.1 template NBT/DataVersion/placement; exclude TestInstanceBlock and retain path/permission guards.
+- Follow-up checks: Test save/load, corner scan, invalid size, rotations/mirrors, integrity seed, entity/BE persistence and guest permissions.
+- RustChunk implementation mapping: RustChunk 1.20.1 creative structure-template manager behind game-master gates.
+- Evidence required before adoption: 1.20.1 mappings/NBT fixtures, rotation goldens, traversal tests and permission traces.
 - Completion state: COMPLETE — 739 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 28181 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1474. `crates/horizon-client/src/game/structure_edit.rs`
@@ -1261,12 +1261,12 @@
 - Dependencies / cross-references: Block editor; structure modes/fields; EditBox/UI; serverbound SetStructureBlock packet.
 - Implementation / logic: Builds mode-dependent controls, validates names, formats integrity, serializes offsets/options and restores state on cancel.
 - Findings: Creative editor is relevant, but ordinals and packet body are version-sensitive; current packet is not 1.20.1 evidence.
-- RustChunk relevance: adaptable; version-specific
-- Decision: Use exact 1.20.1 packet fields/ordinals and target client mappings for parsing and screen behavior.
-- 1.20.1 implications: Check modes/options, cancel/done, invalid numbers, names, mirror/rotation and packet bytes.
-- Follow-up checks: RustChunk 1.20.1 structure editor and protocol adapter.
-- RustChunk implementation mapping: 1.20.1 mappings, packet goldens, edit/cancel fixtures and creative permission tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Optional creative editor; its packet must be target-version exact.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use exact 1.20.1 packet fields/ordinals and target client mappings for parsing and screen behavior.
+- Follow-up checks: Check modes/options, cancel/done, invalid numbers, names, mirror/rotation and packet bytes.
+- RustChunk implementation mapping: RustChunk 1.20.1 structure editor and protocol adapter.
+- Evidence required before adoption: 1.20.1 mappings, packet goldens, edit/cancel fixtures and creative permission tests.
 - Completion state: COMPLETE — 507 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 16591 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1475. `crates/horizon-client/src/game/structures.rs`
@@ -1278,10 +1278,435 @@
 - Dependencies / cross-references: Loaded chunk refs; structure locator; starts and piece bounding boxes.
 - Implementation / logic: Filters refs by structure ID, queries starts at referenced chunk coordinates and merges whole-start/piece containment.
 - Findings: Applicable query pattern, but structure registry IDs and generation/cache APIs are version-specific.
-- RustChunk relevance: adaptable; reference
-- Decision: Rebuild against 1.20.1 chunk references, generated starts and piece bounds; do not carry later structure IDs/generator formats.
-- 1.20.1 implications: Verify cross-chunk refs, multiple starts, whole box vs piece containment and unloaded chunks.
-- Follow-up checks: RustChunk 1.20.1 structure-reference query service.
-- RustChunk implementation mapping: 1.20.1 chunk NBT and structure-start fixtures with deterministic containment tests.
-- Evidence required before adoption: undefined
+- RustChunk relevance: Optional structure lookup utility, not core multiplayer connectivity.
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild against 1.20.1 chunk references, generated starts and piece bounds; do not carry later structure IDs/generator formats.
+- Follow-up checks: Verify cross-chunk refs, multiple starts, whole box vs piece containment and unloaded chunks.
+- RustChunk implementation mapping: RustChunk 1.20.1 structure-reference query service.
+- Evidence required before adoption: 1.20.1 chunk NBT and structure-start fixtures with deterministic containment tests.
 - Completion state: COMPLETE — 54 logical lines read to EOF in the listed contiguous coverage; pinned blob SHA and 2066 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1476. `crates/horizon-client/src/game/subtitle_hud.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f54ca874d2bf5998a800a305a5a1189a3c73893d`
+- Size: 2050 bytes; 58 logical lines
+- Coverage: 1–58 (EOF)
+- Purpose: Displays timed sound subtitles and directional cues as a HUD overlay.
+- Dependencies / cross-references: Sound/subtitle event queue; sound positions; subtitle option; HUD text/atlas; hidden-GUI state and localization.
+- Implementation / logic: Consumes active subtitle events, maintains lifetime and placement, and draws localized text with directional indicators while respecting HUD visibility.
+- Findings: Subtitles and directional HUD cues are vanilla 1.20.1 features; event queue and expiry semantics must match target sources.
+- RustChunk relevance: Useful accessibility/awareness feature, but optional for initial multiplayer connectivity.
+- Decision: adaptable; optional
+- 1.20.1 implications: Use 1.20.1 subtitle option, sound listener, expiry timing, directional cue calculation and HUD layout; verify the snapshot event model.
+- Follow-up checks: Check enabled/disabled, overlapping events, duplicates, expiry, speaker direction, localization, F1 and phone-scaled layout.
+- RustChunk implementation mapping: RustChunk audio subtitle queue and Android-safe subtitle HUD layer.
+- Evidence required before adoption: 1.20.1 mappings/source, deterministic sound-event fixtures, direction/expiry tests and phone aspect-ratio checks.
+- Completion state: COMPLETE — 58 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 2050 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1477. `crates/horizon-client/src/game/sulfur_cubes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f8bcb24555f31aa17739467e94091749c6e7b33d`
+- Size: 13634 bytes; 347 logical lines
+- Coverage: 1–347 (EOF)
+- Purpose: Implements Sulfur Cube variants, swallowed-block behavior, shearing, explosive interactions, splitting, feeding and effects.
+- Dependencies / cross-references: Sulfur Cube entity/AI; block states and pickup; explosions/TNT; entity damage; feeding/items; particles/sounds and test geometry.
+- Implementation / logic: Updates the later mob's state/interactions, including storing/releasing blocks, variant behavior and explosive/splitting actions.
+- Findings: Sulfur Cube is not a vanilla 1.20.1 entity or mechanic; its registry, AI and content are outside the target baseline.
+- RustChunk relevance: No baseline value; reference only if a specific 1.20.1 Forge mod adds this mob.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude from vanilla 1.20.1; add only after identifying a concrete Forge 1.20.1 mod and validating registrations.
+- Follow-up checks: For a named mod verify entity registry, spawn eggs, AI, block interaction, damage, drops and server authority.
+- RustChunk implementation mapping: No vanilla mapping; isolated optional mod-specific entity adapter.
+- Evidence required before adoption: Named 1.20.1 Forge mod source/version, license, registry IDs, entity data and server integration tests.
+- Completion state: COMPLETE — 347 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 13634 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1478. `crates/horizon-client/src/game/test_block_edit.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a391b377cd07570214edf28a71340eff3a5b6c43`
+- Size: 5379 bytes; 185 logical lines
+- Coverage: 1–185 (EOF)
+- Purpose: Provides an editor for GameTest TestBlock configuration and submits mode/message settings.
+- Dependencies / cross-references: TestBlock block entity; mode/message fields; editor widgets; SetTestBlock packet and permissions.
+- Implementation / logic: Builds test-block controls, maps choices to mode/message and sends serverbound update.
+- Findings: Later GameTest tooling, not an ordinary 1.20.1 workflow; its packet is not target protocol evidence.
+- RustChunk relevance: Developer/test-framework feature, irrelevant to initial Android server-join milestone.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Do not implement in the 1.20.1 baseline or add its packet/block entity to the target registry.
+- Follow-up checks: Only reconsider if a named 1.20.1 mod exposes compatible TestBlock; validate packet, permissions and block-entity schema.
+- RustChunk implementation mapping: No baseline mapping; optional isolated developer test UI.
+- Evidence required before adoption: Confirmed target registry/protocol absence and a specific compatible mod requirement.
+- Completion state: COMPLETE — 185 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5379 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1479. `crates/horizon-client/src/game/test_blocks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6c0448b0dedd96cb319be2041ea062462a379514`
+- Size: 5156 bytes; 155 logical lines
+- Coverage: 1–155 (EOF)
+- Purpose: Implements server-side TestBlock activation, mode state, redstone-neighbor handling and permission-gated test operations.
+- Dependencies / cross-references: GameTest TestBlock block entity; redstone updates; server world/block state; creative/guest permissions.
+- Implementation / logic: Tracks test-block state, reacts to triggers/redstone and dispatches test actions subject to permissions.
+- Findings: TestBlock and GameTest workflow are absent from vanilla 1.20.1; later framework assumptions apply.
+- RustChunk relevance: Not needed for regular gameplay or Forge server interoperability.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude TestBlock state, trigger behavior and packet handling from vanilla 1.20.1.
+- Follow-up checks: Only revisit against a specific mod backporting GameTest blocks to Forge 1.20.1.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Target block registry/packet comparison and named mod source/server behavior if applicable.
+- Completion state: COMPLETE — 155 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5156 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1480. `crates/horizon-client/src/game/test_entities.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4bdb61317758f61ba9e29bea55889a554f128f09`
+- Size: 5570 bytes; 144 logical lines
+- Coverage: 1–144 (EOF)
+- Purpose: Manages entity bounds/intersection and removal for GameTest workspaces and force-loaded test chunks.
+- Dependencies / cross-references: GameTest workspace bounds; entity AABBs/lifecycle; chunk force-loading; teardown and world entity storage.
+- Implementation / logic: Finds entities intersecting test regions and cleans them as fixtures/workspaces are reset.
+- Findings: Test-harness lifecycle logic, not vanilla 1.20.1 runtime entity simulation; depends on newer GameTest workspaces.
+- RustChunk relevance: No value for initial Android client or remote protocol.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude GameTest-only entity cleanup; preserve ordinary 1.20.1 entity/chunk unload behavior separately.
+- Follow-up checks: Only revisit if a 1.20.1 test-framework mod is selected; verify ownership, boundary intersection and force-load cleanup.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Specific compatible test-framework mod plus deterministic boundary and cleanup tests.
+- Completion state: COMPLETE — 144 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5570 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1481. `crates/horizon-client/src/game/test_environments.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3b321ac7bed199db5514b33441ee3d355c4fa4f2`
+- Size: 12821 bytes; 375 logical lines
+- Coverage: 1–375 (EOF)
+- Purpose: Parses/applies GameTest batch environment settings including clock, difficulty, functions, gamerules and weather.
+- Dependencies / cross-references: GameTest batch metadata; world clock/difficulty/weather/gamerules; function runner and teardown.
+- Implementation / logic: Reads environment definitions, applies test-world conditions and restores/transitions environment state.
+- Findings: Later GameTest infrastructure, not a 1.20.1 client feature.
+- RustChunk relevance: Not needed for ordinary worlds or joining modded servers.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude and do not reuse this test environment schema as world configuration.
+- Follow-up checks: If a target Forge mod needs it, verify mutations and teardown after test failures.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Named 1.20.1-compatible GameTest mod, format fixtures, teardown/failure tests and server authority checks.
+- Completion state: COMPLETE — 375 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 12821 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1482. `crates/horizon-client/src/game/test_instance_edit.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4069619069ef18e305c816fc3755641775a6822e`
+- Size: 12796 bytes; 412 logical lines
+- Coverage: 1–400, 401–412 (contiguous to EOF)
+- Purpose: Edits TestInstance settings/actions including initialize, query, set, reset, save and run.
+- Dependencies / cross-references: TestInstance metadata; definitions; size/rotation/entities; editor widgets; serverbound action packets.
+- Implementation / logic: Builds mode-specific controls, serializes dimensions/options and dispatches initialize/reset/save/run actions.
+- Findings: TestInstance and associated blocks are later GameTest infrastructure, not vanilla 1.20.1; action packets are not target protocol.
+- RustChunk relevance: No initial mobile client value; developer test tooling only.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude TestInstance UI, state and packet IDs from the 1.20.1 baseline.
+- Follow-up checks: Only reconsider for a 1.20.1 Forge backport; validate actions, modes, rotation, entity flags, permissions and packet body.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Named target mod, packet captures, schema fixtures and permission/lifecycle tests.
+- Completion state: COMPLETE — 412 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 12796 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1483. `crates/horizon-client/src/game/test_instances.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d9872ee138fdd6d95718c0cce3a330cb7d81b22d`
+- Size: 25069 bytes; 666 logical lines
+- Coverage: 1–400, 401–666 (contiguous to EOF)
+- Purpose: Loads GameTest instance definitions/bounds/markers, force-loads test chunks, resets/places templates and starts tests.
+- Dependencies / cross-references: Test-instance JSON/resources; structure templates; chunk loading; block/entity registries; GameTest runner and permissions.
+- Implementation / logic: Parses definitions, builds bounds, renders markers and coordinates reset, template placement, chunk forcing and test execution.
+- Findings: Tightly coupled to TestInstance/GameTest and later schemas; not a general 1.20.1 structure implementation.
+- RustChunk relevance: Developer-only reference at most; not required for joining a modded server.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude its registries, definition format and execution flow; implement target structure-template semantics independently.
+- Follow-up checks: If a compatible test mod is selected, verify schema, DataVersion, chunk ownership, cleanup, placement and permissions.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Target-compatible mod source, template/NBT fixtures, resource validation and chunk lifecycle tests.
+- Completion state: COMPLETE — 666 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 25069 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1484. `crates/horizon-client/src/game/text_displays.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dcdc9fd3a0efdf1ab955e3a130b030c0a27e163c`
+- Size: 18306 bytes; 470 logical lines
+- Coverage: 1–400, 401–470 (contiguous to EOF)
+- Purpose: Synchronizes/renders TextDisplay, BlockDisplay and ItemDisplay entities with interpolation, lighting and culling.
+- Dependencies / cross-references: Display metadata/data indices; entity interpolation/transforms; item/block/text models; lighting/culling; server entity packets.
+- Implementation / logic: Reads display entity state, interpolates transforms/billboard/brightness, resolves content and submits render geometry.
+- Findings: Display entities exist in 1.20.1; metadata indices and later ItemDisplay contexts need exact target mapping; shelf behavior is later.
+- RustChunk relevance: High relevance to correct rendering of modern vanilla display entities, but version-specific and not proof of Forge support.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Implement 1.20.1 display entities/metadata; omit later-only fields and contexts unless target source confirms them.
+- Follow-up checks: Check spawn/update/remove metadata, interpolation, billboard, brightness, shadow, text flags, block transforms, item context and chunk unload.
+- RustChunk implementation mapping: RustChunk 1.20.1 display-entity model, packet decoder and render interpolation.
+- Evidence required before adoption: 1.20.1 metadata tables, captured entity packets and transform/render fixtures.
+- Completion state: COMPLETE — 470 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 18306 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1485. `crates/horizon-client/src/game/titles.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bf3ecead5dd9dd79b8fc7833a52d0b4cb96283ba`
+- Size: 3946 bytes; 96 logical lines
+- Coverage: 1–96 (EOF)
+- Purpose: Ticks/renders title, subtitle, action-bar, selected-item-name and save-indicator HUD elements.
+- Dependencies / cross-references: Title/action-bar packet events; HUD visibility; localized text; item name/rarity; save indicator/timers.
+- Implementation / logic: Maintains message timers/fades and draws centered/action-bar text and indicators.
+- Findings: Core title/action-bar and item-name HUD behavior exists in 1.20.1; durations, reset rules and rarity formatting need target comparison.
+- RustChunk relevance: Useful vanilla UX, but not essential for first protocol handshake.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use 1.20.1 packet behavior, fade timings, selected-item presentation and legacy item naming/rarity.
+- Follow-up checks: Verify replacement, clear/reset packets, durations, pause, action-bar overlap, F1 and localization.
+- RustChunk implementation mapping: RustChunk versioned HUD message state and Android-scaled renderer.
+- Evidence required before adoption: 1.20.1 source/mappings, packet fixtures and deterministic tick/fade tests.
+- Completion state: COMPLETE — 96 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 3946 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1486. `crates/horizon-client/src/game/tnt.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `044e868ea43c8803efa70c8485faa3cb7512d3ae`
+- Size: 32253 bytes; 840 logical lines
+- Coverage: 1–400, 401–800, 801–840 (contiguous to EOF)
+- Purpose: Simulates/renders primed TNT entities, fuse timing, motion, fluid drag, collision, ignition and explosion.
+- Dependencies / cross-references: Primed TNT state/NBT; entity collision; world blocks/fluids; explosion pipeline; owner attribution; renderer/audio.
+- Implementation / logic: Ticks fuse/movement, resolves collision/fluid drag, handles ignition/explosion and owner credit, and renders the entity.
+- Findings: TNT is 1.20.1 content; Horizon/native hooks and physics must be compared with target fuse, explosion and entity packet rules.
+- RustChunk relevance: Core survival feature with visible/destructive multiplayer effects; correctness matters.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild with 1.20.1 TNT NBT, fuse order, physics, explosion resistance/drop logic and owner attribution; native hooks are not Forge events.
+- Follow-up checks: Test fuse, fluids, collision, ignition, chain reactions, damage, drops, unload/reload and authority.
+- RustChunk implementation mapping: RustChunk 1.20.1 primed-TNT simulation, packet interpolation and explosion integration.
+- Evidence required before adoption: 1.20.1 mappings/source, NBT fixtures, seeded explosion tests and server entity traces.
+- Completion state: COMPLETE — 840 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 32253 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1487. `crates/horizon-client/src/game/totem.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c3bbfbc806e9b138d81ab4bfba472fc6ebbdb657`
+- Size: 7639 bytes; 196 logical lines
+- Coverage: 1–196 (EOF)
+- Purpose: Handles Totem of Undying activation during lethal damage, effects, item consumption and client presentation.
+- Dependencies / cross-references: Player damage/death; hands/inventory; effects; stack consumption; status event and HUD/audio.
+- Implementation / logic: Detects eligible totem activation, applies survival effects and feedback, and coordinates hand/item state.
+- Findings: Totem exists in 1.20.1; snapshot uses modern death-protection component abstractions, not legacy target ItemStack flow.
+- RustChunk relevance: Important vanilla survival behavior; target-era exactness required.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Use 1.20.1 hand selection/consumption, effects, health/fire/absorption and entity-event handling; do not require modern components.
+- Follow-up checks: Check hand priority, count, creative, damage sources, fire/health/effects, consumption, status event and authority.
+- RustChunk implementation mapping: RustChunk 1.20.1 death-prevention/totem handler over legacy ItemStack/NBT.
+- Evidence required before adoption: 1.20.1 mappings, lethal-damage matrix, inventory fixtures and client/server traces.
+- Completion state: COMPLETE — 196 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 7639 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1488. `crates/horizon-client/src/game/touch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5e47fb80934651a3ebbe6375d18bed7bdc827991`
+- Size: 85678 bytes; 2039 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2039 (contiguous to EOF)
+- Purpose: Implements on-screen touch controls, layout editing, custom buttons, virtual-pad actions, multitouch gestures, pointer aiming, Android keyboard coordination and chat controls.
+- Dependencies / cross-references: Winit touch events; Android mobile-controls bridge; virtual gamepad/keybinds; pointer capture; options/layout JSON; renderer/HUD; IME/clipboard; custom actions.
+- Implementation / logic: Routes finger phases into key/mouse actions, draws/edits touch layouts, supports custom controls/gestures, synchronizes held state and bridges Android keyboard/chat.
+- Findings: Highly relevant Android architecture reference, but Starling/Horizon layouts, assets and key mappings are not drop-in RustChunk code; lifecycle and held-input correctness are critical.
+- RustChunk relevance: Very high relevance to Android A22; requires RustChunk platform bridge and lifecycle/memory design.
+- Decision: adaptable; rewrite required; Android-specific
+- 1.20.1 implications: Port needed 1.20.1 controls through RustChunk Android input; decouple layout/config from Starling assets and release held inputs on focus loss/background.
+- Follow-up checks: Test multitouch, drag/look, attack/use, jump/sneak, pointer capture, layout persistence, custom buttons, controller coexistence, IME, pause/resume, rotation and touch cancellation.
+- RustChunk implementation mapping: RustChunk Android touch controller/router, layout editor and lifecycle-safe IME integration.
+- Evidence required before adoption: SM-A225F/API 33 tests, deterministic touch traces, IME lifecycle tests and stuck-key regressions.
+- Completion state: COMPLETE — 2039 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 85678 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1489. `crates/horizon-client/src/game/touch/slots.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c87b6c1fb196d1439140e008028c36f8d6ad317f`
+- Size: 32059 bytes; 824 logical lines
+- Coverage: 1–400, 401–800, 801–824 (contiguous to EOF)
+- Purpose: Implements touch-first inventory/menu slot actions: pick stacks, half-stack hold, double-tap quick-move, drag distribution, outside drop and player rotation.
+- Dependencies / cross-references: Touch event stream; menu slots/ItemStack; creative inventory; container click pipeline; synthesized mouse events; pointer/scroll ownership; tooltip renderer.
+- Implementation / logic: Converts touch gestures to slot click/quick-craft events, tracks picked stacks, distributes across slots and animates moved stacks/tooltips.
+- Findings: Useful mobile interaction model, but local menu click assumptions do not establish correct remote Forge container synchronization.
+- RustChunk relevance: Strong mobile UX feature; local simulation cannot replace remote server-authoritative packet handling.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Adapt gestures to 1.20.1 menus and server-authoritative click/quick-craft with exact IDs; preserve server correction handling.
+- Follow-up checks: Test split-stack, quick-move, creative tabs, result exclusion, drag order, cursor recovery, close/disconnect during hold and delayed slot updates.
+- RustChunk implementation mapping: RustChunk touch slot gesture adapter over legacy container/protocol transactions.
+- Evidence required before adoption: 1.20.1 mappings/packet traces, slot-action goldens, inventory race/correction tests and phone UX validation.
+- Completion state: COMPLETE — 824 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 32059 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1490. `crates/horizon-client/src/game/touch/text_mirror.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a6ebd0b2e56adc6e9eb7616615ba9c0dc8a04bec`
+- Size: 32941 bytes; 797 logical lines
+- Coverage: 1–400, 401–797 (contiguous to EOF)
+- Purpose: Mirrors game text fields into Android IME and synchronizes text, cursor, selection, action keys and keyboard visibility.
+- Dependencies / cross-references: Android TextMirror bridge; IME events; EditBox; chat/sign/book/anvil/command/options/world/dialog/catalog fields; clipboard/password handling.
+- Implementation / logic: Tracks field identity/generation to reject stale edits, maps keyboard actions, applies filters/limits and synchronizes show/update/hide and fallback.
+- Findings: Valuable Android text-entry design; depends on companion platform code and exact field APIs. Password redaction/generation checks are important.
+- RustChunk relevance: High Android usability for chat, server addresses, commands, books and signs.
+- Decision: adaptable; Android-specific; rewrite required
+- 1.20.1 implications: Implement RustChunk IME bridge for 1.20.1 UI; preserve field generation and redacted password diagnostics using Android APIs independently.
+- Follow-up checks: Test Unicode/selection, autocorrect/paste, field-switch races, Back/Enter/Tab, multiline filtering, password redaction, orientation and fallback.
+- RustChunk implementation mapping: RustChunk Android IME mirror and game-field adapters.
+- Evidence required before adoption: API 33 instrumentation, Unicode fixtures, stale-event races and privacy review.
+- Completion state: COMPLETE — 797 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 32941 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1491. `crates/horizon-client/src/game/trading.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `217a232180f7141d569026d1e5c5f4437d364777`
+- Size: 37199 bytes; 934 logical lines
+- Coverage: 1–400, 401–800, 801–934 (contiguous to EOF)
+- Purpose: Implements villager/wandering-trader interactions, offer generation/session state, trading UI, rewards, maps and persistence.
+- Dependencies / cross-references: Villager/trader data; profession/variant registries; trade tables; merchant session; random sequences; menus; map NBT/structure locator; SelectTrade packet; reputation/effects.
+- Implementation / logic: Generates offers, opens local/remote sessions, processes trades/XP/reputation, creates exploration maps and draws/scrolls offers.
+- Findings: Trading is core 1.20.1, but random-sequence persistence, map/item conventions, native hooks and modern merchant abstractions need target comparison.
+- RustChunk relevance: Relevant vanilla gameplay and multiplayer menu interaction, not a shortcut to Forge support.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Reimplement 1.20.1 offers, legacy map/item NBT, merchant slot IDs and SelectTrade/ContainerClick semantics; remove later random-sequence/native assumptions absent from target.
+- Follow-up checks: Verify profession/level offers, demand/discounts, depletion/restock, XP, map NBT, trader sets, remote click order and mob persistence.
+- RustChunk implementation mapping: RustChunk 1.20.1 merchant model and Android UI over legacy menu/protocol adapter.
+- Evidence required before adoption: 1.20.1 trade tables/mappings, deterministic RNG fixtures, map NBT, merchant packets and server traces.
+- Completion state: COMPLETE — 934 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 37199 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1492. `crates/horizon-client/src/game/transient_blocks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d28cf2b5762a54f834435295c25dbac5d2393439`
+- Size: 5977 bytes; 161 logical lines
+- Coverage: 1–161 (EOF)
+- Purpose: Temporarily renders server-announced blocks until replacement section mesh is compiled/uploaded.
+- Dependencies / cross-references: Custom AddTransientBlock packet; section meshing sequence; block-state registry; render geometry and TTL queue.
+- Implementation / logic: Queues transient block states, renders until TTL and removes them when a later section mesh uploads.
+- Findings: Custom packet/render bridge is not vanilla 1.20.1 protocol; idea may inform local chunk rebuild transitions but is not server-interoperable.
+- RustChunk relevance: Interesting renderer reference for chunk visibility, not an initial baseline feature.
+- Decision: unnecessary; reference; later-version/custom protocol
+- 1.20.1 implications: Do not add custom packet to 1.20.1 client; smoothing must be client-only and cannot fabricate server block state.
+- Follow-up checks: For local exploration, test mesh upload races, duplicates, TTL, unload/reload and stale state without protocol changes.
+- RustChunk implementation mapping: Optional local chunk-render transition overlay independent of network decoding.
+- Evidence required before adoption: 1.20.1 server traces proving no dependency, meshing stress tests and Mali-G52 validation.
+- Completion state: COMPLETE — 161 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5977 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1493. `crates/horizon-client/src/game/trial_spawner.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cf901b66a28bcead1302f8c790d5adfa38e8b99c`
+- Size: 14438 bytes; 368 logical lines
+- Coverage: 1–368 (EOF)
+- Purpose: Runs Trial Spawner simulation, player detection, spawning, reward ejection, Trial Omen effects and block transitions.
+- Dependencies / cross-references: TrialSpawner block entity/state; Trial Omen; mob spawning/loot; player/guest UUIDs; world random; game events/rewards.
+- Implementation / logic: Ticks trial spawners, plans entities/UUIDs, handles loot/effects/events, mutates state and transforms Bad Omen to Trial Omen.
+- Findings: Trial Spawners and Trial Omen belong to 1.21 Trial Chambers, not vanilla 1.20.1.
+- RustChunk relevance: No vanilla baseline use; only for an explicit backport mod.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude TrialSpawner block/entity/effect/protocol additions from 1.20.1.
+- Follow-up checks: For an exact Forge backport verify registries, effects, loot, packet data and server-authoritative ticks.
+- RustChunk implementation mapping: No vanilla mapping; optional mod-specific adapter.
+- Evidence required before adoption: Named Forge 1.20.1 backport, source/license, NBT/registry fixtures and deterministic simulations.
+- Completion state: COMPLETE — 368 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 14438 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1494. `crates/horizon-client/src/game/trial_visuals.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e3a69bd9dd43adab37ba2da4b53cf30f8e18c400`
+- Size: 14123 bytes; 345 logical lines
+- Coverage: 1–345 (EOF)
+- Purpose: Renders Trial Spawner/Vault events, particles, ambient sounds, spin animation and nearby-player connection effects.
+- Dependencies / cross-references: TrialSpawner/Vault entities/states; particle/sound registries; event IDs 3011–3021; connected player UUID/position; client random.
+- Implementation / logic: Maps trial/vault events to effects, ticks state emissions and animates display mobs/items and connection particles.
+- Findings: Depends on 1.21 Trial Chambers and Vault/TrialSpawner event IDs; not vanilla 1.20.1 behavior.
+- RustChunk relevance: No baseline value; reference only for a backported mod.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude these block entities, event IDs and particle assumptions from 1.20.1.
+- Follow-up checks: For a Forge backport validate event ID collisions, particle types, timing/random sequence and proximity behavior.
+- RustChunk implementation mapping: No vanilla mapping.
+- Evidence required before adoption: Target mod event registry, packet captures and deterministic visual/event tests.
+- Completion state: COMPLETE — 345 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 14123 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1495. `crates/horizon-client/src/game/trident.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1e1557390f52a9197d5df7c6627137d9d4658dd2`
+- Size: 35360 bytes; 873 logical lines
+- Coverage: 1–400, 401–800, 801–873 (contiguous to EOF)
+- Purpose: Implements trident use/throw, Riptide, Loyalty return, projectile collision/damage, Impaling/Channeling, pickup, NBT and rendering.
+- Dependencies / cross-references: Trident ItemStack/enchantments; player water/rain/movement; projectile collision; mobs/damage; lightning rods; projectile packets/NBT; renderer/pickups.
+- Implementation / logic: Checks release conditions, launches/ticks tridents, resolves impacts, applies enchantments, returns Loyalty projectiles, handles pickup and rendering.
+- Findings: Tridents/core enchantments exist in 1.20.1; packet/NBT, damage, collision and enchantment APIs need target-era sources. Native hooks are not Forge.
+- RustChunk relevance: Core vanilla combat/projectile feature with remote-server relevance.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Implement exact 1.20.1 trident behavior, legacy item/entity NBT and spawn/move/pickup packets; adapt Channeling without current native hooks.
+- Follow-up checks: Test charge threshold, durability, creative, Riptide water/rain/lift, Loyalty return/disconnect, Impaling, Channeling/rod, deflection, pickup and save/reload.
+- RustChunk implementation mapping: RustChunk 1.20.1 trident item logic, projectile simulation, network adapter and renderer.
+- Evidence required before adoption: 1.20.1 mappings/packet traces, physics fixtures, enchantment matrix, NBT goldens and multiplayer pickup tests.
+- Completion state: COMPLETE — 873 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 35360 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1496. `crates/horizon-client/src/game/tutorial.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ee9e801bcb38732af6edb69722363f35d4e59937`
+- Size: 19848 bytes; 563 logical lines
+- Coverage: 1–400, 401–563 (contiguous to EOF)
+- Purpose: Tracks first-world tutorial steps, movement/look progress, tree/punch/inventory/crafting hints and toasts.
+- Dependencies / cross-references: Client tutorial option; player input/game mode; item/block tags and stats; HUD/localization/toast slots; inventory/mining.
+- Implementation / logic: Advances tutorial from input and inventory/mining/crafting, persists step and displays contextual hints/progress.
+- Findings: Basic tutorial exists in 1.20.1; tag names, persistence and timing/layout need target comparison.
+- RustChunk relevance: Optional onboarding for new mobile players, not required for core gameplay/server join.
+- Decision: adaptable; optional
+- 1.20.1 implications: Use 1.20.1 step enum/options and hint triggers; adapt prompts/toasts to touch rather than desktop keybinds.
+- Follow-up checks: Test survival/creative, movement/look, existing logs/planks, persistence, disabled tutorial, touch input, toast overlap and re-entry.
+- RustChunk implementation mapping: RustChunk optional tutorial state machine and touch-oriented presenter.
+- Evidence required before adoption: 1.20.1 tutorial mappings/options, progression fixtures and Android UI checks.
+- Completion state: COMPLETE — 563 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 19848 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1497. `crates/horizon-client/src/game/tweaks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `67c143834e1be0e765aac6574a2f12738389b043`
+- Size: 20695 bytes; 546 logical lines
+- Coverage: 1–400, 401–546 (contiguous to EOF)
+- Purpose: Adds optional inventory mouse tweaks, stack drag/wheel operations, slot sorting and HDR shortcut.
+- Dependencies / cross-references: Menu slot model/click engine; remote menu packets; ItemStack; sort planner; settings/keybinds; HDR/display APIs.
+- Implementation / logic: Implements alternate drag/wheel inventory actions through menu clicks and optional sorting/HDR actions; disabled by default.
+- Findings: Non-vanilla enhancements; remote paths synthesize menu clicks and need exact 1.20.1 transactions. HDR is platform-specific.
+- RustChunk relevance: Optional quality-of-life feature, not required for A22 baseline or protocol correctness.
+- Decision: unnecessary; optional/future
+- 1.20.1 implications: Keep out of baseline; if selected, gate behind settings and use authoritative 1.20.1 menu transactions; separate HDR capability.
+- Follow-up checks: Test no-op defaults, drag/wheel, result slots, server corrections, sort determinism and unsupported HDR displays.
+- RustChunk implementation mapping: Optional RustChunk inventory enhancements after menu/protocol stability.
+- Evidence required before adoption: Explicit UX approval, packet captures, deterministic sort tests and Android display capability checks.
+- Completion state: COMPLETE — 546 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 20695 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1498. `crates/horizon-client/src/game/ui_control.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `82877543667d2efd11576631966436fb56ea6ce7`
+- Size: 8684 bytes; 220 logical lines
+- Coverage: 1–220 (EOF)
+- Purpose: Exposes UI widget tree and agent commands to inspect/click/set widgets via synthetic input.
+- Dependencies / cross-references: Agent/control channel; labelled widget tree/generation; screen slots; synthetic window events; slider/menu handlers.
+- Implementation / logic: Serializes widgets/bounds, defers stale-frame requests and routes clicks/slider positioning through normal UI events.
+- Findings: Agent/developer automation surface, not vanilla gameplay; any command channel is a security boundary.
+- RustChunk relevance: Not needed in release Android client; useful only in local development builds.
+- Decision: unnecessary; developer-only
+- 1.20.1 implications: Exclude from production or gate behind authenticated local debug mode; never expose unauthenticated widget mutation to network clients.
+- Follow-up checks: Test build gating, local binding/auth, stale-frame races, bounds, command allowlists and remote isolation.
+- RustChunk implementation mapping: No release mapping; optional local development UI automation.
+- Evidence required before adoption: Threat model, release artifact inspection, auth/allowlist tests and dev-tools requirement.
+- Completion state: COMPLETE — 220 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 8684 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1499. `crates/horizon-client/src/game/update_offer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `50fa3ad4959f52570bd4d2f54d8fe3ecc67d9b24`
+- Size: 17111 bytes; 450 logical lines
+- Coverage: 1–400, 401–450 (contiguous to EOF)
+- Purpose: Checks GitHub releases for a newer Android APK, presents prompt, downloads/verifies and launches Android installer.
+- Dependencies / cross-references: GitHub release API/allowlist; HTTPS download; SHA-256 metadata; private storage; package installer permission; threads/cancellation.
+- Implementation / logic: Finds newer release, tracks progress, downloads to temp file, checks optional digest, renames and requests install.
+- Findings: Launcher update infrastructure, not Minecraft 1.20.1 behavior. HTTPS plus optional hash does not establish publisher authenticity; release trust policy is needed.
+- RustChunk relevance: Potentially useful only if RustChunk owns a trusted update channel; irrelevant to Forge game support.
+- Decision: unnecessary; optional/future; security review required
+- 1.20.1 implications: Do not port into game core. If self-update is added, require trusted manifest/signature or mandatory digest, rollback and Android package-signature continuity.
+- Follow-up checks: Review allowlist, redirects, TLS, authenticity, partial cleanup, cancellation races, storage permissions, versions and signing continuity.
+- RustChunk implementation mapping: Separate RustChunk Android updater/release service, independent of Minecraft runtime.
+- Evidence required before adoption: Threat model, signed manifest/release process, tamper tests and Android upgrade tests across package signatures.
+- Completion state: COMPLETE — 450 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 17111 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1500. `crates/horizon-client/src/game/vault.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b94358e5a8572f6c5b5841f7db6a363113bfd55b`
+- Size: 9674 bytes; 249 logical lines
+- Coverage: 1–249 (EOF)
+- Purpose: Runs Vault block-entity state, player/key interactions, reward ejection, state changes and display-item rendering.
+- Dependencies / cross-references: Vault block entity/state; Trial Chambers player data; key/item interactions; loot tables/random; block events; item renderer.
+- Implementation / logic: Ticks vault state, accepts items/keys, consumes matching items, emits rewards/events and draws spinning display item.
+- Findings: Vaults are 1.21 Trial Chambers content, not vanilla 1.20.1; reward/item paths depend on later registries/components.
+- RustChunk relevance: No vanilla baseline applicability; only for a mod explicitly backporting Vaults.
+- Decision: unnecessary; later-version content
+- 1.20.1 implications: Exclude Vault block/entity, packet, loot and rendering from 1.20.1.
+- Follow-up checks: For a specific Forge backport verify registry/NBT, key semantics, loot, event IDs and remote authority.
+- RustChunk implementation mapping: No vanilla mapping; optional mod-specific adapter.
+- Evidence required before adoption: Named Forge 1.20.1 backport source/version, license, registry/loot fixtures and server-authoritative interaction tests.
+- Completion state: COMPLETE — 249 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 9674 byte size match the source tree; embedded tests, where present, were inspected only and not run.

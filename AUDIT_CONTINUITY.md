@@ -154,9 +154,21 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Completed entries: **1451–1475 inclusive (25/25)** from the pinned source snapshot.
 - All 25 files were read completely through EOF. Files over 400 lines were read in consecutive ranges no larger than 400; exact ranges and logical line counts are in the Ledger.
 - Source SHAs and byte sizes match the pinned tree. All 25 Ledger records contain the 15 required fields exactly once.
-- Index: **1,475 sequential entries and 1,475 unique paths**; Index/Ledger path and Decision alignment for 1451–1475 is verified.
+- Index: **1,475 sequential entries and 1,475 unique paths**; Index/Ledger path alignment for 1451–1475 is verified. A semantic field-value shift was corrected and Decision values realigned to Index in the 1476–1500 QA transaction.
 - Active Ledger: **75 entries**, 1401–1475.
 - The user's authorization covers **1451–1500**. Continue with **1476–1500**, then stop for authorization.
 - No source or application code changed. Embedded tests were inspected but not run. No build/tests/APK/device/Forge/server validation was performed.
-- Branch head before this checkpoint transaction: `62f81fde4a04394863e7abe902233dfae79fe201`. Record the final commit SHA after commit/read-back.
+- Checkpoint commit: `69e45d02a0aee19f701fa8e6b5c6361766833746`; all five-document read-backs were verified.
 - `main` and backups remain untouched; next backup remains at the 1000-entry cadence.
+
+
+## Closed reporting section — 1451–1500 — 2026-11-19
+
+- Completed entries: **1451–1500 inclusive (50/50)** in two 25-file checkpoints.
+- Active Ledger: **100 entries**, 1401–1500, each with exactly 15 required fields.
+- Index: **1,500 sequential entries and 1,500 unique source paths**.
+- The 1451–1475 field-value shift was corrected; Index and Ledger decisions align for 1451–1500.
+- Source SHAs, byte sizes and full EOF coverage are recorded and verified for the new checkpoint.
+- No source/application code changed. Embedded tests were inspected but not run. No build, test, APK, device, Forge or server validation occurred.
+- **STOP at 1500.** Next proposed section: 1501–1550; wait for explicit user authorization.
+- Active 200-file stage 1401–1600 is **100/200 complete**. Backup remains due only after entries 1001–2000 are complete and globally verified. Main and backup refs remain untouched.

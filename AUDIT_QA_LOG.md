@@ -1079,3 +1079,17 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests were inspected as source only, not run. No build, unit test, benchmark, APK, Forge launch, Android device, Minecraft join, LAN, UPnP or relay test was run.
 - Only the audit branch is changed. `main` and backups remain untouched. No backup is due; next backup remains after entries 1001–2000 are globally verified.
 - The user's authorization covers section 1451–1500. Continue with 1476–1500; stop at 1500 for fresh authorization.
+
+
+## Source-audit checkpoint 1476–1500 — 2026-11-19
+
+- Completed entries 1476–1500 inclusive (25/25) from the pinned Starling tree at `5432370d573642041585c69b40fb045b27133488`.
+- All sources were read completely through EOF. Files over 400 logical lines were inspected in consecutive, gap-free chunks no larger than 400 lines; final partial chunks reached EOF.
+- Source SHA, byte size, canonical line count and complete coverage are recorded and verified against the non-truncated pinned recursive tree.
+- Each new Ledger record has the 15 required fields exactly once. Index rows 1476–1500 match Ledger paths and decisions.
+- Semantic correction to checkpoint 1451–1475: the initial write had shifted values under fields 9–14 by one position. The 15 field names were present, but values were mislabelled. Values are now realigned; descriptive relevance notes were added; Index decisions were corrected. The full 1451–1500 range was checked after correction.
+- Global Index: 1–1500 sequential, 1,500 unique paths. Active Ledger: 100 entries (1401–1500), all 15 required fields each.
+- Android touch/IME and touch inventory are strong mobile references but need a RustChunk platform bridge and authoritative 1.20.1 menu handling. Display entities, TNT, totem, trident, trading and tutorial have target-era counterparts requiring adaptation. Sulfur Cube, GameTest/TestInstance, Trial Spawner/Vault and associated visuals are later-version features. Transient-block rendering is a custom protocol concept and must not enter vanilla 1.20.1 protocol. UI agent control and APK auto-update need separate security design/release gating.
+- Embedded tests were inspected only, not executed. No build, unit test, benchmark, APK, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was run.
+- Only the audit branch was updated. `main` and backups remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
+- Section 1451–1500 is closed. Stop at 1500 and wait for explicit authorization before 1501–1550.
