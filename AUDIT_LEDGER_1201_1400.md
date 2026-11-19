@@ -2567,12 +2567,12 @@
 - Source SHA: `47dc3e3d863cfb5727b87d785d09abf9743c0a72`
 - Size: 9 bytes; 1 logical lines
 - Coverage: symlink target only
-- Purpose: symlink target only
-- Dependencies / cross-references: Repository guidance entry; Git tree records this path as a symbolic link whose 9-byte target is `AGENTS.md`.
-- Implementation / logic: Git tree mode `120000`; blob content is the path `AGENTS.md`, not an independent instruction document.
-- Findings: The path is a symlink; the contents endpoint followed it and returned the target document, so the target was separately checked through the exact blob.
-- RustChunk relevance: Do not count the followed target text as the symlink's own source. Preserve link semantics and audit `AGENTS.md` at its own path if not already recorded.
-- Decision: Documentation metadata only; no runtime or Forge implementation.
+- Purpose: Repository guidance entry; Git tree records this path as a symbolic link whose 9-byte target is `AGENTS.md`.
+- Dependencies / cross-references: Git tree mode `120000`; blob content is the path `AGENTS.md`, not an independent instruction document.
+- Implementation / logic: The path is a symlink; the contents endpoint followed it and returned the target document, so the target was separately checked through the exact blob.
+- Findings: Do not count the followed target text as the symlink's own source. Preserve link semantics and audit `AGENTS.md` at its own path if not already recorded.
+- RustChunk relevance: Documentation metadata only; no runtime or Forge implementation.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: No Minecraft 1.20.1 runtime implication.
 - Follow-up checks: Check target path resolution and avoid duplicate auditing of the target as this path.
 - RustChunk implementation mapping: No code mapping.
@@ -2584,12 +2584,12 @@
 - Source SHA: `014ad78c1da33aa8ea1dc07d058afaae700d21fa`
 - Size: 3145 bytes; 93 logical lines
 - Coverage: 1–93 (EOF)
-- Purpose: 1–93 (EOF)
-- Dependencies / cross-references: Reads and writes custom data components on native-mod item stacks.
-- Implementation / logic: `Game`, `ItemStack`, item component encode/decode helpers and native hook callbacks.
-- Findings: Exposes item component lookup/mutation through the Horizon native-mod API and translates values to the game's stack representation.
-- RustChunk relevance: This is Horizon's private native-mod contract, not a Forge/FML component implementation.
-- Decision: No direct compatibility: RustChunk must support Java item component semantics through the 1.20.1 protocol/runtime rather than this API.
+- Purpose: Reads and writes custom data components on native-mod item stacks.
+- Dependencies / cross-references: `Game`, `ItemStack`, item component encode/decode helpers and native hook callbacks.
+- Implementation / logic: Exposes item component lookup/mutation through the Horizon native-mod API and translates values to the game's stack representation.
+- Findings: This is Horizon's private native-mod contract, not a Forge/FML component implementation.
+- RustChunk relevance: No direct compatibility: RustChunk must support Java item component semantics through the 1.20.1 protocol/runtime rather than this API.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Forge 1.20.1 component/NBT behavior must follow that version's item stack and packet model.
 - Follow-up checks: Compare component serialization against 1.20.1 item NBT and packet fixtures if a future bridge is proposed.
 - RustChunk implementation mapping: No baseline mapping; optional isolated native-extension layer only.
@@ -2601,12 +2601,12 @@
 - Source SHA: `4a683434e4553b1e87a3d3d35d84ff2c3bf77344`
 - Size: 8141 bytes; 215 logical lines
 - Coverage: 1–215 (EOF)
-- Purpose: 1–215 (EOF)
-- Dependencies / cross-references: Implements custom native-mod criteria and advancement/trigger observations.
-- Implementation / logic: Native hook declarations, advancement state, game/player lifecycle and criteria identifiers.
-- Findings: Registers and evaluates mod-defined criteria from observed game events, forwarding matching progress to the native-mod callbacks.
-- RustChunk relevance: The API is Horizon-specific; it does not load Java Forge advancement triggers or implement Forge event buses.
-- Decision: Useful only as a design reference for event-to-criteria dispatch; not a route to Forge mod compatibility.
+- Purpose: Implements custom native-mod criteria and advancement/trigger observations.
+- Dependencies / cross-references: Native hook declarations, advancement state, game/player lifecycle and criteria identifiers.
+- Implementation / logic: Registers and evaluates mod-defined criteria from observed game events, forwarding matching progress to the native-mod callbacks.
+- Findings: The API is Horizon-specific; it does not load Java Forge advancement triggers or implement Forge event buses.
+- RustChunk relevance: Useful only as a design reference for event-to-criteria dispatch; not a route to Forge mod compatibility.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 advancements use Java-side trigger/serializer registration and versioned packet/state semantics.
 - Follow-up checks: Check vanilla trigger coverage, reload behavior and event ordering before implementing any analogous Rust feature.
 - RustChunk implementation mapping: No baseline mapping; possible generic event/criteria abstraction only.
@@ -2618,12 +2618,12 @@
 - Source SHA: `b3d4984a4ec740f7bd6f506c9a46c5b3d728ee69`
 - Size: 14847 bytes; 408 logical lines
 - Coverage: 1–400, 401–408 (contiguous to EOF)
-- Purpose: 1–400, 401–408 (contiguous to EOF)
-- Dependencies / cross-references: Provides native mods with data-map access and typed lookup helpers.
-- Implementation / logic: Game resources, registries, tags/data maps and native hook APIs.
-- Findings: Reads the loaded data-driven maps and exposes resolved values through bounded helpers for native mods.
-- RustChunk relevance: This is an internal Horizon data API; it is not Forge's Java data-map or registry bootstrap.
-- Decision: Potential reference for typed data lookup and resource reload boundaries, but not reusable as a Forge loader.
+- Purpose: Provides native mods with data-map access and typed lookup helpers.
+- Dependencies / cross-references: Game resources, registries, tags/data maps and native hook APIs.
+- Implementation / logic: Reads the loaded data-driven maps and exposes resolved values through bounded helpers for native mods.
+- Findings: This is an internal Horizon data API; it is not Forge's Java data-map or registry bootstrap.
+- RustChunk relevance: Potential reference for typed data lookup and resource reload boundaries, but not reusable as a Forge loader.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 data-driven resources and registries must be sourced from the exact target version and server sync rules.
 - Follow-up checks: Verify resource reload invalidation, missing-key behavior and registry identity if adapting concepts.
 - RustChunk implementation mapping: No baseline mapping; optional `resources/data_maps` service behind a version adapter.
@@ -2635,12 +2635,12 @@
 - Source SHA: `cdbb13e3c4202c0445fe42da79d9c613eda1d880`
 - Size: 24199 bytes; 605 logical lines
 - Coverage: 1–400, 401–605 (contiguous to EOF)
-- Purpose: 1–400, 401–605 (contiguous to EOF)
-- Dependencies / cross-references: Implements native-mod entity queries and operations over Horizon's simulated world.
-- Implementation / logic: Game world, mob/entity storage, entity references, dimensions, collision and native hook callbacks.
-- Findings: Provides entity lookup and controlled entity operations while enforcing world/side and entity-state constraints.
-- RustChunk relevance: Horizon entities are Rust-native simulations; the API does not instantiate or execute Java Forge entity classes.
-- Decision: Useful as an internal entity-service reference only; cannot substitute for Forge entity registries, Java classes or mixins.
+- Purpose: Implements native-mod entity queries and operations over Horizon's simulated world.
+- Dependencies / cross-references: Game world, mob/entity storage, entity references, dimensions, collision and native hook callbacks.
+- Implementation / logic: Provides entity lookup and controlled entity operations while enforcing world/side and entity-state constraints.
+- Findings: Horizon entities are Rust-native simulations; the API does not instantiate or execute Java Forge entity classes.
+- RustChunk relevance: Useful as an internal entity-service reference only; cannot substitute for Forge entity registries, Java classes or mixins.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Minecraft 1.20.1 entity types, metadata, spawn packets, attributes and lifecycle are version-specific.
 - Follow-up checks: Compare every exposed entity field and operation with 1.20.1 protocol and vanilla behavior before any bridge.
 - RustChunk implementation mapping: No baseline mapping; separate Rust entity model only if explicitly scoped, not Forge support.
@@ -2652,12 +2652,12 @@
 - Source SHA: `fa227ce08e9f494107c86ed04cf7579b8080b0d0`
 - Size: 5243 bytes; 114 logical lines
 - Coverage: 1–114 (EOF)
-- Purpose: 1–114 (EOF)
-- Dependencies / cross-references: Maintains native-mod entity references/handles and validates their lifetime.
-- Implementation / logic: Native entity model, world epochs/lifecycle and entity lookup helpers.
-- Findings: Associates stable handles with entities and checks validity against current world/entity state before use.
-- RustChunk relevance: These are Horizon-local handles, not Minecraft entity IDs or Forge capability references.
-- Decision: Reference for stale-handle prevention; not a compatible Java entity-reference mechanism.
+- Purpose: Maintains native-mod entity references/handles and validates their lifetime.
+- Dependencies / cross-references: Native entity model, world epochs/lifecycle and entity lookup helpers.
+- Implementation / logic: Associates stable handles with entities and checks validity against current world/entity state before use.
+- Findings: These are Horizon-local handles, not Minecraft entity IDs or Forge capability references.
+- RustChunk relevance: Reference for stale-handle prevention; not a compatible Java entity-reference mechanism.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 network entity IDs and Java object lifetimes remain distinct concepts.
 - Follow-up checks: Test stale handles across entity removal, dimension changes and world close if reusing the pattern.
 - RustChunk implementation mapping: No baseline mapping; optional internal generational-handle utility.
@@ -2669,12 +2669,12 @@
 - Source SHA: `1d3350bab24c9cb903d5fa2a27f17ef05357c8fd`
 - Size: 5310 bytes; 138 logical lines
 - Coverage: 1–138 (EOF)
-- Purpose: 1–138 (EOF)
-- Dependencies / cross-references: Allows native server mods to create/configure explosions in Horizon's world simulation.
-- Implementation / logic: Game world, explosion simulation, block/entity damage and native callbacks.
-- Findings: Validates dimension and inputs, then applies server-authoritative explosion effects through Horizon's own world model.
-- RustChunk relevance: This is a custom server-side extension; it is not Java `Explosion`/Forge explosion event behavior.
-- Decision: Reference only for input validation and authority checks; no direct Forge compatibility.
+- Purpose: Allows native server mods to create/configure explosions in Horizon's world simulation.
+- Dependencies / cross-references: Game world, explosion simulation, block/entity damage and native callbacks.
+- Implementation / logic: Validates dimension and inputs, then applies server-authoritative explosion effects through Horizon's own world model.
+- Findings: This is a custom server-side extension; it is not Java `Explosion`/Forge explosion event behavior.
+- RustChunk relevance: Reference only for input validation and authority checks; no direct Forge compatibility.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Explosion radius, block interaction, damage and packet effects must match 1.20.1 exactly if implemented.
 - Follow-up checks: Compare block resistance, entity damage, fire and explosion packet behavior against vanilla 1.20.1.
 - RustChunk implementation mapping: No baseline mapping; optional server extension only.
@@ -2686,12 +2686,12 @@
 - Source SHA: `e8e18ef5a392bc059acd9415cc4ad396f7fddac1`
 - Size: 4803 bytes; 132 logical lines
 - Coverage: 1–132 (EOF)
-- Purpose: 1–132 (EOF)
-- Dependencies / cross-references: Spawns and simulates mod-requested falling blocks on the authoritative server world.
-- Implementation / logic: Game, falling-block simulation, block-state registry, loaded chunks and world bounds.
-- Findings: Rejects invalid dimensions/states/positions, caps count and velocity, requires loaded chunks, then creates a falling-block entity with placement/drop/damage behavior.
-- RustChunk relevance: This models Horizon's own falling-block entity and server simulation, not Forge's Java `FallingBlockEntity` lifecycle.
-- Decision: Reference for bounded entity creation and loaded-chunk guards; not a mod loader path.
+- Purpose: Spawns and simulates mod-requested falling blocks on the authoritative server world.
+- Dependencies / cross-references: Game, falling-block simulation, block-state registry, loaded chunks and world bounds.
+- Implementation / logic: Rejects invalid dimensions/states/positions, caps count and velocity, requires loaded chunks, then creates a falling-block entity with placement/drop/damage behavior.
+- Findings: This models Horizon's own falling-block entity and server simulation, not Forge's Java `FallingBlockEntity` lifecycle.
+- RustChunk relevance: Reference for bounded entity creation and loaded-chunk guards; not a mod loader path.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 falling-block spawn, movement, landing and block update packets must match vanilla.
 - Follow-up checks: Test collision, placement failure, entity persistence and damage against 1.20.1.
 - RustChunk implementation mapping: No baseline mapping; optional Rust-side falling entity only.
@@ -2703,12 +2703,12 @@
 - Source SHA: `a9a06e641684c939559a90e0a424afe25cfe38f8`
 - Size: 455449 bytes; 10360 logical lines
 - Coverage: 1–10360 in contiguous chunks of at most 400 lines (26 chunks; EOF verified)
-- Purpose: 1–10360 in contiguous chunks of at most 400 lines (26 chunks; EOF verified)
-- Dependencies / cross-references: Central native-mod hook surface and helper implementation for Horizon game, world, UI, networking, entities and server events.
-- Implementation / logic: Game/GameLevel, registries, world simulation, render/HUD systems, LAN server, item/recipe/container helpers, native lifecycle and `native-hooks.json` catalog/fragments.
-- Findings: Declares the hook points and implements extensive helpers for block/state access, items, inventories, recipes, menus, mobs, rendering, input, sound, world data, networking, lifecycle and server interactions; includes contract tests that compare declarations with the hook catalog and module roots.
-- RustChunk relevance: This is Horizon's bespoke Rust-native mod API, not Forge's Java event bus, ModLauncher, Mixin, classloading or JVM ABI. Its broad surface must not be mistaken for Forge compatibility.
-- Decision: Architectural reference for explicit hook contracts, bounds, validation and tests only; implementing this file does not load or run Forge mods.
+- Purpose: Central native-mod hook surface and helper implementation for Horizon game, world, UI, networking, entities and server events.
+- Dependencies / cross-references: Game/GameLevel, registries, world simulation, render/HUD systems, LAN server, item/recipe/container helpers, native lifecycle and `native-hooks.json` catalog/fragments.
+- Implementation / logic: Declares the hook points and implements extensive helpers for block/state access, items, inventories, recipes, menus, mobs, rendering, input, sound, world data, networking, lifecycle and server interactions; includes contract tests that compare declarations with the hook catalog and module roots.
+- Findings: This is Horizon's bespoke Rust-native mod API, not Forge's Java event bus, ModLauncher, Mixin, classloading or JVM ABI. Its broad surface must not be mistaken for Forge compatibility.
+- RustChunk relevance: Architectural reference for explicit hook contracts, bounds, validation and tests only; implementing this file does not load or run Forge mods.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Minecraft 1.20.1 Forge compatibility requires the target Java runtime, Forge loader, mappings, mixin/transformer and Java mod dependencies; these hooks cannot replace them.
 - Follow-up checks: If ever porting individual behaviors, map each hook to a specific 1.20.1 vanilla/Forge contract and test both client/server authority; do not port the whole API wholesale.
 - RustChunk implementation mapping: No baseline mapping; keep separate from any future Java/Forge compatibility runtime.
@@ -2720,12 +2720,12 @@
 - Source SHA: `429acdc1c7a881d296e606d517f074ee779fdb31`
 - Size: 14962 bytes; 401 logical lines
 - Coverage: 1–400, 401 (contiguous to EOF)
-- Purpose: 1–400, 401 (contiguous to EOF)
-- Dependencies / cross-references: Reads and moves online/offline players' inventories for native server mods.
-- Implementation / logic: Game LAN host/guest state, playerdata NBT files, item stacks, native menu stack-fit logic and save read/write.
-- Findings: Maps 41 player slots and 27 ender slots, reads saved player data, validates expected source stacks, moves whole stacks and writes offline files before mutating live state.
-- RustChunk relevance: Server-side Horizon inventory administration API; offline file editing and live guest access are not a client-side Forge feature.
-- Decision: Reference for transactional inventory movement and NBT preservation only; not a Forge inventory integration.
+- Purpose: Reads and moves online/offline players' inventories for native server mods.
+- Dependencies / cross-references: Game LAN host/guest state, playerdata NBT files, item stacks, native menu stack-fit logic and save read/write.
+- Implementation / logic: Maps 41 player slots and 27 ender slots, reads saved player data, validates expected source stacks, moves whole stacks and writes offline files before mutating live state.
+- Findings: Server-side Horizon inventory administration API; offline file editing and live guest access are not a client-side Forge feature.
+- RustChunk relevance: Reference for transactional inventory movement and NBT preservation only; not a Forge inventory integration.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 player inventory slot mapping and item components/NBT need exact vanilla compatibility.
 - Follow-up checks: Test slot indices, NBT preservation, stale offers, file-write failure and no-duplication invariants.
 - RustChunk implementation mapping: No baseline mapping; optional isolated inventory service, not core client behavior.
@@ -2737,12 +2737,12 @@
 - Source SHA: `2d43685285e1558374007ad7773435d712ace57a`
 - Size: 13596 bytes; 370 logical lines
 - Coverage: 1–370 (EOF)
-- Purpose: 1–370 (EOF)
-- Dependencies / cross-references: Implements item-stack containers for native mods using the container component.
-- Implementation / logic: ItemStack component data, NBT tags, item registry limits and native item-container callbacks.
-- Findings: Reads container slots, inserts/extracts one item at a time, respects per-slot limits and shulker restrictions, preserves other custom data and clears stale wire data.
-- RustChunk relevance: This is a Horizon custom item capability implemented in Rust; it is not NeoForge `IItemHandler` or Java capability registration.
-- Decision: Reference for bounded item-container semantics only; no direct Forge capability support.
+- Purpose: Implements item-stack containers for native mods using the container component.
+- Dependencies / cross-references: ItemStack component data, NBT tags, item registry limits and native item-container callbacks.
+- Implementation / logic: Reads container slots, inserts/extracts one item at a time, respects per-slot limits and shulker restrictions, preserves other custom data and clears stale wire data.
+- Findings: This is a Horizon custom item capability implemented in Rust; it is not NeoForge `IItemHandler` or Java capability registration.
+- RustChunk relevance: Reference for bounded item-container semantics only; no direct Forge capability support.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 container component semantics and shulker restrictions must be checked against the target version.
 - Follow-up checks: Compare slot serialization, stack limits, empty-container stacking and item component round trips.
 - RustChunk implementation mapping: No baseline mapping; optional `items/container` model only if version-correct.
@@ -2754,12 +2754,12 @@
 - Source SHA: `5518915ccbc59e13c8f47ea2f16e0124a7c71cfb`
 - Size: 12990 bytes; 341 logical lines
 - Coverage: 1–341 (EOF)
-- Purpose: 1–341 (EOF)
-- Dependencies / cross-references: Implements a custom energy buffer stored on mod item stacks.
-- Implementation / logic: ItemStack, custom-data NBT, native item energy callbacks and item registry.
-- Findings: Validates capacity and per-call limits, stores energy under a Horizon-specific custom-data key, and returns changed one-item stacks for insertion/extraction.
-- RustChunk relevance: The energy API is explicitly Horizon-specific and resembles NeoForge's item energy capability but does not implement Java capability interfaces.
-- Decision: Reference for bounded arithmetic and stack immutability; does not enable Forge energy capabilities.
+- Purpose: Implements a custom energy buffer stored on mod item stacks.
+- Dependencies / cross-references: ItemStack, custom-data NBT, native item energy callbacks and item registry.
+- Implementation / logic: Validates capacity and per-call limits, stores energy under a Horizon-specific custom-data key, and returns changed one-item stacks for insertion/extraction.
+- Findings: The energy API is explicitly Horizon-specific and resembles NeoForge's item energy capability but does not implement Java capability interfaces.
+- RustChunk relevance: Reference for bounded arithmetic and stack immutability; does not enable Forge energy capabilities.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Forge 1.20.1 energy APIs are mod/library-defined and cannot be inferred from this custom NBT key.
 - Follow-up checks: Check overflow, negative values, serialization and interoperability with the specific Forge energy API in scope.
 - RustChunk implementation mapping: No baseline mapping; optional separate energy capability adapter.
@@ -2771,12 +2771,12 @@
 - Source SHA: `4be8b73b845c12d098d283b30872684d24d5d872`
 - Size: 13643 bytes; 357 logical lines
 - Coverage: 1–357 (EOF)
-- Purpose: 1–357 (EOF)
-- Dependencies / cross-references: Implements bucket and custom item fluid tanks for native mods.
-- Implementation / logic: ItemStack, custom-data NBT, item fluid callbacks and item registry.
-- Findings: Models water/lava buckets, validates mod tank capacities, fills/drains one-item copies and preserves unrelated custom data.
-- RustChunk relevance: This is a restricted Horizon fluid model, not NeoForge `IFluidHandler` or a complete Forge fluid registry/capability implementation.
-- Decision: Reference for fill/drain invariants only; no direct Forge fluid compatibility.
+- Purpose: Implements bucket and custom item fluid tanks for native mods.
+- Dependencies / cross-references: ItemStack, custom-data NBT, item fluid callbacks and item registry.
+- Implementation / logic: Models water/lava buckets, validates mod tank capacities, fills/drains one-item copies and preserves unrelated custom data.
+- Findings: This is a restricted Horizon fluid model, not NeoForge `IFluidHandler` or a complete Forge fluid registry/capability implementation.
+- RustChunk relevance: Reference for fill/drain invariants only; no direct Forge fluid compatibility.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 fluid identifiers, bucket behavior and modded fluid registries need versioned Java-side definitions.
 - Follow-up checks: Test partial fills, empty/full buckets, mod fluid IDs, serialization and capability negotiation.
 - RustChunk implementation mapping: No baseline mapping; optional isolated fluid model after target API selection.
@@ -2788,12 +2788,12 @@
 - Source SHA: `9428b6092f3ee4d877b606e29b44e0f7fc3ab88c`
 - Size: 13103 bytes; 362 logical lines
 - Coverage: 1–362 (EOF)
-- Purpose: 1–362 (EOF)
-- Dependencies / cross-references: Tracks authoritative world open/close epochs and server tick lifecycle for native mods.
-- Implementation / logic: Game execution role, atomic epoch allocation, lifecycle context types and world/server hook callbacks.
-- Findings: Tracks Opening/Ready/Closing states, invalidates failed epochs, pairs non-paused tick start/end and scopes reads to the active tick context.
-- RustChunk relevance: Lifecycle is specific to Horizon's server architecture and native hooks; it does not reproduce Forge lifecycle events or mod construction.
-- Decision: Reference for explicit lifecycle epochs and read scopes only; not a replacement for Forge mod lifecycle.
+- Purpose: Tracks authoritative world open/close epochs and server tick lifecycle for native mods.
+- Dependencies / cross-references: Game execution role, atomic epoch allocation, lifecycle context types and world/server hook callbacks.
+- Implementation / logic: Tracks Opening/Ready/Closing states, invalidates failed epochs, pairs non-paused tick start/end and scopes reads to the active tick context.
+- Findings: Lifecycle is specific to Horizon's server architecture and native hooks; it does not reproduce Forge lifecycle events or mod construction.
+- RustChunk relevance: Reference for explicit lifecycle epochs and read scopes only; not a replacement for Forge mod lifecycle.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Forge 1.20.1 lifecycle phases, event ordering and thread constraints are Java/Forge-specific.
 - Follow-up checks: Map any needed lifecycle event to exact Forge 1.20.1 event timing and thread ownership.
 - RustChunk implementation mapping: No baseline mapping; optional internal world-session epoch abstraction.
@@ -2805,12 +2805,12 @@
 - Source SHA: `b690387efa0033e2a5236bb762f7aaac56bb5274`
 - Size: 19766 bytes; 518 logical lines
 - Coverage: 1–400, 401–518 (contiguous to EOF)
-- Purpose: 1–400, 401–518 (contiguous to EOF)
-- Dependencies / cross-references: Implements server-opened chest-style menus, inventory exchange and player menu lifecycle observations for native mods.
-- Implementation / logic: LAN host/guest, menu protocol, player inventories, block/container state and native menu hooks.
-- Findings: Opens/syncs/closes native menus, tracks player container transitions, routes clicks and performs checked all-or-nothing inventory exchanges.
-- RustChunk relevance: Horizon-specific menu implementation and packet assumptions; not Forge `MenuType`/`AbstractContainerMenu` Java integration.
-- Decision: Reference for transactional trade and menu event ordering only.
+- Purpose: Implements server-opened chest-style menus, inventory exchange and player menu lifecycle observations for native mods.
+- Dependencies / cross-references: LAN host/guest, menu protocol, player inventories, block/container state and native menu hooks.
+- Implementation / logic: Opens/syncs/closes native menus, tracks player container transitions, routes clicks and performs checked all-or-nothing inventory exchanges.
+- Findings: Horizon-specific menu implementation and packet assumptions; not Forge `MenuType`/`AbstractContainerMenu` Java integration.
+- RustChunk relevance: Reference for transactional trade and menu event ordering only.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Forge 1.20.1 menu IDs, slot semantics, click modes and packet sync must be matched exactly.
 - Follow-up checks: Verify menu lifecycle, death/close behavior, shift-click and stale inventory offers against 1.20.1.
 - RustChunk implementation mapping: No baseline mapping; optional server menu layer after protocol parity.
@@ -2822,12 +2822,12 @@
 - Source SHA: `8d4ce9c2f952a1064ffcfd1285686d1c27be795f`
 - Size: 8549 bytes; 230 logical lines
 - Coverage: 1–230 (EOF)
-- Purpose: 1–230 (EOF)
-- Dependencies / cross-references: Provides native mods with client-side mob/player render state and custom geometry hooks.
-- Implementation / logic: Mob animation/interpolation, camera transforms, block-entity draw helpers, vertex buffers and render lighting.
-- Findings: Builds interpolated render snapshots, poses custom geometry relative to mob feet/body yaw and conditionally replaces or layers vanilla geometry when hooks listen.
-- RustChunk relevance: Custom Horizon renderer hooks are not Java Forge renderer events or entity model layers.
-- Decision: Reference for render-state snapshots and pose math only; no direct Forge renderer support.
+- Purpose: Provides native mods with client-side mob/player render state and custom geometry hooks.
+- Dependencies / cross-references: Mob animation/interpolation, camera transforms, block-entity draw helpers, vertex buffers and render lighting.
+- Implementation / logic: Builds interpolated render snapshots, poses custom geometry relative to mob feet/body yaw and conditionally replaces or layers vanilla geometry when hooks listen.
+- Findings: Custom Horizon renderer hooks are not Java Forge renderer events or entity model layers.
+- RustChunk relevance: Reference for render-state snapshots and pose math only; no direct Forge renderer support.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Forge 1.20.1 entity renderer/model layer APIs and render-thread contracts differ.
 - Follow-up checks: Compare interpolation, yaw conventions, camera-relative transforms and render ordering with 1.20.1.
 - RustChunk implementation mapping: No baseline mapping; optional Rust-native rendering extension only.
@@ -2839,12 +2839,12 @@
 - Source SHA: `bb562a9e8a1d6ed41833ba5620d8da4a780ef0fb`
 - Size: 12853 bytes; 323 logical lines
 - Coverage: 1–323 (EOF)
-- Purpose: 1–323 (EOF)
-- Dependencies / cross-references: Exposes server-side mob spawn, query, movement, health, equipment and removal operations to native mods.
-- Implementation / logic: Game mob simulation, world/chunk bounds, dimensions, LAN guests, entity IDs, attributes and native mob hooks.
-- Findings: Validates authority/dimension/chunk/bounds, creates mobs, exposes snapshots, mutates health/velocity/position, kills/removes and observes equipment changes.
-- RustChunk relevance: This operates Horizon's own mob model; it does not load Java entity classes or Forge entity registrations.
-- Decision: Reference for authority and validation rules only; not Forge entity compatibility.
+- Purpose: Exposes server-side mob spawn, query, movement, health, equipment and removal operations to native mods.
+- Dependencies / cross-references: Game mob simulation, world/chunk bounds, dimensions, LAN guests, entity IDs, attributes and native mob hooks.
+- Implementation / logic: Validates authority/dimension/chunk/bounds, creates mobs, exposes snapshots, mutates health/velocity/position, kills/removes and observes equipment changes.
+- Findings: This operates Horizon's own mob model; it does not load Java entity classes or Forge entity registrations.
+- RustChunk relevance: Reference for authority and validation rules only; not Forge entity compatibility.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 spawn/entity metadata, attributes, equipment and movement packets must be exact.
 - Follow-up checks: Test peaceful difficulty, unloaded chunks, entity tracking and player/mob equipment sync.
 - RustChunk implementation mapping: No baseline mapping; separate Rust entity simulation only.
@@ -2856,12 +2856,12 @@
 - Source SHA: `84f234e7a9434f782cb354804d0ebf00bfebb4d6`
 - Size: 3675 bytes; 82 logical lines
 - Coverage: 1–82 (EOF)
-- Purpose: 1–82 (EOF)
-- Dependencies / cross-references: Adds client player pushes and server-side creative flying-speed control for native mods.
-- Implementation / logic: Player velocity, spectator state, LAN host abilities and movement validation.
-- Findings: Clamps push components and flying speed, rejects non-finite values and sends updated abilities to online players.
-- RustChunk relevance: The helper changes Horizon player state and has explicit anti-cheat implications; it is not Forge movement event handling.
-- Decision: Reference for finite-value clamps only; not a general movement compatibility layer.
+- Purpose: Adds client player pushes and server-side creative flying-speed control for native mods.
+- Dependencies / cross-references: Player velocity, spectator state, LAN host abilities and movement validation.
+- Implementation / logic: Clamps push components and flying speed, rejects non-finite values and sends updated abilities to online players.
+- Findings: The helper changes Horizon player state and has explicit anti-cheat implications; it is not Forge movement event handling.
+- RustChunk relevance: Reference for finite-value clamps only; not a general movement compatibility layer.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 movement speed, ability packets and moved-too-quickly checks are server-version dependent.
 - Follow-up checks: Test speed limits, server correction and chunk-loading behavior at high flight speeds.
 - RustChunk implementation mapping: No baseline mapping; optional movement extension after vanilla parity.
@@ -2873,12 +2873,12 @@
 - Source SHA: `2877ffc527fa4b2c9ad85d43723cde86e448c96c`
 - Size: 3329 bytes; 85 logical lines
 - Coverage: 1–85 (EOF)
-- Purpose: 1–85 (EOF)
-- Dependencies / cross-references: Lets native server mods allow or cancel player/mob mounting and dismounting.
-- Implementation / logic: Game vehicles, mobs, LAN acting-player identity and entity-mount hook callback.
-- Findings: Resolves rider/vehicle identities and types, invokes the mount callback on authoritative server contexts and honors cancellation.
-- RustChunk relevance: Horizon-specific vehicle/mob identity and mount callbacks, not Forge `EntityMountEvent` registration.
-- Decision: Reference for authority-aware mount cancellation only.
+- Purpose: Lets native server mods allow or cancel player/mob mounting and dismounting.
+- Dependencies / cross-references: Game vehicles, mobs, LAN acting-player identity and entity-mount hook callback.
+- Implementation / logic: Resolves rider/vehicle identities and types, invokes the mount callback on authoritative server contexts and honors cancellation.
+- Findings: Horizon-specific vehicle/mob identity and mount callbacks, not Forge `EntityMountEvent` registration.
+- RustChunk relevance: Reference for authority-aware mount cancellation only.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 vehicle/passenger packets and mount event order must be validated independently.
 - Follow-up checks: Test player/mob/vehicle cases, cancellation and dismount edge cases.
 - RustChunk implementation mapping: No baseline mapping; optional mount event abstraction.
@@ -2890,12 +2890,12 @@
 - Source SHA: `fa3bef8743adb7348eab3a77637d5b56f67b8b7a`
 - Size: 6308 bytes; 165 logical lines
 - Coverage: 1–165 (EOF)
-- Purpose: 1–165 (EOF)
-- Dependencies / cross-references: Queues and sends Horizon native-mod client/server custom messages.
-- Implementation / logic: Horizon protocol mod-net channel, LAN host, player UUIDs, custom payload packets and per-tick counters.
-- Findings: Validates channel names and payload encoding, queues guest/server messages, applies per-player/per-tick limits and flushes messages at tick end.
-- RustChunk relevance: The `horizon:mod_net` channel is proprietary and requires both endpoints to implement it; it is not Forge's SimpleChannel/vanilla payload contract.
-- Decision: Reference for payload validation and rate limiting only; not compatible with ordinary Forge channels.
+- Purpose: Queues and sends Horizon native-mod client/server custom messages.
+- Dependencies / cross-references: Horizon protocol mod-net channel, LAN host, player UUIDs, custom payload packets and per-tick counters.
+- Implementation / logic: Validates channel names and payload encoding, queues guest/server messages, applies per-player/per-tick limits and flushes messages at tick end.
+- Findings: The `horizon:mod_net` channel is proprietary and requires both endpoints to implement it; it is not Forge's SimpleChannel/vanilla payload contract.
+- RustChunk relevance: Reference for payload validation and rate limiting only; not compatible with ordinary Forge channels.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 custom payload registration and packet phases differ and must be negotiated with the server.
 - Follow-up checks: Threat-model payload sizes, channel authorization, connection phases and abuse limits.
 - RustChunk implementation mapping: No baseline mapping; optional isolated extension channel only after explicit negotiation.
@@ -2907,12 +2907,12 @@
 - Source SHA: `2ed64ef2c0ec7ef5b700d3d4b360c41998122093`
 - Size: 23899 bytes; 629 logical lines
 - Coverage: 1–400, 401–629 (contiguous to EOF)
-- Purpose: 1–400, 401–629 (contiguous to EOF)
-- Dependencies / cross-references: Implements a native-mod item/recipe browser panel beside container screens.
-- Implementation / logic: HUD batch/rendering, item stacks, screen/input state, native panel event callbacks and recipe pages.
-- Findings: Manages panel ownership/versioning, item conversion, pagination, search, pointer/key events and drawing while preserving the container UI.
-- RustChunk relevance: This is a Horizon-native UI integration, not a Forge client GUI or JEI/REI plugin API.
-- Decision: Reference for UI ownership, search and input handling only.
+- Purpose: Implements a native-mod item/recipe browser panel beside container screens.
+- Dependencies / cross-references: HUD batch/rendering, item stacks, screen/input state, native panel event callbacks and recipe pages.
+- Implementation / logic: Manages panel ownership/versioning, item conversion, pagination, search, pointer/key events and drawing while preserving the container UI.
+- Findings: This is a Horizon-native UI integration, not a Forge client GUI or JEI/REI plugin API.
+- RustChunk relevance: Reference for UI ownership, search and input handling only.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: Forge 1.20.1 screens, rendering and JEI/REI integrations require Java APIs and their own lifecycle.
 - Follow-up checks: Check GUI scale, narrow windows, focus, keyboard shortcuts, tooltip layering and disabled mods.
 - RustChunk implementation mapping: No baseline mapping; optional Rust-only overlay, not Forge GUI compatibility.
@@ -2924,12 +2924,12 @@
 - Source SHA: `5b70f2e357721f6ce7995b554051394bea0795f1`
 - Size: 21642 bytes; 568 logical lines
 - Coverage: 1–400, 401–568 (contiguous to EOF)
-- Purpose: 1–400, 401–568 (contiguous to EOF)
-- Dependencies / cross-references: Lays out and renders native-mod recipe pages inside the Horizon item panel.
-- Implementation / logic: Native panel layout, item/recipe stack conversion, HUD sprites, recipe event callbacks and item atlas.
-- Findings: Builds bounded recipe/tab pages, computes grid/cooking/smithing/brewing layouts, cycles stacks, renders controls and dispatches slot/tab/action/page events.
-- RustChunk relevance: This is a custom recipe-viewer UI; it is not Forge recipe registration or JEI/REI integration.
-- Decision: Reference for recipe presentation and bounded UI data only.
+- Purpose: Lays out and renders native-mod recipe pages inside the Horizon item panel.
+- Dependencies / cross-references: Native panel layout, item/recipe stack conversion, HUD sprites, recipe event callbacks and item atlas.
+- Implementation / logic: Builds bounded recipe/tab pages, computes grid/cooking/smithing/brewing layouts, cycles stacks, renders controls and dispatches slot/tab/action/page events.
+- Findings: This is a custom recipe-viewer UI; it is not Forge recipe registration or JEI/REI integration.
+- RustChunk relevance: Reference for recipe presentation and bounded UI data only.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 recipe serializers, recipe book displays and client recipe viewer APIs differ.
 - Follow-up checks: Validate each recipe layout, missing item behavior, page boundaries and click targets if porting UI concepts.
 - RustChunk implementation mapping: No baseline mapping; optional recipe UI separate from loader/runtime.
@@ -2941,12 +2941,12 @@
 - Source SHA: `afebd339acba05552580473c02f1a08fcd6772be`
 - Size: 11000 bytes; 302 logical lines
 - Coverage: 1–302 (EOF)
-- Purpose: 1–302 (EOF)
-- Dependencies / cross-references: Routes projectile impacts through native server-mod hooks and replays canceled impacts.
-- Implementation / logic: Projectile/arrow simulation, hit targets, mobs/players/carts, wind charges, End dragon/crystals and world collision.
-- Findings: Collects impacts, maps owners/targets, lets hooks cancel them, then re-simulates canceled projectiles and removes associated hit/arrow events consistently.
-- RustChunk relevance: This is Horizon's own projectile simulation and cancellation flow, not Forge projectile events.
-- Decision: Reference for deferred impact settlement only; no Java Forge compatibility.
+- Purpose: Routes projectile impacts through native server-mod hooks and replays canceled impacts.
+- Dependencies / cross-references: Projectile/arrow simulation, hit targets, mobs/players/carts, wind charges, End dragon/crystals and world collision.
+- Implementation / logic: Collects impacts, maps owners/targets, lets hooks cancel them, then re-simulates canceled projectiles and removes associated hit/arrow events consistently.
+- Findings: This is Horizon's own projectile simulation and cancellation flow, not Forge projectile events.
+- RustChunk relevance: Reference for deferred impact settlement only; no Java Forge compatibility.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 projectile movement, hit ordering, entity/block collision and event cancellation must match vanilla.
 - Follow-up checks: Test multiple impacts in one tick, canceled/replayed arrows, player PvP and special entity targets.
 - RustChunk implementation mapping: No baseline mapping; optional server simulation behavior only.
@@ -2958,12 +2958,12 @@
 - Source SHA: `62e9a0f19d24828ac2dbbab7801b8e46cb8dacb1`
 - Size: 12808 bytes; 364 logical lines
 - Coverage: 1–364 (EOF)
-- Purpose: 1–364 (EOF)
-- Dependencies / cross-references: Routes shift-click/quick-move actions in native mod containers through mod callbacks.
-- Implementation / logic: LAN menu state, block entities, item stacks, player inventory and container-click packets.
-- Findings: Maps menu/inventory slots, checks menu validity and drag state, calls the mod hook, settles remainder/original stacks and resynchronizes or closes the menu.
-- RustChunk relevance: Horizon-specific custom container routing; not Forge `AbstractContainerMenu.quickMoveStack` execution.
-- Decision: Reference for no-duplication settlement and slot validation only.
+- Purpose: Routes shift-click/quick-move actions in native mod containers through mod callbacks.
+- Dependencies / cross-references: LAN menu state, block entities, item stacks, player inventory and container-click packets.
+- Implementation / logic: Maps menu/inventory slots, checks menu validity and drag state, calls the mod hook, settles remainder/original stacks and resynchronizes or closes the menu.
+- Findings: Horizon-specific custom container routing; not Forge `AbstractContainerMenu.quickMoveStack` execution.
+- RustChunk relevance: Reference for no-duplication settlement and slot validation only.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 click modes, slot ranges, hidden slots and prediction corrections must match the target protocol.
 - Follow-up checks: Test stale menu IDs, dead/spectator players, drag state, block removal and item conservation.
 - RustChunk implementation mapping: No baseline mapping; optional container click layer after protocol parity.
@@ -2975,12 +2975,12 @@
 - Source SHA: `d8eea22d58ba6aa803bd6b0d295aecdadeb302e5`
 - Size: 18308 bytes; 454 logical lines
 - Coverage: 1–400, 401–454 (contiguous to EOF)
-- Purpose: 1–400, 401–454 (contiguous to EOF)
-- Dependencies / cross-references: Builds native-mod recipe/item catalogues, tracks recipe-book displays and synchronizes selected server recipe content.
-- Implementation / logic: Crafting/recipe book, item registry/tags, cooking/station/brewing recipes, custom payload and native datapack sync callbacks.
-- Findings: Builds indexed item/recipe tables, supports creative give/place actions, receives bounded recipe-content parts and overlays selected server recipe types onto client recipes.
-- RustChunk relevance: The recipe-content channel and native recipe API are Horizon-specific; they do not register or execute Java Forge recipe serializers.
-- Decision: Reference for recipe indexing and bounded synchronization only; no Forge mod compatibility.
+- Purpose: Builds native-mod recipe/item catalogues, tracks recipe-book displays and synchronizes selected server recipe content.
+- Dependencies / cross-references: Crafting/recipe book, item registry/tags, cooking/station/brewing recipes, custom payload and native datapack sync callbacks.
+- Implementation / logic: Builds indexed item/recipe tables, supports creative give/place actions, receives bounded recipe-content parts and overlays selected server recipe types onto client recipes.
+- Findings: The recipe-content channel and native recipe API are Horizon-specific; they do not register or execute Java Forge recipe serializers.
+- RustChunk relevance: Reference for recipe indexing and bounded synchronization only; no Forge mod compatibility.
+- Decision: unnecessary; reference; optional/future
 - 1.20.1 implications: 1.20.1 recipe JSON serializers, datapack reload and recipe-book packet semantics must be matched exactly.
 - Follow-up checks: Test recipe reload, malformed/incomplete content parts, item/tag resolution and recipe-book invalidation.
 - RustChunk implementation mapping: No baseline mapping; optional isolated recipe-data service after 1.20.1 parity.
