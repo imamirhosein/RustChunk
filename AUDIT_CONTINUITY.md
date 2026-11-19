@@ -122,3 +122,11 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Index: 1350 sequential entries and 1350 unique source paths.
 - Active Ledger: entries 1201–1350, 150 records; every entry has exactly 15 required fields.
 - Current authorization state: STOP. The next range 1351–1400 requires a separate explicit user instruction.
+
+
+## Duplicate-path correction — checkpoint 1326–1350
+
+- Read-back QA found the initially recorded entry 1349 path `crates/horizon-client/src/lib.rs` duplicated entry 118. Entry 118 remains the only `lib.rs` audit entry.
+- Corrected 1349 to `crates/horizon-client/src/locator_bar.rs` and added `crates/horizon-client/src/lod_net.rs` as entry 1350, fully reviewed to EOF.
+- The final Index is 1350 sequential entries and 1350 unique source paths. The active Ledger contains 150 entries, 1201–1350, with exactly 15 fields per entry.
+- Reporting section 1301–1350 remains complete. STOP at 1350; do not begin 1351–1400 until explicit user authorization.

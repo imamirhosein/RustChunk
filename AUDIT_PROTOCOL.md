@@ -135,7 +135,7 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Branch head before this source-audit checkpoint commit: `${head}`.
+- Branch head before this duplicate-path correction: `2e5b2ddabd92cebb81a01226f56ec61833c9bac3`.
 - Completed entries: **1–1350**.
 - Closed stage: **1001–1200** (200/200).
 - Active stage: **1201–1400**; completed **1201–1350** (150/200).
@@ -151,3 +151,10 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - In entries 1–1000, duplicate slots 631, 632, 633, 754, 762 and 766 were replaced with unique paths: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`.
 - Entry 1089 was corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only `entry.rs` occurrence.
 - Preserve these corrections and all prior QA evidence; never repeat those paths.
+
+
+## Duplicate-path correction record — 2026-11-19
+
+- QA detected that entry 1349 initially duplicated `crates/horizon-client/src/lib.rs` at historical entry 118. Preserve entry 118; the duplicate slot was corrected.
+- Final entry 1349 is `crates/horizon-client/src/locator_bar.rs`; final entry 1350 is `crates/horizon-client/src/lod_net.rs`.
+- Do not repeat `lib.rs` at entry 1349. The final Index must contain 1350 sequential entry numbers and 1350 unique paths before the 1301–1350 reporting section is considered closed.

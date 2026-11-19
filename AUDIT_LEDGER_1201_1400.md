@@ -2528,24 +2528,7 @@
 - Evidence required before adoption: 1.20.1 Java fall/landing source, Forge living-fall events, block behavior fixtures and deterministic movement/event traces.
 - Completion state: COMPLETE — 706 logical lines read in contiguous ranges 1–400 and 401–706; source SHA and 22924-byte size match the pinned tree; embedded tests inspected, not run.
 
-### 1349. `crates/horizon-client/src/lib.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `3699d714d7f5684c82f9401eee44f07cd291c0b2`
-- Size: 415 bytes; 13 logical lines
-- Coverage: 1–13 (EOF)
-- Purpose: Defines the Horizon client crate root, re-exports the reusable client library, gates Android-specific code and exposes startup/game/mod/API/diagnostics/performance modules.
-- Dependencies / cross-references: horizon-client-lib, Android activity/JNI integration, crate modules and target_os conditional compilation.
-- Implementation / logic: Uses a crate self-alias and re-export, conditionally includes Android bindings and declares the top-level modules used by the executable client crate.
-- Findings: This is a thin crate/module boundary, not a launcher implementation. The Android conditional attribute and Horizon module names are project-specific; the re-export boundary is a conventional Rust pattern.
-- RustChunk relevance: A clean crate root and target gating are useful architectural patterns, but no gameplay feature is implemented here.
-- Decision: **adaptable; reference**
-- 1.20.1 implications: Use a RustChunk-specific crate root and explicit Android/Linux feature boundaries; do not copy Horizon module declarations or package assumptions blindly.
-- Follow-up checks: Review RustChunk workspace/crate boundaries, JNI target cfgs, unsafe-code policy and module ownership as the project grows.
-- RustChunk implementation mapping: Existing workspace crate roots; no new file proposed.
-- Evidence required before adoption: RustChunk Cargo workspace and Android target build configuration.
-- Completion state: COMPLETE — 13 logical lines read to EOF; source SHA and 415-byte size match the pinned tree.
-
-### 1350. `crates/horizon-client/src/locator_bar.rs`
+### 1349. `crates/horizon-client/src/locator_bar.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ecead2c52ccd1e45f4ddf66e48233a9bc2c18e11`
 - Size: 27216 bytes; 742 logical lines
@@ -2561,3 +2544,20 @@
 - RustChunk implementation mapping: No baseline mapping; optional future `ui/hud/locator_bar.rs` behind explicit compatibility support.
 - Evidence required before adoption: Target-compatible waypoint protocol/server extension, resource-pack sprites and screenshot/projection tests across camera angles and GUI scales.
 - Completion state: COMPLETE — 742 logical lines read in contiguous ranges 1–400 and 401–742; source SHA and 27216-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1350. `crates/horizon-client/src/lod_net.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c9cd80ba2e22a031de4a29cd15bc33c66afcfbfa`
+- Size: 19954 bytes; 555 logical lines
+- Coverage: 1–400, 401–555 (contiguous to EOF)
+- Purpose: Defines Horizon's custom far-terrain network channel, including configuration offer, tile requests/replies, server-side distance/rate limits and client-side tile decoding.
+- Dependencies / cross-references: Horizon LOD sampler/column data, custom payload protocol, configuration phase, block/biome registries, dimension heights, remote tile inbox/server service and background sampling.
+- Implementation / logic: Negotiates protocol version and limits, validates aligned power-of-two tile requests, encodes bounded 16×16 column replies, decodes biome/state/span palettes and rejects oversized or malformed terrain data.
+- Findings: This is a proprietary `horizon:lod` custom payload protocol, explicitly not sent to vanilla clients; the offer is disabled by default and dedicated-server-only. The file warns that distant terrain can reveal information about a world's seed. It is not Minecraft 1.20.1 vanilla chunk synchronization.
+- RustChunk relevance: Not part of the standard Forge 1.20.1 client baseline. Its bounded payload parsing and request throttling are useful security references only if a separately negotiated far-terrain extension is ever designed.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not send or expect `horizon:lod` packets when joining ordinary 1.20.1 servers. Use normal chunk packets and client-side distance/LOD processing unless both endpoints explicitly support a compatible extension.
+- Follow-up checks: If reconsidered, threat-model seed leakage, verify server opt-in and authorization, enforce in-flight/rate/size/span limits, test trailing-byte handling and validate dimension/state/biome mappings.
+- RustChunk implementation mapping: No baseline mapping; possible isolated future `protocol/extensions/horizon_lod.rs` only behind explicit opt-in and server negotiation.
+- Evidence required before adoption: Compatible server implementation, protocol/version specification, seed-leakage review, hostile-payload corpus and Android memory/network profiling.
+- Completion state: COMPLETE — 555 logical lines read in contiguous ranges 1–400 and 401–555; source SHA and 19954-byte size match the pinned tree; embedded tests inspected, not run.

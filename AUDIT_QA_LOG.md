@@ -1001,3 +1001,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - This range is weighted toward LAN/server infrastructure. Server-only modules were not classified as client features; later-version waypoint/locator and packet structures were not treated as 1.20.1 compatibility evidence. Shared landing/movement architecture and optional in-process chunk handoff were identified separately.
 - Embedded tests were inspected only, not executed. No build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join, LAN host, UPnP or relay test was run.
 - The audit branch alone was updated. `main` and both existing backup branches remain untouched. The next backup remains due only after entries 1001–2000 are fully committed and globally verified.
+
+
+## Duplicate-path correction for checkpoint 1326–1350 — 2026-11-19
+
+- Read-back QA detected that the initially committed entry 1349, `crates/horizon-client/src/lib.rs`, duplicated the already-audited source path at entry 118. Entry 118 remains unchanged and authoritative.
+- Corrected entry 1349 to `crates/horizon-client/src/locator_bar.rs`, which had been fully inspected and recorded at 1350 in the initial checkpoint commit.
+- Added the next eligible, previously unaudited pinned-tree path as entry 1350: `crates/horizon-client/src/lod_net.rs`. It was read completely in ranges 1–400 and 401–555; its pinned SHA is `c9cd80ba2e22a031de4a29cd15bc33c66afcfbfa` and its byte size is 19954.
+- No other entry number or source path was changed. The completed reporting section remains 1301–1350 (50/50).
+- Final validation after this correction: Index entries 1–1350 are sequential and every source path is unique; Ledger entries 1201–1350 contain 150 entries, each with all 15 required fields exactly once; Index/Ledger path and decision alignment is verified.
+- This was a documentation/path-uniqueness correction. Embedded tests remain inspected only, not run; no build, APK, Forge launch, Android device, server join or LAN test was performed.
