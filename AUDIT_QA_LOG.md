@@ -557,10 +557,17 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 ## Audit checkpoint 1021–1040 — 2026-11-19
 
 - Completed full source review of exactly 20 new unique files (entries 1021–1040) from pinned Starling commit 5432370d573642041585c69b40fb045b27133488.
-- Recorded all 15 required fields, upstream SHA, byte size and canonical logical line count for every file. All 20 source texts were read to EOF. The merchant fixture (556 lines) was read as 1–400 and 401–556; game advancement integration (2,341 lines) was read as six consecutive sections no larger than 400 lines; ambient audio (479 lines) was read as 1–400 and 401–479.
+- Recorded all 15 required fields, upstream SHA, byte size and canonical logical line count for every file. All 20 source texts were read to EOF. The merchant fixture (556 lines) was read as 1–400 and 401–556; the advancement tree/predicate module (1,805 lines) was read as five consecutive sections (1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–1,805); ambient audio (479 lines) was read as 1–400 and 401–479.
 - Version findings: text-display entities are relevant but require 1.20.1 metadata/protocol reconstruction; the tooltip-display data component is later than the target; trade tables and random-sequence assumptions are versioned; world-options packets must be rewritten for 1.20.1; advancement integration has newer triggers that must be excluded unless verified; ambient sound data must be translated from 1.20.1 biome effects rather than the newer attributes schema.
 - Performance fixtures are methodology references only. The random-tick eligibility benchmark lacks an explicit semantic equality assertion; the resource-memory profile uses platform-specific RSS tools; save-batch benchmark verifies NBT equality but does not time disk I/O; sprite-cache fixture deletes a cache under the supplied root and must only run on a disposable copy.
 - Account management (1038) is security-sensitive and coupled to Starling account/provider/platform code; no direct port is approved without independent threat-model and provider review.
 - No tests, build, benchmark, APK, Android device, Minecraft client, Forge client, audio playback or server process were executed.
 - Validated SHA/byte size for all 20 entries against the pinned upstream Git tree; all 15 fields occur exactly once; numbering is sequential; paths are unique against Index entries 1–1040.
 - Next checkpoint: entries 1041–1060. Backup branches remain untouched; backup cadence remains every 1,000 newly completed audit entries only (next due after entry 2000).
+
+### Checkpoint 1021–1040 reconciliation after concurrent duplicate write
+
+- A second concurrent write had appended a duplicate set of entries 1021–1040 and placed the separate `src/game/advancements.rs` file at entry 1039. The duplicate block was removed; the canonical 20 entries 1021–1040 remain exactly once.
+- The canonical entry 1039 is `crates/horizon-client/src/advancements.rs` (SHA `1483c1eebaca73e55886fcfef0028e5986a05dcc`, 66,532 bytes, 1,805 logical lines), which was read completely in five consecutive sections of at most 400 lines. The distinct `crates/horizon-client/src/game/advancements.rs` (SHA `18479955a0f183cd5f98d98290a6557c6cb4d7e2`) was not part of this checkpoint and remains eligible for its later lexical position; no review of it is claimed here.
+- Updated Index entry 1039 path/decision to match the canonical ledger. Aligned all 20 Index rows with the canonical entries and decisions. The range now contains exactly one each of 1021–1040, with 20 unique paths.
+- No additional backup was created. Existing backup branches remain untouched; the next backup remains due after entry 2000.
