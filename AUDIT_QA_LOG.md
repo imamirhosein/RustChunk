@@ -1011,3 +1011,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No other entry number or source path was changed. The completed reporting section remains 1301–1350 (50/50).
 - Final validation after this correction: Index entries 1–1350 are sequential and every source path is unique; Ledger entries 1201–1350 contain 150 entries, each with all 15 required fields exactly once; Index/Ledger path and decision alignment is verified.
 - This was a documentation/path-uniqueness correction. Embedded tests remain inspected only, not run; no build, APK, Forge launch, Android device, server join or LAN test was performed.
+
+## Source-audit checkpoint 1351–1375 — 2026-11-19
+
+- Completed entries 1351–1375 inclusive (25/25) from the pinned Starling tree.
+- Entry 1351 is a Git symlink (CLAUDE.md, mode 120000) whose exact 9-byte blob points to AGENTS.md; the content endpoint follows the link, so the symlink blob was checked separately to avoid miscounting target text.
+- The largest file, native_hooks.rs, was read in 26 consecutive chunks covering all 10,360 lines through EOF. Other files over 400 lines were read in contiguous chunks, including their final partial chunks.
+- Index read-back: entries 1–1375 are sequential and all 1,375 source paths are unique.
+- Ledger read-back: entries 1201–1375 contain 175 records; all 15 required fields appear exactly once per record. Index/Ledger path and decision alignment was checked.
+- This is a source review only. Embedded tests were inspected, not run; no build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join, or server test was performed.
+- RustChunk decision remains that Horizon's native Rust mod API is not Forge 1.20.1 compatibility. Its validation and architecture patterns are references only; these files do not provide Java classloading, Forge/FML, ModLauncher, Mixin, or JVM execution.
+- Only the audit branch is changed. main and backup branches remain untouched. No backup is due at this checkpoint.
+- The user has authorized the full section 1351–1400. Continue with checkpoint 1376–1400, then stop at 1400.
