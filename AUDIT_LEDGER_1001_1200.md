@@ -709,7 +709,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `8ce860eb542ca12f63539c06c8905139688a6103`
 - Size: 103070 bytes; 2840 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–2840, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–2,000; 2,001–2,400; 2,401–2,800; 2,801–2,840. Every range is at most 400 lines and the final range reaches EOF.
 - Purpose: Horizon Android visual-theme and drawing toolkit for panels, typography, control-editor screens, color palettes, borders, rounded shapes, layout helpers and font/atlas-backed text.
 - Dependencies / cross-references: HudAtlas/HudBatch and font faces, display density/scale, Android viewport dimensions, palette/theme settings, UI geometry helpers and touch-control editor screens.
 - Implementation / logic: Defines reusable drawing primitives and theme/layout helpers; resolves text metrics and fit, computes mobile density/scale, paints rounded panels/buttons/borders/swatches and supports multiple Horizon control-editor pages and visual styles.
@@ -726,7 +726,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `08e1d02ecc64605adca0f90f60170fc59d76977c`
 - Size: 344501 bytes; 8506 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–8506, ending at EOF.
+- Coverage: Complete consecutive sections: 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–2,000; 2,001–2,400; 2,401–2,800; 2,801–3,200; 3,201–3,600; 3,601–4,000; 4,001–4,400; 4,401–4,800; 4,801–5,200; 5,201–5,600; 5,601–6,000; 6,001–6,400; 6,401–6,800; 6,801–7,200; 7,201–7,600; 7,601–8,000; 8,001–8,400; 8,401–8,506. All sections are contiguous, no larger than 400 lines, and end at EOF.
 - Purpose: Large Android touch-input and control-editor implementation: gameplay virtual mouse/keyboard, on-screen control hub, editable layouts, presets, custom buttons, property inspector and save/undo workflows.
 - Dependencies / cross-references: android_controls settings/layout/editor models; android_control_theme Ui/HudAtlas/HudBatch; keyboard/mouse state; screen/menu lifecycle; filesystem-backed presets; IME and viewport scaling; touch phases and pointer ownership.
 - Implementation / logic: Maps Android pointers to mouse/key actions; tracks pointer ownership, press/release/cancel, scrolling, gesture, virtual cursor and simultaneous button state; draws the floating control hub/editor; supports move/resize, grid snapping, sliders, custom bindings, preset save/load/reset, undo/redo and property edits.
@@ -760,7 +760,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `408af1630dc5f52294bbf0192dbb47a9b24da161`
 - Size: 77461 bytes; 2000 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–2000, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–2,000. All five sections are gap-free and the final line is 2,000.
 - Purpose: Implements client-side block/fluid ambient animation ticks and campfire block-entity particle ticks, including deterministic particle positions, probabilities, sounds and biome ambient particles.
 - Dependencies / cross-references: BlockFacts/Fluid facts, BlockRegistry/state properties, block tags and behavior JSON, Biomes, World, BlockCollisionRegistry, model offsets, sky/rain/height/weather inputs, LegacyRandom and ParticleEngine.
 - Implementation / logic: Classifies block states into animation kinds; loads tags/behavior and biome ambient-particle data; simulates torch/furnace/campfire/leaves/portal/redstone/dripstone/fire/cauldron-adjacent and other ambient effects; emits particles/sounds and computes campfire cooking smoke.
@@ -777,7 +777,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `146dc64d39b0fe7092daca2dc2cd8ec6fc1a8f13`
 - Size: 53941 bytes; 1482 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–1482, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–800; 801–1,200; 1,201–1,482. All four sections are gap-free and end at EOF.
 - Purpose: Projectile simulation and collision for arrows, tipped/spectral arrows and thrown tridents, including block/entity hits, water/lava, bubble columns, fire, pickup, piercing and hit events.
 - Dependencies / cross-references: Projectile/ProjectileKind, EntityRules and target AABBs, World/BlockFacts/BlockCollisionRegistry, FluidResources/entity-fluid and flow APIs, LegacyRandom, Mob/Who, potion and ItemStack data, game rules and block contact events.
 - Implementation / logic: Defines arrow state/pickup and event output; clips projectile movement against block shapes and entities; updates rotation, velocity, drag/gravity, water inertia, piercing, stuck/despawn/owner-ignore rules, entity-hit outcomes, trident bounce/deflection, TNT/campfire/candle reactions, fluid flow and fire extinguishing.
@@ -862,7 +862,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `11b47818839abbb9c75ed7a0ffd5951d6842cf0a`
 - Size: 14860 bytes; 461 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–461, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–461. Both sections are contiguous and the final section reaches EOF.
 - Purpose: Beehive and bee-nest gameplay logic: bee occupants, NBT storage, honey/pollination state, entering/leaving, emergency release and honey-related interactions.
 - Dependencies / cross-references: Bee/entity data, BeehiveBlockEntity NBT, flowers/tags, weather/time/night checks, block states and honey level, campfire/smoke path, sounds/particles and World update hooks.
 - Implementation / logic: Loads bee occupant data, simulates bee entry/exit and hive capacity, tracks nectar/pollen/honey progress and cooldowns, releases bees under normal/emergency conditions, updates hive block state and emits effects.
@@ -879,7 +879,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `cf2bf02a31b29287c752dd9af3ce7de252e5670e`
 - Size: 23777 bytes; 616 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–616, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–616. Both sections are contiguous and the final section reaches EOF.
 - Purpose: In-client benchmark scenario runner for repeatable scene setup, camera movement, frame/tick sampling and summary/reporting.
 - Dependencies / cross-references: World setup and seed/markers, chunk loading, camera/player controls, frame statistics, render/tick timing, GPU-pass instrumentation, benchmark state and platform memory/temperature data.
 - Implementation / logic: Defines scenario configuration and stage progression; prepares reproducible benchmark worlds, waits for chunk readiness, drives camera trajectories, collects frame-time/tick-time/CPU/GPU and optional memory/device signals, then emits a summary.
@@ -896,7 +896,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `3ac2b1546141cb56ab233ee6be1c5d72fbde92b7`
 - Size: 63753 bytes; 908 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–908, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–800; 801–908. All three sections are contiguous and the final section reaches EOF.
 - Purpose: Single source-of-truth command catalogue for the Horizon desktop control CLI and its generated help, Markdown reference and MCP tool schemas.
 - Dependencies / cross-references: Command grouping/parameter type definitions, per-command flags, tool naming, JSON schema generation, line construction, destructive/network command annotations and CLI/MCP consumers.
 - Implementation / logic: Declares command names, usage, summaries, descriptions, examples and typed parameters across screenshots, UI, world editing, multiplayer, account, performance, touch layout, recording and scripting; derives overview/detail/Markdown, MCP schemas and argument-to-command lines.
@@ -964,7 +964,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `2d84fa5808a3c36f4e27f14029def9959aa730b1`
 - Size: 26500 bytes; 662 logical lines
-- Coverage: Complete source read in consecutive sections of at most 400 lines, 1–662, ending at EOF.
+- Coverage: Complete consecutive sections: lines 1–400; 401–662. Both sections are contiguous and the final section reaches EOF.
 - Purpose: Converts block-entity saved NBT into item data on creative pick-block and restores block-entity state when placing the item; also handles spawn-egg data, spawner entity display and operator-only warnings.
 - Dependencies / cross-references: block_entity_nbt canonicalization, ItemStack data components, NBT Compound/Tag/JavaString, container/loot/waxed/sign/banner/skull/decorated-pot/beehive data and op permissions.
 - Implementation / logic: Splits block-entity NBT into implicit item components and remaining block_entity_data; maps container slots, loot table, sign sides, bees, banner patterns, wax, pot decorations and profile; on placement merges permitted custom data, applies component defaults and canonicalizes; handles spawn-egg entity_data and spawner metadata.
