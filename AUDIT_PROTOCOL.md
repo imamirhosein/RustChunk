@@ -158,3 +158,15 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - QA detected that entry 1349 initially duplicated `crates/horizon-client/src/lib.rs` at historical entry 118. Preserve entry 118; the duplicate slot was corrected.
 - Final entry 1349 is `crates/horizon-client/src/locator_bar.rs`; final entry 1350 is `crates/horizon-client/src/lod_net.rs`.
 - Do not repeat `lib.rs` at entry 1349. The final Index must contain 1350 sequential entry numbers and 1350 unique paths before the 1301–1350 reporting section is considered closed.
+
+## 14. Authorization and resume update — 2026-11-19
+
+- The former STOP state at entry 1350 was superseded by the user's explicit instruction to start the next section after the 1350 boundary.
+- Authorized section: 1351–1400 (50 files), split into checkpoints 1351–1375 and 1376–1400.
+- Checkpoint 1351–1375 is complete and verified. Continue serially with 1376–1400; no additional approval is required at 1375.
+- Stop at 1400. Do not begin 1401–1450 until the user explicitly authorizes that next 50-file section.
+- Latest verified checkpoint commit at time of this update: b5c3d05705b67aaf72eb167aba660a4dff038cbb (continuity update; subsequent protocol commit will advance branch head).
+- Keep the established cadence: four 50-file reporting sections per 200-entry boundary; each 50-file section has two 25-file checkpoints. Report briefly after each 25-file checkpoint; after the second checkpoint of a 50-file section, stop and ask before the next 50-file section.
+- Inspect files serially, not concurrently. Files up to 400 lines may be read whole; larger files must be read in contiguous chunks of at most 400 lines through EOF. Verify pinned-tree SHA, byte size and logical line count. Treat symlinks by their Git blob target text, not by following their target contents as if they were the link.
+- Preserve the 15 required Ledger fields, unique source paths in Index, and checkpoint QA/Continuity updates. Never claim tests or builds were run unless actually executed.
+- Keep user-facing reports extremely short; omit implementation recaps and dependency explanations unless requested. Do not alter main or backup branches. Backups remain due only at the established 1000-entry cadence.
