@@ -1147,3 +1147,17 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No source/application code changed. Only audit documentation was updated.
 - Only `starling-1.20.1-port-audit` was updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
 - Reporting section 1551–1600 is closed. Stop at entry 1600 and wait for fresh explicit authorization before 1601–1650.
+
+## Source-audit checkpoint 1601–1625 — 2026-11-19
+
+- Completed entries 1601–1625 inclusive (25/25) from pinned Starling source tree `5432370d573642041585c69b40fb045b27133488`.
+- All 25 source files were read fully through EOF. Files over 400 logical lines were inspected in consecutive, gap-free chunks no larger than 400 lines; exact logical line counts and ranges are recorded in `AUDIT_LEDGER_1601_1800.md`.
+- All 25 source paths, blob SHAs and byte sizes match the pinned recursive source tree. Exact logical line counts and full EOF coverage are recorded; Index paths and Decision values match the Ledger for 1601–1625.
+- Reviewed domains include undead/villager/Warden AI, Wither/Witch, mob world queries, player movement/fluids/environment, multiplayer UI, music and Starling native mod hooks/content.
+- Compatibility findings: Starling Native Mod API/generated hooks/Host/native client hooks are not Forge ModLoader/FML or Forge event APIs. Content loading has partial Forge/NeoForge biome-modifier parsing only; full Java mod loading and custom serializers remain unresolved. Friend relay and multiplayer ping paths are Starling/Horizon-specific until checked against 1.20.1.
+- Player physics, fluid interaction, environment damage and villager/Warden Brain are core references, but modern attributes/events/data (including restitution/bounciness and Nautilus breathing) must be filtered or rebuilt for 1.20.1. No Android profiling or performance claim is made.
+- Optional headwear/music UI and ignored integration tests are references only. Embedded tests were inspected; none were run.
+- No Rust build, unit test, benchmark, APK, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay validation was performed.
+- No source/application code changed; only audit documentation is included in this checkpoint.
+- Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1601–1625 is closed. Continue with 1626–1650 under the user's existing authorization; stop at entry 1650 for fresh authorization.

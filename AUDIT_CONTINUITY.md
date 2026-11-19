@@ -229,3 +229,17 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Checkpoint 1551–1575 commit: `ce4fd9f8711ce9cbab367e3ca637df130771d012`. This transaction closes 1576–1600 after five-document commit/read-back verification.
 - **STOP at 1600.** Do not inspect 1601 or later until fresh explicit user authorization.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest verified checkpoint — 1601–1625 — 2026-11-19
+
+- Completed entries: **1601–1625 inclusive (25/25)** from pinned source `5432370d573642041585c69b40fb045b27133488`.
+- Active 200-file stage: **1601–1800**, now **25/200 complete**.
+- Active 50-file section: **1601–1650**. Checkpoint **1601–1625** is complete; checkpoint **1626–1650** remains covered by the same explicit user authorization. Do not request intermediate permission.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **25 entries** (1601–1625), each with exactly 15 fields. The previous Ledger 1401–1600 remains closed at 200/200.
+- Index: **1,625 sequential entries and 1,625 unique source paths**. Index/Ledger path and Decision alignment is checked for 1601–1625.
+- All 25 files were read through EOF in serial order. Files over 400 lines were read in contiguous chunks no larger than 400; SHAs, byte sizes and logical line coverage match the pinned source tree.
+- Findings: target-era mob behavior and player physics need strict 1.20.1 parity; Starling Native Mod API/hooks are not Forge; content has only partial Forge/NeoForge biome-modifier handling; multiplayer friend relay/status protocol are Starling-specific. No Android performance claim is made.
+- No source/application code changed. Embedded tests were inspected but not run. No build, unit tests, benchmark, APK, device, Forge or server validation was performed.
+- Checkpoint commit SHA is recorded after atomic five-document commit/read-back below.
+- **Next: inspect 1626–1650**, serially and with maximum 400-line chunks. Stop at **1650** and wait for fresh authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.

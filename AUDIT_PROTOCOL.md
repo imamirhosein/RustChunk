@@ -248,3 +248,18 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Preserve exact 200 / 50 / 25 cadence, serial inspection and maximum 400-line chunks. On next authorization, verify branch HEAD and current Index/tree order before entry 1601.
 - No source/application code changed. Embedded tests were inspected only, not run. No build, unit test, benchmark, APK, Android device, Forge launch, Minecraft join, LAN, UPnP or relay validation has been performed.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest authoritative resume state — checkpoint 1601–1625 — 2026-11-19
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1–1625**.
+- Active 200-file stage: **1601–1800**, completed **25/200**.
+- Active reporting section: **1601–1650**. Checkpoint **1601–1625** is complete; checkpoint **1626–1650** is already authorized by the same user instruction. Proceed without asking for mid-section permission.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **25 entries** (1601–1625), with exactly 15 fields each. Previous Ledger `AUDIT_LEDGER_1401_1600.md` is closed. Index: **1,625 sequential unique paths**.
+- The 25 files 1601–1625 were read through EOF serially; files above 400 logical lines were read in consecutive chunks of at most 400. SHA/size/coverage are recorded in the active Ledger.
+- **Next source is entry 1626**, verified as the next unindexed blob in pinned tree order. Recheck the next 25 paths and duplicate status before reading.
+- Preserve exact 200 / 50 / 25 cadence, serial inspection, complete EOF and maximum 400-line chunks. After entries 1626–1650, update all five audit docs in one atomic commit, read all five back individually and verify branch HEAD.
+- **STOP at entry 1650** and wait for new explicit authorization before 1651 or any later source file.
+- No source/application code changed. Embedded tests are inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
+- `main` and backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
