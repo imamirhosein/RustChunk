@@ -554,3 +554,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Re-read the committed first checkpoint and compared all 20 Source SHAs and byte sizes again against the pinned source tree.
 - Found and corrected one transcription error in entry 1013's SHA: the ledger had omitted the final two characters. Correct value: `327a8e9d1465a6fd80b6e236fe759417f7e42fe2`; pinned tree SHA and fetched file SHA both agree. The file size remains 6,621 bytes and 145 logical lines.
 - This is a metadata correction only; source content, decision and implementation mapping were not changed. Checkpoint remains 20 complete entries.
+## Audit checkpoint 1021–1040 — 2026-11-19
+
+- Completed full source review of exactly 20 new unique files (entries 1021–1040) from pinned Starling commit 5432370d573642041585c69b40fb045b27133488.
+- Recorded all 15 required fields, upstream SHA, byte size and canonical logical line count for every file. All 20 source texts were read to EOF. The merchant fixture (556 lines) was read as 1–400 and 401–556; game advancement integration (2,341 lines) was read as six consecutive sections no larger than 400 lines; ambient audio (479 lines) was read as 1–400 and 401–479.
+- Version findings: text-display entities are relevant but require 1.20.1 metadata/protocol reconstruction; the tooltip-display data component is later than the target; trade tables and random-sequence assumptions are versioned; world-options packets must be rewritten for 1.20.1; advancement integration has newer triggers that must be excluded unless verified; ambient sound data must be translated from 1.20.1 biome effects rather than the newer attributes schema.
+- Performance fixtures are methodology references only. The random-tick eligibility benchmark lacks an explicit semantic equality assertion; the resource-memory profile uses platform-specific RSS tools; save-batch benchmark verifies NBT equality but does not time disk I/O; sprite-cache fixture deletes a cache under the supplied root and must only run on a disposable copy.
+- Account management (1038) is security-sensitive and coupled to Starling account/provider/platform code; no direct port is approved without independent threat-model and provider review.
+- No tests, build, benchmark, APK, Android device, Minecraft client, Forge client, audio playback or server process were executed.
+- Validated SHA/byte size for all 20 entries against the pinned upstream Git tree; all 15 fields occur exactly once; numbering is sequential; paths are unique against Index entries 1–1040.
+- Next checkpoint: entries 1041–1060. Backup branches remain untouched; backup cadence remains every 1,000 newly completed audit entries only (next due after entry 2000).
