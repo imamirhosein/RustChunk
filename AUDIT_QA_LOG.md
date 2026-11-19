@@ -512,3 +512,20 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - This batch is source/metadata/structure/coverage/decision QA only. No Rust build, unit tests, benchmark execution, APK build, Android-device test, Minecraft launch, Forge 1.20.1 client launch or Aternos/server connection was performed.
 - The original backup branch `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; no archive branch was recreated.
 - The second backup remains deferred. Next action: final global QA of entries 1–1000; only after that passes, create the second backup and compare its tree/content against the original backup.
+
+## Global QA 1–1000 — 2026-11-19
+
+### Final verification
+
+- Re-read all four Ledger files from the working branch. Confirmed exactly 1,000 entries, numbering 1–1,000 with no gaps, and exactly 1,000 unique source paths.
+- Verified all 1,000 paths exist in the pinned Starling tree at `5432370d573642041585c69b40fb045b27133488`; all 1,000 recorded source SHAs match the upstream Git tree. Every explicit byte-size field also matches the upstream tree.
+- Verified exactly one occurrence of each of the 15 required fields in every entry (15,000 field checks; zero errors).
+- Verified 1,000 Index rows and exact Ledger-to-Index path agreement. Corrected 20 decision rows where the Index had reversed or omitted the primary decision/qualifier; explanatory prose and quoted historical assessments were not misclassified as decisions.
+- Verified all 80 files whose recorded logical line count exceeds 400 have continuous Coverage from line 1 through EOF, with no gap/overlap and no individual inspected range larger than 400 lines. Corrected the remaining inaccurate/ambiguous Coverage records, including `docs/native-mods.md`, `crates/horizon-protocol/src/item.rs`, `secure_chat.rs`, `item/hash/raw.rs` and `crates/horizon-client/src/touch.rs`.
+- The final source tree contains 5,749 entries and the recursive tree response was not truncated.
+
+### Backup discipline and execution limits
+
+- Original backup `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`. No archive branch was recreated.
+- Global source/metadata/structure/Index/Coverage QA passed. The agreed second backup may now be created from the verified working branch; compare its tree and key audit file contents with the original backup before treating it as valid.
+- No Rust tests, build, benchmark execution, APK build, Android-device run, Minecraft launch, Forge 1.20.1 client launch or multiplayer/Aternos connection was performed. Audit verification is not runtime compatibility evidence.
