@@ -1514,3 +1514,28 @@
 | 1348 | `crates/horizon-client/src/landing.rs` | essential; rewrite required; version-specific | Implements player fall/landing behavior and block landing reactions, producing sound, particle, damage, statistic and block-change events through the motion simulation. |
 | 1349 | `crates/horizon-client/src/locator_bar.rs` | unnecessary; reference; optional/future | Implements client-side waypoint state, style/animated sprite loading and locator-bar rendering with distance-based dots, arrows and contextual HUD priority. |
 | 1350 | `crates/horizon-client/src/lod_net.rs` | unnecessary; reference; optional/future | Defines Horizon's custom far-terrain protocol, bounded tile requests/replies, rate limits and LOD data decoding. |
+| 1351 | `CLAUDE.md` | unnecessary; reference; optional/future | Symlink to AGENTS.md (9-byte target); repository guidance metadata, not a separate source file. |
+| 1352 | `crates/horizon-client/src/game/native_components.rs` | unnecessary; reference; optional/future | Reads/writes native-mod item components through Horizon's custom stack data API. |
+| 1353 | `crates/horizon-client/src/game/native_criteria.rs` | unnecessary; reference; optional/future | Dispatches native-mod criteria/advancement observations from Horizon game events. |
+| 1354 | `crates/horizon-client/src/game/native_data_maps.rs` | unnecessary; reference; optional/future | Exposes loaded data-map values and typed resource lookups to native mods. |
+| 1355 | `crates/horizon-client/src/game/native_entities.rs` | unnecessary; reference; optional/future | Provides Horizon-native entity lookup and server-side entity operations. |
+| 1356 | `crates/horizon-client/src/game/native_entity_refs.rs` | unnecessary; reference; optional/future | Maintains native-mod entity references with lifetime/world validity checks. |
+| 1357 | `crates/horizon-client/src/game/native_explosions.rs` | unnecessary; reference; optional/future | Creates and applies custom authoritative-server explosions in Horizon's simulation. |
+| 1358 | `crates/horizon-client/src/game/native_falling.rs` | unnecessary; reference; optional/future | Spawns bounded falling-block entities in loaded chunks on the authoritative server. |
+| 1359 | `crates/horizon-client/src/game/native_hooks.rs` | unnecessary; reference; optional/future | Central 10,360-line Horizon native-mod hook API and helpers for game, world, UI, render, network and server behavior. |
+| 1360 | `crates/horizon-client/src/game/native_inventories.rs` | unnecessary; reference; optional/future | Reads/moves online and offline player inventories with checked stack transfers and playerdata persistence. |
+| 1361 | `crates/horizon-client/src/game/native_item_container.rs` | unnecessary; reference; optional/future | Implements custom item-stack container slots and bounded insert/extract operations. |
+| 1362 | `crates/horizon-client/src/game/native_item_energy.rs` | unnecessary; reference; optional/future | Implements Horizon custom energy buffers stored in item custom data. |
+| 1363 | `crates/horizon-client/src/game/native_item_fluids.rs` | unnecessary; reference; optional/future | Implements water/lava buckets and custom item fluid tanks. |
+| 1364 | `crates/horizon-client/src/game/native_lifecycle.rs` | unnecessary; reference; optional/future | Tracks authoritative world epochs, open/close phases and non-paused server tick scopes. |
+| 1365 | `crates/horizon-client/src/game/native_menus.rs` | unnecessary; reference; optional/future | Implements server-opened native menus, player menu lifecycle and transactional item exchanges. |
+| 1366 | `crates/horizon-client/src/game/native_mob_draw.rs` | unnecessary; reference; optional/future | Builds client mob/player render snapshots and poses custom native-mod geometry. |
+| 1367 | `crates/horizon-client/src/game/native_mobs.rs` | unnecessary; reference; optional/future | Exposes validated server-side mob spawn, query, movement, health and equipment operations. |
+| 1368 | `crates/horizon-client/src/game/native_motion.rs` | unnecessary; reference; optional/future | Provides bounded player pushes and server-controlled creative flying speed. |
+| 1369 | `crates/horizon-client/src/game/native_mounts.rs` | unnecessary; reference; optional/future | Lets native server mods allow/cancel player and mob mounting or dismounting. |
+| 1370 | `crates/horizon-client/src/game/native_net.rs` | unnecessary; reference; optional/future | Queues Horizon proprietary client/server native-mod payload messages with per-tick limits. |
+| 1371 | `crates/horizon-client/src/game/native_panel.rs` | unnecessary; reference; optional/future | Renders a native-mod item browser panel with paging, search and input events. |
+| 1372 | `crates/horizon-client/src/game/native_panel_recipes.rs` | unnecessary; reference; optional/future | Lays out and renders bounded recipe pages, tabs, inputs and actions in the native item panel. |
+| 1373 | `crates/horizon-client/src/game/native_projectiles.rs` | unnecessary; reference; optional/future | Routes projectile impacts through native hooks and replays impacts canceled by mods. |
+| 1374 | `crates/horizon-client/src/game/native_quick_move.rs` | unnecessary; reference; optional/future | Routes shift-clicks in native mod containers and settles item remainders safely. |
+| 1375 | `crates/horizon-client/src/game/native_recipes.rs` | unnecessary; reference; optional/future | Builds native-mod recipe catalogues, tracks recipe-book state and syncs selected recipe content. |
