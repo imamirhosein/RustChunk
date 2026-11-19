@@ -351,342 +351,339 @@
 ### 1021. `crates/horizon-client/examples/probe/team_rules_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `9a2d716ffc42f1c1b2e0b575d39fdb890465c5df`
-- Size: 2411 bytes; 50 logical lines
-- Coverage: Complete text file reviewed, lines 1–50.
-- Purpose: Differential fixture for team gameplay rules: friendly-fire permission, alliance, pushability, invisibility and name-tag visibility.
-- Dependencies / cross-references: Uses Scoreboard, CollisionRule, Visibility and NameView; JSON case input/output.
-- Implementation / logic: Creates two teams from case flags, resolves own/other/viewer teams, computes invisibility and NameView context, then calls teams_allow_damage, teams_allied, pushable_by and name_shown.
-- Findings: Isolates rule evaluation; omits packet synchronization, team membership lifecycle, collision resolution and rendering. Invalid enum names panic via expect.
-- RustChunk relevance: Useful for multiplayer/team correctness. Pure rules/test pattern is reusable; data and edge semantics require Java 1.20.1 checking.
-- Decision: **adaptable; reference; version-specific — keep the focused team-rule oracle pattern and rebuild cases against the 1.20.1 team model.**
-- 1.20.1 implications: Reconfirm 1.20.1 team collision/visibility enum values, friendly-fire semantics, spectator handling and scoreboard membership updates.
-- Follow-up checks: Test missing/same/different teams, all collision rules, spectator invisibility, camera/vehicle name visibility, HUD-hidden and distance thresholds.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/team_rules_fixture.rs (proposed, not created); runtime mapping is scoreboard state plus entity push/name-tag policy.
-- Evidence required before adoption: Java 1.20.1 scoreboard/team goldens and multiplayer packet-order tests; collision/name-tag device render checks separate.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 2,411 bytes; 50 logical lines
+- Coverage: Complete text file read to EOF, lines 1–50.
+- Purpose: Small differential fixture for scoreboard-team rules: friendly fire, alliances, entity pushability, invisibility and name-tag visibility.
+- Dependencies / cross-references: Uses `scoreboard::{CollisionRule, NameView, Scoreboard, Visibility}`; the inputs represent two teams plus own/other/viewer roles, spectator/HUD/camera/vehicle flags and squared distance.
+- Implementation / logic: Creates two teams from the case, sets friendly-fire/invisibility/collision/name-tag policies, resolves the referenced teams, computes `invisible_to`, then serializes team damage/alliance/push/name-visibility answers.
+- Findings: Deterministic logic-only probe. It does not exercise the server's authoritative damage or collision packets, and it has no entity/world simulation. Enum names and defaults are code-level contracts that need 1.20.1 oracle confirmation.
+- RustChunk relevance: Useful, inexpensive parity harness for multiplayer name visibility and team interactions; suitable for a focused RustChunk scoreboard test, not a complete PvP implementation.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Team rules exist in 1.20.1, but rebuild team collision, visibility and friendly-fire behavior against Java 1.20.1; ignore any new team properties absent from that version.
+- Follow-up checks: Compare all collision-rule pairs, friendly-fire combinations, spectator and invisibility cases, name-tag range boundaries, HUD-hidden/camera/vehicle cases and unassigned teams against Java 1.20.1.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/team_rules_fixture.rs`; production behavior remains in RustChunk scoreboard/player-collision code. No file created.
+- Evidence required before adoption: Java 1.20.1 scoreboard team and entity push/name visibility oracle cases, including boundary-distance vectors. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 50 logical lines; source-only review, no runtime or multiplayer test executed.
 
 ### 1022. `crates/horizon-client/examples/probe/text_display_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f1f58762586cd1d9dc32ea78c75f4c41a050e4d6`
-- Size: 1535 bytes; 37 logical lines
-- Coverage: Complete text file reviewed, lines 1–37.
-- Purpose: Decoder-level parity fixture for text-display entity metadata: reads wire entity-data packets and emits interpreted state or rotation matrix.
-- Dependencies / cross-references: Uses current horizon_protocol Play packet IDs/decoder, SetEntityData, TextDisplayData and serde_json.
-- Implementation / logic: Hex-decodes wire bytes, decodes current SET_ENTITY_DATA packet, applies metadata values, then serializes display state/alignment/plain text or computes the four-angle matrix.
-- Findings: Text display entities exist in target era, but packet ID, metadata serializer indices and current TextDisplayData structure are snapshot-specific. No entity lifecycle.
-- RustChunk relevance: Useful metadata-to-display-state and transform test pattern; protocol translation must be fully versioned.
-- Decision: **adaptable; reference; version-specific — preserve fixture concept, rebuild wire decoder and metadata schema from Java 1.20.1.**
-- 1.20.1 implications: Use 1.20.1 entity metadata index/type mapping and text component format; compare interpolation, billboard, alignment, opacity, background and line width.
-- Follow-up checks: Create Java 1.20.1 vectors for full/partial metadata, null text, billboard modes, rotations, scale, alignment, shadow, see-through, opacity and background.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/text_display_fixture.rs (proposed); production is versioned entity metadata decoder feeding text display model.
-- Evidence required before adoption: Authoritative 1.20.1 SetEntityData packet/metadata vectors and Java-derived state/matrix outputs, including malformed and partial updates.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 1,535 bytes; 37 logical lines
+- Coverage: Complete text file read to EOF, lines 1–37.
+- Purpose: Wire-to-model fixture for text-display entity metadata; accepts an encoded entity-data packet and reports the resulting display state or transform matrix.
+- Dependencies / cross-references: Depends on `horizon_protocol` Play clientbound IDs and decoder, `SetEntityData`, `TextDisplayData`, serde JSON and the snapshot's entity metadata serializer table.
+- Implementation / logic: Hex-decodes the packet payload, decodes `SET_ENTITY_DATA`, applies metadata values to a default TextDisplayData, and either returns its matrix for four supplied angles or serializes display state with plain text and alignment.
+- Findings: Text displays were introduced before 1.20.1, but metadata indices/serializer types and protocol packet IDs are version-specific. The fixture uses current Protocol 777 and therefore cannot be used as a 1.20.1 wire decoder unchanged.
+- RustChunk relevance: Useful separation of protocol metadata decoding from display-state interpretation; good candidate for two focused tests (1.20.1 metadata codec and text-display model).
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild SetEntityData ID, metadata field indices, serializer codecs, interpolation/rotation and alignment semantics from Java 1.20.1. The Text Display entity exists in the target version, but packet fields must match 1.20.1.
+- Follow-up checks: Use 1.20.1 encoded metadata golden vectors for text, line width, background, opacity, alignment, billboard, brightness and transforms; cover absent/default and partial metadata updates.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/text_display_fixture.rs`; runtime decode belongs to RustChunk's 1.20.1 protocol adapter and entity render path. No file created.
+- Evidence required before adoption: Java 1.20.1 entity metadata packets and TextDisplay entity source/oracle vectors. No packet test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 37 logical lines; no protocol or rendering test executed.
 
 ### 1023. `crates/horizon-client/examples/probe/text_display_render_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `2a539e4252095695ffed9ceee6f4dd3d041f37cc`
-- Size: 2925 bytes; 70 logical lines
-- Coverage: Complete text file reviewed, lines 1–70.
-- Purpose: Headless rendering oracle for text-display content: converts metadata wire cases into laid-out text quads, pose matrices and ARGB colors.
-- Dependencies / cross-references: Uses HudAtlas/HudBatch, font layout, TextDisplayData, Lines, background color and current protocol metadata decoding.
-- Implementation / logic: Loads HUD atlas; decodes entity data; applies display metadata; wraps text; draws glyph/background quads; serializes pose and quad corners/colors.
-- Findings: Bypasses GPU and serializes only part of quad data. Atlas/font, serializer indices and text schema are snapshot-specific; no world-space billboard/depth validation.
-- RustChunk relevance: Valuable text-quad oracle. Keep separate from packet decoder and from actual mobile GPU validation.
-- Decision: **adaptable; reference; version-specific — reuse text-quad oracle shape; rebuild metadata/font/atlas inputs for 1.20.1.**
-- 1.20.1 implications: Verify 1.20.1 metadata, text wrapping, billboard/transform and renderer resources; do not import newer HUD sprite identifiers.
-- Follow-up checks: Compare line wrapping, glyph UVs, background alpha, shadow, see-through, alignment, transform origin, billboard modes and depth with Java 1.20.1; add Android/Mali image comparison.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/text_display_render_fixture.rs (proposed); production mapping is 1.20.1 text-display renderer and world-space submission.
-- Evidence required before adoption: Java 1.20.1 golden quad/pose vectors and screenshot tests at multiple GUI scales; Mali-G52 validation.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 2,925 bytes; 70 logical lines
+- Coverage: Complete text file read to EOF, lines 1–70.
+- Purpose: Headless text-display render fixture; turns entity metadata into wrapped text lines, pose matrices and canonical HUD quads.
+- Dependencies / cross-references: Depends on HudAtlas/font metrics, TextDisplayData, SetEntityData decoding, line splitting, background-color calculation and HudBatch vertex format.
+- Implementation / logic: Loads the atlas, decodes each supplied wire packet, applies metadata, splits text at the configured line width, computes background and calls `text_display::draw`; converts batch vertices to four-corner quads with ARGB colors and pose.
+- Findings: Output tests the CPU draw-command/quad construction, not a GPU renderer. It serializes a subset of vertex data and relies on the current atlas, fonts and protocol serializer mappings.
+- RustChunk relevance: Useful differential-rendering harness for text display once a 1.20.1 metadata decoder and font/resource set are available.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Retain the text measurement and quad-oracle pattern, but rebuild metadata packet, text styling, font glyph metrics, background defaults and transforms from 1.20.1 resources.
+- Follow-up checks: Compare empty/multiline/styled text, line-width wrapping, alignment, opacity/background, billboard pose, ARGB conversion and vertex ordering at multiple GUI scales against Java 1.20.1.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/text_display_render_fixture.rs`; production renderer remains RustChunk's own HUD/entity render layer. No file created.
+- Evidence required before adoption: Java 1.20.1 TextDisplayRenderer oracle, exact font/atlas resources and deterministic metadata cases. No rendering test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 70 logical lines; source-only review, no GPU/device run.
 
 ### 1024. `crates/horizon-client/examples/probe/toggle_keys_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `d05acdd5c07cbe4805a997ca07b8725ef7961520`
-- Size: 2052 bytes; 56 logical lines
-- Coverage: Complete text file reviewed, lines 1–56.
-- Purpose: Deterministic state-machine fixture for toggle mappings of sneak, sprint, attack and use across keyboard/button/lifecycle events.
-- Dependencies / cross-references: Uses ToggleKeys, KeyAction, four toggle options and scripted JSON event lists.
-- Implementation / logic: Replays option changes, key press/release/repeat, button state, screen-open/close and respawn; emits down-state and pending click counts.
-- Findings: Covers discrete toggles but not analog, touch pointer IDs, ACTION_CANCEL, focus loss or Android lifecycle callbacks. Input indices are trusted.
-- RustChunk relevance: Good regression model for consistent key-toggle behavior across keyboard and on-screen controls.
-- Decision: **adaptable; reference — reuse event-sequence test structure and map Android touch into the same canonical key contract.**
-- 1.20.1 implications: Verify 1.20.1 toggle/hold semantics and screen transitions; touch cancellation remains platform-specific.
-- Follow-up checks: Add focus-loss, duplicate press, repeat, pointer-up/cancel, multi-touch, screen transition, pause/resume and respawn cases.
-- RustChunk implementation mapping: QA-only candidate tests/input/starling/toggle_keys_probe.rs (proposed); runtime mapping is input state machine shared by keyboard and editable touch controls.
-- Evidence required before adoption: Java 1.20.1 input traces plus Android multi-pointer/lifecycle tests.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 2,052 bytes; 56 logical lines
+- Coverage: Complete text file read to EOF, lines 1–56.
+- Purpose: Event-sequence probe for toggle-style key mappings: sneak, sprint, attack and use behavior across key/button input and screen lifecycle transitions.
+- Dependencies / cross-references: Depends on `ToggleKeys`, `KeyAction`, four option flags and a manually encoded operation stream.
+- Implementation / logic: Replays option changes, key press/release/repeat, button transitions, screen open/close and respawn; emits each key's down state and pending click count after every event.
+- Findings: Pure input state machine, but its key-slot numbering and action details are specific to the source client. It does not test Android touch pointer IDs, controller analog state or OS cancellation.
+- RustChunk relevance: Good compact test pattern for separating toggle semantics from platform-specific input dispatch.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Verify exact 1.20.1 toggle options and repeat/press semantics. RustChunk should map touchscreen controls to the same canonical action state, while keeping touch pointer identity/cancel handling separate.
+- Follow-up checks: Test press-release-repeat sequences, option toggled while held, focus loss, screen open/close, respawn, duplicate pointer/button events and multi-touch cancellation; compare keyboard behavior with Java 1.20.1.
+- RustChunk implementation mapping: Proposed `tests/input/toggle_keys_probe.rs`; canonical key and touch mapping remains RustChunk-owned. No file created.
+- Evidence required before adoption: Java 1.20.1 key mapping/ToggleKeyMapping behavior and separate Android ACTION_CANCEL/multi-pointer tests. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 56 logical lines; no input or Android-device test executed.
 
 ### 1025. `crates/horizon-client/examples/probe/tooltip_display_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `7cb3ade954f587ccf3a3a289cc19401a020f1063`
-- Size: 2808 bytes; 70 logical lines
-- Coverage: Complete text file reviewed, lines 1–70.
-- Purpose: Probe for tooltip visibility policy and styled item-name rendering based on the newer tooltip_display item data component.
-- Dependencies / cross-references: Uses TooltipDisplay, ItemStack, component decoding and NBT Tag; tab-separated visibility flags and custom-name text.
-- Implementation / logic: Builds synthetic sword stack, writes hide-tooltip/hidden-components data, asks TooltipDisplay visibility and emits custom-name style spans.
-- Findings: The minecraft:tooltip_display component and hidden-components schema are newer than vanilla 1.20.1. Custom-name subcase is conceptually useful but not a target tooltip model.
-- RustChunk relevance: Only the general split between item-name styling and tooltip-section visibility is reusable.
-- Decision: **unnecessary; adaptable; version-specific — exclude tooltip_display component behavior from the 1.20.1 baseline; independently test legacy HideFlags/custom names.**
-- 1.20.1 implications: Rebuild tooltip suppression from 1.20.1 ItemStack/NBT/HideFlags; do not add the later component to vanilla item protocol.
-- Follow-up checks: Build Java 1.20.1 vectors for HideFlags bits, attributes/enchantments/durability/lore/name, creative mode and custom-name styles.
-- RustChunk implementation mapping: No runtime mapping for TooltipDisplay; separate legacy parity fixture proposed under tests/parity/starling/legacy_tooltip_visibility.rs.
-- Evidence required before adoption: Java 1.20.1 tooltip goldens and NBT item fixtures; confirm no later tooltip_display component in vanilla baseline.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 2,808 bytes; 70 logical lines
+- Coverage: Complete text file read to EOF, lines 1–70.
+- Purpose: Fixture for tooltip visibility and styled item-name output, including hide-tooltip and hidden-attribute controls.
+- Dependencies / cross-references: Uses `TooltipDisplay`, `ItemStack`, modern item-data components and SNBT/NBT tag construction; also exercises component parsing and styled text spans.
+- Implementation / logic: Reads tab-separated cases, optionally parses a custom-name component, constructs a test stack, calls `TooltipDisplay::for_stack` and `shows`, then serializes style flags for name glyphs.
+- Findings: Central `minecraft:tooltip_display` component and `hidden_components` representation are from the modern data-component item model and are not the 1.20.1 ItemStack/NBT schema. Reusing this fixture directly would misrepresent legacy tooltip rules.
+- RustChunk relevance: Only the high-level tests—hidden tooltip, hidden attribute lines and styled custom name—are conceptually useful; the schema and implementation need a separate legacy 1.20.1 design.
+- Decision: **rewrite required; reference; version-specific**
+- 1.20.1 implications: Do not carry the modern tooltip-display component into vanilla 1.20.1. Reconstruct item tooltip suppression and attribute visibility from 1.20.1 item NBT/flags and the target client implementation.
+- Follow-up checks: Build 1.20.1 tests for custom name formatting, hide flags, attribute modifiers, enchantments, durability, lore, advanced/debug tooltip and creative mode.
+- RustChunk implementation mapping: Proposed legacy fixture `tests/parity/starling/legacy_tooltip_fixture.rs`; no modern component runtime mapping.
+- Evidence required before adoption: Java 1.20.1 ItemStack tooltip source plus golden outputs for old NBT/hide flags. No tooltip test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 70 logical lines; version-specific component schema flagged; no test executed.
 
 ### 1026. `crates/horizon-client/examples/probe/trading_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `36804fba9e92be2326438781135f24759085c66f`
-- Size: 20564 bytes; 556 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–556; final section ends at EOF.
-- Purpose: Merchant-trading differential harness covering villager/wandering-trader offers, price modifiers, gossip, restock, menu, XP, NBT and RNG.
-- Dependencies / cross-references: Uses Items, Enchantments, Trades, RandomSequences, Gossips, MerchantOffer/Session/Trader, merchant menu, entity NBT, recipes/brewing/banner data, legacy RNG and PackOverlay.
-- Implementation / logic: Loads tables; builds merchants from profession/variant/level or wandering trader sets; applies uses/demand/gossip/XP/restock; tests price/restock/NBT; replays menu select/click/tick/close and tracks inventory/offers/XP/orbs/random draws.
-- Findings: Test transport with snapshot assumptions around trade-set names, random sequence IDs, profession/variant catalogues, merchant level logic and menu. Not full village/server tick simulation; positional inputs may panic.
-- RustChunk relevance: High-value gameplay reference for merchant interaction, inventory transactions, pricing and persistence.
-- Decision: **adaptable; reference; version-specific — keep merchant state/replay and NBT comparison strategy; rebuild 1.20.1 trade pools, gossip, restock and menu behavior.**
-- 1.20.1 implications: Use target release's villager professions/levels/biomes, wandering trader offers, gossip, demand/special prices, restock timing, trade XP and ItemStack NBT. Do not assume current random sequence IDs match.
-- Follow-up checks: Create Java 1.20.1 goldens for profession/level/variant, wandering trader, uses/demand/gossip/hero, restock boundaries, menu click modes, inventory overflow, XP orbs and villager NBT.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/trading_fixture.rs (proposed); production spans merchant data, gossip, menus, inventory, RNG and entity persistence.
-- Evidence required before adoption: Pinned 1.20.1 trade/loot/profession data, Java oracle traces, NBT round-trip cases and multiplayer menu packet tests.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 20,564 bytes; 556 logical lines
+- Coverage: Complete text file read to EOF, lines 1–556; consecutive sections of at most 400 lines were used.
+- Purpose: Differential harness for merchant gameplay: generates villager/wandering-trader offers, applies demand/gossip/hero modifiers, restocks merchants, opens trade menus, moves inventory stacks and round-trips villager NBT.
+- Dependencies / cross-references: Depends on Items, Enchantments, Recipes, Brewing, Banners, MobTypes, RandomSequences, Gossip, MerchantOffer/Session/TradeEnv, Menu click logic, entity NBT and vanilla oracle text.
+- Implementation / logic: Loads trade/recipe/item resources; builds merchant offer sets by profession/variant/level and deterministic random sequences; supports generation, price, restock, NBT and trade cases with selection/click/tick/close operations; emits offers, inventory, XP, gossip, event orbs and next RNG.
+- Findings: Large test transport, not a merchant implementation. Inputs and resource tables are snapshot-specific; villager trade pools, professions, variants, trade pricing, random sequence IDs and newer NBT fields must all be rebuilt for 1.20.1. It also trusts several structured fixture fields and uses a synthetic player/origin.
+- RustChunk relevance: Useful as a comprehensive parity-test outline for merchant trading once the legacy 1.20.1 trading data and menus are implemented; not appropriate to copy as a monolithic runtime module.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild 1.20.1 villager professions/levels/trade pools, wandering-trader offers, demand/reputation/hero pricing, restock timing, trade menu and villager NBT using target version sources. Keep RNG sequence order exact.
+- Follow-up checks: Split into deterministic sub-suites for offer generation, special prices, gossip, restock boundaries, inventory/click/result slots, XP/level events and villager NBT round-trip; compare to Java 1.20.1. Include bounds/invalid case handling.
+- RustChunk implementation mapping: Proposed tests under `tests/parity/starling/trading/` split by feature; runtime trade/session remains RustChunk-owned. No files created.
+- Evidence required before adoption: Java 1.20.1 VillagerTrades, WanderingTrader, MerchantOffers, MerchantMenu, GossipContainer and entity NBT oracle outputs; pinned target trade data and RNG vectors. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 556 logical lines read consecutively (1–400, 401–556); no trade, build or server test executed.
 
 ### 1027. `crates/horizon-client/examples/probe/translucency_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `8ea42c1dce681b848e7b880e031f59c4f29415b8`
-- Size: 1697 bytes; 47 logical lines
-- Coverage: Complete text file reviewed, lines 1–47.
-- Purpose: Oracle for translucent quad centers, camera-distance sorting order and cached sort-state updates.
-- Dependencies / cross-references: Uses SortState, Sorter and quad_center with quad positions, section origin and camera positions.
-- Implementation / logic: Computes quad centers, initializes state, updates cache for cameras and independently sorts centers using camera-relative coordinates; emits float bits, indices and update flags.
-- Findings: Tests ordering/cache only, not draw submission, blend/depth, cross-section ordering or visuals. Separate cache sorter and local sorter distinction matters.
-- RustChunk relevance: Directly relevant to terrain transparency sorting and artifacts.
-- Decision: **adaptable; reference — preserve deterministic quad-order and cache-invalidation tests; adapt precision and renderer integration.**
-- 1.20.1 implications: Compare exact 1.20.1 sort algorithm, center precision, camera origin and invalidation thresholds; do not infer blend/depth from fixture.
-- Follow-up checks: Test equal-distance ties, threshold movement, section-origin changes, chunk unload/reload, large counts and nonfinite input rejection.
-- RustChunk implementation mapping: QA-only candidate tests/rendering/starling/translucency_fixture.rs; runtime mapping is translucent quad sort/cache.
-- Evidence required before adoption: Java 1.20.1 sorted-index goldens plus glass/water/ice screenshots and Mali blending tests.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 1,697 bytes; 47 logical lines
+- Coverage: Complete text file read to EOF, lines 1–47.
+- Purpose: Pure CPU fixture for translucent quad center calculation, distance sorting and sort-cache invalidation as the camera moves.
+- Dependencies / cross-references: Depends on `gfx::translucency::{SortState, Sorter, quad_center}` and floating-point inputs for quad vertices/camera/origin.
+- Implementation / logic: Reads cases, calculates each quad center, creates a SortState, runs sorter for each camera frame, records sort indices and whether a cached sort update occurred, and serializes center bit patterns.
+- Findings: Tests only quad ordering and cache behavior; no wgpu draw, blending, depth buffer, transparency artifacts or GPU synchronization is exercised. The cache threshold/state semantics are source-specific.
+- RustChunk relevance: Strong, small parity harness for translucent chunk geometry ordering; suitable for CPU-side RustChunk renderer regression tests.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Confirm Java 1.20.1 translucent quad sorting center formula, distance ordering and camera-relative coordinates; do not inherit later GPU-specific optimizations without visual parity.
+- Follow-up checks: Test equal-distance ties, camera crossing, negative chunk origin, degenerate quads, stable ordering and cached-vs-forced resort; compare indices and verify screenshots separately on Android Mali.
+- RustChunk implementation mapping: Proposed `tests/render/translucency_sort_fixture.rs`; production sort implementation belongs in RustChunk's renderer. No file created.
+- Evidence required before adoption: Java 1.20.1 translucent sorting oracle vectors plus GPU screenshots for blend/depth behavior. No sort or GPU test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 47 logical lines; no build, sort run or GPU/device validation.
 
 ### 1028. `crates/horizon-client/examples/probe/trident_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `bf4e1392d7d79a9a1ad6c4ea83dd0fa084204a53`
-- Size: 5183 bytes; 130 logical lines
-- Coverage: Complete text file reviewed, lines 1–130.
-- Purpose: Headless block-collision parity probe for thrown tridents: projectile step, block hit, in-ground state, shake, gravity and air drag.
-- Dependencies / cross-references: Uses Assets/RenderAssets, World::test_scene, BlockFacts, collision binding, arrows::clip_block_stop, Vec3 and JSON operations.
-- Implementation / logic: Builds radius-1 scene, edits block states, replays ticks, clips movement against block shapes, stops/pulls back on hit or advances and applies drag/gravity on miss.
-- Findings: Covers block collision only. Owner, pickup, touch, target, ignite and velocity inputs are ignored; no entity hits, fluids, loyalty, pickup eligibility, network or authority. Synthetic scene is small.
-- RustChunk relevance: Useful targeted projectile/collision regression for RustChunk.
-- Decision: **adaptable; reference; version-specific — retain collision-step probe pattern and rebuild projectile rules/data against Java 1.20.1.**
-- 1.20.1 implications: Reconstruct 1.20.1 trident movement, block clip, drag/gravity, shake, pickup, loyalty, riptide and entity-hit semantics.
-- Follow-up checks: Add block corner/edge and chunk-border, entity interception, fluids, owner/pickup, loyalty return, riptide, unloaded chunks and seeded precision cases.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/trident_probe.rs; runtime mapping is projectile physics/collision.
-- Evidence required before adoption: Java 1.20.1 golden trajectories/collision shapes and server-authoritative hit/pickup tests.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 5,183 bytes; 130 logical lines
+- Coverage: Complete text file read to EOF, lines 1–130.
+- Purpose: Resident-scene probe for thrown-trident block collision, `AbstractArrow` tick movement, block-hit stop position, in-ground state and shake duration.
+- Dependencies / cross-references: Depends on Assets/RenderAssets, World::test_scene, collision binding/BlockFacts, arrow block clipping, Vec3 bit parsing and JSON operations.
+- Implementation / logic: Builds a small world scene and writes its descriptor; replays block placement/property edits and projectile operations; on each tick decrements shake, clips block collision, pulls back/stops/sticks on hit, or advances position and applies drag/gravity on miss.
+- Findings: Only the arrow's block collision/movement segment is modeled. Owner, pickup, entity hit, enchantments, loyalty, return-to-owner, fluid drag, server authority and network replication are ignored. Uses newer resources/model gallery.
+- RustChunk relevance: Useful narrow projectile collision parity test, but not a full trident gameplay or multiplayer implementation.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild projectile collision, drag/gravity, in-ground/shake timing and block-shape behavior against Java 1.20.1. Exclude later trident data/components and test the full loyalty/riptide behavior separately if targeted.
+- Follow-up checks: Compare hit/miss and boundary intersections against Java 1.20.1; then add separate tests for entity collisions, pickup/owner restrictions, loyalty return, water and enchantments. Keep server-authoritative hit resolution distinct.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/trident_probe.rs`; runtime mapping is RustChunk projectile collision and entity gameplay. No file created.
+- Evidence required before adoption: Java 1.20.1 AbstractArrow/ThrownTrident oracle traces, target block shapes and exact RNG/float vectors. No projectile test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 130 logical lines; no projectile or multiplayer test executed.
 
 ### 1029. `crates/horizon-client/examples/probe/vehicle_container_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `48942be5b184ec2466e300f72d875cf38b3a0441`
-- Size: 1314 bytes; 33 logical lines
-- Coverage: Complete text file reviewed, lines 1–33.
-- Purpose: Table-driven mapping of vehicle entity type to container menu, slot count and title key.
-- Dependencies / cross-references: Uses containers::vehicle_menu and vehicle_menu_name with one entity-type ID per line.
-- Implementation / logic: Trims entity type ID, resolves vehicle menu and outputs menu ID, size and title key or error.
-- Findings: Narrow lookup only; no open/close packet, slot layout, item transfer or persistence. Entity mapping is snapshot-specific.
-- RustChunk relevance: Useful inventory UX and multiplayer consistency check for chest boats/minecarts and hopper minecarts.
-- Decision: **adaptable; reference; version-specific — retain table-driven mapping test and rebuild entity/menu catalogue for 1.20.1.**
-- 1.20.1 implications: Confirm target vehicle types, menu IDs, sizes and title keys; exclude later vehicle entities.
-- Follow-up checks: Test chest boat, chest minecart, hopper minecart, ordinary boat/minecart, invalid IDs, localization and full menu transfers.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/vehicle_container_fixture.rs; runtime mapping is vehicle metadata plus container menu factory.
-- Evidence required before adoption: 1.20.1 Java entity/menu mappings and server packet vectors for opening, closing and transfers.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 1,314 bytes; 33 logical lines
+- Coverage: Complete text file read to EOF, lines 1–33.
+- Purpose: Small entity-type to menu mapping fixture for container vehicles, including menu kind, slot count and display-name translation key.
+- Dependencies / cross-references: Depends on `containers::vehicle_menu` and `vehicle_menu_name`, entity type identifiers and menu naming rules.
+- Implementation / logic: Reads one entity type per line, resolves vehicle menu and size, returns title key or `error` for unsupported types.
+- Findings: Fixture does not model inventory contents, click semantics, packet flow or vehicle entity behavior. Exact supported vehicle types and sizes vary by version; later minecart/boat forms must be checked against 1.20.1.
+- RustChunk relevance: Useful narrow client/server agreement test for opening chest-boat/chest-minecart/hopper-minecart containers if those target entities are supported in the exact version.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild entity type allowlist, menu identifiers, slot counts and title keys from Java 1.20.1; exclude any vehicle type introduced later.
+- Follow-up checks: Verify chest boat, chest minecart and hopper minecart menu type/size/title mapping plus unknown entity IDs against Java 1.20.1; add packet/open/close and inventory synchronization cases separately.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/vehicle_container_fixture.rs`; production mapping resides in RustChunk entity/container systems. No file created.
+- Evidence required before adoption: Java 1.20.1 entity classes `ChestBoat`, `Minecart`, `HopperMinecart`, container menu constructors and translation keys. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 33 logical lines; mapping inspected; no vehicle/menu test executed.
 
 ### 1030. `crates/horizon-client/examples/probe/weather_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b85dd3e097c1631060b239144ed004893eeebcff`
-- Size: 2402 bytes; 67 logical lines
-- Coverage: Complete text file reviewed, lines 1–67.
-- Purpose: Headless rain/snow weather-column sampling, deterministic randomness, parameter-cache and quad-generation fixture.
-- Dependencies / cross-references: Uses weather::column_random, rain_column, snow_column, ParameterCache, column_quad and camera/light inputs.
-- Implementation / logic: Computes rain/snow column extents/UV/light, asserts cached parameters equal uncached columns, emits vertex positions/UV/color/light.
-- Findings: Tests geometry/cache only, not precipitation particle simulation, biome/weather transitions, sound, fog, GPU blending or device visuals. Positional inputs are trusted.
-- RustChunk relevance: Useful weather rendering/cache regression.
-- Decision: **adaptable; reference; version-specific — retain deterministic column/cache model and rebuild visual/data constants for 1.20.1.**
-- 1.20.1 implications: Compare 1.20.1 rain/snow density, heights, randomization, UV, light, alpha and render distance.
-- Follow-up checks: Test weather transitions, world-height bounds, camera, light/cache invalidation, chunk borders and Android/Mali image output.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/weather_fixture.rs; runtime mapping is weather column preparation and precipitation renderer.
-- Evidence required before adoption: Java 1.20.1 weather vectors and screenshots in daylight/night, rain/snow and multiple render distances.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 2,402 bytes; 67 logical lines
+- Coverage: Complete text file read to EOF, lines 1–67.
+- Purpose: Headless weather-render fixture for deterministic rain/snow column placement, UV offsets, light coordinates and emitted quad vertices.
+- Dependencies / cross-references: Depends on `weather` column RNG/geometry, parameter cache, camera position, radius/intensity and float-bit serialization.
+- Implementation / logic: Replays text cases, seeds per-column legacy random from X/Z, computes rain or snow column, asserts ParameterCache equals direct generation, computes camera-facing quad and serializes positions/UV/color/light as exact bits.
+- Findings: CPU-side geometry and random sequence only; no GPU blending, texture sampling, weather audio or biome/weather transition is tested. Exact column range, brightness and snow/rain rules are snapshot-sensitive.
+- RustChunk relevance: Good deterministic render-parity shape for precipitation, but target data, formulas and screenshot validation must be rebuilt for 1.20.1.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Use 1.20.1 precipitation rules and climate/light behavior; confirm column geometry, tick interpolation and legacy RNG sequence from target Java sources. Keep the parameter cache only if measured beneficial on Android.
+- Follow-up checks: Test rain/snow, negative coordinates, camera offsets, light extremes, partial ticks, radius edges, cache equivalence and biome/weather switches against Java 1.20.1; run a separate Mali screenshot/performance pass.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/weather_fixture.rs`; production renderer belongs in RustChunk's render/weather subsystem. No file created.
+- Evidence required before adoption: Java 1.20.1 WeatherEffectRenderer/LevelRenderer oracle values, resource textures and Android GPU screenshots. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 67 logical lines; no weather or GPU test executed.
 
 ### 1031. `crates/horizon-client/examples/probe/world_border_render_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `535118959241217cf1933f18098f2640e3f0aa97`
-- Size: 5373 bytes; 111 logical lines
-- Coverage: Complete text file reviewed, lines 1–111.
-- Purpose: Parity harness for world-border state and visual rendering: interpolation, bounds, wall geometry/transforms and warning vignette.
-- Dependencies / cross-references: Uses WorldBorder/BorderStatus, BorderRenderer/BorderRenderState, GUI vignette and JSON operations.
-- Implementation / logic: Replays tick/lerp/size/center/warning/invalidate/frame operations; captures interpolated bounds/status, prepares renderer, serializes vertices/transforms/sides and vignette color.
-- Findings: Headless extraction only, not GPU texture/blend. Fixed 427×240 vignette viewport; assumes valid scripts.
-- RustChunk relevance: Useful world-border interpolation and rendering reference.
-- Decision: **adaptable; reference; version-specific — retain deterministic border-state/vertex oracle; rebuild constants and packet mapping for 1.20.1.**
-- 1.20.1 implications: Verify target packet updates, interpolation timing, max size, texture offsets, warning settings and vignette semantics.
-- Follow-up checks: Test expand/shrink/stationary, invalid sizes, warning thresholds, camera on border, renderer invalidation, partial tick and GUI scale.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/world_border_render_fixture.rs; runtime spans world-border state, render extraction and HUD vignette.
-- Evidence required before adoption: Java 1.20.1 state/packet goldens and vertex/screenshots at multiple viewports; Android GPU blending.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 5,373 bytes; 111 logical lines
+- Coverage: Complete text file read to EOF, lines 1–111.
+- Purpose: Headless parity fixture for world-border state and visual output: interpolation, bounds, fade, render geometry, texture transforms and vignette warning.
+- Dependencies / cross-references: Uses WorldBorder/BorderStatus, BorderRenderer/BorderRenderState, hud vignette draw extraction, camera/render distance/depth and float-bit canonicalization.
+- Implementation / logic: Replays tick/lerp/size/center/warning/invalidate/frame operations, records border bounds and dimensions/status, extracts render state, prepares border vertices/transforms/sides and computes vignette color.
+- Findings: Pure state/render preparation; no GPU shader/blending or actual screenshot. The test assumes fixed vignette viewport 427×240 and newer renderer representation; this must be parameterized/normalized for target screen dimensions.
+- RustChunk relevance: Useful world-border animation and renderer oracle design; split logical world-border state from GPU-specific geometry.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild interpolation/status/tick/border-distance semantics from Java 1.20.1 and separately derive border vertex generation/texture animation from the target renderer. Avoid fixed screenshot viewport assumptions.
+- Follow-up checks: Test shrinking/growing/stationary, negative center, max-size clamps, warning distance/time, partial tick interpolation, rebuild invalidation and vignette at multiple GUI sizes against Java 1.20.1.
+- RustChunk implementation mapping: Proposed `tests/parity/starling/world_border_render_fixture.rs`; production mapping is RustChunk world-border state plus render overlay. No file created.
+- Evidence required before adoption: Java 1.20.1 WorldBorder and WorldBorderRenderer oracle vectors; target renderer screenshot comparisons on Android. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 111 logical lines; no renderer or device test executed.
 
 ### 1032. `crates/horizon-client/examples/probe/world_options_fixture.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `5bd3026bc5aa664274b96b7a93cce53d49ec8fd5`
-- Size: 1501 bytes; 40 logical lines
-- Coverage: Complete text file reviewed, lines 1–40.
-- Purpose: Packet codec fixture for difficulty change/lock and game-rule set/value messages.
-- Dependencies / cross-references: Uses current protocol ChangeDifficulty, LockDifficulty, SetGameRule, GameRuleValues, Reader and Play packet encoders.
-- Implementation / logic: Builds current-version packet structs from tab-separated inputs, encodes bytes, removes packet ID varint and emits payload hex.
-- Findings: Strictly wire codec fixture; packet IDs and GameRuleEntry/SetGameRule structures are version-specific. Does not test state transition/server application.
-- RustChunk relevance: Useful packet fixture pattern only.
-- Decision: **rewrite required; reference; version-specific — rewrite packet structs, IDs and payloads from Java 1.20.1 protocol.**
-- 1.20.1 implications: Verify which difficulty/game-rule packets exist in 1.20.1; later GameRuleValues messages cannot be assumed.
-- Follow-up checks: Generate Java 1.20.1 packet bytes, malformed varint/trailing-byte tests, direction and protocol-state constraints.
-- RustChunk implementation mapping: QA-only candidate tests/protocol/v1_20_1/world_options_fixture.rs; production mapping is dedicated 1.20.1 packet module.
-- Evidence required before adoption: Authoritative protocol IDs/schemas and client/server packet-byte vectors.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 1,501 bytes; 40 logical lines
+- Coverage: Complete text file read to EOF, lines 1–40.
+- Purpose: Packet-payload fixture for difficulty changes, difficulty lock and game-rule set/value messages.
+- Dependencies / cross-references: Depends on the source snapshot's Play packet types/IDs and `Reader`/packet encoder.
+- Implementation / logic: Translates tab-separated inputs into Serverbound ChangeDifficulty/LockDifficulty/SetGameRule or Clientbound GameRuleValues packets, then strips the packet ID and outputs body bytes.
+- Findings: Protocol 777 packet catalogue and payload schemas are not 1.20.1. Game-rule update packet shape, direction, field order, IDs and supported rules must be rebuilt; output is not a reusable protocol vector.
+- RustChunk relevance: Only the idea of small packet body golden-vector fixtures is reusable. Actual bytes must be generated independently for 1.20.1.
+- Decision: **rewrite required; reference; version-specific**
+- 1.20.1 implications: Implement the dedicated 1.20.1 packet IDs and schemas from authoritative 1.20.1 protocol sources; do not reuse Protocol 777 enum variants or outputs.
+- Follow-up checks: Compare set/ack game rule, difficulty change/lock if supported, serverbound/clientbound direction and malformed VarInt/body length against a Java 1.20.1 protocol oracle.
+- RustChunk implementation mapping: Proposed `tests/protocol/v1_20_1/world_options_packets.rs`; no source packet types reused.
+- Evidence required before adoption: Java 1.20.1 protocol packet ID/schema references and exact encoded payload vectors. No packet test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 40 logical lines; source-only review; no packet encoding test executed.
 
 ### 1033. `crates/horizon-client/examples/random_tick_eligibility_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `bc5a8ea560245e5a9a51177ff30686a180bbcc54`
-- Size: 5670 bytes; 150 logical lines
-- Coverage: Complete text file reviewed, lines 1–150.
-- Purpose: Microbenchmark comparing baseline and cached selection of random-ticking sections; explicitly selection cost only, not block simulation.
-- Dependencies / cross-references: Uses BlockFacts, Chunk/Section, FxHashMap, RandomTickSections and prepared resources.
-- Implementation / logic: Creates sparse/dense 17x17 chunk fixtures; measures steady/cold/reload/edit workloads over repeated ticks, alternates order and reports timing distributions.
-- Findings: Does not simulate random-tick block behavior. Black-boxes result counts but does not assert baseline/cache semantic equality; synthetic workloads may dominate.
-- RustChunk relevance: Useful cache benchmark methodology for chunk ticking.
-- Decision: **adaptable; reference; optional/future — retain benchmark idea; add semantic equality checks before using performance numbers.**
-- 1.20.1 implications: Rebuild random-ticking facts for 1.20.1; verify chunk eligibility, light gating and cache invalidation from target rules.
-- Follow-up checks: Assert baseline equals cached selection for all workloads; test edits/removals/reloads/stale handles; run release benchmark on Android and end-to-end tick.
-- RustChunk implementation mapping: Optional candidate benches/random_tick_eligibility.rs; runtime mapping is chunk random-tick eligibility cache, not block simulation.
-- Evidence required before adoption: 1.20.1 Java/random-tick oracle parity and repeatable Android ARM64/Mali benchmark; no benchmark run here.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 5,670 bytes; 150 logical lines
+- Coverage: Complete text file read to EOF, lines 1–150.
+- Purpose: Development benchmark for random-tick section eligibility selection only; compares a full per-chunk scan with a cached `RandomTickSections` path across sparse/dense synthetic chunks and edit patterns.
+- Dependencies / cross-references: Depends on prepared block registry and BlockFacts, Chunk/Section palette storage, fast hash map, cache invalidation and `Instant`/`black_box` timing.
+- Implementation / logic: Loads registry/facts, chooses active/inactive states, builds 17×17 lit chunk fixtures, then times baseline/cached selection for steady/cold/reload/1%-edit/all-edit workloads with alternating order and warmup samples.
+- Findings: Explicitly measures selection cost, not block simulation, random-tick execution, chunk generation, GPU or total frame time. The fixed 17×17 scene and target-specific facts can bias results; `grass_block` is assumed available/random-ticking.
+- RustChunk relevance: Useful methodology for measuring cache overhead and invalidation behavior; not a gameplay implementation. Any speedup must be reproduced on the actual RustChunk target and phone.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Rebuild BlockFacts and chunk state corpus from 1.20.1; keep Java random-tick section eligibility as the correctness oracle. Do not use its 26.3 resource output as 1.20.1 performance evidence.
+- Follow-up checks: First assert baseline and cached selected sections are identical for each workload, then run repeated release benchmarks on desktop and Android ARM64/Mali with warmed/cold cases and confidence summaries. No run was performed here.
+- RustChunk implementation mapping: Optional dev benchmark `benches/random_tick_eligibility.rs` (proposed only); production cache belongs in RustChunk chunk/tick pipeline.
+- Evidence required before adoption: 1.20.1 Java section random-tick eligibility oracle plus repeatable Rust release timing on Galaxy A22 and representative desktop. No benchmark executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 150 logical lines; benchmark source reviewed only; no measurements collected.
 
 ### 1034. `crates/horizon-client/examples/resource_memory.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f85a65f8aa74885b83d93591f833f286ab56f819`
-- Size: 5564 bytes; 155 logical lines
-- Coverage: Complete text file reviewed, lines 1–155.
-- Purpose: Resource-loader memory profiler reporting live/peak counted heap and process RSS after each initialization stage.
-- Dependencies / cross-references: Uses custom GlobalAlloc counter plus Assets, BlockFacts/Behaviours, Items, Recipes, Biomes, LightTables, MeshTables, collisions, MotionResources and VanillaTerrain; calls ps/macOS footprint.
-- Implementation / logic: Counts allocations, loads startup stages, reports live delta/peak/RSS, sprite pixel memory and state count; retains loaded resources to report steady state.
-- Findings: Unsafe allocator plumbing and OS-specific ps/footprint; cannot capture GPU/native allocations completely; concurrent allocations blur phase attribution.
-- RustChunk relevance: Useful low-memory Android budgeting methodology; not ready Android profiler.
-- Decision: **adaptable; reference; version-specific — adapt staged memory profiling, replace platform-specific RSS and validate 1.20.1 resources.**
-- 1.20.1 implications: Resource tables/sizes are snapshot-specific; no counts from this benchmark establish Galaxy A22 memory behavior.
-- Follow-up checks: Use Android PSS/native/GPU APIs, measure peak during reload, clean and modded 1.20.1, cold/warm profiles.
-- RustChunk implementation mapping: Optional profiling tool tools/profile_android_resource_memory (proposed); not a production module.
-- Evidence required before adoption: Measured Android ARM64 PSS/native/GPU memory profiles with repeatable 1.20.1 resource loads.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 5,564 bytes; 155 logical lines
+- Coverage: Complete text file read to EOF, lines 1–155.
+- Purpose: Development memory profiler for resource-loader startup; records counting-allocator live/peak heap and process RSS after each loader stage.
+- Dependencies / cross-references: Depends on Assets, BlockFacts/Behaviours, Items, Recipes, Biomes, LightTables, MeshTables, Models, Collisions, MotionResources, VanillaTerrain, system allocator and external `ps`/optional macOS `footprint` command.
+- Implementation / logic: Installs a custom global counting allocator, loads resources in game startup order, records live/peak allocation deltas and RSS after registry/assets/facts/items/recipes/biomes/light/mesh/collision/motion/worldgen, then keeps resources alive to process exit.
+- Findings: Developer-only executable, not runtime logic. RSS from `ps` is platform-specific and allocator live bytes do not equal Android PSS/RSS or total native/GPU memory. Optional `footprint` is macOS-specific. Allocation accounting relies on the global allocator wrapper and only process allocations it observes.
+- RustChunk relevance: Useful to identify heavy preparation/runtime resources and compare startup loader stages, but RustChunk memory budgets need Android-native and GPU measurements in addition to allocator counts.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Resource schemas, state counts and worldgen inputs must be 1.20.1. Use Android `/proc`/PSS or native profiler for device memory; do not copy `ps`/macOS assumptions into the app.
+- Follow-up checks: Run isolated processes with disposable 1.20.1 prepared resources; compare live heap, peak, RSS/PSS, GPU texture memory and post-drop retention. Add low-memory scenarios and device measurements. No profiler was run.
+- RustChunk implementation mapping: Proposed developer tool `tools/profile_resource_memory.rs` or Android diagnostic hook; not a production game module.
+- Evidence required before adoption: Repeatable 1.20.1 data and measurements on target ARM64 device, with OS PSS/native heap/GPU memory and desktop reference. No measurements collected.
+- Completion state: FULL TEXT REVIEW COMPLETE — 155 logical lines; profiler source inspected, no profiling or device run.
 
 ### 1035. `crates/horizon-client/examples/save_batch_bench.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `30d7629ca1de49903c8d6828abf2863c005642d2`
-- Size: 9699 bytes; 260 logical lines
-- Coverage: Complete text file reviewed, lines 1–260.
-- Purpose: Synthetic benchmark of batch chunk snapshot preparation for world saving, optionally NBT-encoding, with exact serialized-byte equality guard.
-- Dependencies / cross-references: Uses Chunk/ChunkExtras, BlockEntity, item stacks/NBT, PalettedContainer, Biomes, BlockRegistry and save::chunks_with_block_entities; creates temporary resource fixture.
-- Implementation / logic: Builds 256 chunk village/storage workloads with chest/furnace/sign/block-entity data and NBT overlays; compares old per-chunk filter with batch helper; asserts exact NBT bytes; measures alternating medians; optional NBT timing.
-- Findings: Measures in-memory snapshots and optional encoding only; excludes disk I/O/compression/GPU/autosave. Temp directory predictable by process ID and removed recursively; requires isolation.
-- RustChunk relevance: Useful save optimization pattern with strong exact-output guard.
-- Decision: **adaptable; reference; optional/future — preserve equality guard/benchmark method; rebuild 1.20.1 data and harden temp isolation.**
-- 1.20.1 implications: Recreate target Chunk/BlockEntity/ItemStack/Anvil/NBT structures; current DATA_VERSION and data model are snapshot-specific.
-- Follow-up checks: Use unique secure temp dirs, cleanup on errors, test zero/large density/unknown entities, validate exact 1.20.1 output and separately measure Android storage.
-- RustChunk implementation mapping: Optional candidate benches/save_batch.rs; runtime mapping is snapshot assembly before chunk save.
-- Evidence required before adoption: 1.20.1 NBT golden/round-trip, crash recovery and Android storage I/O benchmarks.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 9,699 bytes; 260 logical lines
+- Coverage: Complete text file read to EOF, lines 1–260.
+- Purpose: Development benchmark for building save snapshots of many chunks with block entities/names; optionally times NBT serialization and always validates exact encoded-byte equality between baseline and optimized snapshot methods.
+- Dependencies / cross-references: Depends on Chunk/BlockEntity/ItemStack, ChunkExtras, palette containers, save NBT encoder, BlockRegistry/Biomes and PNG fixtures; it creates a deterministic temp directory under the OS temp root.
+- Implementation / logic: Builds 256 synthetic chunks with village/storage block entities and saved NBT overlays, compares old per-chunk entity/name filtering against `chunks_with_block_entities`, asserts matching names and byte-identical NBT, then runs alternating warmup/21-sample median timing.
+- Findings: Does not time compression or disk IO, GPU or full world-save workflow. `DATA_VERSION` and component/NBT shapes are snapshot-specific. It deletes a predictable process-specific temp directory at start/end; safe only in an isolated temp root, not a user world. Benchmark can be CPU- and allocator-sensitive.
+- RustChunk relevance: Useful architecture and correctness gate for batching save snapshots, especially exact NBT equality before performance claims. Not a production save API itself.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild chunk extras, block entity NBT, item representation and DataVersion from Java 1.20.1; keep target save layout and chunk serialization separate from modern data-component schema.
+- Follow-up checks: Run exact NBT comparison first for 1/16/64/256 chunk batches, preserve unmodelled block entities and ordering, then benchmark snapshot-only and snapshot+serialization on desktop and Android storage separately. Inspect temp path safety before any run.
+- RustChunk implementation mapping: Proposed `benches/save_batch.rs` and `tests/save_snapshot_parity.rs`; no files created. Production mapping is RustChunk save/chunk snapshot pipeline.
+- Evidence required before adoption: Java 1.20.1 chunk NBT golden files, block entity/item NBT vectors and repeated release benchmarks. No benchmark or filesystem test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 260 logical lines; benchmark source reviewed in full; no benchmark or save operation executed.
 
 ### 1036. `crates/horizon-client/examples/shared_json_startup_profile.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `c6ab30374a40dc91e8784ae0cf02ce350f1a7b76`
-- Size: 3542 bytes; 76 logical lines
-- Coverage: Complete text file reviewed, lines 1–76.
-- Purpose: Process-isolated profile of block-fact/behavior table startup across baseline/shared/deferred parsing modes.
-- Dependencies / cross-references: Uses Assets, BlockFacts, Behaviours, JSON parser and Linux /proc/self/status VmRSS.
-- Implementation / logic: Loads assets, times resource fact/behavior parsing variants, reports phase/total time, state count, parse/facts/behavior subphase and optional retained JSON/projection.
-- Findings: Requires separate processes for peak RSS; deferred mode runs phases contiguously unlike actual startup; Linux VmRSS omits Android GPU/native usage; one mode compares historical PR snapshot.
-- RustChunk relevance: Useful startup optimization methodology, not a direct port decision or benchmark result.
-- Decision: **adaptable; reference; optional/future — reuse process-isolated profiling with Android memory sampling and 1.20.1 data.**
-- 1.20.1 implications: Facts/behavior schema differs in 1.20.1; require identical outputs before comparing loaders.
-- Follow-up checks: Add hash/semantic equality for modes, separate cold/warm, Android PSS/native memory and interrupted reload tests.
-- RustChunk implementation mapping: Optional candidate tools/profile_android_startup; runtime mapping is resource preparation/startup.
-- Evidence required before adoption: Same-output hashes and repeated Android ARM64 profiles using exact 1.20.1 assets.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 3,542 bytes; 76 logical lines
+- Coverage: Complete text file read to EOF, lines 1–76.
+- Purpose: Development profile comparing alternative load paths for the shared block-facts and gameplay-behaviour JSON tables; collects phase time, total time, state count and Linux RSS.
+- Dependencies / cross-references: Depends on Assets, BlockFacts loaders/projections, horizon-world Behaviours loader, JSON parser and `/proc/self/status`.
+- Implementation / logic: Supports baseline/pr607/shared/deferred/deferred-held modes, times JSON parse/facts projection/behaviour creation separately in deferred modes, optionally retains parsed JSON/projection and prints state count plus RSS.
+- Findings: Only a development profiler and comparator; the `pr607` path is a historical same-build reference, not an authority for 1.20.1. `/proc/self/status` is Linux-specific and measures process RSS, not GPU or Android PSS.
+- RustChunk relevance: Useful pattern for evaluating whether shared parsed input reduces startup CPU and peak memory, provided the compared outputs are semantically equal.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Rebuild the data formats and block/behaviour loaders from 1.20.1. Port the measurement method but add Android-specific memory telemetry; do not carry over 26.3 state counts or performance conclusions.
+- Follow-up checks: Before timing, compare every BlockFacts and Behaviours output for semantic equality; measure cold/warm independent process runs and peak RSS/PSS on desktop and Android. No execution occurred.
+- RustChunk implementation mapping: Optional tooling `tools/profile_shared_resource_load.rs` (proposed); production implementation remains in RustChunk prepare/resource loaders.
+- Evidence required before adoption: 1.20.1 generated data, output equality assertions, repeatable process timings and Android memory measurements. No profiler executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 76 logical lines; no profiler or device run executed.
 
 ### 1037. `crates/horizon-client/examples/sprite_cache_parity.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `70f86b4a5c815e84c4e93d22e0278822d659baee`
-- Size: 2112 bytes; 59 logical lines
-- Coverage: Complete text file reviewed, lines 1–59.
-- Purpose: Cold/warm sprite disk-cache parity gate comparing decoded/cache-loaded pixels, layers, mips and animation blends.
-- Dependencies / cross-references: Uses Assets/RenderAssets and deletes horizon-sprites.cache under supplied ROOT.
-- Implementation / logic: Loads assets, removes cache, measures cold decode/write, hashes sprite/animation state, reloads warm cache and compares digest.
-- Findings: Mutates supplied resource root by deleting cache; unsafe against user live resources. DefaultHasher is not stable artifact checksum; does not test corruption recovery/concurrency/GPU upload.
-- RustChunk relevance: Useful asset-cache cold/warm regression concept; must run on disposable copy.
-- Decision: **adaptable; reference; optional/future — keep parity test but isolate directory and use stable digest or byte equality.**
-- 1.20.1 implications: Rebuild cache key/serialization for 1.20.1; include game version, source hash, pack inputs, renderer format and ABI in invalidation.
-- Follow-up checks: Run only on temp resources; test missing/truncated/stale cache, atomic writes, concurrent readers, animation parity and GPU upload.
-- RustChunk implementation mapping: QA-only candidate tests/assets/sprite_cache_parity.rs; runtime mapping is sprite resource cache validation.
-- Evidence required before adoption: Stable digest or byte comparison, corrupt-cache recovery and target Android filesystem/renderer tests.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 2,112 bytes; 59 logical lines
+- Coverage: Complete text file read to EOF, lines 1–59.
+- Purpose: Parity gate for disk-backed sprite cache: computes a digest over decoded render pixels, sprite-layer metadata, mipmaps and animation blends, then checks cold-load and warm-cache reload are identical.
+- Dependencies / cross-references: Depends on Assets/RenderAssets, sprite cache file `horizon-sprites.cache`, PNG decoders, mip/animation data and deterministic digest inputs.
+- Implementation / logic: Loads Assets, deletes `ROOT/horizon-sprites.cache`, reloads to decode/write cache, computes digest, reloads warm cache, computes second digest and reports parity/timings/cache size.
+- Findings: **Destructive to the supplied resource root**: it removes the cache file before testing. Must not be run against user data/shared source/resources; only use a disposable copy. Digest uses `DefaultHasher`, so it is a same-build parity checksum, not a stable cross-toolchain cryptographic identity. It does not prove Android filesystem durability.
+- RustChunk relevance: Useful cache correctness test pattern, but cache schema and decoded content are version-specific; cleanup strategy must be safer in RustChunk.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Regenerate cache format and invalidation key for 1.20.1. Run only against a disposable cloned resource root, and prefer a content hash (SHA-256) for reproducible cross-process records.
+- Follow-up checks: Use a copy of resources, verify cold decode and warm cache arrays byte-identical, test truncated/corrupt/stale/version-mismatched cache recovery, and confirm the original source/cache remains untouched. No run performed.
+- RustChunk implementation mapping: Proposed `tests/assets/sprite_cache_parity.rs`; production cache belongs in RustChunk asset preparation/render subsystem. No file created.
+- Evidence required before adoption: 1.20.1 resource sprites/animations, deterministic cache validation vectors and isolated temp-copy test. Android filesystem/cache eviction tests needed before shipping. No test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 59 logical lines; source only; cache was not deleted and no parity test run.
 
 ### 1038. `crates/horizon-client/src/accounts.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `314fcfe1d29b78f078abd5740c93907d831e9984`
-- Size: 21092 bytes; 597 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–597; final section ends at EOF.
-- Purpose: In-game profile/account orchestration for Microsoft, Ely.by and offline profiles, device-bound secret storage, session renewal, skin upload and official game-file downloads.
-- Dependencies / cross-references: Uses Starling account crate, SecretStore/Endpoints/SignIn, Android Keystore platform seal/open and foreground-work hooks, auth session, private directories, network file pinning and async threads.
-- Implementation / logic: Maintains shared account/file state; seals secrets where supported; selects/adds/removes offline/online profiles; cancellable sign-in/resume; periodically renews sessions; uploads skins; downloads pinned client/server/libraries/assets privately and writes completion marker.
-- Findings: Security-sensitive launcher/account functionality, not simulation. Closely coupled to provider/network endpoints, Starling account crate, platform hooks, UI and file pins. Copying wholesale imports unreviewed auth surface. Offline name/UUID does not authenticate online mode.
-- RustChunk relevance: Architecture reference for private storage, token handling, cancellable work and offline-profile separation; requires independent security/provider scope.
-- Decision: **adaptable; reference; optional/future — preserve reviewed security requirements and abstractions only; do not port without threat model/provider decision.**
-- 1.20.1 implications: 1.20.1 game files/libraries/Java runtime differ; online session and protocol auth must match target; offline profile never grants online-mode server access.
-- Follow-up checks: Threat-model storage/removal, audit OAuth device flow/token revocation, verify provider terms, validate artifact hashes/atomic installation and test cancellation/reinstall/keystore failure.
-- RustChunk implementation mapping: No direct file mapping; future account module proposed under engine/auth with Android Keystore bridge and offline profiles isolated from online credentials.
-- Evidence required before adoption: Independent auth design, provider terms, keystore review, credential redaction, artifact integrity/rollback and end-to-end online/offline login validation.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Size: 21,092 bytes; 597 logical lines
+- Coverage: Complete text file read to EOF, lines 1–597; consecutive sections of at most 400 lines were used.
+- Purpose: Client account/session coordinator for switchable Microsoft, Ely.by and offline profiles; manages platform-sealed credentials, current auth session, background renewal, profile/skin actions and downloading official game files.
+- Dependencies / cross-references: Depends on external `starling-account` crate, platform keystore/seal/open APIs, private filesystem/logging, auth session global, language, background WorkService, async threads/cancellation, Mojang file manifests/pins and own-skin upload subsystem.
+- Implementation / logic: Provides in-game account detection; private account/files directories; keystore-backed per-profile secret files with atomic `.part` rename; current session handoff; State/Files models; lazy saved profile cache; player name/key/skin and cloud status; background renewal; select/add/remove/offline and Ely sign-in; Microsoft device-code polling/cancel; sign-out; verified official client/server/libraries/assets download with progress and cancel.
+- Findings: Security-sensitive integration layer. Credentials are only encrypted when platform can seal; desktop fallback is memory-only. It mixes account UX with official game-file downloads, uses a global mutex/state and background threads, and trusts platform `seal/open`. It does not itself implement OAuth cryptography; that is delegated to starling-account. Download source/pins target Starling's own 26.3 build. Ely provider and cloud skin routes are external dependencies.
+- RustChunk relevance: Some requirements are relevant to a launcher (profiles, private storage, cancellation, auth-state transitions, verified resumable downloads), but RustChunk's immediate user requirement is offline profiles. Do not force a Microsoft/Ely sign-in into offline single-player; online-mode servers still require valid server-compatible authentication. Separate account provider, download manager and game auth interfaces.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rewrite all provider endpoints, version metadata and download pins for Minecraft 1.20.1. For Android, independently security-review Keystore encryption, backup exclusions, token revocation, crash-safe writes and lifecycle cancellation. Offline profile identity must not be presented as Microsoft authentication or an online-mode credential.
+- Follow-up checks: Design a minimal offline-profile path first; then separately test Microsoft device-code auth, account switch/cancel races, token renewal, reinstall/key loss, concurrent sign-in/download, corrupt sealed file, path traversal, `.part` recovery, hash mismatch, network interruption and private data permissions. Review Ely.by terms/availability before adopting.
+- RustChunk implementation mapping: RustChunk launcher account/profile service plus Android credential-store adapter; do not transplant the game-internal UI/state singleton wholesale. Proposed only, no code changes.
+- Evidence required before adoption: Threat model, reviewed OAuth/API provider specs, Android Keystore tests, cryptographic review, 1.20.1 version manifest/hash sources, account lifecycle tests and privacy review. No auth/download/device test executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 597 logical lines read consecutively (1–400, 401–597); security-sensitive source reviewed only, no credentials accessed or network authentication run.
 
-### 1039. `crates/horizon-client/src/game/advancements.rs`
+### 1039. `crates/horizon-client/src/advancements.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `18479955a0f183cd5f98d98290a6557c6cb4d7e2`
-- Size: 94062 bytes; 2341 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–2341; final section ends at EOF.
-- Purpose: Game-side advancement integration: tree/progress loading, world/entity/item predicates, gameplay criteria, rewards/progress, remote sync, toast and chat announcement.
-- Dependencies / cross-references: Depends on Game/world/player/mob/boat/guest state, advancement Tree/Progress/EntityView/ItemView, tags/registries/loot overlays, items/inventory/effects/health/movement/commands/recipes, protocol UpdateAdvancements, HUD/text/audio and per-player JSON save.
-- Implementation / logic: Defines world predicate adapter for dimension/biome/structure/block/fluid/sky/light/tags; materializes entity/item views; prefetches/indexes advancement data; loads/saves progress; evaluates inventory/tick/location/damage/item-use/block/entity/recipe/loot/trade/dimension/effect criteria; tracks fall/Nether/levitation marks; grants rewards/announcements; supports grant/revoke commands and queued toasts.
-- Findings: Large integration module, not standalone engine. Has newer trigger hooks such as spear_mobs, bee_nest_destroyed, default_block_use and any_block_use; do not assume 1.20.1 support. Predicate adapter has assumptions (fixed 200-block sky scan, damage tags from current tables); remote updates use current protocol types. Tightly coupled to Game internals.
-- RustChunk relevance: Very high-level gameplay reference for advancement JSON/progress, criterion dispatch, reward pipeline, trigger instrumentation, multiplayer sync and UI notifications.
-- Decision: **adaptable; reference; version-specific — port concepts selectively; rebuild trigger set, predicate semantics, packet adapter, save format and game hooks for Java 1.20.1.**
-- 1.20.1 implications: Reconstruct 1.20.1 advancement JSON/criteria/loot rewards, player predicate fields, tags, trigger set, progress JSON/DataVersion and ClientboundUpdateAdvancements schema; exclude later triggers unless verified.
-- Follow-up checks: Build trigger-to-source map for every 1.20.1 vanilla criterion; test OR/AND requirements, partial progress, reset/removal, hidden/display-less, rewards, remote sync, item/entity predicates, dimension/effects/damage and toast queue.
-- RustChunk implementation mapping: Do not port as one file; proposed split: engine/advancements/tree, progress, predicates, triggers and UI toasts, connected only after event-level parity.
-- Evidence required before adoption: Java 1.20.1 source and golden fixtures for every trigger family, progress JSON round-trip, packet bytes, multiplayer sync and GUI screenshots.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
+- Source SHA: `1483c1eebaca73e55886fcfef0028e5986a05dcc`
+- Size: 66,532 bytes; 1,805 logical lines
+- Coverage: Complete text file read to EOF, lines 1–1,805; consecutive sections of at most 400 lines were used.
+- Purpose: Advancement data and progress subsystem: loads the advancement tree, indexes criteria by trigger/recipe/inventory candidate items, tracks and serializes progress, evaluates loot/entity/item/location/block/damage predicates and computes visibility/layout of the advancement tree.
+- Dependencies / cross-references: Depends on lazy JSON, data-pack overlay, biome/block/fluid/structure/tag world queries, item/enchantment/potion registries, entity/player/equipment/effects views, loot condition JSON, NBT/JSON progress, recipes, and the tree-layout algorithm.
+- Implementation / logic: Parses advancement JSON and criteria, merges data-pack overrides, builds trigger and recipe indexes, builds InventoryIndex from item tags, converts saved progress, evaluates predicate families recursively, evaluates recipe/arrow/item-entity/damage triggers, and performs Walker tree layout/visibility. Contains tests for index filtering, lock-code behavior, passenger/damage predicates, advancement progress/layout and date serialization; one ignored test needs prepared resources.
+- Findings: Several predicate shapes and entity keys are explicitly from 26.x (`minecraft:components`, `minecraft:predicates`, keyed `EntityPredicate` namespace names, potion/variant/component models). Item predicates use data components, whereas 1.20.1 uses legacy item NBT and older predicate JSON. Includes newer mob/type-specific examples such as sulfur cube and modern damage/biome/tag sets. Some functions may support older syntax via aliases, but cannot be treated as complete 1.20.1 semantics. The ignored test references local 26.3 data.
+- RustChunk relevance: Very useful conceptual source for advancement tree/progress/indexing and UI layout algorithms. It is not a drop-in 1.20.1 predicate or criterion evaluator; separate legacy parser/evaluator is required and only common algorithms should be reused.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Rebuild advancement JSON schemas, trigger registry, entity/item/location predicate format, NBT item predicates, damage source, recipe/loot condition fields, data-pack overrides and progress save schema from Java 1.20.1. Exclude modern component/variant predicates and 26.x-only trigger keys.
+- Follow-up checks: Create Java 1.20.1 golden fixtures for all advancement trigger families, default requirements, completion/revoke, parent/visibility/layout, inventory/recipe indexing equivalence, nested predicates, tags/ranges, damage source and save/load. Run any ignored tests only with a disposable pinned 1.20.1 resource tree.
+- RustChunk implementation mapping: Candidate legacy modules: `advancements/tree.rs`, `progress.rs`, `predicates.rs`, `triggers.rs`, `layout.rs` and parity fixtures; do not transplant the 26.x module wholesale. Proposed structure only.
+- Evidence required before adoption: Java 1.20.1 Advancement/AdvancementProgress/EntityPredicate/ItemPredicate/LocationPredicate sources, exact advancement JSON and tag registries, NBT progress vectors and differential outputs. No tests executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 1,805 logical lines read in consecutive sections (1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–1,805); source-only, no test/build/device run.
 
 ### 1040. `crates/horizon-client/src/ambience.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `98cfe132d091a3b2a5e47c2d2be6e27cba1523fe`
-- Size: 18126 bytes; 479 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–479; final section ends at EOF.
-- Purpose: Local-player ambient sound handlers: biome loops/cross-fades, mood/cave ambience, random additions, underwater transitions/subsounds and bubble-column sounds.
-- Dependencies / cross-references: Uses SoundEngine/SoundInstance/Sounds, LegacyRandom, ambient/player categories, JSON dimension/biome tables, player position/eye height/spectator/underwater flags, light sampler and bubble-column lookup.
-- Implementation / logic: Parses loop/mood/additions; resolves biome sound overriding dimension defaults; finds bubble columns in adjusted player AABB; tracks underwater/bubble/first-tick state; plays enter/exit and subsounds; cross-fades biome loops; samples additions chances and accumulates mood from brightness/random positions.
-- Findings: Good separation of audio policy from backend. But loader expects modern attributes.minecraft:audio/ambient_sounds in biome/dimension JSON; 1.20.1 uses older biome effects ambient_sound/mood_sound/additions_sound schema. No Android playback/focus/latency validation.
-- RustChunk relevance: Relevant to immersive audio and deterministic sound scheduling; bubble-column and underwater patterns map to gameplay. Sound definitions, schema and RNG sequencing require versioning.
-- Decision: **adaptable; reference; version-specific — keep handler/state-machine ideas, rewrite resource loading and compare loop/mood/addition behavior with Java 1.20.1.**
-- 1.20.1 implications: Translate 1.20.1 biome effects ambient_sound/mood_sound/additions_sound into internal model; validate cave mood, underwater, bubble columns, spectator behavior and sound categories.
-- Follow-up checks: Test biome cross-fade, none/one/many additions, mood/light thresholds, underwater transitions/rare additions, bubble-column AABB edges and first tick; Android AudioFocus/device tests.
-- RustChunk implementation mapping: QA-only candidate tests/parity/starling/ambience_fixture.rs; production is audio policy/state machine plus separate Android backend.
-- Evidence required before adoption: Java 1.20.1 biome JSON/sound event tables and deterministic traces, plus target-device playback/focus/latency evidence.
-- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, build, benchmark, APK or device execution was performed.
-
-
-## Checkpoint 1021–1040
+- Size: 18,126 bytes; 479 logical lines
+- Coverage: Complete text file read to EOF, lines 1–479; consecutive sections of at most 400 lines were used.
+- Purpose: Player-local ambient sound system coordinating biome/dimension loops, ambient additions, cave mood sounds, underwater enter/exit/loop/subsounds and bubble-column inside sounds.
+- Dependencies / cross-references: Depends on SoundEngine/Sounds backend, ambient/music sound event registry, LegacyRandom, JSON ambient tables, dimension/biome data, player position/eye/fluid/spectator state, world light sampling, bubble-column block lookup and sound instance IDs.
+- Implementation / logic: Loads `minecraft:audio/ambient_sounds` attributes from dimension_type and biome JSON; resolves biome over dimension defaults; computes bubble-column overlap from player AABB; ticks underwater transitions/delay/random rare additions; maintains cross-fading biome loops; evaluates additions and mood buildup from light/RNG; includes tests for 40-tick loop fade and dark cave mood timing.
+- Findings: Uses the newer `minecraft:audio/ambient_sounds` environment-attribute schema rather than the 1.20.1 BiomeEffects ambient loop/mood/additions JSON fields. Bubble columns and underwater sounds exist in 1.20.1, but exact AABB scan order, spectator behavior, RNG draw order, delay reset and loop cross-fade must be checked against target source. Existing tests use fake audio backend and synthetic resource tables, not actual audio playback.
+- RustChunk relevance: Good architecture reference for stateful client ambience, sound event scheduling, fades and deterministic RNG. Rebuild the resource adapter and compare tick order for Java 1.20.1; Android audio backend must be tested independently.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Read ambient data from 1.20.1 biome effects and sound definitions; do not require the 26.x environment attribute system. Validate underwater/bubble/biome mood/additions against 1.20.1 `LocalPlayer` and ambient handler logic.
+- Follow-up checks: Build a deterministic 1.20.1 audio event oracle covering biome transition, loop cross-fade, light-dependent mood timer, random additions, enter/exit water, underwater delay, bubble-column first tick and spectator exclusions. Run fake backend parity and separate Android audio focus/latency tests.
+- RustChunk implementation mapping: Candidate `audio/ambience.rs` plus resource adapter for 1.20.1 BiomeEffects; platform output remains RustChunk audio backend. No runtime code copied.
+- Evidence required before adoption: Java 1.20.1 biome effect JSON, sound event definitions, ambient handler source, exact RNG vectors, fake-backend golden outputs and Android audio tests. No test or playback executed.
+- Completion state: FULL TEXT REVIEW COMPLETE — 479 logical lines read consecutively (1–400, 401–479); fake-backend tests inspected only, no audio/device validation.
