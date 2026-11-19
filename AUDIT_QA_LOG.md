@@ -529,3 +529,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Original backup `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`. No archive branch was recreated.
 - Global source/metadata/structure/Index/Coverage QA passed. The agreed second backup may now be created from the verified working branch; compare its tree and key audit file contents with the original backup before treating it as valid.
 - No Rust tests, build, benchmark execution, APK build, Android-device run, Minecraft launch, Forge 1.20.1 client launch or multiplayer/Aternos connection was performed. Audit verification is not runtime compatibility evidence.
+
+## Audit stage 1001–1200 started — 2026-11-19
+
+- Re-audit starts from the pinned Starling commit `5432370d573642041585c69b40fb045b27133488` and continues in deterministic lexical path order after the last indexed path at entry 1000.
+- The 200 source paths were selected from the pinned upstream tree after excluding all 1,000 paths already in the Index. The six corrective-closure paths from the previous stage are already indexed and are not counted again.
+- New durable rule: checkpoint every 20 completed files. Each checkpoint writes 20 entries to the range Ledger, matching Index rows and this QA log, validates them, commits, and re-reads the saved state before the next 20 begins.
+- Backup cadence: one backup per 1,000 newly completed entries. The current 1,000-entry backups remain unchanged; no backup is due at 1,200.
+- Starting active-branch commit before this stage: `adfc618dc1bceccb9ba7a1055fd32a4ed2fcb7fd`. Pinned source baseline: `5432370d573642041585c69b40fb045b27133488`.
