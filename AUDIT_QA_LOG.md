@@ -778,3 +778,38 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - After the second-half instruction, complete its five checkpoints without approval pauses between them; close the 200-file stage only after the tenth checkpoint and global QA.
 - The 100-file midpoint does not split the Ledger range and does not trigger a backup. Backup cadence remains once per 1,000 newly completed entries.
 - Current state remains closed at entry 1200. The next stage 1201–1400 has not started; its first half will be 1201–1300 and the second half will be 1301–1400. Neither existing backup branch was modified.
+
+
+### Checkpoint 1201–1220 — 2026-11-19
+
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`. Recursive Git tree was re-fetched, not truncated, and matched the pinned commit. The previous Index had 1200 sequential rows and 1200 unique paths.
+- Source order was resumed after entry 1200 (`crates/horizon-client/src/game/event_loop.rs`). The correct next path is `crates/horizon-client/src/game/events.rs` (entry 1201); the stale Continuity/Protocol note naming `boat_authority_fixture.rs` was incorrect and has been corrected. The next path after entry 1220 is `crates/horizon-client/src/game/ghasts.rs`.
+- Exactly 20 new source files were inspected completely to EOF in deterministic path order. Each recorded blob SHA and byte size matches the pinned tree. Canonical logical lines and byte sizes:
+- 1201 `crates/horizon-client/src/game/events.rs` — 362 lines / 12482 bytes / SHA `034c79c9073147c62fec454765b9fa95676ab522`
+- 1202 `crates/horizon-client/src/game/execution_role.rs` — 24 lines / 865 bytes / SHA `e8892dd471d2a0a0021441c9a8f5641a8e4e4fbd`
+- 1203 `crates/horizon-client/src/game/explosion.rs` — 1416 lines / 58320 bytes / SHA `1ef3a557dab0866fbad28bc7aaedd008565cadaf`
+- 1204 `crates/horizon-client/src/game/extras.rs` — 277 lines / 11167 bytes / SHA `a66d0a619ad748d7c2d5d854a4bee0720bcaec8b`
+- 1205 `crates/horizon-client/src/game/falling_damage.rs` — 182 lines / 7175 bytes / SHA `1f3a2055a4fc2214eab75afb0b3a1031e8c3f7d6`
+- 1206 `crates/horizon-client/src/game/falling_trees.rs` — 243 lines / 9833 bytes / SHA `a9b4eadd016f8b783f89a5201b0e97f00a5a28a9`
+- 1207 `crates/horizon-client/src/game/fangs.rs` — 230 lines / 7989 bytes / SHA `b8e237004839a5f71b17ffc9f72ce30d420fa348`
+- 1208 `crates/horizon-client/src/game/fans.rs` — 379 lines / 15129 bytes / SHA `b7a236e59e4d0786975078e52ed86cea9d680f28`
+- 1209 `crates/horizon-client/src/game/files_offer.rs` — 282 lines / 10887 bytes / SHA `fd5fae697bf39b99437687400efddb6da9246054`
+- 1210 `crates/horizon-client/src/game/fireworks.rs` — 736 lines / 29482 bytes / SHA `3e3858eb094b666c4325b3d2d5e8951521e3ab9e`
+- 1211 `crates/horizon-client/src/game/fishing.rs` — 1570 lines / 61717 bytes / SHA `f9e3e61c399cbae365d04dd7dc6d8187ab3f5737`
+- 1212 `crates/horizon-client/src/game/fov.rs` — 249 lines / 10185 bytes / SHA `c4e039b06f01d779ee1c9e3f4dacb9fa36d3f3f4`
+- 1213 `crates/horizon-client/src/game/foxes.rs` — 166 lines / 7311 bytes / SHA `c1242cc86052b98d9eea139780afbd6277a07003`
+- 1214 `crates/horizon-client/src/game/frames.rs` — 661 lines / 26519 bytes / SHA `7521dd155513be73374e9438507194bce8d7ed1e`
+- 1215 `crates/horizon-client/src/game/friends.rs` — 322 lines / 12510 bytes / SHA `f2480ec76aea698444d83dec9d7f09244682f0cc`
+- 1216 `crates/horizon-client/src/game/functions.rs` — 1079 lines / 43012 bytes / SHA `76305d0e4daa91a6d11e02f7bfff26e6fe363e82`
+- 1217 `crates/horizon-client/src/game/funnels.rs` — 378 lines / 14510 bytes / SHA `dc6e0591d69bf133a6f4d0ed5805e742aaf14494`
+- 1218 `crates/horizon-client/src/game/game_mode.rs` — 241 lines / 9347 bytes / SHA `afc2db79aacc4a81fe9ec8782e6e4933999e3360`
+- 1219 `crates/horizon-client/src/game/game_tests.rs` — 1650 lines / 56315 bytes / SHA `43cdaaab472dd04803bae02fb12ee69392a7451e`
+- 1220 `crates/horizon-client/src/game/gamemode_switcher.rs` — 91 lines / 3246 bytes / SHA `5d0c98048e15ec67e399e3f6fc654c35fae17786`
+- Long-file coverage was consecutive and gap-free, at no more than 400 lines per fetch: `explosion.rs` 1–400, 401–600, 601–800, 801–1000, 1001–1200, 1201–1416; `fireworks.rs` 1–400, 401–736; `fishing.rs` 1–400, 401–800, 801–1200, 1201–1570; `frames.rs` 1–200, 201–400, 401–600, 601–661; `functions.rs` 1–400, 401–800, 801–1079; `game_tests.rs` 1–400, 401–800, 801–1200, 1201–1600, 1601–1650. Every shorter file was read in one complete range ending at EOF.
+- Ledger validation: exactly 20 entries (1201–1220), sequential, with each of the 15 required fields present exactly once. Index validation: 1220 sequential rows, 1220 unique source paths, zero duplicate paths; new rows align with the Ledger paths and decision labels.
+- The new Ledger `AUDIT_LEDGER_1201_1400.md` holds both halves of the 200-file stage. First-half progress after this checkpoint is 20/100; next checkpoint is 1221–1240. The second half 1301–1400 is not authorized yet.
+- Findings separate vanilla-relevant explosions, falling damage, Evoker Fangs, fireworks, fishing, item frames, datapacks/functions and game modes from Horizon agent events, Horizon extras/storage/friends, Create-specific falling trees/fans/funnels, and test-only GameTest orchestration. Target-version data, NBT, commands and packet behavior require 1.20.1 evidence before implementation.
+- Embedded source tests were inspected only; none were run. No build, APK, Forge launch, Android device run, Minecraft multiplayer join, LAN host, UPnP mapping or relay session was performed.
+- Existing backup branches were not modified. Backup remains due only after entries 1001–2000 are fully committed and globally verified.
+
+- Durable checkpoint documents updated together: new range Ledger, Index, QA Log, Continuity and Protocol. Read-back and blob SHA checks required before starting entry 1221.

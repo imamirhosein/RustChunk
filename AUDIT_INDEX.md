@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (in progress; durable checkpoint every 20 entries).
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (in progress; two 100-file halves; checkpoint every 20 entries).
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -1364,3 +1364,23 @@
 | 1198 | `crates/horizon-client/src/game/entity_culling.rs` | adaptable; optional/future; version-specific | Optional rendering optimization; preserve correctness and profile before enabling on Android. |
 | 1199 | `crates/horizon-client/src/game/entity_model_loading_tests.rs` | unnecessary; reference; optional/future | Test-only model-loading benchmark/equivalence fixture; no runtime code to port. |
 | 1200 | `crates/horizon-client/src/game/event_loop.rs` | adaptable; reference | Small reusable platform abstraction; adapt to Android/headless runtime. |
+| 1201 | `crates/horizon-client/src/game/events.rs` | unnecessary; optional/future | Horizon agent event feed and wait-for API; keep outside vanilla client baseline. |
+| 1202 | `crates/horizon-client/src/game/execution_role.rs` | adaptable; reference | Execution-role separation helps distinguish remote client and integrated-server ownership. |
+| 1203 | `crates/horizon-client/src/game/explosion.rs` | essential; rewrite required; version-specific | Core explosion physics/damage/drop behavior; rebuild to 1.20.1 and remove later extensions. |
+| 1204 | `crates/horizon-client/src/game/extras.rs` | unnecessary; optional/future | Horizon Extras HUD conveniences; optional features, not game core. |
+| 1205 | `crates/horizon-client/src/game/falling_damage.rs` | essential; rewrite required; version-specific | Falling-block/anvil/dripstone impact behavior is target gameplay; remove later/custom sync cases. |
+| 1206 | `crates/horizon-client/src/game/falling_trees.rs` | unnecessary; optional/future | Create-specific falling-tree simulation; exclude from vanilla baseline. |
+| 1207 | `crates/horizon-client/src/game/fangs.rs` | essential; rewrite required; version-specific | Evoker Fangs attack timing, owner damage and hitbox are target gameplay. |
+| 1208 | `crates/horizon-client/src/game/fans.rs` | unnecessary; optional/future | Create Encased Fan and recipe processing; mod-specific only. |
+| 1209 | `crates/horizon-client/src/game/files_offer.rs` | unnecessary; optional/future | Horizon Android file-permission/migration UI; keep in launcher layer. |
+| 1210 | `crates/horizon-client/src/game/fireworks.rs` | essential; rewrite required; version-specific | Firework rockets and Elytra boosts are essential; replace components/LAN and later deflection. |
+| 1211 | `crates/horizon-client/src/game/fishing.rs` | essential; rewrite required; version-specific | Fishing hook physics, loot and interactions are essential 1.20.1 behavior. |
+| 1212 | `crates/horizon-client/src/game/fov.rs` | adaptable; rewrite required; version-specific | Camera FOV, bobbing, spyglass and screen effects adapt to target renderer. |
+| 1213 | `crates/horizon-client/src/game/foxes.rs` | adaptable; version-specific | Fox/Dolphin pickup and item-seeking rules adapt after target AI/tag verification. |
+| 1214 | `crates/horizon-client/src/game/frames.rs` | essential; rewrite required; version-specific | Item-frame placement, interaction, drops, maps and rendering are target features. |
+| 1215 | `crates/horizon-client/src/game/friends.rs` | unnecessary; optional/future | Horizon invite-code P2P/LAN sharing is separate from vanilla server joining. |
+| 1216 | `crates/horizon-client/src/game/functions.rs` | essential; rewrite required; version-specific | Datapacks, functions, predicates and scheduling are core; rebuild 1.20.1 format/commands. |
+| 1217 | `crates/horizon-client/src/game/funnels.rs` | unnecessary; optional/future | Create Funnel/Belt Funnel item transport is mod-specific, not vanilla. |
+| 1218 | `crates/horizon-client/src/game/game_mode.rs` | essential; rewrite required; version-specific | Game-mode/spectator mechanics are core; convert adventure predicates to legacy NBT. |
+| 1219 | `crates/horizon-client/src/game/game_tests.rs` | adaptable; reference; optional/future | GameTest runner is useful only as a versioned test harness, not shipping runtime. |
+| 1220 | `crates/horizon-client/src/game/gamemode_switcher.rs` | adaptable; reference; version-specific | F3+F4 switcher is a target UI reference; adapt input, authority and mobile navigation. |
