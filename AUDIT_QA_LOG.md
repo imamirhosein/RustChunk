@@ -682,7 +682,8 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Replacement: `crates/horizon-client/src/game/blockctl.rs`, from pinned source commit `5432370d573642041585c69b40fb045b27133488`; source SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`; 7136 bytes; 179 logical lines.
 - The replacement was fully read, lines 1–179 to EOF. Pinned-tree SHA and byte size match. Findings classify it as Horizon-only scripted test tooling, not vanilla 1.20.1 gameplay; no tests or builds were run.
 - This is the first eligible unindexed source path immediately after the former 1120 endpoint (`crates/horizon-client/src/game/block_items.rs`). It is now indexed at slot 1089 and must remain in the full skip set so it is not audited again as an ordinary next entry.
-- Global Index validation now reports 1120 numbered rows and 1120 distinct source paths, with no duplicate paths. Entry 121 remains the sole audited occurrence of `crates/horizon-client/src/entry.rs`.
+- Global Index validation now reports 1120 numbered rows and 1120 distinct source paths, with no duplicate paths.
+- Corrective commit: `31158be7259f80ff8e5c30665c539c8fcba3e145` (parent checkpoint commit `03bf34e57055632975deb0185b10363b807a1b51`); GitHub branch-head and five-document read-back verification passed. Entry 121 remains the sole audited occurrence of `crates/horizon-client/src/entry.rs`.
 - Resume the deterministic source-tree scan at `crates/horizon-client/src/game/boat_authority_fixture.rs` for the next checkpoint, after rebuilding the skip set from the corrected full Index.
 
 ### Limits
