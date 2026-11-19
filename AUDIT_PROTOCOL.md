@@ -4,11 +4,10 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 
 ## Batch size and boundaries
 
-- Each audit stage is one continuous batch of **exactly 200 new, unique source files** whenever at least 200 eligible files remain.
-- Do not split a 200-file stage into 20-file or other smaller reporting stages.
-- Example boundaries: 601–800, then 801–1000.
-- Do not stop for approval or request a new start command in the middle of a batch.
-- The 200-entry stage remains continuous (1001–1200). However, persist work after every **20 completed files** (checkpoints 1020, 1040, 1060, …, 1200): append those 20 complete entries to the range Ledger, append the matching 20 Index rows, add a dated checkpoint to `AUDIT_QA_LOG.md`, validate the checkpoint, commit it, then re-read the committed files from GitHub. Never leave more than 20 reviewed-but-uncommitted entries.
+- Each audit stage is a continuous batch of **exactly 200 new, unique source files** whenever at least 200 eligible files remain.
+- Divide each 200-file stage into **ten durable checkpoints of 20 files**. For the current stage the checkpoints are 1001–1020, 1021–1040, 1041–1060, 1061–1080, 1081–1100, 1101–1120, 1121–1140, 1141–1160, 1161–1180 and 1181–1200.
+- Do not ask for approval or stop between checkpoints in an already-authorized 200-file stage. Report briefly after each checkpoint is saved and verified.
+- Immediately after each 20 files are fully inspected, append their complete 15-field entries to the range Ledger, append matching Index rows, append a dated checkpoint record to `AUDIT_QA_LOG.md`, validate, commit, and re-read the committed files from GitHub. Never leave more than 20 inspected files uncommitted.
 
 ## File selection and inspection
 
@@ -74,4 +73,5 @@ The next batch after 801–1000 is **1001–1200**.
 - Primary Decision labels are **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, and **undetermined**. Approved secondary qualifiers are **reference**, **version-specific**, and **optional/future**; they supplement a primary decision and do not replace it.
 - The Decision field and Index decision column must use one or more primary decision labels. Do not use placeholders such as "See ledger decision" or sentiment wording such as "Highly relevant/adaptable" as decision labels.
 - Every QA correction and every 20-file audit checkpoint must be recorded in `AUDIT_QA_LOG.md`, including the pinned baseline commit, inclusive entry numbers, source-count, validation results and resulting commit SHA.
+- **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries and not after each 20-file checkpoint. The current 1,000-entry backup was created at entries 1–1000; the next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
 - **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries and not after each 20-file checkpoint. The current 1,000-entry backup was created at entries 1–1000; the next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
