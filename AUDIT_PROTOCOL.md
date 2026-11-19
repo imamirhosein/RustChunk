@@ -13,7 +13,7 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 
 - Use the pinned Starling commit recorded by the audit, not the moving default branch.
 - Continue in deterministic source-tree path order from the last audited path.
-- A source path may appear only once in the audit. Before selecting new files, build the skip set from every path already present in the current index (currently entries 1–1040); do not give a path a second audit number.
+- A source path may appear only once in the audit. Before selecting new files, build the skip set from every path already present in the current index (currently entries 1–1080); do not give a path a second audit number.
 - Corrective closure for entries 1–1000: six duplicate slots (631, 632, 633, 754, 762 and 766) were replaced with the six next unique paths after the former entry-1000 endpoint: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`. Those six files are already audited and must be skipped by future batches.
 - Each file must be inspected completely before moving on. For long files, read consecutive sections of at most 400 lines until the end of that file.
 - If a source file cannot be read completely, record the exact limitation and do not mark it as fully reviewed.
@@ -73,5 +73,4 @@ The next batch after 801–1000 is **1001–1200**.
 - Primary Decision labels are **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, and **undetermined**. Approved secondary qualifiers are **reference**, **version-specific**, and **optional/future**; they supplement a primary decision and do not replace it.
 - The Decision field and Index decision column must use one or more primary decision labels. Do not use placeholders such as "See ledger decision" or sentiment wording such as "Highly relevant/adaptable" as decision labels.
 - Every QA correction and every 20-file audit checkpoint must be recorded in `AUDIT_QA_LOG.md`, including the pinned baseline commit, inclusive entry numbers, source-count, validation results and resulting commit SHA.
-- **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries and not after each 20-file checkpoint. The current 1,000-entry backup was created at entries 1–1000; the next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
 - **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries and not after each 20-file checkpoint. The current 1,000-entry backup was created at entries 1–1000; the next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
