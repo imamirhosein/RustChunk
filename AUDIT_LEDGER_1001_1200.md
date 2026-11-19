@@ -1369,3 +1369,343 @@
 - RustChunk implementation mapping: No core mapping. If later needed, create an optional generic `extensions/block_transform_rules` module separate from the 1.20.1 vanilla path.
 - Evidence required before adoption: Java 1.20.1 AxeItem/ShovelItem/HoeItem/HoneycombItem source, target tags and golden world interaction outputs. None executed.
 - Completion state: FULL TEXT REVIEW COMPLETE — 269 logical lines; source-only review; no transformation or gameplay test executed.
+
+### 1061. `crates/horizon-client/src/boss_overlay.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12920e0d0905ca72151f6dd91a13960712d60f17`
+- Size: 7718 bytes; 243 logical lines
+- Coverage: Complete text file reviewed, lines 1–243.
+- Purpose: Client boss-bar state: ordered events, progress interpolation, style/name updates and world darkening/music/fog flags.
+- Dependencies / cross-references: BossEvent/BossAction packets, HUD boss bars, text-component conversion and renderer interpolation.
+- Implementation / logic: Adds/replaces bars by ID; updates progress/name/style/properties; ignores unknown IDs; interpolates progress over 100 ms; fades world darkening and exposes music/fog flags.
+- Findings: Useful state model, but packet enums are version-specific. Verify duplicate-add order, invalid enum clamping and renderer effects against 1.20.1.
+- RustChunk relevance: Direct relevance to boss HUD and multiplayer feedback.
+- Decision: **adaptable; reference; version-specific — retain ordered event state/interpolation, rebuild packet mapping and visuals for 1.20.1.**
+- 1.20.1 implications: Rebuild 1.20.1 boss-event actions, color/overlay and property semantics.
+- Follow-up checks: Golden traces for add/update/remove, duplicate ID, unknown update, mid-lerp retarget, bounds and simultaneous bars.
+- RustChunk implementation mapping: Proposed engine/client_ui/boss_bars behind the 1.20.1 protocol adapter.
+- Evidence required before adoption: Java 1.20.1 packet traces, deterministic interpolation vectors and HUD screenshots.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1062. `crates/horizon-client/src/breathing.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cbf19446ba93e19fc85d9856aed6938eb5819a06`
+- Size: 6356 bytes; 184 logical lines
+- Coverage: Complete text file reviewed, lines 1–184.
+- Purpose: Breathing/drowning calculation with native-mod hooks for per-living-entity air behavior.
+- Dependencies / cross-references: Player/mob air supply, vanilla breathing rules, drowning damage and native LivingBreathe/LivingDrown hooks.
+- Implementation / logic: Accepts can-breathe/consume/refill; clamps mod values; applies air refill/consumption and -20 drowning threshold; server hook may alter/cancel damage.
+- Findings: Air arithmetic is useful, but purpose is a native mod event bridge with API-versioned server callbacks; RustChunk vanilla has no such extension lifecycle.
+- RustChunk relevance: Only air arithmetic/test vectors inform vanilla player/mob behavior.
+- Decision: **unnecessary; reference; optional/future — exclude native mod hooks; independently verify vanilla air/drowning rules.**
+- 1.20.1 implications: Rebuild water breathing, oxygen enchantment probability, drowning and special mob exceptions from Java 1.20.1.
+- Follow-up checks: Test max air, -20 threshold, refill/consume, oxygen chance, water animals/axolotl and client/server authority.
+- RustChunk implementation mapping: No vanilla mod-hook mapping; any future extension API must be separately designed.
+- Evidence required before adoption: Java 1.20.1 LivingEntity air/drowning traces; separate extension design/security review.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1063. `crates/horizon-client/src/cauldron.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `28cde0b492f2db5374ed532505ebda5c857ac14a`
+- Size: 12723 bytes; 410 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–410; final section ends at EOF.
+- Purpose: Cauldron interactions for empty/water/lava/powder snow, potions, banners, dyed shulkers and extinguishing entities.
+- Dependencies / cross-references: Block state/level, ItemStack metadata, potion/banner/shulker data, inventory, sounds and particles.
+- Implementation / logic: Dispatches item use by cauldron type; fills/empties buckets, bottles/pours potions, washes banners/shulkers, changes levels and updates inventory/effects.
+- Findings: Decision tree is reusable, but ItemStack component access differs from 1.20.1 legacy NBT/BlockEntityTag; sound/effect ordering needs target verification.
+- RustChunk relevance: Relevant vanilla survival interactions and world-state changes.
+- Decision: **adaptable; reference; version-specific — preserve interaction matrix, rewrite item metadata and effect contracts.**
+- 1.20.1 implications: Rebuild potion/banner/shulker metadata via 1.20.1 NBT; verify cauldron level, inventory and server correction.
+- Follow-up checks: Golden tests for each cauldron level/item, creative/survival, failed action, washing, extinguishing and packet order.
+- RustChunk implementation mapping: Proposed engine/world/blocks/cauldron_interactions plus 1.20.1 ItemStack/NBT adapter.
+- Evidence required before adoption: Java 1.20.1 item-on-block outcomes, NBT fixtures and inventory packet traces.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1064. `crates/horizon-client/src/clock.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e7fe8eaf62b8a0690ad1dab7b9a5707e2f19fd38`
+- Size: 21734 bytes; 628 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–628; final section ends at EOF.
+- Purpose: Tick clock and tick-rate manager: fixed-step timing, partial ticks, pause/freeze, stepping and sprinted simulation.
+- Dependencies / cross-references: DeltaTracker/timer, monotonic time, client/server loops, pause/focus, scheduled work and tick-rate synchronization.
+- Implementation / logic: Accumulates elapsed time; computes partial/catch-up ticks; applies max-tick/pause; supports tick-duration changes, freeze/step/sprint and progress reporting.
+- Findings: Fixed-step accumulator is reusable; full management surface includes newer commands/sync beyond a basic 1.20.1 client timer. Unbounded catch-up risks stalls.
+- RustChunk relevance: Core architecture for stable simulation independent of instantaneous FPS.
+- Decision: **adaptable; reference; version-specific — reuse monotonic fixed-step timing; implement 1.20.1 tick semantics separately.**
+- 1.20.1 implications: Verify 1.20.1 timer, pause, catch-up cap, partial-tick clamp and protocol tick-rate behavior.
+- Follow-up checks: Fake-clock tests for 20 TPS, long frame, pause, world load, rate shift, freeze/step and overflow.
+- RustChunk implementation mapping: Proposed engine/time/clock with separate render interpolation and authoritative simulation clock.
+- Evidence required before adoption: Java 1.20.1 timer traces, deterministic fake-clock tests and Android frame-pacing.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1065. `crates/horizon-client/src/command_storage.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `560423e900fccdd6d0ecc5fc0ec92eb7e4ee3336`
+- Size: 4395 bytes; 126 logical lines
+- Coverage: Complete text file reviewed, lines 1–126.
+- Purpose: Persistent namespaced NBT storage for /data storage, kept per namespace in world data files.
+- Dependencies / cross-references: World save root, NBT Compound/Tag helpers, namespace/path IDs, DataVersion and /data command.
+- Implementation / logic: Loads namespace files into ordered maps; missing IDs return empty compounds; set replaces/removes empty values; dirty save writes contents and DataVersion.
+- Findings: Useful model, but namespace/path must be validated before creating paths; atomic writes, symlink traversal and dirty clearing on failed writes need scrutiny.
+- RustChunk relevance: Useful if RustChunk supports /data storage and persistent command state.
+- Decision: **adaptable; reference; version-specific — retain namespaced NBT model; harden filesystem and use 1.20.1 save contract.**
+- 1.20.1 implications: Verify 1.20.1 file layout, NBT envelope, missing namespace, DataVersion and command semantics.
+- Follow-up checks: Test traversal, invalid namespace, symlink, partial write, read-only root, empty deletion, nested IDs and crash recovery.
+- RustChunk implementation mapping: Proposed engine/commands/storage atop safe path resolver and atomic save pipeline.
+- Evidence required before adoption: Java 1.20.1 /data storage fixtures, NBT round-trips and adversarial filesystem tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1066. `crates/horizon-client/src/confirm_screen.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `afb0f5fe3e2f82c8a16a960226d062829f9178e6`
+- Size: 9652 bytes; 291 logical lines
+- Coverage: Complete text file reviewed, lines 1–291.
+- Purpose: Reusable confirmation/multi-choice screen layout with wrapped text, hit testing, keyboard focus and disabled buttons.
+- Dependencies / cross-references: Font metrics, GUI viewport, HUD atlas/batch, button drawing, translated labels and tab/arrow navigation.
+- Implementation / logic: Centres title/message/buttons; wraps text; supports yes/no and arbitrary choices; tracks focus, navigation, cursor hit and inactive rendering.
+- Findings: Generic layout/focus behavior is reusable; exact atlas, fonts, styling and dimensions are Horizon UI details.
+- RustChunk relevance: Useful for safe confirmations such as world deletion or account removal.
+- Decision: **adaptable; reference; optional/future — reuse layout/focus concepts with RustChunk-owned UI primitives.**
+- 1.20.1 implications: No 1.20.1 gameplay behavior; UI assets/design remain independent.
+- Follow-up checks: Test small viewports, long translations, many choices, focus wrap, hover boundaries, delayed disable and accessibility.
+- RustChunk implementation mapping: Future RustChunk Android confirmation component, separate from protocol/game engine.
+- Evidence required before adoption: RustChunk screenshots across densities/aspect ratios and keyboard/touch accessibility tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1067. `crates/horizon-client/src/container_screen.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5674a500c93801e5cef40b32f4782f01f96855c6`
+- Size: 13027 bytes; 384 logical lines
+- Coverage: Complete text file reviewed, lines 1–384.
+- Purpose: Container-screen input model mapping pointer/key actions to slots, outside clicks, recipe-book area and quick-craft drag/release.
+- Dependencies / cross-references: Menu geometry, bounds, recipe-book visibility, pointer position, drag phase/button mask and menu click intent.
+- Implementation / logic: Determines slot/outside/recipe-book target; maps mouse/keyboard shortcuts to menu actions; tracks quick-craft phases and release/cancel on pointer/menu changes.
+- Findings: High-value input model, not authoritative inventory logic. 1.20.1 click packets and Android multi-pointer/cancel need separate adapters.
+- RustChunk relevance: Direct relevance to reliable inventory/touch interaction.
+- Decision: **adaptable; reference; version-specific — preserve input-to-menu state machine; adapt click packets and Android touch.**
+- 1.20.1 implications: Rebuild 1.20.1 menu click types/slot mapping and recipe-book bounds; add pointer IDs/cancel.
+- Follow-up checks: Test outside clicks, quick move, hotbar swap, offhand, clone/throw, drag release/cancel, screen close and server rejection.
+- RustChunk implementation mapping: Proposed engine/ui/container_input and input/pointer_capture feeding 1.20.1 menu adapter.
+- Evidence required before adoption: Java 1.20.1 menu vectors, slot layouts and Android multi-touch tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1068. `crates/horizon-client/src/crafting.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c7eaf74c19d0612b4ed33f4c27d87f443b1f68d9`
+- Size: 98414 bytes; 2497 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–2497; final section ends at EOF.
+- Purpose: Recipe catalogue/crafting logic: resources, categories, ingredient matching, special recipes, remainders, cooking metadata and recipe-book data.
+- Dependencies / cross-references: Items and modern stack components, recipe JSON, ingredients/tags, recipe registry, crafting/furnace/smithing, loot/pack overlay and NeoForge hooks.
+- Implementation / logic: Parses recipe definitions; builds indexes; resolves item/tag/custom ingredients; matches shaped/shapeless grids; computes result/remainders; dispatches special book/firework/map/banner/shield/tipped-arrow/repair/pot/transmute/imbue and cooking paths.
+- Findings: Essential domain but tied to 26.3 components, later recipe/display serializers, custom ingredients and NeoForge. Too coupled to port as one file.
+- RustChunk relevance: Very high gameplay relevance to crafting, smelting, stonecutting, smithing and recipe book.
+- Decision: **rewrite required; reference; version-specific — build fresh 1.20.1 recipe/ingredient layer; retain only proven generic matching algorithms.**
+- 1.20.1 implications: Rebuild 1.20.1 recipe schema/serializer IDs, ingredient predicates, legacy NBT results, remainders, cooking metadata, smithing templates and recipe-book sync. Exclude later types.
+- Follow-up checks: Full target recipe corpus; test shaped/shapeless symmetry, tags, remainders, station/special recipes, malformed definitions and deterministic order.
+- RustChunk implementation mapping: Proposed engine/recipes/v1_20_1 with legacy ingredient/NBT adapters; no direct file port.
+- Evidence required before adoption: Java 1.20.1 recipe data, golden vectors for every serializer/special recipe, packet unlock traces and NBT outputs.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1069. `crates/horizon-client/src/creative.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `012d22bbf2d04b8021c11bfaf1e5d63c418f7ea9`
+- Size: 65976 bytes; 1622 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–1622; final section ends at EOF.
+- Purpose: Creative inventory catalogue/UI: tabs, item lists, name/tag search, grouping, slot clicks, hotbar/offhand/throw/clone.
+- Dependencies / cross-references: Modern item components, item registry, creative tab data, tags, tooltip search, container slots, stack limits and display metadata.
+- Implementation / logic: Loads/orders tabs; builds search lists; handles hover/click and key behavior; implements display-slot interactions including full-stack copy, hotbar, offhand, drop, clone and slot locks.
+- Findings: Tab catalogue, item components/equality and lock metadata are snapshot-specific; general search/click model remains useful.
+- RustChunk relevance: Useful creative inventory/search UX after common container input is isolated.
+- Decision: **adaptable; reference; version-specific — retain tab/search/click concepts; rebuild registry, stack equality and rules for 1.20.1.**
+- 1.20.1 implications: Use 1.20.1 creative tabs, legacy ItemStack/NBT and target packets; filter later entries/components.
+- Follow-up checks: Test tab order/content, tag/name search, empty query, stack limits, hotbar/offhand, throw/clone, locked slots and search key behavior.
+- RustChunk implementation mapping: Proposed engine/ui/creative_inventory with target item/tab data and common container input model.
+- Evidence required before adoption: Java 1.20.1 registry/tab export, stack equality vectors, packet traces and Android screenshots.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1070. `crates/horizon-client/src/cushion.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7610a4aabf909c9fe5c0aaaa08f3d9e028dfc138`
+- Size: 2076 bytes; 59 logical lines
+- Coverage: Complete text file reviewed, lines 1–59.
+- Purpose: Block-specific support/placement helper for a Cushion block state.
+- Dependencies / cross-references: Block registry/state, position and neighbor support/collision shape queries.
+- Implementation / logic: Evaluates support relation for the cushion's placement context and reports whether it remains supported.
+- Findings: No evidence this is vanilla 1.20.1 content; must be traced to target registry or supported mod. Generic support checks can be reused independently.
+- RustChunk relevance: No established relevance to vanilla baseline.
+- Decision: **undetermined; reference; version-specific — exclude until target registry or named mod proves it exists.**
+- 1.20.1 implications: Do not add a vanilla 1.20.1 Cushion block from this file alone.
+- Follow-up checks: Search target block registry/source; otherwise classify only within explicit mod support.
+- RustChunk implementation mapping: No current runtime mapping; confirmed extension would have a versioned support predicate.
+- Evidence required before adoption: Authoritative 1.20.1 registry/source or named mod definition and placement tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1071. `crates/horizon-client/src/custom_armor.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c8ee9af12e96948aab11e26c80b2131004073b0b`
+- Size: 11210 bytes; 292 logical lines
+- Coverage: Complete text file reviewed, lines 1–292.
+- Purpose: Optional custom-armor atlas integration for ItemsAdder resource packs, including custom layer textures and animated color/key data.
+- Dependencies / cross-references: ItemsAdder metadata, armor atlases, shader/renderer constants, texture IDs and modern equipment/material APIs.
+- Implementation / logic: Discovers/parses custom armor atlas resources, resolves item/layer textures, color/animation settings and render-layer inputs.
+- Findings: Third-party mod/resource-pack compatibility, not vanilla armor; relies on ItemsAdder conventions and newer renderer APIs.
+- RustChunk relevance: Low priority for vanilla 1.20.1; consider only with an explicit compatibility requirement and sample packs.
+- Decision: **unnecessary; reference; optional/future — exclude from base client; consider isolated extension later.**
+- 1.20.1 implications: No standard 1.20.1 armor feature is defined by this file; implement vanilla armor first.
+- Follow-up checks: Require named supported mod version, sample packs, texture rights and fallback tests.
+- RustChunk implementation mapping: No current mapping; possible isolated ItemsAdder extension only if approved.
+- Evidence required before adoption: Explicit compatibility requirement, licensed samples and 1.20.1 renderer parity.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1072. `crates/horizon-client/src/data_cmd.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c680363df213c60255e37811440e4204a7679abb`
+- Size: 10918 bytes; 315 logical lines
+- Coverage: Complete text file reviewed, lines 1–315.
+- Purpose: Core NBT operations for /data: recursive merge, path insertion/append/prepend/set, value conversion, string slicing and scaled numeric results.
+- Dependencies / cross-references: NBT Compound/Tag, path selectors, command errors, SNBT serialization and numeric tags.
+- Implementation / logic: Recursively merges compounds; applies path operations; enforces depth/type constraints; converts tags to text; handles negative string offsets and size/floor/scaled results.
+- Findings: Algorithms useful, but NbtPath semantics/errors need 1.20.1 parity. String length may count UTF-8 bytes rather than Java UTF-16 code units.
+- RustChunk relevance: Useful for NBT command and world inspection features.
+- Decision: **adaptable; reference; version-specific — retain operation concepts and verify edge cases/results against 1.20.1.**
+- 1.20.1 implications: Use target NBT path parser/depth, numeric floor/overflow and Java string semantics; translation keys may differ.
+- Follow-up checks: Golden cases for recursive merge, list bounds, multi-match/missing path, type mismatch, empty compound, astral Unicode and SNBT formatting.
+- RustChunk implementation mapping: Proposed engine/commands/data_nbt atop the 1.20.1 NBT/path library.
+- Evidence required before adoption: Java 1.20.1 /data command output/error vectors and NBT tests including Unicode.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1073. `crates/horizon-client/src/debug_chart.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `92bbf9385f5c9892e579fd7e6e908071a40c001c`
+- Size: 23541 bytes; 644 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–644; final section ends at EOF.
+- Purpose: Debug chart buffers/renderers for frame time, integrated-server ticks, ping/bandwidth and lightmap data.
+- Dependencies / cross-references: Debug toggles, frame/tick/network counters, lightmap pixels, font/HUD primitives and remote metrics.
+- Implementation / logic: Maintains bounded samples, records frame/tick/network data, smooths packet rates/bytes and draws bars, thresholds, labels and lightmap view.
+- Findings: Useful telemetry separation, but hotkeys/counters/sample semantics are snapshot-specific; no Android/GPU metrics guaranteed.
+- RustChunk relevance: Optional diagnostics for FPS/TPS/ping/bandwidth; requires RustChunk metric sources.
+- Decision: **adaptable; reference; optional/future — retain chart methodology, gather only real metrics.**
+- 1.20.1 implications: Rebuild bindings and packet counters for 1.20.1; distinguish integrated tick from remote TPS; target lightmap data.
+- Follow-up checks: Test sample capacity/reset, smoothing, counter rollover, invalid scale, narrow display and absent GPU counters.
+- RustChunk implementation mapping: Optional engine/diagnostics/charts and Android metrics adapter.
+- Evidence required before adoption: Fake-clock/chart vectors and target Android traces before performance claims.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1074. `crates/horizon-client/src/debug_entries.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `48d01d5bfe2db87e80b9918691becd2a766e9475`
+- Size: 18658 bytes; 506 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–506; final section ends at EOF.
+- Purpose: Registry/persistence for F3 debug entries, categories/statuses, reduced-debug visibility, profiles, search and migrations.
+- Dependencies / cross-references: Debug providers, key actions, JSON profile, DataVersion/DataFixer migrations and translation keys.
+- Implementation / logic: Defines entries/categories; loads/saves status; supports profiles, identifier parsing, search, visibility toggles and schema migration.
+- Findings: Configuration model reusable; entry catalogue, IDs and migration rules are 26.3-specific; profile schema cannot be copied unchanged.
+- RustChunk relevance: Optional diagnostics customization, not gameplay core.
+- Decision: **adaptable; reference; optional/future — retain config/filter model; rebuild catalogue and migrations.**
+- 1.20.1 implications: Use only target/RustChunk providers; omit newer GPU/renderer-only entries.
+- Follow-up checks: Test missing/corrupt profile, unknown IDs, migrations, reduced-debug privacy, sorting, custom statuses and atomic save.
+- RustChunk implementation mapping: Future engine/diagnostics/debug_profile and RustChunk-specific providers/settings.
+- Evidence required before adoption: RustChunk F3 requirements, migration tests and golden output for 1.20.1 worlds.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1075. `crates/horizon-client/src/debug_keys.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `04c644ecd5a5b9f8f836908ebe1489139649d8ad`
+- Size: 17529 bytes; 490 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–490; final section ends at EOF.
+- Purpose: F3/debug-key state machine for modifier/overlay, key combinations, focus/screen handling and timed crash chord.
+- Dependencies / cross-references: KeyBinds, keyboard press/release/repeat, overlay state, screen state, debug actions and timing.
+- Implementation / logic: Routes modifier/overlay; handles F3 alone, combinations, Escape pause, rebound keys, refused actions and 10-second crash chord.
+- Findings: Good key lifecycle pattern; later debug mappings and Horizon repro keys are not target data. Deliberate crash behavior is unsafe for production/mobile.
+- RustChunk relevance: Useful debug shortcut model; touch can feed same canonical action model.
+- Decision: **adaptable; reference; version-specific — retain modifier state machine; rebuild target bindings and exclude crash/repro from production.**
+- 1.20.1 implications: Reconstruct 1.20.1 debug bindings/screen behavior; account for Android hardware keyboard/focus.
+- Follow-up checks: Test modifier press/release, rebound keys, repeat, overlay, Escape, focus loss and blocked dangerous actions.
+- RustChunk implementation mapping: Proposed engine/input/debug_shortcuts with capability-gated developer actions.
+- Evidence required before adoption: Java 1.20.1 key traces, Android keyboard/focus tests and safety gates.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1076. `crates/horizon-client/src/debug_overlay.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5e603085cea49108ac90aaa5fd4e30e99ee41fab`
+- Size: 24291 bytes; 711 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–711; final section ends at EOF.
+- Purpose: F3 text grouping/formatting for position, heightmap, spawn, light, sound, memory and shader timing.
+- Dependencies / cross-references: Font/GUI primitives, chunk/heightmap/spawn, network/render telemetry, sound cache, device vendor, process memory and profiles.
+- Implementation / logic: Splits priority/group lines; formats position/chunk/section/facing, heightmaps, spawn counts, difficulty, GPU/vendor, sound cache, light/memory and shader-pass cost.
+- Findings: Generic grouping useful; entry data is snapshot-specific. Linux /proc counters do not include GPU/Java memory; Android semantics need validation. Shader timings are Horizon-only.
+- RustChunk relevance: Useful for chunk/light/heightmap/performance diagnostics, only if metrics are real and client/server values distinguished.
+- Decision: **adaptable; reference; optional/future — reuse formatting/grouping, write RustChunk-specific providers and Android memory adapter.**
+- 1.20.1 implications: Rebuild heightmap types and metrics for 1.20.1; don't show unavailable shader/server values; validate /proc on Android.
+- Follow-up checks: Test negative coords/region names, yaw wrapping, heightmap order, spawn counts, missing memory, clipping and narrow screens.
+- RustChunk implementation mapping: Future engine/diagnostics/debug_overlay with world/chunk/network/render providers.
+- Evidence required before adoption: 1.20.1 F3 golden output, deterministic world traces, Android memory and screenshots.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1077. `crates/horizon-client/src/debugworld.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `267cb33363838ae8f862d42af54c15058887250f`
+- Size: 4841 bytes; 131 logical lines
+- Coverage: Complete text file reviewed, lines 1–131.
+- Purpose: Special chunk generator for minecraft:debug preset showing each registered block state in a grid above a barrier floor.
+- Dependencies / cross-references: World preset NBT/settings, block/biome registries, barrier/default state IDs and chunk generation.
+- Implementation / logic: Detects debug generator; selects plains biome; sizes square grid from block-state count; places one state every two horizontal blocks at fixed Y plus barrier floor.
+- Findings: Useful deterministic QA world, but grid order/count depend on registry order/version; current numeric IDs cannot be reused.
+- RustChunk relevance: High-value visual QA preset for every 1.20.1 block state/model/collision and chunk-edge coverage.
+- Decision: **adaptable; reference; version-specific — preserve generator concept, derive order/count/height/biome from Java 1.20.1.**
+- 1.20.1 implications: Verify target DebugLevelSource order, barrier height, biome and registry IDs.
+- Follow-up checks: Test first/last cells, each state once, negative chunks and no gaps/duplicates at boundaries.
+- RustChunk implementation mapping: Proposed engine/worldgen/debug_terrain QA preset using target block registry.
+- Evidence required before adoption: Java 1.20.1 debug-world coordinates, registry order and screenshots.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1078. `crates/horizon-client/src/diagnostics/exit_reports.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0b649015be7c529752beefeec6d30603c7027c46`
+- Size: 9737 bytes; 243 logical lines
+- Coverage: Complete text file reviewed, lines 1–243.
+- Purpose: Android historical process-exit/crash collection from ActivityManager with bounded trace files and last-log summaries.
+- Dependencies / cross-references: JNI/ActivityManager API 30+, private diagnostics directory, thread attach, exit reasons, atomic JSON writes and trace pruning.
+- Implementation / logic: Queries bounded historical exits; reads reason/status/PSS/RSS/PID/importance; optionally copies bounded traces; writes JSON atomically and prunes old reports off UI thread.
+- Findings: Useful crash/OOM/ANR tooling. Raw traces/logs can contain sensitive content; keep local by default and redact before explicit export. Historical APIs require Android 11+.
+- RustChunk relevance: Relevant to reliability diagnostics on Android; can be an independent app layer.
+- Decision: **adaptable; reference; optional/future — retain bounded off-thread collection with privacy controls and RustChunk-owned schema.**
+- 1.20.1 implications: Validate API 33 behavior and memory units; never auto-upload raw traces.
+- Follow-up checks: Test unavailable JNI, null/oversized trace, stream close, worker/write failure, pruning, permissions and explicit redacted export.
+- RustChunk implementation mapping: Future app/android/diagnostics/exit_reports in private app storage.
+- Evidence required before adoption: Physical API 33 crash/ANR/OOM tests, privacy review and bounded-file tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1079. `crates/horizon-client/src/dialog_screen.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ce67693c3c4f34581bd0b7e56f507643934acc03`
+- Size: 19327 bytes; 552 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–552; final section ends at EOF.
+- Purpose: Layout/render/input screen for server modal dialogs: warning/title, scrollable body, inputs, actions, footer and waiting state.
+- Dependencies / cross-references: Dialog model, font/text bidi, item widgets, scroll/header-footer layouts, controls, navigation and wait timing.
+- Implementation / logic: Measures and positions message/item/text/boolean/option/range controls and buttons; wraps text; lays out grids/footer; creates hit regions and waiting Back button.
+- Findings: Specific to server-dialog protocol/schema, not vanilla 1.20.1. General layout concepts don't create protocol compatibility.
+- RustChunk relevance: No base 1.20.1 feature; local launcher forms are separate UI.
+- Decision: **unnecessary; reference; version-specific — exclude server-dialog screen from vanilla 1.20.1.**
+- 1.20.1 implications: Official Java 1.21.6 release notes introduce Dialogs; do not add dialog packets/registry to 1.20.1.
+- Follow-up checks: Only revisit for future >=1.21.6; test untrusted content, escape/exit, validation, command templates and anti-lockout.
+- RustChunk implementation mapping: No 1.20.1 mapping; local launcher forms remain independent of remote server dialogs.
+- Evidence required before adoption: Future version-port decision, versioned schema and security/accessibility tests.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
+
+### 1080. `crates/horizon-client/src/dialog.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `efafe4d3936eb77e19e03e52637dab078fef2bac`
+- Size: 31092 bytes; 895 logical lines
+- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–895; final section ends at EOF.
+- Purpose: Server Dialog data model/codec: kinds, body, inputs, buttons/actions, value substitution, click events and dialog-list resolution.
+- Dependencies / cross-references: NBT, text components, dialog registry/tag lookup, click actions and server-delivered definitions.
+- Implementation / logic: Parses notice/confirmation/multi-action/server-links/dialog-list; body and input controls; computes values/labels; substitutes inputs into command/custom payloads and resolves inline/registry/tag lists.
+- Findings: Protocol feature, not generic UI. Dialogs were added in Java 1.21.6; server-provided command/custom actions and input payloads are a trust boundary.
+- RustChunk relevance: No vanilla 1.20.1 relevance; local value controls may inform forms but not remote action execution.
+- Decision: **unnecessary; reference; version-specific — exclude server-dialog model from RustChunk 1.20.1.**
+- 1.20.1 implications: Do not implement minecraft:dialog registry, show-dialog/custom-click packet or dialog inputs in 1.20.1.
+- Follow-up checks: Only for future >=1.21.6: version-gate schema, fuzz NBT, allowlist actions, limit payload and test permissions/consent.
+- RustChunk implementation mapping: No 1.20.1 mapping; local forms use RustChunk-owned structs and never execute remote command templates.
+- Evidence required before adoption: Future version schema, malformed-dialog fuzzing and strict action/security review.
+- Completion state: FULL TEXT REVIEW COMPLETE — source read in full. No tests, builds, benchmarks, APKs or Android-device runs were executed.
