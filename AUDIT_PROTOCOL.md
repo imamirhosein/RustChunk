@@ -8,7 +8,7 @@ This protocol governs the Starling source audit on branch `starling-1.20.1-port-
 - Do not split a 200-file stage into 20-file or other smaller reporting stages.
 - Example boundaries: 601–800, then 801–1000.
 - Do not stop for approval or request a new start command in the middle of a batch.
-- Report only after the full 200-entry batch is reviewed, recorded and verified.
+- The 200-entry stage remains continuous (1001–1200). However, persist work after every **20 completed files** (checkpoints 1020, 1040, 1060, …, 1200): append those 20 complete entries to the range Ledger, append the matching 20 Index rows, add a dated checkpoint to `AUDIT_QA_LOG.md`, validate the checkpoint, commit it, then re-read the committed files from GitHub. Never leave more than 20 reviewed-but-uncommitted entries.
 
 ## File selection and inspection
 
@@ -56,9 +56,10 @@ Before reporting a batch complete:
 - Verify exactly 200 new sequential entry numbers.
 - Verify no duplicate source paths against every previous entry.
 - Verify all 15 fields are present for every new entry.
-- Append all entries to the ledger file matching the audited entry range (use the range-specific naming convention above) and the matching rows to `AUDIT_INDEX.md`.
-- Re-read both files and verify numbering, path agreement, missing rows and duplicate rows.
-- Only then report the completed range and stop at the batch boundary.
+- For each 20-file checkpoint, append the 20 entries to `AUDIT_LEDGER_1001_1200.md`, the 20 matching rows to `AUDIT_INDEX.md`, and a checkpoint record to `AUDIT_QA_LOG.md`.
+- Before each checkpoint commit, verify the 20 numbers are sequential, all paths are unique against entries 1–1200, every entry has all 15 fields exactly once, and source SHA/byte sizes match the pinned upstream tree. Re-read the committed Ledger/Index/QA log and verify the saved contents.
+- Do not proceed to the next 20 until the current checkpoint commit is confirmed.
+- Report progress at each saved checkpoint; report the 200-entry stage complete only after checkpoint 1200 is committed and globally revalidated.
 
 The next batch after 801–1000 is **1001–1200**.
 
@@ -72,5 +73,5 @@ The next batch after 801–1000 is **1001–1200**.
 - Coverage ranges must not extend beyond the canonical logical line count. Multi-range reads must be consecutive, gap-free, and end exactly at the canonical final line.
 - Primary Decision labels are **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, and **undetermined**. Approved secondary qualifiers are **reference**, **version-specific**, and **optional/future**; they supplement a primary decision and do not replace it.
 - The Decision field and Index decision column must use one or more primary decision labels. Do not use placeholders such as "See ledger decision" or sentiment wording such as "Highly relevant/adaptable" as decision labels.
-- Every QA correction must be recorded in `AUDIT_QA_LOG.md`, including the baseline commit, affected entry numbers, exact correction and verification result.
-- QA may correct active-branch records, but must never modify the frozen archive branch.
+- Every QA correction and every 20-file audit checkpoint must be recorded in `AUDIT_QA_LOG.md`, including the pinned baseline commit, inclusive entry numbers, source-count, validation results and resulting commit SHA.
+- **Backup cadence:** create a new backup branch only after each additional **1,000 newly completed audit entries**, not after 200 entries and not after each 20-file checkpoint. The current 1,000-entry backup was created at entries 1–1000; the next backup is due only after entries 1001–2000 are fully committed and globally verified. Never modify an existing backup branch.
