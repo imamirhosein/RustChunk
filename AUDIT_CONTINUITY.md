@@ -215,3 +215,17 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Checkpoint commit SHA will be added after atomic five-document commit and read-back.
 - **Next: inspect 1576–1600**, serially and with maximum 400-line chunks. Stop at **1600** and wait for fresh authorization.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+## Closed reporting section — 1551–1600 — 2026-11-19
+
+- Completed entries: **1551–1600 inclusive (50/50)** in two 25-file checkpoints: 1551–1575 and 1576–1600.
+- Active 200-file stage: **1401–1600**, now **200/200 complete**.
+- Active Ledger: `AUDIT_LEDGER_1401_1600.md`, **200 entries** (1401–1600), each with exactly 15 semantically aligned fields.
+- Index: **1,600 sequential entries and 1,600 unique source paths**.
+- All 50 files in this section were read through EOF, with maximum 400-line contiguous chunks. Source SHAs/sizes and coverage match the pinned tree.
+- QA correction: the 1551–1575 Ledger records had 15 labels but omitted a separate Purpose and shifted subsequent semantic values. This transaction repaired them using the corresponding Index descriptions as Purpose and re-aligned Dependencies through Evidence. Paths, SHA, sizes, coverage and Decisions were preserved.
+- Target-era behavior remains a candidate for exact 1.20.1 reconstruction; Spear, Sulfur Cube, Copper Golem transport and Trial Spawner are excluded. Spawn/selection/finalization are server-side; renderer, skinning, random textures and spatial indexing are optional architecture references without measured performance claims.
+- No source/application code changed. Embedded tests were inspected but not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
+- Checkpoint 1551–1575 commit: `ce4fd9f8711ce9cbab367e3ca637df130771d012`. This transaction closes 1576–1600 after five-document commit/read-back verification.
+- **STOP at 1600.** Do not inspect 1601 or later until fresh explicit user authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.

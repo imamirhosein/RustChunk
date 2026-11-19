@@ -233,3 +233,18 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - **STOP at entry 1600** and wait for new explicit authorization before 1601 or any later source file.
 - No source/application code changed. Embedded tests are inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
 - `main` and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest authoritative resume state — section 1551–1600 closed — 2026-11-19
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1–1600**.
+- Active 200-file stage: **1401–1600**, now **200/200 complete**.
+- Closed reporting section: **1551–1600**, both 25-file checkpoints complete.
+- Active Ledger: `AUDIT_LEDGER_1401_1600.md`, **200 entries** (1401–1600), with the 15 required fields correctly aligned. Index: **1,600 sequential unique paths**.
+- QA correction: entries 1551–1575 were semantically re-aligned in the 1576–1600 transaction. Index descriptions now populate Purpose; prior values occupy the correct Dependencies, Implementation, Findings, Relevance, Implications, Follow-up, Mapping and Evidence fields. Source SHA/size/coverage/path/Decision were preserved.
+- The 25 files 1576–1600 were read through EOF serially, in chunks no larger than 400 lines; pinned SHAs, byte sizes and contiguous coverage are recorded.
+- **STOP at entry 1600. Entry 1601 or later must not be inspected until fresh explicit user authorization.**
+- Preserve exact 200 / 50 / 25 cadence, serial inspection and maximum 400-line chunks. On next authorization, verify branch HEAD and current Index/tree order before entry 1601.
+- No source/application code changed. Embedded tests were inspected only, not run. No build, unit test, benchmark, APK, Android device, Forge launch, Minecraft join, LAN, UPnP or relay validation has been performed.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.

@@ -2,11 +2,10 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Entry range: 1401–1600 (200 new unique source files; one shared Ledger for the complete stage).
-- Current progress: entries 1401–1425 committed (25/200); first checkpoint of section 1401–1450 complete.
-- Authorized section: 1401–1450, split into checkpoints 1401–1425 and 1426–1450; complete the second checkpoint without another permission request.
-- Reporting rule: stop after 1450 and wait for explicit authorization before 1451–1500.
-- Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md.
+- Entry range: 1401–1600 (200 unique source files; one shared Ledger for this stage).
+- Current progress: entries 1401–1600 complete (200/200); reporting sections 1401–1450, 1451–1500, 1501–1550 and 1551–1600 are closed.
+- Reporting rule: stop at entry 1600 and wait for explicit authorization before inspecting entry 1601 or later.
+- Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is kept separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files were read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size match the pinned source tree.
 - Embedded tests were inspected only, not executed.
 
@@ -2566,16 +2565,16 @@
 - Source SHA: `694940323dbadbcfc0891c88cb6d7f382b508d97`
 - Size: 45136 bytes; 1297 logical lines
 - Coverage: 1–400, 401–800, 801–1200, 1201–1297 (EOF)
-- Purpose: Fox AI depends on ordered goals, food/item tags, berries, chorus fruit, damage/target state, UUID persistence, navigation and mob events.
-- Dependencies / cross-references: Registers fox goals and target rules; handles trust and breeding state, stalking/pouncing, eating, item pickup, teleport, sleep/sit poses and texture selection.
-- Implementation / logic: Core fox behavior is present in 1.20.1. The snapshot also includes a newer Nautilus alertable target and modern item-consumption/data-component assumptions; village trusted-player behavior is commented as unported.
-- Findings: Useful reference for vanilla fox simulation, item interactions and lightweight client state.
-- RustChunk relevance: Keep the 1.20.1 fox behavior, but rebuild target selection, item/NBT persistence, effects and RNG against target-version sources; exclude Nautilus and modern item APIs.
+- Purpose: Fox state, trust UUIDs, defensive behavior, stalking/pouncing, item pickup, berry and chorus-fruit behavior, poses and rendering.
+- Dependencies / cross-references: Fox AI depends on ordered goals, food/item tags, berries, chorus fruit, damage/target state, UUID persistence, navigation and mob events.
+- Implementation / logic: Registers fox goals and target rules; handles trust and breeding state, stalking/pouncing, eating, item pickup, teleport, sleep/sit poses and texture selection.
+- Findings: Core fox behavior is present in 1.20.1. The snapshot also includes a newer Nautilus alertable target and modern item-consumption/data-component assumptions; village trusted-player behavior is commented as unported.
+- RustChunk relevance: Useful reference for vanilla fox simulation, item interactions and lightweight client state.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify exact 1.20.1 fox goal priorities, trust UUID NBT, item pickup/food tags, pounce damage, chorus-fruit teleport and seeded RNG order.
-- Follow-up checks: RustChunk 1.20.1 fox AI/state module, legacy NBT codec and item-interaction event adapter.
-- RustChunk implementation mapping: 1.20.1 Java mappings/source, fox NBT fixtures, food-tag registry, deterministic goal/RNG traces and interaction tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep the 1.20.1 fox behavior, but rebuild target selection, item/NBT persistence, effects and RNG against target-version sources; exclude Nautilus and modern item APIs.
+- Follow-up checks: Verify exact 1.20.1 fox goal priorities, trust UUID NBT, item pickup/food tags, pounce damage, chorus-fruit teleport and seeded RNG order.
+- RustChunk implementation mapping: RustChunk 1.20.1 fox AI/state module, legacy NBT codec and item-interaction event adapter.
+- Evidence required before adoption: 1.20.1 Java mappings/source, fox NBT fixtures, food-tag registry, deterministic goal/RNG traces and interaction tests.
 - Completion state: COMPLETE — 1297 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 45136 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1552. `crates/horizon-client/src/mobs/frog.rs`
@@ -2583,16 +2582,16 @@
 - Source SHA: `4b5532aee599c858efd2ed385e6b83d14b4c3789`
 - Size: 40312 bytes; 1097 logical lines
 - Coverage: 1–400, 401–800, 801–1097 (EOF)
-- Purpose: Depends on amphibious navigation, water/land state, slime/magma-cube targeting, frogspawn/block placement, shared LongJump logic, variants, sensors and RNG.
-- Dependencies / cross-references: Registers frog goals and prey filters; controls tongue pull/eat, spawn laying, long-jump destination selection, cooldowns, amphibious movement and animation state.
-- Implementation / logic: Frog behavior belongs to the target era. LongJump is shared with Goat; later code paths and memory/tag architecture must not replace the 1.20.1 goal/sensor implementation. Sound and shuffle RNG sources require parity checks.
-- Findings: Strong reference for 1.20.1 frog behavior and aquatic navigation.
-- RustChunk relevance: Retain frog behavior but reconstruct target-era goal priorities, variants/tags, frogspawn interaction and exact seeded RNG; keep Goat and Frog parameterization distinct.
+- Purpose: Frog amphibious AI, tongue prey capture, eating, frogspawn placement, long jumps, croaking and pose state.
+- Dependencies / cross-references: Depends on amphibious navigation, water/land state, slime/magma-cube targeting, frogspawn/block placement, shared LongJump logic, variants, sensors and RNG.
+- Implementation / logic: Registers frog goals and prey filters; controls tongue pull/eat, spawn laying, long-jump destination selection, cooldowns, amphibious movement and animation state.
+- Findings: Frog behavior belongs to the target era. LongJump is shared with Goat; later code paths and memory/tag architecture must not replace the 1.20.1 goal/sensor implementation. Sound and shuffle RNG sources require parity checks.
+- RustChunk relevance: Strong reference for 1.20.1 frog behavior and aquatic navigation.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Compare 1.20.1 FrogAi goals/sensors, tongue target sizes, frogspawn placement, long-jump preferences, water malus and RNG draws.
-- Follow-up checks: RustChunk 1.20.1 frog AI, amphibious movement adapter, tongue/projectile event and frogspawn block interaction.
-- RustChunk implementation mapping: Target-version brain/goal source, tag/variant exports, seeded RNG traces and water/land behavior fixtures.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Retain frog behavior but reconstruct target-era goal priorities, variants/tags, frogspawn interaction and exact seeded RNG; keep Goat and Frog parameterization distinct.
+- Follow-up checks: Compare 1.20.1 FrogAi goals/sensors, tongue target sizes, frogspawn placement, long-jump preferences, water malus and RNG draws.
+- RustChunk implementation mapping: RustChunk 1.20.1 frog AI, amphibious movement adapter, tongue/projectile event and frogspawn block interaction.
+- Evidence required before adoption: Target-version brain/goal source, tag/variant exports, seeded RNG traces and water/land behavior fixtures.
 - Completion state: COMPLETE — 1097 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 40312 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1553. `crates/horizon-client/src/mobs/gear.rs`
@@ -2600,16 +2599,16 @@
 - Source SHA: `d93dc169c9e0c625defbc9953fac76822ff54ece`
 - Size: 10094 bytes; 279 logical lines
 - Coverage: 1–279 (EOF)
-- Purpose: Depends on ItemStack, enchantment registry/tags, damage types, equipment slots, attribute modifiers and combat formulas.
-- Dependencies / cross-references: Maps equipment to slots and evaluates enchantment bonuses, ranged weapon modifiers, armor protection and damage-type bypass rules.
-- Implementation / logic: The file uses modern ItemStack/component and damage-type assumptions and includes later species/damage categories; 1.20.1 uses legacy enchantment NBT and older registries.
-- Findings: Useful reference for the combat/equipment calculation boundaries, not a direct port.
-- RustChunk relevance: Rewrite against 1.20.1 ItemStack NBT, enchantment registry and damage sources; filter later species and damage categories.
+- Purpose: Gear-side calculations for equipment slots, enchantments, trims, weapon damage and armor protection.
+- Dependencies / cross-references: Depends on ItemStack, enchantment registry/tags, damage types, equipment slots, attribute modifiers and combat formulas.
+- Implementation / logic: Maps equipment to slots and evaluates enchantment bonuses, ranged weapon modifiers, armor protection and damage-type bypass rules.
+- Findings: The file uses modern ItemStack/component and damage-type assumptions and includes later species/damage categories; 1.20.1 uses legacy enchantment NBT and older registries.
+- RustChunk relevance: Useful reference for the combat/equipment calculation boundaries, not a direct port.
 - Decision: rewrite required; version-specific
-- 1.20.1 implications: Verify 1.20.1 Sharpness/Smite/Bane, Power/Punch/Flame/Piercing, armor/toughness, protection tags, trims and modifier ordering.
-- Follow-up checks: RustChunk 1.20.1 legacy item/enchantment evaluator and combat attribute pipeline.
-- RustChunk implementation mapping: 1.20.1 mappings, enchantment/damage registries, legacy ItemStack fixtures and deterministic damage/protection test matrix.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Rewrite against 1.20.1 ItemStack NBT, enchantment registry and damage sources; filter later species and damage categories.
+- Follow-up checks: Verify 1.20.1 Sharpness/Smite/Bane, Power/Punch/Flame/Piercing, armor/toughness, protection tags, trims and modifier ordering.
+- RustChunk implementation mapping: RustChunk 1.20.1 legacy item/enchantment evaluator and combat attribute pipeline.
+- Evidence required before adoption: 1.20.1 mappings, enchantment/damage registries, legacy ItemStack fixtures and deterministic damage/protection test matrix.
 - Completion state: COMPLETE — 279 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 10094 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1554. `crates/horizon-client/src/mobs/goals.rs`
@@ -2617,16 +2616,16 @@
 - Source SHA: `27779577378b5cee016efe0f573192d261804bce`
 - Size: 100636 bytes; 2972 logical lines
 - Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–2972 (EOF)
-- Purpose: Depends on Mob AI state, navigation/pathfinding, sensors/visibility, item and block tags, damage/target rules, world time and deterministic RNG.
-- Dependencies / cross-references: Defines generic Goal lifecycle and selector arbitration; implements many vanilla goal behaviors, target filters and movement/interaction routines.
-- Implementation / logic: Many core goals exist in 1.20.1, but this snapshot adds newer species and memory behaviors. Exact selector ordering, locks, RNG and tag semantics must be compared to target code.
-- Findings: Central reference for the RustChunk mob AI engine; correctness affects many species.
-- RustChunk relevance: Rebuild the goal framework and target registrations from 1.20.1, excluding later-only entities/behaviors; do not mix it with the newer Breeze/Creaking Brain framework.
+- Purpose: Goal/target selectors, priority and control locks, melee, panic, avoidance, temptation, breeding, strolling, water seeking and block interaction.
+- Dependencies / cross-references: Depends on Mob AI state, navigation/pathfinding, sensors/visibility, item and block tags, damage/target rules, world time and deterministic RNG.
+- Implementation / logic: Defines generic Goal lifecycle and selector arbitration; implements many vanilla goal behaviors, target filters and movement/interaction routines.
+- Findings: Many core goals exist in 1.20.1, but this snapshot adds newer species and memory behaviors. Exact selector ordering, locks, RNG and tag semantics must be compared to target code.
+- RustChunk relevance: Central reference for the RustChunk mob AI engine; correctness affects many species.
 - Decision: rewrite required; version-specific
-- 1.20.1 implications: Compare goal priorities/flags, canUse/canContinue/start/tick/stop order, selector lock semantics, mobGriefing, target visibility, item tags and RNG.
-- Follow-up checks: RustChunk 1.20.1 Goal/TargetSelector core plus versioned species goal registration.
-- RustChunk implementation mapping: 1.20.1 Java source/mappings, selector traces, target/tag fixtures and deterministic behavior tests for each adopted goal.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Rebuild the goal framework and target registrations from 1.20.1, excluding later-only entities/behaviors; do not mix it with the newer Breeze/Creaking Brain framework.
+- Follow-up checks: Compare goal priorities/flags, canUse/canContinue/start/tick/stop order, selector lock semantics, mobGriefing, target visibility, item tags and RNG.
+- RustChunk implementation mapping: RustChunk 1.20.1 Goal/TargetSelector core plus versioned species goal registration.
+- Evidence required before adoption: 1.20.1 Java source/mappings, selector traces, target/tag fixtures and deterministic behavior tests for each adopted goal.
 - Completion state: COMPLETE — 2972 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 100636 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1555. `crates/horizon-client/src/mobs/goat.rs`
@@ -2634,16 +2633,16 @@
 - Source SHA: `e9c1ef3d8c4d36f962b853e77be176debd805756`
 - Size: 19643 bytes; 544 logical lines
 - Coverage: 1–400, 401–544 (EOF)
-- Purpose: Depends on Goat/Frog LongJump, target predicates, pathfinding, collision, sound/events, horn items/tags and seeded UUID/RNG state.
-- Dependencies / cross-references: Registers ram and jump goals; selects targets, prepares a path, lowers head, charges, knocks back and drops horns on eligible blocks.
-- Implementation / logic: Goat and screaming goat are target-era content. Current shared LongJump and cooldown/RNG details require exact 1.20.1 verification.
-- Findings: Useful reference for a distinctive vanilla mob AI with deterministic timing and block interaction.
-- RustChunk relevance: Keep core goat logic but compare goal priorities, cooldown ranges, horn eligibility/drop NBT and RNG draw order to 1.20.1.
+- Purpose: Goat and screaming-goat ram attack, target selection, head lowering, charge, horn drops and long-jump behavior.
+- Dependencies / cross-references: Depends on Goat/Frog LongJump, target predicates, pathfinding, collision, sound/events, horn items/tags and seeded UUID/RNG state.
+- Implementation / logic: Registers ram and jump goals; selects targets, prepares a path, lowers head, charges, knocks back and drops horns on eligible blocks.
+- Findings: Goat and screaming goat are target-era content. Current shared LongJump and cooldown/RNG details require exact 1.20.1 verification.
+- RustChunk relevance: Useful reference for a distinctive vanilla mob AI with deterministic timing and block interaction.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify RamTarget rules, normal/screaming cooldowns, charge vector, knockback, horn loss, offspring and shared LongJump parameters.
-- Follow-up checks: RustChunk 1.20.1 goat AI/state, horn drop event and shared parameterized long-jump routine.
-- RustChunk implementation mapping: 1.20.1 source/mappings, goat entity NBT, horn tag/drop fixtures and seeded target/ram traces.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep core goat logic but compare goal priorities, cooldown ranges, horn eligibility/drop NBT and RNG draw order to 1.20.1.
+- Follow-up checks: Verify RamTarget rules, normal/screaming cooldowns, charge vector, knockback, horn loss, offspring and shared LongJump parameters.
+- RustChunk implementation mapping: RustChunk 1.20.1 goat AI/state, horn drop event and shared parameterized long-jump routine.
+- Evidence required before adoption: 1.20.1 source/mappings, goat entity NBT, horn tag/drop fixtures and seeded target/ram traces.
 - Completion state: COMPLETE — 544 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 19643 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1556. `crates/horizon-client/src/mobs/golem.rs`
@@ -2651,16 +2650,16 @@
 - Source SHA: `718d81b59fcdc24b5d11879cd6162677839ffb89`
 - Size: 29649 bytes; 815 logical lines
 - Coverage: 1–400, 401–800, 801–815 (EOF)
-- Purpose: Depends on POI/village reputation, player and mob targets, pathfinding, weather/temperature, mobGriefing, block changes and item events.
-- Dependencies / cross-references: Registers golem goals, target selection, village stroll/defense, poppy gift, melee/launch, crackiness, snowball attack, melting and snow placement.
-- Implementation / logic: Core Iron/Snow Golem behavior exists in 1.20.1. Copper Golem gifting/acceptance is newer and must be removed; universal-anger reset is not fully ported in this snapshot.
-- Findings: Relevant for village simulation, hostile defense and snow/block interactions.
-- RustChunk relevance: Adapt only 1.20.1 Iron/Snow Golem behavior; exclude Copper Golem and reconstruct village POI/anger state.
+- Purpose: Iron-golem village defense and gifting, attack/crack state, plus snow-golem snowball, melting and snow-trail behavior.
+- Dependencies / cross-references: Depends on POI/village reputation, player and mob targets, pathfinding, weather/temperature, mobGriefing, block changes and item events.
+- Implementation / logic: Registers golem goals, target selection, village stroll/defense, poppy gift, melee/launch, crackiness, snowball attack, melting and snow placement.
+- Findings: Core Iron/Snow Golem behavior exists in 1.20.1. Copper Golem gifting/acceptance is newer and must be removed; universal-anger reset is not fully ported in this snapshot.
+- RustChunk relevance: Relevant for village simulation, hostile defense and snow/block interactions.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Check 1.20.1 POI tags, target/reputation rules, poppy timing, attack damage/launch, snow melting and mobGriefing snow placement.
-- Follow-up checks: RustChunk 1.20.1 golem AI, village reputation adapter and block-change event pipeline.
-- RustChunk implementation mapping: Target-era Java source, POI/tag fixtures, player reputation cases and deterministic snow/attack tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Adapt only 1.20.1 Iron/Snow Golem behavior; exclude Copper Golem and reconstruct village POI/anger state.
+- Follow-up checks: Check 1.20.1 POI tags, target/reputation rules, poppy timing, attack damage/launch, snow melting and mobGriefing snow placement.
+- RustChunk implementation mapping: RustChunk 1.20.1 golem AI, village reputation adapter and block-change event pipeline.
+- Evidence required before adoption: Target-era Java source, POI/tag fixtures, player reputation cases and deterministic snow/attack tests.
 - Completion state: COMPLETE — 815 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 29649 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1557. `crates/horizon-client/src/mobs/guardian.rs`
@@ -2668,16 +2667,16 @@
 - Source SHA: `f86fd0bc43f0984b46d421860ce296fc8d3a6272`
 - Size: 17109 bytes; 487 logical lines
 - Coverage: 1–400, 401–487 (EOF)
-- Purpose: Depends on aquatic movement, target visibility, damage sources, effect application, sound/particles, difficulty and Elder Guardian timing.
-- Dependencies / cross-references: Implements beam charge/attack phases, target acquisition, swim control, thorns, tail/spike poses and periodic Elder Guardian effect.
-- Implementation / logic: Core guardian behavior is target-era; the current spike path includes newer DamageKind::Spear and other enum details that must be excluded from 1.20.1.
-- Findings: Useful for underwater mob simulation and boss-like attack/effect timing.
-- RustChunk relevance: Retain 1.20.1 Guardian/Elder Guardian logic after matching damage-source types, targeting and effect cadence.
+- Purpose: Guardian/Elder Guardian laser attack, swimming, spikes/thorns, land flop, beam animation and Mining Fatigue effect.
+- Dependencies / cross-references: Depends on aquatic movement, target visibility, damage sources, effect application, sound/particles, difficulty and Elder Guardian timing.
+- Implementation / logic: Implements beam charge/attack phases, target acquisition, swim control, thorns, tail/spike poses and periodic Elder Guardian effect.
+- Findings: Core guardian behavior is target-era; the current spike path includes newer DamageKind::Spear and other enum details that must be excluded from 1.20.1.
+- RustChunk relevance: Useful for underwater mob simulation and boss-like attack/effect timing.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify laser duration/range, thorns damage source, target categories, difficulty scaling and 1200-tick Elder Guardian effect.
-- Follow-up checks: RustChunk 1.20.1 aquatic hostile AI, beam attack event and Elder Guardian effect scheduler.
-- RustChunk implementation mapping: 1.20.1 source/mappings, damage-type mapping, target visibility fixtures and seeded timing tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Retain 1.20.1 Guardian/Elder Guardian logic after matching damage-source types, targeting and effect cadence.
+- Follow-up checks: Verify laser duration/range, thorns damage source, target categories, difficulty scaling and 1200-tick Elder Guardian effect.
+- RustChunk implementation mapping: RustChunk 1.20.1 aquatic hostile AI, beam attack event and Elder Guardian effect scheduler.
+- Evidence required before adoption: 1.20.1 source/mappings, damage-type mapping, target visibility fixtures and seeded timing tests.
 - Completion state: COMPLETE — 487 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 17109 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1558. `crates/horizon-client/src/mobs/happy_ghast.rs`
@@ -2685,16 +2684,16 @@
 - Source SHA: `1d61dcbb784ecc753f0e5a2d422905d2cd4a6f49`
 - Size: 24401 bytes; 706 logical lines
 - Coverage: 1–400, 401–706 (EOF)
-- Purpose: Depends on later entity species, harness/lead equipment, rider input, flight navigation, collision and newer entity data.
-- Dependencies / cross-references: Implements Happy Ghast variants, harness/rider movement, flight controls, healing and lead attachment handling.
-- Implementation / logic: Happy Ghast/Ghastling and their harness/ride systems are absent from the 1.20.1 baseline.
-- Findings: No direct 1.20.1 gameplay adoption; only generic flight-control ideas may be studied separately.
-- RustChunk relevance: Exclude the complete species and entity-specific state from the 1.20.1 build.
+- Purpose: Happy Ghast/Ghastling lifecycle, harness equipment, controllable flight/riding, healing and multi-lead handling.
+- Dependencies / cross-references: Depends on later entity species, harness/lead equipment, rider input, flight navigation, collision and newer entity data.
+- Implementation / logic: Implements Happy Ghast variants, harness/rider movement, flight controls, healing and lead attachment handling.
+- Findings: Happy Ghast/Ghastling and their harness/ride systems are absent from the 1.20.1 baseline.
+- RustChunk relevance: No direct 1.20.1 gameplay adoption; only generic flight-control ideas may be studied separately.
 - Decision: exclude; post-1.20.1
-- 1.20.1 implications: Confirm target registry has no Happy Ghast/Ghastling, harness item or related entity/packet identifiers.
-- Follow-up checks: No 1.20.1 implementation mapping; optional later-version research only.
-- RustChunk implementation mapping: 1.20.1 entity/item registry and protocol identifiers confirming absence.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Exclude the complete species and entity-specific state from the 1.20.1 build.
+- Follow-up checks: Confirm target registry has no Happy Ghast/Ghastling, harness item or related entity/packet identifiers.
+- RustChunk implementation mapping: No 1.20.1 implementation mapping; optional later-version research only.
+- Evidence required before adoption: 1.20.1 entity/item registry and protocol identifiers confirming absence.
 - Completion state: COMPLETE — 706 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 24401 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1559. `crates/horizon-client/src/mobs/hostile.rs`
@@ -2702,16 +2701,16 @@
 - Source SHA: `d2d054f8df302f680eb493b9db488bd9001ac987`
 - Size: 14615 bytes; 422 logical lines
 - Coverage: 1–400, 401–422 (EOF)
-- Purpose: Depends on hostile target goals, explosion/loot rules, potion cloud effects, wall collision, block tags, damage and entity conversion.
-- Dependencies / cross-references: Implements Creeper swell/defuse/explosion events, Spider climb and daylight rules, Silverfish ally wake/infested merge and related hostile behavior.
-- Implementation / logic: Core species are 1.20.1. Avoid-Armadillo spider behavior is newer and must be filtered; explosion, loot and mobGriefing rules need version mapping.
-- Findings: Important vanilla hostile AI and combat parity.
-- RustChunk relevance: Keep target-era Creeper/Spider/Silverfish/Endermite behavior and remove newer species interactions.
+- Purpose: Creeper fuse/explosion and charged state, Spider wall/daylight behavior, Silverfish wake/infested-block behavior and Endermite handling.
+- Dependencies / cross-references: Depends on hostile target goals, explosion/loot rules, potion cloud effects, wall collision, block tags, damage and entity conversion.
+- Implementation / logic: Implements Creeper swell/defuse/explosion events, Spider climb and daylight rules, Silverfish ally wake/infested merge and related hostile behavior.
+- Findings: Core species are 1.20.1. Avoid-Armadillo spider behavior is newer and must be filtered; explosion, loot and mobGriefing rules need version mapping.
+- RustChunk relevance: Important vanilla hostile AI and combat parity.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify charged-creeper radius, fuse timing, explosion block/loot behavior, spider daylight/target rules and Silverfish infested-block merge.
-- Follow-up checks: RustChunk 1.20.1 hostile mob AI, explosion event adapter and infested-block interaction.
-- RustChunk implementation mapping: Target Java source, explosion/loot fixtures, entity tags and deterministic fuse/target tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep target-era Creeper/Spider/Silverfish/Endermite behavior and remove newer species interactions.
+- Follow-up checks: Verify charged-creeper radius, fuse timing, explosion block/loot behavior, spider daylight/target rules and Silverfish infested-block merge.
+- RustChunk implementation mapping: RustChunk 1.20.1 hostile mob AI, explosion event adapter and infested-block interaction.
+- Evidence required before adoption: Target Java source, explosion/loot fixtures, entity tags and deterministic fuse/target tests.
 - Completion state: COMPLETE — 422 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 14615 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1560. `crates/horizon-client/src/mobs/illager.rs`
@@ -2719,16 +2718,16 @@
 - Source SHA: `b53ca2f2d4ec64ecad6b2cc0ff12f4cbc342a36a`
 - Size: 34647 bytes; 986 logical lines
 - Coverage: 1–400, 401–800, 801–986 (EOF)
-- Purpose: Depends on Goal/TargetSelector, crossbow/item NBT, projectile RNG, Vex/Fangs, villager/wolf targets, spell effects and animations.
-- Dependencies / cross-references: Registers shared illager goals; handles crossbow states, ranged attacks, Evoker summons/fangs/Wololo and pose/animation state.
-- Implementation / logic: Avoid-Creaking and modern charged-projectile ItemStack components are later architecture; target crossbows store charged projectiles in legacy NBT.
-- Findings: Useful species behavior, but item and crossbow state need a target-version rewrite.
-- RustChunk relevance: Reimplement with 1.20.1 crossbow ItemStack NBT, entity targets, spell timings and older AI selector semantics; exclude Creaking.
+- Purpose: Pillager/Vindicator/Evoker/Illusioner shared behavior, crossbow charge/fire lifecycle, Evoker spells and illager targeting/poses.
+- Dependencies / cross-references: Depends on Goal/TargetSelector, crossbow/item NBT, projectile RNG, Vex/Fangs, villager/wolf targets, spell effects and animations.
+- Implementation / logic: Registers shared illager goals; handles crossbow states, ranged attacks, Evoker summons/fangs/Wololo and pose/animation state.
+- Findings: Avoid-Creaking and modern charged-projectile ItemStack components are later architecture; target crossbows store charged projectiles in legacy NBT.
+- RustChunk relevance: Useful species behavior, but item and crossbow state need a target-version rewrite.
 - Decision: rewrite required; version-specific
-- 1.20.1 implications: Check charged-projectile NBT, Quick Charge, shot ordering/spread, Evoker spell cooldowns, Vex lifetime, Fang placement and target filters.
-- Follow-up checks: RustChunk 1.20.1 illager goal groups, legacy crossbow codec and spell/projectile event handlers.
-- RustChunk implementation mapping: 1.20.1 mappings/source, crossbow NBT fixtures, projectile traces and per-spell tick/target tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Reimplement with 1.20.1 crossbow ItemStack NBT, entity targets, spell timings and older AI selector semantics; exclude Creaking.
+- Follow-up checks: Check charged-projectile NBT, Quick Charge, shot ordering/spread, Evoker spell cooldowns, Vex lifetime, Fang placement and target filters.
+- RustChunk implementation mapping: RustChunk 1.20.1 illager goal groups, legacy crossbow codec and spell/projectile event handlers.
+- Evidence required before adoption: 1.20.1 mappings/source, crossbow NBT fixtures, projectile traces and per-spell tick/target tests.
 - Completion state: COMPLETE — 986 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 34647 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1561. `crates/horizon-client/src/mobs/illusioner.rs`
@@ -2736,16 +2735,16 @@
 - Source SHA: `aa1621fdc74ec94c9d4942806431aec16b2438c7`
 - Size: 8491 bytes; 274 logical lines
 - Coverage: 1–274 (EOF)
-- Purpose: Depends on illager spell/target logic, bow/projectile damage, effects, entity pose and mirror-image client state.
-- Dependencies / cross-references: Implements Illusioner ranged attack and spells, creates/updates mirror offsets, invisibility and Blindness effect, and animation-facing state.
-- Implementation / logic: Illusioner exists in 1.20.1 but is not a normal natural spawn. Avoid-Creaking is a newer branch and must be excluded.
-- Findings: Useful for complete entity registry behavior and optional Illusioner rendering/AI.
-- RustChunk relevance: Keep Illusioner for target-era parity, verify spell durations and mirror synchronization; remove newer Creaking target logic.
+- Purpose: Illusioner bow/spell behavior, invisibility and blindness, four mirror images, target selection and render offsets.
+- Dependencies / cross-references: Depends on illager spell/target logic, bow/projectile damage, effects, entity pose and mirror-image client state.
+- Implementation / logic: Implements Illusioner ranged attack and spells, creates/updates mirror offsets, invisibility and Blindness effect, and animation-facing state.
+- Findings: Illusioner exists in 1.20.1 but is not a normal natural spawn. Avoid-Creaking is a newer branch and must be excluded.
+- RustChunk relevance: Useful for complete entity registry behavior and optional Illusioner rendering/AI.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Compare spell cooldown/effect duration, bow charge/shot, mirror count/offset, invisibility and target acquisition with 1.20.1.
-- Follow-up checks: RustChunk 1.20.1 Illusioner AI/spell state plus client mirror-image render adapter.
-- RustChunk implementation mapping: 1.20.1 source/mappings, effect/goal fixtures and render goldens for mirror offsets.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep Illusioner for target-era parity, verify spell durations and mirror synchronization; remove newer Creaking target logic.
+- Follow-up checks: Compare spell cooldown/effect duration, bow charge/shot, mirror count/offset, invisibility and target acquisition with 1.20.1.
+- RustChunk implementation mapping: RustChunk 1.20.1 Illusioner AI/spell state plus client mirror-image render adapter.
+- Evidence required before adoption: 1.20.1 source/mappings, effect/goal fixtures and render goldens for mirror offsets.
 - Completion state: COMPLETE — 274 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 8491 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1562. `crates/horizon-client/src/mobs/item_break.rs`
@@ -2753,16 +2752,16 @@
 - Source SHA: `3d8866f2ca8fae5e0fa4c2d6794c3154b1f7cc16`
 - Size: 9278 bytes; 224 logical lines
 - Coverage: 1–224 (EOF)
-- Purpose: Depends on entity equipment state, ItemStack serialization, slot mapping and client event/particle IDs.
-- Dependencies / cross-references: Maps equipment-break event slots to held/equipped stacks and emits the matching break particle/render event.
-- Implementation / logic: Core hand/armor slots are target-era; Body/Saddle slots and Wolf Armor/Armadillo scute handling are newer than 1.20.1.
-- Findings: Relevant client feedback for mob equipment durability, but modern slots cannot be reused.
-- RustChunk relevance: Implement only 1.20.1 event slots and legacy stack lookup; remove Body/Saddle and later Wolf Armor paths.
+- Purpose: Client equipment-break events, slot identifiers, equipment lookup and broken-item/scute particle handling.
+- Dependencies / cross-references: Depends on entity equipment state, ItemStack serialization, slot mapping and client event/particle IDs.
+- Implementation / logic: Maps equipment-break event slots to held/equipped stacks and emits the matching break particle/render event.
+- Findings: Core hand/armor slots are target-era; Body/Saddle slots and Wolf Armor/Armadillo scute handling are newer than 1.20.1.
+- RustChunk relevance: Relevant client feedback for mob equipment durability, but modern slots cannot be reused.
 - Decision: rewrite required; version-specific
-- 1.20.1 implications: Verify event IDs/slot indices 47–52, hand/armor stack source and correct particle item metadata on 1.20.1.
-- Follow-up checks: RustChunk 1.20.1 client equipment-break event adapter over legacy ItemStack.
-- RustChunk implementation mapping: 1.20.1 packet/event mappings, equipment NBT fixtures and client particle goldens.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Implement only 1.20.1 event slots and legacy stack lookup; remove Body/Saddle and later Wolf Armor paths.
+- Follow-up checks: Verify event IDs/slot indices 47–52, hand/armor stack source and correct particle item metadata on 1.20.1.
+- RustChunk implementation mapping: RustChunk 1.20.1 client equipment-break event adapter over legacy ItemStack.
+- Evidence required before adoption: 1.20.1 packet/event mappings, equipment NBT fixtures and client particle goldens.
 - Completion state: COMPLETE — 224 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 9278 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1563. `crates/horizon-client/src/mobs/keyframes.rs`
@@ -2770,16 +2769,16 @@
 - Source SHA: `edcee8835e55695071dced0c735431dfcb3a86b4`
 - Size: 7492 bytes; 234 logical lines
 - Coverage: 1–234 (EOF)
-- Purpose: Depends on JSON animation assets, model bone names, animation state/timing and client rendering transforms.
-- Dependencies / cross-references: Parses per-bone keyframes and samples channels into pose transforms; supports applying animation/walk state.
-- Implementation / logic: Generic engine is not itself a gameplay feature; data/assets must be confirmed against 1.20.1 resource packs and model definitions.
-- Findings: Potential optional client-side resource-pack/model animation capability.
-- RustChunk relevance: Keep as a separate optional rendering feature only after verifying target JSON schema, assets and Android CPU/GPU cost.
+- Purpose: Generic keyframe animation parser/interpolator for position, rotation and scale channels, including linear and Catmull-Rom sampling.
+- Dependencies / cross-references: Depends on JSON animation assets, model bone names, animation state/timing and client rendering transforms.
+- Implementation / logic: Parses per-bone keyframes and samples channels into pose transforms; supports applying animation/walk state.
+- Findings: Generic engine is not itself a gameplay feature; data/assets must be confirmed against 1.20.1 resource packs and model definitions.
+- RustChunk relevance: Potential optional client-side resource-pack/model animation capability.
 - Decision: reference; optional client feature
-- 1.20.1 implications: Check keyframe time units, interpolation edge cases, bone mapping, animation blending and memory allocation on Android.
-- Follow-up checks: RustChunk optional client animation module; keep outside mob simulation/protocol compatibility.
-- RustChunk implementation mapping: 1.20.1 asset-format fixtures, interpolation goldens and Android frame-time/memory profiling.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep as a separate optional rendering feature only after verifying target JSON schema, assets and Android CPU/GPU cost.
+- Follow-up checks: Check keyframe time units, interpolation edge cases, bone mapping, animation blending and memory allocation on Android.
+- RustChunk implementation mapping: RustChunk optional client animation module; keep outside mob simulation/protocol compatibility.
+- Evidence required before adoption: 1.20.1 asset-format fixtures, interpolation goldens and Android frame-time/memory profiling.
 - Completion state: COMPLETE — 234 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 7492 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1564. `crates/horizon-client/src/mobs/landing.rs`
@@ -2787,16 +2786,16 @@
 - Source SHA: `6f20f809aca457e2fdc37e207c1618ff5953d9ac`
 - Size: 7413 bytes; 213 logical lines
 - Coverage: 1–213 (EOF)
-- Purpose: Depends on Block.fallOn behavior, block registry/tags, mobGriefing, entity bounds, damage and block-change events.
-- Dependencies / cross-references: Adapts mob landing to block behavior including hay, honey, slime, bed, powder snow, eggs and pointed dripstone.
-- Implementation / logic: Most interactions are present in 1.20.1. Newer shelf-mushroom behavior must not enter the target block set.
-- Findings: Useful shared interface for vanilla and modded block collision/landing hooks.
-- RustChunk relevance: Use the interface concept but populate exact 1.20.1 block behaviors and preserve modded block callback boundaries.
+- Purpose: Shared mob landing/block-fall integration for fall damage, sound, particles and block-specific effects.
+- Dependencies / cross-references: Depends on Block.fallOn behavior, block registry/tags, mobGriefing, entity bounds, damage and block-change events.
+- Implementation / logic: Adapts mob landing to block behavior including hay, honey, slime, bed, powder snow, eggs and pointed dripstone.
+- Findings: Most interactions are present in 1.20.1. Newer shelf-mushroom behavior must not enter the target block set.
+- RustChunk relevance: Useful shared interface for vanilla and modded block collision/landing hooks.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify safe-fall distance, hay reduction, honey slide, slime bounce, bed bounce, powder snow and turtle egg/block effects.
-- Follow-up checks: RustChunk block-landing callback interface invoked by versioned block registry and mob physics.
-- RustChunk implementation mapping: 1.20.1 Block.fallOn source/mappings, block property/tag registry and deterministic landing fixtures.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Use the interface concept but populate exact 1.20.1 block behaviors and preserve modded block callback boundaries.
+- Follow-up checks: Verify safe-fall distance, hay reduction, honey slide, slime bounce, bed bounce, powder snow and turtle egg/block effects.
+- RustChunk implementation mapping: RustChunk block-landing callback interface invoked by versioned block registry and mob physics.
+- Evidence required before adoption: 1.20.1 Block.fallOn source/mappings, block property/tag registry and deterministic landing fixtures.
 - Completion state: COMPLETE — 213 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 7413 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1565. `crates/horizon-client/src/mobs/leash.rs`
@@ -2804,16 +2803,16 @@
 - Source SHA: `3520c3fd10e557045f5a62a722c767d438b12e68`
 - Size: 29434 bytes; 840 logical lines
 - Coverage: 1–400, 401–800, 801–840 (EOF)
-- Purpose: Depends on UUID/NT-array persistence, entity spawn/destroy, leash knots, pathfinding, vehicle state and modern lead attachment support.
-- Dependencies / cross-references: Stores leash holders, resolves anchors, calculates endpoints/forces, supports species offsets and current multi-holder/vehicle attachment types.
-- Implementation / logic: Current elastic spring/snapping distances, boat/raft, four-way and Happy Ghast/Nautilus attachments differ from 1.20.1 vanilla leash behavior.
-- Findings: Important entity persistence/interaction feature, but this implementation has substantial version drift.
-- RustChunk relevance: Rebuild 1.20.1 lead/leash mechanics and NBT from target sources; exclude multi-holder, boats/rafts and all later species.
+- Purpose: Leash attachment/persistence for players, mobs, knots and vehicles, connection geometry, offsets and leash movement forces.
+- Dependencies / cross-references: Depends on UUID/NT-array persistence, entity spawn/destroy, leash knots, pathfinding, vehicle state and modern lead attachment support.
+- Implementation / logic: Stores leash holders, resolves anchors, calculates endpoints/forces, supports species offsets and current multi-holder/vehicle attachment types.
+- Findings: Current elastic spring/snapping distances, boat/raft, four-way and Happy Ghast/Nautilus attachments differ from 1.20.1 vanilla leash behavior.
+- RustChunk relevance: Important entity persistence/interaction feature, but this implementation has substantial version drift.
 - Decision: rewrite required; version-specific
-- 1.20.1 implications: Verify leash knot UUID and chunk/entity load order, break distance/force, eligible species, item drops and player interaction packets.
-- Follow-up checks: RustChunk 1.20.1 leash service, UUID/NBT codec and client rope render adapter.
-- RustChunk implementation mapping: 1.20.1 Java source/mappings, leash persistence fixtures, entity lifecycle traces and rope geometry goldens.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Rebuild 1.20.1 lead/leash mechanics and NBT from target sources; exclude multi-holder, boats/rafts and all later species.
+- Follow-up checks: Verify leash knot UUID and chunk/entity load order, break distance/force, eligible species, item drops and player interaction packets.
+- RustChunk implementation mapping: RustChunk 1.20.1 leash service, UUID/NBT codec and client rope render adapter.
+- Evidence required before adoption: 1.20.1 Java source/mappings, leash persistence fixtures, entity lifecycle traces and rope geometry goldens.
 - Completion state: COMPLETE — 840 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 29434 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1566. `crates/horizon-client/src/mobs/living.rs`
@@ -2821,16 +2820,16 @@
 - Source SHA: `35af3afa4c6f30528bf209649abffdbe18ca4393`
 - Size: 84717 bytes; 2078 logical lines
 - Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2078 (EOF)
-- Purpose: Depends on AABB collision, block/fluid state, entity dimensions, attributes/effects, damage sources, movement controls, sounds and world border.
-- Dependencies / cross-references: Implements movement and collision resolution, fluid currents, landing/fall handling, pose/baby bounds, jump, step, push and animation state.
-- Implementation / logic: Critical source snapshot is newer than 1.20.1 and includes new restitution/air drag, Sulfur Cube and later fluid/ride behavior; rebuild only the target-era physics model.
-- Findings: Core reference for correctness and performance of all mob movement; directly affects simulation cost and visual movement.
-- RustChunk relevance: Rewrite from 1.20.1 LivingEntity/Mob movement and collision semantics; isolate newer restitution/air-drag branches and never port them blindly.
+- Purpose: Living mob movement/physics: fluid movement, collision, dimensions/poses, gravity, fall damage, jumping, bouncing and walk animation.
+- Dependencies / cross-references: Depends on AABB collision, block/fluid state, entity dimensions, attributes/effects, damage sources, movement controls, sounds and world border.
+- Implementation / logic: Implements movement and collision resolution, fluid currents, landing/fall handling, pose/baby bounds, jump, step, push and animation state.
+- Findings: Critical source snapshot is newer than 1.20.1 and includes new restitution/air drag, Sulfur Cube and later fluid/ride behavior; rebuild only the target-era physics model.
+- RustChunk relevance: Core reference for correctness and performance of all mob movement; directly affects simulation cost and visual movement.
 - Decision: rewrite required; core reference; version-specific
-- 1.20.1 implications: Compare 1.20.1 fluid acceleration/drag, step height, collision order, fall damage, pose dimensions, world border, push and RNG; profile allocations and CPU time.
-- Follow-up checks: RustChunk 1.20.1 shared living-entity physics core with mobile-oriented but behavior-preserving collision implementation.
-- RustChunk implementation mapping: 1.20.1 source/mappings, collision/fall/fluid golden tests, server movement traces and Android CPU/allocation benchmarks.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Rewrite from 1.20.1 LivingEntity/Mob movement and collision semantics; isolate newer restitution/air-drag branches and never port them blindly.
+- Follow-up checks: Compare 1.20.1 fluid acceleration/drag, step height, collision order, fall damage, pose dimensions, world border, push and RNG; profile allocations and CPU time.
+- RustChunk implementation mapping: RustChunk 1.20.1 shared living-entity physics core with mobile-oriented but behavior-preserving collision implementation.
+- Evidence required before adoption: 1.20.1 source/mappings, collision/fall/fluid golden tests, server movement traces and Android CPU/allocation benchmarks.
 - Completion state: COMPLETE — 2078 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 84717 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1567. `crates/horizon-client/src/mobs/llama.rs`
@@ -2838,16 +2837,16 @@
 - Source SHA: `b3a1f9d84974b265e748a0de7c81377614d8d084`
 - Size: 11463 bytes; 332 logical lines
 - Coverage: 1–332 (EOF)
-- Purpose: Depends on AbstractHorse, caravan behavior, target species, legacy inventory/NBT, ranged projectile, carpet/decor assets and RNG.
-- Dependencies / cross-references: Registers Llama and Trader Llama goals/targets; rolls health/strength/coat, handles spit, healing, offspring inheritance, inventory columns and NBT fields.
-- Implementation / logic: Both llama types are target-era. Exact Trader Llama defensive targets, despawn timer, inventory/temper fields and RNG draw order need parity checks.
-- Findings: Useful for passive mob, caravan and ranged-spit behavior with legacy inventory implications.
-- RustChunk relevance: Keep 1.20.1 llama behaviors but validate inherited horse state, caravan, item/slot serialization and seeded random sequence.
+- Purpose: Llama/Trader Llama coat, strength, chest capacity, taming temper, caravan, spit attack, breeding and despawn state.
+- Dependencies / cross-references: Depends on AbstractHorse, caravan behavior, target species, legacy inventory/NBT, ranged projectile, carpet/decor assets and RNG.
+- Implementation / logic: Registers Llama and Trader Llama goals/targets; rolls health/strength/coat, handles spit, healing, offspring inheritance, inventory columns and NBT fields.
+- Findings: Both llama types are target-era. Exact Trader Llama defensive targets, despawn timer, inventory/temper fields and RNG draw order need parity checks.
+- RustChunk relevance: Useful for passive mob, caravan and ranged-spit behavior with legacy inventory implications.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify 1.20.1 Llama/TraderLlama goals, target matrix, strength distribution, breeding, chest columns, temper and despawn delay.
-- Follow-up checks: RustChunk 1.20.1 llama module integrated with shared equine and caravan systems, plus legacy NBT inventory codec.
-- RustChunk implementation mapping: 1.20.1 mappings/source, llama NBT/inventory fixtures, caravan traces and seeded spawn/breeding/spit tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep 1.20.1 llama behaviors but validate inherited horse state, caravan, item/slot serialization and seeded random sequence.
+- Follow-up checks: Verify 1.20.1 Llama/TraderLlama goals, target matrix, strength distribution, breeding, chest columns, temper and despawn delay.
+- RustChunk implementation mapping: RustChunk 1.20.1 llama module integrated with shared equine and caravan systems, plus legacy NBT inventory codec.
+- Evidence required before adoption: 1.20.1 mappings/source, llama NBT/inventory fixtures, caravan traces and seeded spawn/breeding/spit tests.
 - Completion state: COMPLETE — 332 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 11463 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1568. `crates/horizon-client/src/mobs/monster_brain.rs`
@@ -2855,16 +2854,16 @@
 - Source SHA: `e5ab25ed4475e6f533df6188c882a1c4f4c2f4da`
 - Size: 54008 bytes; 1591 logical lines
 - Coverage: 1–400, 401–800, 801–1200, 1201–1591 (EOF)
-- Purpose: Depends on Breeze/Creaking species, villager-brain memory slots, sensors, path/navigation, projectile and movement behaviors, seeded shuffle RNG.
-- Dependencies / cross-references: Implements timed Brain memories, nearest-living/player sensors, attack targeting, activities, weighted RunOne behavior and species-specific fight/idle packages.
-- Implementation / logic: This file is exclusively Breeze/Creaking AI, both post-1.20.1. Generic memory/behavior abstractions are not evidence for replacing 1.20.1 Goal/TargetSelector behavior.
-- Findings: No baseline species adoption; generic memory framework may inform a future separate architecture study.
-- RustChunk relevance: Exclude Breeze/Creaking and their species logic from 1.20.1; retain goal-based AI for target-era mobs and evaluate generic abstractions independently.
+- Purpose: Brain memory/sensor/activity/behavior implementation for Breeze and Creaking.
+- Dependencies / cross-references: Depends on Breeze/Creaking species, villager-brain memory slots, sensors, path/navigation, projectile and movement behaviors, seeded shuffle RNG.
+- Implementation / logic: Implements timed Brain memories, nearest-living/player sensors, attack targeting, activities, weighted RunOne behavior and species-specific fight/idle packages.
+- Findings: This file is exclusively Breeze/Creaking AI, both post-1.20.1. Generic memory/behavior abstractions are not evidence for replacing 1.20.1 Goal/TargetSelector behavior.
+- RustChunk relevance: No baseline species adoption; generic memory framework may inform a future separate architecture study.
 - Decision: exclude; post-1.20.1; architecture reference only
-- 1.20.1 implications: Confirm 1.20.1 species and brain provider registries; compare any reusable memory semantics against target Java source before design adoption.
-- Follow-up checks: No 1.20.1 species mapping; optional future AI architecture note only.
-- RustChunk implementation mapping: 1.20.1 entity/brain registry and source proof for any generic memory-system reuse.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Exclude Breeze/Creaking and their species logic from 1.20.1; retain goal-based AI for target-era mobs and evaluate generic abstractions independently.
+- Follow-up checks: Confirm 1.20.1 species and brain provider registries; compare any reusable memory semantics against target Java source before design adoption.
+- RustChunk implementation mapping: No 1.20.1 species mapping; optional future AI architecture note only.
+- Evidence required before adoption: 1.20.1 entity/brain registry and source proof for any generic memory-system reuse.
 - Completion state: COMPLETE — 1591 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 54008 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1569. `crates/horizon-client/src/mobs/nautilus.rs`
@@ -2872,16 +2871,16 @@
 - Source SHA: `e44ef50a6769feabb51c02a2f827db67ffc1ee21`
 - Size: 22095 bytes; 628 logical lines
 - Coverage: 1–400, 401–628 (EOF)
-- Purpose: Depends on new Nautilus species, tame/owner, saddle/equipment, rider controls, water navigation, pufferfish targets, new sounds/effects and NBT.
-- Dependencies / cross-references: Implements swim/rider travel, dash cooldown, anger/charge targets, breath effect, variants, saddle armor, animation and saved fields.
-- Implementation / logic: Nautilus and Zombie Nautilus plus their rider/breath/equipment systems are absent from 1.20.1.
-- Findings: No direct target-era gameplay adoption.
-- RustChunk relevance: Exclude species, item/effect IDs, rider packets and state from the 1.20.1 baseline.
+- Purpose: Nautilus/Zombie Nautilus taming, saddle/armor, rider movement and dash, swimming, pufferfish charge, bubbles and breath effect.
+- Dependencies / cross-references: Depends on new Nautilus species, tame/owner, saddle/equipment, rider controls, water navigation, pufferfish targets, new sounds/effects and NBT.
+- Implementation / logic: Implements swim/rider travel, dash cooldown, anger/charge targets, breath effect, variants, saddle armor, animation and saved fields.
+- Findings: Nautilus and Zombie Nautilus plus their rider/breath/equipment systems are absent from 1.20.1.
+- RustChunk relevance: No direct target-era gameplay adoption.
 - Decision: exclude; post-1.20.1
-- 1.20.1 implications: Confirm absence from 1.20.1 entity/item/effect registries and protocol before filtering all references.
-- Follow-up checks: No 1.20.1 implementation mapping; later-version research only.
-- RustChunk implementation mapping: 1.20.1 entity/item/effect registry and protocol identifiers.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Exclude species, item/effect IDs, rider packets and state from the 1.20.1 baseline.
+- Follow-up checks: Confirm absence from 1.20.1 entity/item/effect registries and protocol before filtering all references.
+- RustChunk implementation mapping: No 1.20.1 implementation mapping; later-version research only.
+- Evidence required before adoption: 1.20.1 entity/item/effect registry and protocol identifiers.
 - Completion state: COMPLETE — 628 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 22095 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1570. `crates/horizon-client/src/mobs/nav.rs`
@@ -2889,16 +2888,16 @@
 - Source SHA: `2b265fcaaa23f6927e9b743e2b82c9d59e22410a`
 - Size: 28934 bytes; 776 logical lines
 - Coverage: 1–400, 401–776 (EOF)
-- Purpose: Depends on PathFinder/Evaluator, Mob movement/controls, world block/fluid state, path type malus, block update notifications and game time.
-- Dependencies / cross-references: Implements ground/wall/water/flying/amphibious navigation, max path length, path requests, delayed recompute, waypoint progression and stuck timeouts.
-- Implementation / logic: Core path-following concepts are target-relevant, but current amphibious/new species settings and exact timing need 1.20.1 comparison; implementation allocates and caches per query.
-- Findings: Critical mob AI and world traversal reference; path recompute cost is relevant to Android CPU/frame budget.
-- RustChunk relevance: Rebuild target-era PathNavigation and variant support; preserve deterministic waypoint semantics while separately optimizing allocations/caches after correctness tests.
+- Purpose: PathNavigation variants, path creation/recompute, waypoint following, corner cutting, stuck detection and timeouts.
+- Dependencies / cross-references: Depends on PathFinder/Evaluator, Mob movement/controls, world block/fluid state, path type malus, block update notifications and game time.
+- Implementation / logic: Implements ground/wall/water/flying/amphibious navigation, max path length, path requests, delayed recompute, waypoint progression and stuck timeouts.
+- Findings: Core path-following concepts are target-relevant, but current amphibious/new species settings and exact timing need 1.20.1 comparison; implementation allocates and caches per query.
+- RustChunk relevance: Critical mob AI and world traversal reference; path recompute cost is relevant to Android CPU/frame budget.
 - Decision: rewrite required; core reference; version-specific
-- 1.20.1 implications: Verify 1.20.1 path recompute throttle, waypoint reach, stuck/timeout thresholds, door/sun handling and allowed navigation variants; profile frequent path requests.
-- Follow-up checks: RustChunk 1.20.1 navigation service over the versioned A* pathfinder with mobile profiling hooks.
-- RustChunk implementation mapping: 1.20.1 source/mappings, path golden fixtures, deterministic navigation traces and Android CPU/allocation benchmarks.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Rebuild target-era PathNavigation and variant support; preserve deterministic waypoint semantics while separately optimizing allocations/caches after correctness tests.
+- Follow-up checks: Verify 1.20.1 path recompute throttle, waypoint reach, stuck/timeout thresholds, door/sun handling and allowed navigation variants; profile frequent path requests.
+- RustChunk implementation mapping: RustChunk 1.20.1 navigation service over the versioned A* pathfinder with mobile profiling hooks.
+- Evidence required before adoption: 1.20.1 source/mappings, path golden fixtures, deterministic navigation traces and Android CPU/allocation benchmarks.
 - Completion state: COMPLETE — 776 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 28934 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1571. `crates/horizon-client/src/mobs/nether.rs`
@@ -2906,16 +2905,16 @@
 - Source SHA: `505de22f7ec0d2c04a24354c9618d19551b9449b`
 - Size: 14412 bytes; 419 logical lines
 - Coverage: 1–400, 401–419 (EOF)
-- Purpose: Depends on hostile goals, line-of-sight, projectile/fireball implementation, difficulty, RNG and flight movement control.
-- Dependencies / cross-references: Implements Blaze melee/three-shot volley and cooldown, hovering, smoke/burn events, Ghast free flight, target gaze and charged Large Fireball.
-- Implementation / logic: Both mobs are target-era; projectile launch vectors, charge timing and random spread must be compared with the 1.20.1 Java behavior.
-- Findings: Useful Nether hostile simulation and ranged projectile behavior.
-- RustChunk relevance: Keep target species but port exact 1.20.1 timers, sound/event IDs, projectile physics and RNG order.
+- Purpose: Blaze and Ghast AI, movement, ranged fireball attacks, target selection, audio events and model animation.
+- Dependencies / cross-references: Depends on hostile goals, line-of-sight, projectile/fireball implementation, difficulty, RNG and flight movement control.
+- Implementation / logic: Implements Blaze melee/three-shot volley and cooldown, hovering, smoke/burn events, Ghast free flight, target gaze and charged Large Fireball.
+- Findings: Both mobs are target-era; projectile launch vectors, charge timing and random spread must be compared with the 1.20.1 Java behavior.
+- RustChunk relevance: Useful Nether hostile simulation and ranged projectile behavior.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Test Blaze volley phases and rest, attack range, float acceleration, Ghast 10/20-tick warning/shot phases, fireball direction and difficulty scaling.
-- Follow-up checks: RustChunk 1.20.1 Blaze/Ghast AI and projectile spawn/event adapter.
-- RustChunk implementation mapping: 1.20.1 source/mappings, projectile traces, seeded RNG fixtures and sound/animation goldens.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep target species but port exact 1.20.1 timers, sound/event IDs, projectile physics and RNG order.
+- Follow-up checks: Test Blaze volley phases and rest, attack range, float acceleration, Ghast 10/20-tick warning/shot phases, fireball direction and difficulty scaling.
+- RustChunk implementation mapping: RustChunk 1.20.1 Blaze/Ghast AI and projectile spawn/event adapter.
+- Evidence required before adoption: 1.20.1 source/mappings, projectile traces, seeded RNG fixtures and sound/animation goldens.
 - Completion state: COMPLETE — 419 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 14412 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1572. `crates/horizon-client/src/mobs/panda.rs`
@@ -2923,16 +2922,16 @@
 - Source SHA: `35d97ac2c8ce28aee036a20405020f3beeb9af9e`
 - Size: 34305 bytes; 1097 logical lines
 - Coverage: 1–400, 401–800, 801–1097 (EOF)
-- Purpose: Depends on gene registry, bamboo/food tags, weather/thunder, breeding/goal selection, item holding, sneeze loot and client animation state.
-- Dependencies / cross-references: Implements genes and attributes, gene inheritance, synchronized flags/counters, eating particles, sneeze event/loot, rest/roll/sneeze goals and rendering state.
-- Implementation / logic: Panda systems are target-era; exact gene weighting, RNG sequence, bamboo conditions, goal priorities and sneeze loot must match 1.20.1.
-- Findings: Useful for passive mob simulation and specialized synchronized client animation.
-- RustChunk relevance: Keep target-era Panda behavior while verifying gene data, tick counters, Bamboo/food tags and loot table; preserve server/client split.
+- Purpose: Panda gene inheritance, eating, sitting, rolling, sneezing, fear, breeding and model/item animation.
+- Dependencies / cross-references: Depends on gene registry, bamboo/food tags, weather/thunder, breeding/goal selection, item holding, sneeze loot and client animation state.
+- Implementation / logic: Implements genes and attributes, gene inheritance, synchronized flags/counters, eating particles, sneeze event/loot, rest/roll/sneeze goals and rendering state.
+- Findings: Panda systems are target-era; exact gene weighting, RNG sequence, bamboo conditions, goal priorities and sneeze loot must match 1.20.1.
+- RustChunk relevance: Useful for passive mob simulation and specialized synchronized client animation.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Compare 1.20.1 panda gene values/weighting, inherited main/hidden genes, eating timing, sneeze chance, thunder fear, breeding conditions and animation sync.
-- Follow-up checks: RustChunk 1.20.1 Panda state/AI module and client pose/crumb particle adapter.
-- RustChunk implementation mapping: 1.20.1 Java source/mappings, gene/tag/loot exports, seeded inheritance traces and client animation goldens.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep target-era Panda behavior while verifying gene data, tick counters, Bamboo/food tags and loot table; preserve server/client split.
+- Follow-up checks: Compare 1.20.1 panda gene values/weighting, inherited main/hidden genes, eating timing, sneeze chance, thunder fear, breeding conditions and animation sync.
+- RustChunk implementation mapping: RustChunk 1.20.1 Panda state/AI module and client pose/crumb particle adapter.
+- Evidence required before adoption: 1.20.1 Java source/mappings, gene/tag/loot exports, seeded inheritance traces and client animation goldens.
 - Completion state: COMPLETE — 1097 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 34305 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1573. `crates/horizon-client/src/mobs/parrot.rs`
@@ -2940,16 +2939,16 @@
 - Source SHA: `a6c9a69922914c2053cd6c16258e28b803bea1b2`
 - Size: 15861 bytes; 399 logical lines
 - Coverage: 1–399 (EOF)
-- Purpose: Depends on flying movement/navigation, shoulder entity behavior, nearby species list, jukebox state, level RNG and client wing animation.
-- Dependencies / cross-references: Registers flying controls, handles flap/glide and flight sound, selects tree perches, checks jukebox dance and imitates nearby/shoulder mob sounds.
-- Implementation / logic: Core parrot behavior exists in 1.20.1; current imitation table contains post-target species such as Breeze, Creaking, Camel Husk, Happy Ghast and Nautilus.
-- Findings: Relevant flying mob and client animation behavior with a versioned species sound table.
-- RustChunk relevance: Retain target-era flight/dance/imitations; build the imitation table only from mobs and sounds present in 1.20.1.
+- Purpose: Parrot flying navigation, tree-seeking wander, flapping/gliding, jukebox dance and mob-imitating sounds.
+- Dependencies / cross-references: Depends on flying movement/navigation, shoulder entity behavior, nearby species list, jukebox state, level RNG and client wing animation.
+- Implementation / logic: Registers flying controls, handles flap/glide and flight sound, selects tree perches, checks jukebox dance and imitates nearby/shoulder mob sounds.
+- Findings: Core parrot behavior exists in 1.20.1; current imitation table contains post-target species such as Breeze, Creaking, Camel Husk, Happy Ghast and Nautilus.
+- RustChunk relevance: Relevant flying mob and client animation behavior with a versioned species sound table.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Verify exact 1.20.1 imitable species, nearby search order, shoulder sound RNG, tree search order and flap/glide tick math.
-- Follow-up checks: RustChunk 1.20.1 parrot flight/animation module and target-era imitation sound registry.
-- RustChunk implementation mapping: 1.20.1 sound/entity registries, shoulder entity behavior source, seeded sound-selection traces and flight animation goldens.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Retain target-era flight/dance/imitations; build the imitation table only from mobs and sounds present in 1.20.1.
+- Follow-up checks: Verify exact 1.20.1 imitable species, nearby search order, shoulder sound RNG, tree search order and flap/glide tick math.
+- RustChunk implementation mapping: RustChunk 1.20.1 parrot flight/animation module and target-era imitation sound registry.
+- Evidence required before adoption: 1.20.1 sound/entity registries, shoulder entity behavior source, seeded sound-selection traces and flight animation goldens.
 - Completion state: COMPLETE — 399 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 15861 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1574. `crates/horizon-client/src/mobs/path.rs`
@@ -2957,16 +2956,16 @@
 - Source SHA: `4a7d98a1640cd17527eb50ce28cf01139d6dcdb8`
 - Size: 49928 bytes; 1397 logical lines
 - Coverage: 1–400, 401–800, 801–1200, 1201–1397 (EOF)
-- Purpose: Depends on block path classifications, collision/AABB, fluid state, mob malus/size, navigation, world bounds and node visit limits.
-- Dependencies / cross-references: Builds per-query node arena/index/open heap and caches; evaluates node types and neighbors; runs A* and reconstructs the chosen path.
-- Implementation / logic: High-value algorithm reference, but newer path types/evaluators and world-data assumptions exist; exact neighbor ordering, tie behavior, costs and limits are compatibility-sensitive.
-- Findings: Critical infrastructure for mob navigation and CPU use; cache design may reduce repeated block classification but must preserve outputs.
-- RustChunk relevance: Reimplement against 1.20.1 PathFinder/NodeEvaluator, then optimize only behind golden tests; exclude post-target PathTypes/evaluators.
+- Purpose: A* PathFinder, node/heap/path structures and Walk/Swim/Fly/Amphibious node evaluators.
+- Dependencies / cross-references: Depends on block path classifications, collision/AABB, fluid state, mob malus/size, navigation, world bounds and node visit limits.
+- Implementation / logic: Builds per-query node arena/index/open heap and caches; evaluates node types and neighbors; runs A* and reconstructs the chosen path.
+- Findings: High-value algorithm reference, but newer path types/evaluators and world-data assumptions exist; exact neighbor ordering, tie behavior, costs and limits are compatibility-sensitive.
+- RustChunk relevance: Critical infrastructure for mob navigation and CPU use; cache design may reduce repeated block classification but must preserve outputs.
 - Decision: rewrite required; core reference; version-specific
-- 1.20.1 implications: Verify node evaluator classifications, start position, diagonal/vertical neighbor order, heap tie-breaking, malus, maxVisited, maxPathLength and path reconstruction.
-- Follow-up checks: RustChunk 1.20.1 A* pathfinding core with versioned node evaluators and bounded scratch buffers.
-- RustChunk implementation mapping: 1.20.1 source/mappings, path golden fixtures across terrain/fluid/door/fence cases and Android time/allocation profiles.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Reimplement against 1.20.1 PathFinder/NodeEvaluator, then optimize only behind golden tests; exclude post-target PathTypes/evaluators.
+- Follow-up checks: Verify node evaluator classifications, start position, diagonal/vertical neighbor order, heap tie-breaking, malus, maxVisited, maxPathLength and path reconstruction.
+- RustChunk implementation mapping: RustChunk 1.20.1 A* pathfinding core with versioned node evaluators and bounded scratch buffers.
+- Evidence required before adoption: 1.20.1 source/mappings, path golden fixtures across terrain/fluid/door/fence cases and Android time/allocation profiles.
 - Completion state: COMPLETE — 1397 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 49928 byte size match the source tree; embedded tests, where present, were inspected only and not run.
 
 ### 1575. `crates/horizon-client/src/mobs/phantom.rs`
@@ -2974,14 +2973,439 @@
 - Source SHA: `0168801a3c9220937cce1c9b9d3af7bc5bfd6a5d`
 - Size: 20067 bytes; 543 logical lines
 - Coverage: 1–400, 401–543 (EOF)
-- Purpose: Depends on target visibility, cats, anchor/home state, custom movement control, melee damage, sea level, difficulty and RNG.
-- Dependencies / cross-references: Selects player targets, circles above an anchor, schedules swoops, checks cat presence, bites on AABB overlap and banks toward movement points.
-- Implementation / logic: Phantom is present in 1.20.1. Some source comments/tests reference 26.3; use the 1.20.1 target source for attack/visibility semantics.
-- Findings: Useful for hostile flying AI and custom movement controls.
-- RustChunk relevance: Keep the phantom system but verify size, anchor height, scan/cooldown intervals, cat fear and line-of-sight against 1.20.1.
+- Purpose: Phantom circling/swooping, player targeting, cat avoidance, movement control, size scaling and flap animation.
+- Dependencies / cross-references: Depends on target visibility, cats, anchor/home state, custom movement control, melee damage, sea level, difficulty and RNG.
+- Implementation / logic: Selects player targets, circles above an anchor, schedules swoops, checks cat presence, bites on AABB overlap and banks toward movement points.
+- Findings: Phantom is present in 1.20.1. Some source comments/tests reference 26.3; use the 1.20.1 target source for attack/visibility semantics.
+- RustChunk relevance: Useful for hostile flying AI and custom movement controls.
 - Decision: adaptable; version-specific
-- 1.20.1 implications: Compare 1.20.1 attack scan volume, target visibility, circle/swoop durations, bite collision, cat scare radius and size/attack attributes.
-- Follow-up checks: RustChunk 1.20.1 Phantom AI and custom flying movement controller.
-- RustChunk implementation mapping: 1.20.1 Java source/mappings, target visibility/occlusion fixtures, movement traces and deterministic RNG tests.
-- Evidence required before adoption: undefined
+- 1.20.1 implications: Keep the phantom system but verify size, anchor height, scan/cooldown intervals, cat fear and line-of-sight against 1.20.1.
+- Follow-up checks: Compare 1.20.1 attack scan volume, target visibility, circle/swoop durations, bite collision, cat scare radius and size/attack attributes.
+- RustChunk implementation mapping: RustChunk 1.20.1 Phantom AI and custom flying movement controller.
+- Evidence required before adoption: 1.20.1 Java source/mappings, target visibility/occlusion fixtures, movement traces and deterministic RNG tests.
 - Completion state: COMPLETE — 543 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 20067 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1576. `crates/horizon-client/src/mobs/piglin.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1560290ce641930fdb92ee5cb38a95140c92890b`
+- Size: 83650 bytes; 2234 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2234 (EOF)
+- Purpose: Piglin, Piglin Brute, Hoglin and Zoglin behavior: anger, hunting, bartering, equipment, riding, conversions and family interactions.
+- Dependencies / cross-references: Depends on Piglin/Hoglin Brain memories and sensors, barter tables and gold-item handling, target tags, equipment/crossbow state, navigation, zombification, NBT and deterministic RNG.
+- Implementation / logic: Registers species behavior and tasks; updates targets and anger; handles barter/equipment, Hoglin/Piglin interactions, conversion and movement/animation state.
+- Findings: Both Piglins and Hoglins are target-era content, but this snapshot mixes them with newer Brain/data assumptions and Spear-related branches; it is not a clean 1.20.1 port.
+- RustChunk relevance: Important Nether mob AI, barter and family-behavior reference; remote server authority remains authoritative in multiplayer.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild the 1.20.1 Piglin/Hoglin memory and task sets from target Java sources; preserve barter/conversion and legacy NBT; remove Spear and later-only equipment/targets.
+- Follow-up checks: Verify 1.20.1 anger/hunt memories, gold barter eligibility and loot, zombification, Hoglin fear, baby riding, crossbow rules, target tags and RNG order.
+- RustChunk implementation mapping: RustChunk 1.20.1 Piglin/Hoglin AI, barter transaction/loot service, anger-memory codec and legacy equipment pipeline.
+- Evidence required before adoption: 1.20.1 source/mappings, Brain memory/task registry, Piglin/Hoglin NBT, barter loot tables, tags, seeded AI traces and server event captures.
+- Completion state: COMPLETE — 2234 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 83650 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1577. `crates/horizon-client/src/mobs/polar_bear.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ec0afc70009e56b342bc0fafa6acc79268a84554`
+- Size: 6616 bytes; 203 logical lines
+- Coverage: 1–203 (EOF)
+- Purpose: Polar Bear neutral-hostile transition, cub protection, warning posture and melee attack behavior.
+- Dependencies / cross-references: Depends on age/baby state, player and mob target predicates, visibility, difficulty, damage, movement goals and animation flags.
+- Implementation / logic: Registers movement and target goals; adults react to threats near cubs, warn before attacking and apply melee damage with pose state.
+- Findings: Polar Bear is target-era content; cub radius, target exclusions, warning duration and mob-target tags require 1.20.1 verification.
+- RustChunk relevance: Useful vanilla neutral-mob behavior and compact deterministic AI reference.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Keep the species but rebuild target predicates, proximity tests and timings from 1.20.1 source and tags.
+- Follow-up checks: Compare cub-defense radius, player/mob exclusions, warning phase, attack damage, difficulty scaling and goal priority.
+- RustChunk implementation mapping: RustChunk 1.20.1 Polar Bear goal/target module and synchronized warning-pose event.
+- Evidence required before adoption: 1.20.1 PolarBear source/mappings, cub/adult target fixtures, tag export and deterministic tick traces.
+- Completion state: COMPLETE — 203 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 6616 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1578. `crates/horizon-client/src/mobs/rabbit.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5aa5415d1c03e03e3e8053b0c4b9aa085b7a8896`
+- Size: 25870 bytes; 755 logical lines
+- Coverage: 1–400, 401–755 (EOF)
+- Purpose: Rabbit variants and movement, hopping, temptation/avoidance, crop eating and Killer Bunny combat.
+- Dependencies / cross-references: Depends on variant registry, carrot crop age/block state, food and target tags, jump/move controls, damage, breeding, sounds and RNG.
+- Implementation / logic: Registers rabbit goals and target selectors; changes hop timing/speed by state, eats eligible crops, flees predators/players and configures Killer Bunny targeting/attacks.
+- Findings: Rabbit and Killer Bunny behavior exist in the target era; crop griefing, variant selection and jump timing depend on block state, tags and RNG order.
+- RustChunk relevance: Useful passive/neutral mob AI and block-interaction coverage.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Retain target-era behavior; use 1.20.1 variant registry and crop/food tags and preserve server-authoritative crop changes.
+- Follow-up checks: Verify Killer Bunny targets, carrot crop age and mobGriefing, hop impulse/timing, panic/tempt goals, breeding and variant RNG.
+- RustChunk implementation mapping: RustChunk 1.20.1 Rabbit AI/variant module, jump controller and crop-eating block event.
+- Evidence required before adoption: 1.20.1 source/mappings, rabbit variant/tag data, crop-state fixtures, seeded hop/variant traces and block-change events.
+- Completion state: COMPLETE — 755 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 25870 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1579. `crates/horizon-client/src/mobs/raider.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `46765c80211d6bf280cfc8ffe6fda28ee9e786d7`
+- Size: 26577 bytes; 774 logical lines
+- Coverage: 1–400, 401–774 (EOF)
+- Purpose: Illager raider patrol state, raid leader/banner handling, village movement and shared raid behavior.
+- Dependencies / cross-references: Depends on Raid state/wave controller, village POIs, patrol spawn rules, illager species/targets, banner/equipment NBT, navigation and game events.
+- Implementation / logic: Implements common raider and patrol/leader state, tracks raid association and banner state, and supplies movement/raid hooks for individual illagers.
+- Findings: Relevant to 1.20.1 raids, but this module is only one part of Raid; center, wave scheduling, victory/loss and other transitions are owned elsewhere.
+- RustChunk relevance: Useful entity-state reference for integration with the larger village/raid system.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Use only with a complete 1.20.1 Raid and Patrol implementation; do not treat this file alone as a full raid engine.
+- Follow-up checks: Compare patrol eligibility, captain/banner NBT, wave membership, target selection, village POIs, raid events and save/reload behavior.
+- RustChunk implementation mapping: RustChunk 1.20.1 Raider base state integrated with a separate authoritative Raid/Patrol service.
+- Evidence required before adoption: 1.20.1 Raider/Raid source and mappings, raid NBT fixtures, POI data, banner/captain cases and deterministic wave traces.
+- Completion state: COMPLETE — 774 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 26577 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1580. `crates/horizon-client/src/mobs/random_textures.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8ec6105cff57e2c4b596699df61908f1e67cbc6c`
+- Size: 23001 bytes; 595 logical lines
+- Coverage: 1–400, 401–595 (EOF)
+- Purpose: OptiFine/ETF-style random entity texture rule loading and variant-based texture selection.
+- Dependencies / cross-references: Depends on resource-pack reload, texture atlas/identifiers, entity species/variant data, biome/world conditions, predicate parsing and render state.
+- Implementation / logic: Loads random-texture definitions and conditions, resolves candidate variants and selects a matching texture for an entity/render state.
+- Findings: Optional resource-pack compatibility, not vanilla mob simulation; rule formats and condition sets are external compatibility contracts.
+- RustChunk relevance: Potential visual feature, but CPU and memory cost must be bounded on Android.
+- Decision: reference; optional client feature
+- 1.20.1 implications: Keep outside the initial 1.20.1 gameplay/protocol core; implement only an explicitly scoped optional OptiFine/ETF subset.
+- Follow-up checks: Verify rule precedence, random group choice, fallback, reload invalidation, variant/biome predicates and cache memory.
+- RustChunk implementation mapping: RustChunk optional entity-texture compatibility service feeding the versioned renderer.
+- Evidence required before adoption: Resource-pack fixtures, OptiFine/ETF behavior references, deterministic selection tests, reload/leak tests and Android memory/frame-time profiles.
+- Completion state: COMPLETE — 595 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 23001 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1581. `crates/horizon-client/src/mobs/ravager.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `15ad5ec41adfa402d20c40c7f766c20c477582aa`
+- Size: 11473 bytes; 337 logical lines
+- Coverage: 1–337 (EOF)
+- Purpose: Ravager charge and melee attacks, stun/roar state, knockback, damage reactions and foliage/block interaction.
+- Dependencies / cross-references: Depends on raid/illager targets, movement control, shield blocking, damage/knockback, mobGriefing, block tags, sound and animation events.
+- Implementation / logic: Registers goals and targets; manages charging, attack timing, roar/stun reactions, shield interaction and block/plant destruction.
+- Findings: Ravager is target-era; Torchflower and Pitcher Plant destruction paths in this snapshot are later and must be filtered.
+- RustChunk relevance: Useful hostile raid-mob behavior and collision/damage feedback.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Keep 1.20.1 attack/stun behavior; remove later crop species and verify mobGriefing/block rules.
+- Follow-up checks: Compare charge distance/speed, reach/damage, shield stun and roar timing, knockback, block tags and raid target rules.
+- RustChunk implementation mapping: RustChunk 1.20.1 Ravager AI and server-authoritative attack/block-change adapter.
+- Evidence required before adoption: 1.20.1 Ravager source/mappings, shield/damage fixtures, block-tag export, deterministic attack traces and raid target tests.
+- Completion state: COMPLETE — 337 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 11473 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1582. `crates/horizon-client/src/mobs/render.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f5571b282382d42b639d4e52782b9d12a7c3d7ed`
+- Size: 153430 bytes; 3984 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–3200, 3201–3600, 3601–3984 (EOF)
+- Purpose: Shared mob model rendering, pose assembly, geometry/vertex generation, model layers, textures and CPU/GPU rendering paths.
+- Dependencies / cross-references: Depends on entity model/layer definitions, pose transforms, texture/atlas assets, render pipeline/shaders, GPU capabilities, equipment and entity render state.
+- Implementation / logic: Builds model poses and render layers, transforms geometry into draw data and routes eligible geometry through GPU paths with CPU/fallback handling.
+- Findings: Contains useful shared renderer architecture but also many later-version entity/model identifiers: Happy Ghast, Nautilus, Sulfur Cube, Copper Golem, Breeze, Creaking, Bogged and Spear-era assets.
+- RustChunk relevance: Potentially important for mob rendering, but it is a client renderer subsystem, not Forge compatibility or game simulation.
+- Decision: rewrite required; optional client rendering; version-specific
+- 1.20.1 implications: Reconstruct model/layer registries from 1.20.1 and isolate rendering from server-authoritative simulation; adopt GPU paths only after visual parity and device profiling.
+- Follow-up checks: Verify target model/layers, armor/eyes, pose transforms, vertex winding/normals, CPU fallback, shader limits and Android allocations.
+- RustChunk implementation mapping: RustChunk 1.20.1 entity renderer with versioned model registry, shared pose builder and optional GPU backend.
+- Evidence required before adoption: 1.20.1 model/layer/resource exports, render golden images, CPU/GPU parity fixtures, shader capability checks and Android frame-time/memory benchmarks.
+- Completion state: COMPLETE — 3984 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 153430 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1583. `crates/horizon-client/src/mobs/riders.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a7eee679cb39fef288f352efbf95d00a7c8b3c90`
+- Size: 15545 bytes; 399 logical lines
+- Coverage: 1–399 (EOF)
+- Purpose: Entity riding relationships, passenger seat offsets, jockey/trap mounting, dismount and rider-driven movement.
+- Dependencies / cross-references: Depends on vehicle/passenger graph, entity dimensions/pose, mount eligibility, movement controls, player input, collision and riding NBT/packets.
+- Implementation / logic: Calculates passenger placement/offsets, manages rider/vehicle interactions and dismount, and handles species-specific jockey/trap-rider cases.
+- Findings: Mounting is core 1.20.1 behavior, but current entries include later Camel/Husk, Nautilus and Sulfur Cube seat layouts; protocol and vehicle authority must match the target.
+- RustChunk relevance: Important for vanilla mounts and modded riding interoperability, especially server packet/state parity.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild passenger graph, offsets and dismount rules from 1.20.1; filter later entities and preserve server authority in multiplayer.
+- Follow-up checks: Verify passenger order, boats/minecarts/horses, jockey spawn, collision/dismount safety, teleport and metadata/packet order.
+- RustChunk implementation mapping: RustChunk 1.20.1 passenger graph and versioned vehicle/rider placement service.
+- Evidence required before adoption: 1.20.1 mappings/protocol fixtures, mount/dismount traces, NBT, seat transform goldens and multiplayer vehicle captures.
+- Completion state: COMPLETE — 399 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 15545 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1584. `crates/horizon-client/src/mobs/seen_grid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e4f5b1dd8bc6598bff2f1c8810f1c7320c4f29a1`
+- Size: 5540 bytes; 148 logical lines
+- Coverage: 1–148 (EOF)
+- Purpose: Spatial broad-phase grid for grouping entity bounding boxes and querying nearby collision candidates.
+- Dependencies / cross-references: Depends on entity AABBs, world/chunk coordinates, entity insertion/removal/movement and stable iteration/snapshot order.
+- Implementation / logic: Partitions mob bounds into fixed 4-block cells and returns nearby candidates; falls back to broader scanning for unbounded queries.
+- Findings: Internal acceleration structure, not vanilla semantics. Correctness depends on no missed boundary-crossing boxes and deterministic candidate order.
+- RustChunk relevance: Potential CPU optimization for collision and nearby-entity queries; no gain has been measured.
+- Decision: reference; performance candidate; parity required
+- 1.20.1 implications: Evaluate only behind parity tests against exhaustive 1.20.1 entity queries; never alter collision results.
+- Follow-up checks: Test negative coordinates, cell edges, large entities, movement, removal, duplicates and ordering; benchmark density distributions on Android.
+- RustChunk implementation mapping: RustChunk optional entity spatial index used by collision/AI query adapters after exact results are proven.
+- Evidence required before adoption: Property tests versus exhaustive AABB scans, deterministic ordering fixtures, lifecycle stress and Android CPU/allocation benchmarks.
+- Completion state: COMPLETE — 148 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5540 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1585. `crates/horizon-client/src/mobs/shulker.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b37dc28fc49ca7f638df02281f7ba0a0b5205b81`
+- Size: 22569 bytes; 657 logical lines
+- Coverage: 1–400, 401–657 (EOF)
+- Purpose: Shulker attachment/facing, shell opening, entity pushing, bullet homing/attacks and teleport behavior.
+- Dependencies / cross-references: Depends on block-face attachment/survival, target visibility, projectile homing, collision, damage, teleport validation and synchronized animation.
+- Implementation / logic: Chooses/persists an attach face, opens/closes shell, pushes entities as bounds expand, fires homing bullets and searches valid teleport destinations.
+- Findings: Shulker and Shulker Bullet are target-era; interaction with Happy Ghast and other modern entities is newer and must be removed.
+- RustChunk relevance: Useful End-mob AI, projectile tracking and block-attached entity behavior.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Keep target-era behavior while rebuilding target checks, face order, projectile NBT/packets and collision against 1.20.1.
+- Follow-up checks: Verify attach-face priority, support validity, shell hitbox, bullet homing/deflection, teleport search, damage and RNG.
+- RustChunk implementation mapping: RustChunk 1.20.1 Shulker state/AI, block-face attachment service and Shulker Bullet adapter.
+- Evidence required before adoption: 1.20.1 source/mappings, attach/detach NBT, projectile trajectories, collision tests and seeded teleport traces.
+- Completion state: COMPLETE — 657 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 22569 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1586. `crates/horizon-client/src/mobs/skin.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `62967bc7bed14deeb3a36df8200c998b4e183a47`
+- Size: 30550 bytes; 794 logical lines
+- Coverage: 1–400, 401–794 (EOF)
+- Purpose: GPU skinning/cache path for mob geometry and pose-specific draw jobs, with CPU fallback.
+- Dependencies / cross-references: Depends on GPU buffer/vertex formats, model meshes/normals, pose matrices, draw-job cache keys, render-thread lifecycle and shader capabilities.
+- Implementation / logic: Flattens/caches model geometry, derives pose/draw jobs, reuses matching work and sends eligible models through GPU while falling back for unsupported geometry.
+- Findings: Potentially useful architecture, but asset/test expectations target newer resources; no CPU/GPU parity test, build or Android benchmark has run.
+- RustChunk relevance: Relevant to mobile FPS goals, but must be optional and guarded by capability checks; benefit is unproven.
+- Decision: reference; optional client feature; performance candidate
+- 1.20.1 implications: Port only after 1.20.1 model parity; keep CPU fallback, bounded caches and invalidation on reload/device loss.
+- Follow-up checks: Measure frame time, allocations, buffer uploads, cache hit/miss, shader compatibility and visual equivalence on target Android GPU and fallback paths.
+- RustChunk implementation mapping: RustChunk optional GPU entity-skinning backend integrated with the 1.20.1 renderer and CPU fallback.
+- Evidence required before adoption: 1.20.1 model fixtures, CPU/GPU image parity, shader compile tests, cache invalidation and Android frame-time/memory profiles.
+- Completion state: COMPLETE — 794 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 30550 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1587. `crates/horizon-client/src/mobs/sniffer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a5a4ee8ef21c8c5e65d61057c007ac7954e6410d`
+- Size: 7430 bytes; 216 logical lines
+- Coverage: 1–216 (EOF)
+- Purpose: Sniffer sniffing, digging, seed-drop state, remembered excavation positions and model/animation state.
+- Dependencies / cross-references: Depends on Sniffer Brain goals/memories/sensors, diggable block tags, seed loot, world time, dimensions, NBT and synchronized animation.
+- Implementation / logic: Stores sniff/dig counters and state, tracks positions dug, emits seed/drop and sound/particle events and supplies pose/render information.
+- Findings: Sniffer was added in Minecraft 1.20 and exists in 1.20.1. This file is state/animation support, not a complete AI implementation.
+- RustChunk relevance: Useful target-era mob state and client animation reference; AI/loot are separate.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Retain target-era state while implementing its 1.20.1 Brain/task registry, block tags, seed loot and NBT independently.
+- Follow-up checks: Compare sniff cooldown/range, dig duration, block eligibility, remembered positions, seed loot, baby size and synchronized event order.
+- RustChunk implementation mapping: RustChunk 1.20.1 Sniffer state codec, Brain task adapter and client sniff/dig animation handler.
+- Evidence required before adoption: 1.20.1 Sniffer source/mappings, brain-memory registry, diggable tags, loot table, NBT fixtures and seeded behavior traces.
+- Completion state: COMPLETE — 216 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 7430 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1588. `crates/horizon-client/src/mobs/spawn_rules.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5e2079ebcc84857c4a9dcfc77f3af6006d763fd4`
+- Size: 25769 bytes; 756 logical lines
+- Coverage: 1–400, 401–756 (EOF)
+- Purpose: Mob spawn placement and validity rules using light, biome, block/fluid state, slime chunks and spawn reasons.
+- Dependencies / cross-references: Depends on spawn-placement registry, block/biome tags, light levels, fluid state, heightmaps, collision shapes, dimension data and spawn reason.
+- Implementation / logic: Evaluates placement categories and species conditions, including water/lava/ground placement, light checks, slime-chunk logic and cached spawn-spot classification.
+- Findings: Rules are highly version/data-sensitive and many species/reasons in the snapshot are newer than 1.20.1. The spot table is derived from block registry/shape data.
+- RustChunk relevance: Important for local world simulation or parity tests; a multiplayer client must not override server spawn authority.
+- Decision: rewrite required; version-specific; server-side reference
+- 1.20.1 implications: Rebuild the 1.20.1 SpawnPlacements registry and tag exports; separate integrated-host simulation from remote-client prediction.
+- Follow-up checks: Compare retained EntityType placement, heightmap, light/sky rules, biome/block/fluid tags, mobGriefing and slime-chunk seed behavior.
+- RustChunk implementation mapping: RustChunk 1.20.1 versioned spawn-placement registry and bounded block-shape lookup cache.
+- Evidence required before adoption: 1.20.1 source/mappings, entity/biome/block tags, light/heightmap fixtures, dimension tests and seeded slime-chunk/spawn traces.
+- Completion state: COMPLETE — 756 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 25769 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1589. `crates/horizon-client/src/mobs/spawn_selection.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `04f12db2122d8cb7ea42747e7723291093e379fb`
+- Size: 49165 bytes; 1382 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1382 (EOF)
+- Purpose: Natural mob spawn selection, category caps, weighted pack placement, player distance and structure/dimension modifiers.
+- Dependencies / cross-references: Depends on NaturalSpawner, entity categories and spawn costs, biome/structure spawn lists, chunk generation, player/respawn positions, spawn rules and level RNG.
+- Implementation / logic: Computes eligible categories/caps, chooses spawn entries and pack positions, applies structure modifiers and spawn-charge/energy accounting.
+- Findings: Models server-side world spawning and chunk-generation, not just client visuals. New species and iteration/cache assumptions need target 1.20.1 verification.
+- RustChunk relevance: Behavioral reference for integrated-world parity tests, not authority for a remote multiplayer client.
+- Decision: rewrite required; version-specific; server-side reference
+- 1.20.1 implications: Recreate 1.20.1 NaturalSpawner semantics in local-host mode; keep remote spawning server-authoritative and preserve Java RNG order.
+- Follow-up checks: Verify category caps, per-player additions, spawn charge, pack attempts, nearest-player order, structure overrides, respawn exclusion and chunk-gen RNG.
+- RustChunk implementation mapping: RustChunk 1.20.1 NaturalSpawner-compatible service behind an integrated-world authority boundary.
+- Evidence required before adoption: 1.20.1 NaturalSpawner source/mappings, biome/structure spawn data, deterministic seeded world fixtures and server spawn traces.
+- Completion state: COMPLETE — 1382 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 49165 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1590. `crates/horizon-client/src/mobs/spawner.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b4d65d1c7a104f31aaf68f99446307f670a2a14a`
+- Size: 30903 bytes; 836 logical lines
+- Coverage: 1–400, 401–800, 801–836 (EOF)
+- Purpose: Vanilla Monster Spawner block-entity state, spawn potentials, delay/near-player checks and client visual feedback.
+- Dependencies / cross-references: Depends on spawner block-entity NBT, SpawnData/SpawnPotentials codecs, entity registry, placement/obstruction rules, player proximity, block events and particles.
+- Implementation / logic: Loads/saves spawner state, selects weighted spawn data, manages delay/count checks, attempts spawning and emits events, sounds and spin/particle state.
+- Findings: Ordinary Monster Spawner exists in 1.20.1. TrialSpawner and its newer config/state are separate 1.21 features.
+- RustChunk relevance: Relevant to local world parity and spawner visuals; remote operation remains server-authoritative.
+- Decision: adaptable; version-specific; server-side reference
+- 1.20.1 implications: Use the classic 1.20.1 MobSpawnerBlockEntity schema and logic; exclude TrialSpawner and preserve legacy SpawnData NBT.
+- Follow-up checks: Verify delay ranges, spawn count/range, nearby entity cap, player activation radius, obstruction and client spin/event timing.
+- RustChunk implementation mapping: RustChunk 1.20.1 Monster Spawner codec, spawn service and client visual adapter.
+- Evidence required before adoption: 1.20.1 Java source/mappings, spawner NBT, SpawnData/SpawnPotentials fixtures, seeded weighted picks and block-event goldens.
+- Completion state: COMPLETE — 836 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 30903 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1591. `crates/horizon-client/src/mobs/spawning.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ed4f27d08db5246617b1c7c81f70567ce52dcddd`
+- Size: 19624 bytes; 495 logical lines
+- Coverage: 1–400, 401–495 (EOF)
+- Purpose: Local difficulty and mob finalizeSpawn initialization: variants, equipment, attributes, spawn reason and state.
+- Dependencies / cross-references: Depends on local/regional difficulty, spawn reason, species finalizeSpawn, loot/equipment tables, item registries, attributes, NBT and Java RNG.
+- Implementation / logic: Calculates local difficulty and finalizes mob state, rolling variants/equipment/weapons and initializing special spawn or vehicle relationships.
+- Findings: Highly version-sensitive; snapshot includes later Spear, Copper Armor, Camel Husk, Nautilus and Sulfur Cube branches.
+- RustChunk relevance: Reference for spawn initialization, but local spawning is server/world authority and exact RNG compatibility is critical.
+- Decision: rewrite required; version-specific; server-side reference
+- 1.20.1 implications: Rebuild retained 1.20.1 finalizeSpawn methods and legacy equipment/attribute/item NBT; exclude later species/items.
+- Follow-up checks: Compare difficulty, spawn-reason branches, armor/weapon chance, variants, baby/vehicle initialization and RNG order.
+- RustChunk implementation mapping: RustChunk 1.20.1 local-difficulty and species-finalize service with legacy equipment serialization.
+- Evidence required before adoption: 1.20.1 mappings/source, per-species equipment tables, difficulty fixtures, legacy NBT round-trips and seeded spawn traces.
+- Completion state: COMPLETE — 495 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 19624 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1592. `crates/horizon-client/src/mobs/spear_use.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d18bfdda35962f8d8f9536d0a1ef78e9f6282bb7`
+- Size: 31642 bytes; 895 logical lines
+- Coverage: 1–400, 401–800, 801–895 (EOF)
+- Purpose: Spear/Kinetic Weapon use, stab/charge behavior, knockback/dismount and spear-related hostile mob tactics.
+- Dependencies / cross-references: Depends on later Spear item/damage types, modern item components, mob Brain tasks, mount state and attack events.
+- Implementation / logic: Implements spear charge/approach/attack behavior and zombie/piglin tactics, including dismount/push and kinetic damage.
+- Findings: Spear and KineticWeapon behavior are absent from the Minecraft 1.20.1 baseline; associated DamageKind and task branches are later additions.
+- RustChunk relevance: No direct target-era gameplay adoption; retain only if a later-version roadmap explicitly adds this item.
+- Decision: exclude; post-1.20.1
+- 1.20.1 implications: Exclude the module and all Spear item/damage/task identifiers from the 1.20.1 build.
+- Follow-up checks: Confirm 1.20.1 item, damage-type and entity-goal registries contain no Spear/Kinetic Weapon dependency.
+- RustChunk implementation mapping: No 1.20.1 mapping; do not create a placeholder item or protocol identifier.
+- Evidence required before adoption: 1.20.1 item/damage/entity-goal registries and mappings proving the feature is absent.
+- Completion state: COMPLETE — 895 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 31642 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1593. `crates/horizon-client/src/mobs/species.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cc2379c9010eb7747976b44a507d7b14ae7ff870`
+- Size: 44431 bytes; 1718 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1718 (EOF)
+- Purpose: Central mob species metadata: entity classification, dimensions, movement flags, foods/tags, textures, sounds, model and animation identifiers.
+- Dependencies / cross-references: Depends on EntityType registry, attributes/dimensions/poses, biome and item tags, sounds, model layers, renderer registry and Brain/goal families.
+- Implementation / logic: Defines per-species metadata and helper lookups used by entity construction, rendering, movement, food/tempt predicates and AI dispatch.
+- Findings: Registry mixes post-1.20.1 species/data. Tadpole itself is 1.20.1 content; only its later Brain redesign is excluded, not the entity or target-era AI.
+- RustChunk relevance: Foundational versioned mob registry reference, but cannot be consumed without filtering and target data exports.
+- Decision: rewrite required; core registry reference; version-specific
+- 1.20.1 implications: Generate strict 1.20.1 EntityType/attribute/dimension/food/sound/model metadata; preserve Tadpole and its target-era goal AI; remove later species.
+- Follow-up checks: Diff species list, dimensions, attributes, tags, sounds, model layers and AI family against 1.20.1 registries/mappings.
+- RustChunk implementation mapping: RustChunk generated 1.20.1 mob metadata registry consumed by simulation and renderer through versioned IDs.
+- Evidence required before adoption: 1.20.1 EntityType/attribute/tag/sound/model exports, dimension fixtures and entity construction tests for retained species.
+- Completion state: COMPLETE — 1718 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 44431 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1594. `crates/horizon-client/src/mobs/strider.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ff5796048fa70d13ef2fb02f648faff48435413f`
+- Size: 5992 bytes; 170 logical lines
+- Coverage: 1–170 (EOF)
+- Purpose: Strider movement and AI on lava, warmth/cold speed changes, floating and rider behavior.
+- Dependencies / cross-references: Depends on lava/fluid pathfinding, warm-block tags, temperature modifier, player steering, mount state and movement controls.
+- Implementation / logic: Registers goals and controls lava-seeking, warm/cold state, speed modifier, floating and animation flags.
+- Findings: Strider is target-era content; warm-block tag contents, search order and movement/temperature timing require 1.20.1 verification.
+- RustChunk relevance: Useful distinctive Nether mount and fluid-navigation behavior.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Retain target-era Strider AI and movement; adapt tags, attributes and rider controls from 1.20.1.
+- Follow-up checks: Verify warm-block tag, lava path cost, cold/warm speed modifier, float/steering, dismount and passenger interactions.
+- RustChunk implementation mapping: RustChunk 1.20.1 Strider AI, lava navigation profile and mount input adapter.
+- Evidence required before adoption: 1.20.1 source/mappings, warm-block tag export, seeded path traces and rider/movement tests.
+- Completion state: COMPLETE — 170 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5992 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1595. `crates/horizon-client/src/mobs/sulfur_cube.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `935b1bd250982434eca6a663bea2857956084b0c`
+- Size: 47122 bytes; 1390 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1390 (EOF)
+- Purpose: Sulfur Cube species, archetypes, swallowed-block/item state, bounce/friction variants, fuse and explosion behavior.
+- Dependencies / cross-references: Depends on later species registration, archetype item tags, swallowed block/item data, entity physics, damage immunity, fuse/explosion and render assets.
+- Implementation / logic: Implements archetype selection, swallowing/storing blocks or items, physical response variants, ignition/fuse, explosion and specialized state/animation.
+- Findings: Sulfur Cube and its archetypes are later-version content and absent from the 1.20.1 entity/item/block registries.
+- RustChunk relevance: No direct 1.20.1 gameplay use; broad kinetic-mob ideas do not establish vanilla compatibility.
+- Decision: exclude; post-1.20.1
+- 1.20.1 implications: Exclude the species, archetype tags, item IDs, damage immunity and explosion logic from the 1.20.1 build.
+- Follow-up checks: Verify 1.20.1 EntityType/item/block registries contain no Sulfur Cube or archetype dependencies.
+- RustChunk implementation mapping: No 1.20.1 implementation mapping; optional later-version research only.
+- Evidence required before adoption: 1.20.1 entity/item/block registries and mappings proving species and archetype IDs are absent.
+- Completion state: COMPLETE — 1390 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 47122 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1596. `crates/horizon-client/src/mobs/sync.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dd195d7697c83ec8dcecf493824538be1f77649f`
+- Size: 5759 bytes; 136 logical lines
+- Coverage: 1–136 (EOF)
+- Purpose: Mob synchronized pose flags, entity-event routing and client animation/state update dispatch.
+- Dependencies / cross-references: Depends on entity metadata indices, entity event IDs, pose flags, species registry, client tick scheduling and server-to-client packets.
+- Implementation / logic: Maps entity events and synchronized state to per-species pose/animation updates, separating server events from local client interpolation/ticks.
+- Findings: Synchronization boundary matters for 1.20.1, but the table includes later Warden, Breeze, Creaking, Copper Golem, Armadillo and Camel Husk species.
+- RustChunk relevance: Essential architecture for correct multiplayer visuals, provided metadata and event IDs exactly match 1.20.1.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild mappings from 1.20.1 metadata/event registries; keep local animation separate from server-authoritative AI.
+- Follow-up checks: Verify metadata indices, pose transitions, event IDs, interpolation order, login/reload and server/client tick responsibilities.
+- RustChunk implementation mapping: RustChunk 1.20.1 mob metadata/event decoder feeding a separate client animation state machine.
+- Evidence required before adoption: 1.20.1 protocol/source mappings, metadata captures, event packet fixtures, pose transition tests and multiplayer traces.
+- Completion state: COMPLETE — 136 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 5759 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1597. `crates/horizon-client/src/mobs/tame.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3290aa2aa492bc22a97c6ad27a250c66c5deee2a`
+- Size: 70470 bytes; 1975 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1975 (EOF)
+- Purpose: Tameable Wolf/Cat/Ocelot/Parrot behavior: ownership, sitting, following, defense, anger, begging, relaxation and animations.
+- Dependencies / cross-references: Depends on owner UUID/entity NBT, goal/target selectors, tame items/food tags, path/teleport, damage, effects, bed/chest blocks, game rules and synchronized events.
+- Implementation / logic: Registers tameable goals and target rules; follows/teleports to owners, responds to attacks, maintains wolf anger, handles wet-wolf shake and cat sleep/gifts, and computes poses/textures.
+- Findings: Core tameable species exist in 1.20.1, but snapshot has later Wolf variants/equipment and changed registry/texture state. Behavior and field semantics need target-era checks.
+- RustChunk relevance: High relevance to survival gameplay and synchronized mob behavior; owner/NBT and event parity are essential.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild owner/tame/anger state and goal order from 1.20.1; keep target-era Cat/Ocelot/Wolf/Parrot behavior and exclude later Wolf variants/equipment.
+- Follow-up checks: Verify owner UUID NBT, tame-item interactions, sit/follow/teleport thresholds, owner defense, universal anger, wet-shake events, cat gifts, variant selection and RNG order.
+- RustChunk implementation mapping: RustChunk 1.20.1 tameable state/goal service, legacy owner NBT codec and server/client event adapter.
+- Evidence required before adoption: 1.20.1 source/mappings, tameable NBT fixtures, goal traces, owner combat cases, sleep/gift loot and synchronized event captures.
+- Completion state: COMPLETE — 1975 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 70470 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1598. `crates/horizon-client/src/mobs/trader.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `324e9d870042189ebef622a19bb68e86c2974fca`
+- Size: 9621 bytes; 322 logical lines
+- Coverage: 1–322 (EOF)
+- Purpose: Wandering Trader routine: invisibility potion/milk, hostile avoidance, trading pause, visit movement, home restriction and despawn delay.
+- Dependencies / cross-references: Depends on effects/potion/milk, trader inventory/trades, hostile species, navigation, home radius, trading-player state, sounds and despawn NBT.
+- Implementation / logic: Registers drink/avoid/trade/wander/restriction goals; applies invisibility or clears effects, moves to a visit target, pauses while trading and counts down despawn.
+- Findings: Wandering Trader exists in 1.20.1. Threat species list and potion/ItemStack effect handling need target mappings and legacy serialization.
+- RustChunk relevance: Useful vanilla NPC AI reference; offers and merchant inventory belong to a separate trading subsystem.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Keep target-era routines but connect potion/milk and trade state to 1.20.1 item/effect and merchant packet/NBT behavior.
+- Follow-up checks: Verify 32-tick drink, day/night conditions, invisibility duration, milk clearing, hostile avoidance, home distance, trade pause and 48000-tick despawn.
+- RustChunk implementation mapping: RustChunk 1.20.1 Wandering Trader goals/state integrated with merchant inventory and effects.
+- Evidence required before adoption: 1.20.1 source/mappings, trader NBT/trade packets, effect fixtures, threat-target tests and deterministic despawn timing.
+- Completion state: COMPLETE — 322 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 9621 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1599. `crates/horizon-client/src/mobs/transport_items.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8d36dcbfd8a527d4e0304bd1fd3957e06bba1b07`
+- Size: 29219 bytes; 827 logical lines
+- Coverage: 1–400, 401–800, 801–827 (EOF)
+- Purpose: Copper Golem chest-to-chest item transport: chest search, queue/open interaction, pickup/place and visited/unreachable memory.
+- Dependencies / cross-references: Depends on Copper Golem and Brain memories, copper chest blocks/tags, double-chest/container APIs, item events, pathfinding and opener state.
+- Implementation / logic: Searches chest block entities, chooses source/destination, queues behind another golem, opens/interacts for a fixed duration, moves up to 16 items and records visited/unreachable positions.
+- Findings: Copper Golem and copper chest transport were introduced after 1.20.1; this module relies on later Brain tasks, blocks and item/container state.
+- RustChunk relevance: No direct 1.20.1 functionality; do not use copper-chest interactions as a generic vanilla container layer.
+- Decision: exclude; post-1.20.1
+- 1.20.1 implications: Exclude this module, transport memories, copper-chest tags and related block/event IDs from the 1.20.1 baseline.
+- Follow-up checks: Confirm 1.20.1 registries contain no Copper Golem or copper chest; keep ordinary chest/container code separately versioned.
+- RustChunk implementation mapping: No 1.20.1 implementation mapping; future-version research only.
+- Evidence required before adoption: 1.20.1 entity/block/item/tag registries and mappings confirming absence of Copper Golem and copper chest.
+- Completion state: COMPLETE — 827 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 29219 byte size match the source tree; embedded tests, where present, were inspected only and not run.
+
+### 1600. `crates/horizon-client/src/mobs/trial_spawner.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d210178aa8cb4935c7d6b75367b40570010ddb4b`
+- Size: 48901 bytes; 1256 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1256 (EOF)
+- Purpose: Trial Spawner configuration/state machine: player detection, waves, ominous conversion, reward ejection, item spawners and cooldown.
+- Dependencies / cross-references: Depends on Trial Spawner block-entity/config codecs, Trial Omen/Bad Omen effects, Trial Chamber loot/config, entity spawn/loot services, UUID tracking and block events.
+- Implementation / logic: Loads/saves normal and ominous configs, detects players, converts Bad Omen, spawns configured waves, tracks mobs, ejects per-player rewards and runs cooldown/item-spawner events.
+- Findings: Trial Spawners, Trial Omen and Trial Chambers are 1.21 content and absent from 1.20.1; ordinary Monster Spawner in spawner.rs is a separate feature.
+- RustChunk relevance: No direct 1.20.1 gameplay adoption.
+- Decision: exclude; post-1.20.1
+- 1.20.1 implications: Exclude TrialSpawner block/entity/state, Trial Omen and trial-specific packet, loot/config and resource identifiers from 1.20.1.
+- Follow-up checks: Confirm absence of trial_spawner block entity/state, effects, loot tables and registries in 1.20.1; retain vanilla Mob Spawner independently.
+- RustChunk implementation mapping: No 1.20.1 mapping; do not alias TrialSpawner to ordinary Monster Spawner.
+- Evidence required before adoption: 1.20.1 registries, effects, block-entity types and resource manifests proving Trial Spawner/Trial Omen absent.
+- Completion state: COMPLETE — 1256 logical lines read through EOF in the listed contiguous coverage; pinned blob SHA and 48901 byte size match the source tree; embedded tests, where present, were inspected only and not run.

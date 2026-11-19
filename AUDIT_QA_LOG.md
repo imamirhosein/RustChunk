@@ -1132,3 +1132,18 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No source/application code changed. Only the audit documentation is included in this checkpoint.
 - Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
 - Checkpoint 1551–1575 is closed. Continue with 1576–1600 under the user's already-issued authorization; stop at entry 1600 for fresh authorization.
+
+## Source-audit checkpoint 1576–1600 — 2026-11-19
+
+- Completed entries 1576–1600 inclusive (25/25) from pinned Starling source tree `5432370d573642041585c69b40fb045b27133488`.
+- All 25 source files were read through EOF. Files over 400 logical lines were read in consecutive, gap-free chunks no larger than 400 lines; exact line counts and coverage are recorded in the Ledger.
+- All 25 paths, blob SHAs and byte sizes match the pinned source tree. New Ledger entries contain exactly the 15 required fields once, with semantic field alignment.
+- Index now contains 1,600 sequential rows and 1,600 unique paths. The active Ledger contains 200 entries (1401–1600), each with exactly 15 fields; Index paths and Decision values align with the Ledger.
+- Ledger semantic correction: final QA found entries 1551–1575 had 15 labels but the separate Purpose value was omitted, shifting semantic values from Purpose onward and leaving Evidence as `undefined`. Those 25 records have been rebuilt: the Index description is now Purpose; prior values are correctly assigned to Dependencies, Implementation, Findings, Relevance, Implications, Follow-up, Mapping and Evidence. Source SHA, size, coverage, path and Decision were preserved.
+- Target-era references include Piglin/Hoglin, Polar Bear, Rabbit, Raider, Ravager, Shulker, Sniffer, Strider, tameables and Wandering Trader. SpawnRules/SpawnSelection/FinalizeSpawn and ordinary Monster Spawner are server/world-authoritative systems; they are useful for local-host parity but do not supersede a remote server.
+- Later-only content excluded from 1.20.1 includes Spear/Kinetic Weapon, Sulfur Cube, Copper Golem chest transport, Trial Spawner/Trial Omen and their identifiers. Later species/model branches must also be filtered from render, sync and species registries.
+- `render.rs`, `skin.rs`, `random_textures.rs` and `seen_grid.rs` are optional renderer/performance architecture references. No FPS gain, CPU/memory improvement or GPU compatibility is claimed; Android profiling and visual parity remain unperformed.
+- Embedded tests were inspected as source only; none were executed. No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- No source/application code changed. Only audit documentation was updated.
+- Only `starling-1.20.1-port-audit` was updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
+- Reporting section 1551–1600 is closed. Stop at entry 1600 and wait for fresh explicit authorization before 1601–1650.
