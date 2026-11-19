@@ -1161,3 +1161,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No source/application code changed; only audit documentation is included in this checkpoint.
 - Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
 - Checkpoint 1601–1625 is closed. Continue with 1626–1650 under the user's existing authorization; stop at entry 1650 for fresh authorization.
+
+## Source-audit checkpoint 1626–1650 — 2026-11-19
+
+- Completed entries 1626–1650 inclusive (25/25) from pinned Starling source tree `5432370d573642041585c69b40fb045b27133488`.
+- Exact next-25 path order was recomputed from the non-truncated recursive tree after Index entries 1–1625; all 25 paths match the next unindexed blobs in order.
+- All 25 files were read through EOF. Files over 400 logical lines were read in consecutive, gap-free ranges no larger than 400 lines; exact coverage is in the Ledger.
+- All 25 blob SHAs and byte sizes match the pinned source tree; logical line counts and EOF coverage are recorded. Each new Ledger record has exactly 15 semantically aligned fields; Index paths and Decision values match the Ledger.
+- Findings: Starling native hooks/data are not Forge/FML; telemetry/overlay are diagnostics, not measured gains; ram_limit and random_tick_sections merit Android profiling; save.rs is explicitly 26.3 and its schema must be rebuilt for 1.20.1 while bounded I/O/LOD architecture may be studied separately.
+- Projectile/raid/patrol/portal/pose behavior is version-sensitive and often world/server-authoritative; remote multiplayer must consume server packets rather than simulate a competing world.
+- Embedded tests were inspected only; none were executed. No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- No source/application code changed; only audit documentation was updated.
+- Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1626–1650 closes reporting section 1601–1650 (50/50). Stop at entry 1650 and wait for fresh explicit authorization before 1651–1700.

@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (200/200 complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (25/200 complete; checkpoint 1601–1625 closed; checkpoint 1626–1650 remains authorized). Current 200-file stage: 1601–1800. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (200/200 complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (50/200 complete; checkpoints 1601–1625 and 1626–1650 closed; next checkpoint 1651–1675 awaits fresh authorization). Current 200-file stage: 1601–1800. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -1790,3 +1790,28 @@
 | 1623 | `crates/horizon-client/src/multiplayer.rs` | rewrite required; client UI; protocol-specific | Multiplayer list/edit/delete, ping/status/favicon, direct connect, LAN discovery, friend invite and reconnect UI. |
 | 1624 | `crates/horizon-client/src/music.rs` | adaptable; version-specific; optional client feature | Situational music selection, delay/frequency, fades, biome/dimension volume and music-layer UI. |
 | 1625 | `crates/horizon-client/src/native_client_hooks.rs` | reference; not Forge; architecture only | One-time native client hook table for menu/living/ingredient callbacks; not Forge event bus. |
+| 1626 | `ROADMAP.md` | reference; project planning only | Project roadmap and staged compatibility/feature plan. |
+| 1627 | `SYNC.md` | reference; workflow notes only | Repository synchronization and contributor handoff notes. |
+| 1628 | `crates/horizon-client/src/native_data.rs` | reference; native Rust extension data only; not Forge | Compile-time/runtime lookup of data files shipped by Starling native mods. |
+| 1629 | `crates/horizon-client/src/native_tombstone.rs` | adaptable; Android diagnostics | Bounded, privacy-conscious parser for Android protobuf tombstones. |
+| 1630 | `crates/horizon-client/src/nether_portal.rs` | adaptable; version-specific | Nether portal entry/cooldown state and entity transition timing. |
+| 1631 | `crates/horizon-client/src/no_resources.rs` | reference; launcher startup UX | Fallback screen when executable starts without launcher-prepared Minecraft files. |
+| 1632 | `crates/horizon-client/src/old_world.rs` | reference; world compatibility | Compatibility UI/state for old or customized worlds. |
+| 1633 | `crates/horizon-client/src/patrol.rs` | adaptable; version-specific; server-side | Pillager patrol spawning, leader selection and movement/target behavior. |
+| 1634 | `crates/horizon-client/src/perf_overlay.rs` | reference; optional diagnostics | On-screen performance overlay for frame/CPU/GPU samples. |
+| 1635 | `crates/horizon-client/src/performance.rs` | reference; performance diagnostics | Performance telemetry and sample aggregation for diagnostic overlay. |
+| 1636 | `crates/horizon-client/src/pick_item.rs` | rewrite required; version-specific | Pick-block/item behavior for client interaction. |
+| 1637 | `crates/horizon-client/src/platform.rs` | rewrite required; platform-specific | Platform abstraction for OS-specific client services. |
+| 1638 | `crates/horizon-client/src/portal_sections.rs` | adaptable; version-specific | Portal-related chunk/section lookup and bookkeeping. |
+| 1639 | `crates/horizon-client/src/pose.rs` | rewrite required; version-specific | Entity pose/dimension state for rendering and interaction bounds. |
+| 1640 | `crates/horizon-client/src/pregen.rs` | reference; optional offline utility | Chunk/world pre-generation scheduling and progress state. |
+| 1641 | `crates/horizon-client/src/preparer.rs` | rewrite required; launcher integration | Launcher preparation pipeline for game files. |
+| 1642 | `crates/horizon-client/src/preparer_install.rs` | reference; install UI | Install/preparation progress UI and state transitions. |
+| 1643 | `crates/horizon-client/src/projectiles.rs` | rewrite required; core reference; version-specific | Projectile simulation, collision, motion and entity-specific behavior. |
+| 1644 | `crates/horizon-client/src/raid.rs` | rewrite required; version-specific; server-authoritative | Raid lifecycle, wave composition, omen trigger, victory/loss and rewards. |
+| 1645 | `crates/horizon-client/src/ram_limit.rs` | reference; mobile memory governor | Memory-pressure governor reducing expensive far-terrain/render work. |
+| 1646 | `crates/horizon-client/src/random_tick_sections.rs` | adaptable; performance reference; version-specific | Section-level cache/index for random-tick candidate selection. |
+| 1647 | `crates/horizon-client/src/recipe_book.rs` | rewrite required; version-specific | Recipe-book state, filtering, grouping and recipe unlock model. |
+| 1648 | `crates/horizon-client/src/recipe_book_screen.rs` | reference; optional client UI | Recipe-book screen, search, overlay recipes, ghost slots and tooltips. |
+| 1649 | `crates/horizon-client/src/save.rs` | rewrite required; core persistence/performance reference; version-specific | World/chunk/entity/POI persistence, region I/O, player/world save data, async writing and saved-chunk LOD. |
+| 1650 | `crates/horizon-client/src/save/gateway.rs` | reference; optional legacy migration | One-time migration of legacy Horizon End Gateway exits into chunk block-entity NBT. |

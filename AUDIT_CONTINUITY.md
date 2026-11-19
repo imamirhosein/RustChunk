@@ -243,3 +243,16 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Checkpoint commit SHA is recorded after atomic five-document commit/read-back below.
 - **Next: inspect 1626–1650**, serially and with maximum 400-line chunks. Stop at **1650** and wait for fresh authorization.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest verified checkpoint — 1626–1650 — 2026-11-19
+
+- Completed entries: **1626–1650 inclusive (25/25)** from pinned source `5432370d573642041585c69b40fb045b27133488`.
+- Active 200-file stage: **1601–1800**, now **50/200 complete**.
+- Reporting section: **1601–1650**, now **50/50 closed** in two checkpoints: 1601–1625 and 1626–1650.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **50 entries** (1601–1650), each with exactly 15 fields. Index: **1,650 sequential entries and 1,650 unique paths**.
+- The 25 files 1626–1650 were read through EOF; files over 400 lines were read in contiguous chunks no larger than 400. Exact source SHA, size and coverage are in the Ledger.
+- Exact next-25 path order was verified against the pinned recursive tree; Index/Ledger path and Decision values align for 1626–1650.
+- Findings: Starling native hooks/data are not Forge/FML; telemetry/overlay are diagnostics, not measured gains; ram_limit and random_tick_sections merit Android profiling; save.rs is 26.3 and its schema must be rebuilt for 1.20.1 while bounded I/O/LOD architecture may be studied separately.
+- No source/application code changed. Embedded tests were inspected but not run. No build, unit test, benchmark, APK, device, Forge or server validation was performed.
+- **STOP at 1650.** Do not inspect 1651 or later until fresh explicit user authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
