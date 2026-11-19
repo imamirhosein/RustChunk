@@ -1728,3 +1728,342 @@
 - RustChunk implementation mapping: Split gameplay/advancements/state, predicates_1_20_1, triggers_1_20_1, persistence and UI.
 - Evidence required before adoption: Per-trigger Java 1.20.1 oracle, protocol parity and progress round-trip/reward tests.
 - Completion state: 2,341 logical lines read in six sections. No tests.
+### 1101. `crates/horizon-client/src/game/agent_navigation.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f34839707a18fadc327859195328fa94e6a2916f`
+- Size: 13927 bytes; 439 logical lines
+- Coverage: 1–400; 401–439
+- Purpose: A* block-cell path search and progress tracking for Horizon external-agent navigation.
+- Dependencies / cross-references: Agent task engine, world collision/fluid facts, loaded-chunk and blocked-edge state, geometry.
+- Implementation / logic: Searches walkable cells, supports bounded ascent/drop, avoids unloaded/blocked cells, limits nodes and reconstructs routes.
+- Findings: Horizon-only navigation tool, not vanilla player movement or mob pathfinding; costs and limits are project policy.
+- RustChunk relevance: Optional path-search/QA reference, not core gameplay.
+- Decision: **adaptable; reference; optional/future — keep only generic search ideas; do not import agent commands.**
+- 1.20.1 implications: Rebuild movement/collision/fluid rules from Java 1.20.1.
+- Follow-up checks: Test slabs, stairs, fences, liquids, doors, unloaded edges and drops.
+- RustChunk implementation mapping: Possible tools/navigation/path_search.rs; not created.
+- Evidence required before adoption: Java path oracle and bounded memory/node tests; prove unloaded chunks are never traversed.
+- Completion state: COMPLETE — 439 lines read in sections 1–400 and 401–439; SHA/bytes match pinned tree; no tests.
+
+### 1102. `crates/horizon-client/src/game/agent_settings.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a7c3224ca9870906b6812fae3cf9e7e7eb28ba9c`
+- Size: 9618 bytes; 255 logical lines
+- Coverage: 1–255
+- Purpose: Horizon settings UI for external AI-agent/control-socket configuration.
+- Dependencies / cross-references: Horizon settings widgets/translations, horizon-ctl and local control-socket status.
+- Implementation / logic: Builds local-only socket settings, generated config and localized status.
+- Findings: Product-specific external-agent UI; not gameplay, vanilla settings or Minecraft protocol.
+- RustChunk relevance: Not needed for initial vanilla client; local-only/opt-in is a security design reference.
+- Decision: **unnecessary; reference; optional/future — do not port Horizon agent settings UI.**
+- 1.20.1 implications: No vanilla 1.20.1 behavior; future automation needs separate permissions and threat model.
+- Follow-up checks: Revisit only if scoped; test access, authorization, privacy, disable and lifecycle.
+- RustChunk implementation mapping: No baseline mapping; future settings belong in RustChunk settings.
+- Evidence required before adoption: Approved feature spec, local-only security and Android lifecycle tests.
+- Completion state: COMPLETE — all 255 lines read; SHA/bytes match pinned tree; no UI/socket tests.
+
+### 1103. `crates/horizon-client/src/game/agent.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `65f691407c6024377ec38048c1a137cebcabc25f`
+- Size: 91831 bytes; 2,247 logical lines
+- Coverage: 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–2,000; 2,001–2,247
+- Purpose: Horizon external-agent command interpreter and asynchronous game-control engine.
+- Dependencies / cross-references: Control socket/MCP framing, agent navigation/settings, Game world/player/inventory/UI/network, input, chat and scheduler.
+- Implementation / logic: Parses requests/state snapshots and drives movement, mining, placement, interaction, inventory, UI/chat; handles tasks and cancellation.
+- Findings: Horizon automation with destructive actions and direct internal-state coupling, not vanilla gameplay.
+- RustChunk relevance: Possible QA automation reference only; not baseline gameplay.
+- Decision: **unnecessary; reference; optional/future — keep out of runtime; task patterns only for approved QA tooling.**
+- 1.20.1 implications: Commands/screens/item components are not a 1.20.1 compatibility layer; preserve server authority.
+- Follow-up checks: If approved, threat-model commands, opt in, restrict destructive actions and redact secrets.
+- RustChunk implementation mapping: Possible tools/qa/agent_driver.rs; not created.
+- Evidence required before adoption: Security review, permissions, parser fuzzing, cancellation, redaction and authority tests.
+- Completion state: COMPLETE — 2,247 lines read in six sections of at most 400; SHA/bytes match pinned tree; no automation/tests.
+
+### 1104. `crates/horizon-client/src/game/allays.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3af85e13b92f16d0d5153dfb4f99bf6da193dfc1`
+- Size: 14187 bytes; 326 logical lines
+- Coverage: 1–326
+- Purpose: Allay item pickup/delivery, dancing, jukebox interaction and player hand-over/duplication.
+- Dependencies / cross-references: Allay AI/sensors, dropped items, ItemStack, jukebox/note blocks, player UUID and advancement triggers.
+- Implementation / logic: Matches drops, updates carried item, detects jukebox dancing, delivers to player/note block and handles hand-over/duplication.
+- Findings: Allays are vanilla 1.20.1, but Horizon Mob.extra, modern item components and sensor/world types are not portable.
+- RustChunk relevance: Required vanilla mob behavior reference; rebuild state, sensors, persistence and packets.
+- Decision: **adaptable; version-specific — preserve target Allay behavior but rebuild state and item persistence.**
+- 1.20.1 implications: Use 1.20.1 NBT/item schema; verify pickup, NoAI, mob-griefing, liked UUID and duplication cooldown.
+- Follow-up checks: Golden cases for matching items, pickup delay, delivery, disconnect, jukebox and duplication.
+- RustChunk implementation mapping: Proposed game/entities/allay.rs; not created.
+- Evidence required before adoption: Java behavior oracle, RNG checks and held-item/UUID save-load tests.
+- Completion state: COMPLETE — all 326 lines read; SHA/bytes match; no tests.
+
+### 1105. `crates/horizon-client/src/game/armor_stands.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0fb8d5070b3192de1fc161be376e3471149bea28`
+- Size: 69525 bytes; 1,713 logical lines
+- Coverage: 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–1,713
+- Purpose: Armor-stand interactions, physics, equipment, breaking/drops and rendering.
+- Dependencies / cross-references: ArmorStand state, collision, equipment/enchantments, armor assets/trims/CIT, skins and particles.
+- Implementation / logic: Loads models, places stands, maps click height to slot, handles swaps/name/break/drop and rendering.
+- Findings: Armor stands are vanilla 1.20.1; newer equippable components/assets/trims/CIT/wings are version-specific.
+- RustChunk relevance: Required vanilla behavior reference; rebuild renderer with 1.20.1 assets.
+- Decision: **adaptable; version-specific — port behavior and rebuild equipment/render data for 1.20.1.**
+- 1.20.1 implications: Use target equipment slots, NBT/enchantments and model assets.
+- Follow-up checks: Compare placement, bounds, disabled slots, swaps, creative break, hit timing, drops and physics.
+- RustChunk implementation mapping: Proposed game/entities/armor_stand.rs and render/entities/armor_stand.rs; not created.
+- Evidence required before adoption: Java placement/tick oracle, NBT round-trips and geometry/image parity.
+- Completion state: COMPLETE — 1,713 lines read in five sections of at most 400; SHA/bytes match; no device/render tests.
+
+### 1106. `crates/horizon-client/src/game/arms.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1416157dafdb93e0328fbc7fa765c6f8f6a70d08`
+- Size: 24258 bytes; 632 logical lines
+- Coverage: 1–400; 401–632
+- Purpose: Create mechanical-arm interaction points, item-transfer phases and kinematics.
+- Dependencies / cross-references: Create 6.0.10 machine entities, kinetics, NBT/inventories, recipes.
+- Implementation / logic: Stores take/deposit points, serializes phases, computes angles and transfers items by kinetic speed.
+- Findings: Explicit Create 6.0.10 mod behavior, not vanilla; target Create 1.20.1 may differ.
+- RustChunk relevance: Relevant only if Create is confirmed among required Forge mods.
+- Decision: **undetermined; reference; version-specific — defer until Create and target release are confirmed.**
+- 1.20.1 implications: Do not add Create IDs, recipes or kinetics to vanilla registries.
+- Follow-up checks: If required, compare arm phases, interactions, NBT and inventory transfer.
+- RustChunk implementation mapping: No baseline mapping; optional Create adapter if confirmed.
+- Evidence required before adoption: Target mod dependency, exact source/version, license and deterministic tests.
+- Completion state: COMPLETE — 632 lines read in two sections; SHA/bytes match; no Create tests.
+
+### 1107. `crates/horizon-client/src/game/atlas_slots.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aaa32c5379e37333cbd35f0a3fa8eb75aafe1266`
+- Size: 2422 bytes; 73 logical lines
+- Coverage: 1–73
+- Purpose: Generic LRU allocation for fixed GUI atlas slots such as skins and maps.
+- Dependencies / cross-references: Fixed sprite atlas, image keys, caller-managed upload/eviction.
+- Implementation / logic: Tracks image-slot pairs, promotes on show, claims free/least-recent slot and clears on atlas replacement.
+- Findings: Generic data structure; caller handles image decode/upload.
+- RustChunk relevance: Reusable cache reference if RustChunk needs runtime texture slots.
+- Decision: **adaptable; reference — integrate with RustChunk's atlas/upload lifecycle.**
+- 1.20.1 implications: No version-specific behavior; atlas reset must invalidate slots.
+- Follow-up checks: Test capacity, promotion, eviction, duplicate keys, reset and stale sprite removal.
+- RustChunk implementation mapping: Possible render/atlas/lru_slots.rs; not created.
+- Evidence required before adoption: Renderer tests for eviction/invalidation/reload; no benchmark without measurement.
+- Completion state: COMPLETE — all 73 lines read; SHA/bytes match; tests read, not run.
+
+### 1108. `crates/horizon-client/src/game/attachment_sync.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aedf32fd39c09c1c4a7ae2766f1e1ac85a43ce3a`
+- Size: 5799 bytes; 148 logical lines
+- Coverage: 1–148
+- Purpose: Horizon custom protocol for mod attachments on players, chunks, block entities, entities and levels.
+- Dependencies / cross-references: Attachment maps/holders, horizon_protocol, LAN visibility and dimensions.
+- Implementation / logic: Builds snapshots, sends incremental changes, queues dimension transitions and applies remote deltas.
+- Findings: Horizon extension protocol, not vanilla networking; requires matching protocol and payload safeguards.
+- RustChunk relevance: Not part of vanilla 1.20.1; future negotiated extension is separate.
+- Decision: **unnecessary; reference; optional/future — exclude Horizon attachment protocol.**
+- 1.20.1 implications: Vanilla 1.20.1 has no horizon:attachment_sync message.
+- Follow-up checks: Review auth, visibility, payload caps and disconnect cleanup only if mod scope is approved.
+- RustChunk implementation mapping: No baseline mapping; future protocol must be negotiated separately.
+- Evidence required before adoption: Protocol spec, security review, fuzz/size tests and interoperability.
+- Completion state: COMPLETE — all 148 lines read; SHA/bytes match; no network exchange.
+
+### 1109. `crates/horizon-client/src/game/banners.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ae3f32968602e91aa8ec590532682a1ec02ef781`
+- Size: 2264 bytes; 67 logical lines
+- Coverage: 1–67
+- Purpose: Extracts banner pattern texture/tint layers and derives map banner markers.
+- Dependencies / cross-references: Banner block entity layers, pattern registry/textures/dye palette and map markers.
+- Implementation / logic: Reads layers, maps standing/wall banners to colors, preserves names and resolves textures/tints.
+- Findings: Banners/map markers are vanilla 1.20.1; registry/NBT/map lifecycle need target data.
+- RustChunk relevance: Useful banner/map reference; do not copy Horizon atlas identifiers.
+- Decision: **adaptable; version-specific — rebuild registries, NBT and map integration for 1.20.1.**
+- 1.20.1 implications: Use 1.20.1 pattern registry; verify colors, names, layer order and marker removal.
+- Follow-up checks: Compare colors, tints, map add/update/remove and reload.
+- RustChunk implementation mapping: Proposed game/block_entities/banner.rs and game/maps/banner_markers.rs; not created.
+- Evidence required before adoption: Java 1.20.1 NBT round-trips and map-marker tests.
+- Completion state: COMPLETE — all 67 lines read; SHA/bytes match; no tests.
+
+### 1110. `crates/horizon-client/src/game/basins.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4fc87db917b0f8d1788b4e91febf5b349e90fd7d`
+- Size: 34659 bytes; 895 logical lines
+- Coverage: 1–400; 401–800; 801–895
+- Purpose: Create 6.0.10 basin/mixer/press/blaze-burner processing.
+- Dependencies / cross-references: Create recipes/tags, item/fluid inventories, machine NBT, kinetics/timers, burner fuels and RNG.
+- Implementation / logic: Loads recipes, consumes item/fluid inputs transactionally, generates chance outputs and simulates heat/buckets/mixer/press timing.
+- Findings: Explicit Create 6.0.10 mod behavior and serializers; not vanilla or proof of target support.
+- RustChunk relevance: Only relevant if Create is confirmed in required Forge mods.
+- Decision: **undetermined; reference; version-specific — defer until target Create 1.20.1 source is confirmed.**
+- 1.20.1 implications: Do not add Create machines, serializers or kinetics to vanilla.
+- Follow-up checks: If required, compare recipes/tags, NBT, fluid, heat, RNG and timing.
+- RustChunk implementation mapping: Possible mods/create_1_20_1/basin.rs; not created.
+- Evidence required before adoption: Required mod manifest, exact source and deterministic item/fluid/timing tests.
+- Completion state: COMPLETE — 895 lines read in three sections; SHA/bytes match; no tests/runtime.
+
+### 1111. `crates/horizon-client/src/game/beacon.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8ae797906df1d0e6c0670e6b38bc316badb56391`
+- Size: 26844 bytes; 706 logical lines
+- Coverage: 1–400; 401–706
+- Purpose: Beacon ticking, pyramid levels, beam rendering, effects, sounds and payment GUI.
+- Dependencies / cross-references: Beacon state/base tag, stained glass, effects, players, SetBeacon packet and renderer.
+- Implementation / logic: Scans beam sections, blends colors, calculates levels, applies effects, renders beam and processes payment UI.
+- Findings: Beacon is vanilla 1.20.1; TestInstanceBlock branch is later and must be excluded.
+- RustChunk relevance: Required vanilla beacon reference; separate effects from rendering.
+- Decision: **adaptable; version-specific — port classic beacon behavior/UI and exclude TestInstanceBlock.**
+- 1.20.1 implications: Rebuild 1.20.1 effects, payment rules, block entity and packet.
+- Follow-up checks: Test levels, glass blends, effects, payment, packet and reload.
+- RustChunk implementation mapping: Proposed beacon simulation/UI/render paths; not created.
+- Evidence required before adoption: Java 1.20.1 effect oracle, packet round-trip and rendering checks.
+- Completion state: COMPLETE — 706 lines read in two sections; SHA/bytes match; no tests.
+
+### 1112. `crates/horizon-client/src/game/bearings.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b69e64619c09fc2ba4d7ef1b9b03105eb12fe539`
+- Size: 19933 bytes; 524 logical lines
+- Coverage: 1–400; 401–524
+- Purpose: Create 6.0.10 mechanical/windmill bearing and contraption simulation.
+- Dependencies / cross-references: Create kinetics, bearing state, sail tags, attachment/slime/honey rules, collision and NBT.
+- Implementation / logic: Searches attached structures, serializes angle/speed, rotates by RPM, assembles/disassembles and drops blocked blocks.
+- Findings: Explicit Create 6.0.10 mod mechanics, not vanilla.
+- RustChunk relevance: Only relevant if Create is confirmed in required Forge mods.
+- Decision: **undetermined; reference; version-specific — defer until exact target source and dependency are confirmed.**
+- 1.20.1 implications: Do not import Create bearing IDs, sail tags, RPM or NBT into vanilla.
+- Follow-up checks: If required, compare cap, attachment, sails, RPM, rounding, collisions and drops.
+- RustChunk implementation mapping: No vanilla mapping; optional Create adapter after confirmation.
+- Evidence required before adoption: Confirmed manifest, target source and deterministic assembly/rotation tests.
+- Completion state: COMPLETE — 524 lines read in two sections; SHA/bytes match; no tests.
+
+### 1113. `crates/horizon-client/src/game/beds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0f0eaa0e2eee06119de72217cadf1dec61a3c37a`
+- Size: 4510 bytes; 107 logical lines
+- Coverage: 1–107
+- Purpose: Tracks occupied beds and clears occupancy when players wake, die, disconnect or change dimension.
+- Dependencies / cross-references: Bed state, sleeping players, LAN guest data, tick/save and custom straw-bed branch.
+- Implementation / logic: Sets occupied on sleep, tracks beds by dimension, clears unused beds and frees records before save.
+- Findings: Normal occupancy is vanilla 1.20.1; straw_bed behavior is unverified and guest tracking is Horizon-specific.
+- RustChunk relevance: Useful to prevent stale occupied flags; rebuild target sleep ownership/packets.
+- Decision: **adaptable; version-specific — port ordinary bed cleanup and exclude unverified straw-bed behavior.**
+- 1.20.1 implications: Use 1.20.1 bed properties and packet/tick/save order; don't assume straw_bed exists.
+- Follow-up checks: Test wake, death, break, disconnect, double bed, dimension and reload.
+- RustChunk implementation mapping: Proposed game/beds.rs and sleeper index; not created.
+- Evidence required before adoption: Java 1.20.1 state/packet and save/reload tests.
+- Completion state: COMPLETE — all 107 lines read; SHA/bytes match; no multiplayer tests.
+
+### 1114. `crates/horizon-client/src/game/beehives.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `094a0b7b8902d7a945404448416577cdc728b690`
+- Size: 14103 bytes; 370 logical lines
+- Coverage: 1–370
+- Purpose: Beehive/bee-nest ticks and interactions: entry/release, honey, smoke and anger.
+- Dependencies / cross-references: Hive state, bee AI/UUID/NBT, honey, fire/campfire, loot, shears/bottle and RNG/audio.
+- Implementation / logic: Ticks hives, releases/stores bees, harvests comb/bottles, resets honey and targets nearby players.
+- Findings: Bee/hive is vanilla 1.20.1; adapter uses Horizon bee/Mob/event structures.
+- RustChunk relevance: Required vanilla reference; rebuild NBT and authoritative events.
+- Decision: **adaptable; version-specific — preserve vanilla behavior while rebuilding state, NBT and integration.**
+- 1.20.1 implications: Verify capacity, delays, flower memory, fire, smoke, honey, tools, anger radius and persistence.
+- Follow-up checks: Test occupation, rain/night, smoke, shears/bottles, reset, anger and reload.
+- RustChunk implementation mapping: Proposed beehive/bee modules; not created.
+- Evidence required before adoption: Java 1.20.1 NBT, AI/RNG and target-selection parity.
+- Completion state: COMPLETE — all 370 lines read; SHA/bytes match; no tests.
+
+### 1115. `crates/horizon-client/src/game/belts.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dd77a8e945d81f2dedcfaed884bb5baec7fe2a0b`
+- Size: 32922 bytes; 926 logical lines
+- Coverage: 1–400; 401–800; 801–926
+- Purpose: Create 6.0.10 belt construction, chaining, kinetic item transport and endpoints.
+- Dependencies / cross-references: Create shafts/belts/connectors, kinetics, machine endpoints/funnels, item entities and NBT.
+- Implementation / logic: Builds chains, maps slopes, moves item stacks, catches drops, inserts/ejects at endpoints and handles connectors.
+- Findings: Explicit Create 6.0.10; belts/shafts/ratios/endpoints are not vanilla.
+- RustChunk relevance: Only relevant if Create is confirmed in target Forge mods.
+- Decision: **undetermined; reference; version-specific — defer until Create and target release are confirmed.**
+- 1.20.1 implications: Do not add Create belt states/connectors/ratios to vanilla.
+- Follow-up checks: If required, compare chain/length, movement, funnels, endpoints and persistence.
+- RustChunk implementation mapping: Possible mods/create_1_20_1/belts.rs; not created.
+- Evidence required before adoption: Create source, dependency confirmation and deterministic movement/inventory tests.
+- Completion state: COMPLETE — 926 lines read in three sections; SHA/bytes match; no Create tests.
+
+### 1116. `crates/horizon-client/src/game/block_editor.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7c6bc49915dfea7ee8c443a446fa141be4fc7b43`
+- Size: 22928 bytes; 650 logical lines
+- Coverage: 1–400; 401–650
+- Purpose: Shared game-master block-editor controller: widgets, focus, keyboard/pointer/slider and packets.
+- Dependencies / cross-references: Structure/Jigsaw/Test blocks, Editor implementations, EditBox/clipboard/HUD and packets.
+- Implementation / logic: Defines editor model, draws controls, handles pointer/key/tab/enter/escape and sends packets.
+- Findings: Structure/Jigsaw relate to 1.20.1; Test/TestInstance are later/unverified; framework is Horizon-specific.
+- RustChunk relevance: Reference if RustChunk later implements Structure/Jigsaw UI; not survival or reusable Android UI.
+- Decision: **adaptable; version-specific — keep only target Structure/Jigsaw screens; omit later test editors.**
+- 1.20.1 implications: Rebuild target screen options, validation and packets; verify test blocks before enabling.
+- Follow-up checks: Compare layout, focus, touch/keyboard, sliders, cancel/done and preview.
+- RustChunk implementation mapping: Proposed ui/game_master/block_editor.rs; not created.
+- Evidence required before adoption: Java 1.20.1 packet/source, interaction and preview/save tests.
+- Completion state: COMPLETE — 650 lines read in two sections; SHA/bytes match; no UI tests.
+
+### 1117. `crates/horizon-client/src/game/block_edits.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6bb1bf26a6c3c63039657e5e8d37e62925b5c726`
+- Size: 26601 bytes; 722 logical lines
+- Coverage: 1–400; 401–722
+- Purpose: Horizon native mod API for bulk block edits and bounded column/heightmap reads.
+- Dependencies / cross-references: native_edit_blocks, native world APIs, command parser/filter, heightmaps/tags and block-entity lifecycle.
+- Implementation / logic: Validates runs, resolves heightmap edits, applies updates, reads bounded columns and updates block entities.
+- Findings: Explicit Horizon server-mod API, not vanilla; format and hooks Horizon-specific.
+- RustChunk relevance: Not baseline; bounded-read patterns may inform internal tools.
+- Decision: **unnecessary; reference; optional/future — exclude Horizon bulk-edit API; retain bounded-read ideas for tooling.**
+- 1.20.1 implications: Java 1.20.1 has its own fill/heightmap semantics.
+- Follow-up checks: If scoped, compare fill, block entities, heightmaps, unloaded columns and filters.
+- RustChunk implementation mapping: Possible tools/world_inspector; not created.
+- Evidence required before adoption: Tool spec, memory bounds, Java oracle and no-unintended-write proof.
+- Completion state: COMPLETE — 722 lines read in two sections; SHA/bytes match; no tests.
+
+### 1118. `crates/horizon-client/src/game/block_entity_anims.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `43b0a3e7e241b5771f5015785b5c7d0b845a4edd`
+- Size: 35336 bytes; 841 logical lines
+- Coverage: 1–400; 401–800; 801–841
+- Purpose: Block-entity animations/events for lids, shulkers, bells, conduits, gateways, pots, books and skulls.
+- Dependencies / cross-references: Block-event/ticker registry, block entities, collision, particles/audio/effects/renderer.
+- Implementation / logic: Routes events, tracks openers, advances tickers and handles bell, conduit, gateway, pot and skull visuals.
+- Findings: Many paths vanilla 1.20.1; custom/later Potent Sulfur and Horizon services are included.
+- RustChunk relevance: Reference for vanilla timing/visuals; port target subset and rebuild renderer/network.
+- Decision: **adaptable; version-specific — preserve vanilla animations and exclude custom/later paths.**
+- 1.20.1 implications: Verify target event IDs, ticker order, bell, conduit, gateway, pot and skull.
+- Follow-up checks: Capture Java events/ticks for representative entities and compare client/server.
+- RustChunk implementation mapping: Proposed render/block_entity_animation.rs and world/block_entity_tickers.rs; not created.
+- Evidence required before adoption: Java timing/event goldens, tick-role, collision and target asset render tests.
+- Completion state: COMPLETE — 841 lines read in three sections; SHA/bytes match; no GPU/audio tests.
+
+### 1119. `crates/horizon-client/src/game/block_entity_ticks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `28099618f42fe47361ec8cb25a1f25da617f4df8`
+- Size: 12835 bytes; 280 logical lines
+- Coverage: 1–280
+- Purpose: Orders block-entity ticks and synchronizes client shulker animation/collision.
+- Dependencies / cross-references: Ticker registry, chunk tickets/world border, vanilla and later/custom entity tables.
+- Implementation / logic: Builds ticking-state list, visits tickers in active chunks/in-border and updates shulker collision.
+- Findings: Mixes vanilla with later Crafter/Creaking Heart/Trial Spawner/Vault and Horizon Potent Sulfur; order needs rebuild.
+- RustChunk relevance: Reference for ticking gates/order and client/server split; exact list is not portable.
+- Decision: **rewrite required; reference; version-specific — rebuild target ticker registry/order and omit later/custom entities.**
+- 1.20.1 implications: Register only 1.20.1 entities and match target tick/chunk gating.
+- Follow-up checks: Compare order, tickets, border, removals, hoppers, furnaces, brewing, campfires, hives and spawners.
+- RustChunk implementation mapping: Proposed world/block_entity_tick.rs and target registry; not created.
+- Evidence required before adoption: Java per-tick traces, deterministic order and unloaded-chunk tests.
+- Completion state: COMPLETE — all 280 lines read; SHA/bytes match; no tick tests.
+
+### 1120. `crates/horizon-client/src/game/block_items.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `718ef0e7576ee2fbea13c0ca80fcebb9d8e62493`
+- Size: 11344 bytes; 278 logical lines
+- Coverage: 1–278
+- Purpose: Block pick-item, creative shulker drops, block-state data and block-entity placement transfer.
+- Dependencies / cross-references: Block-entity NBT, item components, registry/facts, containers and placement.
+- Implementation / logic: Resolves clone overrides, creates pick stacks, attaches hive/light/banner/pot data and restores placed entity data.
+- Findings: Pick/place is vanilla concept but modern block_state components are used; Copper Golem Statue is later/unverified.
+- RustChunk relevance: Required semantics reference; serialization must be rewritten for 1.20.1 NBT.
+- Decision: **rewrite required; reference; version-specific — replace modern components with 1.20.1 item NBT/BlockEntityTag.**
+- 1.20.1 implications: Rebuild item data, names, banner/pot, hive honey, light and shulker contents.
+- Follow-up checks: Compare creative/survival pick, data/no-data, shulker, banner/pot and placement restore.
+- RustChunk implementation mapping: Proposed items/block_entity_item_1_20_1.rs; not created.
+- Evidence required before adoption: Golden 1.20.1 NBT, pick/place round-trips and no modern component keys.
+- Completion state: COMPLETE — all 278 lines read; SHA/bytes match; no serialization tests/game runs.

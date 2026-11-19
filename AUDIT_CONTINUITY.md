@@ -6,18 +6,18 @@ Working branch: `starling-1.20.1-port-audit`
 
 ## Authoritative resume point
 
-- **Completed and committed entries:** 1–1100.
+- **Completed and committed entries:** 1–1120.
 - **Current 200-file stage:** 1001–1200.
-- **Completed checkpoints in this stage:** 1001–1020, 1021–1040, 1041–1060, 1061–1080, 1081–1100.
-- **Current stage progress:** 100 of 200 entries (50%).
-- **Next checkpoint to start:** **1101–1120**.
-- **Next checkpoint number:** 6 of 10.
+- **Completed checkpoints in this stage:** 1001–1020, 1021–1040, 1041–1060, 1061–1080, 1081–1100, 1101–1120.
+- **Current stage progress:** 120 of 200 entries (60%).
+- **Next checkpoint to start:** **1121–1140**, after corrective closure for entry 1089.
+- **Next checkpoint number:** 7 of 10 (held pending duplicate closure).
 - **Range Ledger:** `AUDIT_LEDGER_1001_1200.md`.
 - **Navigation/decision index:** `AUDIT_INDEX.md`.
 - **Checkpoint and QA history:** `AUDIT_QA_LOG.md`.
 - **Rules:** `AUDIT_PROTOCOL.md`.
 
-The Ledger currently contains exactly 100 entries for 1001–1100. The Index also contains rows through 1100. Do not repeat or renumber any of these entries.
+The Ledger currently contains exactly 120 entries for 1001–1120. The Index also contains rows through 1120. Do not repeat or renumber any of these entries.
 
 ## Pinned source
 
@@ -62,4 +62,12 @@ The previous long chat branch was interrupted while reviewing the large Horizon/
 
 ## Current task
 
-Resume with the next not-yet-audited unique upstream path after the last path recorded for entry 1100. Build the skip set from the full Index through 1100 before selecting it. Complete and commit checkpoint **1101–1120** next.
+Resume with the next not-yet-audited unique upstream path after the last path recorded for entry 1100. Build the skip set from the full Index through 1120. Correct entry 1089 (path also used at 121) before continuing with checkpoint **1121–1140**.
+
+
+## Historical duplicate-path hold — 2026-11-19
+
+- Full Index validation found `crates/horizon-client/src/entry.rs` at entries 121 and 1089.
+- New entries 1101–1120 are unique and SHA/byte-size verified. Global path uniqueness remains blocked by the historical duplicate.
+- Replace entry 1089 with the next eligible unique source path, inspect it fully, update Ledger/Index/QA and add it to the skip set before checkpoint 1121–1140.
+- Do not touch either backup.

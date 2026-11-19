@@ -667,3 +667,32 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Resume state at creation: entries 1–1100 committed; current stage 1001–1200 is 100/200 complete; next checkpoint 1101–1120.
 - Pinned Starling baseline remains `5432370d573642041585c69b40fb045b27133488`. Existing backup refs remain unchanged; next backup remains due only after entry 2000 is fully audited and globally verified.
 - This setup commit changes documentation only. No source files were audited, no entry numbers were added, and no backup refs were modified.
+
+## Audit checkpoint 1101–1120 — 2026-11-19
+
+- Inspected exactly 20 new unique files in pinned-tree order; all were read through EOF.
+- Files over 400 logical lines were read consecutively in sections no larger than 400 lines: 1101 (439; 2), 1103 (2,247; 6), 1105 (1,713; 5), 1106 (632; 2), 1110 (895; 3), 1111 (706; 2), 1112 (524; 2), 1115 (926; 3), 1116 (650; 2), 1117 (722; 2), 1118 (841; 3).
+- All 20 paths exist in the pinned upstream tree and all SHAs/byte sizes match. New paths are unique against prior Index entries and one another.
+- Every new Ledger entry contains all 15 required fields exactly once; all Index rows match their Ledger paths and decisions.
+- Findings distinguish vanilla 1.20.1 behavior from Create 6.0.10, Horizon-only APIs and later-version data/features.
+
+### Historical duplicate path discovered
+
+- Full-index validation found a pre-existing duplicate: `crates/horizon-client/src/entry.rs` appears at entries 121 and 1089.
+- None of the 20 new paths duplicates an existing path, but global Index path uniqueness is not satisfied until entry 1089 is replaced. Earlier QA for 1081–1100 missed this older duplicate.
+- Corrective closure is required before checkpoint 1121–1140. Keep other numbers unchanged; inspect a unique replacement source fully, correct entry 1089 and its Index row, record the correction and add the replacement to the skip set.
+
+### Limits
+
+- No source was copied. No Rust tests/builds/benchmarks/APKs/device runs/Minecraft or Forge launches/server joins/GPU/audio/UI tests were performed; source tests were read only.
+
+### Durable checkpoint
+
+- Appended exactly 20 complete 15-field entries (1101–1120), 20 Index rows and this QA record.
+- Continuity is updated to 120/200 and records the duplicate-path hold; Protocol status is updated through 1120.
+- Pre-commit checks cover sequential numbering, new-path uniqueness, 15 fields and pinned SHA/byte sizes. Post-commit read-back of all five docs is required.
+- Existing backups are untouched; next backup only after entries 1001–2000 are fully audited and globally verified.
+
+### Next action
+
+- Correct historical duplicate entry 1089 before checkpoint 1121–1140.

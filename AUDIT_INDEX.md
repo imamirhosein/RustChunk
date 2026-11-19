@@ -1264,3 +1264,23 @@
 | 1098 | `crates/horizon-client/src/game.rs` | rewrite required; reference; version-specific | Monolith mixes vanilla-like behavior with LAN/friends, native hooks, Discord, Bedrock inventory, LOD and later mechanics; ItemStack/NBT uses components. |
 | 1099 | `crates/horizon-client/src/game/advancements_screen.rs` | adaptable; reference; version-specific | Five roots match vanilla; visibility/assets/text wrapping/server positions need 1.20.1 parity. UI separate from trigger service. |
 | 1100 | `crates/horizon-client/src/game/advancements.rs` | rewrite required; reference; version-specific | Modern predicate/trigger schema, spear_mobs, entity variants and ItemStack components are not 1.20.1; tests unexecuted. |
+| 1101 | `crates/horizon-client/src/game/agent_navigation.rs` | adaptable; reference; optional/future | keep only generic search ideas; do not import agent commands. |
+| 1102 | `crates/horizon-client/src/game/agent_settings.rs` | unnecessary; reference; optional/future | do not port Horizon agent settings UI. |
+| 1103 | `crates/horizon-client/src/game/agent.rs` | unnecessary; reference; optional/future | keep out of runtime; task patterns only for approved QA tooling. |
+| 1104 | `crates/horizon-client/src/game/allays.rs` | adaptable; version-specific | preserve target Allay behavior but rebuild state and item persistence. |
+| 1105 | `crates/horizon-client/src/game/armor_stands.rs` | adaptable; version-specific | port behavior and rebuild equipment/render data for 1.20.1. |
+| 1106 | `crates/horizon-client/src/game/arms.rs` | undetermined; reference; version-specific | defer until Create and target release are confirmed. |
+| 1107 | `crates/horizon-client/src/game/atlas_slots.rs` | adaptable; reference | integrate with RustChunk's atlas/upload lifecycle. |
+| 1108 | `crates/horizon-client/src/game/attachment_sync.rs` | unnecessary; reference; optional/future | exclude Horizon attachment protocol. |
+| 1109 | `crates/horizon-client/src/game/banners.rs` | adaptable; version-specific | rebuild registries, NBT and map integration for 1.20.1. |
+| 1110 | `crates/horizon-client/src/game/basins.rs` | undetermined; reference; version-specific | defer until target Create 1.20.1 source is confirmed. |
+| 1111 | `crates/horizon-client/src/game/beacon.rs` | adaptable; version-specific | port classic beacon behavior/UI and exclude TestInstanceBlock. |
+| 1112 | `crates/horizon-client/src/game/bearings.rs` | undetermined; reference; version-specific | defer until exact target source and dependency are confirmed. |
+| 1113 | `crates/horizon-client/src/game/beds.rs` | adaptable; version-specific | port ordinary bed cleanup and exclude unverified straw-bed behavior. |
+| 1114 | `crates/horizon-client/src/game/beehives.rs` | adaptable; version-specific | preserve vanilla behavior while rebuilding state, NBT and integration. |
+| 1115 | `crates/horizon-client/src/game/belts.rs` | undetermined; reference; version-specific | defer until Create and target release are confirmed. |
+| 1116 | `crates/horizon-client/src/game/block_editor.rs` | adaptable; version-specific | keep only target Structure/Jigsaw screens; omit later test editors. |
+| 1117 | `crates/horizon-client/src/game/block_edits.rs` | unnecessary; reference; optional/future | exclude Horizon bulk-edit API; retain bounded-read ideas for tooling. |
+| 1118 | `crates/horizon-client/src/game/block_entity_anims.rs` | adaptable; version-specific | preserve vanilla animations and exclude custom/later paths. |
+| 1119 | `crates/horizon-client/src/game/block_entity_ticks.rs` | rewrite required; reference; version-specific | rebuild target ticker registry/order and omit later/custom entities. |
+| 1120 | `crates/horizon-client/src/game/block_items.rs` | rewrite required; reference; version-specific | replace modern components with 1.20.1 item NBT/BlockEntityTag. |
