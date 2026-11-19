@@ -482,3 +482,33 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 ### Next QA range
 
 - Next range: **901–1000**.
+
+## QA batch 901–1000 — 2026-11-19
+
+### Scope and verification
+
+- Reviewed exactly the final 100 existing entries (901–1000); no source path was renumbered or reselected.
+- Verified 100/100 unique Ledger paths, all present in the pinned upstream tree; all 100 recorded source SHAs and byte sizes match commit `5432370d573642041585c69b40fb045b27133488`.
+- Verified consecutive numbering, exactly one occurrence of each of the 15 required fields per entry, and 100/100 Ledger-to-Index path agreement. Index decisions were converted to the standard primary labels and synchronized with each Ledger Decision.
+- Repaired the shifted description and asset mapping records in 901–913. Rewrote implementation mappings for code records 929–1000 so each QA fixture points to its own source basename; no production/runtime path is claimed or created.
+- Corrected Coverage for all seven files over 400 logical lines: 945 (495), 946 (435), 966 (655), 971 (533), 974 (472), 992 (1,697) and 995 (1,430). Each was read to EOF in consecutive sections of at most 400 lines and the recorded ranges now match the actual inspected ranges.
+
+### Touch image findings (901–928)
+
+- Visually inspected all 28 PNGs from the pinned source blobs and decoded their IHDR dimensions. Twenty-seven are 24×24 RGBA; `stick.png` is the only 48×48 RGBA file; `stick_knob.png` is 24×24.
+- Corrected glyph identities for the D-pad arrows/center, drop, inventory, jump, offhand, pause, pick-block, player list, sneak, joystick base/knob and use-item states. The center D-pad tile is not a standalone action button.
+- These PNGs remain visual references only. No source image was copied into RustChunk. Asset redistribution rights and every runtime consumer/call-site have not been cleared; RustChunk should implement independent editable touch artwork/layouts.
+
+### Target-version corrections
+
+- Entry 935 is a narrow NeoForge/Horizon carried-content inspection probe, not a Forge 47.x loader or proof that required Forge mods can run.
+- Entry 958's command parser fixture is retained as a useful generic differential-test pattern; its command tree, parser IDs and registry payload must be rebuilt for 1.20.1.
+- Entry 995 covers both natural spawning and ordinary block-based mob spawners, which are in 1.20.1 scope. Only its Trial Spawner and Vault branches are excluded as 1.21-era features.
+- Entry 967's generic entity-predicate harness may be adapted, but its modern variant-component schema is not accepted as 1.20.1 data. Entry 963 remains undetermined until the underlying cushion feature is confirmed against the target registry.
+- Windows build customizations (929), destructive fixture generation (938), the newer creative tool component (961) and inline-object syntax (983) are not baseline RustChunk runtime features.
+
+### Limits, backup and next action
+
+- This batch is source/metadata/structure/coverage/decision QA only. No Rust build, unit tests, benchmark execution, APK build, Android-device test, Minecraft launch, Forge 1.20.1 client launch or Aternos/server connection was performed.
+- The original backup branch `backup/audit-1000-unique-2026-11-18` remains unchanged at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; no archive branch was recreated.
+- The second backup remains deferred. Next action: final global QA of entries 1–1000; only after that passes, create the second backup and compare its tree/content against the original backup.
