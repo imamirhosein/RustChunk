@@ -126,7 +126,7 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 ## 11. Backup policy
 
 - Create a new backup only after each additional **1,000 newly completed audit entries** have been committed and globally verified.
-- The audit currently has entries 1–1300. The next backup is due only after entries **1001–2000** are complete and the entire 1–2000 audit passes global validation.
+- The audit currently has entries 1–1350. The next backup is due only after entries **1001–2000** are complete and the entire 1–2000 audit passes global validation.
 - Do not create backups at 200-entry stage boundaries, 100-entry points, 50-file reporting boundaries or 25-file checkpoints.
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
@@ -136,14 +136,14 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
 - Branch head before this source-audit checkpoint commit: `${head}`.
-- Completed entries: **1–1325**.
+- Completed entries: **1–1350**.
 - Closed stage: **1001–1200** (200/200).
-- Active stage: **1201–1400**; completed **1201–1325** (125/200).
-- Authorization state: **CONTINUE** within the user-authorized section **1301–1350**. Checkpoint **1301–1325** is committed and verified; checkpoint **1326–1350** is the next authorized work.
-- After 1350, STOP and wait for explicit authorization before 1351–1400.
+- Active stage: **1201–1400**; completed **1201–1350** (150/200).
+- Authorization state: **STOP** at the 1350 boundary. Section **1301–1350** is complete and verified.
+- Next section requires explicit authorization: **1351–1400**, checkpoints **1351–1375** and **1376–1400**.
 - Active Ledger: `AUDIT_LEDGER_1201_1400.md`; Index: `AUDIT_INDEX.md`; QA: `AUDIT_QA_LOG.md`; Continuity: `AUDIT_CONTINUITY.md`.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
-- Index: 1325 sequential entries and 1325 unique paths. Active Ledger: 125 entries (1201–1325), each with exactly 15 required fields.
+- Index: 1350 sequential entries and 1350 unique paths. Active Ledger: 150 entries (1201–1350), each with exactly 15 required fields.
 - Existing backups: `backup/audit-1000-unique-2026-11-18` at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; `backup/audit-1000-final-2026-11-19` at `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`. Do not modify them.
 
 ## 13. Historical corrections preserved

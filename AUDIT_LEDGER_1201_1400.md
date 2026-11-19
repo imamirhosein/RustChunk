@@ -2136,3 +2136,428 @@
 - RustChunk implementation mapping: No baseline mapping; possible build-time generator for a future local server command tree only.
 - Evidence required before adoption: 1.20.1 Brigadier/Forge command registrations, command tree packet captures and deterministic suggestion ordering tests.
 - Completion state: COMPLETE — 892 logical lines read in contiguous ranges 1–400, 401–800 and 801–892; source SHA and 28247-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1326. `crates/horizon-client/src/lan/command_suggestions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e55e6ef92fd23d979f58e3ffb35f6a2cc8f95202`
+- Size: 11272 bytes; 336 logical lines
+- Coverage: 1–336 (EOF)
+- Purpose: Provides generated ordering/selection metadata for command suggestion providers keyed by command argument paths.
+- Dependencies / cross-references: Horizon/Brigadier command tree registrations, suggestion provider identifiers, command generator and server-side command dispatcher.
+- Implementation / logic: Maps known command node paths to ordered suggestion provider names so the server can reproduce stable completion behavior.
+- Findings: This is generated metadata for Horizon's server command system, not the client's command-tree decoder. It includes modern command paths and providers that do not exist in vanilla 1.20.1.
+- RustChunk relevance: Not needed by a remote client; deterministic generation may be a reference only if RustChunk later hosts a local server.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Use the command tree and suggestions supplied by a 1.20.1 server. Do not hardcode this later-version provider table.
+- Follow-up checks: Compare the 1.20.1 Brigadier suggestion packet/tree and Forge command registrations only if local hosting is added.
+- RustChunk implementation mapping: No baseline mapping; optional server-side command metadata generator only.
+- Evidence required before adoption: 1.20.1 Brigadier/Forge registrations and command-tree packet captures.
+- Completion state: COMPLETE — 336 logical lines read to EOF; source SHA and 11272-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1327. `crates/horizon-client/src/lan/commands.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fa6193840d1daaf4f4f8cb60df6155a1fc7fcefe`
+- Size: 15489 bytes; 434 logical lines
+- Coverage: 1–400, 401–434 (contiguous to EOF)
+- Purpose: Builds and sends the server's Brigadier command tree and command-completion data, including permission-aware command nodes and argument metadata.
+- Dependencies / cross-references: LAN Hub, command registrar/dispatcher, permission levels, suggestion providers, protocol command-tree encoder and modern command argument registry.
+- Implementation / logic: Collects registered server commands, filters or shapes nodes for a guest, encodes the tree and its argument/suggestion metadata for the client.
+- Findings: The file is a server-side outbound encoder and uses Horizon's modern command/argument types. It is not the inbound command-tree implementation needed by a 1.20.1 client.
+- RustChunk relevance: Not a remote-client subsystem; the client should parse the command tree advertised by its server.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 ClientboundCommands decoding and Brigadier node reconstruction separately; preserve server-sent permissions and suggestions.
+- Follow-up checks: Compare 1.20.1 command packet node indices, redirects, argument serializers, suggestion provider IDs and Forge command additions.
+- RustChunk implementation mapping: No baseline mapping; future local-server module only.
+- Evidence required before adoption: 1.20.1 Java/Forge command tree source, packet captures and parser fixtures.
+- Completion state: COMPLETE — 434 logical lines read in contiguous ranges 1–400 and 401–434; source SHA and 15489-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1328. `crates/horizon-client/src/lan/conn.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fb6750acef6ead34fcc5b5430d308183cea5313a`
+- Size: 72052 bytes; 1908 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1908 (contiguous to EOF)
+- Purpose: Implements the LAN server connection lifecycle from admission and login through configuration and play, including authentication, packet routing and disconnect handling.
+- Dependencies / cross-references: LAN listener, guest/player state, protocol packet codecs, authentication/profile identity, configuration registries, resource/data synchronization and server tick channels.
+- Implementation / logic: Maintains per-connection state, validates and dispatches inbound packets according to protocol phase, sends phase-specific responses and transitions guests into the active play hub.
+- Findings: This is the server-side connection handler. Its authentication, packet phases and outbound responses are not a replacement for the Android client's clientbound handlers or client login flow; protocol details are from the pinned later version.
+- RustChunk relevance: Architecture reference only for a future RustChunk integrated/LAN server; not part of joining an existing server as a client.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Build a separate 1.20.1 client connection state machine and packet handling path. Never copy later-version handshake or configuration packet layouts.
+- Follow-up checks: Compare 1.20.1 login/configuration transitions, offline identity behavior, Forge handshake, disconnect reasons, timeout/backpressure and packet ordering.
+- RustChunk implementation mapping: No baseline mapping; possible future `server/lan/connection.rs` only if hosting is scoped.
+- Evidence required before adoption: 1.20.1 protocol captures, Forge handshake traces and state-machine integration tests.
+- Completion state: COMPLETE — 1908 logical lines read in five contiguous ranges through EOF; source SHA and 72052-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1329. `crates/horizon-client/src/lan/containers.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7c8c2c785fcf400d8b2e8ed0f7aaa045d8c1dbe8`
+- Size: 32069 bytes; 928 logical lines
+- Coverage: 1–400, 401–800, 801–928 (contiguous to EOF)
+- Purpose: Implements LAN Hub guest-facing container operations: nearby sound and level/entity events, opening/closing menus, inventory synchronization, click handling and container data slots.
+- Dependencies / cross-references: LAN Hub and Guest, item-stack codecs, menu slot abstractions, block entities, server world state, sound/level-event packets and native-menu event queues.
+- Implementation / logic: Broadcasts gameplay events to nearby guests, creates menu windows, validates guest clicks against server state, corrects client predictions and synchronizes changed slots and furnace/brewing/crafter data.
+- Findings: This is authoritative server-side menu and event handling. Its click implementation is not the client's local prediction logic; later item-stack/component and menu packet structures also differ from 1.20.1.
+- RustChunk relevance: Container interaction is essential to a playable client, but this source is the server authority side and cannot be used as the client packet receiver.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 container open/content/slot/data packet handlers and local click prediction separately; accept server corrections and use legacy ItemStack NBT plus Forge menu extensions.
+- Follow-up checks: Verify 1.20.1 container state IDs, click modes, carried stack, hidden/modded slots, shift-click, furnace/brewing data and stale-click correction.
+- RustChunk implementation mapping: No baseline mapping; future `server/lan/containers.rs` only.
+- Evidence required before adoption: 1.20.1 AbstractContainerMenu source, Forge menu APIs, packet captures and click/correction fixtures.
+- Completion state: COMPLETE — 928 logical lines read in contiguous ranges 1–400, 401–800 and 801–928; source SHA and 32069-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1330. `crates/horizon-client/src/lan/data.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12c926f0b7130b38e993a0fef3c485004101577f`
+- Size: 29506 bytes; 784 logical lines
+- Coverage: 1–400, 401–784 (contiguous to EOF)
+- Purpose: Provides LAN server registry/data synchronization and preparation of the data sent to joining guests, including registry-backed world/game data.
+- Dependencies / cross-references: LAN connection configuration, synchronized registries/tags, world resources and packet serializers.
+- Implementation / logic: Builds the server-side data snapshots used during the LAN configuration/play transition and serializes the appropriate registry-backed values for connected guests.
+- Findings: This is a server-side data publisher using the newer protocol and registry model. It is not the 1.20.1 client's registry/tag decoder and cannot establish target registry IDs or payload layouts.
+- RustChunk relevance: Registry synchronization is essential to multiplayer, but this is the outbound server side only.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 clientbound registry/tag/configuration handling and Forge registry extensions from target-era sources; do not import modern registry payload shapes.
+- Follow-up checks: Compare 1.20.1 registry synchronization, tags, recipe/biome data, configuration phase and modded registry negotiation.
+- RustChunk implementation mapping: No baseline mapping; future LAN server data publisher only.
+- Evidence required before adoption: 1.20.1 protocol/mappings, Forge handshake captures, registry/tag packet fixtures and unknown-registry tests.
+- Completion state: COMPLETE — 784 logical lines read in contiguous ranges 1–400 and 401–784; source SHA and 29506-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1331. `crates/horizon-client/src/lan/discovery.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `58e54bec7c5c7528f645d957344e26893624fa9c`
+- Size: 8637 bytes; 249 logical lines
+- Coverage: 1–249 (EOF)
+- Purpose: Implements LAN server discovery by sending and receiving local-network discovery/status messages and collecting candidate servers.
+- Dependencies / cross-references: UDP sockets, local network interfaces/broadcast or multicast behavior, server status response decoding and discovery result lifecycle.
+- Implementation / logic: Sends discovery probes, receives responses and maintains the set of discovered LAN servers for the surrounding UI.
+- Findings: This is optional discovery UX, not the Minecraft server connection protocol. Android multicast permissions, Wi-Fi lifecycle, duplicate responses and network changes need platform-specific handling.
+- RustChunk relevance: Could be a useful optional convenience for discovering local servers on Android, but manual address entry and direct connection are sufficient for the baseline.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Implement only if LAN discovery is desired; use Android-compatible multicast/UDP permissions and never assume all LAN servers advertise this Horizon discovery protocol.
+- Follow-up checks: Test Android Wi-Fi lifecycle, multicast lock/permissions, subnet changes, duplicate/forged responses, timeout and manual-server fallback.
+- RustChunk implementation mapping: Possible `platform/android/lan_discovery.rs`; not created.
+- Evidence required before adoption: Android network permission/lifecycle tests and interoperability captures from supported 1.20.1 LAN servers.
+- Completion state: COMPLETE — 249 logical lines read to EOF; source SHA and 8637-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1332. `crates/horizon-client/src/lan/entity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `32223100d56123a1b3fc07181dfb1c989e9ad623`
+- Size: 83433 bytes; 2132 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2132 (contiguous to EOF)
+- Purpose: Implements server-side entity tracking and synchronization: spawn/removal, visibility and relationships, metadata, attributes, motion and per-player entity update packets.
+- Dependencies / cross-references: LAN Hub and Guest, entity registry, world/entity state, tracker ranges, view distance/chunks, protocol entity packet codecs and player lifecycle.
+- Implementation / logic: Tracks which guests should know each entity, sends initial and incremental state, pairs/unpairs entities and emits updates as server entities move or change.
+- Findings: The implementation is server-side tracking and packet production, not the client's entity packet decoder. It is tied to later registries, entity types and packet fields, so it cannot be copied as the 1.20.1 client entity lifecycle.
+- RustChunk relevance: Entity synchronization is essential to multiplayer correctness, but RustChunk needs the receiving/rendering path and target-era entity metadata mapping.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 clientbound spawn, remove, metadata, attributes, movement, passengers and relationship handlers separately; keep server visibility authority external.
+- Follow-up checks: Compare 1.20.1 packet families, tracker range, entity ID reuse, metadata serializers, passenger ordering and Forge-added entity types.
+- RustChunk implementation mapping: No baseline mapping; future `server/entity_tracking.rs` only if local hosting is added.
+- Evidence required before adoption: 1.20.1 Java server/client packet handlers, packet captures and deterministic entity lifecycle tests.
+- Completion state: COMPLETE — 2132 logical lines read in six contiguous ranges through EOF; source SHA and 83433-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1333. `crates/horizon-client/src/lan/far.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `958d0bb3619a5b31a07e185bd1fe437419d26a6a`
+- Size: 15377 bytes; 429 logical lines
+- Coverage: 1–400, 401–429 (contiguous to EOF)
+- Purpose: Implements server-side far-chunk delivery for distant players, maintaining a ring/cache of resident or saved columns and sending far terrain without generating or ticking those chunks.
+- Dependencies / cross-references: LAN Hub, player view distance, saved chunk storage, dimension geometry, far-chunk packet format and background/cache state.
+- Implementation / logic: Selects distant columns for each player, reuses cached/saved chunk data and schedules far terrain updates separately from normal nearby ticking.
+- Findings: The algorithm is a server-side far-terrain delivery path, not a client renderer or authoritative chunk decoder. It relies on Horizon's custom far/LOD packet path and saved-column assumptions.
+- RustChunk relevance: The separation between active nearby chunks and cheaper distant terrain is a useful architecture reference for RustChunk's performance goal, but the protocol and storage format are not directly reusable.
+- Decision: **adaptable; reference; version-specific**
+- 1.20.1 implications: Do not expect a 1.20.1 server to send Horizon far packets. Any distant terrain must be derived client-side or negotiated through an explicit compatible mod/protocol.
+- Follow-up checks: Profile memory and scheduling under large view distances; compare saved vs generated columns, stale cache invalidation, dimension boundaries and client/server authority.
+- RustChunk implementation mapping: Possible future `world/far_terrain_cache.rs`; not created.
+- Evidence required before adoption: 1.20.1 chunk packet support, saved-chunk fixtures, memory benchmarks and visual seam/invalidations tests.
+- Completion state: COMPLETE — 429 logical lines read in contiguous ranges 1–400 and 401–429; source SHA and 15377-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1334. `crates/horizon-client/src/lan/forwarding.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `346b15935fe5b05c12b281e557241d5b388289a1`
+- Size: 8111 bytes; 231 logical lines
+- Coverage: 1–231 (EOF)
+- Purpose: Implements server-side proxy forwarding identity verification, including Velocity-style signed forwarding data and HMAC validation.
+- Dependencies / cross-references: LAN server login, proxy forwarding configuration, connection addresses, profile identity and cryptographic HMAC-SHA256 helpers.
+- Implementation / logic: Parses forwarded identity/address data, validates its signature against configured secret material and returns the trusted profile/network identity to the server connection flow.
+- Findings: This is server-side trust-boundary code, not a client login feature. Proxy forwarding must be explicitly configured and authenticated; accepting unsigned or mismatched forwarded identity would permit identity spoofing.
+- RustChunk relevance: Not needed by the Android remote client; the target server owns proxy authentication and identity mapping.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not implement or trust proxy-forwarded identity in RustChunk's client. Follow the server's ordinary 1.20.1/Forge login handshake.
+- Follow-up checks: If local hosting/proxy integration is ever added, verify signature inputs, timestamp/nonce handling, constant-time comparison, secret storage and replay resistance.
+- RustChunk implementation mapping: No baseline mapping; separate future server security module only.
+- Evidence required before adoption: Velocity forwarding specification, 1.20.1 proxy integration captures and cryptographic test vectors (not run in this audit).
+- Completion state: COMPLETE — 231 logical lines read to EOF; source SHA and 8111-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1335. `crates/horizon-client/src/lan/guest.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `82c2eabc8197ca0cf0829953b3c45ea0e7ab5737`
+- Size: 66325 bytes; 1614 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1614 (contiguous to EOF)
+- Purpose: Stores the LAN server's per-connected-player state and operations, including inventory, movement, chat, abilities, menus, attributes, recipes and outgoing packet queues.
+- Dependencies / cross-references: LAN Hub and connection handler, entity/player models, item registry and modern ItemStack format, scoreboard, chat validation, packet serialization and profile data.
+- Implementation / logic: Maintains authoritative guest state, applies inbound player actions, builds/queues clientbound updates and exposes the per-player view used by the server hub.
+- Findings: The module is a server-side player/session model. It includes modern component-oriented stack and protocol structures and is not a substitute for RustChunk's client player state or 1.20.1 legacy item handling.
+- RustChunk relevance: Only an architectural reference if RustChunk later implements an integrated/LAN server; remote-client baseline needs packet-driven state.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Build the client player/inventory model from 1.20.1 clientbound packets and local input; keep server validation and authoritative inventory state external.
+- Follow-up checks: Compare target player abilities, inventory, chat/session, attributes, menu state, respawn and Forge capability synchronization.
+- RustChunk implementation mapping: No baseline mapping; future `server/guest.rs` only if hosting is added.
+- Evidence required before adoption: 1.20.1 player/server source, Forge handshake/packet traces and inventory/session lifecycle tests.
+- Completion state: COMPLETE — 1614 logical lines read in five contiguous ranges through EOF; source SHA and 66325-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1336. `crates/horizon-client/src/lan/handoff.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6c0d84664cf7178100bd19c4f08388293ea39e27`
+- Size: 4681 bytes; 132 logical lines
+- Coverage: 1–132 (EOF)
+- Purpose: Allows the in-process single-player server and client window to share identical chunk-section allocations after the window decodes the normal chunk packet.
+- Dependencies / cross-references: Chunk/section storage, Arc/Weak ownership, packet decode path, block/biome/light equality and the memory-connection handoff between integrated server and client.
+- Implementation / logic: The server offers weak references to sections; after decoding, the client adopts only sections that still exist and compare equal, preserving isolation through copy-on-write when either side edits.
+- Findings: This optimization is specific to a same-process single-player server/client memory connection. It does not affect the packet format and weak references do not keep sections alive; equality must include blocks, biomes and light. It is not available when joining a remote server.
+- RustChunk relevance: Potentially useful to reduce memory duplication if RustChunk later hosts an integrated server in the same process, but not needed for remote multiplayer or a standalone client.
+- Decision: **adaptable; reference; optional/future**
+- 1.20.1 implications: Do not use this path for Aternos/remote joins. Consider only after an integrated-server architecture exists and with strict immutable-section/copy-on-write guarantees.
+- Follow-up checks: Benchmark saved memory, verify section equality includes light/biomes, test server edit between offer/take, stale weak refs, dimension/min_y offset and concurrent ownership.
+- RustChunk implementation mapping: Possible future `platform/integrated/handoff.rs`; not created.
+- Evidence required before adoption: Integrated-server proof of concept, Arc ownership stress tests and chunk-section equality fixtures.
+- Completion state: COMPLETE — 132 logical lines read to EOF; source SHA and 4681-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1337. `crates/horizon-client/src/lan/hub.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aa2939dced8a51670fecdf33f57ee238b39b66de`
+- Size: 181745 bytes; 4525 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–3200, 3201–3600, 3601–4000, 4001–4400, 4401–4525 (contiguous to EOF)
+- Purpose: Implements the central LAN/dedicated server hub tick: guest lifecycle, packet handling, movement authority, chunk delivery, entity tracking, broadcasts, menus, teleports and server-side world interactions.
+- Dependencies / cross-references: LAN connection/Guest, world/chunk storage, movement prediction, entity tracker, scoreboard, recipes, registries, menu and packet codecs, server tick and worker pools.
+- Implementation / logic: Coordinates connected guests per server tick, applies inbound actions, updates player/entity state, decides visibility and packet delivery, handles joins/leaves and performs authoritative world/menu operations.
+- Findings: This is a large server authority module, not the Android client loop or renderer. It relies on Horizon-specific later-version packet/content structures. Some subsystems (chunk batching and adaptive delivery) are architectural references only.
+- RustChunk relevance: Not a direct RustChunk client port. Only isolated algorithms may inform future integrated-server work; the remote client must never simulate Hub authority.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Keep the 1.20.1 client networking/tick pipeline separate from server logic; decode server updates and render authoritative state.
+- Follow-up checks: If hosting is ever added, split responsibilities and validate tick ordering, packet backpressure, chunk view, entity tracking, teleport/respawn, menu lifecycle and concurrent guest changes.
+- RustChunk implementation mapping: No baseline mapping; future `server/hub.rs` only if product scope expands.
+- Evidence required before adoption: 1.20.1 server tick/packet sources, Forge event traces, multi-client integration tests and load profiling.
+- Completion state: COMPLETE — 4525 logical lines read in twelve contiguous ranges through EOF; source SHA and 181745-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1338. `crates/horizon-client/src/lan/hub/chat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ec506e84e04dc66daff68d8bd6e8871be782cf55`
+- Size: 18651 bytes; 513 logical lines
+- Coverage: 1–400, 401–513 (contiguous to EOF)
+- Purpose: Implements server-side secure chat and command handling: profile-key validation, signed message chains, last-seen acknowledgements, visibility and relaying.
+- Dependencies / cross-references: LAN Hub/Guest, chat signing keys, player profiles, message chain state, command parser and play packet codecs.
+- Implementation / logic: Validates signed/unsigned guest chat and command arguments, updates last-seen state and relays accepted messages to eligible players.
+- Findings: This is server-side message validation/relay, not the client chat UI or receiving/signing state machine. It uses the pinned later protocol and must not be treated as a 1.20.1 chat codec.
+- RustChunk relevance: Chat is essential UX, but the client requires target-specific receive, display and signing logic rather than server relay code.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 secure-chat packet parsing, chat type decoration, signature/acknowledgement behavior and Forge compatibility using target-era sources.
+- Follow-up checks: Compare 1.20.1 chat session, player profile keys, signed/unsigned commands, last-seen acknowledgements, filtering and disconnect/error handling.
+- RustChunk implementation mapping: No baseline mapping; future `server/chat.rs` only for local hosting.
+- Evidence required before adoption: 1.20.1 chat protocol source, packet captures, signed-chat fixtures and localization/UI tests.
+- Completion state: COMPLETE — 513 logical lines read in contiguous ranges 1–400 and 401–513; source SHA and 18651-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1339. `crates/horizon-client/src/lan/hub/chat_filter.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f9dc6ca6bf3dbef0dcf86ec7eecfcc761a7c087b`
+- Size: 8090 bytes; 247 logical lines
+- Coverage: 1–247 (EOF)
+- Purpose: Implements server-side chat moderation/filtering for muted users, blocked language and moderation escalation across chat, commands and text-entry channels.
+- Dependencies / cross-references: LAN Hub chat flow, server moderation settings, player mute/ban state and server event/log dispatch.
+- Implementation / logic: Evaluates submitted text against moderation rules and player state, then allows, suppresses or escalates the corresponding server action.
+- Findings: This is server policy enforcement and not a client-side moderation substitute. The rules are Horizon/server-specific and can differ from a target server's policy.
+- RustChunk relevance: Not required to connect to a server; the server remains authoritative for moderation.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not impose this filter locally in RustChunk's baseline. Display server-provided filtering/system messages according to the 1.20.1 client protocol.
+- Follow-up checks: If hosting is added, threat-model false positives, normalization/Unicode evasion, audit logging, mute/ban enforcement and command/book/anvil coverage.
+- RustChunk implementation mapping: No baseline mapping; future server moderation module only.
+- Evidence required before adoption: 1.20.1 server policy requirements, adversarial Unicode/text corpus and moderation event tests.
+- Completion state: COMPLETE — 247 logical lines read to EOF; source SHA and 8090-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1340. `crates/horizon-client/src/lan/menu.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9326c9a62a923cc922d0e214e1b924fa86f30405`
+- Size: 41131 bytes; 1126 logical lines
+- Coverage: 1–400, 401–800, 801–1126 (contiguous to EOF)
+- Purpose: Implements the authoritative server-side container click engine: slot rules, carried stacks, click modes, shift-click, swaps, throws, bundles and hidden/native menu slots.
+- Dependencies / cross-references: LAN Hub/Guest, container slot abstractions, item stacks and tags, menu types, player inventory and Forge/Horizon menu callbacks.
+- Implementation / logic: Applies a guest's click request to server-owned slots, checks menu validity and slot restrictions, handles complex transfer/click modes and returns changed slots for synchronization.
+- Findings: This is server-authoritative menu simulation, not the client-side click prediction/input model. It contains later item formats, bundle/native menu behavior and Horizon-specific menu extensions.
+- RustChunk relevance: Container UI and local click prediction are essential, but this server implementation is not a drop-in 1.20.1 client subsystem.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Build the client menu state and prediction against 1.20.1 container packets and legacy ItemStack NBT; accept authoritative server corrections and target Forge menu extensions.
+- Follow-up checks: Compare 1.20.1 AbstractContainerMenu click modes, slot validity, shift-click ranges, bundle support, carried stack and correction sequencing.
+- RustChunk implementation mapping: No baseline mapping; future `server/menu.rs` only.
+- Evidence required before adoption: 1.20.1 Java menu code, Forge slot fixtures and packet-driven click prediction/correction tests.
+- Completion state: COMPLETE — 1126 logical lines read in three contiguous ranges through EOF; source SHA and 41131-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1341. `crates/horizon-client/src/lan/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `816cd885f0976184b705a59f4e670f85efb1bb55`
+- Size: 40640 bytes; 1028 logical lines
+- Coverage: 1–400, 401–800, 801–1028 (contiguous to EOF)
+- Purpose: Defines the LAN/dedicated server module, listener/configuration setup, login admission, online-mode identity and per-connection session lifecycle.
+- Dependencies / cross-references: Server settings and secrets, network listener, connection workers, profile authentication, play protocol and LAN Hub.
+- Implementation / logic: Starts and configures the server-side listener, accepts and gates incoming connections, manages login identity and hands established sessions to the hub.
+- Findings: This module starts a server and handles incoming guests; it is not a client connector. Authentication, admission limits and server lifecycle must not be confused with the Android launcher's offline account mode.
+- RustChunk relevance: Not needed for joining remote servers. Future local-hosting would be a separate product feature with additional security and lifecycle requirements.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not start or expose a LAN listener in the remote-client baseline. Implement only the 1.20.1 client login/Forge handshake path.
+- Follow-up checks: If hosting is considered, verify admission limits under concurrent logins, private/local address exemptions, secret storage, online/offline identity and shutdown cleanup.
+- RustChunk implementation mapping: No baseline mapping; separate future `server/lan/mod.rs` only.
+- Evidence required before adoption: 1.20.1 login/Forge handshake captures, concurrent admission tests and Android network-security review.
+- Completion state: COMPLETE — 1028 logical lines read in three contiguous ranges through EOF; source SHA and 40640-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1342. `crates/horizon-client/src/lan/playerdata.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f36b7605f7df18911cdf40168b82c7f60e85c88f`
+- Size: 31535 bytes; 782 logical lines
+- Coverage: 1–400, 401–782 (contiguous to EOF)
+- Purpose: Persists and restores the LAN server's player save data, including inventory, attributes, effects, abilities, recipe-book state, vehicle and world/dimension fields.
+- Dependencies / cross-references: Server player/entity state, NBT serialization, UUID-based player files, Level.dat owner data, world storage and entity/attachment data.
+- Implementation / logic: Loads player NBT from the UUID file with fallback handling, applies saved fields to a new server player and writes current state back to persistent storage.
+- Findings: This is server persistence, not a remote client's local profile or launcher account database. The saved field set and NBT semantics are version-specific; modded dimensions/attachments need separate compatibility checks.
+- RustChunk relevance: Not required for a remote client. It may be a reference if RustChunk later includes an integrated server or local worlds.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not port server player save handling into client profile storage. Keep account/profile metadata and server-authoritative player NBT separate.
+- Follow-up checks: If local hosting is added, compare 1.20.1 playerdata NBT keys, `.dat_old` recovery, dimension IDs, Forge capabilities/attachments, inventory and vehicle persistence.
+- RustChunk implementation mapping: No baseline mapping; future integrated-server player save module only.
+- Evidence required before adoption: 1.20.1 playerdata fixtures, Forge capability serialization tests and save/restart recovery tests.
+- Completion state: COMPLETE — 782 logical lines read in two contiguous ranges through EOF; source SHA and 31535-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1343. `crates/horizon-client/src/lan/prediction.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5b0c39858f70ae6c4823c3c8a2403b7cf497be63`
+- Size: 62143 bytes; 1497 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1497 (contiguous to EOF)
+- Purpose: Implements server-side replay of guest movement inputs to compare claimed movement with deterministic player physics and detect/excuse deviations.
+- Dependencies / cross-references: PlayerMotion simulation, collision scene, movement attributes/abilities, velocity pushes, item-use slowdown, sprint/jump state, server tick/packet record and LAN Hub.
+- Implementation / logic: Records client inputs and server-observed changes, replays movement ticks, tracks offsets/candidate states and accumulates unexplained movement deviations for authoritative correction/moderation.
+- Findings: This is server-side movement validation, not the client's local movement predictor. It depends on Horizon physics and modern movement state; replay tests may require prepared local game resources and were inspected only.
+- RustChunk relevance: Accurate client movement and prediction are important, but this anti-cheat replay engine is not the client movement loop. Its deterministic replay concepts are a reference for testing RustChunk's own prediction.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 client movement/collision locally and treat server corrections as authoritative. Do not add this server anti-cheat to the Android client.
+- Follow-up checks: Compare 1.20.1 movement tick order, sprint modifiers, jump delay, item slowdown, velocity packets, teleport/burst handling and tolerance against a target server.
+- RustChunk implementation mapping: Possible future `tests/movement_replay_oracle.rs`; not created.
+- Evidence required before adoption: 1.20.1 Java player physics and packet traces, deterministic client/server movement harness and latency/lag fixtures.
+- Completion state: COMPLETE — 1497 logical lines read in four contiguous ranges through EOF; source SHA and 62143-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1344. `crates/horizon-client/src/lan/recipes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cf983e79698bc07c8b939551ef0896ee3d1fb877`
+- Size: 17725 bytes; 471 logical lines
+- Coverage: 1–400, 401–471 (contiguous to EOF)
+- Purpose: Builds server-side recipe data for synchronization, recipe-property item sets, stonecutter displays and optional Horizon native-mod recipe-content payloads.
+- Dependencies / cross-references: Recipe JSON/resource packs, tags and item registries, recipe filters, crafting ingredient parser, LAN SyncData, network packet writer and custom payload channel.
+- Implementation / logic: Loads/overlays recipe files, filters and normalizes supported ingredients, encodes recipe-property sets and stonecutter outputs, and chunks mod recipe content into bounded payloads.
+- Findings: This is the outbound server recipe encoder and includes Horizon-specific native recipe-content synchronization and later slot-display structures. It is not the 1.20.1 client's recipe packet decoder or the Forge recipe model.
+- RustChunk relevance: Recipe-book and crafting data are essential client features, but the client needs a separate target-era inbound parser.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Implement 1.20.1 recipe/recipe-book packet handling and Forge serializer compatibility from target-era sources; do not adopt Horizon custom payload or slot-display formats.
+- Follow-up checks: Compare 1.20.1 recipe packet structure, ingredient/tag expansion, recipe filters, stonecutter, furnace property sets, unknown mod ingredient handling and payload limits.
+- RustChunk implementation mapping: No baseline mapping; future `server/recipe_sync.rs` only for local hosting.
+- Evidence required before adoption: 1.20.1 Java/Forge recipe serializers and packet captures, modded ingredient corpus and round-trip fixtures.
+- Completion state: COMPLETE — 471 logical lines read in contiguous ranges 1–400 and 401–471; source SHA and 17725-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1345. `crates/horizon-client/src/lan/scoreboard.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2a9a158758932ef1bcb8ef673c13fb09feadf925`
+- Size: 12393 bytes; 337 logical lines
+- Coverage: 1–337 (EOF)
+- Purpose: Maintains a per-player view of server scoreboard objectives, display slots, scores and teams, then emits the packets needed to update that client's board.
+- Dependencies / cross-references: Server scoreboard state, team membership/color/parameters, objective render/number formats, display-slot registry and play packet encoders.
+- Implementation / logic: Filters objectives to displayed ones, snapshots scores/teams and diffs two snapshots into ordered team, objective, display-slot, score and reset packets.
+- Findings: This is the server-side scoreboard diff/broadcaster, not the client's scoreboard packet receiver/state model. Display-slot IDs, number formats and packet forms are version-specific.
+- RustChunk relevance: Scoreboard display is important for multiplayer HUD, but this code is useful only as a server-side reference; RustChunk needs 1.20.1 inbound packet handling.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Build the 1.20.1 client scoreboard/team state from server packets, preserving team leave-before-join ordering and target formatting rules.
+- Follow-up checks: Compare 1.20.1 objective/team/score/display packet semantics, team reassignment order, number formats, reset behavior and Forge extensions.
+- RustChunk implementation mapping: No baseline mapping; future server scoreboard broadcaster only.
+- Evidence required before adoption: 1.20.1 scoreboard Java source, packet captures and ordered team/objective update fixtures.
+- Completion state: COMPLETE — 337 logical lines read to EOF; source SHA and 12393-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1346. `crates/horizon-client/src/lan/tracking.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f39031e256fda5f5f3c955de2c251142881be24b`
+- Size: 7728 bytes; 180 logical lines
+- Coverage: 1–180 (EOF)
+- Purpose: Provides a generated entity-type table of server tracking range, update interval and delta-tracking behavior, with fallback defaults for unknown types.
+- Dependencies / cross-references: Generated EntityTypes metadata, LAN entity tracker, entity registry and projectile template mapping.
+- Implementation / logic: Looks up each entity type in a sorted constant table and returns its chunk tracking range, update interval and delta flag; unknown thrown projectiles may inherit snowball settings.
+- Findings: This is server tracking configuration for a later Minecraft version and includes entity types absent from 1.20.1. It does not describe client render distance or client entity interpolation.
+- RustChunk relevance: A reference for how entity tracking policy is kept data-driven; not a client subsystem.
+- Decision: **unnecessary; reference; version-specific**
+- 1.20.1 implications: Do not use this table for 1.20.1 rendering or culling. Reconstruct server tracking only if hosting is added, from the target entity builders.
+- Follow-up checks: Compare all 1.20.1 EntityType.Builder tracking ranges/update intervals and Forge mod entity defaults; validate unknown/projectile fallback.
+- RustChunk implementation mapping: No baseline mapping; future server tracker configuration generator only.
+- Evidence required before adoption: 1.20.1 decompiled EntityTypes source/mappings and per-entity spawn/update packet traces.
+- Completion state: COMPLETE — 180 logical lines read to EOF; source SHA and 7728-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1347. `crates/horizon-client/src/lan/waypoints.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3e92d820dcafd1a5c6368dffff7e6d8e7a00ee4d`
+- Size: 24828 bytes; 690 logical lines
+- Coverage: 1–400, 401–690 (contiguous to EOF)
+- Purpose: Implements server-side waypoint/locator-bar tracking between players, including block/chunk/azimuth targets, visibility, team color, range and update/untrack packets.
+- Dependencies / cross-references: LAN player position and view distance, waypoint transmit/receive attributes, spectator/hiding state, team colors, game rule and TrackedWaypoint packet encoder.
+- Implementation / logic: Maintains source/receiver connections each tick, chooses block/chunk/azimuth representation based on visibility and distance, and sends track/update/untrack packets as players move or hide.
+- Findings: This is the server manager for a newer locator-bar feature, not client rendering or a 1.20.1 server protocol. It relies on later waypoint attributes and packet types.
+- RustChunk relevance: Not needed for baseline 1.20.1 multiplayer. It can be a future optional protocol/UI feature only if both client and server support it.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not expect ordinary 1.20.1 servers to send TrackedWaypoint packets or expose these attributes. Do not implement server waypoint authority in the client.
+- Follow-up checks: If considered later, verify privacy/hiding rules, spectators, team colors, view-distance transitions, cross-dimension untracking and packet lifecycle.
+- RustChunk implementation mapping: No baseline mapping; optional future locator/waypoint protocol adapter only.
+- Evidence required before adoption: Target server/plugin protocol, privacy rules, packet captures and cross-dimension/range transition tests.
+- Completion state: COMPLETE — 690 logical lines read in contiguous ranges 1–400 and 401–690; source SHA and 24828-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1348. `crates/horizon-client/src/landing.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bc0235ecdf722966347c3ecca5379f9f8260409c`
+- Size: 22924 bytes; 706 logical lines
+- Coverage: 1–400, 401–706 (contiguous to EOF)
+- Purpose: Implements player fall/landing behavior and block landing reactions, producing sound, particle, damage, statistic and block-change events through the motion simulation.
+- Dependencies / cross-references: MotionWorld/player state, fall-damage and living-fall rules, landing definition registry, movement attributes, collision scene, block push and native client hooks.
+- Implementation / logic: Applies safe-fall distance, fall-damage multipliers, landing-specific behavior (hay, honey, slime, powder snow, pointed dripstone, farmland, turtle eggs), event generation and block/entity reactions.
+- Findings: This is shared movement/landing simulation with explicit client/server distinctions, but it contains later block families and native hooks. Some block mutation and damage effects are event-produced and must remain server-authoritative in multiplayer.
+- RustChunk relevance: Fall physics, landing feedback and collision interactions are core gameplay behavior; the architecture is useful but the implementation needs target-version reconstruction.
+- Decision: **essential; rewrite required; version-specific**
+- 1.20.1 implications: Rebuild the 1.20.1 fall/landing path, target block set and Forge event hooks. The remote client may predict presentation but must reconcile damage/block changes from the server.
+- Follow-up checks: Compare 1.20.1 LivingEntity fall logic, safe-fall attributes, hay/slime/honey/farmland/egg/dripstone behavior, creative/mayfly exemptions, statistics, random draw order and server/client block authority.
+- RustChunk implementation mapping: Possible `gameplay/movement/landing_1_20_1.rs` plus event consumer; not created.
+- Evidence required before adoption: 1.20.1 Java fall/landing source, Forge living-fall events, block behavior fixtures and deterministic movement/event traces.
+- Completion state: COMPLETE — 706 logical lines read in contiguous ranges 1–400 and 401–706; source SHA and 22924-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1349. `crates/horizon-client/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3699d714d7f5684c82f9401eee44f07cd291c0b2`
+- Size: 415 bytes; 13 logical lines
+- Coverage: 1–13 (EOF)
+- Purpose: Defines the Horizon client crate root, re-exports the reusable client library, gates Android-specific code and exposes startup/game/mod/API/diagnostics/performance modules.
+- Dependencies / cross-references: horizon-client-lib, Android activity/JNI integration, crate modules and target_os conditional compilation.
+- Implementation / logic: Uses a crate self-alias and re-export, conditionally includes Android bindings and declares the top-level modules used by the executable client crate.
+- Findings: This is a thin crate/module boundary, not a launcher implementation. The Android conditional attribute and Horizon module names are project-specific; the re-export boundary is a conventional Rust pattern.
+- RustChunk relevance: A clean crate root and target gating are useful architectural patterns, but no gameplay feature is implemented here.
+- Decision: **adaptable; reference**
+- 1.20.1 implications: Use a RustChunk-specific crate root and explicit Android/Linux feature boundaries; do not copy Horizon module declarations or package assumptions blindly.
+- Follow-up checks: Review RustChunk workspace/crate boundaries, JNI target cfgs, unsafe-code policy and module ownership as the project grows.
+- RustChunk implementation mapping: Existing workspace crate roots; no new file proposed.
+- Evidence required before adoption: RustChunk Cargo workspace and Android target build configuration.
+- Completion state: COMPLETE — 13 logical lines read to EOF; source SHA and 415-byte size match the pinned tree.
+
+### 1350. `crates/horizon-client/src/locator_bar.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ecead2c52ccd1e45f4ddf66e48233a9bc2c18e11`
+- Size: 27216 bytes; 742 logical lines
+- Coverage: 1–400, 401–742 (contiguous to EOF)
+- Purpose: Implements client-side waypoint state, style/animated sprite loading and rendering of the locator bar with distance-based dots, direction arrows and contextual HUD priority.
+- Dependencies / cross-references: TrackedWaypoint play packets, HUD sprite/animation atlas, camera projection/yaw/pitch/FOV, entity lookup, GUI draw pipeline and waypoint-style JSON resources.
+- Implementation / logic: Applies track/update/untrack packets, loads waypoint styles and sprite animation metadata, projects targets to screen, sorts waypoints and draws dots/arrows while choosing between locator, XP and jumpable-vehicle bars.
+- Findings: This is client-side rendering for a later waypoint protocol and requires matching server packets, attributes and resources. The packet model and built-in locator feature are not ordinary Minecraft 1.20.1 behavior.
+- RustChunk relevance: A self-contained HUD/rendering example, but not required to connect to Forge 1.20.1 servers; only reusable UI projection/animation ideas may transfer.
+- Decision: **unnecessary; reference; optional/future**
+- 1.20.1 implications: Do not enable this feature in the 1.20.1 baseline unless a compatible server/mod protocol is explicitly supported. Keep waypoint data optional and server-originated.
+- Follow-up checks: If added later, validate packet lifecycle, privacy/untrack behavior, sprite resource reload, GUI scaling/FOV/pitch edge cases, animation timing and accessibility.
+- RustChunk implementation mapping: No baseline mapping; optional future `ui/hud/locator_bar.rs` behind explicit compatibility support.
+- Evidence required before adoption: Target-compatible waypoint protocol/server extension, resource-pack sprites and screenshot/projection tests across camera angles and GUI scales.
+- Completion state: COMPLETE — 742 logical lines read in contiguous ranges 1–400 and 401–742; source SHA and 27216-byte size match the pinned tree; embedded tests inspected, not run.

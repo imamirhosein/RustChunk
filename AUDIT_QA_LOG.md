@@ -988,3 +988,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings in this range include client rendering/UX subsystems, several server-only LAN encoders/host features, and later-version extensions. All 26.3/Horizon-specific packet structures and content were kept separate from 1.20.1 compatibility claims.
 - Embedded tests were inspected as source only, not executed. No build, unit tests, benchmark, APK, Forge launch, Android-device validation, Minecraft join, LAN host, UPnP or relay test was run.
 - Existing backups and main branch were not modified. Next backup remains due only after entries 1001–2000 are completed and globally verified.
+
+
+## Source-audit checkpoint 1326–1350 — 2026-11-19
+
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Exactly 25 new unique source files (1326–1350) were inspected in pinned-tree lexical order after entry 1325. Every selected file was read fully to EOF; long-file ranges were consecutive, gap-free and no larger than 400 logical lines.
+- Source SHA and byte size for all 25 entries match the pinned recursive tree. The Ledger records canonical logical line counts and EOF coverage.
+- The 25 Ledger entries contain all 15 required fields exactly once; Index rows 1326–1350 align with their Ledger paths and decisions.
+- The active stage 1201–1400 now has 150/200 entries complete. Reporting section 1301–1350 is closed after checkpoints 1301–1325 and 1326–1350.
+- At this 50-file boundary, stop. Do not inspect entry 1351 or later until the user explicitly authorizes section 1351–1400 (checkpoints 1351–1375 and 1376–1400).
+- This range is weighted toward LAN/server infrastructure. Server-only modules were not classified as client features; later-version waypoint/locator and packet structures were not treated as 1.20.1 compatibility evidence. Shared landing/movement architecture and optional in-process chunk handoff were identified separately.
+- Embedded tests were inspected only, not executed. No build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join, LAN host, UPnP or relay test was run.
+- The audit branch alone was updated. `main` and both existing backup branches remain untouched. The next backup remains due only after entries 1001–2000 are fully committed and globally verified.
