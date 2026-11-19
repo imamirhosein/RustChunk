@@ -734,3 +734,20 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Appended exactly 20 complete Ledger entries (1141–1160) with 15 fields each and 20 matching Index rows; QA, Continuity and Protocol updated in the same checkpoint operation.
 - Stage 1001–1200 advances to 160/200 (80%). The next checkpoint is 1161–1180, starting at `crates/horizon-client/src/game/commands/test_locate.rs`.
 - Commit and post-commit read-back are required before treating this checkpoint as saved.
+
+### Checkpoint 1161–1180 — 2026-11-19
+
+- Pinned source: `starling-client/starling` @ 5432370d573642041585c69b40fb045b27133488; the recursive Git tree SHA matches the pinned commit.
+- Exactly 20 new and previously unindexed Rust files were reviewed completely to EOF. All 20 source blob SHAs and byte sizes match pinned Git-tree metadata.
+- Complete logical-line coverage: 1161 (353), 1162 (489), 1163 (402), 1164 (1731), 1165 (213), 1166 (389), 1167 (1615), 1168 (362), 1169 (255), 1170 (485), 1171 (98), 1172 (8), 1173 (7615), 1174 (486), 1175 (605), 1176 (1371), 1177 (576), 1178 (493), 1179 (292), 1180 (187). Files longer than 400 lines were read in consecutive, gap-free chunks of at most 400 lines.
+- Every new Ledger entry contains exactly the 15 required fields. Pre-commit Index validation: 1180 sequential numbered rows, 1180 unique source paths and no duplicates against entries 1–1160 or within this checkpoint.
+- The historical correction at entry 1089 (`blockctl.rs`) remains in the skip set; `entry.rs` occurs only at entry 121.
+- Decisions separate 1.20.1 commands, composter/consume, creatures, crossbow and debug-stick behavior from later test-instance/copper-golem/Creaking/cushion/cosmetics features and Horizon control tooling. The huge creature module is a core feature area but must be split and rewritten for the target version.
+- No source tests, builds, APKs, Forge launches, Android device runs, multiplayer joins or server operations were performed. Embedded tests were inspected only.
+- Existing backup branches were not changed. The next backup remains due only after entries 1001–2000 have been committed and globally verified.
+
+### Durable checkpoint
+
+- Appended exactly 20 complete 15-field Ledger entries (1161–1180) and 20 matching Index rows; QA, Continuity and Protocol were updated in the same checkpoint operation.
+- Stage 1001–1200 advances to 180/200 (90%). Next checkpoint is 1181–1200, beginning at `crates/horizon-client/src/game/decorated_pot.rs`.
+- Post-commit read-back of all five documents and blob-SHA verification are required before considering this checkpoint saved.

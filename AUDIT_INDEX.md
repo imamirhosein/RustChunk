@@ -1324,3 +1324,23 @@
 | 1158 | `crates/horizon-client/src/game/commands/profiles.rs` | unnecessary; reference; optional/future | Dedicated-server user-list commands; keep outside Android client core. |
 | 1159 | `crates/horizon-client/src/game/commands/raid.rs` | unnecessary; reference; optional/future | Developer raid-control command; omit from vanilla 1.20.1 command surface. |
 | 1160 | `crates/horizon-client/src/game/commands/terrain_cmds.rs` | adaptable; version-specific | Forceload, fillbiome, worldborder and loot are target-relevant; rebuild against 1.20.1 world and item APIs. |
+| 1161 | `crates/horizon-client/src/game/commands/test_locate.rs` | unnecessary; reference; optional/future; version-specific | Later test-instance/GameTest command extension; omit from vanilla 1.20.1. |
+| 1162 | `crates/horizon-client/src/game/commands/test_runs.rs` | unnecessary; reference; optional/future; version-specific | Modern GameTest orchestration; not part of the target client baseline. |
+| 1163 | `crates/horizon-client/src/game/commands/text_commands.rs` | adaptable; rewrite required; version-specific | Target command behavior adapts, but text component and packet implementation require a 1.20.1 rewrite. |
+| 1164 | `crates/horizon-client/src/game/commands/world_cmds.rs` | adaptable; rewrite required; version-specific | Many world commands are target-relevant, but their shared modern implementation must be split and rewritten. |
+| 1165 | `crates/horizon-client/src/game/composter.rs` | adaptable; version-specific | Vanilla composter behavior adapts after replacing modern compute/provider data with target tags/chances. |
+| 1166 | `crates/horizon-client/src/game/consume.rs` | adaptable; rewrite required; version-specific | Eating/drinking is core and adaptable, but component-based item effects require a 1.20.1 rewrite. |
+| 1167 | `crates/horizon-client/src/game/control.rs` | unnecessary; reference; optional/future | Horizon-only privileged control socket; keep out of the release client core. |
+| 1168 | `crates/horizon-client/src/game/copper_golems.rs` | unnecessary; reference; optional/future; version-specific | Later copper-golem/copper-chest features; exclude from vanilla 1.20.1. |
+| 1169 | `crates/horizon-client/src/game/cosmetics.rs` | unnecessary; reference; optional/future | Horizon-specific cosmetics service; not required for gameplay or server compatibility. |
+| 1170 | `crates/horizon-client/src/game/creaking.rs` | unnecessary; reference; optional/future; version-specific | Later Creaking/Creaking Heart subsystem; exclude from 1.20.1 baseline. |
+| 1171 | `crates/horizon-client/src/game/creative_hotbar.rs` | adaptable; version-specific | Creative hotbar behavior adapts; rewrite persistence to 1.20.1 item NBT. |
+| 1172 | `crates/horizon-client/src/game/creative_shift.rs` | unnecessary; reference | Horizon-specific build workaround; omit. |
+| 1173 | `crates/horizon-client/src/game/creatures.rs` | essential; rewrite required; version-specific | Critical creature engine area; must be modularly rewritten for 1.20.1 with later species and Horizon/LAN code excluded. |
+| 1174 | `crates/horizon-client/src/game/crossbow.rs` | adaptable; rewrite required; version-specific | Crossbow behavior adapts; charged component storage must be rewritten to target NBT. |
+| 1175 | `crates/horizon-client/src/game/cushions.rs` | unnecessary; reference; optional/future | Horizon-only cushion furniture entity; exclude from vanilla 1.20.1. |
+| 1176 | `crates/horizon-client/src/game/debug_keys.rs` | adaptable; rewrite required; version-specific | Debug keys are useful, but split/rewrite them against 1.20.1 and strip Horizon-only controls. |
+| 1177 | `crates/horizon-client/src/game/debug_lines.rs` | adaptable; version-specific | F3 data model adapts; rebuild exact 1.20.1 entry set and presentation. |
+| 1178 | `crates/horizon-client/src/game/debug_options.rs` | unnecessary; reference; optional/future; version-specific | Newer 26.3 DebugOptionsScreen; omit from the 1.20.1 baseline. |
+| 1179 | `crates/horizon-client/src/game/debug_renderers.rs` | adaptable; version-specific | Selected debug geometry can adapt; target flags/data and mobile scan costs must be rebuilt. |
+| 1180 | `crates/horizon-client/src/game/debug_stick.rs` | adaptable; rewrite required; version-specific | Vanilla debug stick adapts, but component persistence must be rewritten to 1.20.1 NBT. |
