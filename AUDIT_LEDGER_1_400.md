@@ -537,8 +537,8 @@
 ### 20. `docs/mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 6b6c04640da7292c3a4a60217347d5acd487ebd1
-- Size: 492 lines; 30,867 characters; full file fetched and read in one request; final newline present.
-- Coverage: lines 1–492, complete.
+- Size: 492 logical lines; 30,867 characters; fetched and read in consecutive source ranges 1–400 and 401–492.
+- Coverage: lines 1–400; 401–492, complete; both source ranges returned the same pinned blob SHA `6b6c04640da7292c3a4a60217347d5acd487ebd1`.
 - Purpose: describes Horizon's mod model, supported mod types, enabling/loading, content mod authoring and schema, multiplayer compatibility checks, native code mods, registry publishing and artifact integrity.
 - Two distinct mod systems:
   - Content mods (.hmod) carry data/assets only: blocks, items, recipes, loot, tags, models, textures, structures and supported registry records. They are loaded at game start and contain no executable code.
@@ -582,7 +582,7 @@
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `31c77d4d63bb45c648b8ec24134ad6141dd2628c`.
 - Size: 33,526 bytes; 435 lines; complete file fetched in consecutive ranges 1–400 and 401–435.
-- Coverage: lines 1–435, complete; both ranges returned the same blob SHA.
+- Coverage: lines 1–400; 401–435, complete; both ranges were fetched consecutively.
 - Purpose: describes Horizon's automated process for moving its Rust implementation from one Minecraft Java release to the next: pinning, official-jar preparation, data generation, class indexing/diff, regeneration, parity harnesses, issue/report generation and release switch.
 - Current-version assumptions and pinned facts:
   - The documented baseline is Minecraft 26.3: world/data version 5023, protocol 777, resource pack 97.1, data pack 121.0, Java 25; generated constants and protocol tables derive from that pin.
@@ -671,7 +671,7 @@
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `51d9245e4d9d4a7b467004d6c07db10d59065d51`.
 - Size: 54,334 bytes; 857 lines; fetched in consecutive ranges 1–400, 401–800 and 801–857.
-- Coverage: lines 1–857, complete; all three ranges returned the same blob SHA.
+- Coverage: lines 1–400; 401–800; 801–857, complete; all three ranges were fetched consecutively.
 - Purpose: documents the Rust-native playable client, its setup and resource preparation, implemented gameplay/rendering slices, agent-control API, operating-system target, and extensive scoped Java-parity evidence.
 - Version and platform constraints:
   - The client is explicitly a Rust rewrite targeting Minecraft Java Edition 26.3 and consumes the matching prepared resources/data. It does not directly execute Minecraft's Java client.
@@ -904,7 +904,7 @@
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `b33229cbf56d422449a8c62672b27cd706fb9b97`.
 - Size: 21,900 bytes; 609 lines; fetched in consecutive ranges 1–400 and 401–609.
-- Coverage: lines 1–609, complete; both ranges returned the same blob SHA; unit tests included.
+- Coverage: lines 1–400; 401–609, complete; both ranges were fetched consecutively.
 - Purpose: discovers/provisions Java tools, applies memory options, builds platform classpaths and runs Java/Javac processes used by vanilla exporters and datagen.
 - Java discovery and execution:
   - A caller can inject a `Supplied` Java/Javac pair and environment through a process-wide `OnceLock`. The module comments identify Starling on Android as the case where ordinary system Java is unavailable and the app supplies its private runtime.
@@ -932,7 +932,7 @@
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `69f47232438e887e8960db27ce22aba91f775c71`.
 - Size: 66,697 bytes; 1,650 lines; fetched in consecutive ranges 1–400, 401–800, 801–1,200, 1,201–1,600 and 1,601–1,650.
-- Coverage: lines 1–1,650, complete; all five ranges returned the same blob SHA; all unit-test code was reviewed.
+- Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–1650, complete; all five ranges were fetched consecutively.
 - Purpose: validates, locates, imports and reuses the player's official Minecraft version manifest, client/server JARs, client libraries and server-bundled libraries into `.local/minecraft/<version>`.
 - Lock and manifest model:
   - `Lock::read` obtains the Minecraft version, `java_major`, SHA pins and accepted republished-manifest/asset-index hashes from `research-lock.json`; validates the version identifier against path traversal; and resolves the version-specific local directory.
@@ -968,7 +968,7 @@
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `00ff58173199fa11d717243ed2614e9cfb002618`.
 - Size: 76,227 bytes; 1,966 lines; fetched in consecutive ranges 1–400, 401–800, 801–1,200, 1,201–1,600 and 1,601–1,966.
-- Coverage: lines 1–1,966, complete; all five ranges returned the same blob SHA; all included unit tests were read.
+- Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–1966, complete; all five ranges were fetched consecutively.
 - Purpose: main resource-preparation engine. It imports verified game artifacts, runs vanilla Java data generators/exporters, extracts client assets/data, builds worldgen and gameplay resource bundles, tracks provenance/hashes and writes the resource manifest consumed by the Rust client.
 - Structure and execution:
   - Declares the 18-stage progress protocol, resource manifest schema 7 and preparer output version 3. The output version is independent of the Minecraft game version; the launcher uses it to decide whether generated resources must be recreated.
@@ -1164,7 +1164,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `892b6af9a53c105ad663c56c07db9fe3714a61b8`.
 - Size: 22,066 bytes; 590 lines; fetched in consecutive ranges 1–400 and 401–590.
-- Coverage: lines 1–590, complete; both ranges returned the same blob SHA.
+- Coverage: lines 1–400; 401–590, complete; both ranges were fetched consecutively.
 - Purpose: generated packet-ID constants and ID-to-name tables for every connection state/direction of Minecraft Java protocol 777 (26.3).
 - Findings:
   - File header states it is generated from the vanilla data generator's packet report by `tools/generate_packet_ids.py`; the file must not be edited manually.
@@ -1189,7 +1189,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `a7e1d30600b073eecf7aa26d0ccb4b25ec5ee539`.
 - Size: 27,464 bytes; 744 lines; fetched in consecutive ranges 1–400 and 401–744.
-- Coverage: lines 1–744, complete; both ranges returned the same blob SHA; all unit tests read.
+- Coverage: lines 1–400; 401–744, complete; both ranges were fetched consecutively.
 - Purpose: implements the byte transport and framed Minecraft packet connection, including TCP and in-process memory pipes, optional AES/CFB8 encryption, VarInt21 framing, zlib threshold compression, split reader/writer and connection counters.
 - Transport behavior:
   - `Pipe` is a thread-safe in-memory duplex byte channel with close notification, optional read timeout and clone semantics; it supports vanilla-style LocalChannel communication between an integrated server and local player.
@@ -1221,7 +1221,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `4b82513417a34119abc2d23f7517d5b83377835e`.
 - Size: 22,954 bytes; 724 lines; fetched in consecutive ranges 1–400 and 401–724.
-- Coverage: lines 1–724, complete; both ranges returned the same blob SHA; all tests and macros read.
+- Coverage: lines 1–400; 401–724, complete; both ranges were fetched consecutively.
 - Purpose: generic wire-level buffer readers/writers and typed `Codec` building blocks modeled on Minecraft's FriendlyByteBuf, VarInt/VarLong, ByteBufCodecs and StreamCodec composition.
 - Implemented primitives and structures:
   - Bounded Reader over packet bytes with big-endian signed/unsigned integers, floats, booleans, VarInt/VarLong, byte arrays, UTF-8 strings capped by Java UTF-16 code units, UUIDs, NBT, variable/fixed long arrays and remaining-byte access.
@@ -1351,7 +1351,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `0da8053f315d53b739bf39823c8874f6aa17c5af`.
 - Size: 141,345 bytes; 3,922 lines; fetched in consecutive ranges 1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–2,000, 2,001–2,400, 2,401–2,800, 2,801–3,200, 3,201–3,600 and 3,601–3,922.
-- Coverage: lines 1–3,922, complete; all ten ranges returned the same blob SHA; all packet enums, custom codecs and unit tests read.
+- Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2800; 2801–3200; 3201–3600; 3601–3922, complete; all ten ranges were fetched consecutively.
 - Purpose: the large typed packet catalogue for modern protocol Play state, including world/chunk, entity, player, inventory, recipe, command tree, advancement, sound, chat and serverbound interaction packets.
 - Scope of implementation:
   - Shared structures include global spawn information, relative movement flags, registry-backed/inline holders, signed chat types, entity movement paths/deltas, biome chunk updates and map patches.
@@ -1388,7 +1388,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `f961b1b230dd57f05532844869db6a4c755166aa`.
 - Size: 18,283 bytes; 522 lines; fetched in consecutive ranges 1–400 and 401–522.
-- Coverage: lines 1–522, complete; both ranges returned the same blob SHA; all tests read.
+- Coverage: lines 1–400; 401–522, complete; both ranges were fetched consecutively.
 - Purpose: packet codecs and data structures for serialized chunk columns/sections, block and biome palettes, heightmaps, block entities, and sky/block light layers.
 - Implemented structures:
   - `Paletted` represents a registry-ID palette plus bit-packed storage. It has strategy-specific local/global palette thresholds for blocks and 4×4×4 biomes, packed long access, conversion from flat values, and safe handling of storage bit widths.
@@ -1450,7 +1450,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `34f9fb132a3ea8daa1faffb60bf458f260aa615d`.
 - Size: 27,001 bytes; 754 lines; fetched in consecutive ranges 1–400 and 401–754.
-- Coverage: lines 1–754, complete; both ranges returned the same blob SHA; all entity metadata and particle codecs/tests read.
+- Coverage: lines 1–400; 401–754, complete; both ranges were fetched consecutively.
 - Purpose: decodes/encodes `ClientboundSetEntityDataPacket` synchronized entity metadata values using serializer IDs, plus modern particles, position sources and resolvable player profiles.
 - Implementation:
   - `EntityDataSerializers` table is hardcoded in 26.3 registration order with IDs 0–43: byte/int/long/float/string/components/optional components/item stack/boolean/rotations/positions/directions/optional entity references/block states/particles/villager data/pose/variant enums/optional global position/vector/quaternion/resolvable profile/humanoid arm/dye color.
@@ -1540,7 +1540,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `dcbe5ffa0e1e81369a5c9e163eb0e24676a6dd9e`.
 - Size: 19,442 bytes; 634 lines; fetched in consecutive ranges 1–400 and 401–634.
-- Coverage: lines 1–634, complete; both ranges returned the same blob SHA; tests read.
+- Coverage: lines 1–400; 401–634, complete; both ranges were fetched consecutively.
 - Purpose: codecs for the modern recipe book display system, including recursive slot displays, recipe display variants, recipe book add/remove/settings, ghost recipes and place-recipe requests.
 - Implementation:
   - `HolderSet` represents either a named registry tag or a list of item registry IDs.
@@ -1596,7 +1596,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `479f4d64254b8037f4ef49fee0314dedd564a242`.
 - Size: 35,306 bytes; 834 lines; fetched in consecutive ranges 1–400, 401–800 and 801–834.
-- Coverage: lines 1–834, complete; all three ranges returned the same blob SHA; all RSA/DER/prime/signature tests read.
+- Coverage: lines 1–400; 401–800; 801–834, complete; all three ranges were fetched consecutively.
 - Purpose: pure-Rust RSA key parsing, public-key encryption, private-key decryption/signing, PKCS#1 v1.5 signature verification, Montgomery modular arithmetic and RSA key-pair generation.
 - Implementation:
   - Custom arbitrary-width positive integers are represented as little-endian 32-bit limbs. Operations include big-endian conversion, multiplication, small multiply/add, division by a small integer, compare/subtract and bit access.
@@ -1851,7 +1851,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `966f8860587406f7e8468398532da0b33cbc1be3`.
 - Size: 29,855 bytes; 850 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–850, complete.
+- Coverage: lines 1–400; 401–800; 801–850, complete; all three ranges were fetched consecutively.
 - Purpose: Builds the representation and hashes for patched ItemStack components according to the 26.3 `HashedPatchMap.create` and `HashedStack.create` logic.
 - Implementation / logic: The `Names` trait converts registry IDs into resource identifiers. Component code reconstructs the Codec shape from the wire representation and internal type, then hashes it with HashOps/CRC32C. Nested components such as enchantment maps, StackTemplate, potions, books, fireworks, banner patterns, trim, custom model data, and tooltip display have separate paths. A component is not hashed if its registry name or Codec form cannot be reconstructed. `Hashed::create` hashes added components and retains removed IDs; when a raw wire patch is available, it decodes that patch first to preserve the actual transmitted patch.
 - Findings: This implementation directly depends on `DataComponentType`, 26.3 registry IDs, and modern Codecs. The result is neither SHA nor a file hash; it is CRC32C over the Codec representation. Unknown or unnamed components are silently omitted from the added-component hashes and, according to the module documentation, may cause the server to resynchronize the slot. The test suite fixes the hash values generated by vanilla 26.3 for dozens of components; those tests were not run in this audit.
@@ -1885,7 +1885,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `a2a248ff0c2a6ad12211c86a2667fcecebb9089c`.
 - Size: 24,029 bytes; 620 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–620, complete.
+- Coverage: lines 1–400; 401–620, complete; both ranges were fetched consecutively.
 - Purpose: Reconstructs Codec-form representations and hashes gameplay item components from byte streams and registry names.
 - Implementation / logic: It has specialized paths for components such as UseEffects, AttributeModifiers, Food, Consumable, UseCooldown, DamageResistant/Repairable, Tool, Weapon, Equippable, DeathProtection, BlocksAttacks, Piercing/KineticWeapon, SwingAnimation, Jukebox, and banner/trim-related data. Registry references are resolved through `Names`; enum IDs are converted to `StringRepresentable` names; default fields are omitted from the hash according to `optionalFieldOf`; and sound, holder forms, and BlockPredicate values are also reconstructed as Codec maps.
 - Findings: Dispatch is based on fixed DataComponents IDs from generation 26.3. Many decoder helpers use `Option`; malformed streams, unsupported enum values, or unnamed registry IDs become `None`. Exact Codec defaults affect the hash, so omitting the wrong value causes a mismatch. This code does not mix modern components with legacy ItemStack data; it is not a 1.20.1 path.
@@ -1919,7 +1919,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `aa436cc31e7add4f2bfd21a45c9128fd417b44f2`.
 - Size: 14,017 bytes; 425 lines; full source fetched in consecutive ranges of at most 400 lines.
-- Coverage: lines 1–425, complete.
+- Coverage: lines 1–400; 401–425, complete; both ranges were fetched consecutively.
 - Purpose: Precisely consumes byte streams for Data Components whose internal meaning Horizon does not decode, so that parsing the remainder of the ItemStack stays aligned.
 - Implementation / logic: It uses a dispatch table based on the 26.3 DataComponents registry order. Depending on the component type, it consumes the appropriate VarInt, float, identifier, NBT, list, optional, holder/holderSet, sound, template, block-predicate, attribute-modifier, food/consumable, tool, equippable, blocks-attacks, kinetic-weapon, potion-effect, or firework representation. For components without a stream Codec, it reads the persistent NBT Codec. An unknown kind produces an error.
 - Findings: This file is critical because the current item-data format has no separate length prefix for each component. If a skip routine consumes the wrong number of bytes, all following components and subsequent packets become misaligned. At the same time, an unknown kind cannot safely be skipped generically and immediately produces an error. The kind-ID table, nested-component forms, holder encoding, and registry order are all specific to 26.3. The file was read completely in two consecutive ranges, 1–400 and 401–426; no standalone tests were found in this file.
@@ -2140,7 +2140,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: c1544a14f48e79ad2bd40ac30c5c732a4eb1545e.
 - Size: 26,043 bytes; 626 lines; complete source fetched in consecutive ranges 1–400 and 401–626.
-- Coverage: lines 1–626, complete.
+- Coverage: lines 1–400; 401–626, complete; both ranges were fetched consecutively.
 - Purpose: Lists key mappings and their default/category/toggle metadata, persists and restores bindings, translates physical keys into actions, and defines keybind behavior in container UI.
 - Implementation / logic: `MAPPINGS` is an ordered table of mapping names, defaults, and categories; `CATEGORIES` defines category order and `is_toggle` marks selected mappings as toggles. `KEYS` maps keyboard resource keys to winit `KeyCode` values. `key_code`/`key_name` provide bidirectional conversion; `keyboard_keys` sorts function keys first. `mouse_name`/`mouse_button` map mouse buttons. `learn_layout` is a no-op on Android and learns a layout label from winit events and `key_without_modifiers` on other platforms. `KeyBinds` stores values in a `BTreeMap`, handles conflicts/defaults, finds all bindings sharing a key, and translates physical keys into vanilla-default actions. Debug mappings are excluded from translation so they retain independent F3-modifier behavior. `container_mouse_key` and `container_hotbar_key` model offhand-swap and hotbar priority in container screens.
 - Findings: The `MAPPINGS` table uses 26.3 defaults and categories and includes newer actions (such as friends/quickActions and debug bindings); it must be compared with 1.20.1 `Options.keyMappings`. `KEYS` is only a subset of key names. An unknown mapping returns `None` from `key_code`, and `translate` passes through a physical `KeyCode` when no name exists. `mouse_button` decodes only Left/Right/Middle/Back/Forward, while `mouse_name` also produces names for `Other`; round-tripping buttons 6+ is not guaranteed. `set` accepts only registered mappings but does not validate the key string. Reassigned default keys become inert, and multiple mappings can trigger from one physical input. Tests cover rebinding, conflicts, default-action removal, container priority, and display names; none were run.
@@ -2191,7 +2191,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 7e60b81c16afed63139f36ec416bd1a4f0791c57.
 - Size: 19,239 bytes; 568 lines; complete source fetched in consecutive ranges 1–400 and 401–568.
-- Coverage: lines 1–568, complete.
+- Coverage: lines 1–400; 401–568, complete; both ranges were fetched consecutively.
 - Purpose: camera mouse-look, pointer delta accumulation, sensitivity curve, cinematic smoothing, invert/scoping behavior, scroll-wheel processing, spectator flight-speed scroll and macOS Control-click emulation.
 - Implementation / logic: SmoothDouble accumulates target/remaining deltas with half-step smoothing; java_signum preserves signed zero/NaN semantics. ScrollWheelHandler accumulates fractional X/Y wheel offsets, resets accumulator on direction reversal and emits whole steps. Rotation implements Entity.turn with 0.15 degree/count and pitch clamp. MouseLook collects relative deltas while grabbed or absolute position deltas otherwise; ignores first motion after reset, aggregates per frame, optionally applies smooth-camera or scoping sensitivity, then inversion. sensitivity_scales uses (s*0.6F+0.2F)^3 and sens*8. on_scroll supports discrete wheel events and wheel sensitivity. Additional helpers invert degrees to mouse counts, cosine easing, center pointer after grab state transition and preserve Control-click-as-right-click through release.
 - Findings: implementation is explicitly version 26.3. The sensitivity multiplication uses Java float constants widened to f64 to reproduce exact rounding; yaw/pitch are converted back to f32 before turn. smooth camera uses elapsed frame time and retains residual movement across later frames. Scroll fraction handling and direction reset matter for high-resolution touchpads. next_selection repeatedly wraps selected index but assumes limit > 0; limit 0 would loop indefinitely and should be guarded at call boundary or helper. mouse_position_after_grab_change divides by scale without checking zero/non-finite scale. macOS Control-click state is captured at press and retained to release even if Control key state changes. Tests cover vanilla sensitivity formula, scoping/inversion, inverse motion, cinematic smoothing, fractional scroll, pointer centering and Control-click. Tests not run.
@@ -2208,7 +2208,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 71dcc3d59839a11eca7beca8852c74808a3c7435.
 - Size: 33,729 bytes; 958 lines; complete source fetched in consecutive ranges 1–400, 401–800 and 801–958.
-- Coverage: lines 1–958, complete.
+- Coverage: lines 1–400; 401–800; 801–958, complete; all three ranges were fetched consecutively.
 - Purpose: Handles window sizing/GUI scale, scaled mouse position, inactivity FPS throttling, frame pacing, present mode/VSync, fullscreen state, and monitor video modes.
 - Implementation / logic: `calculate_scale` uses a minimum GUI space of 320×240, a maximum scale, and Unicode even-scale handling. `gui_scaled_size` converts framebuffer dimensions using ceiling, while `scaled_pos` maps mouse coordinates into screen space. `throttle_reason` and `framerate_limit` select 10/30/60 FPS or the configured limit for minimized/AFK/menu states. With VSync enabled, `vsync_present_mode` selects FIFO; without VSync, it prefers Immediate/Mailbox/FIFO in that order. `FramerateLimiter` uses an injectable clock, tracks overshoot with an EMA, sleeps until near the deadline, then spins; `limit_on_grid` bases each frame slot on the prior deadline to prevent late wake-ups from drifting average frame rate or causing bursts after a long frame. `FullscreenState` separates requested and actual fullscreen and accepts compositor changes. VideoMode JSON read/write handles refresh rate/bit depth and per-monitor mode caching. The icon PNG is created from an embedded theme asset.
 - Findings: The file explicitly targets 26.3. `FramerateLimiter` applies the cap only for FPS values below 260; dividing the frame period by framerate assumes a positive limit. `gui_scaled_size` and `scaled_pos` assume positive GUI scale/screen dimensions; zero scale would divide by zero. With Unicode enforcement enabled, `calculate_scale` may exceed `max_scale` by adding one to an odd result; this matches the current test but must be checked against target vanilla semantics. `VideoMode.read` manually parses JSON by searching property names and does not fully validate JSON grammar, duplicate keys, or complete input; a serde JSON parser would be safer. `from_winit` approximates total bit depth by dividing it among channels. `FramerateLimiter` has two modes: vanilla-like sleep/spin and grid pacing. `SleepingClock` replaces spinning with 50µs sleeps to reduce busy CPU use, with different granularity/latency. Extensive tests cover scaling, fullscreen transitions, FPS caps, timer overshoot, grid recovery, VSync, and monitor caching; they were not run.
@@ -2225,7 +2225,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 1326a3d0ffb9f6f069e0d90d6148d318f46ddac2.
 - Size: 18,716 bytes; 535 lines; complete source fetched in consecutive ranges 1–400 and 401–535.
-- Coverage: lines 1–535, complete.
+- Coverage: lines 1–400; 401–535, complete; both ranges were fetched consecutively.
 - Purpose: Clipboard abstraction, keyboard-editing shortcuts, chat-text filtering, text-component formatting removal, and selection behavior for append-only text fields.
 - Implementation / logic: `shortcut_letter` obtains A/C/V/X from the logical layout and falls back to the physical key for non-Latin logical text. `edit_shortcut` accepts only the edit modifier (Cmd on macOS, Ctrl elsewhere), without Shift/Alt. `types_text` makes an exception for AltGr, which Windows reports as Ctrl+Alt. `is_allowed_chat_character` and `filter_text` remove § and control characters and allow newlines only in multiline fields; `strip_formatting` removes recognized color/style codes. The Clipboard trait is implemented by `SystemClipboard`, Android platform hooks, and `MemoryClipboard`; the last copied text is retained in memory. Editable shortcuts implement SelectAll/Copy/Paste/Cut. `AppendSelection` keeps a full-value selection for append-only fields such as names/signs/book pages until the field ID or value changes.
 - Findings: The file explicitly models 26.3 input/text and clipboard behavior. The Android backend uses `OnceLock` platform-function hooks, which cannot be replaced after being set. Loss of the desktop clipboard causes a system-backend reset; the copied fallback text is retained, but `get` uses it only when the system object is unavailable. `ContentNotAvailable` returns an empty string directly. `filter_text` removes newlines from chat but permits them in multiline fields; it does not remove C1 characters (including U+0080). `strip_formatting` removes only valid formatting codes and preserves §z. `append_limited` returns true whenever room remains, even if filtering makes the input empty or no character is appended; this may violate a “value changed” return contract. `AppendSelection` invalidates its selection using a snapshot of the entire value. Tests cover shortcuts/AltGr, layout fallback, filtering, edit fields, append-only behavior, and rejected paste; they were not run.
@@ -2242,7 +2242,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: cb36e0c3661155d910cc2b87d48eb6400f57a24d.
 - Size: 63,778 bytes; 1,681 lines; complete source fetched in consecutive ranges 1–400, 401–800, 801–1200, 1201–1600 and 1601–1681.
-- Coverage: lines 1–1,681, complete.
+- Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–1681, complete; all five ranges were fetched consecutively.
 - Purpose: Backend-independent controller layer implementing button/action mapping, state and edges, deadzones/look curves, menu navigation, rumble, adaptive triggers, lightbar, and controller-specific settings.
 - Implementation / logic: `Button` models 16 standard gilrs/SDL positions and provides labels/colors for Xbox/PlayStation/Nintendo. `PadState` stores buttons as a bitset plus stick/trigger values; it merges multiple sources and extracts press/release edges using trigger hysteresis. `ACTIONS` maps Bedrock-style defaults to vanilla key actions and pad-only hotbar actions. `PadSettings` stores controller settings in `horizon-controller.txt` next to options and serializes changed bindings. The module implements radial deadzone, `move_vector`, `java_move_vector` (approximation to Java's eight-direction movement), `look_delta`, `cursor_delta`, `focus_step`/`focus_step_rect`/`focus_step_vague`, `scroll_shift`/`refind`/`tab_step`/`slider_step`, a health watcher, and rumble pulse shapes. With the `controllers` feature, `TriggerFeel` maps to DualSense adaptive-trigger effects; the lightbar displays health/dimension, and `bow_power` derives force from draw ticks.
 - Findings: The file states that controller support is a Horizon feature and vanilla 26.3 itself has no gamepad input; the entire feature must not be attributed to vanilla. UI glyphs and ACTIONS layout, defaults, pad-only controls, Steam Deck keyboard detection, server stick modes, and rumble/adaptive triggers are extensions. `java_move_vector` selects the nearest of eight directions using thresholds so movement on Java servers approximates boolean-direction packets; this differs from free analog movement and is selected by ServerStick mode. The settings parser is tolerant and defaults unknown/malformed values; it clamps floats to finite ranges. Radial deadzone normalization uses denominator `(1-deadzone)` and the public API assumes `deadzone<1`; `PadSettings` clamps it to at most 0.9, but direct callers must preserve this invariant. `PadState.merge` sums/clamps controller sources; edge hysteresis prevents trigger chatter. UI focus navigation for target rectangles uses a detailed geometry algorithm. Tests cover mapping, persistence, deadzone, edge hysteresis, menu focus, settings, rumble, lightbar, trigger effects, and movement sectors; none were run.
@@ -2276,7 +2276,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 96a8976a479b8639e26585285211f8bd12b862e6.
 - Size: 24,849 bytes; 689 lines; complete source fetched in consecutive ranges 1–400 and 401–689.
-- Coverage: lines 1–689, complete.
+- Coverage: lines 1–400; 401–689, complete; both ranges were fetched consecutively.
 - Purpose: local control socket for scripts/horizon-ctl to send text-line commands to a running game, with Unix socket or authenticated localhost TCP transport; also frame timing/performance statistics used by control replies.
 - Implementation / logic: Stream abstracts UnixStream/TcpStream; uses_tcp selects TCP on non-Unix or .json endpoint. TCP endpoint metadata stores port/token/remote flag in a private file; client reads it, connects to localhost and sends auth TOKEN. Server writes a random localhost port + token to endpoint path and starts listener/client threads. TCP first line is authenticated with same_token bytewise comparison; clients send each command as a line and wait for one JSON reply from game thread. Requests enter mpsc channel and Server::try_recv exposes them to the main/game thread. Server::drop marks closed, wakes listener and removes endpoint. Helpers encode/decode base64 screenshots. FrameStats records frame/CPU/GPU/phase durations and static/dynamic entity cache counters, with percentiles and low-1% FPS summaries.
 - Findings: TCP server is bound to IPv4 loopback even when HORIZON_CONTROL_PORT is fixed; adb port forwarding is the documented mobile path. Unix endpoint permissions set 0600 only via OpenOptionsExt on Unix. random_token is constructed from RandomState hasher keys + time + PID; RandomState is not specified as a cryptographic CSPRNG, so use getrandom/OS CSPRNG for bearer tokens. authenticate reads at most 256 bytes but does not reject a line that reaches the cap without newline; serve uses BufRead::lines with no maximum command-line size. No concurrent-client or request-rate cap exists; listener spawns a thread per accepted client and mpsc::channel is unbounded. Each serve thread waits synchronously for a game-thread reply without timeout. File permission behavior and Windows ACL semantics need verification. base64/unbase64 round-trip tests exist, but unbase64 does not validate RFC 4648 length modulo 4 or canonical padding bits; an invalid one-character input may decode to an empty byte vector instead of None. FrameStats caps millis/cpu/phases at LIMIT but record_gpu extends the full supplied slice whenever the current length is below LIMIT and can exceed the cap; summary also assumes useful positive frame durations for avg_fps. Tests cover TCP/auth, base64, token differences, remote marker and stats counters; none were run.
@@ -2293,7 +2293,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: acc7dbd7b2ef2a1020ab7f0895c92e018e669be9.
 - Size: approximately 111,426 bytes; 2,848 lines; complete source fetched in seven consecutive ranges: 1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–2,000, 2,001–2,400 and 2,401–2,848.
-- Coverage: lines 1–2,848, complete.
+- Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2848, complete; all seven ranges were fetched consecutively.
 - Purpose: Full phone touch-control state machine: touch joystick/D-pad, buttons, tap/hold interaction, mouse-look, hotbar, multi-finger gestures, layout editor, JSON layout persistence, and conversion of touch to mouse events for menus.
 - Implementation / logic: `LayoutConfig` stores responsive layout positions relative to screen width/height, control sizes, and opacity. A backward-compatible JSON parser supports Show On/Ghost/Off, Tap/Crosshair, Sneak Hold/Toggle, fixed/floating sticks, D-pad, gyro, three-finger stats, and custom/mod buttons. Layout calculations use framebuffer size and GUI scale to position the joystick, buttons, extra controls, hotbar, and close target. `TouchControls` claims an independent role for each finger: Stick, Look, Button, DPad, or Spent; edge actions are sent to the game loop. A view tap is separated from HoldStart/HoldStop for break/use at HOLD=300ms; drag beyond the slop threshold moves the camera. In Tap mode, a quick tap targets the point under the finger; Crosshair mode displays Attack/Use buttons. Pause activates on release, while EDIT_HOLD=800ms opens the editor. The D-pad converts eight directions to a stick vector and a double-tap up triggers Sprint. In UI screens, `TouchPointer` maps the first finger to a cursor/mouse and distinguishes tap, vertical scroll, sideways drag, scrollbar drag, and hold-to-drag; cancellation/background sends a synthetic Release to prevent stuck mouse buttons. `LayoutEditor` supports drag/resize/visibility/opacity, mode changes, and custom-button deletion.
 - Findings: This module is touch-native and is not part of vanilla 1.20.1; its design is intentionally Bedrock-style. Per-finger ownership prevents a finger touching one button from unexpectedly taking control of another. `reset()` releases fingers but preserves toggle-sneak (so screen toggling matches vanilla); `clear_sneak()` must be called on respawn. The three-finger chord is active only when enabled and uses CHORD=350ms; it neutralizes actions started by newly participating fingers. `LayoutConfig` supports legacy `visible` and old movement names and ignores unknown keys; custom buttons are capped at 64 and persisted mod layouts at 256. `Shape::hits` uses a circle for Round and bounding boxes with 1.15 tolerance for Square/Wide; ordinary buttons in `button_at` are circles only, while custom Shape is used for mod controls. `stick_tilt` assumes a positive radius and `look_scale` divides by height, so window height must be positive. `slot_at` uses GUI-scaled hotbar geometry. In `TouchPointer`, only the first finger acts as the pointer and other fingers are ignored; `cancel()` during app background sends Release only, not a click. Layout depends on aspect ratio, density, and GUI scale; defaults in this file target 20:9 phones. Extensive tests cover joystick/sprint, fixed stick, chord, custom buttons, pointer gestures, pause long press, JSON compatibility, layout editor, sneak modes, D-pad, mod controls, hotbar, tap/hold/look/crosshair, gyro, and F3 chips; no tests were run in this audit.
@@ -2327,7 +2327,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: b494059445a3b6ae5db6afcd1e159d6cf226899d.
 - Size: 417 lines; complete source fetched in consecutive ranges 1–400 and 401–417.
-- Coverage: lines 1–417, complete.
+- Coverage: lines 1–400; 401–417, complete; both ranges were fetched consecutively.
 - Purpose: Horizon virtual keyboard for controller-based focus navigation, with simple output for typing into the active text field.
 - Implementation / logic: Two fixed layouts, LETTERS and SYMBOLS, each have five rows and a total width of 10 key units. Keyboard state includes row/column, symbol mode, one-shot shift, and caps lock. The D-pad wraps horizontally and, when moving vertically, selects the key with the nearest horizontal center. Pressing Char, Space, Backspace, or Done produces Output::Text/Backspace/Enter; Shift and Layer only change keyboard state. Gamepad mappings are South=press, West=backspace, North=space, Start=enter, East=close, LeftStick/LeftTrigger=shift, and bumpers=symbol layer. Rendering uses its own UI theme and draws focused/lit keys and controller glyph-style hints.
 - Findings: This is a QWERTY virtual keyboard specifically for controller navigation, not an Android IME. Its letter layout is fixed and Latin-based, with only a few accented characters (é/è/à/ç/ù/ü/ö/ä/ß/ñ) in the symbol layer. This file has no input-method, composition, prediction, locale-layout, Unicode IME-event, or clipboard integration. The Output API leaves it to the caller to apply text to the focused field; validation and field-length limits are outside this module. Shift is one-shot; pressing Shift twice enables caps lock, and a third press unlocks it. Tests cover row widths, navigation wrapping, shift/caps, symbols, and output-button mapping; they were not run.
@@ -2344,7 +2344,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 6c8ae28734715a89fd3af69c5f77a2c7afb579ac.
 - Size: 451 lines; complete source fetched in consecutive ranges 1–400 and 401–451.
-- Coverage: lines 1–451, complete.
+- Coverage: lines 1–400; 401–451, complete; both ranges were fetched consecutively.
 - Purpose: Android control-editor variant of the controller on-screen keyboard, with touch hit-testing and hardware KeyCode output for editors that accept key bindings.
 - Implementation / logic: The file header states that the code is an MIT adaptation from Horizon Android and that `THIRD_PARTY_NOTICES.md` and `LICENSE` must be reviewed. The fixed LETTERS/SYMBOLS layout resembles the OSK and has five rows of 10 units. Keyboard state tracks focus row/column, shift, caps, and symbol mode. D-pad movement wraps; presses produce characters, Backspace, Enter, and mode changes. Unlike `osk.rs`, Output includes `Key(KeyCode)` in addition to Text/Backspace/Enter/Close. Controller mappings include South/West/North/Start/East, shift, layer, and D-pad. `touch(width,height,at_top,p)` hit-tests key cells using the same draw geometry and fixed 554×268 dimensions, then performs the press. Rendering uses `android_control_theme` and displays controller-button hints.
 - Findings: This file largely duplicates the keyboard state and navigation in `osk.rs`, but adds touch hit-testing and KeyCode output for the Android control-configuration editor. Touch geometry depends on fixed drawing constants; changes to UNIT/GAP/KEY_H or layout dimensions must be reflected in hit-testing at the same time. The keyboard is fixed QWERTY/Latin and has no IME/native composition or locale-specific input. `Output::Key(KeyCode)` provides only hardware-key identity and does not determine character text; the caller must interpret it in the correct editor context. The header explicitly attributes the adaptation to Horizon Android/MIT; any code transfer must comply with LICENSE and THIRD_PARTY_NOTICES. Tests cover touch rectangles, row width, navigation, shift/caps, symbol mode, and output mapping; they were not run.
@@ -2378,7 +2378,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 9406989b095c1c4b42f480aada781e5833a0a807.
 - Size: 1,766 lines; complete source fetched in five consecutive ranges: 1–400, 401–800, 801–1,200, 1,201–1,600 and 1,601–1,766.
-- Coverage: lines 1–1,766, complete.
+- Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–1766, complete; all five ranges were fetched consecutively.
 - Purpose: Main multiplayer-session layer: connection thread, handshake/login, RSA/AES encryption, compression, configuration/registry synchronization, play-packet forwarding, keep-alive, ping/status, transfer/cookies, and disconnect-reason classification.
 - Implementation / logic: `Session` starts a dedicated network thread and sends events to the game thread through a channel. A Mutex-protected packet writer remains available to the game thread, while the Configuration state prevents play packets from being sent during reconfiguration. Connections can use a TCP server, an integrated-server memory Pipe, a LAN-selected endpoint, a friend-invite tunnel, or a transfer after server handoff. The client first sends a handshake with the protocol version and LOGIN/TRANSFER intent, then Hello with the profile UUID/name. If the server requests encryption, the RSA public key is parsed from DER, a shared secret is generated, the online-mode session hash is sent to the session service, and the secret/challenge are then RSA-encrypted; AES encryption begins after the response. The compression threshold is applied during login. After LoginFinished, LoginAcknowledged is sent and Configuration begins: ClientInformation, `minecraft:brand`, known-pack response, registries/tags/features, resource packs, code-of-conduct, dialogs, server links, and cookies are processed, followed by FinishConfiguration and a Joined event. During Play, KeepAlive is answered immediately on the network thread, but Ping is sent to the game thread so Pong does not overtake prior updates/teleport acknowledgements. ConnectionStartConfiguration emits a reconfiguration event, sends an acknowledgement, and gates play traffic. A disconnect event includes the reason text/key and a `from_server` flag for auto-reconnect decisions. Status ping and pre-1.7 legacy ping are also provided.
 - Findings: The file is tightly coupled to `PROTOCOL_VERSION` and Horizon protocol 26.3 packet schemas; status/configuration/play/login packet IDs and registry models cannot be retained for 1.20.1. Friend relay/tunnel, Horizon custom content identity, mod_list, quiet commands, mod_net, the far-LOD channel, dialogs/code-of-conduct, and transfer/cookies are modern or Horizon-specific and must be omitted from the vanilla base or deferred to a separate phase. The most valuable reusable architecture is the network thread + typed Event channel + single writer lock + game-thread event consumption. `Session::start` discards thread-spawn errors with `.ok()`; if the thread is not created, Session returns without reporting a disconnect and without an active connection. The Event channel uses unbounded `mpsc::channel`; if game-thread polling stops or packets flood in, the queue can grow. `send` drops packets while configuring; real lifecycle call sites must guarantee that required packets are not lost during this interval. Play packet-decode errors become `DecodeError` and the loop continues; for 1.20.1, only genuinely skippable packets should be ignored, while malformed critical packets should disconnect. The fixed read timeout is 30 seconds, explained in relation to keep-alive cadence; connect timeout is 10 seconds. TCP host resolution/SRV is done in the Connection layer, except for friend relay where the endpoint is already concrete. `Reason::component/tag` extracts a translation key separately from the text so reconnect classification is language-independent. Round-trip ping is measured only after a Status response; `ping_legacy` uses the legacy 0xFE/MC|PingHost packet and reads the UTF-16 response length as a u16. `json_text` and component flattening produce plain text, not rich chat rendering. The file contains many tests for status/login/keepalive/configuration/transfer/cookies/reconnect/auth/drop behavior; none were run.
