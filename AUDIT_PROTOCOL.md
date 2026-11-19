@@ -62,7 +62,7 @@ Before reporting a batch complete:
 - Do not proceed to the next 20 until the current checkpoint commit is confirmed.
 - Report progress at each saved checkpoint; report the 200-entry stage complete only after checkpoint 1200 is committed and globally revalidated.
 
-Current continuation state (2026-11-19): entries **1001–1180** are committed. Checkpoint 1161–1180 is recorded with 1180 unique Index paths. The historical duplicate at entry 1089 is corrected; keep `crates/horizon-client/src/game/blockctl.rs` in the skip set. Resume checkpoint 1181–1200 at `crates/horizon-client/src/game/decorated_pot.rs`. Read `AUDIT_CONTINUITY.md` before each new chat.
+Current continuation state (2026-11-19): entries **1001–1200** are committed. Stage 1001–1200 is complete with 1200 unique Index paths. Historical entry 1089 remains corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 is the only `entry.rs` occurrence. Do not start entry 1201 until the user authorizes a new 200-entry stage. The next backup is due only after entries 1001–2000 are fully committed and globally verified. Read `AUDIT_CONTINUITY.md` before each new chat.
 
 
 ## QA review and canonical file-size accounting

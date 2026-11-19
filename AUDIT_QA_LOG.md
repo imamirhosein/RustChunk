@@ -751,3 +751,20 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Appended exactly 20 complete 15-field Ledger entries (1161–1180) and 20 matching Index rows; QA, Continuity and Protocol were updated in the same checkpoint operation.
 - Stage 1001–1200 advances to 180/200 (90%). Next checkpoint is 1181–1200, beginning at `crates/horizon-client/src/game/decorated_pot.rs`.
 - Post-commit read-back of all five documents and blob-SHA verification are required before considering this checkpoint saved.
+
+### Checkpoint 1181–1200 — 2026-11-19
+
+- Pinned source: `starling-client/starling` @ 5432370d573642041585c69b40fb045b27133488; the recursive Git tree SHA matches the pinned commit. Each of the 20 new paths was absent from the previous Index and each blob SHA/byte size matches the pinned tree.
+- Exactly 20 source files were read completely to EOF. Complete logical-line coverage: 1181 (159), 1182 (2227), 1183 (86), 1184 (595), 1185 (388), 1186 (118), 1187 (295), 1188 (182), 1189 (1247), 1190 (47), 1191 (1176), 1192 (2270), 1193 (4836), 1194 (107), 1195 (1178), 1196 (1788), 1197 (694), 1198 (736), 1199 (315), 1200 (24). Every file longer than 400 lines was read in consecutive, gap-free chunks of no more than 400 lines.
+- Ledger validation: exactly 15 required fields for each of entries 1181–1200. Index validation: 1200 sequential numbered rows, 1200 unique source paths and zero duplicate paths across the full Index.
+- This closes the 1001–1200 stage: 200/200 numbered entries are complete, committed and re-read. Entry 1089 remains correctly replaced by `blockctl.rs`; `entry.rs` occurs only at entry 121.
+- Decisions distinguish decorated pots, dispenser/dropper, End/dragon, enchantment, entity abstraction and event loop features from Horizon dedicated hosting/management/telemetry, custom dialogs, Discord, diagnostics, optional dynamic lighting and test-only fixtures.
+- The dragon source is 4836 logical lines/191786 bytes; the End source is 1788 logical lines (corrected count). Both were read to EOF in consecutive chunks. The earlier progress note that called End 1588 lines was an arithmetic slip; the canonical coverage and tree metadata here are correct.
+- No source tests, builds, APKs, Forge launches, Android device runs, multiplayer joins or server operations were performed. Embedded tests were inspected only.
+- Existing backup branches were not modified. The next backup remains due only after entries 1001–2000 are complete and globally verified; 200/200 for this stage is not a backup boundary.
+
+### Durable checkpoint
+
+- Appended exactly 20 complete Ledger entries (1181–1200) with 15 fields each and 20 matching Index rows. QA, Continuity and Protocol were updated together.
+- Stage 1001–1200 is now **200/200 (100%) complete**. This closes the authorized 200-file stage; no files from 1201 onward were started.
+- The five updated documents must be fetched again from GitHub and their blob SHAs, Index uniqueness and Ledger field counts verified before this checkpoint is considered saved.

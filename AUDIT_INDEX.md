@@ -1344,3 +1344,23 @@
 | 1178 | `crates/horizon-client/src/game/debug_options.rs` | unnecessary; reference; optional/future; version-specific | Newer 26.3 DebugOptionsScreen; omit from the 1.20.1 baseline. |
 | 1179 | `crates/horizon-client/src/game/debug_renderers.rs` | adaptable; version-specific | Selected debug geometry can adapt; target flags/data and mobile scan costs must be rebuilt. |
 | 1180 | `crates/horizon-client/src/game/debug_stick.rs` | adaptable; rewrite required; version-specific | Vanilla debug stick adapts, but component persistence must be rewritten to 1.20.1 NBT. |
+| 1181 | `crates/horizon-client/src/game/decorated_pot.rs` | adaptable; version-specific | Vanilla decorated pot is target-relevant; adapt loot/item NBT and update packets. |
+| 1182 | `crates/horizon-client/src/game/dedicated.rs` | unnecessary; reference; optional/future | Horizon dedicated-server runtime; keep out of Android client. |
+| 1183 | `crates/horizon-client/src/game/dedicated/events.rs` | unnecessary; reference; optional/future | Horizon dedicated-server event stream; not a client requirement. |
+| 1184 | `crates/horizon-client/src/game/dedicated/management.rs` | unnecessary; reference; optional/future | Horizon privileged management RPCs; exclude from Android client. |
+| 1185 | `crates/horizon-client/src/game/dedicated/report.rs` | unnecessary; reference; optional/future | Horizon dedicated telemetry; optional future server feature only. |
+| 1186 | `crates/horizon-client/src/game/dedicated/status.rs` | unnecessary; reference; optional/future | Horizon host status endpoint; not server-list ping or client functionality. |
+| 1187 | `crates/horizon-client/src/game/deflect.rs` | adaptable; version-specific | Only target-version deflection behavior may adapt; remove later wind-charge types. |
+| 1188 | `crates/horizon-client/src/game/diagnostics.rs` | unnecessary; reference; optional/future | Horizon device diagnostics; optional, separate from the game engine. |
+| 1189 | `crates/horizon-client/src/game/dialogs.rs` | unnecessary; reference; optional/future; version-specific | Modern dialog protocol/UI; omit from 1.20.1 baseline. |
+| 1190 | `crates/horizon-client/src/game/discord.rs` | unnecessary; reference; optional/future | Optional Discord Rich Presence; not a core launcher/game feature. |
+| 1191 | `crates/horizon-client/src/game/dispense_fixture.rs` | unnecessary; reference; optional/future | Horizon dispenser parity harness; retain methodology only, not game runtime. |
+| 1192 | `crates/horizon-client/src/game/dispenser.rs` | essential; rewrite required; version-specific | Dispenser is essential but must be modularly rewritten for 1.20.1 with newer content removed. |
+| 1193 | `crates/horizon-client/src/game/dragon.rs` | essential; rewrite required; version-specific | Essential End boss feature; modularly rewrite for 1.20.1 and strip later extensions. |
+| 1194 | `crates/horizon-client/src/game/dynamic_lights.rs` | unnecessary; reference; optional/future | Horizon optional dynamic lighting; omit from vanilla baseline. |
+| 1195 | `crates/horizon-client/src/game/enchant_effects.rs` | essential; rewrite required; version-specific | Enchantment gameplay is essential; rewrite modern effect components into 1.20.1 enchant logic. |
+| 1196 | `crates/horizon-client/src/game/end.rs` | essential; rewrite required; version-specific | End dimension features are essential; rewrite gateway/portal and persistence against 1.20.1. |
+| 1197 | `crates/horizon-client/src/game/entity.rs` | essential; rewrite required; version-specific | Shared entity abstraction is essential; rebuild kind roster/behavior and Forge extension points for 1.20.1. |
+| 1198 | `crates/horizon-client/src/game/entity_culling.rs` | adaptable; optional/future; version-specific | Optional rendering optimization; preserve correctness and profile before enabling on Android. |
+| 1199 | `crates/horizon-client/src/game/entity_model_loading_tests.rs` | unnecessary; reference; optional/future | Test-only model-loading benchmark/equivalence fixture; no runtime code to port. |
+| 1200 | `crates/horizon-client/src/game/event_loop.rs` | adaptable; reference | Small reusable platform abstraction; adapt to Android/headless runtime. |

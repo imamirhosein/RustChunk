@@ -62,12 +62,11 @@ The previous long chat branch was interrupted while reviewing the large Horizon/
 
 ## Current task
 
-- Stage 1001–1200: **180/200 numbered entries complete (90%)**. Checkpoint 1161–1180 has been fully reviewed and is being committed.
-- Entries 1161–1180 cover the next twenty unique paths from `commands/test_locate.rs` through `debug_stick.rs`; all files were read to EOF and their pinned source SHA/byte size verified.
-- Historical duplicate at entry 1089 remains corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only occurrence of `crates/horizon-client/src/entry.rs`.
-- The Index will contain 1180 rows and 1180 unique source paths after this checkpoint is saved. Keep `blockctl.rs` and all already indexed paths in the skip set.
-- Resume checkpoint **1181–1200** at `crates/horizon-client/src/game/decorated_pot.rs`, then complete the 1001–1200 stage.
-- Both existing backup branches remain untouched. The next backup is due only after entries 1001–2000 are committed and globally verified.
+- Stage 1001–1200: **200/200 numbered entries complete (100%)**. The ten 20-file checkpoints from 1001–1020 through 1181–1200 are committed and their five-document read-backs have been verified.
+- The full Index contains 1200 sequential entries and 1200 unique source paths; there are zero duplicate paths. The historical duplicate at entry 1089 remains corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only `entry.rs` occurrence.
+- Entries 1181–1200 cover the pinned upstream paths from `decorated_pot.rs` through `event_loop.rs`. Each was read to EOF and its blob SHA and size matched the pinned source tree.
+- The 1001–1200 stage is closed. Do not start entry 1201 or create a new 200-entry stage until the user gives a new stage instruction.
+- Both existing backup branches remain untouched. The next backup is due only after entries 1001–2000 are committed and globally verified; completion of this 200-file stage does not trigger a backup.
 
 
 ## Historical duplicate-path correction — 2026-11-19
@@ -75,6 +74,6 @@ The previous long chat branch was interrupted while reviewing the large Horizon/
 - Duplicate found: `crates/horizon-client/src/entry.rs` at entries 121 and 1089.
 - Corrective replacement: entry 1089 is now `crates/horizon-client/src/game/blockctl.rs` (pinned SHA `94b3853a94ceb4d905e477434553f0a84b4730e5`, 7136 bytes, 179 logical lines), read fully to EOF.
 - No other entry numbers changed. Global Index path uniqueness is restored: 1120 entries, 1120 unique paths, zero duplicates.
-- The replacement path is included in the skip set. Checkpoint 1161–1180 is now completed; next scan starts at `crates/horizon-client/src/game/decorated_pot.rs`.
+- The replacement path remains in the skip set. The 1001–1200 stage is complete at 200/200; no next stage has been started.
 - Backups were not modified.
 

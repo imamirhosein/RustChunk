@@ -3086,3 +3086,343 @@
 - RustChunk implementation mapping: Proposed game/interactions/debug_stick_1_20_1.rs with legacy target NBT codec; not created.
 - Evidence required before adoption: 1.20.1 Java DebugStickItem source/mappings, ItemStack NBT golden files, block-state registry fixture and interaction packet traces.
 - Completion state: COMPLETE — all 187 logical lines read to EOF; source SHA and 7851-byte size match pinned Git tree; embedded index test read only; no interaction tests run.
+
+### 1181. `crates/horizon-client/src/game/decorated_pot.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e3926975ac40edd1d87f851cfe195805ef45496d`
+- Size: 6146 bytes; 159 logical lines
+- Coverage: 1–159
+- Purpose: Implements decorated-pot item insertion, failure/success wobble and sounds, sherd/item synchronization, loot-table unpacking and block-change events.
+- Dependencies / cross-references: DecoratedPot block entity NBT, saved entity tag helpers, loot tables/sequences, ItemStack serialization, first-person hand, block events, particles and item consumption.
+- Implementation / logic: Reads or creates the pot's saved block-entity tag, unpacks a deferred loot table using seed/sequence/world RNG, inserts one compatible item into the stored contents, persists the block entity and emits wobble/audio/particles/events.
+- Findings: Decorated pots and their insertion/loot behavior are vanilla 1.20.1. The current code converts loot to component-backed item data and uses current saved-entity helpers, modern stack compatibility and packet sync.
+- RustChunk relevance: Adapt as a target block-entity interaction/loot module; rebuild item persistence and server update flow using legacy 1.20.1 NBT.
+- Decision: **adaptable; version-specific — Vanilla decorated pot is target-relevant; adapt loot/item NBT and update packets.**
+- 1.20.1 implications: Use 1.20.1 DecoratedPotBlockEntity schema, sherd fields, `item` NBT, loot table seed/sequence semantics, item stack compatibility and block-entity update packets.
+- Follow-up checks: Compare empty/full/incompatible inserts, creative and offhand, failure wobble, deferred loot roll with seed/sequence, item NBT round trip, block break drops and reload.
+- RustChunk implementation mapping: Proposed game/block_entities/decorated_pot_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 decorated-pot NBT snapshots, loot table fixtures, deterministic RNG traces and interaction packet captures.
+- Completion state: COMPLETE — all 159 logical lines read to EOF; source SHA and 6146-byte size match pinned Git tree; no interaction tests run.
+
+### 1182. `crates/horizon-client/src/game/dedicated.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `197a2d1f72551a19a38089e38a38be74b2bc11d6`
+- Size: 90454 bytes; 2227 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2227
+- Purpose: Implements Horizon's dedicated-server lifecycle, startup/shutdown, server tick and save flow, player/session management, console/RCON-related state and custom host integration.
+- Dependencies / cross-references: Dedicated server options and properties, Horizon server launcher/runtime, LAN hub, world save/load, user lists, console commands, event stream, reporting, management socket, player lifecycle and server tick pump.
+- Implementation / logic: Initializes the dedicated host, prepares/loads the world, drives server ticks, handles operator/console actions, saves and shuts down world/player data, reports state and coordinates custom server management features.
+- Findings: This is a dedicated-server product/runtime integration, not the Android multiplayer client. Aternos/Forge servers own these operations; importing them into the client would add privileged server code unrelated to joining a server.
+- RustChunk relevance: Exclude from RustChunk client core. If RustChunk later becomes a server-hosting product, design a distinct server target and do not copy Horizon hosting/runtime assumptions wholesale.
+- Decision: **unnecessary; reference; optional/future — Horizon dedicated-server runtime; keep out of Android client.**
+- 1.20.1 implications: The 1.20.1 client should connect through the vanilla/Forge protocol and accept server-authoritative player/world state; it must not implement local remote-server lifecycle, save or operator controls.
+- Follow-up checks: No client follow-up. A future server product needs a separate target scope, 1.20.1 Forge server lifecycle, permissions, storage and security review.
+- RustChunk implementation mapping: No client mapping; only a separately scoped `server/host_1_20_1.rs` architecture might be considered, not created.
+- Evidence required before adoption: An explicit RustChunk dedicated-server requirement, Forge 1.20.1 server APIs, platform support and isolated server/client integration tests.
+- Completion state: COMPLETE — all 2227 logical lines read in six consecutive chunks through EOF; SHA and 90454-byte size verified; no server was started or operated.
+
+### 1183. `crates/horizon-client/src/game/dedicated/events.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `00bf89859e488156910b57d00f70bf7335167b6f`
+- Size: 3398 bytes; 86 logical lines
+- Coverage: 1–86
+- Purpose: Provides Horizon's structured dedicated-server event stream, including player lifecycle, kicks, chat and other server-side events with sequence identifiers.
+- Dependencies / cross-references: Horizon dedicated events buffer, JSON serialization, dedicated server state and external management/event consumers.
+- Implementation / logic: Creates typed event records, sequences and buffers them, then exposes serialized event information for the Horizon management/control layer.
+- Findings: This event API is a proprietary hosting/observability interface, not a Minecraft 1.20.1 play packet or client capability.
+- RustChunk relevance: Exclude from the joining client. It may be a reference for a separate RustChunk server telemetry API.
+- Decision: **unnecessary; reference; optional/future — Horizon dedicated-server event stream; not a client requirement.**
+- 1.20.1 implications: Do not add Horizon event identifiers or assume an Aternos/Forge server publishes this stream.
+- Follow-up checks: If server telemetry is later required, define event schema, ordering, privacy and retention separately from Minecraft packets.
+- RustChunk implementation mapping: No client mapping; future server/events.rs only if server hosting is explicitly scoped, not created.
+- Evidence required before adoption: Explicit server observability requirement, documented event schema, data retention policy and consumer contract.
+- Completion state: COMPLETE — all 86 logical lines read to EOF; source SHA and 3398-byte size match pinned tree; no event service contacted.
+
+### 1184. `crates/horizon-client/src/game/dedicated/management.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7d07a60dbc42e488a8da8143e1a2b76a77e7f419`
+- Size: 26225 bytes; 595 logical lines
+- Coverage: 1–400; 401–595
+- Purpose: Implements Horizon management RPC endpoints for dedicated-server settings, allowlist/ban/operator changes, guest controls and server administration.
+- Dependencies / cross-references: Horizon management socket/RPC messages, dedicated server options, user lists, player UUID/name/IP state, kick/permission flows and JSON request/response schema.
+- Implementation / logic: Validates management requests, changes server properties and lists, grants/revokes privileges, bans or kicks players and returns structured server-side results.
+- Findings: This is privileged dedicated-server administration and includes IP/user-list management. It is not client gameplay or a vanilla server protocol exposed to connected users.
+- RustChunk relevance: Exclude from the client. Never expose remote server administration from RustChunk's ordinary client or pass credentials to a server by inference.
+- Decision: **unnecessary; reference; optional/future — Horizon privileged management RPCs; exclude from Android client.**
+- 1.20.1 implications: A 1.20.1 Forge client cannot edit Aternos ops, bans, whitelist or properties; these are controlled by server owner/admin interfaces.
+- Follow-up checks: No client follow-up. Future host feature must have authentication, authorization, auditing, rate limits, CSRF/replay protections and private IP handling.
+- RustChunk implementation mapping: No client mapping; future server/admin/management_api.rs only in separate product scope, not created.
+- Evidence required before adoption: Explicit server-hosting requirement, threat model, authenticated management protocol, admin permission tests and privacy review.
+- Completion state: COMPLETE — all 595 logical lines read in consecutive chunks 1–400 and 401–595; source SHA/byte size verified; no management calls made.
+
+### 1185. `crates/horizon-client/src/game/dedicated/report.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ef78d5480d97499870fe2d8e3eb845f277775934`
+- Size: 14656 bytes; 388 logical lines
+- Coverage: 1–388
+- Purpose: Collects periodic Horizon dedicated-server performance reports covering tick timing, CPU, players, chunks, world/save activity and worker health.
+- Dependencies / cross-references: Dedicated runtime metrics, timers/spans, streaming/chunk workers, server player state, world storage and report/event serialization.
+- Implementation / logic: Samples performance counters over a reporting interval, aggregates timings and counts, then packages a report for the Horizon server observability pipeline.
+- Findings: Server-side telemetry and Horizon's custom metric schema are not needed to render or join a 1.20.1 multiplayer server. It may disclose operational data.
+- RustChunk relevance: Exclude from the client baseline; a separate opt-in local diagnostics feature is different and should not gather server internals.
+- Decision: **unnecessary; reference; optional/future — Horizon dedicated telemetry; optional future server feature only.**
+- 1.20.1 implications: Do not assume ordinary remote servers expose these metrics. Keep client FPS/memory telemetry local and privacy controlled.
+- Follow-up checks: If later reused for RustChunk's own server, bound report frequency and fields; review sensitive identifiers and retention.
+- RustChunk implementation mapping: No client mapping; separate server/telemetry/report.rs only if justified, not created.
+- Evidence required before adoption: Explicit server monitoring requirement, metrics schema, privacy review and resource overhead benchmarks.
+- Completion state: COMPLETE — all 388 logical lines read to EOF; SHA and Git-tree byte size verified; no report was emitted.
+
+### 1186. `crates/horizon-client/src/game/dedicated/status.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `31d5a948f1e04b09bd30986e390769df3e4063ec`
+- Size: 5006 bytes; 118 logical lines
+- Coverage: 1–118
+- Purpose: Exposes Horizon dedicated-server runtime status, console/RCON and custom event/management connection state through a control/status response.
+- Dependencies / cross-references: Dedicated server state, console/RCON bridge, Horizon events and management RPC modules, status JSON schema and runtime properties.
+- Implementation / logic: Collects host runtime and service state, formats a status response and provides a polling surface for management/launcher consumers.
+- Findings: This is a Horizon management/status API, not the Minecraft Server List ping protocol or a game client's server status query.
+- RustChunk relevance: Do not import into the client. Use standard 1.20.1 Server List Ping/status packet behavior when displaying server status.
+- Decision: **unnecessary; reference; optional/future — Horizon host status endpoint; not server-list ping or client functionality.**
+- 1.20.1 implications: Separate multiplayer server ping (status protocol) from privileged server host status; no RCON/admin state belongs in the client core.
+- Follow-up checks: Compare target Server List Ping handshake/version/protocol fields separately; future local hosting status needs access controls.
+- RustChunk implementation mapping: No baseline mapping; future server/status_api.rs only under distinct host target, not created.
+- Evidence required before adoption: Explicit server host requirement and an authenticated status API schema; server-list status protocol tests.
+- Completion state: COMPLETE — all 118 logical lines read to EOF; source SHA and 5006-byte size verified; no status endpoint contacted.
+
+### 1187. `crates/horizon-client/src/game/deflect.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cb0fd87ce5281f0b771bda40bc3781a610de6da9`
+- Size: 11360 bytes; 295 logical lines
+- Coverage: 1–295
+- Purpose: Handles player melee deflection of selected hostile projectiles, including ghast fireballs and newer wind-charge projectiles, with hit timing and feedback.
+- Dependencies / cross-references: Projectile kinds and owner/velocity, entity hit tests, player attack strength, damage/deflection events, sound/particles and current WindCharge/BreezeWindCharge types.
+- Implementation / logic: Finds eligible projectile under aim, applies attack strength and direction to redirect/alter motion, handles projectile-specific impact/ownership and emits sound/particle feedback.
+- Findings: Ghast fireball deflection is target-era behavior to verify; wind charge/BreezeWindCharge projectiles are not 1.20.1 vanilla. This source also uses the current generalized projectile-kind model.
+- RustChunk relevance: Adapt only the 1.20.1-supported projectile interaction subset after checking Java source; exclude later wind-charge branches.
+- Decision: **adaptable; version-specific — Only target-version deflection behavior may adapt; remove later wind-charge types.**
+- 1.20.1 implications: Use 1.20.1 projectile roster and attack/collision path; do not register wind-charge projectile IDs in the vanilla target.
+- Follow-up checks: Verify ghast fireball melee deflection, hit selection, direction/speed, ownership, attack strength, sound and server correction; test unsupported projectile types pass through.
+- RustChunk implementation mapping: Proposed game/projectiles/deflect_1_20_1.rs restricted to verified 1.20.1 projectile kinds; not created.
+- Evidence required before adoption: 1.20.1 Java projectile source/mappings, packet traces and deterministic ray-hit/velocity fixtures.
+- Completion state: COMPLETE — all 295 logical lines read to EOF; pinned SHA and byte size verified; no projectile gameplay tests run.
+
+### 1188. `crates/horizon-client/src/game/diagnostics.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d3b497b4c20de4f6c6e067827f4bf2403eeb7f26`
+- Size: 7374 bytes; 182 logical lines
+- Coverage: 1–182
+- Purpose: Implements Horizon Android/client diagnostics export and performance recording/reporting for device, GPU, renderer and application state.
+- Dependencies / cross-references: Android/platform diagnostic providers, GPU/renderer information, performance counters, local logs and an export/report schema.
+- Implementation / logic: Collects local platform and render diagnostics, records optional performance samples and packages them for export/support investigation.
+- Findings: This is platform diagnostics rather than Minecraft protocol or gameplay. It can collect device/runtime details, so export must be user initiated and privacy reviewed.
+- RustChunk relevance: Not part of game core. A small opt-in RustChunk mobile diagnostics feature could be separately designed for Android troubleshooting.
+- Decision: **unnecessary; reference; optional/future — Horizon device diagnostics; optional, separate from the game engine.**
+- 1.20.1 implications: No 1.20.1 behavior or server protocol implications; platform APIs must match supported Android API and avoid unsupported desktop assumptions.
+- Follow-up checks: If adopted, require explicit opt-in, redact identifiers/paths, bound log sizes, scrub secrets and allow review before sharing.
+- RustChunk implementation mapping: No game mapping; optional platform/android_diagnostics.rs only after privacy and UX scope, not created.
+- Evidence required before adoption: Explicit support requirement, Android API contract, privacy/data-retention policy and redaction tests.
+- Completion state: COMPLETE — all 182 logical lines read to EOF; source SHA and 7374-byte size verified; no diagnostic report exported.
+
+### 1189. `crates/horizon-client/src/game/dialogs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `96d7e4a38ec07d474d56d8378a3fa158a4f2c977`
+- Size: 49526 bytes; 1247 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1247
+- Purpose: Implements a modern server-driven dialog system with registry-loaded dialog definitions, inputs, buttons, confirmations, nested screens and custom actions.
+- Dependencies / cross-references: Dialog packet/state, modern `minecraft:dialog` registry, component/text serializer, UI widgets, form input validation, click events and remote session custom actions.
+- Implementation / logic: Loads dialog definitions, constructs dynamic screen controls, validates inputs, routes button actions and submits responses/custom click payloads to the remote server.
+- Findings: The dialog registry/protocol and its data model post-date Minecraft Java 1.20.1. It includes custom action and component schemas not available in the target vanilla client.
+- RustChunk relevance: Exclude from baseline 1.20.1. Consider only for a future version or explicitly named Forge mod with its own protocol extension.
+- Decision: **unnecessary; reference; optional/future; version-specific — Modern dialog protocol/UI; omit from 1.20.1 baseline.**
+- 1.20.1 implications: Do not expect dialog registry or packets on 1.20.1 Forge servers; unknown packet IDs must not be silently sent/handled as this feature.
+- Follow-up checks: Confirm target 1.20.1 protocol/registry exports; if mod-added, pin that mod's schema and threat-model arbitrary server-provided form links/actions.
+- RustChunk implementation mapping: No 1.20.1 mapping; optional ui/dialogs.rs only for a later protocol adapter, not created.
+- Evidence required before adoption: Newer target version or named mod protocol, registry definitions, UI interaction fixtures and untrusted-input security review.
+- Completion state: COMPLETE — all 1247 logical lines read in four consecutive chunks 1–400, 401–800, 801–1200 and 1201–1247; SHA/tree size verified; no dialog server session run.
+
+### 1190. `crates/horizon-client/src/game/discord.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `43af0ddad2be6e879563f606fc07cc00a7b60afe`
+- Size: 1599 bytes; 47 logical lines
+- Coverage: 1–47
+- Purpose: Bridges current game/world status to Discord Rich Presence, exposing a small external activity/status string.
+- Dependencies / cross-references: Discord Rich Presence client/API, game state, world/server names and external IPC/service availability.
+- Implementation / logic: Builds and updates a Discord activity representation from current session state.
+- Findings: External social integration is not Minecraft gameplay, Forge compatibility or vanilla protocol. It adds an optional external dependency and may expose server/world names.
+- RustChunk relevance: Exclude from RustChunk baseline; add only if explicitly desired as a separate opt-in integration.
+- Decision: **unnecessary; reference; optional/future — Optional Discord Rich Presence; not a core launcher/game feature.**
+- 1.20.1 implications: No 1.20.1 server/client protocol implication.
+- Follow-up checks: If revived, check provider API availability, consent, private server-name redaction and behavior when Discord is absent.
+- RustChunk implementation mapping: No mapping; optional integrations/discord_presence.rs only after product approval, not created.
+- Evidence required before adoption: Explicit user/product requirement, provider contract, privacy behavior and integration tests.
+- Completion state: COMPLETE — all 47 logical lines read to EOF; source SHA and 1599-byte size verified; no Discord IPC/service called.
+
+### 1191. `crates/horizon-client/src/game/dispense_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6e7a354b4dce0455030fc48ffbb1155c8ebb254b`
+- Size: 46540 bytes; 1176 logical lines
+- Coverage: 1–400; 401–800; 801–1176
+- Purpose: Provides a deterministic, scripted headless parity fixture for dispenser behaviors, with input/case JSON and serialized world/entity output.
+- Dependencies / cross-references: Dispenser game logic, headless game/world initialization, JSON fixtures, environment-variable path, test-only feature gates and output serializer.
+- Implementation / logic: Loads dispenser test cases, builds a minimal world, drives dispense operations and captures item/block/entity results for comparison against an external oracle.
+- Findings: This is a developer fixture harness, not runtime dispenser behavior. It includes cases for newer items/entities and Horizon test scaffolding; no fixture tests were executed in this review.
+- RustChunk relevance: Useful test design reference for RustChunk's 1.20.1 dispenser parity suite, but keep it under tests and rebuild fixtures against target behavior.
+- Decision: **unnecessary; reference; optional/future — Horizon dispenser parity harness; retain methodology only, not game runtime.**
+- 1.20.1 implications: Do not compile this harness into the Android release client or reuse modern fixture outputs as 1.20.1 truth.
+- Follow-up checks: Create a separate target oracle and cases for buckets, arrows, projectiles, armor, boats, TNT, bone meal and target-era dispenser behaviors; isolate env vars and temporary files.
+- RustChunk implementation mapping: Possible tests/dispense_parity_1_20_1.rs behind test-only configuration; not created.
+- Evidence required before adoption: Golden Java 1.20.1 dispenser traces, deterministic seeds, fixture coverage and proof test-only code is excluded from release.
+- Completion state: COMPLETE — all 1176 logical lines read in three consecutive chunks through EOF; SHA/tree size verified; fixture was not run.
+
+### 1192. `crates/horizon-client/src/game/dispenser.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `191739a9a4b2eb8d06d03547fbbbd05e6d12601a`
+- Size: 88905 bytes; 2270 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2270
+- Purpose: Implements the broad dispenser/dropper behavior registry and execution path for item placement, use, projectiles, buckets, equipment and block/entity interactions.
+- Dependencies / cross-references: Dispenser behavior dispatch, inventory/block-entity state, block/item registries, projectiles and mobs, recipes/tags, sounds/particles, item components and native mod hooks.
+- Implementation / logic: Selects the behavior for the item in a slot, validates target and world state, applies block/entity/item mutation, handles projectile spawn/velocity and dropper transfer, then updates inventory, cooldown, sounds and events.
+- Findings: The dispenser/dropper system is a major vanilla 1.20.1 redstone feature. This implementation is very broad but mixes later wind charges, copper golems, happy ghasts, nautilus/armadillo/bogged and other post-target content, modern item components and mod hooks.
+- RustChunk relevance: Essential feature area for server/world parity; split into behavior handlers and port only the vanilla 1.20.1 behavior set with legacy ItemStack NBT.
+- Decision: **essential; rewrite required; version-specific — Dispenser is essential but must be modularly rewritten for 1.20.1 with newer content removed.**
+- 1.20.1 implications: Rebuild 1.20.1 registered dispense behaviors, order/priority, dropper inventory insertion, projectile trajectories, bucket placement/pickup, armor equip, TNT, bone meal, boat/minecart placement and durability/NBT.
+- Follow-up checks: Use a deterministic Java 1.20.1 oracle for every behavior; test failed/pass/success return codes, slot consumption, facing, spawn positions, entity collisions, sound/events, random dispersion, block entity preservation and Forge hooks.
+- RustChunk implementation mapping: Proposed game/blocks/dispenser_1_20_1.rs split into behavior modules; no target implementation created.
+- Evidence required before adoption: 1.20.1 DispenseItemBehavior registry, target item tags/NBT, Java trace fixtures, block/entity update packets and Forge dispenser extension API.
+- Completion state: COMPLETE — all 2270 logical lines read in six consecutive chunks 1–400, 401–800, 801–1200, 1201–1600, 1601–2000 and 2001–2270; SHA/tree size verified; no dispenser tests run.
+
+### 1193. `crates/horizon-client/src/game/dragon.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `38a1a5801cff021203da797157cd61924b5cc18d`
+- Size: 191786 bytes; 4836 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2800; 2801–3200; 3201–3600; 3601–4000; 4001–4400; 4401–4800; 4801–4836
+- Purpose: Implements the Ender Dragon and dragon fight: entity/part state, phase AI, paths, crystals, player targeting, damage/knockback, breath/fireballs, death sequence, exit portal triggers and rendering.
+- Dependencies / cross-references: Dragon/Fight/Crystal models, End dimension, End gateway and podium helpers, players/guests, entity parts, damage registry and native hooks, particles/audio, boss overlay, chunk/tick/world state and renderer.
+- Implementation / logic: Ticks phase state machines, moves/poses dragon parts, selects targets and paths, handles crystal destruction and strafing, dragon damage/explosion/wing interactions, breath/fireball particles, death rays and boss bar/fight progression.
+- Findings: The Ender Dragon fight is a central vanilla feature. This file is tightly linked to Starling's current LAN host/guest identity, custom fight serialization, native damage hooks and newer DamageKind/projectile types (Wind Charge/Breeze Wind Charge) and rendering/assets.
+- RustChunk relevance: Essential subsystem for End/server parity. Rebuild against Java 1.20.1 EnderDragon/EnderDragonFight phases and vanilla End dimension state; do not transplant modern LAN and damage extension paths.
+- Decision: **essential; rewrite required; version-specific — Essential End boss feature; modularly rewrite for 1.20.1 and strip later extensions.**
+- 1.20.1 implications: Use 1.20.1 phase enum/order, crystal beam and invulnerability rules, attack/damage types, player attribution, fight NBT/DragonKilled/Gateway fields, dragon fireball and portal/podium semantics. Remove later wind-charge and custom fight fields.
+- Follow-up checks: Differentially verify phase transitions/path nodes, crystal respawn/waves, target selection, part hitbox damage, cooldown, wing knockback, breath/cloud damage, dragon fireball, death XP/portal/gateway and save/reload.
+- RustChunk implementation mapping: Proposed game/end/ender_dragon_1_20_1.rs split into fight, phases, crystal, combat, projectiles and renderer; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, EnderDragonFight NBT snapshots, deterministic tick traces, player/projectile packet captures and render fixtures.
+- Completion state: COMPLETE — all 4836 logical lines read in thirteen consecutive chunks through EOF; source SHA and actual Git-tree size 191786 bytes verified; embedded tests inspected, not run.
+
+### 1194. `crates/horizon-client/src/game/dynamic_lights.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8a277ad8e588235813e0bbb72f2058e8ea34fa8f`
+- Size: 4206 bytes; 107 logical lines
+- Coverage: 1–107
+- Purpose: Gathers optional dynamic light sources from held items, fire and dropped glowing items near the camera, then selects the nearest sources for rendering.
+- Dependencies / cross-references: Horizon Extras dynamic-light setting, per-item luminance table, player/mob hands, fire state, dropped items, camera interpolation and dynamic-light renderer.
+- Implementation / logic: Returns no sources when the extra is disabled; picks the brighter held item or fire per entity, interpolates positions and passes sources to the dynamic-light selector.
+- Findings: Dynamic handheld item lighting is not a required vanilla 1.20.1 client feature; the file explicitly marks it as a Horizon Extra. It can be GPU/CPU expensive on mobile.
+- RustChunk relevance: Exclude from baseline. A future opt-in RustChunk mobile visual enhancement should be separately profiled and power-aware.
+- Decision: **unnecessary; reference; optional/future — Horizon optional dynamic lighting; omit from vanilla baseline.**
+- 1.20.1 implications: No protocol or game mechanics implication; item luminance tables and light updates are client-side optional rendering only.
+- Follow-up checks: If added later, profile CPU/GPU/battery and limit source count/update frequency; test light behavior only with a compatible renderer backend.
+- RustChunk implementation mapping: No core mapping; optional render/dynamic_lights.rs after Android performance evaluation, not created.
+- Evidence required before adoption: Explicit user-facing option, measured Android performance/battery cost and renderer correctness tests.
+- Completion state: COMPLETE — all 107 logical lines read to EOF; SHA and 4206-byte size verified; no renderer or device profiling run.
+
+### 1195. `crates/horizon-client/src/game/enchant_effects.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0ba138abe1780b9d39c9ce017bf65e0ec5ef5ec5`
+- Size: 50344 bytes; 1178 logical lines
+- Coverage: 1–400; 401–800; 801–1178
+- Purpose: Applies enchantment effects to gameplay: mining speed/durability, combat damage/knockback, post-attack effects, Thorns/Mending, bow/crossbow modifiers, Soul Speed, Frost Walker and attribute modifiers.
+- Dependencies / cross-references: Modern Enchantment effect-component registry, ItemStack enchant data, EffectContext/conditions, attribute and damage registries, loot predicates, player/mob state, NBT and native mod hooks.
+- Implementation / logic: Evaluates data-driven enchantment effects and conditions for item damage, weapon damage, knockback, ignite/effects, Mending repair, projectile ammo/damage, location changes and replace-disk block effects.
+- Findings: Enchantment gameplay is core, but the entire file is based on newer data-driven effect components, including post-piercing attacks, wind burst, newer attribute IDs and later Soul Speed/Frost Walker schemas. 1.20.1 uses legacy enchantment definitions/logic and ItemStack NBT.
+- RustChunk relevance: Essential behavior domain but not an adoptable 1.20.1 implementation; map target enchantments one by one to explicit vanilla 1.20.1 algorithms.
+- Decision: **essential; rewrite required; version-specific — Enchantment gameplay is essential; rewrite modern effect components into 1.20.1 enchant logic.**
+- 1.20.1 implications: Use 1.20.1 EnchantmentHelper/EnchantmentInstance and legacy enchant NBT, target attribute modifiers, Unbreaking/Mending/Thorns/Sharpness/Power/Infinity/Flame/Frost Walker/Soul Speed rules. Exclude Lunge/Wind Burst and modern component effect IDs.
+- Follow-up checks: Build target enchantment matrix; compare each supported enchant at every level, random chance/order, durability, attributes, armor/equipment slot, bow/crossbow, XP repair, frost/ice placement and persistence.
+- RustChunk implementation mapping: Proposed game/enchantments/{durability,combat,projectiles,equipment,location}_1_20_1.rs with legacy NBT reader; not created.
+- Evidence required before adoption: 1.20.1 enchantment registry/data, Java source traces, ItemStack NBT fixtures, deterministic RNG snapshots and target attribute modifier captures.
+- Completion state: COMPLETE — all 1178 logical lines read in three consecutive chunks 1–400, 401–800 and 801–1178; SHA/tree size verified; tests not run.
+
+### 1196. `crates/horizon-client/src/game/end.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `98999c8f4a953db6c879fb747f9952b89f8ceb1d`
+- Size: 72071 bytes; 1788 logical lines
+- Coverage: 1–400; 401–800; 801–1200; 1201–1600; 1601–1788
+- Purpose: Implements End dimension features outside the dragon module: portal frames/activation, Eye of Ender/stronghold navigation, End platform/podium, gateway teleportation, crystals, End sky flash and environment.
+- Dependencies / cross-references: End dimension state and worldgen, End gateway block entity/tickets/chunk streaming, block registry, portal travel, Eye projectile, crystal renderer, saved entities/NBT, loot/particles/audio and dragon fight state.
+- Implementation / logic: Detects and activates 12-frame portal rings, throws/steers eyes toward strongholds, builds arrival platform and active exit portal/podium, creates and resolves End gateways, teleports entities/items/pearls and draws End flashes/crystals/eyes.
+- Findings: Most End mechanics are vanilla 1.20.1 but this implementation combines current chunk streaming, custom gateway arrival queue, LAN/remote entity state, extra portal tickets and current block-entity/worldgen helpers. These require target comparison.
+- RustChunk relevance: Essential for End dimension traversal and boss progression. Split portal, eye, gateway, world spawn, End environment and crystal rendering components.
+- Decision: **essential; rewrite required; version-specific — End dimension features are essential; rewrite gateway/portal and persistence against 1.20.1.**
+- 1.20.1 implications: Rebuild 1.20.1 End gateway cooldown/exit search and NBT, EnderEye stronghold selection, portal frame orientation, End podium/return platform, entity portal cooldown and world spawn semantics.
+- Follow-up checks: Compare frame activation, portal collision shape, eye signal/throw/break chance, stronghold targeting, return platform, exit portal persistence, gateway ring generation/exit search, item/mob/pearl travel and End flash timing.
+- RustChunk implementation mapping: Proposed game/end/{portals,gateways,eyes,world_spawn,environment}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 Java source/mappings, Level/EndGateway NBT, deterministic world seed fixtures, portal packet captures and dimension-travel traces.
+- Completion state: COMPLETE — all 1788 logical lines read in five consecutive chunks 1–400, 401–800, 801–1200, 1201–1600 and 1601–1788; SHA/tree bytes verified; no world tests run.
+
+### 1197. `crates/horizon-client/src/game/entity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ae1c9d74a0ff35cbab3a0fdc3147ea82acba7e66`
+- Size: 35991 bytes; 694 logical lines
+- Coverage: 1–400; 401–694
+- Purpose: Defines the common static Entity interface and entity-list dispatch for tick, save, portal, fluid, explosion, lightning, piston, selector and renderer-related systems.
+- Dependencies / cross-references: Game's mob/item/boat/cart/armor-stand/TNT/falling/orb/projectile/rocket/trident lists, EntityRules, NBT persistence, collision/world state and command target resolver.
+- Implementation / logic: Uses static trait implementations and macros to expose shared per-kind methods, generate handle walks and persistence dispatch, with specialized overrides for each entity class.
+- Findings: A unified entity abstraction is essential for the Rust engine architecture, but the kind list includes later projectiles and Starling-specific dispatch/save assumptions. Static dispatch/macros are an implementation choice rather than a vanilla contract.
+- RustChunk relevance: Adapt the architecture but define a target-version entity roster, lifecycle contracts and serializer boundaries. Keep client-side remote entities server-authoritative.
+- Decision: **essential; rewrite required; version-specific — Shared entity abstraction is essential; rebuild kind roster/behavior and Forge extension points for 1.20.1.**
+- 1.20.1 implications: Use only 1.20.1 entity types and portal/physics/push rules; add Forge entity registration and extensible adapters without allowing modern kinds to leak into vanilla registries.
+- Follow-up checks: Check that every registered target entity implements selector/save/tick/portal/physics rules; compare NBT serialization, piston/fire/fluid/explosion and remote entity tracking per type.
+- RustChunk implementation mapping: Proposed game/entity/{trait,lists,dispatch,persistence}_1_20_1.rs; not created.
+- Evidence required before adoption: 1.20.1 entity type registry, Java per-kind behavior matrix, NBT golden files, Forge custom entity API fixtures and lifecycle tests.
+- Completion state: COMPLETE — all 694 logical lines read in consecutive chunks 1–400 and 401–694; source SHA/tree byte size verified; tests read only.
+
+### 1198. `crates/horizon-client/src/game/entity_culling.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2a0aecc878fc4df410d3f408a9ff2f0d7b4bc77c`
+- Size: 25857 bytes; 736 logical lines
+- Coverage: 1–400; 401–736
+- Purpose: Provides synchronous and asynchronous entity occlusion culling, reusing exact geometry bounds and validating opaque chunk/section snapshots before suppressing entity mesh submission.
+- Dependencies / cross-references: Entity mesh vertices, Culler ray/occlusion utility, chunk snapshots/weak references, render section validity, async worker channels, world/chunk revisions and graphics pack shadow spans.
+- Implementation / logic: Builds culling queries for entity vertex bounds, computes opaque blockers on a bounded background worker, stores proof sections/chunks and revalidates revisions/render readiness before hiding geometry.
+- Findings: This is render-only optimization and must never alter entity ticking/interaction. It requires vanilla-like opaque block geometry and currently assumes Starling's chunk/section memory and renderer model. Worker overhead may not benefit low-memory/mobile devices.
+- RustChunk relevance: Potentially useful for RustChunk's distant entity rendering, but only after correct basic rendering and profiling; implement bounded synchronous baseline first, then optional async mode.
+- Decision: **adaptable; optional/future; version-specific — Optional rendering optimization; preserve correctness and profile before enabling on Android.**
+- 1.20.1 implications: Use target chunk palette/revision and block opacity facts; keep culling independent of server authority, entity simulation, interaction and Forge entity visibility rules.
+- Follow-up checks: Test occlusion false positives at chunk/section boundaries, changed block/chunk invalidation, moving camera and animated mesh bounds; benchmark CPU, memory and latency on Galaxy-class ARM64.
+- RustChunk implementation mapping: Proposed render/entity_culling.rs with conservative sync mode; async worker feature not committed, not created.
+- Evidence required before adoption: Pixel/visibility golden tests, invalidation stress tests, bounded memory, worker shutdown tests and Android performance evidence.
+- Completion state: COMPLETE — all 736 logical lines read in consecutive chunks 1–400 and 401–736; pinned SHA/tree size verified; embedded tests inspected, not run.
+
+### 1199. `crates/horizon-client/src/game/entity_model_loading_tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d94d6d0adea414ea02fdc3e224bc1d7072406725`
+- Size: 10915 bytes; 315 logical lines
+- Coverage: 1–315
+- Purpose: Tests equivalence between previous per-model file loading and batched entity-model document loading, and provides an opt-in benchmark of model/armor asset loading.
+- Dependencies / cross-references: BoatModels, CartModels, ArmorStandAssets, EntityModelDocument, JSON fixtures, temporary directory helpers and optional benchmark environment variables.
+- Implementation / logic: Builds model fixtures, compares baseline and optimized model maps including failure/missing layer cases, checks namespace equipment loading and provides an ignored timing benchmark.
+- Findings: This is test/benchmark code, not runtime game logic. It demonstrates an asset-loading regression-test pattern, but fixture includes later boat woods and modern equipment-layer namespaces.
+- RustChunk relevance: Use as a testing methodology reference for RustChunk's asset pipeline; do not add it to the Android runtime.
+- Decision: **unnecessary; reference; optional/future — Test-only model-loading benchmark/equivalence fixture; no runtime code to port.**
+- 1.20.1 implications: Build fixtures using 1.20.1 model/armor asset formats and target supported entity roster; keep opt-in benchmarks separate from normal tests.
+- Follow-up checks: Create model loader equivalence tests for missing/corrupt resources, mod namespace assets and repeated loads; benchmark separately on Android/desktop without flaky CI thresholds.
+- RustChunk implementation mapping: Possible tests/entity_model_loading_1_20_1.rs; not created.
+- Evidence required before adoption: Golden target model outputs, test coverage for all 1.20.1 renderable entities and opt-in reproducible benchmark report.
+- Completion state: COMPLETE — all 315 logical lines read to EOF; SHA and 10915-byte size verified; tests and benchmark were not run.
+
+### 1200. `crates/horizon-client/src/game/event_loop.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9cd829ee45b02476ba969aefbbacf3b749ce2649`
+- Size: 950 bytes; 24 logical lines
+- Coverage: 1–24
+- Purpose: Defines a tiny EventLoopCtl abstraction for exit and control-flow scheduling, implemented by winit's ActiveEventLoop so headless clients can supply another loop.
+- Dependencies / cross-references: winit ActiveEventLoop/ControlFlow, game loop host, windowed and headless execution targets.
+- Implementation / logic: Exposes exit and set_control_flow methods behind a trait so game logic does not depend directly on a display/window event loop.
+- Findings: This is a small architectural abstraction, not Minecraft logic; it already acknowledges headless execution but its concrete platform contract is winit-specific.
+- RustChunk relevance: Useful pattern for separating RustChunk game state from Android/window lifecycle and headless test driving.
+- Decision: **adaptable; reference — Small reusable platform abstraction; adapt to Android/headless runtime.**
+- 1.20.1 implications: Define a platform-neutral scheduler/exit contract that Android's event source and tests can implement; do not require a desktop ActiveEventLoop on Android.
+- Follow-up checks: Test pause/resume, exit propagation, frame deadline/wakeup and headless deterministic ticking on Android and CI.
+- RustChunk implementation mapping: Possible platform/event_loop_ctl.rs; not created.
+- Evidence required before adoption: Android event loop integration tests and headless deterministic clock/tick tests.
+- Completion state: COMPLETE — all 24 logical lines read to EOF; SHA and 950-byte size verified; no event loop or game was run.
