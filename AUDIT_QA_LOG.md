@@ -583,3 +583,24 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 20 paths are sequential (1041–1060), unique against entries 1–1040, and SHA/byte-size match the pinned source tree. Each entry has all 15 fields exactly once; matching Index rows have been appended.
 - No tests, build, benchmark, APK, Android device, Minecraft client, Forge client, multiplayer server or Aternos connection were executed.
 - Next checkpoint: entries 1061–1080. Backup branches remain untouched; next backup remains due only after entry 2000.
+
+## Audit checkpoint 1041–1060 — 2026-11-19
+
+### Scope and source verification
+
+- Inspected exactly 20 new unique text files in deterministic pinned-tree order, entries 1041–1060, from `starling-client/starling@5432370d573642041585c69b40fb045b27133488`.
+- Recorded every source SHA and byte size from the pinned tree. Each source file was read to its canonical EOF; no partial file is marked complete.
+- Long files were read in consecutive sections of at most 400 lines: 1042 (2,840 lines; eight sections), 1043 (8,506 lines; 22 sections), 1045 (2,000 lines; five sections), 1046 (1,482 lines; four sections), 1052 (616 lines; two sections), 1053 (908 lines; three sections), and 1057 (662 lines; two sections).
+- Classified app/UI/CLI systems separately from Minecraft simulation and protocol. Explicitly flagged Mojang asset licensing for 1041; modern 26.x ambience/item component/block-transform schemas for 1045, 1057 and 1060; Horizon-only Android UI/JNI/CLI/MCP and benchmark behavior; and target-version validation required for arrows, combat, bee, banner, auto-jump and block prediction logic.
+- No Starling source code or asset was copied into RustChunk. No Rust test, build, benchmark, APK, Android device, Minecraft launch, Forge client or multiplayer/server test was executed.
+
+### Durable checkpoint persistence
+
+- Added 20 complete 15-field records to `AUDIT_LEDGER_1001_1200.md` and 20 matching decision/path rows to `AUDIT_INDEX.md`.
+- Re-fetched the Ledger, Index and QA log from GitHub after writes. Verify: numbers 1041–1060 occur exactly once and sequentially; 20 paths are unique and not duplicated in the previous 1,040 entries; all source paths exist in the pinned tree; all Source SHAs and byte sizes match; every entry contains each of the 15 required fields exactly once; and all 20 Index paths/primary decisions match the Ledger.
+- The earlier checkpoint reconciliation at 1021–1040 remains recorded; its duplicate block was removed and the canonical entry 1039 remains the 1,805-line `crates/horizon-client/src/advancements.rs` record.
+- Both existing backup branches remain untouched. No backup was created at this 20-file checkpoint. The next backup is due only after entry 2000 has been fully audited and globally verified.
+
+### Next checkpoint
+
+- Continue with entries **1061–1080**. Do not restart or renumber the current 200-file stage.
