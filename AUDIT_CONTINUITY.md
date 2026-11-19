@@ -130,3 +130,16 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Corrected 1349 to `crates/horizon-client/src/locator_bar.rs` and added `crates/horizon-client/src/lod_net.rs` as entry 1350, fully reviewed to EOF.
 - The final Index is 1350 sequential entries and 1350 unique source paths. The active Ledger contains 150 entries, 1201–1350, with exactly 15 fields per entry.
 - Reporting section 1301–1350 remains complete. STOP at 1350; do not begin 1351–1400 until explicit user authorization.
+
+## Latest verified checkpoint — 1351–1375
+
+- Branch head before checkpoint work: 38dab3b1018f4b023c22dcb549da1b1024588f4a.
+- Latest checkpoint documentation commit: 9098ab72dabbea4ca59d5ace32460e511b8127bb.
+- Completed entries: 1351–1375 inclusive (25/25).
+- Index: 1375 sequential entries and 1375 unique source paths.
+- Active Ledger: entries 1201–1375, 175 records; each has exactly 15 required fields.
+- QA: checkpoint 1351–1375 recorded; the symlink at 1351 and complete 10,360-line native_hooks.rs inspection are explicitly noted.
+- Pinned upstream remains starling-client/starling @ 5432370d573642041585c69b40fb045b27133488.
+- Authorization: the user's “start” instruction authorized the full section 1351–1400. Continue with 1376–1400 without asking for another permission at 1375.
+- Next checkpoint: 1376–1400. Stop after entry 1400 and wait for explicit authorization for 1401–1450.
+- No builds/tests/device checks were run. main and backups remain untouched; next backup remains governed by the existing 1000-entry cadence.
