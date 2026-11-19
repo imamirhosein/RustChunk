@@ -813,3 +813,37 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Existing backup branches were not modified. Backup remains due only after entries 1001–2000 are fully committed and globally verified.
 
 - Durable checkpoint documents updated together: new range Ledger, Index, QA Log, Continuity and Protocol. Read-back and blob SHA checks required before starting entry 1221.
+
+
+### Checkpoint 1221–1240 — 2026-11-19
+
+- Pinned source starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Recursive tree SHA matched the pin and response was not truncated. Prior Index contained 1220 sequential rows and 1220 unique paths.
+- Exactly 20 new source files 1221–1240 were read fully to EOF. Blob SHAs and byte sizes match pinned tree:
+- 1221 crates/horizon-client/src/game/ghasts.rs — 172 lines; 7007 bytes; SHA b8cc40e5b6498c21a5c8195e19ce15c3a98105b2.
+- 1222 crates/horizon-client/src/game/glowing.rs — 53 lines; 2139 bytes; SHA 049040f97491f69e388e72320779727bd3745119.
+- 1223 crates/horizon-client/src/game/golems.rs — 396 lines; 16247 bytes; SHA 60c757be8b9938c37f6bd587ad5815d1f49bdcd9.
+- 1224 crates/horizon-client/src/game/growth.rs — 124 lines; 5079 bytes; SHA c52e7394e44a132ab01a264595db63ace9902c44.
+- 1225 crates/horizon-client/src/game/hand.rs — 990 lines; 41204 bytes; SHA 3374297c13e4039acfc99c747938e734c7acf2dd.
+- 1226 crates/horizon-client/src/game/headless.rs — 98 lines; 3260 bytes; SHA 587bd9b2e449d67410e6d9518c961519438b98e1.
+- 1227 crates/horizon-client/src/game/ime.rs — 151 lines; 6539 bytes; SHA 51a270608beb251429d96849ab8ee454fe2dcfbb.
+- 1228 crates/horizon-client/src/game/imports.rs — 804 lines; 28209 bytes; SHA d9ab95a0132ddf881d5ff36418f84f800b646871.
+- 1229 crates/horizon-client/src/game/initial_spawn.rs — 367 lines; 14855 bytes; SHA ae6956ab40ebf14d5a8a62496a767fd0688adf5b.
+- 1230 crates/horizon-client/src/game/input_mode.rs — 90 lines; 3695 bytes; SHA 018916e4d19c6fd7b512956ee5dff6021f26a7db.
+- 1231 crates/horizon-client/src/game/input_trace.rs — 684 lines; 22937 bytes; SHA dec41557ad4e3968dcdc810944862c3314320cee.
+- 1232 crates/horizon-client/src/game/integrated.rs — 1329 lines; 53468 bytes; SHA baedd4a77d6b62dc337158bbaf451f8689cb040b.
+- 1233 crates/horizon-client/src/game/interactions.rs — 132 lines; 4886 bytes; SHA ddf1d967eb21ee7f1673434439aaadd431a7e334.
+- 1234 crates/horizon-client/src/game/item_draw.rs — 681 lines; 26733 bytes; SHA 19776b1660bfe859d1737c9476c7db3a5ddc3489.
+- 1235 crates/horizon-client/src/game/item_particles.rs — 130 lines; 5317 bytes; SHA 52072f7aaca615cfb8f699fb808cb751d17766a0.
+- 1236 crates/horizon-client/src/game/item_use.rs — 448 lines; 19407 bytes; SHA 7b5b46006ac40b458901f34385f680eafbfacef0.
+- 1237 crates/horizon-client/src/game/jigsaw_blocks.rs — 141 lines; 4770 bytes; SHA 4085e80887fb73f5bcf3095dae495a2285d13b7e.
+- 1238 crates/horizon-client/src/game/jigsaw_edit.rs — 331 lines; 10795 bytes; SHA 119e3cea3187755fc3926f5f00d0fcbe793fee50.
+- 1239 crates/horizon-client/src/game/jukebox.rs — 410 lines; 16555 bytes; SHA 03d2f5852cab025beb0364116b7b4a4dfd6788f5.
+- 1240 crates/horizon-client/src/game/key_focus.rs — 518 lines; 19617 bytes; SHA a87464b19721a98c309e4650d642e8ad9fba2afb.
+- Long-file coverage was contiguous and gap-free, each range <=400 lines: hand.rs 1–400,401–800,801–990; imports.rs 1–400,401–800,801–804; input_trace.rs 1–400,401–684; integrated.rs 1–400,401–800,801–1200,1201–1329; item_draw.rs 1–400,401–681; item_use.rs 1–400,401–448; jukebox.rs 1–200,201–400,401–410; key_focus.rs 1–400,401–518. Shorter files were fetched once to EOF.
+- Ledger: 20 sequential entries, each 15 fields exactly once. Index: 1240 sequential rows, 1240 unique paths, zero duplicates; new paths/decisions align with Ledger.
+- Range Ledger 1201–1400 now has 40 entries. First-half authorized progress is 40/100. Next checkpoint 1241–1260 begins at crates/horizon-client/src/game/kinetic_machines.rs. Do not start second half 1301–1400 before separate user instruction after first half.
+- Happy Ghast and Copper Golem are later than 1.20.1; snow/iron golem mechanics remain relevant. Hand combat, item use/render, jukebox and item feedback are important but require 1.20.1 data/NBT/packet mapping. Spawn/integrated-server behavior is server-side; remote client obeys server authority. Create extras and Horizon platform/agent systems stay outside baseline.
+- Potential hardening observations: Interaction dimensions need finite/bounded validation; importer behind Horizon UI needs separate archive/path security review; WorldRequest save-folder input needs boundary validation. These are review observations, not reproduced vulnerabilities.
+- Embedded tests were inspected, not executed. No build, APK, Forge launch, Android device run, multiplayer join, LAN host, UPnP or relay action was performed.
+- Existing backup refs untouched. Backup remains due only after entries 1001–2000 are committed and globally verified.
+
