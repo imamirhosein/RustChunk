@@ -154,7 +154,8 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - The final 50-file section had checkpoints 1351–1375 and 1376–1400; both are recorded in QA.
 - Index: 1400 sequential entries, 1400 unique paths, no duplicate source paths.
 - Ledger: 200 records for 1201–1400; all 15 required fields exactly once per record.
-- Latest checkpoint QA commit: c79e6368688ac31d5576d26521911424230c9363.
+- Latest checkpoint QA/alignment commit: 90d23fa8ccd599d4c8726b08849689e903f374fc.
 - Pinned Starling source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488.
 - STOP. Next proposed range is 1401–1450. No authorization for that range exists yet; wait for the user's explicit instruction.
 - No tests/builds/device/server validation were run. main and backup branches remain untouched. Backup cadence remains every 1000 entries.
+- Final field alignment correction for entries 1376–1400 is committed; the 15-field Ledger and Index path/decision match were re-verified after correction.
