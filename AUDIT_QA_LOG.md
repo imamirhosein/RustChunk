@@ -537,3 +537,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - New durable rule: checkpoint every 20 completed files. Each checkpoint writes 20 entries to the range Ledger, matching Index rows and this QA log, validates them, commits, and re-reads the saved state before the next 20 begins.
 - Backup cadence: one backup per 1,000 newly completed entries. The current 1,000-entry backups remain unchanged; no backup is due at 1,200.
 - Starting active-branch commit before this stage: `adfc618dc1bceccb9ba7a1055fd32a4ed2fcb7fd`. Pinned source baseline: `5432370d573642041585c69b40fb045b27133488`.
+
+## Audit checkpoint 1001–1020 — 2026-11-19
+
+- Completed full source review of exactly 20 new unique files (entries 1001–1020) at pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- The reviewed files comprise 20 text sources; all were read completely. The 723-line motion probe and 430-line scoreboard fixture were read in consecutive sections of at most 400 lines.
+- Recorded source SHA, byte size, canonical logical line count, coverage and all 15 required fields for every entry.
+- Key findings: recipe fixtures are useful as 1.20.1 parity-harness patterns but require rebuilt registries; scene collision/motion and section meshing are high-value candidates for terrain/player correctness; Crafter UI is later than 1.20.1 and excluded; server-files administration is outside the mobile client core; sound, spawn, sprint, skin, subtitle and tab-list fixtures require version-specific data and/or protocol reconstruction.
+- Entry 1010 is server-administration tooling with a predictable temporary-directory cleanup pattern; it is not to be reused against user worlds/server directories. Entry 1017 hardcodes a local 26.3 resource path. Entry 1012 tests legacy skin normalization only, not profile signature authentication.
+- Confirmed no source paths duplicate entries 1–1000 or each other; the checkpoint's 20 entries are sequential.
+- This is source inspection only. No tests, build, benchmark, APK, Android device, Minecraft client, Forge client or server were executed.
+- Next checkpoint: entries 1021–1040. Continue only after re-reading this saved checkpoint from GitHub.
