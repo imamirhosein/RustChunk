@@ -97,7 +97,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `43564d3bcf2d2eebdaed9b9d82bd0f8c75c5d51a`
 - Size: 30534 bytes; 723 logical lines
-- Coverage: Complete source read in consecutive sections, maximum 400 lines per section.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–723. Both ranges were read to EOF, no gaps or overlaps.
 - Purpose: Large differential harness that replays sequential player-motion operations in one resident synthetic world and snapshots player, attributes, health, fluids, portal state, movement flags and emitted events after every operation.
 - Dependencies / cross-references: Uses Assets/World/collisions/MotionResources, PlayerMotion/MotionWorld, health and food rules, attributes/modifiers, movement statistics, portal state, block registry, fluid states and JSON fixtures.
 - Implementation / logic: Builds a test scene, creates a player with stable attribute/instance identities, replays a broad operation vocabulary (pose, controlled tick, movement, jump, sprint, health/food, hurt/fall, fluids/air, powder snow, portal, effects, blocks, modifiers) and serializes deterministic state/event snapshots.
@@ -114,7 +114,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4a2534b328204d6cb79b8f9548fef6cbac2b8d45`
 - Size: 16998 bytes; 430 logical lines
-- Coverage: Complete source read in consecutive sections, maximum 400 lines per section.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–430. Both ranges were read to EOF, no gaps or overlaps.
 - Purpose: Comprehensive scoreboard differential fixture covering objectives, score holders/values, display slots, teams, player memberships, criteria, number formats and NBT save/reload.
 - Dependencies / cross-references: Uses Scoreboard, criteria registries, components, NumberFormat, team visibility/collision policies, NBT read/write and optional vanilla-produced NBT for a reload comparison.
 - Implementation / logic: Replays objective/team/score operations; dumps streamed/listed order, tracked holders, slots and membership; packs NBT, encodes/decodes it, reloads the scoreboard and emits canonical JSON and hex.
@@ -437,7 +437,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `36804fba9e92be2326438781135f24759085c66f`
 - Size: 20,564 bytes; 556 logical lines
-- Coverage: Complete text file read to EOF, lines 1–556; consecutive sections of at most 400 lines were used.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–556. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Differential harness for merchant gameplay: generates villager/wandering-trader offers, applies demand/gossip/hero modifiers, restocks merchants, opens trade menus, moves inventory stacks and round-trips villager NBT.
 - Dependencies / cross-references: Depends on Items, Enchantments, Recipes, Brewing, Banners, MobTypes, RandomSequences, Gossip, MerchantOffer/Session/TradeEnv, Menu click logic, entity NBT and vanilla oracle text.
 - Implementation / logic: Loads trade/recipe/item resources; builds merchant offer sets by profession/variant/level and deterministic random sequences; supports generation, price, restock, NBT and trade cases with selection/click/tick/close operations; emits offers, inventory, XP, gossip, event orbs and next RNG.
@@ -641,7 +641,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `314fcfe1d29b78f078abd5740c93907d831e9984`
 - Size: 21,092 bytes; 597 logical lines
-- Coverage: Complete text file read to EOF, lines 1–597; consecutive sections of at most 400 lines were used.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–597. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Client account/session coordinator for switchable Microsoft, Ely.by and offline profiles; manages platform-sealed credentials, current auth session, background renewal, profile/skin actions and downloading official game files.
 - Dependencies / cross-references: Depends on external `starling-account` crate, platform keystore/seal/open APIs, private filesystem/logging, auth session global, language, background WorkService, async threads/cancellation, Mojang file manifests/pins and own-skin upload subsystem.
 - Implementation / logic: Provides in-game account detection; private account/files directories; keystore-backed per-profile secret files with atomic `.part` rename; current session handoff; State/Files models; lazy saved profile cache; player name/key/skin and cloud status; background renewal; select/add/remove/offline and Ely sign-in; Microsoft device-code polling/cancel; sign-out; verified official client/server/libraries/assets download with progress and cancel.
@@ -658,7 +658,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `1483c1eebaca73e55886fcfef0028e5986a05dcc`
 - Size: 66,532 bytes; 1,805 logical lines
-- Coverage: Complete text file read to EOF, lines 1–1,805; consecutive sections of at most 400 lines were used.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–1,805. All ranges are contiguous and no larger than 400 lines.
 - Purpose: Advancement data and progress subsystem: loads the advancement tree, indexes criteria by trigger/recipe/inventory candidate items, tracks and serializes progress, evaluates loot/entity/item/location/block/damage predicates and computes visibility/layout of the advancement tree.
 - Dependencies / cross-references: Depends on lazy JSON, data-pack overlay, biome/block/fluid/structure/tag world queries, item/enchantment/potion registries, entity/player/equipment/effects views, loot condition JSON, NBT/JSON progress, recipes, and the tree-layout algorithm.
 - Implementation / logic: Parses advancement JSON and criteria, merges data-pack overrides, builds trigger and recipe indexes, builds InventoryIndex from item tags, converts saved progress, evaluates predicate families recursively, evaluates recipe/arrow/item-entity/damage triggers, and performs Walker tree layout/visibility. Contains tests for index filtering, lock-code behavior, passenger/damage predicates, advancement progress/layout and date serialization; one ignored test needs prepared resources.
@@ -675,7 +675,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `98cfe132d091a3b2a5e47c2d2be6e27cba1523fe`
 - Size: 18,126 bytes; 479 logical lines
-- Coverage: Complete text file read to EOF, lines 1–479; consecutive sections of at most 400 lines were used.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–479. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Player-local ambient sound system coordinating biome/dimension loops, ambient additions, cave mood sounds, underwater enter/exit/loop/subsounds and bubble-column inside sounds.
 - Dependencies / cross-references: Depends on SoundEngine/Sounds backend, ambient/music sound event registry, LegacyRandom, JSON ambient tables, dimension/biome data, player position/eye/fluid/spectator state, world light sampling, bubble-column block lookup and sound instance IDs.
 - Implementation / logic: Loads `minecraft:audio/ambient_sounds` attributes from dimension_type and biome JSON; resolves biome over dimension defaults; computes bubble-column overlap from player AABB; ticks underwater transitions/delay/random rare additions; maintains cross-fading biome loops; evaluates additions and mood buildup from light/RNG; includes tests for 40-tick loop fade and dark cave mood timing.
@@ -953,7 +953,7 @@
 - Implementation / logic: Provides a scoped thread-local level hook and a registered callback; emits contact events while ticking block interactions; records whether the current level contains a mod block and clamps incoming fall damage to finite nonnegative values.
 - Findings: This is an extension/mod compatibility hook, not vanilla client block behavior. It depends on NeoForge/Horizon mod lifecycle and block event contracts, which do not exist in the RustChunk baseline. A future mod bridge would need a separate architecture and security boundary.
 - RustChunk relevance: May inform a later plugin callback interface, but no direct relevance to the vanilla 1.20.1 milestone; do not introduce hidden thread-local hooks into core world simulation.
-- Decision: **unnecessary; version-specific — exclude from the vanilla RustChunk core; reconsider only as a separately scoped mod/plugin extension.**
+- Decision: **unnecessary; reference; version-specific — exclude from the vanilla RustChunk core; reconsider only as a separately scoped mod/plugin extension.**
 - 1.20.1 implications: Does not implement Forge 47.x and is not evidence of running Forge mods. Forge event/lifecycle/transform semantics require separate work.
 - Follow-up checks: If a future mod API is scoped, define explicit event ownership, callback isolation, panic/failure handling, reentrancy/thread model and server-authoritative rules.
 - RustChunk implementation mapping: No current RustChunk mapping. Future plugin API could expose typed block-contact events behind a separate extension crate; not created.
@@ -1068,7 +1068,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `28cde0b492f2db5374ed532505ebda5c857ac14a`
 - Size: 12723 bytes; 410 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–410; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–410. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Cauldron interactions for empty/water/lava/powder snow, potions, banners, dyed shulkers and extinguishing entities.
 - Dependencies / cross-references: Block state/level, ItemStack metadata, potion/banner/shulker data, inventory, sounds and particles.
 - Implementation / logic: Dispatches item use by cauldron type; fills/empties buckets, bottles/pours potions, washes banners/shulkers, changes levels and updates inventory/effects.
@@ -1085,7 +1085,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e7fe8eaf62b8a0690ad1dab7b9a5707e2f19fd38`
 - Size: 21734 bytes; 628 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–628; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–628. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Tick clock and tick-rate manager: fixed-step timing, partial ticks, pause/freeze, stepping and sprinted simulation.
 - Dependencies / cross-references: DeltaTracker/timer, monotonic time, client/server loops, pause/focus, scheduled work and tick-rate synchronization.
 - Implementation / logic: Accumulates elapsed time; computes partial/catch-up ticks; applies max-tick/pause; supports tick-duration changes, freeze/step/sprint and progress reporting.
@@ -1153,7 +1153,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `c7eaf74c19d0612b4ed33f4c27d87f443b1f68d9`
 - Size: 98414 bytes; 2497 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–2497; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–2,000; 2,001–2,400; 2,401–2,497. All ranges are contiguous and no larger than 400 lines.
 - Purpose: Recipe catalogue/crafting logic: resources, categories, ingredient matching, special recipes, remainders, cooking metadata and recipe-book data.
 - Dependencies / cross-references: Items and modern stack components, recipe JSON, ingredients/tags, recipe registry, crafting/furnace/smithing, loot/pack overlay and NeoForge hooks.
 - Implementation / logic: Parses recipe definitions; builds indexes; resolves item/tag/custom ingredients; matches shaped/shapeless grids; computes result/remainders; dispatches special book/firework/map/banner/shield/tipped-arrow/repair/pot/transmute/imbue and cooking paths.
@@ -1170,7 +1170,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `012d22bbf2d04b8021c11bfaf1e5d63c418f7ea9`
 - Size: 65976 bytes; 1622 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–1622; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–800; 801–1,200; 1,201–1,600; 1,601–1,622. All ranges are contiguous and no larger than 400 lines.
 - Purpose: Creative inventory catalogue/UI: tabs, item lists, name/tag search, grouping, slot clicks, hotbar/offhand/throw/clone.
 - Dependencies / cross-references: Modern item components, item registry, creative tab data, tags, tooltip search, container slots, stack limits and display metadata.
 - Implementation / logic: Loads/orders tabs; builds search lists; handles hover/click and key behavior; implements display-slot interactions including full-stack copy, hotbar, offhand, drop, clone and slot locks.
@@ -1238,7 +1238,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `92bbf9385f5c9892e579fd7e6e908071a40c001c`
 - Size: 23541 bytes; 644 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–644; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–644. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Debug chart buffers/renderers for frame time, integrated-server ticks, ping/bandwidth and lightmap data.
 - Dependencies / cross-references: Debug toggles, frame/tick/network counters, lightmap pixels, font/HUD primitives and remote metrics.
 - Implementation / logic: Maintains bounded samples, records frame/tick/network data, smooths packet rates/bytes and draws bars, thresholds, labels and lightmap view.
@@ -1255,7 +1255,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `48d01d5bfe2db87e80b9918691becd2a766e9475`
 - Size: 18658 bytes; 506 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–506; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–506. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Registry/persistence for F3 debug entries, categories/statuses, reduced-debug visibility, profiles, search and migrations.
 - Dependencies / cross-references: Debug providers, key actions, JSON profile, DataVersion/DataFixer migrations and translation keys.
 - Implementation / logic: Defines entries/categories; loads/saves status; supports profiles, identifier parsing, search, visibility toggles and schema migration.
@@ -1272,7 +1272,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `04c644ecd5a5b9f8f836908ebe1489139649d8ad`
 - Size: 17529 bytes; 490 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–490; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–490. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: F3/debug-key state machine for modifier/overlay, key combinations, focus/screen handling and timed crash chord.
 - Dependencies / cross-references: KeyBinds, keyboard press/release/repeat, overlay state, screen state, debug actions and timing.
 - Implementation / logic: Routes modifier/overlay; handles F3 alone, combinations, Escape pause, rebound keys, refused actions and 10-second crash chord.
@@ -1289,7 +1289,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `5e603085cea49108ac90aaa5fd4e30e99ee41fab`
 - Size: 24291 bytes; 711 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–711; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–711. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: F3 text grouping/formatting for position, heightmap, spawn, light, sound, memory and shader timing.
 - Dependencies / cross-references: Font/GUI primitives, chunk/heightmap/spawn, network/render telemetry, sound cache, device vendor, process memory and profiles.
 - Implementation / logic: Splits priority/group lines; formats position/chunk/section/facing, heightmaps, spawn counts, difficulty, GPU/vendor, sound cache, light/memory and shader-pass cost.
@@ -1340,7 +1340,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ce67693c3c4f34581bd0b7e56f507643934acc03`
 - Size: 19327 bytes; 552 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–552; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–552. Both ranges are contiguous and the final range reaches EOF.
 - Purpose: Layout/render/input screen for server modal dialogs: warning/title, scrollable body, inputs, actions, footer and waiting state.
 - Dependencies / cross-references: Dialog model, font/text bidi, item widgets, scroll/header-footer layouts, controls, navigation and wait timing.
 - Implementation / logic: Measures and positions message/item/text/boolean/option/range controls and buttons; wraps text; lays out grids/footer; creates hit regions and waiting Back button.
@@ -1357,7 +1357,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `efafe4d3936eb77e19e03e52637dab078fef2bac`
 - Size: 31092 bytes; 895 logical lines
-- Coverage: Complete text file reviewed in consecutive sections of at most 400 lines, lines 1–895; final section ends at EOF.
+- Coverage: Complete consecutive source reads: lines 1–400; 401–800; 801–895. All ranges are contiguous and no larger than 400 lines.
 - Purpose: Server Dialog data model/codec: kinds, body, inputs, buttons/actions, value substitution, click events and dialog-list resolution.
 - Dependencies / cross-references: NBT, text components, dialog registry/tag lookup, click actions and server-delivered definitions.
 - Implementation / logic: Parses notice/confirmation/multi-action/server-links/dialog-list; body and input controls; computes values/labels; substitutes inputs into command/custom payloads and resolves inline/registry/tag lists.
