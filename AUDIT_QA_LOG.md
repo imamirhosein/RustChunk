@@ -616,3 +616,8 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No tests, builds, benchmarks, APKs, Android-device tests, Minecraft/Forge launches, server connections or audio/GPU execution were performed.
 - The 20 entries are sequential (1061–1080), unique against entries 1–1060, all 15 fields occur exactly once, and SHA/byte sizes match the pinned upstream tree. Matching Index rows and this QA checkpoint are committed.
 - Next checkpoint: entries 1081–1100. Backup branches remain untouched; next backup is due only after entry 2000.
+
+### Checkpoint 1061–1080 Index normalization
+
+- Rechecked the newly appended Index decision column against the Ledger. The first write had included explanatory text after the primary decision labels; normalized all 20 rows so the Index carries only the approved primary decision plus optional qualifiers, while the reason remains in the final column.
+- Re-read and verified the corrected Index rows for entries 1061–1080. This is a documentation-format correction; the Ledger decisions and source reviews are unchanged.
