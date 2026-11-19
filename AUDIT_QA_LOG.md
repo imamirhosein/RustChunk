@@ -1042,3 +1042,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Re-read all 200 Ledger entries: each of the 15 required fields occurs exactly once.
 - Re-read Index and compared every Ledger path and Decision: all 25 entries 1376–1400 match exactly.
 - Index remains 1–1400 sequential with 1,400 unique paths. No source or application code was modified.
+
+## Source-audit checkpoint 1401–1425 — 2026-11-19
+
+- Completed entries 1401–1425 inclusive (25/25) from the pinned Starling tree at `5432370d573642041585c69b40fb045b27133488`.
+- Every selected file was read completely through EOF. Files over 400 logical lines were read in consecutive, gap-free ranges no larger than 400 lines; ambiguous ranges in `potions.rs` were verified by slicing the complete pinned blob.
+- All 25 source blob SHAs and byte sizes match the complete, non-truncated pinned recursive tree. Canonical logical line counts and EOF coverage are recorded in `AUDIT_LEDGER_1401_1600.md`.
+- All 25 Ledger entries contain the 15 required fields exactly once. Index rows 1401–1425 match each Ledger path and Decision.
+- Global Index check: 1,425 sequential entry numbers and 1,425 unique source paths; no repeated path was introduced.
+- The 25-file checkpoint closes the first half of the authorized 50-file section 1401–1450. Continue with 1426–1450 without asking for intermediate permission; stop at 1450.
+- Key 1.20.1 findings include remote chunk decoding/order, synchronized mob metadata, remote object lifecycle, secure chat and core gameplay systems needing version-specific rewrites. Later-only Potent Sulfur and Quick Actions were excluded; Create processing is a bundled native simulation, not Forge mod loading.
+- Embedded tests were inspected as source only, not run. No build, unit test, benchmark, APK, Forge launch, Android-device validation, Minecraft join, LAN, UPnP or relay test was run.
+- Only the audit branch is changed. `main` and both existing backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are committed and globally verified.

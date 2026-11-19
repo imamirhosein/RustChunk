@@ -1564,3 +1564,28 @@
 | 1398 | `crates/horizon-client/src/game/passengers.rs` | essential; adapt; 1.20.1 | Entity passenger graphs, vehicle seating, jockeys and skeleton horse traps. |
 | 1399 | `crates/horizon-client/src/game/perf.rs` | optional; diagnostics | Performance sampling, GPU memory and stats overlay. |
 | 1400 | `crates/horizon-client/src/game/persist.rs` | essential; adapt; 1.20.1 | Entity/chunk NBT persistence, passenger trees, attachments and scheduled ticks. |
+| 1401 | `crates/horizon-client/src/game/perspective.rs` | essential; rewrite required; 1.20.1 | Camera mode, collision zoom and player model/render pipeline. |
+| 1402 | `crates/horizon-client/src/game/pick_entity.rs` | essential; rewrite required; 1.20.1 | Entity ray-pick selection and creative pick-result mapping. |
+| 1403 | `crates/horizon-client/src/game/pickups.rs` | adaptable; reference; optional/future | Visual item/orb/arrow/trident pickup interpolation. |
+| 1404 | `crates/horizon-client/src/game/piglins.rs` | essential; rewrite required; 1.20.1 | Piglin item preference, equipment, barter and anger. |
+| 1405 | `crates/horizon-client/src/game/piston_push.rs` | essential; rewrite required; 1.20.1 | Piston entity pushes, collision clipping and sticky movement. |
+| 1406 | `crates/horizon-client/src/game/player_equip.rs` | adaptable; rewrite required; 1.20.1 | Player armor/offhand equip sounds and game events. |
+| 1407 | `crates/horizon-client/src/game/postprocess.rs` | essential; rewrite required; 1.20.1 | Chunk-neighborhood fluid and block postprocessing. |
+| 1408 | `crates/horizon-client/src/game/potent_sulfur.rs` | unnecessary; version mismatch; future | Later-version Potent Sulfur geyser; exclude from baseline. |
+| 1409 | `crates/horizon-client/src/game/potions.rs` | essential; rewrite required; 1.20.1 | Potion use, splash/lingering effects, clouds and HUD. |
+| 1410 | `crates/horizon-client/src/game/powder_snow.rs` | essential; adapt; 1.20.1 | Powder-snow bucket pickup and fire extinguishing. |
+| 1411 | `crates/horizon-client/src/game/prediction.rs` | optional; reference; LAN host | LAN-host guest movement replay; not remote-client baseline. |
+| 1412 | `crates/horizon-client/src/game/processing.rs` | unnecessary; reference; optional/future | Create native processing simulation; not Forge mod loading. |
+| 1413 | `crates/horizon-client/src/game/pumpkin.rs` | essential; adapt; 1.20.1 | Shears carving pumpkin, loot and orientation. |
+| 1414 | `crates/horizon-client/src/game/quick_actions.rs` | unnecessary; version mismatch; future | Later-version Quick Actions dialog registry/keybind flow. |
+| 1415 | `crates/horizon-client/src/game/raids.rs` | essential; rewrite required; 1.20.1 | Raids, patrol spawning, waves and village siege. |
+| 1416 | `crates/horizon-client/src/game/ram_limit.rs` | adaptable; reference; Android optimization | Adaptive render-distance policy under memory pressure. |
+| 1417 | `crates/horizon-client/src/game/random_textures.rs` | optional; reference; OptiFine compatibility | OptiFine random entity texture selection. |
+| 1418 | `crates/horizon-client/src/game/recipe_book.rs` | essential; rewrite required; 1.20.1 | Recipe-book search/filter, placement and ghost slots. |
+| 1419 | `crates/horizon-client/src/game/remote_camera.rs` | essential; adapt; 1.20.1 | Spectator camera attachment and entity post effects. |
+| 1420 | `crates/horizon-client/src/game/remote_chat.rs` | essential; rewrite required; 1.20.1 | Secure chat signing and last-seen acknowledgement. |
+| 1421 | `crates/horizon-client/src/game/remote_chunks.rs` | essential; rewrite required; 1.20.1 | Remote chunk decode, lighting, biome mapping and ordered insertion. |
+| 1422 | `crates/horizon-client/src/game/remote_mob_data.rs` | essential; rewrite required; 1.20.1 | Remote mob/player synchronized metadata and model state. |
+| 1423 | `crates/horizon-client/src/game/remote_mob_particles.rs` | optional; adapt; entity effects | Remote mob event particles and ravager feedback. |
+| 1424 | `crates/horizon-client/src/game/remote_mob_use.rs` | essential; rewrite required; 1.20.1 | Client prediction of mob interaction and held-item fallback. |
+| 1425 | `crates/horizon-client/src/game/remote_objects.rs` | essential; rewrite required; 1.20.1 | Remote vehicle, armor stand, frame, painting and display lifecycle. |
