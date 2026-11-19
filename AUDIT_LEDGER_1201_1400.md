@@ -2561,3 +2561,428 @@
 - RustChunk implementation mapping: No baseline mapping; possible isolated future `protocol/extensions/horizon_lod.rs` only behind explicit opt-in and server negotiation.
 - Evidence required before adoption: Compatible server implementation, protocol/version specification, seed-leakage review, hostile-payload corpus and Android memory/network profiling.
 - Completion state: COMPLETE — 555 logical lines read in contiguous ranges 1–400 and 401–555; source SHA and 19954-byte size match the pinned tree; embedded tests inspected, not run.
+
+### 1351. `CLAUDE.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `47dc3e3d863cfb5727b87d785d09abf9743c0a72`
+- Size: 9 bytes; 1 logical lines
+- Coverage: symlink target only
+- Purpose: symlink target only
+- Dependencies / cross-references: Repository guidance entry; Git tree records this path as a symbolic link whose 9-byte target is `AGENTS.md`.
+- Implementation / logic: Git tree mode `120000`; blob content is the path `AGENTS.md`, not an independent instruction document.
+- Findings: The path is a symlink; the contents endpoint followed it and returned the target document, so the target was separately checked through the exact blob.
+- RustChunk relevance: Do not count the followed target text as the symlink's own source. Preserve link semantics and audit `AGENTS.md` at its own path if not already recorded.
+- Decision: Documentation metadata only; no runtime or Forge implementation.
+- 1.20.1 implications: No Minecraft 1.20.1 runtime implication.
+- Follow-up checks: Check target path resolution and avoid duplicate auditing of the target as this path.
+- RustChunk implementation mapping: No code mapping.
+- Evidence required before adoption: Exact Git blob, mode `120000`, target bytes and prior audit status of `AGENTS.md`.
+- Completion state: COMPLETE — symlink blob verified as 9 bytes / one line; mode and SHA match pinned tree; target-following behavior explicitly accounted for.
+
+### 1352. `crates/horizon-client/src/game/native_components.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `014ad78c1da33aa8ea1dc07d058afaae700d21fa`
+- Size: 3145 bytes; 93 logical lines
+- Coverage: 1–93 (EOF)
+- Purpose: 1–93 (EOF)
+- Dependencies / cross-references: Reads and writes custom data components on native-mod item stacks.
+- Implementation / logic: `Game`, `ItemStack`, item component encode/decode helpers and native hook callbacks.
+- Findings: Exposes item component lookup/mutation through the Horizon native-mod API and translates values to the game's stack representation.
+- RustChunk relevance: This is Horizon's private native-mod contract, not a Forge/FML component implementation.
+- Decision: No direct compatibility: RustChunk must support Java item component semantics through the 1.20.1 protocol/runtime rather than this API.
+- 1.20.1 implications: Forge 1.20.1 component/NBT behavior must follow that version's item stack and packet model.
+- Follow-up checks: Compare component serialization against 1.20.1 item NBT and packet fixtures if a future bridge is proposed.
+- RustChunk implementation mapping: No baseline mapping; optional isolated native-extension layer only.
+- Evidence required before adoption: Cross-version component fixtures, stack round trips and exact 1.20.1 packet evidence.
+- Completion state: COMPLETE — all 93 lines read to EOF; SHA and 3145-byte tree size verified; tests inspected, not run.
+
+### 1353. `crates/horizon-client/src/game/native_criteria.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4a683434e4553b1e87a3d3d35d84ff2c3bf77344`
+- Size: 8141 bytes; 215 logical lines
+- Coverage: 1–215 (EOF)
+- Purpose: 1–215 (EOF)
+- Dependencies / cross-references: Implements custom native-mod criteria and advancement/trigger observations.
+- Implementation / logic: Native hook declarations, advancement state, game/player lifecycle and criteria identifiers.
+- Findings: Registers and evaluates mod-defined criteria from observed game events, forwarding matching progress to the native-mod callbacks.
+- RustChunk relevance: The API is Horizon-specific; it does not load Java Forge advancement triggers or implement Forge event buses.
+- Decision: Useful only as a design reference for event-to-criteria dispatch; not a route to Forge mod compatibility.
+- 1.20.1 implications: 1.20.1 advancements use Java-side trigger/serializer registration and versioned packet/state semantics.
+- Follow-up checks: Check vanilla trigger coverage, reload behavior and event ordering before implementing any analogous Rust feature.
+- RustChunk implementation mapping: No baseline mapping; possible generic event/criteria abstraction only.
+- Evidence required before adoption: 1.20.1 advancement trigger definitions, event-order tests and compatibility fixtures.
+- Completion state: COMPLETE — all 215 lines read to EOF; SHA and 8141-byte size verified; tests inspected, not run.
+
+### 1354. `crates/horizon-client/src/game/native_data_maps.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b3d4984a4ec740f7bd6f506c9a46c5b3d728ee69`
+- Size: 14847 bytes; 408 logical lines
+- Coverage: 1–400, 401–408 (contiguous to EOF)
+- Purpose: 1–400, 401–408 (contiguous to EOF)
+- Dependencies / cross-references: Provides native mods with data-map access and typed lookup helpers.
+- Implementation / logic: Game resources, registries, tags/data maps and native hook APIs.
+- Findings: Reads the loaded data-driven maps and exposes resolved values through bounded helpers for native mods.
+- RustChunk relevance: This is an internal Horizon data API; it is not Forge's Java data-map or registry bootstrap.
+- Decision: Potential reference for typed data lookup and resource reload boundaries, but not reusable as a Forge loader.
+- 1.20.1 implications: 1.20.1 data-driven resources and registries must be sourced from the exact target version and server sync rules.
+- Follow-up checks: Verify resource reload invalidation, missing-key behavior and registry identity if adapting concepts.
+- RustChunk implementation mapping: No baseline mapping; optional `resources/data_maps` service behind a version adapter.
+- Evidence required before adoption: 1.20.1 resource-pack fixtures, registry/tag tests and reload tests.
+- Completion state: COMPLETE — all 408 lines read in contiguous ranges to EOF; SHA and 14847-byte size verified; tests inspected, not run.
+
+### 1355. `crates/horizon-client/src/game/native_entities.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cdbb13e3c4202c0445fe42da79d9c613eda1d880`
+- Size: 24199 bytes; 605 logical lines
+- Coverage: 1–400, 401–605 (contiguous to EOF)
+- Purpose: 1–400, 401–605 (contiguous to EOF)
+- Dependencies / cross-references: Implements native-mod entity queries and operations over Horizon's simulated world.
+- Implementation / logic: Game world, mob/entity storage, entity references, dimensions, collision and native hook callbacks.
+- Findings: Provides entity lookup and controlled entity operations while enforcing world/side and entity-state constraints.
+- RustChunk relevance: Horizon entities are Rust-native simulations; the API does not instantiate or execute Java Forge entity classes.
+- Decision: Useful as an internal entity-service reference only; cannot substitute for Forge entity registries, Java classes or mixins.
+- 1.20.1 implications: Minecraft 1.20.1 entity types, metadata, spawn packets, attributes and lifecycle are version-specific.
+- Follow-up checks: Compare every exposed entity field and operation with 1.20.1 protocol and vanilla behavior before any bridge.
+- RustChunk implementation mapping: No baseline mapping; separate Rust entity model only if explicitly scoped, not Forge support.
+- Evidence required before adoption: 1.20.1 entity packet captures, spawn/metadata tests and server interoperability.
+- Completion state: COMPLETE — all 605 lines read in contiguous ranges to EOF; SHA and 24199-byte size verified; tests inspected, not run.
+
+### 1356. `crates/horizon-client/src/game/native_entity_refs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fa227ce08e9f494107c86ed04cf7579b8080b0d0`
+- Size: 5243 bytes; 114 logical lines
+- Coverage: 1–114 (EOF)
+- Purpose: 1–114 (EOF)
+- Dependencies / cross-references: Maintains native-mod entity references/handles and validates their lifetime.
+- Implementation / logic: Native entity model, world epochs/lifecycle and entity lookup helpers.
+- Findings: Associates stable handles with entities and checks validity against current world/entity state before use.
+- RustChunk relevance: These are Horizon-local handles, not Minecraft entity IDs or Forge capability references.
+- Decision: Reference for stale-handle prevention; not a compatible Java entity-reference mechanism.
+- 1.20.1 implications: 1.20.1 network entity IDs and Java object lifetimes remain distinct concepts.
+- Follow-up checks: Test stale handles across entity removal, dimension changes and world close if reusing the pattern.
+- RustChunk implementation mapping: No baseline mapping; optional internal generational-handle utility.
+- Evidence required before adoption: Lifecycle tests for removal/reuse and exact 1.20.1 entity-ID mapping.
+- Completion state: COMPLETE — all 114 lines read to EOF; SHA and 5243-byte size verified; tests inspected, not run.
+
+### 1357. `crates/horizon-client/src/game/native_explosions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1d3350bab24c9cb903d5fa2a27f17ef05357c8fd`
+- Size: 5310 bytes; 138 logical lines
+- Coverage: 1–138 (EOF)
+- Purpose: 1–138 (EOF)
+- Dependencies / cross-references: Allows native server mods to create/configure explosions in Horizon's world simulation.
+- Implementation / logic: Game world, explosion simulation, block/entity damage and native callbacks.
+- Findings: Validates dimension and inputs, then applies server-authoritative explosion effects through Horizon's own world model.
+- RustChunk relevance: This is a custom server-side extension; it is not Java `Explosion`/Forge explosion event behavior.
+- Decision: Reference only for input validation and authority checks; no direct Forge compatibility.
+- 1.20.1 implications: Explosion radius, block interaction, damage and packet effects must match 1.20.1 exactly if implemented.
+- Follow-up checks: Compare block resistance, entity damage, fire and explosion packet behavior against vanilla 1.20.1.
+- RustChunk implementation mapping: No baseline mapping; optional server extension only.
+- Evidence required before adoption: 1.20.1 explosion packet fixtures and deterministic world/entity tests.
+- Completion state: COMPLETE — all 138 lines read to EOF; SHA and 5310-byte size verified; tests inspected, not run.
+
+### 1358. `crates/horizon-client/src/game/native_falling.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e8e18ef5a392bc059acd9415cc4ad396f7fddac1`
+- Size: 4803 bytes; 132 logical lines
+- Coverage: 1–132 (EOF)
+- Purpose: 1–132 (EOF)
+- Dependencies / cross-references: Spawns and simulates mod-requested falling blocks on the authoritative server world.
+- Implementation / logic: Game, falling-block simulation, block-state registry, loaded chunks and world bounds.
+- Findings: Rejects invalid dimensions/states/positions, caps count and velocity, requires loaded chunks, then creates a falling-block entity with placement/drop/damage behavior.
+- RustChunk relevance: This models Horizon's own falling-block entity and server simulation, not Forge's Java `FallingBlockEntity` lifecycle.
+- Decision: Reference for bounded entity creation and loaded-chunk guards; not a mod loader path.
+- 1.20.1 implications: 1.20.1 falling-block spawn, movement, landing and block update packets must match vanilla.
+- Follow-up checks: Test collision, placement failure, entity persistence and damage against 1.20.1.
+- RustChunk implementation mapping: No baseline mapping; optional Rust-side falling entity only.
+- Evidence required before adoption: Vanilla 1.20.1 falling-block traces and server/client landing tests.
+- Completion state: COMPLETE — all 132 lines read to EOF; SHA and 4803-byte size verified; tests inspected, not run.
+
+### 1359. `crates/horizon-client/src/game/native_hooks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a9a06e641684c939559a90e0a424afe25cfe38f8`
+- Size: 455449 bytes; 10360 logical lines
+- Coverage: 1–10360 in contiguous chunks of at most 400 lines (26 chunks; EOF verified)
+- Purpose: 1–10360 in contiguous chunks of at most 400 lines (26 chunks; EOF verified)
+- Dependencies / cross-references: Central native-mod hook surface and helper implementation for Horizon game, world, UI, networking, entities and server events.
+- Implementation / logic: Game/GameLevel, registries, world simulation, render/HUD systems, LAN server, item/recipe/container helpers, native lifecycle and `native-hooks.json` catalog/fragments.
+- Findings: Declares the hook points and implements extensive helpers for block/state access, items, inventories, recipes, menus, mobs, rendering, input, sound, world data, networking, lifecycle and server interactions; includes contract tests that compare declarations with the hook catalog and module roots.
+- RustChunk relevance: This is Horizon's bespoke Rust-native mod API, not Forge's Java event bus, ModLauncher, Mixin, classloading or JVM ABI. Its broad surface must not be mistaken for Forge compatibility.
+- Decision: Architectural reference for explicit hook contracts, bounds, validation and tests only; implementing this file does not load or run Forge mods.
+- 1.20.1 implications: Minecraft 1.20.1 Forge compatibility requires the target Java runtime, Forge loader, mappings, mixin/transformer and Java mod dependencies; these hooks cannot replace them.
+- Follow-up checks: If ever porting individual behaviors, map each hook to a specific 1.20.1 vanilla/Forge contract and test both client/server authority; do not port the whole API wholesale.
+- RustChunk implementation mapping: No baseline mapping; keep separate from any future Java/Forge compatibility runtime.
+- Evidence required before adoption: A complete 1.20.1 Forge launch with real Java mods, event/mixin tests, protocol captures and server interoperability—not merely native-hook tests.
+- Completion state: COMPLETE — all 10360 lines read in 26 contiguous chunks to EOF; SHA and 455449-byte tree size verified; embedded tests inspected, not run.
+
+### 1360. `crates/horizon-client/src/game/native_inventories.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `429acdc1c7a881d296e606d517f074ee779fdb31`
+- Size: 14962 bytes; 401 logical lines
+- Coverage: 1–400, 401 (contiguous to EOF)
+- Purpose: 1–400, 401 (contiguous to EOF)
+- Dependencies / cross-references: Reads and moves online/offline players' inventories for native server mods.
+- Implementation / logic: Game LAN host/guest state, playerdata NBT files, item stacks, native menu stack-fit logic and save read/write.
+- Findings: Maps 41 player slots and 27 ender slots, reads saved player data, validates expected source stacks, moves whole stacks and writes offline files before mutating live state.
+- RustChunk relevance: Server-side Horizon inventory administration API; offline file editing and live guest access are not a client-side Forge feature.
+- Decision: Reference for transactional inventory movement and NBT preservation only; not a Forge inventory integration.
+- 1.20.1 implications: 1.20.1 player inventory slot mapping and item components/NBT need exact vanilla compatibility.
+- Follow-up checks: Test slot indices, NBT preservation, stale offers, file-write failure and no-duplication invariants.
+- RustChunk implementation mapping: No baseline mapping; optional isolated inventory service, not core client behavior.
+- Evidence required before adoption: 1.20.1 playerdata fixtures, packet/menu sync tests and crash-safe file-write tests.
+- Completion state: COMPLETE — all 401 lines read in contiguous ranges to EOF; SHA and 14962-byte size verified; tests inspected, not run.
+
+### 1361. `crates/horizon-client/src/game/native_item_container.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2d43685285e1558374007ad7773435d712ace57a`
+- Size: 13596 bytes; 370 logical lines
+- Coverage: 1–370 (EOF)
+- Purpose: 1–370 (EOF)
+- Dependencies / cross-references: Implements item-stack containers for native mods using the container component.
+- Implementation / logic: ItemStack component data, NBT tags, item registry limits and native item-container callbacks.
+- Findings: Reads container slots, inserts/extracts one item at a time, respects per-slot limits and shulker restrictions, preserves other custom data and clears stale wire data.
+- RustChunk relevance: This is a Horizon custom item capability implemented in Rust; it is not NeoForge `IItemHandler` or Java capability registration.
+- Decision: Reference for bounded item-container semantics only; no direct Forge capability support.
+- 1.20.1 implications: 1.20.1 container component semantics and shulker restrictions must be checked against the target version.
+- Follow-up checks: Compare slot serialization, stack limits, empty-container stacking and item component round trips.
+- RustChunk implementation mapping: No baseline mapping; optional `items/container` model only if version-correct.
+- Evidence required before adoption: 1.20.1 item component/NBT fixtures and container behavior tests.
+- Completion state: COMPLETE — all 370 lines read to EOF; SHA and 13596-byte size verified; tests inspected, not run.
+
+### 1362. `crates/horizon-client/src/game/native_item_energy.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5518915ccbc59e13c8f47ea2f16e0124a7c71cfb`
+- Size: 12990 bytes; 341 logical lines
+- Coverage: 1–341 (EOF)
+- Purpose: 1–341 (EOF)
+- Dependencies / cross-references: Implements a custom energy buffer stored on mod item stacks.
+- Implementation / logic: ItemStack, custom-data NBT, native item energy callbacks and item registry.
+- Findings: Validates capacity and per-call limits, stores energy under a Horizon-specific custom-data key, and returns changed one-item stacks for insertion/extraction.
+- RustChunk relevance: The energy API is explicitly Horizon-specific and resembles NeoForge's item energy capability but does not implement Java capability interfaces.
+- Decision: Reference for bounded arithmetic and stack immutability; does not enable Forge energy capabilities.
+- 1.20.1 implications: Forge 1.20.1 energy APIs are mod/library-defined and cannot be inferred from this custom NBT key.
+- Follow-up checks: Check overflow, negative values, serialization and interoperability with the specific Forge energy API in scope.
+- RustChunk implementation mapping: No baseline mapping; optional separate energy capability adapter.
+- Evidence required before adoption: Exact target mod/library API, NBT fixtures and round-trip tests.
+- Completion state: COMPLETE — all 341 lines read to EOF; SHA and 12990-byte size verified; tests inspected, not run.
+
+### 1363. `crates/horizon-client/src/game/native_item_fluids.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4be8b73b845c12d098d283b30872684d24d5d872`
+- Size: 13643 bytes; 357 logical lines
+- Coverage: 1–357 (EOF)
+- Purpose: 1–357 (EOF)
+- Dependencies / cross-references: Implements bucket and custom item fluid tanks for native mods.
+- Implementation / logic: ItemStack, custom-data NBT, item fluid callbacks and item registry.
+- Findings: Models water/lava buckets, validates mod tank capacities, fills/drains one-item copies and preserves unrelated custom data.
+- RustChunk relevance: This is a restricted Horizon fluid model, not NeoForge `IFluidHandler` or a complete Forge fluid registry/capability implementation.
+- Decision: Reference for fill/drain invariants only; no direct Forge fluid compatibility.
+- 1.20.1 implications: 1.20.1 fluid identifiers, bucket behavior and modded fluid registries need versioned Java-side definitions.
+- Follow-up checks: Test partial fills, empty/full buckets, mod fluid IDs, serialization and capability negotiation.
+- RustChunk implementation mapping: No baseline mapping; optional isolated fluid model after target API selection.
+- Evidence required before adoption: 1.20.1 bucket packet traces and concrete Forge fluid API compatibility tests.
+- Completion state: COMPLETE — all 357 lines read to EOF; SHA and 13643-byte size verified; tests inspected, not run.
+
+### 1364. `crates/horizon-client/src/game/native_lifecycle.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9428b6092f3ee4d877b606e29b44e0f7fc3ab88c`
+- Size: 13103 bytes; 362 logical lines
+- Coverage: 1–362 (EOF)
+- Purpose: 1–362 (EOF)
+- Dependencies / cross-references: Tracks authoritative world open/close epochs and server tick lifecycle for native mods.
+- Implementation / logic: Game execution role, atomic epoch allocation, lifecycle context types and world/server hook callbacks.
+- Findings: Tracks Opening/Ready/Closing states, invalidates failed epochs, pairs non-paused tick start/end and scopes reads to the active tick context.
+- RustChunk relevance: Lifecycle is specific to Horizon's server architecture and native hooks; it does not reproduce Forge lifecycle events or mod construction.
+- Decision: Reference for explicit lifecycle epochs and read scopes only; not a replacement for Forge mod lifecycle.
+- 1.20.1 implications: Forge 1.20.1 lifecycle phases, event ordering and thread constraints are Java/Forge-specific.
+- Follow-up checks: Map any needed lifecycle event to exact Forge 1.20.1 event timing and thread ownership.
+- RustChunk implementation mapping: No baseline mapping; optional internal world-session epoch abstraction.
+- Evidence required before adoption: Forge 1.20.1 lifecycle event traces, thread assertions and world reload/failure tests.
+- Completion state: COMPLETE — all 362 lines read to EOF; SHA and 13103-byte size verified; tests inspected, not run.
+
+### 1365. `crates/horizon-client/src/game/native_menus.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b690387efa0033e2a5236bb762f7aaac56bb5274`
+- Size: 19766 bytes; 518 logical lines
+- Coverage: 1–400, 401–518 (contiguous to EOF)
+- Purpose: 1–400, 401–518 (contiguous to EOF)
+- Dependencies / cross-references: Implements server-opened chest-style menus, inventory exchange and player menu lifecycle observations for native mods.
+- Implementation / logic: LAN host/guest, menu protocol, player inventories, block/container state and native menu hooks.
+- Findings: Opens/syncs/closes native menus, tracks player container transitions, routes clicks and performs checked all-or-nothing inventory exchanges.
+- RustChunk relevance: Horizon-specific menu implementation and packet assumptions; not Forge `MenuType`/`AbstractContainerMenu` Java integration.
+- Decision: Reference for transactional trade and menu event ordering only.
+- 1.20.1 implications: Forge 1.20.1 menu IDs, slot semantics, click modes and packet sync must be matched exactly.
+- Follow-up checks: Verify menu lifecycle, death/close behavior, shift-click and stale inventory offers against 1.20.1.
+- RustChunk implementation mapping: No baseline mapping; optional server menu layer after protocol parity.
+- Evidence required before adoption: 1.20.1 container packet captures, slot mapping tests and two-player no-duplication tests.
+- Completion state: COMPLETE — all 518 lines read in contiguous ranges to EOF; SHA and 19766-byte size verified; tests inspected, not run.
+
+### 1366. `crates/horizon-client/src/game/native_mob_draw.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8d4ce9c2f952a1064ffcfd1285686d1c27be795f`
+- Size: 8549 bytes; 230 logical lines
+- Coverage: 1–230 (EOF)
+- Purpose: 1–230 (EOF)
+- Dependencies / cross-references: Provides native mods with client-side mob/player render state and custom geometry hooks.
+- Implementation / logic: Mob animation/interpolation, camera transforms, block-entity draw helpers, vertex buffers and render lighting.
+- Findings: Builds interpolated render snapshots, poses custom geometry relative to mob feet/body yaw and conditionally replaces or layers vanilla geometry when hooks listen.
+- RustChunk relevance: Custom Horizon renderer hooks are not Java Forge renderer events or entity model layers.
+- Decision: Reference for render-state snapshots and pose math only; no direct Forge renderer support.
+- 1.20.1 implications: Forge 1.20.1 entity renderer/model layer APIs and render-thread contracts differ.
+- Follow-up checks: Compare interpolation, yaw conventions, camera-relative transforms and render ordering with 1.20.1.
+- RustChunk implementation mapping: No baseline mapping; optional Rust-native rendering extension only.
+- Evidence required before adoption: 1.20.1 renderer captures, camera-angle screenshots and model-layer tests.
+- Completion state: COMPLETE — all 230 lines read to EOF; SHA and 8549-byte size verified; tests inspected, not run.
+
+### 1367. `crates/horizon-client/src/game/native_mobs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bb562a9e8a1d6ed41833ba5620d8da4a780ef0fb`
+- Size: 12853 bytes; 323 logical lines
+- Coverage: 1–323 (EOF)
+- Purpose: 1–323 (EOF)
+- Dependencies / cross-references: Exposes server-side mob spawn, query, movement, health, equipment and removal operations to native mods.
+- Implementation / logic: Game mob simulation, world/chunk bounds, dimensions, LAN guests, entity IDs, attributes and native mob hooks.
+- Findings: Validates authority/dimension/chunk/bounds, creates mobs, exposes snapshots, mutates health/velocity/position, kills/removes and observes equipment changes.
+- RustChunk relevance: This operates Horizon's own mob model; it does not load Java entity classes or Forge entity registrations.
+- Decision: Reference for authority and validation rules only; not Forge entity compatibility.
+- 1.20.1 implications: 1.20.1 spawn/entity metadata, attributes, equipment and movement packets must be exact.
+- Follow-up checks: Test peaceful difficulty, unloaded chunks, entity tracking and player/mob equipment sync.
+- RustChunk implementation mapping: No baseline mapping; separate Rust entity simulation only.
+- Evidence required before adoption: 1.20.1 entity packet traces, attributes/equipment tests and server join tests.
+- Completion state: COMPLETE — all 323 lines read to EOF; SHA and 12853-byte size verified; tests inspected, not run.
+
+### 1368. `crates/horizon-client/src/game/native_motion.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `84f234e7a9434f782cb354804d0ebf00bfebb4d6`
+- Size: 3675 bytes; 82 logical lines
+- Coverage: 1–82 (EOF)
+- Purpose: 1–82 (EOF)
+- Dependencies / cross-references: Adds client player pushes and server-side creative flying-speed control for native mods.
+- Implementation / logic: Player velocity, spectator state, LAN host abilities and movement validation.
+- Findings: Clamps push components and flying speed, rejects non-finite values and sends updated abilities to online players.
+- RustChunk relevance: The helper changes Horizon player state and has explicit anti-cheat implications; it is not Forge movement event handling.
+- Decision: Reference for finite-value clamps only; not a general movement compatibility layer.
+- 1.20.1 implications: 1.20.1 movement speed, ability packets and moved-too-quickly checks are server-version dependent.
+- Follow-up checks: Test speed limits, server correction and chunk-loading behavior at high flight speeds.
+- RustChunk implementation mapping: No baseline mapping; optional movement extension after vanilla parity.
+- Evidence required before adoption: 1.20.1 player ability/movement packet tests and server correction traces.
+- Completion state: COMPLETE — all 82 lines read to EOF; SHA and 3675-byte size verified; tests inspected, not run.
+
+### 1369. `crates/horizon-client/src/game/native_mounts.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2877ffc527fa4b2c9ad85d43723cde86e448c96c`
+- Size: 3329 bytes; 85 logical lines
+- Coverage: 1–85 (EOF)
+- Purpose: 1–85 (EOF)
+- Dependencies / cross-references: Lets native server mods allow or cancel player/mob mounting and dismounting.
+- Implementation / logic: Game vehicles, mobs, LAN acting-player identity and entity-mount hook callback.
+- Findings: Resolves rider/vehicle identities and types, invokes the mount callback on authoritative server contexts and honors cancellation.
+- RustChunk relevance: Horizon-specific vehicle/mob identity and mount callbacks, not Forge `EntityMountEvent` registration.
+- Decision: Reference for authority-aware mount cancellation only.
+- 1.20.1 implications: 1.20.1 vehicle/passenger packets and mount event order must be validated independently.
+- Follow-up checks: Test player/mob/vehicle cases, cancellation and dismount edge cases.
+- RustChunk implementation mapping: No baseline mapping; optional mount event abstraction.
+- Evidence required before adoption: 1.20.1 passenger packet traces and server/client mount tests.
+- Completion state: COMPLETE — all 85 lines read to EOF; SHA and 3329-byte size verified; tests inspected, not run.
+
+### 1370. `crates/horizon-client/src/game/native_net.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fa3bef8743adb7348eab3a77637d5b56f67b8b7a`
+- Size: 6308 bytes; 165 logical lines
+- Coverage: 1–165 (EOF)
+- Purpose: 1–165 (EOF)
+- Dependencies / cross-references: Queues and sends Horizon native-mod client/server custom messages.
+- Implementation / logic: Horizon protocol mod-net channel, LAN host, player UUIDs, custom payload packets and per-tick counters.
+- Findings: Validates channel names and payload encoding, queues guest/server messages, applies per-player/per-tick limits and flushes messages at tick end.
+- RustChunk relevance: The `horizon:mod_net` channel is proprietary and requires both endpoints to implement it; it is not Forge's SimpleChannel/vanilla payload contract.
+- Decision: Reference for payload validation and rate limiting only; not compatible with ordinary Forge channels.
+- 1.20.1 implications: 1.20.1 custom payload registration and packet phases differ and must be negotiated with the server.
+- Follow-up checks: Threat-model payload sizes, channel authorization, connection phases and abuse limits.
+- RustChunk implementation mapping: No baseline mapping; optional isolated extension channel only after explicit negotiation.
+- Evidence required before adoption: 1.20.1 custom payload fixtures and server/client compatibility tests.
+- Completion state: COMPLETE — all 165 lines read to EOF; SHA and 6308-byte size verified; tests inspected, not run.
+
+### 1371. `crates/horizon-client/src/game/native_panel.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2ed64ef2c0ec7ef5b700d3d4b360c41998122093`
+- Size: 23899 bytes; 629 logical lines
+- Coverage: 1–400, 401–629 (contiguous to EOF)
+- Purpose: 1–400, 401–629 (contiguous to EOF)
+- Dependencies / cross-references: Implements a native-mod item/recipe browser panel beside container screens.
+- Implementation / logic: HUD batch/rendering, item stacks, screen/input state, native panel event callbacks and recipe pages.
+- Findings: Manages panel ownership/versioning, item conversion, pagination, search, pointer/key events and drawing while preserving the container UI.
+- RustChunk relevance: This is a Horizon-native UI integration, not a Forge client GUI or JEI/REI plugin API.
+- Decision: Reference for UI ownership, search and input handling only.
+- 1.20.1 implications: Forge 1.20.1 screens, rendering and JEI/REI integrations require Java APIs and their own lifecycle.
+- Follow-up checks: Check GUI scale, narrow windows, focus, keyboard shortcuts, tooltip layering and disabled mods.
+- RustChunk implementation mapping: No baseline mapping; optional Rust-only overlay, not Forge GUI compatibility.
+- Evidence required before adoption: 1.20.1 screen/input tests, multiple GUI scales and screenshots on target Android GPU.
+- Completion state: COMPLETE — all 629 lines read in contiguous ranges to EOF; SHA and 23899-byte size verified; tests inspected, not run.
+
+### 1372. `crates/horizon-client/src/game/native_panel_recipes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5b70f2e357721f6ce7995b554051394bea0795f1`
+- Size: 21642 bytes; 568 logical lines
+- Coverage: 1–400, 401–568 (contiguous to EOF)
+- Purpose: 1–400, 401–568 (contiguous to EOF)
+- Dependencies / cross-references: Lays out and renders native-mod recipe pages inside the Horizon item panel.
+- Implementation / logic: Native panel layout, item/recipe stack conversion, HUD sprites, recipe event callbacks and item atlas.
+- Findings: Builds bounded recipe/tab pages, computes grid/cooking/smithing/brewing layouts, cycles stacks, renders controls and dispatches slot/tab/action/page events.
+- RustChunk relevance: This is a custom recipe-viewer UI; it is not Forge recipe registration or JEI/REI integration.
+- Decision: Reference for recipe presentation and bounded UI data only.
+- 1.20.1 implications: 1.20.1 recipe serializers, recipe book displays and client recipe viewer APIs differ.
+- Follow-up checks: Validate each recipe layout, missing item behavior, page boundaries and click targets if porting UI concepts.
+- RustChunk implementation mapping: No baseline mapping; optional recipe UI separate from loader/runtime.
+- Evidence required before adoption: 1.20.1 recipe fixtures and UI tests at multiple scales.
+- Completion state: COMPLETE — all 568 lines read in contiguous ranges to EOF; SHA and 21642-byte size verified; tests inspected, not run.
+
+### 1373. `crates/horizon-client/src/game/native_projectiles.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `afebd339acba05552580473c02f1a08fcd6772be`
+- Size: 11000 bytes; 302 logical lines
+- Coverage: 1–302 (EOF)
+- Purpose: 1–302 (EOF)
+- Dependencies / cross-references: Routes projectile impacts through native server-mod hooks and replays canceled impacts.
+- Implementation / logic: Projectile/arrow simulation, hit targets, mobs/players/carts, wind charges, End dragon/crystals and world collision.
+- Findings: Collects impacts, maps owners/targets, lets hooks cancel them, then re-simulates canceled projectiles and removes associated hit/arrow events consistently.
+- RustChunk relevance: This is Horizon's own projectile simulation and cancellation flow, not Forge projectile events.
+- Decision: Reference for deferred impact settlement only; no Java Forge compatibility.
+- 1.20.1 implications: 1.20.1 projectile movement, hit ordering, entity/block collision and event cancellation must match vanilla.
+- Follow-up checks: Test multiple impacts in one tick, canceled/replayed arrows, player PvP and special entity targets.
+- RustChunk implementation mapping: No baseline mapping; optional server simulation behavior only.
+- Evidence required before adoption: 1.20.1 projectile packet traces, deterministic collision tests and multiplayer validation.
+- Completion state: COMPLETE — all 302 lines read to EOF; SHA and 11000-byte size verified; tests inspected, not run.
+
+### 1374. `crates/horizon-client/src/game/native_quick_move.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `62e9a0f19d24828ac2dbbab7801b8e46cb8dacb1`
+- Size: 12808 bytes; 364 logical lines
+- Coverage: 1–364 (EOF)
+- Purpose: 1–364 (EOF)
+- Dependencies / cross-references: Routes shift-click/quick-move actions in native mod containers through mod callbacks.
+- Implementation / logic: LAN menu state, block entities, item stacks, player inventory and container-click packets.
+- Findings: Maps menu/inventory slots, checks menu validity and drag state, calls the mod hook, settles remainder/original stacks and resynchronizes or closes the menu.
+- RustChunk relevance: Horizon-specific custom container routing; not Forge `AbstractContainerMenu.quickMoveStack` execution.
+- Decision: Reference for no-duplication settlement and slot validation only.
+- 1.20.1 implications: 1.20.1 click modes, slot ranges, hidden slots and prediction corrections must match the target protocol.
+- Follow-up checks: Test stale menu IDs, dead/spectator players, drag state, block removal and item conservation.
+- RustChunk implementation mapping: No baseline mapping; optional container click layer after protocol parity.
+- Evidence required before adoption: 1.20.1 container-click packet fixtures and item-conservation property tests.
+- Completion state: COMPLETE — all 364 lines read to EOF; SHA and 12808-byte size verified; tests inspected, not run.
+
+### 1375. `crates/horizon-client/src/game/native_recipes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d8eea22d58ba6aa803bd6b0d295aecdadeb302e5`
+- Size: 18308 bytes; 454 logical lines
+- Coverage: 1–400, 401–454 (contiguous to EOF)
+- Purpose: 1–400, 401–454 (contiguous to EOF)
+- Dependencies / cross-references: Builds native-mod recipe/item catalogues, tracks recipe-book displays and synchronizes selected server recipe content.
+- Implementation / logic: Crafting/recipe book, item registry/tags, cooking/station/brewing recipes, custom payload and native datapack sync callbacks.
+- Findings: Builds indexed item/recipe tables, supports creative give/place actions, receives bounded recipe-content parts and overlays selected server recipe types onto client recipes.
+- RustChunk relevance: The recipe-content channel and native recipe API are Horizon-specific; they do not register or execute Java Forge recipe serializers.
+- Decision: Reference for recipe indexing and bounded synchronization only; no Forge mod compatibility.
+- 1.20.1 implications: 1.20.1 recipe JSON serializers, datapack reload and recipe-book packet semantics must be matched exactly.
+- Follow-up checks: Test recipe reload, malformed/incomplete content parts, item/tag resolution and recipe-book invalidation.
+- RustChunk implementation mapping: No baseline mapping; optional isolated recipe-data service after 1.20.1 parity.
+- Evidence required before adoption: 1.20.1 recipe JSON fixtures, server reload tests and packet captures.
+- Completion state: COMPLETE — all 454 lines read in contiguous ranges to EOF; SHA and 18308-byte tree size verified; tests inspected, not run.
