@@ -102,7 +102,20 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - If a new chat or lost context makes the state uncertain, re-fetch branch head and all five audit documents before source work. Never guess a resume point from conversational memory alone.
 - Historical QA entries describing old cadence remain historical evidence, not current instructions.
 
-## 9. QA scope and claim discipline
+## 9. Work pacing and concise communication
+
+- Work **serially, one item at a time**. Inspect one source file or perform one independent validation step to completion before starting another. Do not run unrelated file reads, checks or investigations in parallel.
+- For a long source file, read its ranges sequentially in order, each no larger than 400 logical lines. Do not interleave multiple files or leave a file unfinished while switching to another.
+- Keep each tool operation and work unit small and bounded. Avoid large multi-action runs that leave the user watching one unchanged response for a long time.
+- After each completed unit, preserve the exact state needed to resume. A 25-file checkpoint is still committed as one transaction after its 25 files are individually completed; do not create partial or unverified checkpoint claims.
+- When a task is taking long enough that the user may reasonably think it is stuck, provide a brief status update identifying only the current item. Do not send repetitive progress narration or filler.
+- User-facing reports must be **very short**. Normally include only: completed range/status, whether its required verification succeeded or what blocked it, and the exact next point or required user authorization.
+- Do not volunteer file-by-file summaries, architecture explanations, descriptions of which file reads which other file, implementation plans, or lists of internal changes. Provide those details only when the user asks.
+- Keep detailed evidence in the Ledger/QA/Continuity records, not in long chat reports. Do not repeat information already recorded in the prior report.
+- At a 25-file checkpoint, a compact confirmation is sufficient. At a 50-file boundary, give one concise report and STOP for explicit authorization. Never continue across the 50-file boundary on implied permission.
+- If interrupted or moved to another chat, resume from the latest verified Git commit and Continuity record. Do not restart a completed range or guess what was done.
+
+## 10. QA scope and claim discipline
 
 - QA of existing entries is separate from new source-audit checkpoints. QA must not silently create, renumber or duplicate source entries.
 - Structural QA checks sequential numbering, global path uniqueness, exact 15-field counts, source SHA/byte-size matches, canonical line counts, EOF coverage, Ledger/Index alignment and five-document consistency.
@@ -110,7 +123,7 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Never claim a Rust build, unit test, benchmark, APK build, Forge launch, Android-device test, Minecraft multiplayer join, LAN host, UPnP or relay validation unless actually executed. Record unrun checks as pending.
 - Preserve security findings. Do not treat Starling/Horizon native-mod build and app-library replacement mechanisms as ordinary Forge mod loading or adopt them without a separate security design and review.
 
-## 10. Backup policy
+## 11. Backup policy
 
 - Create a new backup only after each additional **1,000 newly completed audit entries** have been committed and globally verified.
 - The audit currently has entries 1–1300. The next backup is due only after entries **1001–2000** are complete and the entire 1–2000 audit passes global validation.
@@ -118,7 +131,7 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 11. Current authoritative resume state (2026-11-19)
+## 12. Current authoritative resume state (2026-11-19)
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
@@ -133,7 +146,7 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Index: 1300 sequential entries and 1300 unique paths. Active Ledger: 100 entries (1201–1300), each with exactly 15 required fields.
 - Existing backups: `backup/audit-1000-unique-2026-11-18` at `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`; `backup/audit-1000-final-2026-11-19` at `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`. Do not modify them.
 
-## 12. Historical corrections preserved
+## 13. Historical corrections preserved
 
 - In entries 1–1000, duplicate slots 631, 632, 633, 754, 762 and 766 were replaced with unique paths: `pick_block_data_fixture.rs`, `place_recipe_fixture.rs`, `player_sync_fixture.rs`, `raid_fixture.rs`, `random_tick_sections_probe.rs` and `recipe_book_fixture.rs`.
 - Entry 1089 was corrected to `crates/horizon-client/src/game/blockctl.rs`; entry 121 remains the only `entry.rs` occurrence.

@@ -965,3 +965,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Backup policy is unchanged: next backup only after entries 1001–2000 are complete, committed and globally verified. No backup at a 25-, 50-, 100- or 200-entry boundary.
 - The Index currently contains 1300 sequential entries and 1300 unique paths. The active Ledger contains entries 1201–1300 with exactly 15 required fields each. No source files beyond entry 1300 were started as part of this amendment.
 - No source build, unit tests, APK, Forge launch, Android-device validation or multiplayer/server test was performed as part of this policy/document amendment.
+
+
+## Work pacing and concise-report amendment — 2026-11-19
+
+- Policy-only amendment; no source entry was inspected, added, renumbered or reclassified.
+- Work is now performed serially, one file or independent check at a time. Unrelated reads and validations must not be parallelized. Long files are read in sequential, contiguous ranges of at most 400 logical lines.
+- Keep operations small and bounded. If a delay could make the user reasonably think work is stuck, provide one brief status update about the current item; avoid repetitive progress narration.
+- Chat reports are intentionally minimal: completed range/status, verification result or blocker, and the exact next point or required authorization. Do not volunteer file-by-file details, architecture explanations, file dependency descriptions or internal change lists unless requested.
+- Detailed evidence belongs in the audit documents. A 25-file checkpoint needs only a compact confirmation in chat; a 50-file reporting boundary requires a brief report and STOP for explicit authorization.
+- On interruption/chat transition, resume only from the latest verified commit and Continuity record. Do not repeat completed work or infer an unverified state.
