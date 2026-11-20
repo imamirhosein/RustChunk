@@ -346,3 +346,19 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - **STOP at entry 1800**. The next section is **1801–1850**; wait for fresh explicit authorization before inspecting it.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
 
+
+
+## Latest authoritative resume state — checkpoint 1801–1825 — 2026-11-20
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Completed entries: **1–1825**; all 1,825 Index paths are sequential and unique.
+- Active 200-file stage: **1801–2000**, progress **25/200**.
+- Active reporting section: **1801–1850**; checkpoint **1801–1825** complete; **1826–1850** remains covered by the same explicit user authorization. Do not ask for mid-section permission.
+- Active Ledger: `AUDIT_LEDGER_1801_2000.md`, **25 entries** (1801–1825), each with exactly 15 fields. Progress register: `AUDIT_200_FILE_BOUNDARY.md`.
+- All 25 files were read through EOF serially; files above 400 lines were read in contiguous chunks no larger than 400. SHAs and byte sizes match the pinned tree; Index paths and Decisions align with Ledger.
+- Key findings: DualSense output/HDR are optional platform-specific branches; friends is peer-hosting, not standard outbound Minecraft protocol; router mapping needs explicit consent/security hardening; STUN discloses public IP; block facts/decoder offer useful architecture but need target 1.20.1 exports and strict shape validation.
+- Tests/examples were inspected only, not executed. No source/application code changed. No build, tests, benchmark, APK, Android device, Forge launch or server join validation was performed.
+- After the atomic checkpoint commit, read back the Ledger, Index, QA Log, Continuity, Protocol and Boundary register individually and verify consistency.
+- **Next: inspect 1826–1850** under existing authorization. Finish the remaining 25, then **STOP at 1850**. Do not inspect 1851+ without fresh explicit authorization.
+- main and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 and global verification are complete.

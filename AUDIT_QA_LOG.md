@@ -1247,3 +1247,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
 - Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
 - Checkpoint 1776–1800 is complete and committed with the audit documents. Reporting section 1751–1800 is now closed (50/50). **STOP at entry 1800**; wait for fresh explicit authorization before inspecting 1801 or later.
+
+
+## Source-audit checkpoint 1801–1825 — 2026-11-20
+
+- Completed entries 1801–1825 inclusive (25/25) from pinned Starling source tree 5432370d573642041585c69b40fb045b27133488.
+- All 25 files were fetched serially and read through EOF. Files above 400 logical lines were read in consecutive, gap-free chunks no larger than 400 lines; exact coverage is recorded in the new active Ledger.
+- All source blob SHAs and byte sizes were checked against the untruncated pinned recursive tree. Index now contains 1,825 sequential unique paths; the new Ledger contains 25 entries, each with exactly 15 fields; paths and Decisions align.
+- Findings: DualSense crates are optional hardware-specific output; horizon-friends is a separate invite/direct/relay peer-hosting system, not the standard Aternos client transport. Router port mapping and STUN introduce consent/privacy/security concerns; invite decoding lacks an evident endpoint-count cap. HDR code is platform-specific; block-facts ingestion/shape decoding is architecturally useful but the facts schema and banner/component formats are not 1.20.1 drop-ins.
+- Embedded decoder tests and examples were inspected only; none were run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
+- No application/source code changed. Only audit documentation is committed.
+- First 50-file section 1801–1850 remains authorized; next checkpoint 1826–1850 is authorized. Do not inspect 1851 or later. Stop at 1850 for new authorization.
+- Only starling-1.20.1-port-audit is updated; main and backup refs remain untouched. No backup is due before entries 1001–2000 and global verification are complete.

@@ -369,3 +369,18 @@ This section is the current resume authority and supersedes the older stage/auth
 - **STOP at entry 1800**. Do not inspect **1801–1850** until fresh explicit user authorization.
 - Do not modify `main` or backup refs. No backup is due before entries 1001–2000 are complete and globally verified.
 
+
+
+## 13. Authoritative stage 1801–2000 register and checkpoint artifacts — 2026-11-20
+
+This section supersedes older stage-specific Ledger names and the five-document list for the current 1801–2000 stage only; historical checkpoint records remain unchanged.
+
+- Active Ledger: `AUDIT_LEDGER_1801_2000.md`; do not append new-stage records to the closed `AUDIT_LEDGER_1601_1800.md`.
+- The explicit 200-file boundary/progress artifact is `AUDIT_200_FILE_BOUNDARY.md`. It records all four 50-file sections, all eight 25-file checkpoints, authorization state, completion state and stop boundary.
+- At each 25-file checkpoint in 1801–2000, update and commit **six documents in one transaction**: the active Ledger, `AUDIT_INDEX.md`, `AUDIT_QA_LOG.md`, `AUDIT_CONTINUITY.md`, `AUDIT_PROTOCOL.md`, and `AUDIT_200_FILE_BOUNDARY.md`.
+- Read back each of those six files individually from GitHub after updating the branch; verify entry counts, all 15 Ledger fields, Index uniqueness/sequential numbering, path/Decision alignment, boundary status and matching HEAD.
+- The 200-file stage is 1801–2000. Its 50-file sections are 1801–1850, 1851–1900, 1901–1950 and 1951–2000; each contains two 25-file checkpoints.
+- User authorization currently covers **1801–1850 only**. Checkpoint 1801–1825 is complete; 1826–1850 is covered by the same authorization. **STOP at 1850** and obtain fresh explicit authorization before inspecting 1851 or later.
+- `AUDIT_200_FILE_BOUNDARY.md` must mark later sections/checkpoints as locked/not authorized until the corresponding user permission arrives; never infer permission from a progress record.
+- Preserve serial source reading, complete EOF, maximum 400-line contiguous chunks, source SHA/size verification, no test execution and no application code changes. Keep main and existing backup refs untouched.
+- No backup is due until all entries 1001–2000 are complete and global verification of entries 1–2000 has passed.
