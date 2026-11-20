@@ -389,3 +389,11 @@ This section supersedes older stage-specific Ledger names and the five-document 
 ## Corrected checkpoint ordering note — 2026-11-20
 
 For the 1801–1850 section, derive the canonical path sequence by excluding only entries 1–1800 from the pinned recursive tree, then take the next 50 blobs. Do not exclude already registered but potentially misnumbered records from 1801 onward when reconciling this section. The missing `crates/horizon-friends/src/lib.rs` belongs at 1812. Checkpoint 1801–1825 ends at `crates/horizon-items/src/blocks/decode.rs`; `blocks/decode_tests.rs` belongs at 1826. The correction must be committed/read back as a checkpoint transaction.
+
+
+## 15. Stage 1801–2000 progress after section 1801–1850 — 2026-11-20
+
+- Entries 1801–1850 complete and closed (50/200). Corrected order and the omitted `horizon-friends/src/lib.rs` at 1812 are recorded in QA/Continuity; nonexistent `horizon-mod-registry/src/storage.rs` is not an entry.
+- Both 25-file checkpoints committed as separate six-document transactions; all six docs were read back after each commit.
+- Section 1851–1900 is locked; do not inspect it without fresh explicit user authorization.
+- Preserve serial review, full EOF, <=400-line contiguous chunks, source SHA/size verification, exactly 15 Ledger fields, no unverified test/build claims and no app source changes.

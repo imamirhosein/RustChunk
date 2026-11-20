@@ -2195,3 +2195,34 @@
 | 1823 | `crates/horizon-items/src/banner_layer.rs` | rewrite required; version-specific | Modern banner pattern component NBT conversion; incompatible with legacy 1.20.1 schema. |
 | 1824 | `crates/horizon-items/src/blocks.rs` | rewrite required; core reference; version-specific | Per-block-state gameplay facts loader; architecture useful, source-version data differs. |
 | 1825 | `crates/horizon-items/src/blocks/decode.rs` | adaptable; core reference; version-specific | Typed low-allocation JSON/shape decoder; validate geometry semantics strictly. |
+
+
+## Part 74 — Entries 1826–1850
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1826 | `crates/horizon-items/src/blocks/decode_tests.rs` | undetermined; reference; tests only | Decoder tests useful to port; source tests were inspected, not run. |
+| 1827 | `crates/horizon-items/src/bundle.rs` | adaptable; optional/future; version-specific; arithmetic-review | Bundle logic is useful but modern component format and bounds need adaptation. |
+| 1828 | `crates/horizon-items/src/content_namespaces.rs` | adaptable; registry-integration; version-specific | Namespace discovery pattern may translate, but marker files differ from Forge's resource loader. |
+| 1829 | `crates/horizon-items/src/cooldowns.rs` | rewrite required; version-specific | Grouped cooldown behavior depends on the modern use_cooldown component. |
+| 1830 | `crates/horizon-items/src/enchant.rs` | rewrite required; core reference; version-specific | Enchantment architecture is relevant but its registry/effect model needs a full target rewrite. |
+| 1831 | `crates/horizon-items/src/firework.rs` | rewrite required; version-specific | Modern firework component differs from 1.20.1 legacy NBT. |
+| 1832 | `crates/horizon-items/src/flowers.rs` | rewrite required; version-specific | Flower/effect table includes post-1.20.1 content. |
+| 1833 | `crates/horizon-items/src/item_data.rs` | rewrite required; core reference; version-specific | Modern ItemStack components do not match the 1.20.1 item/tag format. |
+| 1834 | `crates/horizon-items/src/item_nbt.rs` | rewrite required; version-specific | ItemStack codec uses modern components rather than 1.20.1 legacy fields. |
+| 1835 | `crates/horizon-items/src/items.rs` | rewrite required; core reference; version-specific | Item/loot architecture useful but context and predicate coverage are incomplete. |
+| 1836 | `crates/horizon-items/src/lib.rs` | adaptable; module-structure reference | Small module façade and unsafe-code policy can inform crate organization. |
+| 1837 | `crates/horizon-items/src/random_sequences.rs` | adaptable; core reference; version-specific | Named deterministic streams are useful but need exact 1.20.1 parity. |
+| 1838 | `crates/horizon-items/src/recipe_filters.rs` | adaptable; optional/future; recipe-pipeline | Recipe filters may aid modpacks after target serializer integration. |
+| 1839 | `crates/horizon-items/src/use_animation.rs` | rewrite required; version-specific | Modern consumable animation component differs from 1.20.1 item behavior. |
+| 1840 | `crates/horizon-mcp/Cargo.toml` | unnecessary; server-tooling | MCP manifest is developer/server tooling, not game runtime. |
+| 1841 | `crates/horizon-mcp/src/lib.rs` | unnecessary; server-tooling; protocol-specific | MCP JSON-RPC stdio is unrelated to Minecraft network protocol. |
+| 1842 | `crates/horizon-mod-registry/Cargo.lock` | unnecessary; server-only; lockfile | Backend dependency lock graph should not enter Android client workspace. |
+| 1843 | `crates/horizon-mod-registry/Cargo.toml` | unnecessary; server-only; toolchain-specific | Standalone registry manifest targets Rust 1.90 and server libraries. |
+| 1844 | `crates/horizon-mod-registry/Dockerfile` | unnecessary; deployment-only | Dockerfile deploys hosted service, not mobile game. |
+| 1845 | `crates/horizon-mod-registry/README.md` | reference; server-security; deployment-only | Security and workflow documentation is for hosted registry only. |
+| 1846 | `crates/horizon-mod-registry/railway.json` | unnecessary; deployment-only | Railway config is hosted-service deployment metadata only. |
+| 1847 | `crates/horizon-mod-registry/src/github.rs` | reference; server-tooling; security-sensitive | GitHub OAuth/API and PR automation are backend-only security-sensitive tools. |
+| 1848 | `crates/horizon-mod-registry/src/lib.rs` | unnecessary; server-tooling; security-sensitive | Hosted registry API must not enter Android client. |
+| 1849 | `crates/horizon-mod-registry/src/main.rs` | unnecessary; server-tooling | Registry main launches hosted Axum service, not Minecraft client. |
+| 1850 | `crates/horizon-mod-registry/src/ratings.rs` | unnecessary; server-tooling | SQLite rating persistence belongs to hosted registry backend. |

@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–1825 complete (25/200); first checkpoint closed. The second checkpoint 1826–1850 remains authorized.
+- Current progress: entries 1801–1850 complete (50/200); both checkpoints closed. Next section 1851–1900 is not authorized.
 - Reporting rule: STOP at entry 1850 after both authorized 25-file checkpoints are complete. Wait for fresh explicit authorization before entry 1851.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
@@ -434,3 +434,428 @@
 - RustChunk implementation mapping: RustChunk block-facts decoder or generated registry loader with strict target schema.
 - Evidence required before adoption: Property/fuzz tests, malformed-shape rejection, memory benchmarks and exact 1.20.1 facts parity.
 - Completion state: COMPLETE — 293 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 10111-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1826. `crates/horizon-items/src/blocks/decode_tests.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c222e26bd04e479fc200ddffcafbc50e1f146056`
+- Size: 6279 bytes; 166 logical lines
+- Coverage: 1–166 (EOF)
+- Purpose: Regression tests for shape canonicalization and typed facts decoding.
+- Dependencies / cross-references: serde_json/RawValue, Arc identity, temp files and BlockRegistry fixture.
+- Implementation / logic: Compares shapes/interning with legacy Value semantics; checks defaults, duplicate keys, wrong types, overflow/depth and validation order.
+- Findings: Good test inventory for malformed JSON and decoder compatibility; tests were not run.
+- RustChunk relevance: Test-design reference for RustChunk block facts, not production implementation.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Use test intent only; add exact 1.20.1 shape and registry fixtures.
+- Follow-up checks: Run on chosen toolchain, add malformed geometry/fuzz cases and compare against a 1.20.1 oracle.
+- RustChunk implementation mapping: RustChunk block-facts unit/property/fuzz tests.
+- Evidence required before adoption: Executed tests, deterministic 1.20.1 fixtures and fuzz corpus.
+- Completion state: COMPLETE — 166 logical lines read through EOF; contiguous coverage; pinned SHA and 6279-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1827. `crates/horizon-items/src/bundle.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f32d23a5d2567bad25be6182631a5457756ede7b`
+- Size: 16103 bytes; 441 logical lines
+- Coverage: 1–400, 401–441 (EOF)
+- Purpose: Bundle component weight, selection, insertion/removal and tooltip behavior.
+- Dependencies / cross-references: ItemStack components, registry weights, nested bundle contents and tooltip code.
+- Implementation / logic: Computes nested weight with exact rational arithmetic; provides admission, insert/remove and selection helpers.
+- Findings: Uses newer bundle_contents component model; extreme counts, nesting depth and arithmetic bounds need review.
+- RustChunk relevance: Optional inventory/gameplay architecture, unrelated to chunk loading.
+- Decision: adaptable; optional/future; version-specific; arithmetic-review
+- 1.20.1 implications: 1.20.1 has older bundle item/NBT semantics; not a direct drop-in.
+- Follow-up checks: Check integer overflow, recursion/depth, shulker exclusion, inventory/cursor rules, stack merging and Forge overrides.
+- RustChunk implementation mapping: Optional bundle adapter on 1.20.1 NBT/registries, isolated from world loading.
+- Evidence required before adoption: Overflow/deep nesting tests and vanilla/Forge inventory parity.
+- Completion state: COMPLETE — 441 logical lines read through EOF; contiguous coverage; pinned SHA and 16103-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1828. `crates/horizon-items/src/content_namespaces.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c4d595e224e9e937c675a570e00201fcd0a7b7ac`
+- Size: 1659 bytes; 43 logical lines
+- Coverage: 1–43 (EOF)
+- Purpose: Discovers content namespaces and mod IDs from generated markers.
+- Dependencies / cross-references: horizon-mod-content.json, horizon-mod-ids.json and resource loader.
+- Implementation / logic: Reads marker JSON and builds namespace set for data-folder scanning.
+- Findings: Horizon-specific markers can be missing, stale or malformed, silently omitting namespaces.
+- RustChunk relevance: Reference for content enumeration only, not the Forge registry mechanism.
+- Decision: adaptable; registry-integration; version-specific
+- 1.20.1 implications: Use 1.20.1 Forge mod/resource manager and registries, not this marker contract.
+- Follow-up checks: Check marker creation, malformed/missing files, duplicate IDs, case and pack precedence.
+- RustChunk implementation mapping: Implement namespace discovery from real Forge 1.20.1 APIs.
+- Evidence required before adoption: Vanilla plus modded registry fixtures, corrupt marker cases and namespace coverage.
+- Completion state: COMPLETE — 43 logical lines read through EOF; contiguous coverage; pinned SHA and 1659-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1829. `crates/horizon-items/src/cooldowns.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `31e8827127ab950428cb59a648b358d4be77e254`
+- Size: 6660 bytes; 174 logical lines
+- Coverage: 1–174 (EOF)
+- Purpose: Runtime model for item use-cooldowns grouped by a data component.
+- Dependencies / cross-references: ItemStack use_cooldown component, ticks and group map.
+- Implementation / logic: Converts component seconds to ticks, records group end ticks and reports remaining percentage.
+- Findings: Modern schema; invalid floats, conversion overflow and tick wrap need validation.
+- RustChunk relevance: Cooldown is gameplay behavior, but this source is version-specific.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild using 1.20.1 cooldown classes and Forge hooks.
+- Follow-up checks: Test NaN/infinity/negative/zero durations, overflow, tick rollover, groups and world reset.
+- RustChunk implementation mapping: RustChunk target-version item cooldown manager.
+- Evidence required before adoption: 1.20.1 parity and boundary/property tests.
+- Completion state: COMPLETE — 174 logical lines read through EOF; contiguous coverage; pinned SHA and 6660-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1830. `crates/horizon-items/src/enchant.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `75291649297d6667ce1119e6d37cc959ef60fa30`
+- Size: 47359 bytes; 1193 logical lines
+- Coverage: 1–400, 401–800, 801–1193 (EOF)
+- Purpose: Modern data-driven enchantment registry, selection and effects.
+- Dependencies / cross-references: Enchantment registry/tags, ItemStack, item tags, RNG, text and effect model.
+- Implementation / logic: Loads tags/metadata, selects random enchantments and evaluates supported conditions/effects.
+- Findings: Targets newer effects schema; tag recursion is bounded, malformed inputs may be skipped; RNG parity and numeric bounds need audit.
+- RustChunk relevance: High-level algorithm reference; not a compatible 1.20.1 implementation.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Reconstruct 1.20.1 enchantment classes, costs, incompatibilities, loot/anvil and Forge hooks.
+- Follow-up checks: Verify RNG, tag cycles, effect conditions, numeric bounds, translations and modded enchantments.
+- RustChunk implementation mapping: Rewrite against target 1.20.1 registries/NBT; retain only verified algorithms.
+- Evidence required before adoption: Vanilla/Forge fixtures, deterministic seed parity, malformed tags and modded enchant tests.
+- Completion state: COMPLETE — 1193 logical lines read through EOF; contiguous coverage; pinned SHA and 47359-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1831. `crates/horizon-items/src/firework.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `9e6668e5dacf8f3503f255a7a7142fab580910c4`
+- Size: 1656 bytes; 61 logical lines
+- Coverage: 1–61 (EOF)
+- Purpose: Enums/colors for firework explosion shapes.
+- Dependencies / cross-references: Dye RGB table and firework_explosion component.
+- Implementation / logic: Maps shape strings and dye colors to typed explosion values.
+- Findings: Modern representation; no legacy 1.20.1 tag conversion.
+- RustChunk relevance: Optional gameplay reference only.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Use 1.20.1 firework tag and target color/shape IDs.
+- Follow-up checks: Compare shape IDs, RGB, defaults and multiple explosions to target classes.
+- RustChunk implementation mapping: Build a target-version firework tag adapter.
+- Evidence required before adoption: 1.20.1 vanilla NBT round-trip and modded firework fixtures.
+- Completion state: COMPLETE — 61 logical lines read through EOF; contiguous coverage; pinned SHA and 1656-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1832. `crates/horizon-items/src/flowers.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a6dbf7c01b551c3a749697216a50fb72de9e2d08`
+- Size: 3992 bytes; 78 logical lines
+- Coverage: 1–78 (EOF)
+- Purpose: Suspicious-stew flower status effects and durations.
+- Dependencies / cross-references: Block/item registry IDs and effect IDs/ticks.
+- Implementation / logic: Maps flower IDs to stew effect/duration values.
+- Findings: Contains golden dandelion and eyeblossoms, absent from 1.20.1.
+- RustChunk relevance: Versioned gameplay data reference.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Use only flowers and effects in 1.20.1 vanilla/Forge.
+- Follow-up checks: Compare flower set, effect IDs/durations, stew NBT and modded flowers.
+- RustChunk implementation mapping: Generate target stew mapping from 1.20.1 registries.
+- Evidence required before adoption: 1.20.1 parity and modded flower behavior tests.
+- Completion state: COMPLETE — 78 logical lines read through EOF; contiguous coverage; pinned SHA and 3992-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1833. `crates/horizon-items/src/item_data.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `ddcda970da953a4d9e05ddf823d182ea27ef30d1`
+- Size: 56528 bytes; 1443 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1443 (EOF)
+- Purpose: Modern ItemStack component projection and NBT/network round-trip.
+- Dependencies / cross-references: Item model, component registry, NBT, text, item registry, nested containers and wire patches.
+- Implementation / logic: Encodes/decodes enchantments, names, potions, books, trims, containers, projectiles, fireworks, maps and banners; preserves unknown data.
+- Findings: Data-component era differs from 1.20.1 legacy tag payload; preservation is an architecture idea, not wire compatibility proof.
+- RustChunk relevance: Core gameplay domain architecture, but exact target implementation needs rewrite.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 ItemStack id/Count/tag NBT, legacy item tags and Forge custom data.
+- Follow-up checks: Audit unknown tags, nested container bounds, counts, text, enchantments and server round trips.
+- RustChunk implementation mapping: Rebuild ItemStack model/serializer for 1.20.1 vanilla plus Forge.
+- Evidence required before adoption: Golden NBT/protocol fixtures for supported item features and modded round trips.
+- Completion state: COMPLETE — 1443 logical lines read through EOF; contiguous coverage; pinned SHA and 56528-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1834. `crates/horizon-items/src/item_nbt.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e0101228b72a2c46fc0e1aebe23ff280cba24ed0`
+- Size: 2026 bytes; 62 logical lines
+- Coverage: 1–62 (EOF)
+- Purpose: Converts ItemStack and inventory slots to/from newer NBT.
+- Dependencies / cross-references: ItemStack codec, NBT compound/list and slot identifiers.
+- Implementation / logic: Encodes id/count/components and serializes slot lists; accepts alternate count casing.
+- Findings: Target 1.20.1 uses Count/tag; slot-to-u8 may truncate and duplicates need checks.
+- RustChunk relevance: Serializer organization reference only.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Implement 1.20.1 legacy ItemStack NBT and inventory slot rules.
+- Follow-up checks: Test slot bounds/duplicates, empty slots, count overflow, missing IDs and unknown tags.
+- RustChunk implementation mapping: Version-specific RustChunk ItemStack NBT module.
+- Evidence required before adoption: Vanilla/Forge NBT round-trip and malformed slot/count fuzz tests.
+- Completion state: COMPLETE — 62 logical lines read through EOF; contiguous coverage; pinned SHA and 2026-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1835. `crates/horizon-items/src/items.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `67ab3591e8f3c28c1f7d9c950111b935524c44e7`
+- Size: 116410 bytes; 2763 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2763 (EOF)
+- Purpose: Loads item facts and implements item behavior plus block loot evaluation.
+- Dependencies / cross-references: Item registry/default JSON, tags, tools, consumables, RNG, loot tables and mod hooks.
+- Implementation / logic: Loads properties and evaluates block drops, conditions, pools and functions; bridges mod-produced stack changes.
+- Findings: Partial engine: missing entity/damage/player/biome/luck context; location_check can succeed without world check and entity predicates are incomplete/default false.
+- RustChunk relevance: Valuable design reference, but cannot be considered a complete game implementation.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Port exact 1.20.1 item/loot conditions/functions, RNG and Forge hooks with complete LootContext.
+- Follow-up checks: Audit every predicate/context field, seeds, recursion, explosion decay, counts, tags and mod hooks.
+- RustChunk implementation mapping: Rewrite RustChunk item/loot engine with complete 1.20.1 LootContext and Forge integration.
+- Evidence required before adoption: Differential tests against 1.20.1 vanilla/Forge for loot, seeds and modded tables.
+- Completion state: COMPLETE — 2763 logical lines read through EOF; contiguous coverage; pinned SHA and 116410-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1836. `crates/horizon-items/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e94458712884aaf91637762ec2b9cb75d6e5537b`
+- Size: 664 bytes; 21 logical lines
+- Coverage: 1–21 (EOF)
+- Purpose: Module/export boundary for Horizon items crate.
+- Dependencies / cross-references: Sibling item/block modules and crate lint settings.
+- Implementation / logic: Exports item and block modules; applies forbid(unsafe_code).
+- Findings: Small organization file; no runtime behavior.
+- RustChunk relevance: Simple modularization/security reference.
+- Decision: adaptable; module-structure reference
+- 1.20.1 implications: No target-version data semantics.
+- Follow-up checks: Review public API boundaries and isolate unsafe code in reviewed platform crates.
+- RustChunk implementation mapping: Use explicit module façade and unsafe boundary in RustChunk core.
+- Evidence required before adoption: Static API review and target toolchain check.
+- Completion state: COMPLETE — 21 logical lines read through EOF; contiguous coverage; pinned SHA and 664-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1837. `crates/horizon-items/src/random_sequences.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `9fb2a80f4ff62bb1851ff525dc7be5212672d199`
+- Size: 6405 bytes; 173 logical lines
+- Coverage: 1–173 (EOF)
+- Purpose: Named random sequence state for gameplay and loot.
+- Dependencies / cross-references: World seed, sequence ID/salt, RNG and NBT persistence.
+- Implementation / logic: Creates named streams, advances state and serializes/restores them.
+- Findings: Seed mixing and persistence schema are version-specific; tests not run.
+- RustChunk relevance: Potentially important for deterministic loot/world logic.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Verify exact 1.20.1 algorithm and state format.
+- Follow-up checks: Compare seed mixing, salt, IDs, reset, persistence and long-run determinism.
+- RustChunk implementation mapping: Target-specific world/loot random-state manager.
+- Evidence required before adoption: Seed differential vectors from 1.20.1 and Forge sequences.
+- Completion state: COMPLETE — 173 logical lines read through EOF; contiguous coverage; pinned SHA and 6405-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1838. `crates/horizon-items/src/recipe_filters.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `97ec8e8aab20a8aa1ba4bef38bc559cc910d57ee`
+- Size: 15155 bytes; 374 logical lines
+- Coverage: 1–374 (EOF)
+- Purpose: JSON filters remove recipes or replace inputs/outputs.
+- Dependencies / cross-references: PackOverlay, recipe JSON, namespace discovery and serde_json.
+- Implementation / logic: Loads filters after datapack merge; matches id/type/input/output and applies remove/replace actions in order.
+- Findings: Horizon-specific folder/walker may not model all mod serializer schemas; unknown actions are skipped with warnings.
+- RustChunk relevance: Optional modpack compatibility layer, not base network/rendering.
+- Decision: adaptable; optional/future; recipe-pipeline
+- 1.20.1 implications: Use Forge 1.20.1 serializers, conditions and reload lifecycle.
+- Follow-up checks: Check nested JSON matching, output variants, tags, ordering and reload invalidation.
+- RustChunk implementation mapping: Optional recipe filter after RustChunk 1.20.1 datapack/Forge load.
+- Evidence required before adoption: Vanilla/Forge recipe corpus and malformed-filter fuzzing.
+- Completion state: COMPLETE — 374 logical lines read through EOF; contiguous coverage; pinned SHA and 15155-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1839. `crates/horizon-items/src/use_animation.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `af7f6681780a1ce7a423900127a9749950ea812f`
+- Size: 432 bytes; 14 logical lines
+- Coverage: 1–14 (EOF)
+- Purpose: Maps consumable component animation string to internal enum.
+- Dependencies / cross-references: serde_json Value and consumable UseAnimation enum.
+- Implementation / logic: Maps eat/drink strings; unknown/absent values use default/None behavior.
+- Findings: Tiny helper with modern input schema; no tests.
+- RustChunk relevance: Minimal gameplay mapping reference.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Resolve animation from 1.20.1 item classes/metadata and Forge capability.
+- Follow-up checks: Verify eat, drink, block, bow, crossbow, spyglass and modded animations.
+- RustChunk implementation mapping: Target-version item animation resolver.
+- Evidence required before adoption: Vanilla and modded use-animation parity fixtures.
+- Completion state: COMPLETE — 14 logical lines read through EOF; contiguous coverage; pinned SHA and 432-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1840. `crates/horizon-mcp/Cargo.toml`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `47ba9ff4bad0b36b24bf7b222d2475111a07d051`
+- Size: 331 bytes; 13 logical lines
+- Coverage: 1–13 (EOF)
+- Purpose: Manifest for Horizon Model Context Protocol server crate.
+- Dependencies / cross-references: serde_json and workspace lints; Rust 1.88 MSRV.
+- Implementation / logic: Declares a standalone MCP utility crate for server processes.
+- Findings: Agent-control utility, not game runtime.
+- RustChunk relevance: No base client value.
+- Decision: unnecessary; server-tooling
+- 1.20.1 implications: Keep out of Android client dependency graph.
+- Follow-up checks: Revisit only for a separate packaged developer-control process.
+- RustChunk implementation mapping: No player client mapping; isolated dev tool only.
+- Evidence required before adoption: Separate requirement/security/package review.
+- Completion state: COMPLETE — 13 logical lines read through EOF; contiguous coverage; pinned SHA and 331-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1841. `crates/horizon-mcp/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `9014b4bbe1f30070b79235e948f5ab60d4d180a4`
+- Size: 19010 bytes; 476 logical lines
+- Coverage: 1–400, 401–476 (EOF)
+- Purpose: JSON-RPC 2.0 line-framed MCP over stdin/stdout.
+- Dependencies / cross-references: serde_json, tool callbacks and stdio I/O.
+- Implementation / logic: Supports protocol negotiation, discovery, initialize, tools/list/call, notifications and errors.
+- Findings: MCP is an agent protocol, not Minecraft; tests inspected only.
+- RustChunk relevance: Possible separate developer tool, not player runtime.
+- Decision: unnecessary; server-tooling; protocol-specific
+- 1.20.1 implications: No relation to 1.20.1 handshake/login/play/Forge negotiation.
+- Follow-up checks: Review line bounds, request IDs, negotiation, stdio ownership and tool authorization if reused.
+- RustChunk implementation mapping: Separate developer-control process, never MC packet codec.
+- Evidence required before adoption: MCP compliance, oversized input and tool authorization tests.
+- Completion state: COMPLETE — 476 logical lines read through EOF; contiguous coverage; pinned SHA and 19010-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1842. `crates/horizon-mod-registry/Cargo.lock`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f7f3a35b00261e2ff6784a692d2e8844c631822e`
+- Size: 46342 bytes; 1835 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1835 (EOF)
+- Purpose: Pinned dependency graph for hosted mod registry.
+- Dependencies / cross-references: Axum/Tokio, SQLite, rustls/ureq, serde, ZIP and platform crates.
+- Implementation / logic: Locks standalone registry service dependencies and checksums in Cargo lockfile v4.
+- Findings: Server/network/database/wasm dependencies; not game lockfile.
+- RustChunk relevance: No client runtime value other than reproducible locking example.
+- Decision: unnecessary; server-only; lockfile
+- 1.20.1 implications: Do not merge into Android dependency graph.
+- Follow-up checks: Check MSRV/Android features only for crates actually adopted.
+- RustChunk implementation mapping: Separate lockfile only for a future registry backend.
+- Evidence required before adoption: Dependency, license and security audit if adopted.
+- Completion state: COMPLETE — 1835 logical lines read through EOF; contiguous coverage; pinned SHA and 46342-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1843. `crates/horizon-mod-registry/Cargo.toml`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f5c027b7e8279d68da45e27aed8da3178051c593`
+- Size: 1476 bytes; 38 logical lines
+- Coverage: 1–38 (EOF)
+- Purpose: Manifest for hosted mod submission/rating service.
+- Dependencies / cross-references: horizon-mods index, Axum, Tokio, ureq, HMAC, getrandom, rusqlite, Tower.
+- Implementation / logic: Defines separate Rust 2024 workspace and web/database dependencies.
+- Findings: Explicitly isolates server from game workspace; not client footprint.
+- RustChunk relevance: No Android gameplay requirement.
+- Decision: unnecessary; server-only; toolchain-specific
+- 1.20.1 implications: Keep backend separate from Android runtime.
+- Follow-up checks: Review only if RustChunk needs a hosted mod index.
+- RustChunk implementation mapping: No MC client mapping; separate backend.
+- Evidence required before adoption: Independent backend build/security/deploy validation.
+- Completion state: COMPLETE — 38 logical lines read through EOF; contiguous coverage; pinned SHA and 1476-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1844. `crates/horizon-mod-registry/Dockerfile`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `ee2065008b998d846cfc84f2830c19cc9879c42c`
+- Size: 1162 bytes; 18 logical lines
+- Coverage: 1–18 (EOF)
+- Purpose: Builds/runs registry web service container.
+- Dependencies / cross-references: Rust build image, registry crates, Debian, CA certs and setpriv.
+- Implementation / logic: Builds locked release binary then runs as unprivileged user with persistent DB volume.
+- Findings: Linux container deployment only.
+- RustChunk relevance: No Android client value.
+- Decision: unnecessary; deployment-only
+- 1.20.1 implications: No Android or MC protocol mapping.
+- Follow-up checks: Review container permissions, DB volume and image hardening only if needed.
+- RustChunk implementation mapping: No client mapping; deployment only.
+- Evidence required before adoption: Image scan, UID/volume tests and deployment smoke test.
+- Completion state: COMPLETE — 18 logical lines read through EOF; contiguous coverage; pinned SHA and 1162-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1845. `crates/horizon-mod-registry/README.md`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a5b8228ba52fad3e2797a6d3ee2447da0542f7d1`
+- Size: 6079 bytes; 87 logical lines
+- Coverage: 1–87 (EOF)
+- Purpose: Documents mod submission, OAuth, ratings and deployment.
+- Dependencies / cross-references: GitHub OAuth/token, HMAC owner update, registry and SQLite.
+- Implementation / logic: Describes repository/file submissions, PRs, owner updates, ratings, rate limits, CSRF and deployment.
+- Findings: Documents 64MiB upload cap, rate limits, origin/CSRF and review workflow; service not run.
+- RustChunk relevance: May inform separate mod portal, not the game client.
+- Decision: reference; server-security; deployment-only
+- 1.20.1 implications: No 1.20.1 runtime integration; secrets must remain server-side.
+- Follow-up checks: Verify docs against implementation, scope, privacy, CSRF and operations before reuse.
+- RustChunk implementation mapping: Reference only for a separately threat-modeled backend.
+- Evidence required before adoption: Threat model, endpoint tests, OAuth/CSRF and retention policy.
+- Completion state: COMPLETE — 87 logical lines read through EOF; contiguous coverage; pinned SHA and 6079-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1846. `crates/horizon-mod-registry/railway.json`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `cfafe4367faa9ba99102d65a76c561c8fe458bd9`
+- Size: 534 bytes; 21 logical lines
+- Coverage: 1–21 (EOF)
+- Purpose: Deployment build, health-check and restart policy config.
+- Dependencies / cross-references: Dockerfile path, watch patterns, /healthz and regional replica config.
+- Implementation / logic: Sets Dockerfile build, watched paths, health timeout and restart retries.
+- Findings: Provider-specific service deployment metadata.
+- RustChunk relevance: No Android/game relevance.
+- Decision: unnecessary; deployment-only
+- 1.20.1 implications: No 1.20.1 mapping.
+- Follow-up checks: Only revisit if RustChunk deploys its own service there.
+- RustChunk implementation mapping: No client mapping.
+- Evidence required before adoption: Provider schema and deployment smoke test.
+- Completion state: COMPLETE — 21 logical lines read through EOF; contiguous coverage; pinned SHA and 534-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1847. `crates/horizon-mod-registry/src/github.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `0ff5b28f4464a27523f136b6b1653f3623f8c4a3`
+- Size: 12970 bytes; 390 logical lines
+- Coverage: 1–390 (EOF)
+- Purpose: GitHub API adapter for repo lookup, release staging, branches and PRs.
+- Dependencies / cross-references: ureq, OAuth/API endpoints, registry token, Entry model, JSON/Base64 and files.
+- Implementation / logic: Does OAuth profile lookup, reads entries, checks public repositories, uploads releases, manages branches/resets, commits files and opens PRs.
+- Findings: Upload reads whole file in memory; branch reset force-updates; raw OAuth state inserted by helper (caller uses random hex and signed-cookie check); token not zeroized explicitly.
+- RustChunk relevance: Reference for a separate mod portal only.
+- Decision: reference; server-tooling; security-sensitive
+- 1.20.1 implications: Keep credentials server-side; never embed GitHub tokens in Android launcher.
+- Follow-up checks: Audit repo/path validation, OAuth, token scope/lifetime, reset authorization, memory limits and API rates.
+- RustChunk implementation mapping: Separate server-only registry if explicitly required.
+- Evidence required before adoption: Threat model, OAuth tests, restricted token, hostile repo/path and mock API tests.
+- Completion state: COMPLETE — 390 logical lines read through EOF; contiguous coverage; pinned SHA and 12970-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1848. `crates/horizon-mod-registry/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `edcf53fc53bc4eff5e503dc7cc628ff5b7d1489d`
+- Size: 47987 bytes; 1312 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1312 (EOF)
+- Purpose: Axum app for GitHub sign-in, submissions, owner updates and ratings.
+- Dependencies / cross-references: GitHub adapter, HMAC/SHA-256, SQLite, Axum multipart/JSON, cookies and index validator.
+- Implementation / logic: Implements signed sessions/CSRF, origin checks, rate limits, streamed uploads, file inspection, HMAC owner updates, PR and ratings.
+- Findings: Positive controls include signed session/state, Secure/HttpOnly/SameSite, origin+CSRF and body limits. Rate windows are in-process memory; tests inspected only.
+- RustChunk relevance: Server-side workflow reference only.
+- Decision: unnecessary; server-tooling; security-sensitive
+- 1.20.1 implications: Keep OAuth secrets, GitHub token and DB backend-only.
+- Follow-up checks: Review origin parsing, multi-replica rates, cookie lifecycle, duplicate multipart, temp cleanup, HMAC and idempotency.
+- RustChunk implementation mapping: No player client mapping; isolated backend only.
+- Evidence required before adoption: Security review, parser fuzzing, OAuth/CSRF, multi-replica and privacy tests.
+- Completion state: COMPLETE — 1312 logical lines read through EOF; contiguous coverage; pinned SHA and 47987-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1849. `crates/horizon-mod-registry/src/main.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a1e40a57a8f2d728d5763c486d72c45876e9fa4d`
+- Size: 1101 bytes; 26 logical lines
+- Coverage: 1–26 (EOF)
+- Purpose: Executable entry point for registry web service.
+- Dependencies / cross-references: Tokio runtime, Config, App/router, TCP listener and Ctrl-C.
+- Implementation / logic: Parses PORT fallback, binds 0.0.0.0, loads config/SQLite, serves Axum and handles graceful shutdown.
+- Findings: Backend process entrypoint only.
+- RustChunk relevance: No Android gameplay value.
+- Decision: unnecessary; server-tooling
+- 1.20.1 implications: Not part of Minecraft 1.20.1 implementation.
+- Follow-up checks: For future service, verify bind exposure, env validation and shutdown.
+- RustChunk implementation mapping: Keep server main in separate workspace.
+- Evidence required before adoption: Container smoke test and DB shutdown consistency.
+- Completion state: COMPLETE — 26 logical lines read through EOF; contiguous coverage; pinned SHA and 1101-byte size match the recursive tree; tests/examples inspected only, not run.
+
+### 1850. `crates/horizon-mod-registry/src/ratings.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `0cba8514298f3332d80e6a1fca3f7426ca81b416`
+- Size: 4187 bytes; 129 logical lines
+- Coverage: 1–129 (EOF)
+- Purpose: SQLite per-account/per-project ratings and aggregate summaries.
+- Dependencies / cross-references: rusqlite, WAL schema, unique project/account key and SQL aggregate queries.
+- Implementation / logic: Creates ratings table, upserts 1–5 stars and reads individual/project summaries.
+- Findings: Server-side data; u64 account/timestamp cast to i64 and count back to u64; DB checks star range; tests inspected only.
+- RustChunk relevance: Hosted registry only; unrelated to Minecraft client/mod loading/chunk performance.
+- Decision: unnecessary; server-tooling
+- 1.20.1 implications: Keep ratings DB server-side.
+- Follow-up checks: Review integer bounds, schema migration, privacy/retention and backup/restore.
+- RustChunk implementation mapping: Separate optional backend DB only if RustChunk runs a mod portal.
+- Evidence required before adoption: SQLite migration, integer-boundary, privacy and restore tests.
+- Completion state: COMPLETE — 129 logical lines read through EOF; contiguous coverage; pinned SHA and 4187-byte size match the recursive tree; tests/examples inspected only, not run.

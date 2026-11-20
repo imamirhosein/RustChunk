@@ -1269,3 +1269,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Files were read serially to EOF; long files were covered in contiguous chunks <=400 lines. The missing lib was reviewed fully (230 lines). This correction records that the first candidate enumeration was incomplete rather than concealing it.
 - This repaired checkpoint contains 25 Ledger entries, exactly 15 fields each; Index numbering and paths 1801–1825 are sequential and unique.
 - Tests/examples inspected only; none run. No build/device/Forge/server validation. No application source changed.
+
+
+## Source-audit checkpoint 1826–1850 — 2026-11-20
+
+- Completed corrected canonical checkpoint 1826–1850 (25/25) from the pinned Starling tree. These are exactly the next 25 blobs after checkpoint 1801–1825 when excluding entries 1–1800.
+- All 25 files were fetched serially and read completely through EOF. Files over 400 lines were covered in contiguous gap-free chunks no larger than 400 lines; pinned SHA and byte size match the complete source tree.
+- Active Ledger now contains 50 records 1801–1850, exactly 15 fields each. Index contains 1,850 sequential, unique paths; Ledger paths and Decisions align with Index, and all 50 paths match the pinned tree's next 50 blobs.
+- Tree-reconciliation history: `horizon-friends/src/lib.rs` was inserted at 1812 after omission from the first candidate enumeration; subsequent records shifted by one. `blocks/decode_tests.rs` is 1826. The attempted `horizon-mod-registry/src/storage.rs` fetch returned 404 and the pinned tree confirms no such path; it was not indexed. Final order matches the tree exactly. Original review sequence crossed corrected checkpoint boundary, explicitly disclosed in the QA record.
+- Findings: modern bundle/cooldown/enchantment/item-component schemas require 1.20.1 rewrites; loot engine has incomplete context/predicate behavior; random sequences and recipe filters require target parity; MCP and mod-registry service crates are developer/backend tooling only.
+- Tests/examples inspected only, not executed. No build, benchmark, APK, Android device, Forge launch or server-join validation. No application source changed; audit documentation only.
+- Section 1801–1850 is **COMPLETE/CLOSED (50/50)**. Do not inspect 1851 or later without new explicit user authorization. main and backups untouched; no backup until entries 1001–2000 and global verification are complete.

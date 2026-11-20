@@ -370,3 +370,14 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - `crates/horizon-friends/src/lib.rs` inserted at 1812 after discovery during complete-tree reconciliation; first 25 now end at `crates/horizon-items/src/blocks/decode.rs` (1825). `blocks/decode_tests.rs` is reassigned to 1826.
 - The initial 25-file candidate enumeration omitted one pinned path; final numbering is repaired and the correction retained in QA.
 - The six checkpoint docs are read back after commit; the second authorized checkpoint is 1826–1850. Stop at 1850; 1851+ is unauthorized.
+
+
+## Authoritative closeout — 1801–1850 complete — 2026-11-20
+
+- Overall indexed coverage: **1–1850**, sequential and unique.
+- Active 200-file stage: **1801–2000**, progress **50/200**.
+- Section **1801–1850 COMPLETE/CLOSED**; both 25-file checkpoints separately committed and GitHub read-back verified.
+- Correct order derives from complete pinned tree after excluding entries 1–1800. The initial candidate list omitted `crates/horizon-friends/src/lib.rs`; it was inserted at 1812 and later entries shifted. `blocks/decode_tests.rs` is 1826. `horizon-mod-registry/src/storage.rs` returned 404 and is absent from pinned tree. Final 50 paths match the tree; initial source reading crossed corrected checkpoint boundary and is disclosed in QA.
+- Active Ledger `AUDIT_LEDGER_1801_2000.md`: 50 records, 15 fields each. Index: 1,850 sequential unique paths.
+- All 50 files read serially through EOF; long files in continuous <=400-line chunks; source SHA/size verified. Tests/examples inspected only. No tests/build/benchmark/APK/device/Forge/server validation; no application code changes.
+- **STOP at 1850.** Section 1851–1900 unauthorized without new explicit permission. main/backups untouched. Backup only after all entries 1001–2000 and global verification.
