@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (150/200 complete; checkpoints 1601–1625, 1626–1650, 1651–1675, 1676–1700, 1701–1725 and 1726–1750 closed). Current 200-file stage: 1601–1800. Section 1701–1750 closed. Next section: 1751–1800; await explicit authorization. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (175/200 complete; checkpoints through 1751–1775 are closed). Current 200-file stage: 1601–1800. Section 1701–1750 closed. Active section: 1751–1800; checkpoint 1751–1775 closed and 1776–1800 remains authorized. Stop at 1800. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2104,3 +2104,33 @@
 | 1748 | `crates/horizon-core/src/density/rounding.rs` | adaptable; version-specific | Java-compatible floor/round/ceil/truncate and multiple operations. |
 | 1749 | `crates/horizon-core/src/density/selection.rs` | adaptable; core reference; version-specific | Range choice, lerp and interval-branch density samplers. |
 | 1750 | `crates/horizon-core/src/density/slice.rs` | adaptable; optional/future | Axis-fixed sampler and optional cached XZ plane broadcasting. |
+
+## Part 71 — Entries 1751–1775
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1751 | `crates/horizon-core/src/density/spline.rs` | adaptable; core reference; version-specific | Cubic spline sampler, interpolation, range and coordinate caching. |
+| 1752 | `crates/horizon-core/src/density/surface.rs` | adaptable; version-specific | Density crossing search for highest terrain surface. |
+| 1753 | `crates/horizon-core/src/density/terrain_noise.rs` | rewrite required; core reference; version-specific | Shift/blended noise and distance density nodes need 1.20.1 RNG parity. |
+| 1754 | `crates/horizon-core/src/density/tests.rs` | undetermined; reference; tests only | Density sampler buffer, cache, interpolation and failure-path test inventory. |
+| 1755 | `crates/horizon-core/src/density/world_fields.rs` | adaptable; reference; incomplete | Context-bound blend/beardifier fields; complete blender algorithm is pending. |
+| 1756 | `crates/horizon-core/src/fast_hash.rs` | adaptable; optional | Non-cryptographic fast hasher for internal hot-key collections. |
+| 1757 | `crates/horizon-core/src/geometry/border.rs` | adaptable; version-specific | World-border geometry, transitions and collision calculations. |
+| 1758 | `crates/horizon-core/src/geometry/mod.rs` | adaptable; core reference; version-specific | Vector/AABB/ray geometry with Java numeric edge behavior. |
+| 1759 | `crates/horizon-core/src/geometry/movement.rs` | adaptable; core reference; version-specific | Entity collision resolver and step-up candidate selection. |
+| 1760 | `crates/horizon-core/src/geometry/shape.rs` | adaptable; core reference; version-specific | VoxelShape occupancy, AABB decomposition, collision and clipping. |
+| 1761 | `crates/horizon-core/src/geometry/shape/create.rs` | adaptable; version-specific | AABB-to-voxel-grid construction and shape optimization. |
+| 1762 | `crates/horizon-core/src/geometry/shape/face.rs` | adaptable; version-specific | Lazy/transient voxel-face mask computation and caching. |
+| 1763 | `crates/horizon-core/src/geometry/shape/join.rs` | adaptable; core reference; version-specific | Boolean VoxelShape composition and coordinate merging. |
+| 1764 | `crates/horizon-core/src/geometry/sweep.rs` | adaptable; reference | Movement sweep block visitation and deduplication, not collision effects. |
+| 1765 | `crates/horizon-core/src/geometry/traversal.rs` | adaptable; version-specific | Ray traversal through voxel blocks with explicit tie-break order. |
+| 1766 | `crates/horizon-core/src/geometry/trig.rs` | rewrite required; architecture-specific | Sine lookup and fdlibm angle functions tied to the pinned runtime. |
+| 1767 | `crates/horizon-core/src/jmath.rs` | rewrite required; architecture-specific; version-specific | Java math paths assume HotSpot x86/AArch64; Android ARM64 needs direct validation. |
+| 1768 | `crates/horizon-core/src/lib.rs` | reference; incomplete; not a playable client | Upstream explicitly says core is not a playable game and parity covers only a subset. |
+| 1769 | `crates/horizon-core/src/noise/mod.rs` | rewrite required; core reference; version-specific | Noise core explicitly targets 26.3 and says terrain generation remains incomplete. |
+| 1770 | `crates/horizon-core/src/noise/normal.rs` | rewrite required; core reference; version-specific | NormalNoise octaves, normalization and legacy random consumption. |
+| 1771 | `crates/horizon-core/src/noise/perlin.rs` | adaptable; core reference; version-specific | Perlin/smeared noise and batched Y-volume evaluation. |
+| 1772 | `crates/horizon-core/src/noise/simplex.rs` | adaptable; version-specific | 2D/3D Simplex noise using seeded permutation tables. |
+| 1773 | `crates/horizon-core/src/noise/stack.rs` | adaptable; version-specific | Ordered noise-layer aggregation and scalar/bulk summation. |
+| 1774 | `crates/horizon-core/src/noise/volume.rs` | adaptable; core reference; version-specific | Bounded density volume descriptor with Z-X-Y flat indexing. |
+| 1775 | `crates/horizon-core/src/paletted.rs` | rewrite required; core reference; version-specific | 26.3 palette strategy/wire thresholds differ from target 1.20.1. |

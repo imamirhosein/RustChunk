@@ -1223,3 +1223,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
 - Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
 - Checkpoint 1726–1750 is complete and committed with the audit documents. Reporting section 1701–1750 is now closed (50/50). **STOP at entry 1750**; wait for explicit authorization before inspecting 1751–1800.
+
+## Source-audit checkpoint 1751–1775 — 2026-11-20
+
+- Completed entries 1751–1775 inclusive (25/25) from pinned Starling source tree 5432370d573642041585c69b40fb045b27133488.
+- All 25 files were read through EOF in serial order. Files above 400 logical lines were inspected in consecutive, gap-free chunks of at most 400 lines; exact ranges, logical line counts, source SHA and byte sizes are recorded in the active Ledger.
+- All 25 blob SHAs and byte sizes match the pinned recursive tree. The Index now contains 1,775 sequential entries and 1,775 unique paths. The active Ledger contains 175 entries (1601–1775), each with exactly 15 fields; Index paths and Decisions align with the new records.
+- This checkpoint covers newer density spline/surface/noise code, world fields, geometry/collision and shape operations, Java/HotSpot math, Perlin/Simplex/normal noise and the 26.3 paletted-container implementation. The core library explicitly states it is not a playable game; terrain generation and parity coverage remain incomplete.
+- Java 26.3 strategy thresholds, newer math/runtime assumptions and noise/biome semantics must not be treated as 1.20.1 behavior. The paletted container is a high-value design reference but needs a target-era rewrite.
+- Embedded tests and microbenchmarks were inspected only; none were executed. No source/application code was modified.
+- No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1751–1775 is complete and committed with the audit documents. Continue with 1776–1800 under the user's existing authorization; **STOP at 1800** for fresh authorization.

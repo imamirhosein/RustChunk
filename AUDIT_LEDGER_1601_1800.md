@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1601–1800 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1601–1750 complete (150/200); reporting sections 1601–1650, 1651–1700 and 1701–1750 are closed; checkpoints 1726–1750 complete.
-- Reporting rule: STOP at entry 1750. Wait for explicit authorization before inspecting entry 1751 or later.
+- Current progress: entries 1601–1775 complete (175/200); reporting sections 1601–1650, 1651–1700 and 1701–1750 are closed; checkpoint 1751–1775 is complete; checkpoint 1776–1800 remains authorized.
+- Reporting rule: STOP at entry 1800. Do not inspect entry 1801 or later before fresh explicit authorization.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests are inspected only; they are not executed.
@@ -2558,3 +2558,428 @@
 - RustChunk implementation mapping: RustChunk density graph slice sampler and optional LOD plane cache.
 - Evidence required before adoption: 1.20.1 density graph axis dependencies and NoiseChunk volume fixtures.
 - Completion state: COMPLETE — 118 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4105-byte size match the source tree.
+
+### 1751. `crates/horizon-core/src/density/spline.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `14eaa0adf2a4eeb6652b4619b2010056cc31072e`
+- Size: 13399 bytes; 344 logical lines
+- Coverage: 1–344 (EOF)
+- Purpose: Cubic spline density sampler with range and coordinate evaluation.
+- Dependencies / cross-references: DensitySampler, FunctionId-backed coordinate samplers, spline point lists, Interval arithmetic and volume evaluation.
+- Implementation / logic: Evaluates constant and multipoint splines, interpolates between control points, computes conservative value ranges and shares coordinate sampling during bulk evaluation.
+- Findings: Spline point ordering, derivative behavior, NaN handling and compile-time coordinate caching are observable; pinned implementation belongs to the newer density system.
+- RustChunk relevance: Useful architecture and regression reference for spline terrain density.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild spline evaluation and codec semantics from Minecraft 1.20.1 CubicSpline/DensityFunctions; do not reuse newer graph interfaces unchanged.
+- Follow-up checks: Compare endpoint clamping, equal locations, derivative interpolation, float operation order, NaN and bulk coordinate reuse against 1.20.1.
+- RustChunk implementation mapping: RustChunk cubic-spline density node and scalar/bulk tests.
+- Evidence required before adoption: Mojang-mapped 1.20.1 CubicSpline source and deterministic spline fixtures.
+- Completion state: COMPLETE — 344 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 13399-byte size match the source tree.
+
+### 1752. `crates/horizon-core/src/density/surface.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `df437bc2be767725299953e5eeeb0c60522322ce`
+- Size: 3177 bytes; 99 logical lines
+- Coverage: 1–99 (EOF)
+- Purpose: Finds the highest terrain surface crossing in a density sampler.
+- Dependencies / cross-references: DensitySampler, DensityVolume, upper/lower bounds and sampler context.
+- Implementation / logic: Searches down from an upper density boundary, samples the density crossing and exposes scalar plus single-Y-layer volume behavior.
+- Findings: The implementation's integer rounding and search bounds are version-specific; it explicitly uses the pinned newer Mth behavior.
+- RustChunk relevance: Potential reference for surface-height search and terrain preview.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Reconstruct surface search from 1.20.1 NoiseChunk/WorldgenRandomState callers and density rules; preserve target integer floor semantics.
+- Follow-up checks: Test crossing/no-crossing, inclusive limits, negative heights, integer overflow and exact one-layer buffer requirements.
+- RustChunk implementation mapping: RustChunk surface-height sampler for terrain generation.
+- Evidence required before adoption: 1.20.1 surface-search call sites and trusted scalar/bulk height fixtures.
+- Completion state: COMPLETE — 99 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 3177-byte size match the source tree.
+
+### 1753. `crates/horizon-core/src/density/terrain_noise.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `908a0657621a80f10f7e2ddfdfb0a535cfe5bba9`
+- Size: 7260 bytes; 220 logical lines
+- Coverage: 1–220 (EOF)
+- Purpose: Compiles shift-noise, blended-noise and distance-to-point density primitives.
+- Dependencies / cross-references: Perlin/Normal noise stacks, seeded random factories, DensitySampler, DistanceMetric and graph compiler.
+- Implementation / logic: Builds shifted noise variants, blended fBm samplers, distance metrics and octave-based terrain noise helpers.
+- Findings: Noise octave ordering, random consumption and newer graph node variants are tied to the pinned target; exact output is seed-sensitive.
+- RustChunk relevance: Core architectural reference for density noise and terrain shaping.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Implement only the 1.20.1 density noise functions and BlendedNoise algorithm, driven by the target-era random state.
+- Follow-up checks: Compare octave frequencies/amplitudes, positional offsets, legacy RNG draws, distance metric formulas and scalar/bulk float bits.
+- RustChunk implementation mapping: RustChunk 1.20.1 terrain-noise sampler family.
+- Evidence required before adoption: 1.20.1 BlendedNoise/NoiseChunk/DensityFunctions source and seed-based oracle traces.
+- Completion state: COMPLETE — 220 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 7260-byte size match the source tree.
+
+### 1754. `crates/horizon-core/src/density/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1c76399d0fb47cbf517885fb0786f5cabec5e698`
+- Size: 33778 bytes; 1012 logical lines
+- Coverage: 1–400, 401–800, 801–1012 (EOF)
+- Purpose: Unit-test inventory for density sampler primitives, volume behavior, caching and error propagation.
+- Dependencies / cross-references: DensitySampler implementations, DensityVolume, cache/slice/interpolation, noise and surface samplers.
+- Implementation / logic: Exercises buffer sizing/tails, partial writes, cache reset/isolation, interpolation, slices, spline, surface and failure paths.
+- Findings: Tests assert the pinned implementation's newer-version details; they were read only, not executed.
+- RustChunk relevance: Useful regression checklist for RustChunk's density engine.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Translate applicable tests to the exact 1.20.1 function set and expected results; remove cases for newer-only sampler behavior.
+- Follow-up checks: Build target-era test matrix for scalar/bulk parity, failed child writes, cache namespace, interpolation, spline and surface limits.
+- RustChunk implementation mapping: RustChunk density unit and integration regression tests.
+- Evidence required before adoption: 1.20.1 source-derived expected outputs and a runnable RustChunk test harness; no tests run.
+- Completion state: COMPLETE — 1012 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 33778-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1755. `crates/horizon-core/src/density/world_fields.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7709de8199ae68efd4271e0c40b9c964c44423d3`
+- Size: 4521 bytes; 151 logical lines
+- Coverage: 1–151 (EOF)
+- Purpose: Binds world-dependent density inputs to a per-evaluation sampler context.
+- Dependencies / cross-references: BlendAlpha, BlendOffset, Beardifier, DensityBlender trait, WorldFields and ContextBoundSampler.
+- Implementation / logic: Stores and resolves named world fields, supplies defaults and routes density input through a blender interface.
+- Findings: The file documents that the full blender data model/distance weighting is pending; this is an interface, not a complete Minecraft blending implementation.
+- RustChunk relevance: Useful separation pattern for per-world context and density dependencies.
+- Decision: adaptable; reference; incomplete
+- 1.20.1 implications: Build target-compatible blend alpha/offset/beardifier bindings from 1.20.1 blending data; keep the incomplete blender abstraction separate from authoritative terrain logic.
+- Follow-up checks: Verify default field values, context replacement, cache invalidation, blending coordinates and missing-field behavior.
+- RustChunk implementation mapping: RustChunk world-field context and an isolated blending-provider interface.
+- Evidence required before adoption: 1.20.1 Blender/BlendingData source, blending test worlds and complete target algorithm.
+- Completion state: COMPLETE — 151 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4521-byte size match the source tree.
+
+### 1756. `crates/horizon-core/src/fast_hash.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9382adbb8dab55a9fe8378972441ede30a30050b`
+- Size: 2537 bytes; 88 logical lines
+- Coverage: 1–88 (EOF)
+- Purpose: Fast non-cryptographic hash builder and map/set aliases for hot integer-keyed collections.
+- Dependencies / cross-references: Fx-style hash state, integer hashing and standard HashMap/HashSet interfaces.
+- Implementation / logic: Implements a lightweight hasher and type aliases used for block/chunk/tick keys.
+- Findings: Not a cryptographic hash; performance and collision behavior are implementation choices, and iteration order must not be treated as stable.
+- RustChunk relevance: Potential performance-oriented collection reference for RustChunk hot paths.
+- Decision: adaptable; optional
+- 1.20.1 implications: Use a fast hasher only for non-adversarial internal keys after profiling; retain robust hashing at untrusted input boundaries.
+- Follow-up checks: Benchmark realistic chunk/tick workloads and test collision handling, determinism assumptions and denial-of-service exposure.
+- RustChunk implementation mapping: Optional RustChunk internal fast-map aliases.
+- Evidence required before adoption: Threat model, benchmark corpus and review of every key that can be influenced by server/mod data.
+- Completion state: COMPLETE — 88 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 2537-byte size match the source tree.
+
+### 1757. `crates/horizon-core/src/geometry/border.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `92b865927235040277db5cd14dd2a65311613020`
+- Size: 9458 bytes; 270 logical lines
+- Coverage: 1–270 (EOF)
+- Purpose: World-border geometry, movement transitions and collision shape calculations.
+- Dependencies / cross-references: AABB/Vec3 geometry, border center/size, lerp timing and collision queries.
+- Implementation / logic: Computes border bounds, current interpolated size, distance-to-border and collision restrictions around the player.
+- Findings: This is the geometric portion only; persistence, packet synchronization, damage, warnings and listeners live elsewhere. Transition edge cases need target parity.
+- RustChunk relevance: Useful reference for movement collision and world-border rendering.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild border geometry and transition semantics from 1.20.1 WorldBorder; integrate separately with protocol sync and gameplay damage logic.
+- Follow-up checks: Test shrinking/growing borders, zero-duration size changes, negative coordinates, boundary inclusivity and player collision at corners.
+- RustChunk implementation mapping: RustChunk world-border geometry service, separate from packet/state handling.
+- Evidence required before adoption: 1.20.1 WorldBorder source, packet captures and edge-case transition traces.
+- Completion state: COMPLETE — 270 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 9458-byte size match the source tree.
+
+### 1758. `crates/horizon-core/src/geometry/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `016bda36d2843998c684055fc4878b24881836f8`
+- Size: 22670 bytes; 714 logical lines
+- Coverage: 1–400, 401–714 (EOF)
+- Purpose: Core vector, direction, AABB, ray and block-hit geometry primitives.
+- Dependencies / cross-references: Vec3, Axis/Direction, AABB, BlockPos, block shape clipping and Java-compatible floating-point helpers.
+- Implementation / logic: Implements vector operations, rotations, axis ordering, box intersections, ray clipping, hit-face resolution and related numeric edge behavior.
+- Findings: Geometry and clipping order affect movement/mining; code contains newer target assumptions and machine/float behavior requires parity.
+- RustChunk relevance: High relevance to player physics, raycasting and block interaction.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Reconstruct each primitive against Mojang-mapped 1.20.1 Vec3/AABB/Direction/BlockHitResult and preserve operation order.
+- Follow-up checks: Test parallel rays, face ties, touching boxes, signed zero/NaN, negative coordinates, degenerate boxes and hit-face tie-breaking.
+- RustChunk implementation mapping: RustChunk geometry kernel for raycasting, collision and block selection.
+- Evidence required before adoption: 1.20.1 geometry source and deterministic edge-case/ray traces.
+- Completion state: COMPLETE — 714 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 22670-byte size match the source tree.
+
+### 1759. `crates/horizon-core/src/geometry/movement.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `21ed18302ce729502c4a02075f2f77970f2dce22`
+- Size: 20319 bytes; 554 logical lines
+- Coverage: 1–400, 401–554 (EOF)
+- Purpose: Entity movement collision resolution and step-up candidate selection.
+- Dependencies / cross-references: AABB, VoxelShape, block colliders, movement vectors and axis ordering.
+- Implementation / logic: Resolves movement against colliders, evaluates axis clipping and step-up alternatives, and handles collision movement branches.
+- Findings: The internal two-million-case randomized test was inspected but not run; collision ordering and newer implementation shortcuts need target comparison.
+- RustChunk relevance: High relevance to player movement, stepping and block collision.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild movement resolver from 1.20.1 Entity/CollisionGetter/Shapes sources; preserve exact candidate ordering and tie behavior.
+- Follow-up checks: Compare axis clipping, step heights, grounded/fall conditions, empty colliders, negative motion and deterministic random test seeds.
+- RustChunk implementation mapping: RustChunk entity collision/movement resolver and property-test suite.
+- Evidence required before adoption: 1.20.1 Entity.move/Shapes sources and reference movement traces; randomized tests not run.
+- Completion state: COMPLETE — 554 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 20319-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1760. `crates/horizon-core/src/geometry/shape.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a2aa95dd8eb017e02013479ee4ef4ab97ea0aeb1`
+- Size: 22282 bytes; 607 logical lines
+- Coverage: 1–400, 401–607 (EOF)
+- Purpose: VoxelShape representation, occupancy, decomposition and collision queries.
+- Dependencies / cross-references: Discrete voxel grids, AABB decomposition, coordinate lists, boolean shape joins and ray clipping.
+- Implementation / logic: Stores shape occupancy, derives bounding boxes, enumerates boxes and performs collision/axis-distance and clipping operations.
+- Findings: Grid capacity and identity fast paths are implementation constraints; all query/shape ordering must be verified for 1.20.1.
+- RustChunk relevance: High relevance to block collision and selection, especially modded block shapes.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Port the 1.20.1 Shapes/VoxelShape/DiscreteVoxelShape semantics and limits rather than assuming the newer occupancy grid matches.
+- Follow-up checks: Test empty/infinite shapes, coordinate quantization, unions/intersections, face occlusion, box decomposition, clipping and large modded shapes.
+- RustChunk implementation mapping: RustChunk VoxelShape and collision-shape engine.
+- Evidence required before adoption: 1.20.1 Shapes/BitSetDiscreteVoxelShape sources and modded shape fixtures.
+- Completion state: COMPLETE — 607 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 22282-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1761. `crates/horizon-core/src/geometry/shape/create.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `312e030b3d5ed83d52bc90f46ec2a7dfc390c2c5`
+- Size: 5418 bytes; 147 logical lines
+- Coverage: 1–147 (EOF)
+- Purpose: Constructs voxel shapes from AABBs and joins/optimizes them.
+- Dependencies / cross-references: AABB coordinates, discrete shape grid, face masks and VoxelShape boolean join.
+- Implementation / logic: Quantizes box boundaries to the discrete grid, builds occupancy and applies optimized shape joining.
+- Findings: Thin-box acceptance, coordinate quantization and optimization identity are version-sensitive.
+- RustChunk relevance: Useful focused reference for block-shape construction.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild Shapes.create/from/AABB conversion and optimization from 1.20.1 source; do not carry newer quantization assumptions blindly.
+- Follow-up checks: Test fractional and one-eighth boundaries, zero-thickness boxes, inflate, negative extents and shape joins.
+- RustChunk implementation mapping: RustChunk AABB-to-VoxelShape constructor.
+- Evidence required before adoption: 1.20.1 Shapes source and known block collision-box fixtures.
+- Completion state: COMPLETE — 147 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 5418-byte size match the source tree.
+
+### 1762. `crates/horizon-core/src/geometry/shape/face.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5a615019721974a59d15d0b14b942fd0f7b049a9`
+- Size: 6451 bytes; 168 logical lines
+- Coverage: 1–168 (EOF)
+- Purpose: Computes and caches voxel-shape faces for occlusion and contact queries.
+- Dependencies / cross-references: VoxelShape occupancy, face direction, discrete masks and lazy/transient cache state.
+- Implementation / logic: Derives a face mask from the occupancy grid and caches selected results, with a transient path to avoid retaining large data.
+- Findings: Cache lifetime and invalidation behavior are coupled to shape immutability and the pinned implementation.
+- RustChunk relevance: Useful reference for face occlusion and block-face comparisons.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Reconstruct 1.20.1 FaceShape/Shapes face extraction and cache semantics; avoid introducing persistent cache leaks.
+- Follow-up checks: Test all six faces, empty/full shapes, transient behavior, equality, cache reuse and memory retention.
+- RustChunk implementation mapping: RustChunk voxel-face mask helper and occlusion cache.
+- Evidence required before adoption: 1.20.1 FaceShape source and block occlusion fixtures.
+- Completion state: COMPLETE — 168 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 6451-byte size match the source tree.
+
+### 1763. `crates/horizon-core/src/geometry/shape/join.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `261c33802de4a478ab3531fa082298e09180cfff`
+- Size: 11960 bytes; 361 logical lines
+- Coverage: 1–361 (EOF)
+- Purpose: Performs boolean union/intersection/only-first shape operations.
+- Dependencies / cross-references: VoxelShape, coordinate mergers, discrete occupancy and boolean join truth tables.
+- Implementation / logic: Merges axis coordinate sets, evaluates the requested boolean operation across cells and constructs a result shape.
+- Findings: Unbounded-shape shortcuts and coordinate merge edge cases can affect correctness and require exact target parity.
+- RustChunk relevance: Core reference for collision/occlusion shape composition.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Port target 1.20.1 BooleanOp/Shapes.join and coordinate merger logic; preserve truth table and merger ordering.
+- Follow-up checks: Test empty/infinite cases, duplicate coordinates, one-cell overlap, all boolean operations and result simplification.
+- RustChunk implementation mapping: RustChunk VoxelShape boolean composition engine.
+- Evidence required before adoption: 1.20.1 BooleanOp/IndirectMerger sources and differential shape fixtures.
+- Completion state: COMPLETE — 361 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 11960-byte size match the source tree.
+
+### 1764. `crates/horizon-core/src/geometry/sweep.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e90ee56349670a6998d47655b4edd414b2317fa9`
+- Size: 7625 bytes; 224 logical lines
+- Coverage: 1–224 (EOF)
+- Purpose: Visits blocks intersected by a swept movement volume.
+- Dependencies / cross-references: AABB/Vec3, block traversal, chunk/block position math and bounded deduplication.
+- Implementation / logic: Enumerates the movement path's block candidates, tracks already visited blocks and enforces work limits.
+- Findings: This is candidate visitation only; collision resolution and block effects are handled by other layers.
+- RustChunk relevance: Useful to organize broad-phase collision candidate gathering.
+- Decision: adaptable; reference
+- 1.20.1 implications: Implement the 1.20.1 collision-sweep visitation independently from actual collision and block update effects.
+- Follow-up checks: Test corner/edge crossings, stationary axes, duplicate block visits, large movements and work-limit behavior.
+- RustChunk implementation mapping: RustChunk broad-phase movement sweep iterator.
+- Evidence required before adoption: 1.20.1 BlockCollisions source and movement-volume test fixtures.
+- Completion state: COMPLETE — 224 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 7625-byte size match the source tree.
+
+### 1765. `crates/horizon-core/src/geometry/traversal.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6dee29f6ec6e39d804416771c44defa2d1ba7697`
+- Size: 4706 bytes; 155 logical lines
+- Coverage: 1–155 (EOF)
+- Purpose: Traverses voxel blocks along a ray in deterministic order.
+- Dependencies / cross-references: Ray direction, BlockPos, voxel boundary stepping and block visitor callback.
+- Implementation / logic: Steps through crossed cells with explicit corner tie-breaking and a maximum visitation count.
+- Findings: Tie resolution and traversal cap are observable, and must match the 1.20.1 clip traversal before adoption.
+- RustChunk relevance: Useful for raycast traversal and block targeting.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild the target 1.20.1 BlockGetter.clip/ray traversal and face tie rules; keep visitation caps only if behavior-compatible.
+- Follow-up checks: Test axis-aligned rays, exact edge/corner crossings, negative directions, zero components and max visit boundaries.
+- RustChunk implementation mapping: RustChunk voxel ray traversal helper.
+- Evidence required before adoption: 1.20.1 BlockGetter.clip and traversal oracle fixtures.
+- Completion state: COMPLETE — 155 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4706-byte size match the source tree.
+
+### 1766. `crates/horizon-core/src/geometry/trig.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f7b2484b5f30cba7cf5155c59aef9ff76bfd20b3`
+- Size: 13325 bytes; 384 logical lines
+- Coverage: 1–384 (EOF)
+- Purpose: Fast trigonometric lookup and fdlibm atan2 support.
+- Dependencies / cross-references: Sine table, angle reduction and Java StrictMath-compatible fdlibm routines.
+- Implementation / logic: Provides table-backed sine and fdlibm atan2 behavior for exact angle calculations.
+- Findings: The tables and expected bit patterns are tied to the pinned runtime; do not infer Android ART/HotSpot results from them.
+- RustChunk relevance: Useful only where exact angle compatibility is required.
+- Decision: rewrite required; architecture-specific
+- 1.20.1 implications: Use the target Java 17/Android ARM runtime behavior or a proven 1.20.1-compatible math implementation; verify the chosen path on ARM64.
+- Follow-up checks: Compare trigonometric bit patterns, quadrants, signed zero, huge angles and boundary rounding on the Galaxy-class ARM64 target.
+- RustChunk implementation mapping: RustChunk target-runtime trig compatibility layer if required.
+- Evidence required before adoption: 1.20.1 Java runtime math expectations and ARM64 device differential vectors.
+- Completion state: COMPLETE — 384 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 13325-byte size match the source tree.
+
+### 1767. `crates/horizon-core/src/jmath.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3ffe3929b99c4ede8081313987222861c7e50851`
+- Size: 22665 bytes; 707 logical lines
+- Coverage: 1–400, 401–707 (EOF)
+- Purpose: Implements selected java.lang.Math/StrictMath behavior for the pinned HotSpot runtime.
+- Dependencies / cross-references: fdlibm routines, AArch64 FMA trig kernels, platform libm and geometry trig helpers.
+- Implementation / logic: Dispatches different math paths by architecture for sin/cos/tan/exp/log/pow/cbrt/atan2/hypot, with HotSpot-specific AArch64 code.
+- Findings: Comments explicitly describe HotSpot x86-64/AArch64 differences and Java 25 behavior; the exact platform/runtime target is not Android ART by default.
+- RustChunk relevance: Important cautionary reference for float compatibility, not a portable drop-in implementation.
+- Decision: rewrite required; architecture-specific; version-specific
+- 1.20.1 implications: Define math parity for the actual Minecraft 1.20.1 Java runtime on Android ARM64; do not copy HotSpot 25 paths without device evidence.
+- Follow-up checks: Run differential vectors for Java 17/target runtime versus Rust on Android ARM64, including FMA, NaN, subnormal, huge-angle and pow/log edges.
+- RustChunk implementation mapping: RustChunk Android ARM64 math adapter only if differential testing proves necessary.
+- Evidence required before adoption: Target Minecraft Java runtime and device-specific oracle outputs; source tests were inspected only.
+- Completion state: COMPLETE — 707 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 22665-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1768. `crates/horizon-core/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `169f537e9d7186206c2e4d64d427950f66b593d6`
+- Size: 615 bytes; 26 logical lines
+- Coverage: 1–26 (EOF)
+- Purpose: Exports the simulation primitive modules of horizon-core.
+- Dependencies / cross-references: Biome, carving, density, geometry, noise, palette, positions, random, storage, text, ticks and version modules.
+- Implementation / logic: Declares public crate modules and forbids unsafe Rust.
+- Findings: The crate explicitly states it is not a playable game and only a limited subset of Vanilla has differential checks; full terrain generation is still absent elsewhere.
+- RustChunk relevance: Useful evidence of current upstream scope and modular boundaries.
+- Decision: reference; incomplete; not a playable client
+- 1.20.1 implications: Do not mistake this crate for a complete game engine or use its module list as proof of 1.20.1 Forge support.
+- Follow-up checks: Map each required client subsystem to implemented code and identify missing protocol, rendering, entity, inventory, resource and mod-loader systems.
+- RustChunk implementation mapping: RustChunk gap analysis and module boundary planning.
+- Evidence required before adoption: Full 1.20.1/Forge feature inventory plus end-to-end playability criteria.
+- Completion state: COMPLETE — 26 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 615-byte size match the source tree.
+
+### 1769. `crates/horizon-core/src/noise/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e715b10f0c98f2d8330fd31b8a41326893524a73`
+- Size: 10722 bytes; 305 logical lines
+- Coverage: 1–305 (EOF)
+- Purpose: Shared Perlin/Simplex/gradient table and density-volume noise utilities.
+- Dependencies / cross-references: LegacyRandom, GradientTable, Perlin/Simplex/NormalNoise and DensityVolume.
+- Implementation / logic: Builds gradient permutation tables, wraps coordinates, supplies interpolation helpers and baseline noise tests.
+- Findings: File explicitly targets pinned Java 26.3 and states complete density graphs/terrain generation remain absent.
+- RustChunk relevance: Useful noise architecture and seed-trace reference, not direct 1.20.1 implementation.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Rebuild noise generation and helpers from Minecraft 1.20.1 Java sources and its exact random stream.
+- Follow-up checks: Compare gradient permutation, random consumption, wrap boundaries, float interpolation order and deterministic noise vectors.
+- RustChunk implementation mapping: RustChunk 1.20.1 noise core.
+- Evidence required before adoption: 1.20.1 PerlinNoise/SimplexNoise sources and seed-specific expected bit patterns.
+- Completion state: COMPLETE — 305 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 10722-byte size match the source tree.
+
+### 1770. `crates/horizon-core/src/noise/normal.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1a0b8b85317eb10afecdb2042227c5cca1689225`
+- Size: 13116 bytes; 387 logical lines
+- Coverage: 1–387 (EOF)
+- Purpose: NormalNoise octave builder, normalization and legacy FBM construction.
+- Dependencies / cross-references: PerlinNoise, NoiseStack, positional random factories and amplitude modifiers.
+- Implementation / logic: Builds selected octave layers, computes amplitude normalization and implements a legacy FBM path with explicit random-consumption order.
+- Findings: Builder permits up to 4096 octaves while the source comment notes Vanilla's data codec allows 32; legacy behavior is constrained and version-specific.
+- RustChunk relevance: High-value reference for worldgen octave logic and RNG auditing.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 NormalNoise/BlendedNoise octave selection and normalization from target Java source; use the target codec bounds.
+- Follow-up checks: Compare amplitude modifiers, absent/zero octaves, positive/negative octave ranges, legacy draw counts and normalized range.
+- RustChunk implementation mapping: RustChunk 1.20.1 NormalNoise builder and deterministic RNG tests.
+- Evidence required before adoption: Mojang-mapped 1.20.1 NormalNoise source, codec limits and seed-based traces.
+- Completion state: COMPLETE — 387 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 13116-byte size match the source tree.
+
+### 1771. `crates/horizon-core/src/noise/perlin.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `130238c4157a82ecbec2c7ccdf54a9edde043229`
+- Size: 15287 bytes; 432 logical lines
+- Coverage: 1–400, 401–432 (EOF)
+- Purpose: Perlin and smeared Perlin sampling with derivatives and bulk volume accumulation.
+- Dependencies / cross-references: GradientTable, random source, DensityVolume, coordinate wrapping and interpolation functions.
+- Implementation / logic: Computes gradients/corner values, noise derivatives and batched Y-volume samples; includes bit-identical scalar/bulk tests.
+- Findings: Optimization batches four Ys within a cell; matching floats does not prove 1.20.1 seed or arithmetic parity. Tests were not run.
+- RustChunk relevance: High relevance to terrain noise and chunk generation.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Port the exact 1.20.1 Perlin/SmearedNoise implementation first; enable batching only after scalar oracle parity.
+- Follow-up checks: Check offsets/permutations, negative coordinates, Y fudge, cell-boundary batches, volume tail handling and scalar/bulk bit equality.
+- RustChunk implementation mapping: RustChunk Perlin noise sampler and optional verified bulk specialization.
+- Evidence required before adoption: 1.20.1 PerlinNoise source and differential output fixtures; tests not executed.
+- Completion state: COMPLETE — 432 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 15287-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1772. `crates/horizon-core/src/noise/simplex.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8dcb56f85efda2fc5b6ac46d2994996037d0b25c`
+- Size: 4322 bytes; 121 logical lines
+- Coverage: 1–121 (EOF)
+- Purpose: Simplex noise sampler for two- and three-dimensional coordinates.
+- Dependencies / cross-references: GradientTable, permutation table, floor conversion and corner attenuation.
+- Implementation / logic: Computes skewed-grid simplex corners, gradient lookup, attenuation and normalized outputs.
+- Findings: Seeded permutation order and signed-coordinate arithmetic are version-sensitive.
+- RustChunk relevance: Potential reference for biome/End noise only after target verification.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild the target 1.20.1 SimplexNoise algorithm and call sites; avoid assuming it is used identically in target worldgen.
+- Follow-up checks: Compare permutation table, corner tie ordering, negative coordinates, NaNs and exact seed vectors.
+- RustChunk implementation mapping: RustChunk Simplex noise utility if required by 1.20.1.
+- Evidence required before adoption: 1.20.1 SimplexNoise source and fixed-seed output corpus.
+- Completion state: COMPLETE — 121 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4322-byte size match the source tree.
+
+### 1773. `crates/horizon-core/src/noise/stack.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9cfe093d5ede317bf0f123a3a860e927f72e2f0d`
+- Size: 7224 bytes; 233 logical lines
+- Coverage: 1–233 (EOF)
+- Purpose: Composable ordered stack of noise layers and scalar/bulk evaluation.
+- Dependencies / cross-references: Noise trait, Perlin/Simplex implementations, layer frequency/amplitude and DensityVolume.
+- Implementation / logic: Aggregates layers in insertion order, supports flattened nested stacks and sums each layer's volume contribution.
+- Findings: Layer ordering and float accumulation are observable; range behavior also depends on signed zero/infinity.
+- RustChunk relevance: Useful abstraction for multi-octave noise composition.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Recreate target 1.20.1 noise layering with the same accumulation order and normalization.
+- Follow-up checks: Test empty/zero-amplitude layers, nested flattening, infinities/NaNs, range bounds and scalar/bulk sum order.
+- RustChunk implementation mapping: RustChunk NoiseStack abstraction.
+- Evidence required before adoption: 1.20.1 NormalNoise composition source and bit-level layer fixtures.
+- Completion state: COMPLETE — 233 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 7224-byte size match the source tree.
+
+### 1774. `crates/horizon-core/src/noise/volume.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d0362ee1bd386a1ee025f4ea20ab0f2ce8ce4095`
+- Size: 3460 bytes; 94 logical lines
+- Coverage: 1–94 (EOF)
+- Purpose: Validated strided density-volume descriptor and flat buffer indexing.
+- Dependencies / cross-references: Axis, dimensions, minimum block coordinates, coordinate steps and Java wrapping arithmetic.
+- Implementation / logic: Bounds dimensions/steps and total size, maps coordinates with wrapping i32 math and uses Z-X-Y storage with Y innermost.
+- Findings: The chosen layout and i32 maximum size must match each target sampler's buffer contract.
+- RustChunk relevance: Useful common descriptor for density volume calculations.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Define RustChunk's 1.20.1 chunk-density lattice layout and maximum allocation limits independently from this newer implementation.
+- Follow-up checks: Test dimensions/steps validation, negative coordinates, index mapping, overflow and buffer-tail behavior.
+- RustChunk implementation mapping: RustChunk DensityVolume descriptor.
+- Evidence required before adoption: 1.20.1 NoiseChunk volume ordering and deterministic index fixtures.
+- Completion state: COMPLETE — 94 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 3460-byte size match the source tree.
+
+### 1775. `crates/horizon-core/src/paletted.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5b5b3be1ee020d9db973b0a3ac9f8e8ed7237cce`
+- Size: 50805 bytes; 1306 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1306 (EOF)
+- Purpose: Resident PalettedContainer for block-state and biome values with wire and saved encodings.
+- Dependencies / cross-references: Strategy thresholds, palette variants, packed storage, VarInt-facing wire data and palette ID lookup.
+- Implementation / logic: Supports single/list/global palette states, resize, set/get, pack/unpack, wire load/save, palette queries and storage round trips.
+- Findings: This file explicitly targets Java 26.3; block/biome bit thresholds and transitions must not be copied directly to 1.20.1. Embedded tests and ignored microbenchmarks were inspected only, not run.
+- RustChunk relevance: Very high relevance to chunk sections and large modded registries, but version-specific format is critical.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Reconstruct 1.20.1 PalettedContainer strategies, bit widths, wire/NBT layout and palette resize behavior from exact target sources.
+- Follow-up checks: Test palette transition thresholds, entries spanning long words, registry IDs >65k, wire round trips, malformed data, stale palette entries and save/load parity.
+- RustChunk implementation mapping: RustChunk 1.20.1 block/biome palettes and PackedStorage.
+- Evidence required before adoption: 1.20.1 PalettedContainer/PalettedContainer.Strategy/BitStorage sources and Forge registry-size fixtures.
+- Completion state: COMPLETE — 1306 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 50805-byte size match the source tree; embedded tests were inspected only, not run.
