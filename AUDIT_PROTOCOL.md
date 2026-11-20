@@ -436,3 +436,14 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Six-document atomic update required and completed: active Ledger, Index, QA Log, Continuity, Protocol and Boundary register. Read each back individually; verify 150 Ledger entries/15 fields each, 1,950 sequential unique Index paths, path/Decision alignment and source SHA/size.
 - Do not inspect 1951–2000 without fresh explicit user authorization. Stop at 1950.
 - Main and backup refs remain untouched; no source/application code changes or test/build/device/Forge/server/renderer claims. Backup only after entries 1001–2000 and global 1–2000 verification.
+
+
+## 21. Checkpoint 1951–1975 — 2026-11-20
+
+- Entries 1951–1975 are complete as the first 25-file checkpoint of section 1951–2000.
+- All 25 paths are the next blobs after excluding Index entries 1–1950 from the complete pinned tree. Every file was inspected serially through EOF; files over 400 lines were fetched in consecutive, gap-free chunks <=400 lines.
+- Six-document checkpoint update and read-back is required and is being committed together: Ledger, Index, QA Log, Continuity, Protocol and Boundary register.
+- Ledger now holds 175 entries (1801–1975), exactly 15 fields each; Index has 1,975 sequential unique paths. SHA/size must match the complete pinned tree and Ledger paths/Decisions must match Index.
+- The user's authorization for section 1951–2000 continues. Proceed with entries 1976–2000 one file at a time. Do not stop at 1975 or ask for intermediate permission.
+- At entry 2000, close section 1951–2000 and STOP. Ask the user before starting global verification of entries 1–2000 and creating the final backup.
+- Embedded tests/examples inspected only; none executed. No build/device/Forge/server/renderer claims. No application source code changes.

@@ -7,15 +7,17 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-20**.
-- Completed and committed entries: **1–1800**.
+- Completed and committed entries: **1–1975**.
 - Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1601–1800**, **200/200 complete**; this stage is closed.
-- Closed reporting sections: **1601–1650**, **1651–1700**, **1701–1750** and **1751–1800**.
-- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **200 entries** (1601–1800), each with exactly 15 fields.
-- Index: **1,800 sequential entries and 1,800 unique paths**.
-- **STOP at entry 1800.** The next section, **1801–1850**, is not authorized; wait for explicit user authorization before inspecting entry 1801.
+- Active 200-file stage: **1801–2000**, **175/200 complete**.
+- Closed reporting sections: **1801–1850**, **1851–1900**, and **1901–1950**.
+- Active section: **1951–2000**, authorized; checkpoint **1951–1975 complete/closed**, checkpoint **1976–2000 still authorized**.
+- Active Ledger: `AUDIT_LEDGER_1801_2000.md`, **175 entries** (1801–1975), each with exactly 15 fields.
+- Index: **1,975 sequential entries and 1,975 unique paths**.
+- Next source entry: **1976**. Continue one file at a time through 2000 under the current authorization.
+- **STOP at 2000.** Ask explicit permission before global verification of entries 1–2000 and then creating the final backup.
 - Preserve the 200 / 50 / 25 cadence: commit and read-back verify each 25-file checkpoint; report and stop at each 50-file boundary.
-- Next backup remains due only after entries 1001–2000 are complete and globally verified. Existing backup refs remain untouched.
+- No incremental backup. Existing `main` and backup refs remain untouched.
 
 ## Source pin and selection
 
@@ -436,3 +438,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Source entries 1926–1950 were read serially through EOF; files >400 lines used gap-free chunks <=400; SHA/size matched pinned tree. Tests/examples inspected only; no test/build/benchmark/APK/device/Forge/server/renderer validation; no application code changed.
 - Findings: the port-pack upgrade/worldgen files target 26.2→26.3 and contain hard-coded/lossy transformations; Prepare is host-side Java/JDK exporter and asset-import infrastructure, not the Android game process; protocol probes use newer protocol and are not Forge 1.20.1 validation; Relay is optional friend-session service.
 - **STOP at 1950.** Section 1951–2000 remains locked pending fresh explicit user authorization. main/backups untouched; backup only after all entries 1001–2000 and global verification.
+
+
+## Latest verified checkpoint — entries 1951–1975 — 2026-11-20
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- The exact 25 paths were the next 25 blobs after excluding Index entries 1–1950; each was inspected serially through EOF, and every recorded SHA/size matches the pinned tree.
+- Active stage 1801–2000 is **175/200 complete**. Index has **1,975** sequential unique paths; Ledger has **175** entries (1801–1975), each with exactly 15 fields; new paths/Decisions align.
+- Section **1951–2000 remains authorized**. Checkpoint 1951–1975 is now closed; next is 1976–2000 under the same permission.
+- Findings include relay limits/concurrency hardening, safe checksum path validation, dedicated-server-only file/settings modules, Java-properties/Gson parity limits, weak entropy fallback for management secret, and server-panel polling/backend-auth follow-up.
+- Tests/examples inspected only; none run. No build, benchmark, APK, device, Forge, server join, Aternos or renderer validation. No application code changed.
+- **STOP at 2000** and ask permission for full verification 1–2000, then final backup. No backup is due before that global verification.

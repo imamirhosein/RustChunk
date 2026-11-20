@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–1950 complete (150/200); section 1901–1950 closed (50/50); section 1951–2000 is locked pending fresh authorization.
-- Reporting rule: complete the authorized section 1901–1950, then STOP at 1950 and wait for fresh explicit authorization before entry 1951.
+- Current progress: entries 1801–1975 complete (175/200); section 1901–1950 closed (50/50); section 1951–2000 is authorized and in progress (1951–1975 checkpoint closed; 1976–2000 remains authorized).
+- Reporting rule: complete the authorized section 1951–2000 in two 25-file checkpoints, then STOP at 2000 and wait for permission before global verification and final backup.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests/examples are inspected only; they are not executed.
@@ -2564,3 +2564,429 @@
 - RustChunk implementation mapping: Separate optional RustChunk relay backend, not client/runtime code.
 - Evidence required before adoption: Explicit product requirement, threat model, relay interoperability, abuse tests and operational deployment validation.
 - Completion state: COMPLETE — 19 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 471-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+
+### 1951. `crates/horizon-relay/Dockerfile`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8f41b4ea3aee35ff846c7d3358bee57c8cf6d13c`
+- Size: 568 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Multi-stage Docker image build for Horizon's optional play-with-friends TCP relay.
+- Dependencies / cross-references: Rust 1-slim-bookworm build stage, Debian bookworm-slim runtime, workspace manifests and horizon-relay binary.
+- Implementation / logic: Compiles `horizon-relay` in release mode, copies the executable into a minimal Debian image, exposes port 7000, and runs as `nobody`.
+- Findings: Separates build tools from runtime and uses a non-root runtime account; this is deployment packaging, not client code.
+- RustChunk relevance: No Forge 1.20.1 client, rendering or Aternos connectivity functionality.
+- Decision: reference; deployment-only; optional relay
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Review base-image pinning, reproducible build, image scanning, runtime capabilities, CPU/memory limits and relay abuse protections.
+- RustChunk implementation mapping: Optional standalone RustChunk relay container, only if friend-hosting is an explicit product requirement.
+- Evidence required before adoption: Approved relay threat model, reproducible image build, integration/interoperability and deployment hardening tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1952. `crates/horizon-relay/horizon-relay.service`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dc67babdd5603219cf13fbac6e191ec79abb8f78`
+- Size: 750 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: systemd unit for self-hosting the optional Horizon friend relay.
+- Dependencies / cross-references: systemd, `/usr/local/bin/horizon-relay`, TCP port 7000 and RELAY_* environment settings documented by the project.
+- Implementation / logic: Starts relay after network-online, uses DynamicUser, NoNewPrivileges, ProtectSystem=strict, ProtectHome and PrivateTmp, and restarts on failure.
+- Findings: Includes several useful systemd sandboxing controls; safe deployment still depends on trusted network/proxy configuration and configured resource limits.
+- RustChunk relevance: Server deployment configuration only; no Android launcher or Forge 1.20.1 behavior.
+- Decision: reference; deployment configuration; optional relay
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Check service filesystem needs, resource caps, trusted proxy boundaries, port exposure, and systemd compatibility on target distributions.
+- RustChunk implementation mapping: Template for a separate RustChunk relay service; not copied into Android app.
+- Evidence required before adoption: Deployment tests under an unprivileged dynamic user plus network and restart-failure tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1953. `crates/horizon-relay/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f30169107314737d6a18e23472a7390374e7fe28`
+- Size: 23494 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: TCP relay service for Horizon play-with-friends sessions; transports opaque end-to-end encrypted bytes between host and guest.
+- Dependencies / cross-references: horizon-friends wire/code protocol, rate limiter, TCP sockets, threads, mutexes, atomics and random token generation.
+- Implementation / logic: Registers hosts, issues random tokens/nameplates, handles guest join/host attach, bridges two streams, throttles per-session and total bytes, exposes health/whoami HTTP responses and maintains in-memory counts.
+- Findings: This is a friend-session fallback relay, not a normal public Minecraft server proxy. max_bridges is checked before incrementing, so concurrent joins can transiently exceed its cap; proxy protocol mode must only be exposed behind a trusted proxy.
+- RustChunk relevance: Does not implement Forge 1.20.1 handshake, mod negotiation or Aternos connection. Optional service only.
+- Decision: unnecessary; optional friend relay; network-specific
+- 1.20.1 implications: This optional relay subsystem does not implement Forge 1.20.1 client protocol or mod negotiation.
+- Follow-up checks: Add atomic bridge-slot reservation; validate all numeric limits; bound per-address state; test shutdown/thread cleanup, proxy trust, malformed frames, and concurrent capacity.
+- RustChunk implementation mapping: Separate optional RustChunk friend-relay crate, isolated from launcher/game process.
+- Evidence required before adoption: Threat model, concurrency stress tests, fuzzing, rate-limit tests, end-to-end encrypted tunnel interoperability and resource-exhaustion tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1954. `crates/horizon-relay/src/limits.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `adf199919887dc3223c6b753f2fff5301d657e0a`
+- Size: 8694 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Token-bucket bandwidth and request rate limits plus client-address tracking for the friend relay.
+- Dependencies / cross-references: std HashMap/VecDeque, IpAddr and Instant; consumed by horizon-relay.
+- Implementation / logic: Implements refillable buckets, per-address registration/join limits, unknown-code blocks, IPv4-mapped address normalization and IPv6 /64 grouping; periodically removes idle address records.
+- Findings: Core token-bucket approach is reusable, but float settings are not validated as finite/non-negative; NaN and pathological values can break timing calculations. Address tracking is only periodically swept.
+- RustChunk relevance: Optional relay-only utility; unrelated to Minecraft 1.20.1 client transport.
+- Decision: adaptable; rate-limiting reference; security-sensitive
+- 1.20.1 implications: This optional relay subsystem does not implement Forge 1.20.1 client protocol or mod negotiation.
+- Follow-up checks: Reject NaN/infinity/negative rates, define zero-rate semantics, bound tracked-address cardinality, and fuzz timestamp/rate edge cases.
+- RustChunk implementation mapping: Optional RustChunk relay limiter with validated typed configuration.
+- Evidence required before adoption: Property-based refill tests, invalid-env tests, high-cardinality address stress tests and concurrent rate-limit tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1955. `crates/horizon-relay/src/main.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a5f2dfe837aa9de11b9e68d8e5364d8b59e6fe5e`
+- Size: 1624 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Executable entry point for the optional Horizon TCP friend relay.
+- Dependencies / cross-references: horizon_relay::Config and Relay, TcpListener, PORT and RELAY_BIND environment variables.
+- Implementation / logic: Parses the port, binds a configured address or dual-stack wildcard with IPv4 fallback, constructs relay config and serves until stopped while printing counts every five minutes.
+- Findings: Default bind is externally reachable on wildcard interfaces; operators need firewall and trusted-proxy guidance. Configuration validation belongs before serving.
+- RustChunk relevance: Standalone server binary, not Android launcher/runtime logic.
+- Decision: unnecessary; relay executable; server-only
+- 1.20.1 implications: This optional relay subsystem does not implement Forge 1.20.1 client protocol or mod negotiation.
+- Follow-up checks: Validate port/config values, document secure bind defaults, add graceful shutdown handling and deployment/network exposure tests.
+- RustChunk implementation mapping: Separate optional RustChunk relay executable.
+- Evidence required before adoption: Bind-scope tests, graceful SIGTERM test, config-validation tests and deployment checks.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1956. `crates/horizon-relay/tests/tunnel.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e59f48d52ae071549b1f7df90d7d4ee473e6ca44`
+- Size: 15034 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Integration tests for direct and relayed friend-session tunnels.
+- Dependencies / cross-references: horizon-friends host/guest APIs, horizon-relay local server, TCP echo test server and loopback networking.
+- Implementation / logic: Exercises direct path, relay path, fallback, wrong secrets, unknown and ended codes, version mismatch, attach timeout, bandwidth cap, health/whoami and connection/first-line limits.
+- Findings: Provides broad end-to-end regression coverage for the optional relay. Tests were inspected only and not executed; no dedicated concurrent max_bridges race or malformed-rate config stress case was observed.
+- RustChunk relevance: No proof of Forge 1.20.1 protocol or Aternos compatibility.
+- Decision: reference; integration tests only; not executed
+- 1.20.1 implications: This optional relay subsystem does not implement Forge 1.20.1 client protocol or mod negotiation.
+- Follow-up checks: Add concurrency and invalid configuration tests plus fuzz malformed relay messages and shutdown races; run only in a dedicated test environment.
+- RustChunk implementation mapping: Regression suite for a separately implemented RustChunk relay; do not mix into Minecraft client protocol tests.
+- Evidence required before adoption: Executed test output, race/stress/fuzz results and cross-implementation relay interoperability.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1957. `crates/horizon-release-sign/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0585adcf83c4b8b3d82548f3fe9056541f7ddc8d`
+- Size: 430 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Cargo manifest for release signing and checksum verification utilities.
+- Dependencies / cross-references: Workspace lint/edition/license settings, ring 0.17 and base64 0.22; declared minimum Rust 1.85.
+- Implementation / logic: Defines the horizon-release-sign crate and its Ed25519/SHA-256 support dependencies.
+- Findings: Small host-side integrity tool dependency set; not part of Minecraft world or network runtime.
+- RustChunk relevance: Can inform secure updater architecture but does not provide game version/mod compatibility.
+- Decision: reference; release tooling; cryptographic dependency
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Confirm dependency policy, supported Rust toolchain and platform builds before adding analogous signing support.
+- RustChunk implementation mapping: RustChunk release-integrity crate or build tooling only.
+- Evidence required before adoption: Pinned dependency audit, cross-platform build tests and key rotation/verification fixtures.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1958. `crates/horizon-release-sign/legacy-releases.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a0a71182ce10f4a34cdb436e8ab5098bdd729d2a`
+- Size: 45772 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Allowlist of SHA-256 digests for release archives published before signed checksum manifests were introduced.
+- Dependencies / cross-references: Consumed by horizon-release-sign legacy_digest and release updater flows; generated by tools/ci/legacy_releases.py.
+- Implementation / logic: Stores `<tag> <asset> <sha256>` records for historical releases and installer archives; changes require code-owner review.
+- Findings: The inspected 427-line file has 423 data rows. Both inspected ranges contained valid 64-hex SHA values and no repeated tag/asset keys; no malformed rows were found.
+- RustChunk relevance: Release metadata only; not a Minecraft runtime feature.
+- Decision: reference; release integrity data; legacy allowlist
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Recheck all rows as one dataset for global uniqueness and source provenance; ensure legacy hashes cannot be bypassed or silently replaced.
+- RustChunk implementation mapping: Optional pinned legacy digest table in RustChunk updater, if rollback support is needed.
+- Evidence required before adoption: Independent digest provenance, global uniqueness check, signed-updater integration tests and controlled rollback tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1959. `crates/horizon-release-sign/release-keys.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c39be4435eeaa1740ec269a47fad72d2046f9df2`
+- Size: 436 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Trusted public Ed25519 key list used by release verification.
+- Dependencies / cross-references: Included by horizon-release-sign at compile time; private signing keys live in release environment secrets.
+- Implementation / logic: Contains comments and one Base64-encoded public key; parser requires a 32-byte Ed25519 public key.
+- Findings: No private signing key is present in this file. Changes are designated for code-owner review.
+- RustChunk relevance: Potential trust-anchor pattern for RustChunk release verification, not game runtime.
+- Decision: reference; public key material; security-sensitive
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Validate the decoded key length and key rotation process; document revocation/recovery and require protected review for trust-anchor changes.
+- RustChunk implementation mapping: RustChunk updater trust store or embedded public-key resource.
+- Evidence required before adoption: Key lifecycle policy, signature verification tests, rotation/revocation tests and protected review evidence.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1960. `crates/horizon-release-sign/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `45c72f09c08a33bcaf4877f674e2a69c1b229ba4`
+- Size: 20572 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Ed25519-signed SHA256SUMS verification, nightly/release channel separation, legacy digest lookup and streaming SHA-256 helpers.
+- Dependencies / cross-references: ring Ed25519 and SHA-256, base64, release-keys.txt and legacy-releases.txt.
+- Implementation / logic: Signs/verifies a message containing release tag plus checksum bytes; accepts a valid trusted signature line, parses checksum rows, compares hashes and generates PKCS#8 signing keys.
+- Findings: Fail-closed behavior when no trusted key exists and tag binding are positive. Checksum parser does not reject duplicate names or unsafe path syntax; callers must constrain paths.
+- RustChunk relevance: Version-independent release integrity pattern; no Minecraft packet or mod-loader behavior.
+- Decision: adaptable; secure update verification; version-independent
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Validate checksum path segments and duplicates at consumers; impose metadata-size limits; test malformed signatures, key rotation, replay and channel separation.
+- RustChunk implementation mapping: Dedicated RustChunk update-verification module, kept separate from game protocol.
+- Evidence required before adoption: Executed cryptographic test vectors, fuzzed parsers, key rotation/revocation tests and end-to-end download hash checks.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1961. `crates/horizon-release-sign/src/main.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `108b5192a6ea0d586f59df0df1d478eb852c6aa5`
+- Size: 5533 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: CLI for verifying a release folder and generating Ed25519 signing keys.
+- Dependencies / cross-references: horizon-release-sign library, filesystem, streaming SHA-256 and OS stdout terminal detection.
+- Implementation / logic: Reads signed sums/signature, verifies every listed local archive in 64KiB chunks, and writes public key separately while sending private key bytes only to stdout pipe.
+- Findings: Keygen explicitly refuses to write a private key to an interactive terminal. `folder.join(name)` trusts checksum asset names; absolute paths or `..` need rejection before file access.
+- RustChunk relevance: Host-side release tooling only; not a mobile game launcher feature.
+- Decision: adaptable; release CLI tooling; security-sensitive
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Canonicalize/validate each asset as a single safe relative filename, reject duplicates and symlinks as needed, cap sums/signature size, and tighten CLI argument validation.
+- RustChunk implementation mapping: Optional RustChunk CI release-signing CLI, not Android runtime.
+- Evidence required before adoption: Traversal/symlink/path fuzz tests, secret-output tests, CI integration and reproducible release verification.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1962. `crates/horizon-release-sign/tests/cli.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12673f87758295491a95a611f6826437387995a8`
+- Size: 6207 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: CLI integration tests for release signing, verification, tamper detection, key rotation and key generation.
+- Dependencies / cross-references: horizon-release-sign APIs, compiled CLI executable, bash/OpenSSL 3 and temporary directories.
+- Implementation / logic: Creates archives/checksum manifests, signs with test keys or the signing shell script, verifies success, rejects tampering and checks secret output behavior.
+- Findings: Test cases cover the happy path and cryptographic tampering but do not exercise malicious checksum filenames/path traversal. Tests were inspected only, not run.
+- RustChunk relevance: Test-only release tooling reference; no Minecraft 1.20.1 runtime relevance.
+- Decision: reference; CLI integration tests only; not executed
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Add absolute-path, parent-component, symlink, duplicate checksum and oversized manifest fixtures; run on Linux/macOS/Windows CI.
+- RustChunk implementation mapping: Tests for a future RustChunk release-integrity tool.
+- Evidence required before adoption: Executed CI results and regression tests for all path/manifest edge cases.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1963. `crates/horizon-server-files/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2643fc726bbebc3691ccbaf11aa626e1284fca82`
+- Size: 680 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Cargo manifest for dedicated-server file and settings compatibility helpers.
+- Dependencies / cross-references: horizon-core, horizon-protocol, horizon-world, log, base64 and ureq TLS; minimum Rust 1.90.
+- Implementation / logic: Defines server-side Java-properties, JSON, player profile lookup, user cache and user-list functionality.
+- Findings: The crate description and module roles explicitly target the dedicated server, not the Android launcher/game client.
+- RustChunk relevance: Mostly outside RustChunk mobile client scope; selected serialization semantics may serve as reference.
+- Decision: unnecessary; dedicated-server only; host-side dependency
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Only reuse isolated utilities after validating version alignment, dependencies, licensing and resource bounds.
+- RustChunk implementation mapping: No direct runtime module; extract targeted pure compatibility utilities only if justified.
+- Evidence required before adoption: Version-matched 1.20.1 parity fixtures and platform/resource testing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1964. `crates/horizon-server-files/src/eula.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `769af94012a4eb6b9d1706bfc2bde959aeb18cbf`
+- Size: 1512 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Read/write behavior for the dedicated server's eula.txt.
+- Dependencies / cross-references: Local java_properties parser/store and timestamp helpers; Minecraft EULA URL.
+- Implementation / logic: Writes default `eula=false`; reads EULA property case-insensitively; missing/unreadable files are replaced with default false and reported as errors.
+- Findings: Consent is explicit and defaults to not agreed; write failure is ignored when replacing an unreadable/missing file.
+- RustChunk relevance: Legal-consent pattern only; not launcher or Forge implementation.
+- Decision: reference; server legal-consent handling; version-specific
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Keep agreement explicit, avoid implying acceptance, and test missing, malformed, read-only and write-failure behavior.
+- RustChunk implementation mapping: No direct client module; use only as a legal-consent handling reference if required.
+- Evidence required before adoption: Version-matched behavior comparison and tests ensuring no implicit acceptance.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1965. `crates/horizon-server-files/src/java_properties.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `794e751cbe594b02c8707f52c47f019c5d92d4b6`
+- Size: 15177 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Compatibility implementation of Java Properties load/store, including continuation lines, escapes, Latin-1 and key ordering.
+- Dependencies / cross-references: Rust standard library collections, UTF-16 encoding/decoding helpers and date conversion functions.
+- Implementation / logic: Parses Java-style property lines, resolves unicode escapes, stores keys in UTF-16 order and formats timestamp comments similar to java.util.Date.
+- Findings: The code contains custom surrogate/NUL handling; isolated surrogate replacement and NUL marker interactions need differential checks against supported JDKs. Existing tests cover only a small set of examples.
+- RustChunk relevance: Potential utility for Java launcher metadata/config files, but exact behavior requires proof against the 1.20.1 runtime's Java version.
+- Decision: adaptable; Java-properties compatibility; parity-sensitive
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Build a broad JVM differential corpus for trailing slash, continuations, malformed unicode, surrogate pairs/isolates, NUL, comments and platform newlines.
+- RustChunk implementation mapping: Optional RustChunk Java-properties compatibility module, isolated from renderer/protocol.
+- Evidence required before adoption: Automated differential test output against supported JDK versions on Android and desktop.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1966. `crates/horizon-server-files/src/json.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `47fe6d5d3ae8a5f442bc8a664d114449a43652b6`
+- Size: 14180 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Ordered JSON tree and strict parser/writers aiming to match Gson behavior and preserve numeric token text.
+- Dependencies / cross-references: Rust standard library vectors/strings and local Json value model.
+- Implementation / logic: Parses JSON values, preserves object member order and number spelling, writes compact and pretty forms, and emits HTML-safe Gson strings.
+- Findings: No explicit input-byte or nesting-depth bound is visible; recursive parsing/writing can cause resource exhaustion on deeply nested or huge input. Only a small round-trip test exists.
+- RustChunk relevance: May support metadata compatibility, but it is not MC 1.20.1 network protocol implementation.
+- Decision: adaptable; JSON compatibility utility; security-sensitive
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Add size/depth/element bounds, duplicate-key and unicode edge-case tests, and differential tests against the exact Gson version.
+- RustChunk implementation mapping: Bounded compatibility JSON utility in RustChunk only if target fixtures require it.
+- Evidence required before adoption: Fuzzing, memory/stack-limit tests and byte-for-byte Gson differential corpus.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1967. `crates/horizon-server-files/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `08c059905b44d7c26bee545ff032acb3a121a258`
+- Size: 526 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Module root exporting dedicated-server EULA, Java-properties, JSON, profiles, settings, cache and user-list modules.
+- Dependencies / cross-references: The sibling modules within horizon-server-files; game server consumes them and horizon-server manages them.
+- Implementation / logic: Declares and publicly exports seven dedicated server helper modules.
+- Findings: The module documentation says the dedicated server reads them and this crate needs neither a window nor the game.
+- RustChunk relevance: No direct Android client or launcher functionality.
+- Decision: unnecessary; server-only module exports
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Do not port the whole crate to RustChunk client; extract only independently justified compatibility logic.
+- RustChunk implementation mapping: No direct mapping to launcher/game executable.
+- Evidence required before adoption: A specific client-side requirement and version-matched isolated tests before extracting any helper.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1968. `crates/horizon-server-files/src/profiles.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2c6611c875142079a4cfae01fa3942ca615d13a8`
+- Size: 8200 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Resolve player names/UUIDs and fetch Minecraft Services profile-certificate public keys for a dedicated server.
+- Dependencies / cross-references: Minecraft Services discovery document/endpoints, ureq TLS, local JSON parser, Base64 and RSA public key parser.
+- Implementation / logic: Looks up profile by name or UUID through discovered endpoints and decodes profilePropertyKeys/playerCertificateKeys into RSA public keys.
+- Findings: HTTP responses are read fully without explicit byte limits; discovery and returned endpoint URLs lack a visible host allowlist. Empty player name passes `valid_player_name`'s current length/ASCII predicate and needs comparison with the target Java behavior.
+- RustChunk relevance: Server account lookup and secure-chat trust data, not Forge client mod negotiation or Aternos routing.
+- Decision: reference; server account/profile lookup; network-sensitive
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Bound response sizes, enforce HTTPS and allowed service origins, validate redirects/endpoints and test player-name boundaries against vanilla.
+- RustChunk implementation mapping: Optional server-side profile resolver only; do not include in Android client runtime by default.
+- Evidence required before adoption: Network mock tests, endpoint allowlist/redirect tests, size-limit tests and 1.20.1 profile lookup parity.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1969. `crates/horizon-server-files/src/properties.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `849e2a54189320e0adadc72c6159bd952d4ba9cf`
+- Size: 24332 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Large parser/normalizer for modern dedicated-server server.properties and generator/resource-pack settings.
+- Dependencies / cross-references: Local Java Properties and JSON modules, Java string hash, MD5/UUID helpers and entropy provider.
+- Implementation / logic: Reads defaults and values for online-mode, permissions, view/simulation distance, management server, world seed/generator, resource pack and other properties; normalizes them back to Properties.
+- Findings: Uses a /dev/urandom attempt then falls back to clock-seeded SplitMix64 for management secret generation, which is not a CSPRNG; its setting set is version-specific to the pinned newer server.
+- RustChunk relevance: Do not import settings as 1.20.1 truth; derive properties from Forge/Minecraft 1.20.1 target classes. Never reuse weak secret fallback.
+- Decision: reference; server settings schema; security-sensitive; version-specific
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Replace with cross-platform OS CSPRNG that fails closed; validate bounds and compare every property/default/serializer with 1.20.1 server classes.
+- RustChunk implementation mapping: Version-specific server settings reference only; RustChunk client may only reuse unrelated parsing primitives after tests.
+- Evidence required before adoption: CSPRNG assurance and deterministic 1.20.1 parity fixtures for every supported property.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1970. `crates/horizon-server-files/src/user_cache.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2e974637bbd513b24f7963a98d3c1d494b7fd981`
+- Size: 11888 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Persistent usercache.json mapping player UUIDs/names to one-month expiration metadata.
+- Dependencies / cross-references: Java date conversion, local Gson-like JSON, profile name checks and user list NameAndId type.
+- Implementation / logic: Loads cache entries, resolves case-insensitive names/UUIDs, expires name lookups, and serializes most-recently-used entries capped at 1000.
+- Findings: The serialized file is capped to 1000 records, but internal `infos`/maps are not evicted and can grow over time; file and JSON parsing have no clear size/depth cap.
+- RustChunk relevance: Dedicated-server player cache only; no renderer/chunk loading or mod compatibility.
+- Decision: adaptable; user-cache behavior; memory-sensitive
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Implement actual LRU eviction from memory, cap input size/depth and test duplicates, expiration, corrupted files and growth under repeated adds.
+- RustChunk implementation mapping: Optional bounded profile cache if RustChunk later provides server tooling; not game client core.
+- Evidence required before adoption: Long-running memory tests, file-size adversarial tests and comparison with vanilla cache behavior.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1971. `crates/horizon-server-files/src/user_lists.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0c80fcef869f06f35032f91b456f02999e4373f0`
+- Size: 17424 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Stored ops, whitelist, player-ban and IP-ban list handling for the dedicated server.
+- Dependencies / cross-references: Local JSON and Java-properties date helpers, UUID conversion, Java string hashing and JavaHashMap from horizon-world.
+- Implementation / logic: Loads/serializes list entries, maintains Java HashMap iteration semantics, expires bans and emits watcher change notifications for add/remove/clear.
+- Findings: Reads and parses unbounded JSON; `load_str` permits trailing content after the first value; file writes are direct/non-atomic. Date parsing needs extreme-number overflow tests.
+- RustChunk relevance: Server administration only; may inform portable account-list serialization but not Minecraft public-server client connectivity.
+- Decision: adaptable; access-list persistence; compatibility-sensitive
+- 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
+- Follow-up checks: Use strict whole-document parsing, input bounds and atomic temp-write/rename; fuzz date fields, malformed entries and map ordering.
+- RustChunk implementation mapping: Optional standalone administrative list utility, isolated from Android gameplay.
+- Evidence required before adoption: Parity fixtures against target version, corruption recovery, atomic-write interruption tests and parser fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1972. `crates/horizon-server/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2b289e057d04e07e021bbcbf565ef07befe24df2`
+- Size: 2694 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Cargo manifest for Horizon's dedicated server supervisor/management application.
+- Dependencies / cross-references: horizon-server-files, MCP, anticheat, chat-filter, benchmark, release-signing, TLS, WebSocket, TOML, PNG and ZIP packages; minimum Rust 1.90.
+- Implementation / logic: Declares the control-plane executable that configures, launches, monitors, updates and backs up the headless game server.
+- Findings: The dependency graph is dedicated-server management infrastructure and includes many packages irrelevant to a mobile Minecraft client.
+- RustChunk relevance: No direct Forge 1.20.1 launcher or Android rendering implementation.
+- Decision: unnecessary; dedicated-server supervisor; server-only
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Keep server manager separate; extract shared crates only after auditing their independent client need.
+- RustChunk implementation mapping: No direct runtime mapping; optional RustChunk server-management companion only.
+- Evidence required before adoption: A distinct server-management product requirement and server deployment/integration tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1973. `crates/horizon-server/panel/index.html`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5d77cb9561c09c67b27d8cf929ff45e1e421826a`
+- Size: 2979 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Static HTML structure for Horizon's server administration dashboard.
+- Dependencies / cross-references: panel.css, panel.js and `/api/v1` server management routes.
+- Implementation / logic: Defines status/actions, performance charts, player table, backup controls, console and signed-out/down states.
+- Findings: It is presentation markup; authentication and authorization must be enforced by the backend, not assumed from this file.
+- RustChunk relevance: Server dashboard only; no Android launcher or game-engine support.
+- Decision: reference; admin panel markup; server-only
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Review accessibility, CSRF/session design, safe linking and route authorization in associated backend handlers.
+- RustChunk implementation mapping: Optional admin companion UI only if RustChunk later needs remote server management.
+- Evidence required before adoption: Browser accessibility checks, route authorization tests and end-to-end authenticated session tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1974. `crates/horizon-server/panel/panel.css`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `994f5eac6dabf15015f5fe36f0bbbfe6240bf19e`
+- Size: 4491 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Responsive style sheet and light/dark theme for the Horizon server panel.
+- Dependencies / cross-references: Panel HTML class/id structure and CSS theme variables.
+- Implementation / logic: Defines layout, responsive columns, charts, tables, forms, buttons, notices and dark-mode tokens.
+- Findings: Pure presentation layer with no engine, persistence or authentication behavior.
+- RustChunk relevance: Not relevant to Minecraft Java runtime or Android launcher logic.
+- Decision: unnecessary; presentation-only CSS; server-only
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Check mobile layout, contrast, keyboard focus and CSS feature compatibility if reusing the panel.
+- RustChunk implementation mapping: No direct gameplay mapping; optional web admin styling reference.
+- Evidence required before adoption: Visual responsive tests, contrast audit and supported-browser checks.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1975. `crates/horizon-server/panel/panel.js`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5405907ca90d30146dbd38a3bd1e28b02c3881e8`
+- Size: 10282 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Browser-side logic for the Horizon server admin dashboard.
+- Dependencies / cross-references: Panel DOM, same-origin `/api/v1` JSON endpoints and authenticated session cookie/header contract.
+- Implementation / logic: Polls status/metrics/logs, draws TPS/MSPT/RAM/CPU charts, renders players/backups, and submits command, restart, stop, restore and update actions.
+- Findings: Remote strings are placed via textContent, reducing DOM injection risk. A one-second setInterval can overlap slow polls; a failure in Promise.all can mark the whole panel gone even if some routes respond. Server-side auth/CSRF validation is not proven by this file.
+- RustChunk relevance: Admin frontend only; not launcher or Forge game runtime.
+- Decision: adaptable; admin UI safety pattern; server-only
+- 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
+- Follow-up checks: Add in-flight poll guard/backoff, independent handling for optional endpoints, CSRF/session review, backend authorization tests and DOM injection tests.
+- RustChunk implementation mapping: Optional RustChunk admin frontend; keep entirely separate from client gameplay.
+- Evidence required before adoption: Browser tests for XSS, CSRF, overlapping polls, session expiry and every management action.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
