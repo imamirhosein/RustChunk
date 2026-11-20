@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (125/200 complete; checkpoints 1601–1625, 1626–1650, 1651–1675, 1676–1700 and 1701–1725 closed). Current 200-file stage: 1601–1800. Active section: 1701–1750; checkpoint 1701–1725 closed and 1726–1750 authorized; stop at 1750. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (150/200 complete; checkpoints 1601–1625, 1626–1650, 1651–1675, 1676–1700, 1701–1725 and 1726–1750 closed). Current 200-file stage: 1601–1800. Section 1701–1750 closed. Next section: 1751–1800; await explicit authorization. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2074,3 +2074,33 @@
 | 1723 | `crates/horizon-core/examples/biome_zoom_fixture.rs` | adaptable; reference | Biome zoom parity fixture pattern; calculations require 1.20.1 oracle. |
 | 1724 | `crates/horizon-core/examples/generation_tick_fixture.rs` | adaptable; core reference | Scheduled tick lifecycle fixture is relevant; target semantics must be verified. |
 | 1725 | `crates/horizon-core/examples/paletted_fixture.rs` | adaptable; core reference | Palette wire and packed-storage round-trip fixture is relevant to large modpacks. |
+
+## Part 70 — Entries 1726–1750
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1726 | `crates/horizon-core/src/bin/density_parity.rs` | adaptable; core reference | Differential harness for density graphs, samplers, caches and bulk outputs. |
+| 1727 | `crates/horizon-core/src/bin/float_log_parity.rs` | adaptable; reference | Float-bit parity transport for Java-compatible logarithm behavior. |
+| 1728 | `crates/horizon-core/src/bin/geometry_parity.rs` | adaptable; core reference | Differential geometry/collision and entity-movement fixtures. |
+| 1729 | `crates/horizon-core/src/bin/noise_parity.rs` | adaptable; core reference | Noise, random-stream and octave-volume differential harness. |
+| 1730 | `crates/horizon-core/src/bin/parity.rs` | adaptable; core reference | RNG, positional seeds, coordinate packing and PackedStorage fixtures. |
+| 1731 | `crates/horizon-core/src/bin/tick_parity.rs` | adaptable; core reference | Scheduled tick lifecycle and chunk persistence trace adapter. |
+| 1732 | `crates/horizon-core/src/biome.rs` | rewrite required; version-specific | Biome zoom and seed transform explicitly target Java 26.3. |
+| 1733 | `crates/horizon-core/src/biome/seed_hash.rs` | unnecessary; version-specific | Specialized SHA-256 seed transform for the newer biome scheme. |
+| 1734 | `crates/horizon-core/src/carving.rs` | adaptable; version-specific | Packed carving mask and ordered column-run traversal. |
+| 1735 | `crates/horizon-core/src/carving/ellipsoid.rs` | adaptable; version-specific | Cave/canyon ellipsoid traversal with reach and iteration budget. |
+| 1736 | `crates/horizon-core/src/density/arithmetic.rs` | adaptable; core reference | Java float arithmetic and specialized scalar/bulk density operations. |
+| 1737 | `crates/horizon-core/src/density/beardifier.rs` | adaptable; version-specific; modded extension | Structure terrain beardifier mixes vanilla-like and mod-library kernels. |
+| 1738 | `crates/horizon-core/src/density/cache.rs` | adaptable; optional/future | Context-local density cache plus sparse and plane preview caching. |
+| 1739 | `crates/horizon-core/src/density/end_islands.rs` | rewrite required; version-specific | End island sampler explicitly targets Java 26.3. |
+| 1740 | `crates/horizon-core/src/density/graph/compiler.rs` | adaptable; core reference; version-specific | Density DAG compiler with cache preparation and graph optimizations. |
+| 1741 | `crates/horizon-core/src/density/graph/mod.rs` | adaptable; core reference; version-specific | Immutable density graph, interning, axes and interval range analysis. |
+| 1742 | `crates/horizon-core/src/density/graph/seeded.rs` | adaptable; version-specific | Seed-bound noise factories and named-noise cache behavior. |
+| 1743 | `crates/horizon-core/src/density/graph/tests.rs` | undetermined; reference; tests only | Density graph, cache, identity and compiler regression test inventory. |
+| 1744 | `crates/horizon-core/src/density/interpolation.rs` | adaptable; core reference; version-specific | Coarse-grid density interpolation and sparse preview mode. |
+| 1745 | `crates/horizon-core/src/density/interval.rs` | adaptable; core reference | Interval arithmetic including Java NaN, infinities and signed zero. |
+| 1746 | `crates/horizon-core/src/density/mod.rs` | adaptable; core reference; version-specific | DensitySampler API, per-worker context and primitive samplers. |
+| 1747 | `crates/horizon-core/src/density/power.rs` | adaptable; version-specific | Power sampler with constant-exponent specialization. |
+| 1748 | `crates/horizon-core/src/density/rounding.rs` | adaptable; version-specific | Java-compatible floor/round/ceil/truncate and multiple operations. |
+| 1749 | `crates/horizon-core/src/density/selection.rs` | adaptable; core reference; version-specific | Range choice, lerp and interval-branch density samplers. |
+| 1750 | `crates/horizon-core/src/density/slice.rs` | adaptable; optional/future | Axis-fixed sampler and optional cached XZ plane broadcasting. |

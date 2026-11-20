@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1601–1800 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1601–1725 complete (125/200); reporting sections 1601–1650 and 1651–1700 are closed; checkpoint 1701–1725 is complete; checkpoint 1726–1750 remains authorized.
-- Reporting rule: STOP at entry 1750. Do not inspect entry 1751 or later before fresh explicit authorization.
+- Current progress: entries 1601–1750 complete (150/200); reporting sections 1601–1650, 1651–1700 and 1701–1750 are closed; checkpoints 1726–1750 complete.
+- Reporting rule: STOP at entry 1750. Wait for explicit authorization before inspecting entry 1751 or later.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests are inspected only; they are not executed.
@@ -2133,3 +2133,428 @@
 - RustChunk implementation mapping: RustChunk 1.20.1 PalettedContainer differential fixture.
 - Evidence required before adoption: 1.20.1 PalettedContainer/BitStorage source and controlled registry-size fixtures.
 - Completion state: COMPLETE — 136 logical lines read through EOF; pinned blob SHA and 4230-byte size match the source tree.
+
+### 1726. `crates/horizon-core/src/bin/density_parity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `07bdf65374187727e7e9a318a095414fc8a0cf32`
+- Size: 48978 bytes; 1103 logical lines
+- Coverage: 1–400, 401–800, 801–1103 (EOF)
+- Purpose: Differential transport for comparing density samplers and compiled density graphs.
+- Dependencies / cross-references: DensitySampler, DensityCompiler/GraphNode, noise/random APIs, spline/surface samplers, intervals and volume layouts.
+- Implementation / logic: Builds scripted samplers/graphs, queries scalar and bulk values, exercises caches, contexts and volumes, and emits float-bit results.
+- Findings: Extensive parity tooling, not runtime generation; expected outputs are meaningful only against the matching vanilla version.
+- RustChunk relevance: Strong test-harness reference for density evaluation, graph compilation, volume layout and cache behavior.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Rebuild fixture operations and expected outputs against Minecraft 1.20.1 density graph/noise semantics; exclude newer nodes and schemas.
+- Follow-up checks: Compare scalar/bulk bit patterns, cache reuse, failure writes, spline coordinates, volume indexing and seeded noise against 1.20.1.
+- RustChunk implementation mapping: RustChunk differential density-graph test executable and parity corpus.
+- Evidence required before adoption: Pinned 1.20.1 DensityFunctions/NoiseChunk sources and trusted oracle output; inspected, not executed.
+- Completion state: COMPLETE — 1103 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 48978-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1727. `crates/horizon-core/src/bin/float_log_parity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `570a7c666e5271472fe8800f24efa13fa26900a1`
+- Size: 1930 bytes; 55 logical lines
+- Coverage: 1–55 (EOF)
+- Purpose: Binary transport for exhaustive comparison of the compiled float logarithm sampler.
+- Dependencies / cross-references: UnarySampler Log operation, DensitySampler interface and IEEE-754 float bits.
+- Implementation / logic: Feeds 32-bit float patterns through the log sampler in bounded batches and writes normalized result bits.
+- Findings: Narrow parity utility; no gameplay logic or user-facing dependency.
+- RustChunk relevance: Useful for validating Java-compatible float math and NaN canonicalization.
+- Decision: adaptable; reference
+- 1.20.1 implications: Use only as a test utility for exact 1.20.1 math; do not ship in Android runtime.
+- Follow-up checks: Compare finite/exceptional float classes, signed zeros, infinities, NaN output and bit-range boundaries.
+- RustChunk implementation mapping: Optional RustChunk float-math differential executable.
+- Evidence required before adoption: 1.20.1 MathHelper/Java math oracle and generated expected corpus.
+- Completion state: COMPLETE — 55 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 1930-byte size match the source tree.
+
+### 1728. `crates/horizon-core/src/bin/geometry_parity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a51f518877644988f7c532c4046068b5e6e7ce46`
+- Size: 21882 bytes; 564 logical lines
+- Coverage: 1–400, 401–564 (EOF)
+- Purpose: Differential transport for geometry, collision shapes and entity movement.
+- Dependencies / cross-references: Vec3/AABB/BlockPos, VoxelShape boolean operations, block traversal, ray clipping and movement resolvers.
+- Implementation / logic: Exercises vector math, boxes, shapes, voxel grids, block sweeps, collision resolution and step movement with bit-precise output.
+- Findings: Oracle adapter rather than implementation; behavior and ordering must be checked against target mappings.
+- RustChunk relevance: High relevance to player/entity physics and block-collision correctness.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Reconstruct 1.20.1 Vec3, AABB, VoxelShape and Entity collision semantics; verify pinned 26.3 behavior separately.
+- Follow-up checks: Differentially test negative coordinates, boundary contact, shape unions, clipping face order, sweep order, step-up and float edges.
+- RustChunk implementation mapping: RustChunk geometry/physics differential test harness.
+- Evidence required before adoption: Mojang-mapped 1.20.1 geometry/collision sources and target-version traces.
+- Completion state: COMPLETE — 564 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 21882-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1729. `crates/horizon-core/src/bin/noise_parity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `52085cddd888b1f60649f8642ae8f70b10271915`
+- Size: 16503 bytes; 423 logical lines
+- Coverage: 1–400, 401–423 (EOF)
+- Purpose: Differential transport for Perlin/Simplex/Normal noise and noise-stack evaluation.
+- Dependencies / cross-references: Noise implementations, LegacyRandom/XoroshiroRandom, GradientTable and DensityVolume.
+- Implementation / logic: Creates noise samplers, emits permutations/ranges, samples points/volumes and probes derivatives, stacks and random stream state.
+- Findings: Noise generation, normalization and RNG choice are version- and seed-sensitive.
+- RustChunk relevance: Useful test design for world generation reproducibility and exact noise output.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Rebuild 1.20.1 noise constructors, octave selection and random-consumption order; verify RNG algorithm paths independently.
+- Follow-up checks: Compare permutations, offsets, octave frequencies/amplitudes, normalization, derivatives, volume order and seeded outputs.
+- RustChunk implementation mapping: RustChunk worldgen noise differential tests.
+- Evidence required before adoption: 1.20.1 Perlin/NormalNoise sources and deterministic seed/output fixtures.
+- Completion state: COMPLETE — 423 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 16503-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1730. `crates/horizon-core/src/bin/parity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `964391b3f8697fcb2cd95b8a8bb457d23a4aa52c`
+- Size: 11853 bytes; 321 logical lines
+- Coverage: 1–321 (EOF)
+- Purpose: Parity adapter for random streams, positional factories, coordinates and packed storage.
+- Dependencies / cross-references: Legacy/Xoroshiro random APIs, BlockPos/ChunkPos/SectionPos and PackedStorage.
+- Implementation / logic: Replays random calls, positional seed/hash construction, coordinate pack/unpack and storage set/fill/import operations.
+- Findings: RNG APIs and packed-storage invariants are version-specific; adapter does not prove save or protocol compatibility.
+- RustChunk relevance: Useful test inventory for deterministic RNG, coordinate packing and palette backing storage.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Rebuild target-era RNG and coordinate/storage rules from 1.20.1 sources; do not carry newer RNG stream selection without evidence.
+- Follow-up checks: Check RNG consumption, bounded values, UTF-16 hashing, signed coordinate extremes, pack/unpack and storage bounds.
+- RustChunk implementation mapping: RustChunk deterministic RNG/position/PackedStorage regression harness.
+- Evidence required before adoption: Mojang-mapped 1.20.1 RNG/BlockPos/BitStorage sources and fixtures.
+- Completion state: COMPLETE — 321 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 11853-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1731. `crates/horizon-core/src/bin/tick_parity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e4b8c46ea0bb1db5f5817ea7d14cba4631c3c8bb`
+- Size: 9531 bytes; 246 logical lines
+- Coverage: 1–246 (EOF)
+- Purpose: Trace adapter for chunk scheduled-tick lifecycle and level tick execution.
+- Dependencies / cross-references: LevelTicks/ChunkTicks, SavedTick/ScheduledTick, TickPriority, TickArea and chunk lifecycle.
+- Implementation / logic: Exercises add/load/unpack/remove/restore, duplicate scheduling, query, save/reload, clear/copy and callback-time mutation.
+- Findings: Trace adapter only; tick ordering and chunk-removal semantics remain target-version-dependent.
+- RustChunk relevance: High relevance to deterministic block/fluid ticks and chunk persistence.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Rebuild scheduler behavior from 1.20.1 LevelTicks, ProtoChunkTicks and LevelChunkTicks; verify exact queue priority/sub-order.
+- Follow-up checks: Test duplicates, callback scheduling, chunk unload/reload, tick-area copy, save delays and deterministic order.
+- RustChunk implementation mapping: RustChunk scheduled-tick service and persistence regression tests.
+- Evidence required before adoption: 1.20.1 tick scheduler sources and reference traces; fixture not executed.
+- Completion state: COMPLETE — 246 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 9531-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1732. `crates/horizon-core/src/biome.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9a26bac139444307c97c43721b2e07f5c18e4b61`
+- Size: 12184 bytes; 301 logical lines
+- Coverage: 1–301 (EOF)
+- Purpose: Block-to-quart biome selection and biome seed obfuscation for Java Edition 26.3.
+- Dependencies / cross-references: BlockPos, seed hash, signed coordinate wrapping and eight-corner jitter selection.
+- Implementation / logic: Hashes the world seed, computes eight-corner jitter and selects the nearest corner with strict comparison.
+- Findings: Explicitly targets Java 26.3; seed transform and zoom algorithm are not presumed to match 1.20.1.
+- RustChunk relevance: Conceptual reference for biome quart lookup only; no direct target adoption.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Replace with exact 1.20.1 biome zoom/seed algorithm; retain only details independently verified against target source.
+- Follow-up checks: Compare seed transform, negative-coordinate arithmetic, corner order, tie behavior and boundary positions with 1.20.1.
+- RustChunk implementation mapping: RustChunk 1.20.1 biome quart lookup adapter.
+- Evidence required before adoption: 1.20.1 BiomeManager/zoom source and deterministic world-seed fixtures; embedded tests not run.
+- Completion state: COMPLETE — 301 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 12184-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1733. `crates/horizon-core/src/biome/seed_hash.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e88d67ae1ddc37507f074f3498bd0763ff3b901b`
+- Size: 2780 bytes; 66 logical lines
+- Coverage: 1–66 (EOF)
+- Purpose: Specialized SHA-256 transform for an eight-byte world seed.
+- Dependencies / cross-references: Fixed SHA-256 constants, little-endian seed input and digest-byte ordering.
+- Implementation / logic: Pads one seed value, performs one SHA-256 compression block and converts the first eight digest bytes to a signed long.
+- Findings: Compatibility transform for a newer biome seed scheme, not a general cryptography API.
+- RustChunk relevance: No baseline value unless 1.20.1 evidence requires this exact seed mapping.
+- Decision: unnecessary; version-specific
+- 1.20.1 implications: Do not use for 1.20.1 biome seed handling unless target source proves an identical transform.
+- Follow-up checks: Verify target biome seed derivation independently; do not reuse as general-purpose crypto.
+- RustChunk implementation mapping: None unless a separately verified 1.20.1 seed transform is needed.
+- Evidence required before adoption: Authoritative 1.20.1 biome seed source demonstrating identical SHA-256 transform.
+- Completion state: COMPLETE — 66 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 2780-byte size match the source tree.
+
+### 1734. `crates/horizon-core/src/carving.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e539203f31c7e2079d4872be78e1c6cf4ef6cdcd`
+- Size: 5493 bytes; 164 logical lines
+- Coverage: 1–164 (EOF)
+- Purpose: Packed carving mask with ordered contiguous column-run iteration.
+- Dependencies / cross-references: Chunk-local X/Z coordinates, inclusive Y bounds, bitset storage and visitor iteration.
+- Implementation / logic: Stores carved cells as bits and traverses ascending set runs split at column boundaries; visitor mutations affect later searches.
+- Findings: Height cap, index arithmetic and run order may differ from 1.20.1.
+- RustChunk relevance: Useful architecture reference for compact chunk carving masks.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild mask layout, height bounds, out-of-range behavior and iteration order from 1.20.1 CarvingMask.
+- Follow-up checks: Test negative/minY coordinates, section ranges, aliasing, cross-word runs, visitor mutation and capacity boundaries.
+- RustChunk implementation mapping: RustChunk chunk carving-mask implementation and tests.
+- Evidence required before adoption: 1.20.1 CarvingMask source and boundary fixtures; no tests run.
+- Completion state: COMPLETE — 164 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 5493-byte size match the source tree.
+
+### 1735. `crates/horizon-core/src/carving/ellipsoid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `49b9d0e3a60656203c2eccdd31af8419480c3818`
+- Size: 4404 bytes; 124 logical lines
+- Coverage: 1–124 (EOF)
+- Purpose: Shared ellipsoid traversal and path reachability for cave/canyon carvers.
+- Dependencies / cross-references: ChunkPos, CarvingMask/CarverOutput, floor conversion and horizontal/vertical radii.
+- Implementation / logic: Computes chunk reach, visits candidate cells in X/Z/descending-Y order, applies skip predicate and enforces traversal budget.
+- Findings: Budget, traversal caps and inclusive/exclusive bounds are safeguards that may diverge from vanilla order.
+- RustChunk relevance: Relevant to cave/canyon generation and chunk-boundary behavior.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild cave/canyon candidate bounds, floor rounding, traversal order and skip semantics from 1.20.1 carver sources.
+- Follow-up checks: Compare chunk reach, min/max Y, negative coordinates, zero radii, boundary cells, failure retention and RNG consumption.
+- RustChunk implementation mapping: RustChunk 1.20.1 carver ellipsoid helper.
+- Evidence required before adoption: 1.20.1 CaveWorldCarver/CanyonWorldCarver sources and seeded fixtures.
+- Completion state: COMPLETE — 124 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4404-byte size match the source tree.
+
+### 1736. `crates/horizon-core/src/density/arithmetic.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `51892ffc78dc68b7f04979e622575fbe1a7ca161`
+- Size: 16419 bytes; 508 logical lines
+- Coverage: 1–400, 401–508 (EOF)
+- Purpose: Scalar and bulk arithmetic samplers with Java-compatible float semantics.
+- Dependencies / cross-references: DensitySampler, intervals, Java power/log helpers, unary/binary operations and volume buffers.
+- Implementation / logic: Implements unary/binary operations, signed-zero/NaN-aware min/max, power and specialized bulk loops; includes bit-exact unit-test cases.
+- Findings: Bulk operations intentionally differ in some NaN handling from scalar paths; semantics require target parity.
+- RustChunk relevance: Strong reference for deterministic density arithmetic and avoiding accidental performance-only behavior changes.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Port only operations present in 1.20.1 and verify exact Java float semantics before enabling bulk specialization.
+- Follow-up checks: Compare NaN payloads, signed zeros, infinities, overflow, power/log edges and scalar-vs-volume results.
+- RustChunk implementation mapping: RustChunk density arithmetic with scalar/bulk differential tests.
+- Evidence required before adoption: 1.20.1 DensityFunctions/MathHelper behavior and float-bit fixtures; tests read only.
+- Completion state: COMPLETE — 508 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 16419-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1737. `crates/horizon-core/src/density/beardifier.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b041be160ef371923355d54c2c622fb4fd7f1c7b`
+- Size: 14409 bytes; 384 logical lines
+- Coverage: 1–384 (EOF)
+- Purpose: Structure terrain adaptation for rigid pieces, jigsaw junctions and optional terrain kernels.
+- Dependencies / cross-references: Structure bounds/pieces, junctions, DensitySampler, Beardify kernel and YUNG/Moogs-style terrain adaptation.
+- Implementation / logic: Combines vanilla-like beard/bury terms with optional custom terrain-kernel pieces and junctions; supports scalar and volume sampling.
+- Findings: File mixes vanilla terrain adaptation with mod-library-inspired kernels; those are not vanilla evidence.
+- RustChunk relevance: Useful for structure terrain density and modded structure compatibility if separated cleanly.
+- Decision: adaptable; version-specific; modded extension
+- 1.20.1 implications: Port target 1.20.1 vanilla Beardifier separately; treat YUNG/Moogs kernels as optional mod integration with separate source/license review.
+- Follow-up checks: Verify vanilla offsets, kernel indexing, affected bounds, junction weights and modded kernels separately.
+- RustChunk implementation mapping: RustChunk structure density adapter and isolated optional mod terrain-kernel interface.
+- Evidence required before adoption: 1.20.1 Beardifier source and separate YUNG/Moogs library source/version fixtures; tests not run.
+- Completion state: COMPLETE — 384 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 14409-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1738. `crates/horizon-core/src/density/cache.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `477f247c057b40dee670233471872c3a2f898289`
+- Size: 4711 bytes; 144 logical lines
+- Coverage: 1–144 (EOF)
+- Purpose: Context-owned scalar/volume caching for density samplers, including sparse and plane-cache modes.
+- Dependencies / cross-references: SamplerContext, DensityVolume, BlockPos packing, graph cache IDs and recursive evaluation state.
+- Implementation / logic: Caches scalar/volume samples, guards recursive entry, reuses scratch buffers and optionally retains Y-fixed XZ planes for previews.
+- Findings: Sparse/plane caching is a preview extension; graph cache IDs and scratch lifetimes require isolation.
+- RustChunk relevance: Relevant to reducing repeated density work for far-chunk/LOD previews, but no performance benefit is proven.
+- Decision: adaptable; optional/future
+- 1.20.1 implications: Keep preview-only sparse/plane cache separate from authoritative 1.20.1 terrain generation; validate context reset and cache namespace isolation.
+- Follow-up checks: Test key collisions, graph reuse, worker isolation, failed writes, recursion, memory retention and preview/full consistency.
+- RustChunk implementation mapping: RustChunk LOD density preview cache, separate from vanilla terrain cache.
+- Evidence required before adoption: Target density semantics plus thread-safety, memory and exact-output tests; no benchmarks.
+- Completion state: COMPLETE — 144 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4711-byte size match the source tree.
+
+### 1739. `crates/horizon-core/src/density/end_islands.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2ae9f9b5fe1ab150c5605f1fc13f8fe7a8033678`
+- Size: 8854 bytes; 217 logical lines
+- Coverage: 1–217 (EOF)
+- Purpose: End outer-island density sampler for Java Edition 26.3.
+- Dependencies / cross-references: SimplexNoise, LegacyRandom, world seed, signed division/remainder and DensityVolume.
+- Implementation / logic: Consumes fixed random sequence, evaluates candidate outer islands and accelerates volume evaluation by collecting island candidates once.
+- Findings: Explicitly targets Java 26.3; RNG consumption and truncating negative-coordinate arithmetic need target proof.
+- RustChunk relevance: Conceptual End-island reference only; not safe for direct 1.20.1 adoption.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild from 1.20.1 End island generation and exact random-consumption order; exclude 26.3-specific seed/volume optimization until verified.
+- Follow-up checks: Compare random draws, island exclusion circle, negative-coordinate truncation, clamping and scalar/bulk output.
+- RustChunk implementation mapping: RustChunk 1.20.1 End-island density implementation.
+- Evidence required before adoption: 1.20.1 End-island source and seeded boundary fixtures; embedded tests not run.
+- Completion state: COMPLETE — 217 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 8854-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1740. `crates/horizon-core/src/density/graph/compiler.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `53d8fe2eb2947933d3fb1b33bc371bf592d71304`
+- Size: 19876 bytes; 498 logical lines
+- Coverage: 1–400, 401–498 (EOF)
+- Purpose: Compiler from immutable density definitions to executable samplers.
+- Dependencies / cross-references: DensityGraph/GraphNode, cache IDs, seeded noise context, interval ranges, spline and sampler implementations.
+- Implementation / logic: Rewrites graph children, prepares cache nodes, slices uniform axes, compiles sampler variants and folds constant arithmetic/selection nodes.
+- Findings: Optimization and evaluation order are encoded in cache preparation, range pruning and child compilation; changes can affect failures and float results.
+- RustChunk relevance: High-value architecture for a typed density DAG and compile-once sampler graph.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Build target-version node set/compiler from 1.20.1 density definitions; verify each rewrite/specialization before enabling.
+- Follow-up checks: Test compile traversal, cache IDs, uniform-axis slicing, range elimination, NaNs, child failures and exact sample order.
+- RustChunk implementation mapping: RustChunk immutable density graph and compiler.
+- Evidence required before adoption: 1.20.1 DensityFunctions/NoiseChunk implementation and differential compile/sample fixtures.
+- Completion state: COMPLETE — 498 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 19876-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1741. `crates/horizon-core/src/density/graph/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8eefe2d1df3ae251eae0597fe543cc23121eea12`
+- Size: 24454 bytes; 712 logical lines
+- Coverage: 1–400, 401–712 (EOF)
+- Purpose: Typed immutable density graph definitions, registration, interning, identity and range analysis.
+- Dependencies / cross-references: GraphNode/FunctionId/NoiseId/HolderId, graph entries, noise/function registries and domain-axis masks.
+- Implementation / logic: Defines node variants, canonical keys, child rewriting, equality/hash identity, depth limits, holder/noise registration, axis masks and range propagation.
+- Findings: Code comments say codecs/remaining function kinds are pending; graph includes newer features such as EndIslands/IntervalSelect.
+- RustChunk relevance: Core architecture reference, but not a complete vanilla 1.20.1 graph or codec.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild node schema and range rules from 1.20.1 DensityFunctions; retain only structures validated against target.
+- Follow-up checks: Test identity, signed-zero/hash behavior, depth, duplicate registry IDs, holder identity, axis masks and ranges.
+- RustChunk implementation mapping: RustChunk versioned density DAG and range-analysis layer.
+- Evidence required before adoption: 1.20.1 density-function schema and deterministic graph equality/range fixtures.
+- Completion state: COMPLETE — 712 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 24454-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1742. `crates/horizon-core/src/density/graph/seeded.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `17d66ce0f3feb82e7eab7b8474992c421827b108`
+- Size: 3177 bytes; 97 logical lines
+- Coverage: 1–97 (EOF)
+- Purpose: Seed-bound context for creating and caching registered noise samplers.
+- Dependencies / cross-references: Legacy/Xoroshiro positional random factories, NormalNoise registry entries, world seed and mutex-protected sampler map.
+- Implementation / logic: Creates seeded factories, hashes named noise IDs to derive instances, caches ordinary noises and recreates two legacy Nether noises per lookup.
+- Findings: RNG factories, name hashing and Nether exceptions are version/seed sensitive.
+- RustChunk relevance: Useful separation of immutable graph definitions from seed-dependent runtime state.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild RandomState semantics, name hashing, cache identity and Nether exceptions from 1.20.1.
+- Follow-up checks: Compare RNG initialization, UTF-16 name hashing, noise reuse, Nether reseeding and synchronization.
+- RustChunk implementation mapping: RustChunk seeded worldgen compilation context.
+- Evidence required before adoption: 1.20.1 RandomState/NormalNoise source and deterministic named-noise fixtures.
+- Completion state: COMPLETE — 97 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 3177-byte size match the source tree.
+
+### 1743. `crates/horizon-core/src/density/graph/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4f3358460769d3941f8899ad68adb4b459f70ab0`
+- Size: 18414 bytes; 552 logical lines
+- Coverage: 1–400, 401–552 (EOF)
+- Purpose: Regression test inventory for graph compilation, optimization, cache identity and density evaluation.
+- Dependencies / cross-references: DensityGraph/Compiler, samplers, seeded noise, spline, Interval and cache.
+- Implementation / logic: Covers compilation failures, cache ID reuse, graph equality, axis slicing, scalar/bulk values, EndIslands and range pruning.
+- Findings: Tests cover newer-version behavior and internal implementation contracts; inspected only, not run.
+- RustChunk relevance: Useful high-coverage checklist for RustChunk density-compiler testing.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Translate cases and expected values from 1.20.1; remove graph nodes absent from target.
+- Follow-up checks: Add target-era differential tests for cache prep, graph deduplication, failures, signed zeros, spline ranges and buffers.
+- RustChunk implementation mapping: RustChunk density graph test matrix.
+- Evidence required before adoption: 1.20.1 density source, verified oracle outputs and runnable test harness; tests not executed.
+- Completion state: COMPLETE — 552 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 18414-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1744. `crates/horizon-core/src/density/interpolation.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4bcb51a3a10d56dd00225df837d1d142fca0d850`
+- Size: 8523 bytes; 219 logical lines
+- Coverage: 1–219 (EOF)
+- Purpose: Coarse-grid density interpolation for scalar and bulk worldgen evaluation.
+- Dependencies / cross-references: DensitySampler, DensityVolume, per-context buffers and floating-point lerp order.
+- Implementation / logic: Samples coarse corner grids, interpolates X/Y/Z and supports scalar queries, dense volumes and sparse preview evaluation.
+- Findings: Bulk path preserves repeated-addition rounding and distinct scalar/volume calls; sparse path is preview-specific.
+- RustChunk relevance: High relevance to terrain density interpolation and chunk generation.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild interpolation cell sizes, boundaries and exact float order from 1.20.1 NoiseChunk/InterpolatedNoiseSampler.
+- Follow-up checks: Compare negative cell coordinates, strided volumes, terminal cells, repeated addition, sparse/full results and buffer tails.
+- RustChunk implementation mapping: RustChunk 1.20.1 density interpolation sampler.
+- Evidence required before adoption: 1.20.1 NoiseChunk interpolation source and scalar/bulk oracle traces.
+- Completion state: COMPLETE — 219 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 8523-byte size match the source tree.
+
+### 1745. `crates/horizon-core/src/density/interval.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0e2652fe1c58c11e968a5487c1a098c3b912160f`
+- Size: 13799 bytes; 412 logical lines
+- Coverage: 1–400, 401–412 (EOF)
+- Purpose: Interval arithmetic for density graph range analysis.
+- Dependencies / cross-references: Java-compatible min/max/power/log helpers, f32 endpoints, NAI and infinities.
+- Implementation / logic: Implements arithmetic bounds, reciprocal/division, powers, clamps, monotonic maps, lerp and sign ranges with signed-zero handling.
+- Findings: Range rules mirror selected vanilla behavior but must be compared to 1.20.1; float edge cases are observable.
+- RustChunk relevance: Useful for safe graph optimization and range-based pruning.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Reconstruct target 1.20.1 range semantics and preserve NaN, infinity and signed-zero behavior before pruning.
+- Follow-up checks: Test operators at zero crossings, infinities, negative bases, NaNs, signed zeros and non-monotonic inputs.
+- RustChunk implementation mapping: RustChunk density interval/range-analysis module.
+- Evidence required before adoption: 1.20.1 density range source and bit-precise edge-case fixtures.
+- Completion state: COMPLETE — 412 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 13799-byte size match the source tree.
+
+### 1746. `crates/horizon-core/src/density/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e3f5ae7a7280b3be7a2913d3433f95605afc63dd`
+- Size: 13472 bytes; 407 logical lines
+- Coverage: 1–400, 401–407 (EOF)
+- Purpose: Core DensitySampler trait, worker evaluation context and primitive sampler implementations.
+- Dependencies / cross-references: DensityVolume, Axis, cache/slice helpers, Noise, GradientSampler and shifted noise.
+- Implementation / logic: Defines scalar/bulk contract, context-owned scratch/caches/world fields, buffer validation, constant/gradient/noise and shifted-noise samplers.
+- Findings: Source explicitly targets Java 26.3 and says complete terrain generation is pending.
+- RustChunk relevance: Core API architecture reference; target behavior and graph features need reconstruction.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Define RustChunk 1.20.1 sampler API, then port target-compatible primitives; isolate preview-specific context modes.
+- Follow-up checks: Test buffer tails, exact/minimum buffer sizes, scratch reuse, worker isolation, gradient tiling and shift order.
+- RustChunk implementation mapping: RustChunk density sampler trait and per-worker evaluation context.
+- Evidence required before adoption: 1.20.1 NoiseChunk/DensityFunction sources and target scalar/bulk fixtures.
+- Completion state: COMPLETE — 407 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 13472-byte size match the source tree.
+
+### 1747. `crates/horizon-core/src/density/power.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b400093ae91bcb2565c7d3d0e2fc29315e4a773a`
+- Size: 2317 bytes; 72 logical lines
+- Coverage: 1–72 (EOF)
+- Purpose: Power density sampler and constant-exponent specialization.
+- Dependencies / cross-references: DensitySampler, Java-compatible power helper and unary arithmetic.
+- Implementation / logic: Samples base then exponent, evaluates bulk operands separately and specializes sqrt/identity/square/cube with selected negative-exponent reciprocals.
+- Findings: Specialization and operand order are implementation-sensitive and require target parity.
+- RustChunk relevance: Useful small optimization reference for density power functions.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Compare constant exponents and evaluation order with 1.20.1; retain signed fallback for unsupported exponents.
+- Follow-up checks: Test negative/positive exponents, zero/one bases, NaNs, infinities and scalar/bulk failures.
+- RustChunk implementation mapping: RustChunk power-density sampler.
+- Evidence required before adoption: 1.20.1 power density function source and float-bit tests.
+- Completion state: COMPLETE — 72 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 2317-byte size match the source tree.
+
+### 1748. `crates/horizon-core/src/density/rounding.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4ac9bbe83d732363996c8c448a49f12b12fbda7a`
+- Size: 3153 bytes; 98 logical lines
+- Coverage: 1–98 (EOF)
+- Purpose: Round/floor/ceil/truncate density operations with optional multiple sampler.
+- Dependencies / cross-references: DensitySampler, RoundMode, exact buffer helpers and Java Math.round semantics.
+- Implementation / logic: Handles integer and multiple-based rounding with literal-one fast path; preserves child evaluation and buffer rules.
+- Findings: Float-to-int rounding and sampled-multiple behavior are subtle Java compatibility details.
+- RustChunk relevance: Useful direct reference for 1.20.1 density rounding.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild exact RoundMode and multiple semantics from 1.20.1 density functions.
+- Follow-up checks: Test half ties, negative values, NaN/infinity, signed zero, zero multiple and bulk sizing/failure order.
+- RustChunk implementation mapping: RustChunk density rounding sampler.
+- Evidence required before adoption: 1.20.1 DensityFunctions rounding source and Java edge-value fixtures.
+- Completion state: COMPLETE — 98 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 3153-byte size match the source tree.
+
+### 1749. `crates/horizon-core/src/density/selection.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `eed6145ffad1933f4323b88e853dce37159ee35a`
+- Size: 7704 bytes; 228 logical lines
+- Coverage: 1–228 (EOF)
+- Purpose: Range-choice, lerp and interval-branch density samplers.
+- Dependencies / cross-references: DensitySampler, DensityValue, volume scratch buffers and interval threshold/branch arrays.
+- Implementation / logic: Implements conditional branches, constant-aware interpolation and interval selection with bulk child evaluation and delayed output selection.
+- Findings: Bulk branch evaluation order and threshold order are observable; this is not proof of target parity.
+- RustChunk relevance: Useful reference for graph selection/interpolation organization.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Reconstruct exact 1.20.1 range-choice/lerp/threshold operators and branch evaluation order.
+- Follow-up checks: Test inclusive/exclusive boundaries, NaNs, equal thresholds, constant endpoints, child errors and scratch bounds.
+- RustChunk implementation mapping: RustChunk density selection samplers.
+- Evidence required before adoption: 1.20.1 DensityFunctions selection/lerp sources and deterministic scalar/bulk fixtures.
+- Completion state: COMPLETE — 228 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 7704-byte size match the source tree.
+
+### 1750. `crates/horizon-core/src/density/slice.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3e7fa87a25b590f8e74f0c53c1a7370ca09057e6`
+- Size: 4105 bytes; 118 logical lines
+- Coverage: 1–118 (EOF)
+- Purpose: Density sampler wrapper that fixes one or more world axes and broadcasts reduced-volume samples.
+- Dependencies / cross-references: DensitySampler, DensityVolume, SamplerContext plane cache and fixed X/Y/Z/XZ coordinate keys.
+- Implementation / logic: Pins selected coordinates, reduces sample volume dimensions, broadcasts child outputs and optionally reuses Y-fixed XZ planes.
+- Findings: Plane cache is an optimization extension; reduced descriptors preserve original steps and need target validation.
+- RustChunk relevance: Useful pattern for axis-dependent density graphs.
+- Decision: adaptable; optional/future
+- 1.20.1 implications: Implement only after 1.20.1 axis-dependency and sampler-volume semantics are verified; keep plane cache optional for preview.
+- Follow-up checks: Test fixed axes, combined XZ slicing, reduced volume descriptors, plane keys, buffer tails and full-vs-sparse outputs.
+- RustChunk implementation mapping: RustChunk density graph slice sampler and optional LOD plane cache.
+- Evidence required before adoption: 1.20.1 density graph axis dependencies and NoiseChunk volume fixtures.
+- Completion state: COMPLETE — 118 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 4105-byte size match the source tree.

@@ -137,14 +137,13 @@ This section is the current resume authority and supersedes the older stage/auth
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Completed entries: **1–1725**.
+- Completed entries: **1–1750**.
 - Closed 200-file stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1601–1800**, with **125/200 complete**.
-- Closed reporting sections in the active stage: **1601–1650** and **1651–1700**.
-- Active reporting section: **1701–1750**; checkpoint **1701–1725** is complete and committed/read-back verified; checkpoint **1726–1750** is already authorized by the user's same instruction.
-- Current resume point: **entry 1726**. Continue through **1750** without a mid-section permission request, then **STOP at 1750** and wait for explicit authorization before entry 1751.
-- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, with **125 entries** (1601–1725), each containing exactly 15 required fields.
-- Index: **1,725 sequential entries and 1,725 unique paths**.
+- Active 200-file stage: **1601–1800**, with **150/200 complete**.
+- Closed reporting sections in the active stage: **1601–1650**, **1651–1700** and **1701–1750**; both 25-file checkpoints in section 1701–1750 are complete, committed and read-back verified.
+- Current authorization state: **STOP at 1750**. The next section, **1751–1800**, is not authorized. Wait for explicit user authorization before inspecting entry 1751 or later.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, with **150 entries** (1601–1750), each containing exactly 15 required fields.
+- Index: **1,750 sequential entries and 1,750 unique paths**.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
 - Preserve the exact 200 / 50 / 25 cadence, serial review, complete EOF coverage and maximum 400-line chunks. At every 25-file checkpoint, commit and read back the required audit documents; stop for user authorization at each 50-file boundary.
 - Existing backup refs remain untouched: `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19`.
@@ -324,4 +323,19 @@ This section is the current resume authority and supersedes the older stage/auth
 - Keep all tests/examples as inspected-only unless explicitly run later; no tests/builds/device/server validation was performed for this checkpoint.
 - After checkpoint 1726–1750, update and read back all five audit documents in one commit; **STOP at 1750**.
 - Do not modify `main` or backup refs. No backup is due before entries 1001–2000 pass global verification.
+
+
+## Latest verified checkpoint — 1726–1750 — 2026-11-20
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1–1750**.
+- Active 200-file stage: **1601–1800**, completed **150/200**.
+- Reporting section **1701–1750 is closed**; checkpoints **1701–1725** and **1726–1750** are complete.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **150 entries** (1601–1750), exactly 15 fields each. Index: **1,750 sequential unique paths**.
+- The 25 files 1726–1750 were read through EOF serially; ranges for files over 400 lines are consecutive and no larger than 400. SHA/size/coverage match the pinned tree. Index paths/Decisions align with the Ledger.
+- Density graph, sampler and parity architectures are research references only. Java 26.3-specific biome/End-island algorithms and newer density nodes require target-era reconstruction. Tests were inspected only and not run.
+- No source/application code changed. No build/test/benchmark/APK/device/Forge/server validation was performed.
+- **STOP at entry 1750**. Do not inspect 1751–1800 until fresh explicit user authorization.
+- Do not modify `main` or backup refs. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
 

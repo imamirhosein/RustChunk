@@ -7,14 +7,13 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-20**.
-- Completed and committed entries: **1–1725**.
+- Completed and committed entries: **1–1750**.
 - Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1601–1800**, with **125/200 complete**.
-- Closed reporting sections: **1601–1650** and **1651–1700**.
-- Active reporting section: **1701–1750**; checkpoint **1701–1725** is complete, committed and read-back verified; checkpoint **1726–1750** remains authorized.
-- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **125 entries** (1601–1725), each with exactly 15 fields.
-- Index: **1,725 sequential entries and 1,725 unique paths**.
-- Continue with entry **1726** under the current authorization. **STOP at entry 1750** and wait for fresh explicit authorization before 1751.
+- Active 200-file stage: **1601–1800**, with **150/200 complete**.
+- Closed reporting sections: **1601–1650**, **1651–1700** and **1701–1750**.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **150 entries** (1601–1750), each with exactly 15 fields.
+- Index: **1,750 sequential entries and 1,750 unique paths**.
+- **STOP at entry 1750.** The next section, **1751–1800**, is not authorized; wait for explicit user authorization before inspecting entry 1751.
 - Preserve the 200 / 50 / 25 cadence: commit and read-back verify each 25-file checkpoint; report and stop at each 50-file boundary.
 - Next backup remains due only after entries 1001–2000 are complete and globally verified. Existing backup refs remain untouched.
 
@@ -71,10 +70,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 
 - Entries 1–1000: complete and historically QA-reviewed.
 - Entries 1001–1200, 1201–1400 and 1401–1600: complete; prior stages closed.
-- Entries 1601–1725: complete in the active Ledger; reporting sections 1601–1650 and 1651–1700 are closed, and checkpoint 1701–1725 is complete.
-- Index: 1,725 sequential entries and 1,725 unique paths.
-- Active Ledger: 125 entries (1601–1725), each with exactly 15 required fields.
-- Source SHAs, byte sizes and complete EOF coverage for entries 1701–1725 are recorded in the active Ledger and were verified against the pinned source tree.
+- Entries 1601–1750: complete in the active Ledger; reporting sections 1601–1650, 1651–1700 and 1701–1750 are closed.
+- Index: 1,750 sequential entries and 1,750 unique paths.
+- Active Ledger: 150 entries (1601–1750), each with exactly 15 required fields.
+- Source SHAs, byte sizes and complete EOF coverage for entries 1726–1750 are recorded in the active Ledger and were verified against the pinned source tree.
 - No source or application code was modified. Embedded tests were inspected only, not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
 
 ## Historical duplicate corrections
@@ -302,5 +301,20 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - No source/application code changed. Embedded tests were inspected only, not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
 - Checkpoint documentation blobs prepared for five-document commit and read-back.
 - **Next: inspect entry 1726**. Complete checkpoint 1726–1750; **STOP at 1750** and wait for fresh explicit authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+
+## Latest verified checkpoint — 1726–1750 — 2026-11-20
+
+- Completed entries: **1726–1750 inclusive (25/25)** from pinned source `5432370d573642041585c69b40fb045b27133488`.
+- Active 200-file stage: **1601–1800**, now **150/200 complete**.
+- Reporting section **1701–1750** is closed; both checkpoints 1701–1725 and 1726–1750 are complete, committed and read-back verified.
+- Active Ledger: **150 entries**, 1601–1750, each with exactly 15 fields. Index: **1,750 sequential entries and 1,750 unique paths**.
+- All 25 files were read fully through EOF in serial order; files above 400 logical lines were read in contiguous ranges no larger than 400. Source SHA, byte size and coverage match the pinned tree.
+- Index paths and Decisions align with the new Ledger entries.
+- Findings: density graph/sampler architecture and parity harnesses are useful references, but much of this tree targets Java 26.3; biome/End-island logic and newer graph semantics require reconstruction from 1.20.1 sources. Sparse/plane caches and mod terrain kernels are optional extensions, not proven vanilla behavior.
+- Embedded tests and parity tools were inspected only, not executed. No source/application code changed. No build, tests, benchmark, APK, device, Forge or server validation was performed.
+- Checkpoint documentation committed in one five-document transaction and read back from GitHub.
+- **STOP at entry 1750**. The next proposed section is **1751–1800**; wait for explicit user authorization before inspecting it.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
 
