@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–1875 complete (75/200); section 1851–1900 is active (25/50), checkpoint 1851–1875 closed; 1876–1900 remains authorized.
-- Reporting rule: complete the authorized section 1851–1900, then STOP at 1900 and wait for fresh explicit authorization before entry 1901.
+- Current progress: entries 1801–1925 complete (125/200); section 1901–1950 active (25/50), checkpoint 1901–1925 closed; 1926–1950 remains authorized.
+- Reporting rule: complete the authorized section 1901–1950, then STOP at 1950 and wait for fresh explicit authorization before entry 1951.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests/examples are inspected only; they are not executed.
@@ -1714,3 +1714,428 @@
 - RustChunk implementation mapping: RustChunk resource-pack properties parser shared by optional pack features.
 - Evidence required before adoption: Fuzz UTF-8 boundary cases, Java reference vectors, parser size limits and Android file encoding tests.
 - Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1901. `crates/horizon-optifine/src/random.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `fb356960e2dbc8da007da0dae9ab0facfbfd1e4a`
+- Size: 30216 bytes; 802 logical lines
+- Coverage: 1–400, 401–800, 801–802 (EOF)
+- Purpose: Parses OptiFine/ETF random-entity properties into selectors, weighted variants and condition rules.
+- Dependencies / cross-references: Java Properties syntax, entity name/path mapping, OptiFine random-entity rule fields and entity-condition parser.
+- Implementation / logic: Reads rule keys, expands variants and weighted alternatives, parses biome/height/health/name/profession/age/team/seed conditions and reports malformed or unsupported entries.
+- Findings: Rule interpretation is tied to OptiFine/ETF behavior and several selectors need parity checks. Dynamic entity state requires reevaluation; properties parsing is separate and has its own encoding/escape semantics.
+- RustChunk relevance: Potential optional resource-pack feature for entity variation; unrelated to base Minecraft networking or chunk loading.
+- Decision: reference; optional resource-pack feature; version-specific
+- 1.20.1 implications: Rebuild against the exact 1.20.1 OptiFine/ETF properties contract and Mojmap entity fields; do not assume newer condition names or seed selection match.
+- Follow-up checks: Compare against 1.20.1 OptiFine/ETF fixtures for each condition, weighting, inheritance, malformed input and per-frame reevaluation.
+- RustChunk implementation mapping: RustChunk optional random-entity texture rules module, behind resource-pack feature gates.
+- Evidence required before adoption: Differential fixtures from 1.20.1 OptiFine/ETF, parser fuzz tests and Android resource-pack performance tests.
+- Completion state: COMPLETE — 802 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 30216-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1902. `crates/horizon-optifine/src/random_textures.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `7831796f7d3a155bc164e78e748383fb7794510f`
+- Size: 23051 bytes; 579 logical lines
+- Coverage: 1–400, 401–579 (EOF)
+- Purpose: Discovers and organizes random entity texture variants from OptiFine/ETF/MCPatcher resource-pack folders.
+- Dependencies / cross-references: Resource-pack filesystem roots, random.properties parsed rules, entity texture atlas names, variant inheritance and file lookup.
+- Implementation / logic: Scans candidate folder layouts in priority order, collects variant texture files, resolves rule inheritance and produces deterministic atlas-facing variant names.
+- Findings: Folder precedence and naming are format-specific; scans rely on path containment and file filtering. Dynamic rules and texture atlas limits need explicit bounds.
+- RustChunk relevance: Optional resource-pack rendering feature; no core client or Forge protocol value.
+- Decision: reference; optional resource-pack feature; version-specific
+- 1.20.1 implications: Implement only after 1.20.1 texture atlas and entity model integration exists; verify Android asset I/O and memory budgets.
+- Follow-up checks: Test precedence among ETF/OptiFine/MCPatcher, duplicate variant IDs, path traversal/symlinks, missing textures, atlas size and reload invalidation.
+- RustChunk implementation mapping: RustChunk resource-pack scanner feeding an optional entity texture resolver/atlas builder.
+- Evidence required before adoption: Known-good 1.20.1 packs, deterministic atlas fixtures, filesystem security tests and Mali-G52 memory/performance measurements.
+- Completion state: COMPLETE — 579 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 23051-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1903. `crates/horizon-port-pack/Cargo.toml`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `53758fc949f376d5ee07da39e5303789cd0d6e44`
+- Size: 849 bytes; 22 logical lines
+- Coverage: 1–22 (EOF)
+- Purpose: Cargo manifest for the Horizon modpack porting command-line tool.
+- Dependencies / cross-references: zip, serde/serde_json, TOML, HTTP client and workspace Horizon crates.
+- Implementation / logic: Declares a standalone migration utility that imports packs, fetches jars, inspects metadata and carries content into Horizon folders.
+- Findings: This is a tooling crate with a separate target/version contract, not a runtime game dependency.
+- RustChunk relevance: Useful only as a reference for a future RustChunk pack-inspection/migration utility.
+- Decision: unnecessary; tooling-only; version-specific
+- 1.20.1 implications: Do not add this manifest or dependency graph to the Android client; its output targets Horizon's newer content API.
+- Follow-up checks: Audit only if RustChunk creates a distinct desktop/server-side pack conversion tool; review licenses and dependency MSRV then.
+- RustChunk implementation mapping: No player-runtime mapping; optional separate CLI/tooling crate.
+- Evidence required before adoption: Explicit product requirement, isolated build and dependency/license review.
+- Completion state: COMPLETE — 22 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 849-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1904. `crates/horizon-port-pack/src/carry.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `1965e0adab47b256e23cf4ad748722c26993160d`
+- Size: 86999 bytes; 2120 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2120 (EOF)
+- Purpose: Carries content assets/data from a NeoForge mod JAR into Horizon's folder-content mod format.
+- Dependencies / cross-references: ZIP archive entries, mod metadata, JSON/TOML, block/item facts, worldgen processors, recipe/loot conversion and Horizon API 0.2 declarations.
+- Implementation / logic: Reads a jar, filters namespaces, converts blockstates/models/items/recipes/loot/worldgen, creates declarations and a carry report, and moves recipes for undeclared carried items outside.
+- Findings: This migration explicitly targets mod content from 1.21.1 to Horizon 26.3. JAR entries can be read fully into memory without a clear per-entry/uncompressed aggregate ceiling; generated block/item templates can approximate rather than reproduce mod Java behavior.
+- RustChunk relevance: Architecture reference for a future content-only pack converter; does not load Forge mods or enable joining Aternos.
+- Decision: rewrite required; tooling-only; version-specific; security-sensitive
+- 1.20.1 implications: Do not reuse output schemas for Forge 1.20.1. A target-specific converter must model 1.20.1 registries, NBT, recipes, loot and Forge hooks.
+- Follow-up checks: Add ZIP bomb/entry size limits, namespace ownership tests, safe extraction/path validation, full target-version parity and deterministic output tests.
+- RustChunk implementation mapping: Potential separate RustChunk pack-audit/conversion utility; never include in the game runtime load path.
+- Evidence required before adoption: 1.20.1 Forge corpus, ZIP adversarial tests, exact registry/loot/recipe differential tests and resource-limit validation.
+- Completion state: COMPLETE — 2120 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 86999-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1905. `crates/horizon-port-pack/src/check.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `45fb20f1ee1f2955721330dcd5c88db448c83b83`
+- Size: 14550 bytes; 415 logical lines
+- Coverage: 1–400, 401–415 (EOF)
+- Purpose: Classifies one mod JAR as content-only Works/Partly/Doesn't-run before carry-over.
+- Dependencies / cross-references: JAR metadata/parser, class bytecode census, content carry engine and JSON check report.
+- Implementation / logic: Reads jar names/classes, detects loader and legacy-layout incompatibility, performs content carry, summarizes translated assets and skipped code features.
+- Findings: The verdict measures content carry capability, not actual launch/runtime behavior. Code is only censused; it is never loaded or executed.
+- RustChunk relevance: Useful preflight-report pattern for modpack analysis; not a compatibility guarantee for Forge 1.20.1.
+- Decision: adaptable; tooling reference; version-specific
+- 1.20.1 implications: A 1.20.1 checker needs Forge 47.x mappings, old recipe/loot formats, and real runtime/API compatibility criteria.
+- Follow-up checks: Validate against a representative Forge 1.20.1 mod corpus; distinguish metadata-only, content-only, partial code and runnable mods.
+- RustChunk implementation mapping: RustChunk offline mod inspection/report module, separate from game loading.
+- Evidence required before adoption: Known modpack fixtures, false-positive/negative compatibility matrix and actual Forge launch results (not obtained here).
+- Completion state: COMPLETE — 415 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 14550-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1906. `crates/horizon-port-pack/src/classes.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `d39c72e1aba47f3c8ee0f44241c7796f6df1b8bd`
+- Size: 22845 bytes; 642 logical lines
+- Coverage: 1–400, 401–642 (EOF)
+- Purpose: Parses Java class files and infers mod code features from inheritance, interfaces, method names and constant-pool references.
+- Dependencies / cross-references: Class-file constant pool, Java descriptors, Mojang package names, Forge/Fabric event names and feature taxonomy.
+- Implementation / logic: Reads class headers/pool/method declarations, follows in-jar superclass chains, classifies behavior bases and scans references for events, commands and Mixins.
+- Findings: The package/method map assumes current Mojang names and treats obfuscated/SRG methods as unread. It does not execute or decompile bytecode; modified UTF-8 is decoded lossily.
+- RustChunk relevance: Useful inspection approach for mod compatibility reporting, not a loader or source-code port.
+- Decision: adaptable; tooling reference; mapping-sensitive
+- 1.20.1 implications: Forge 1.20.1 runtime mappings differ by distribution/build; classification must use exact Forge 47.x mappings and Java 17 class-file constraints.
+- Follow-up checks: Test Java 17 class-file versions, modified UTF-8, constant-pool edge cases, inheritance depth, Forge SRG/Mojmap mappings and hidden behavior via interfaces/calls.
+- RustChunk implementation mapping: RustChunk offline class-file census for diagnostics only.
+- Evidence required before adoption: Differential class fixtures built under Forge 47.x, adversarial malformed class corpus and comparison against actual mod behavior.
+- Completion state: COMPLETE — 642 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 22845-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1907. `crates/horizon-port-pack/src/classify.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `7ebb65644b2fb60da6e0e5983d3b1f22a40c3303`
+- Size: 7670 bytes; 233 logical lines
+- Coverage: 1–233 (EOF)
+- Purpose: Classifies mods by reviewed ATM10 rows or heuristic loader side/category/content facts and assigns dependency layers.
+- Dependencies / cross-references: Embedded ATM10 CSV, Modrinth categories, side support flags, JAR class/content census and required dependency graph.
+- Implementation / logic: Normalizes IDs/names, checks known table first, applies side/category heuristics and calculates layer numbers for required in-pack dependencies.
+- Findings: The curated table is ATM10-specific. Cycles are all placed at a final shared layer rather than topologically resolved; heuristic confidence must remain visible.
+- RustChunk relevance: Reference for a mod inventory/reporting tool only.
+- Decision: adaptable; tooling reference; pack-specific
+- 1.20.1 implications: Use Forge 1.20.1 mod metadata and a corpus specific to the target modpack; do not rely on ATM10's reviewed labels.
+- Follow-up checks: Test normalization collisions, multiple mods sharing a display name, side/category precedence, missing dependencies, duplicate keys and dependency cycles.
+- RustChunk implementation mapping: RustChunk mod inventory classifier outside runtime.
+- Evidence required before adoption: Representative 1.20.1 modpack labels reviewed by hand and a graph validation suite.
+- Completion state: COMPLETE — 233 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 7670-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1908. `crates/horizon-port-pack/src/fetch.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `17a99ef26dab0347ad35f73bdcd5c4446000f5f8`
+- Size: 18002 bytes; 494 logical lines
+- Coverage: 1–400, 401–494 (EOF)
+- Purpose: Fetches required mod JARs from pack links/Modrinth or a user's local instance and verifies SHA-1 when available.
+- Dependencies / cross-references: Modrinth cache, pack file URLs, local JAR index, proxy agent, SHA-1 and temporary-file publication.
+- Implementation / logic: Chooses local/present/downloaded/NeedsKey outcomes, downloads into a temporary file with a 512MiB limit and publishes after hash verification.
+- Findings: Local instance scanning reads each jar fully without a per-file bound. A pack-provided URL can be accepted even without SHA-1, and initial-host allowlisting is not visibly rechecked after redirects.
+- RustChunk relevance: Potential utility for an isolated pack manager; not needed for the running Minecraft network client.
+- Decision: adaptable; tooling reference; security-sensitive
+- 1.20.1 implications: Keep download/catalog logic separate from the 1.20.1 game socket. Verify hashes for every source and constrain redirects/hosts.
+- Follow-up checks: Require hashes, enforce local and aggregate byte limits, validate redirect destinations, bound API responses, sanitize filenames and test concurrent publication.
+- RustChunk implementation mapping: Separate RustChunk pack acquisition service with strict download policy.
+- Evidence required before adoption: Malicious redirect tests, ZIP/JAR size tests, hash mismatch/interruption cases and Android storage permission validation.
+- Completion state: COMPLETE — 494 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 18002-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1909. `crates/horizon-port-pack/src/import.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c9381ae7c94dc176dc55416ec35d82d53cfe8c68`
+- Size: 18031 bytes; 484 logical lines
+- Coverage: 1–400, 401–484 (EOF)
+- Purpose: Imports Modrinth/CurseForge packs, Crash Assistant modlists and Prism/MultiMC instances into a unified Pack manifest.
+- Dependencies / cross-references: ZIP JSON/TOML manifests, mmc-pack metadata, modlist.json, filesystem game-root detection and SHA-1.
+- Implementation / logic: Parses loader/Minecraft version, jar paths, download links, mod IDs and override counts for each supported pack format.
+- Findings: ZIP manifest reads and recursive instance file counting have no clear decompressed-size/depth/symlink limits; legacy dependency/metadata fields are intentionally incomplete.
+- RustChunk relevance: Useful format parser for a future separate pack importer.
+- Decision: adaptable; tooling reference; security-sensitive
+- 1.20.1 implications: A RustChunk 1.20.1 importer must resolve Forge 47.x and preserve legacy config/KubeJS/datapack semantics; no Horizon pack manifest.
+- Follow-up checks: Bound archive entry reads and directory recursion, reject symlinks/path traversal, validate duplicate paths and add fixtures for actual target launchers.
+- RustChunk implementation mapping: Separate pack import adapter; output should be RustChunk-owned metadata only.
+- Evidence required before adoption: Real 1.20.1 CurseForge/Modrinth/Prism exports and adversarial archive/instance tests.
+- Completion state: COMPLETE — 484 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 18031-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1910. `crates/horizon-port-pack/src/inventory.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `57c043ae322f4499a296cfbe2da62843824f71d5`
+- Size: 8212 bytes; 229 logical lines
+- Coverage: 1–229 (EOF)
+- Purpose: Builds the per-file mod inventory from pack metadata, jar facts and Modrinth dependency metadata.
+- Dependencies / cross-references: PackFile, jar parser/class census, Modrinth cache, known classifier and dependency layer graph.
+- Implementation / logic: Chooses stable key/name/version/license/source, resolves required dependencies and sorts records by dependency layer.
+- Findings: If jar metadata dependencies are non-empty they replace Modrinth required dependencies rather than being merged; duplicate keys can collide in dependency maps/layer graph.
+- RustChunk relevance: Good report model for a pack-management tool, not an in-game subsystem.
+- Decision: adaptable; tooling reference; dependency-sensitive
+- 1.20.1 implications: Forge 1.20.1 depends on loader metadata, configs and mod-specific dependency rules; inventory cannot replace actual loader resolution.
+- Follow-up checks: Merge or explicitly reconcile dependency sources, test duplicate IDs and aliases, verify external dependency mapping and cycle reporting.
+- RustChunk implementation mapping: RustChunk pack inventory model separated from mod runtime/registry.
+- Evidence required before adoption: Forge 47.x modpack manifests and dependency graph differential tests.
+- Completion state: COMPLETE — 229 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 8212-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1911. `crates/horizon-port-pack/src/jar.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2fcf5a356f872b5142d700b8563d5c69a42617ef`
+- Size: 21609 bytes; 621 logical lines
+- Coverage: 1–400, 401–621 (EOF)
+- Purpose: Reads JAR metadata (NeoForge/Forge/Fabric/legacy Forge) and counts assets, data files and class files.
+- Dependencies / cross-references: ZIP central directory, mods.toml, neoforge.mods.toml, fabric.mod.json, mcmod.info and manifest.
+- Implementation / logic: Extracts mod identity/license/dependencies and counts blockstates, item models, recipes, loot, tags, worldgen, structures, textures and class files.
+- Findings: Metadata read helpers load ZIP entries without explicit uncompressed limits; census counts file paths only and does not prove their data is valid or behavior runs. Legacy metadata intentionally omits dependencies/license.
+- RustChunk relevance: Useful pack inspector metadata parser, not a game loader.
+- Decision: adaptable; tooling reference; security-sensitive
+- 1.20.1 implications: Target Forge 1.20.1 legacy metadata and old plural recipes/loot_tables conventions; maintain Java 17 compatibility.
+- Follow-up checks: Add ZIP entry decompression bounds, malformed TOML/JSON cases, duplicate metadata, loader precedence and exact 1.20.1 file-layout fixtures.
+- RustChunk implementation mapping: RustChunk offline mod metadata scanner used by tooling only.
+- Evidence required before adoption: Representative Forge 1.20.1 jars, ZIP bomb limits and metadata parity tests.
+- Completion state: COMPLETE — 621 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 21609-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1912. `crates/horizon-port-pack/src/legacy_structure_mods/ctov.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `49c6fe6cb1727d8988ee2e882e3c7e12b265a5a2`
+- Size: 3284 bytes; 104 logical lines
+- Coverage: 1–104 (EOF)
+- Purpose: Hard-coded carry-over entries for CTOV village and pillager-outpost structures.
+- Dependencies / cross-references: CTOV mod ID, default configuration and target vanilla structure-set IDs/weights.
+- Implementation / logic: Generates 21 village variants in three size weights and 11 outpost variants with default weights.
+- Findings: Only the default CTOV configuration is represented; user config and CTOV releases may change entries/weights.
+- RustChunk relevance: A narrow worldgen migration reference only.
+- Decision: unnecessary; mod-specific migration data; version-specific
+- 1.20.1 implications: Not reusable as general 1.20.1 worldgen logic; the relevant sets and default weights must be sourced from the exact mod/version.
+- Follow-up checks: Check CTOV version/config, registry IDs, weights, existing vanilla entries and duplicate set additions.
+- RustChunk implementation mapping: No base-client mapping; optional mod-specific data migration if a matching target mod is present.
+- Evidence required before adoption: Exact CTOV jar/config fixture and target 1.20.1 structure-set parity.
+- Completion state: COMPLETE — 104 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 3284-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1913. `crates/horizon-port-pack/src/legacy_structure_mods/mod.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `acc38a289590a35d4f28bc24d0821ad874d50ee7`
+- Size: 806 bytes; 16 logical lines
+- Coverage: 1–16 (EOF)
+- Purpose: Declares the legacy structure-mod conversion submodule.
+- Dependencies / cross-references: ctov module declaration and documentation references to YUNG/Lithostitched helpers.
+- Implementation / logic: Exports `ctov` internally; general converter reaches these helpers through crate-private entrypoints.
+- Findings: Comments describe YUNG and Lithostitched submodules that are declared elsewhere at crate root or not activated in this file; this is only module wiring.
+- RustChunk relevance: No direct player/runtime value.
+- Decision: unnecessary; tooling structure
+- 1.20.1 implications: No Minecraft 1.20.1 behavior.
+- Follow-up checks: Verify crate module ownership and remove stale documentation references only if maintaining this migration tool.
+- RustChunk implementation mapping: No RustChunk client mapping.
+- Evidence required before adoption: Static module/API review if this tool is adopted.
+- Completion state: COMPLETE — 16 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 806-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1914. `crates/horizon-port-pack/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `84a01dc4d81e0568297549e6b498c7793f930d5c`
+- Size: 775 bytes; 27 logical lines
+- Coverage: 1–27 (EOF)
+- Purpose: Crate root and module exports for the Horizon modpack migration tool.
+- Dependencies / cross-references: carry, check, classes, classify, fetch, import, inventory, jar, modrinth, net, oracle, pipeline, processors, report, resourcepacks, upgrade and worldgen.
+- Implementation / logic: Exports public migration steps and keeps legacy structure conversion internals crate-private.
+- Findings: The root belongs to a separate CLI/migration package; it is not linked into Minecraft client runtime.
+- RustChunk relevance: Only useful as an organizational reference for a separate tool.
+- Decision: unnecessary; tooling-only
+- 1.20.1 implications: Do not wire this crate into the Android runtime or Forge protocol layer.
+- Follow-up checks: Review API visibility and dependency isolation only if a standalone tool is desired.
+- RustChunk implementation mapping: No game-runtime mapping; optional independent pack utility.
+- Evidence required before adoption: Separate packaging/build requirement and static API review.
+- Completion state: COMPLETE — 27 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 775-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1915. `crates/horizon-port-pack/src/lithostitched.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `cfb1013b79ca022eb27c353150bc8fa4878e0a83`
+- Size: 19482 bytes; 477 logical lines
+- Coverage: 1–400, 401–477 (EOF)
+- Purpose: Converts Lithostitched jigsaws, modifiers and processors into Horizon 26.3 worldgen files.
+- Dependencies / cross-references: Lithostitched schema, NeoForge mod-loaded conditions, Horizon Worldgen Upgrade/report, processor carry and CTOV compatibility data.
+- Implementation / logic: Renames supported jigsaw structures, unwraps selected pool elements, evaluates condition trees, generates horizon:add_to files and recursively carries supported processor lists.
+- Findings: Some Lithostitched features/processors are deliberately lost or unsupported; conditions with unknown types fail closed. Size providers are reduced to a selected maximum and jigsaw size is clamped to 20.
+- RustChunk relevance: Worldgen conversion architecture reference only; not a renderer or base-client feature.
+- Decision: rewrite required; tooling-only; worldgen-specific
+- 1.20.1 implications: 1.20.1 has different worldgen data and processor contracts; only target-version Java/Forge behavior can be authoritative.
+- Follow-up checks: Test all supported condition types, nested/unknown processors, pool semantics, load order/priority and loss-report completeness.
+- RustChunk implementation mapping: Possible separate RustChunk worldgen migration utility, with explicit 1.20.1 target schema.
+- Evidence required before adoption: Differential fixtures from the exact source/target mod versions and in-world structure-generation validation.
+- Completion state: COMPLETE — 477 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 19482-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1916. `crates/horizon-port-pack/src/main.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `9eaa71e049e525ca6d4008b4bee7b7dd11d9b16d`
+- Size: 6478 bytes; 142 logical lines
+- Coverage: 1–142 (EOF)
+- Purpose: CLI entrypoint that orchestrates import, inventory, fetch, carry, report, check and 26.3 datapack upgrade commands.
+- Dependencies / cross-references: horizon_port_pack library, pipeline, fetch, inventory and upgrade modules.
+- Implementation / logic: Parses global options and dispatches subcommands; datapack upgrade writes into an output folder or world/datapacks/<name>-26.3.
+- Findings: This executable is developer/user tooling for Horizon modpack migration, not a game launcher runtime.
+- RustChunk relevance: Potential user-facing workflow reference only.
+- Decision: unnecessary; tooling-only; version-specific
+- 1.20.1 implications: No 1.20.1 client protocol effect; datapack-upgrade path explicitly targets 26.3.
+- Follow-up checks: Validate argument combinations, unknown/unused flags, path handling and cancellation if building an independent RustChunk tool.
+- RustChunk implementation mapping: No client runtime mapping; optional separate CLI if product scope requires pack migration.
+- Evidence required before adoption: CLI integration tests and target-specific pack fixture suite.
+- Completion state: COMPLETE — 142 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 6478-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1917. `crates/horizon-port-pack/src/modrinth.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `ef327cc493e22459d2775e6624e84f3cdaf21e4e`
+- Size: 4057 bytes; 115 logical lines
+- Coverage: 1–115 (EOF)
+- Purpose: Fetches and caches Modrinth version/project metadata by file SHA-1.
+- Dependencies / cross-references: Modrinth v2 API, ureq net agent, JSON and BTreeMap cache.
+- Implementation / logic: Batches up to 500 hashes per request and 100 project IDs per query; resolves project metadata and required dependencies.
+- Findings: API responses are read fully into strings without a clear response-size cap; cache may accumulate indefinitely and no expiry/versioning policy is visible.
+- RustChunk relevance: Useful pack-management metadata layer only.
+- Decision: adaptable; tooling reference; network-sensitive
+- 1.20.1 implications: Not part of Minecraft login or server protocol. A RustChunk pack catalog should have rate limits, cache expiry and user consent.
+- Follow-up checks: Bound HTTP responses, enforce API retries/rate limits, validate cache schema/version and handle deleted/renamed projects.
+- RustChunk implementation mapping: Separate optional Modrinth metadata provider outside game runtime.
+- Evidence required before adoption: API fixtures, oversized/malformed responses, offline/stale cache tests and rate-limit behavior.
+- Completion state: COMPLETE — 115 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 4057-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1918. `crates/horizon-port-pack/src/net.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a441fb13a0648aca7799e9fbf5ee1ac3ac16c5f1`
+- Size: 14619 bytes; 389 logical lines
+- Coverage: 1–389 (EOF)
+- Purpose: Shared proxy selection, NO_PROXY bypass and reusable ureq agents for port-pack network traffic.
+- Dependencies / cross-references: ureq Agent/Proxy, HTTP(S)_PROXY/ALL_PROXY, NO_PROXY, mutex cache and redacted diagnostics.
+- Implementation / logic: Chooses launcher or environment proxy, bypasses loopback/NO_PROXY hosts, caches agents by proxy and redacts credentials in logs.
+- Findings: SOCKS schemes are explicitly unsupported and fall back to direct; URL host parsing is manual and should be tested against IPv6/credentials/edge cases.
+- RustChunk relevance: Potential networking utility reference, not a Minecraft packet transport.
+- Decision: adaptable; reference; network-security-sensitive
+- 1.20.1 implications: Android app proxy policy and Java/Forge networking must be integrated separately; do not assume ureq settings affect Minecraft sockets.
+- Follow-up checks: Fuzz URL host extraction, validate proxy schemes, verify environment precedence, redirects, credential redaction and concurrent agent replacement.
+- RustChunk implementation mapping: Optional tooling HTTP client proxy utility; separate from game TCP/TLS/auth stack.
+- Evidence required before adoption: Proxy integration tests on Android and desktop, IPv6/NO_PROXY matrix and credential-leak tests.
+- Completion state: COMPLETE — 389 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 14619-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1919. `crates/horizon-port-pack/src/oracle.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `1f0a1f6f1df6c5da7acf05c482b68a20ce530694`
+- Size: 36020 bytes; 858 logical lines
+- Coverage: 1–400, 401–800, 801–858 (EOF)
+- Purpose: Loads NeoForge oracle facts and chooses vanilla block/item templates plus component patches.
+- Dependencies / cross-references: facts.json exported from a running NeoForge game, block/item registries, state shapes/sounds/drops, vanilla defaults, armor assets and report loss tracking.
+- Implementation / logic: Scores vanilla block templates by class/state/shape/sound/hardness, infers self-drop rules, builds item declarations/components and compares vanilla template components.
+- Findings: Oracle facts are newer-version-specific. Template matching is heuristic; custom classes/food items and invalid armor layer layouts may be left out. File facts are read fully into memory.
+- RustChunk relevance: Useful oracle-driven registry migration architecture; block/item data is central to a Rust client but this schema is not reusable unchanged.
+- Decision: rewrite required; core reference; version-specific; heuristic
+- 1.20.1 implications: Generate new facts from exact Minecraft 1.20.1 + Forge 47.x and use legacy ItemStack NBT rather than 1.21.1/26.3 components.
+- Follow-up checks: Check class chain, all blockstate property combinations, geometry equivalence, drop-self conditions, armor paths, food/custom item exclusions and numeric bounds.
+- RustChunk implementation mapping: RustChunk optional oracle/facts pipeline and block/item registry adapter for 1.20.1.
+- Evidence required before adoption: Complete 1.20.1 vanilla/Forge facts export, per-state parity and in-world block/item behavior fixtures.
+- Completion state: COMPLETE — 858 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 36020-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1920. `crates/horizon-port-pack/src/pipeline.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f3298f1b1d018456feb1e1c023a1478f2f9591f1`
+- Size: 16602 bytes; 430 logical lines
+- Coverage: 1–400, 401–430 (EOF)
+- Purpose: Orchestrates pack import, inventory, jar fetch, content carry and coverage reporting in a resumable work folder.
+- Dependencies / cross-references: Pack manifest, Modrinth cache, JAR inventory, Oracle facts, resourcepacks, carry reports, dependency order and harness outputs.
+- Implementation / logic: Runs each pipeline step, selects portable data-tier mods, tracks shared namespaces, invokes carry and builds coverage report.
+- Findings: Portable means content/data tier; it does not mean code mods execute. Shared namespace handling and mod order are migration-tool rules; oracle/harness outputs are external dependencies.
+- RustChunk relevance: Useful workflow architecture for an offline pack migration utility, not gameplay runtime.
+- Decision: adaptable; tooling reference; version-specific
+- 1.20.1 implications: A RustChunk 1.20.1 pipeline needs Forge loader/resolution and mod runtime support; Horizon folder mods are not equivalent to Forge JARs.
+- Follow-up checks: Test missing jars, conflicting namespaces, partial carry reruns, stale reports, interrupted steps and reproducible output.
+- RustChunk implementation mapping: Separate RustChunk pack-analysis/import pipeline if needed; never merge with live game tick/network path.
+- Evidence required before adoption: Real 1.20.1 Forge pack corpus and repeatable import/carry/harness results.
+- Completion state: COMPLETE — 430 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 16602-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1921. `crates/horizon-port-pack/src/processors.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `52acdf1fdf99a93a7e37f92b56dd8165ed1ae2ca`
+- Size: 37113 bytes; 887 logical lines
+- Coverage: 1–400, 401–800, 801–887 (EOF)
+- Purpose: Converts selected Java structure processors into Horizon-native processor data and renames supported rule tests.
+- Dependencies / cross-references: NeoForge ZIP entries, Moog/Repurposed Structures data, Lithostitched helpers, blockstate/processor schemas and Horizon worldgen processor types.
+- Implementation / logic: Loads spawner lists, vanilla replacement presets and processor lists; converts selected spawner/pillar/trial-spawner/vault/waterlogging/structure-void processors.
+- Findings: Only a narrow set of known mod processors is translated; unknown processors remain and can later be dropped. Several transformations assume exact 26.3 NBT/state/property names.
+- RustChunk relevance: Worldgen tooling reference only; not part of core client rendering or multiplayer.
+- Decision: rewrite required; tooling-only; worldgen-specific
+- 1.20.1 implications: Must reconstruct supported processor types and NBT/state semantics for Forge 1.20.1; Horizon custom processor IDs are not valid Forge registrations.
+- Follow-up checks: Audit nested list depth, archive entry sizes, NBT field conversion, processor loss accounting, RNG order and target state IDs.
+- RustChunk implementation mapping: Potential standalone RustChunk worldgen converter/harness, isolated from client engine.
+- Evidence required before adoption: Target 1.20.1 processor fixtures and generated structures validated in a real world with Forge mods.
+- Completion state: COMPLETE — 887 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 37113-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1922. `crates/horizon-port-pack/src/report.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `b00e6387f570dedef9fcfbc26d6fbd3eb62d9497`
+- Size: 16575 bytes; 468 logical lines
+- Coverage: 1–400, 401–468 (EOF)
+- Purpose: Generates per-mod coverage status from carry-report, harness results, dependency states and license heuristics.
+- Dependencies / cross-references: Inventory records, carry-report.json, harness/result.json and resource-pack outcomes.
+- Implementation / logic: Assigns Ported/Partial/NotYet/NotNeeded, aggregates classes/tiers/licenses and writes Markdown/JSON coverage.
+- Findings: Status Ported requires a harness result with no failures; absent harness stays Partial. License-family classification is heuristic and not a legal determination.
+- RustChunk relevance: Useful reporting concept for a modpack conversion utility; no game runtime value.
+- Decision: adaptable; tooling reference; reporting-only
+- 1.20.1 implications: Do not use coverage status as proof of Forge 1.20.1 compatibility or legal permission.
+- Follow-up checks: Validate harness schema, missing/stale result handling, dependency propagation and SPDX license edge cases.
+- RustChunk implementation mapping: RustChunk pack audit dashboard/report, separate from launcher and gameplay.
+- Evidence required before adoption: Known harness fixtures, stale report tests and manually reviewed license classifications.
+- Completion state: COMPLETE — 468 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 16575-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1923. `crates/horizon-port-pack/src/resourcepacks.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `98b0bfceb0187d21b9caada3a44abff01eab1b13`
+- Size: 21730 bytes; 590 logical lines
+- Coverage: 1–400, 401–590 (EOF)
+- Purpose: Stages embedded/standalone resource packs safely and fetches indexed client resource-pack ZIPs.
+- Dependencies / cross-references: MRPack/CurseForge overrides, path sanitizer, ZIP central directory, file-count/byte limits, symlink checks and SHA-1 downloader.
+- Implementation / logic: Extracts client resource packs, resolves priority between overrides, validates path/case collisions, writes without overwriting existing packs and reports state.
+- Findings: Strong controls include 65,536 file and 512MiB limits, path and symlink checks, duplicate-central-entry rejection and hash verification. Copying explicitly does not validate rendering.
+- RustChunk relevance: Relevant to resource-pack management; optional pack staging, not a proof of renderer support.
+- Decision: adaptable; core tooling reference; security-sensitive
+- 1.20.1 implications: Preserve resource-pack order/format for Minecraft 1.20.1; shader packs need a separate renderer pipeline. Do not treat staged as compatible.
+- Follow-up checks: Test ZIP64/central directory edge cases, decompression bombs, case collisions, platform path rules, interrupted writes and large real packs.
+- RustChunk implementation mapping: RustChunk resource-pack importer/stager with isolated VFS and explicit user pack activation.
+- Evidence required before adoption: Adversarial archive suite, 1.20.1 pack corpus, atomic copy tests and Android storage lifecycle validation.
+- Completion state: COMPLETE — 590 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 21730-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1924. `crates/horizon-port-pack/src/resourcepacks/tests.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `4ab07dfce1895e57c929adbb50812c50acb16a3d`
+- Size: 15374 bytes; 459 logical lines
+- Coverage: 1–400, 401–459 (EOF)
+- Purpose: Regression tests for safe resource-pack staging, downloads, profile copying and status reporting.
+- Dependencies / cross-references: resourcepacks module, temporary filesystem, ZIP writer, hash store and pipeline/report.
+- Implementation / logic: Tests override precedence, CurseForge root, symlink/path traversal, collision and file-count bounds, hash downloads, no-overwrite and interrupted writes.
+- Findings: Strong security test inventory, but embedded tests were only inspected; behavior has not been executed in this audit.
+- RustChunk relevance: Test design reference for RustChunk's future resource-pack installer.
+- Decision: undetermined; tests only; reference
+- 1.20.1 implications: Port test intents to 1.20.1 resource-pack semantics and Android scoped storage paths.
+- Follow-up checks: Run under target toolchain, add ZIP64 and decompression-bomb cases, Android storage failures and concurrent install cases.
+- RustChunk implementation mapping: RustChunk resource-pack import unit/integration/security tests.
+- Evidence required before adoption: Executed tests, adversarial fixtures, Android device storage validation and 1.20.1 pack compatibility results.
+- Completion state: COMPLETE — 459 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 15374-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.
+
+### 1925. `crates/horizon-port-pack/src/upgrade/density.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `7ec30c6edcf21a04a558e59f80ca97a642e868a2`
+- Size: 14020 bytes; 323 logical lines
+- Coverage: 1–323 (EOF)
+- Purpose: Converts Minecraft 26.2 density functions into the 26.3 density-function schema.
+- Dependencies / cross-references: Named density-function graph, noise settings/router, noise holders, spline recursion, interpolation-cell metadata and conversion loss report.
+- Implementation / logic: Traverses function references from noise routers, infers cells, maps operation names and rewrites flat/cache/interpolated/gradient/shifted-noise/spline forms.
+- Findings: Explicitly targets 26.2→26.3; shared interpolated functions across different cells are lossy and reported. Unknown types are logged and preserved unchanged; some edge cases such as equal gradient endpoints are approximated.
+- RustChunk relevance: Terrain/worldgen conversion reference only; no direct renderer or networking value.
+- Decision: rewrite required; tooling-only; worldgen-specific; version-specific
+- 1.20.1 implications: 1.20.1 density-function registry and serialization differ; rebuild from exact 1.20.1 sources, not these newer mappings.
+- Follow-up checks: Test density graph cycles, unknown IDs, shared-cell functions, y-dependency analysis, overflow in cell-size math, spline nesting and numeric edge cases.
+- RustChunk implementation mapping: Potential standalone 1.20.1 worldgen/data migration utility; not live terrain engine implementation.
+- Evidence required before adoption: Differential density evaluations against Minecraft 1.20.1 Java with deterministic coordinates/seeds and full world terrain comparisons.
+- Completion state: COMPLETE — 323 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 14020-byte size match the complete recursive source tree; embedded tests/examples were inspected only, not run.

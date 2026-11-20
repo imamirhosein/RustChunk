@@ -413,3 +413,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Tests/benchmarks/examples were inspected only, not run. No source code changes, build, APK, device, Forge, server or renderer validation.
 - `main` and backup refs untouched. No backup until entries 1001–2000 complete and global 1–2000 verification passes.
 - **STOP at 1900.** Do not inspect 1901+ until new explicit authorization.
+
+
+## Latest verified checkpoint — 1901–1925 — 2026-11-20
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Index coverage: **1–1925**, sequential and unique. Active Ledger: **125 entries** (1801–1925), 15 fields each.
+- Current 200-file stage: **1801–2000**, progress **125/200**. Section 1901–1950 is authorized; checkpoint 1901–1925 closed; 1926–1950 remains authorized.
+- All 25 files were read serially through EOF; long files were read in contiguous chunks <=400 lines; source SHA/size match the pinned tree. Index paths and Decisions align with Ledger.
+- Key findings: the Horizon port-pack is a separate 1.21.1→26.3 conversion tool, not a Forge 1.20.1 runtime loader. Some ideas can inform optional pack tooling/resource packs, but density/worldgen/ItemStack and folder mod outputs need 1.20.1-specific rewrites. JAR/API/archive bounds and redirects need follow-up hardening.
+- Tests/examples inspected only, not run. No build/test/benchmark/APK/device/Forge/server/renderer validation. No app source changes.
+- **Next: inspect 1926–1950** under the existing authorization. Then close and STOP at 1950. Do not inspect 1951+ without fresh explicit authorization.

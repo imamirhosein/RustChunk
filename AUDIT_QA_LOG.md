@@ -1312,3 +1312,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No application source changed. No build/test/benchmark/APK/Android device/Forge launch/Minecraft join/server/renderer validation was performed.
 - The authorized section 1851–1900 is now **CLOSED — 50/50**. **STOP at 1900**. Entries 1901–1950 remain locked pending fresh explicit user authorization.
 - `main` and existing backups remain untouched. No backup is due; backup only after entries 1001–2000 and global verification 1–2000.
+
+
+## Source-audit checkpoint 1901–1925 — 2026-11-20
+
+- Completed entries 1901–1925 inclusive (25/25) from pinned Starling source tree 5432370d573642041585c69b40fb045b27133488; exact path order equals the next 25 blobs after excluding Index entries 1–1900.
+- All 25 files were read serially through EOF. Files over 400 logical lines were read in consecutive, gap-free chunks no larger than 400 lines. Every recorded source blob SHA and byte size matches the complete pinned recursive tree.
+- Active Ledger contains 125 records (1801–1925), each with exactly 15 fields. Index contains 1,925 sequential unique paths; new Ledger paths and Decisions align with Index.
+- Findings: Horizon's port-pack is a standalone modpack conversion/checking tool for newer Horizon content formats, not a Forge 1.20.1 mod loader. Its OptiFine/ETF rules may be optional resource-pack references; its 1.21.1→26.3 carry, worldgen, density and resource transformations require target-version rewrites. JAR/network/archive paths have remaining size/redirect/hash hardening checks, while resourcepacks has stronger path/size/no-overwrite controls. Class census/check verdicts do not prove mods execute.
+- Embedded tests/examples and harness references were inspected only; none were run. No build, benchmark, APK, Android device, Forge launch, Minecraft join or renderer validation was performed. No application/game source code changed; audit documents only.
+- User authorization covers section 1901–1950. Checkpoint 1901–1925 is now closed; 1926–1950 remains authorized. Stop at 1950 for fresh authorization.

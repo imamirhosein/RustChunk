@@ -2285,3 +2285,34 @@
 | 1898 | `crates/horizon-optifine/src/matchers.rs` | adaptable; optional; parser utility | Range parser accepts reversed bounds that simply never match. |
 | 1899 | `crates/horizon-optifine/src/paths.rs` | rewrite required; security-sensitive; reference | File symlinks are not canonicalized against the resource root before returned paths are opened. |
 | 1900 | `crates/horizon-optifine/src/properties.rs` | rewrite required; parser correctness/security-sensitive | `split` scans UTF-8 bytes and advances two bytes after backslash. |
+
+
+## Part 76 — Entries 1901–1925
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1901 | `crates/horizon-optifine/src/random.rs` | reference; optional resource-pack feature; version-specific | OptiFine/ETF random-entity rules may support optional entity texture variants after 1.20.1 parity. |
+| 1902 | `crates/horizon-optifine/src/random_textures.rs` | reference; optional resource-pack feature; version-specific | Variant scanner is useful only for a future opt-in entity texture feature. |
+| 1903 | `crates/horizon-port-pack/Cargo.toml` | unnecessary; tooling-only; version-specific | Horizon port-pack is a migration tool, not an Android game runtime dependency. |
+| 1904 | `crates/horizon-port-pack/src/carry.rs` | rewrite required; tooling-only; version-specific; security-sensitive | The carry engine targets 1.21.1→26.3 and requires a 1.20.1 rewrite plus archive hardening. |
+| 1905 | `crates/horizon-port-pack/src/check.rs` | adaptable; tooling reference; version-specific | Preflight verdict design can guide a future mod report, but it does not prove mods run. |
+| 1906 | `crates/horizon-port-pack/src/classes.rs` | adaptable; tooling reference; mapping-sensitive | Class census is a diagnostics idea, but its modern name map is not valid proof for Forge 1.20.1. |
+| 1907 | `crates/horizon-port-pack/src/classify.rs` | adaptable; tooling reference; pack-specific | ATM10-specific rules and cycle layering are not general-purpose compatibility decisions. |
+| 1908 | `crates/horizon-port-pack/src/fetch.rs` | adaptable; tooling reference; security-sensitive | Download flow has good temp/hash patterns but missing hashes, redirects and local scans need hardening. |
+| 1909 | `crates/horizon-port-pack/src/import.rs` | adaptable; tooling reference; security-sensitive | Pack import formats can be reused conceptually, but archive and path limits need work. |
+| 1910 | `crates/horizon-port-pack/src/inventory.rs` | adaptable; tooling reference; dependency-sensitive | Inventory architecture is useful, but dependency-source precedence and duplicate keys need validation. |
+| 1911 | `crates/horizon-port-pack/src/jar.rs` | adaptable; tooling reference; security-sensitive | JAR census is useful for inspection but has unbounded metadata reads and is not runtime validation. |
+| 1912 | `crates/horizon-port-pack/src/legacy_structure_mods/ctov.rs` | unnecessary; mod-specific migration data; version-specific | Hard-coded CTOV defaults are version/config specific, not general game functionality. |
+| 1913 | `crates/horizon-port-pack/src/legacy_structure_mods/mod.rs` | unnecessary; tooling structure | undefined |
+| 1914 | `crates/horizon-port-pack/src/lib.rs` | unnecessary; tooling-only | undefined |
+| 1915 | `crates/horizon-port-pack/src/lithostitched.rs` | rewrite required; tooling-only; worldgen-specific | undefined |
+| 1916 | `crates/horizon-port-pack/src/main.rs` | unnecessary; tooling-only; version-specific | undefined |
+| 1917 | `crates/horizon-port-pack/src/modrinth.rs` | adaptable; tooling reference; network-sensitive | undefined |
+| 1918 | `crates/horizon-port-pack/src/net.rs` | adaptable; reference; network-security-sensitive | undefined |
+| 1919 | `crates/horizon-port-pack/src/oracle.rs` | rewrite required; core reference; version-specific; heuristic | undefined |
+| 1920 | `crates/horizon-port-pack/src/pipeline.rs` | adaptable; tooling reference; version-specific | Pipeline architecture may aid tooling but its content-only portability model is not Forge mod execution. |
+| 1921 | `crates/horizon-port-pack/src/processors.rs` | rewrite required; tooling-only; worldgen-specific | undefined |
+| 1922 | `crates/horizon-port-pack/src/report.rs` | adaptable; tooling reference; reporting-only | undefined |
+| 1923 | `crates/horizon-port-pack/src/resourcepacks.rs` | adaptable; core tooling reference; security-sensitive | undefined |
+| 1924 | `crates/horizon-port-pack/src/resourcepacks/tests.rs` | undetermined; tests only; reference | undefined |
+| 1925 | `crates/horizon-port-pack/src/upgrade/density.rs` | rewrite required; tooling-only; worldgen-specific; version-specific | This module upgrades 26.2 to 26.3 density schemas and is not a 1.20.1 implementation. |
