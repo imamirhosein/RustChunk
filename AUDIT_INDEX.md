@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (200/200 complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (50/200 complete; checkpoints 1601–1625 and 1626–1650 closed; next checkpoint 1651–1675 awaits fresh authorization). Current 200-file stage: 1601–1800. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (100/200 complete; checkpoints 1601–1625, 1626–1650, 1651–1675 and 1676–1700 closed). Current 200-file stage: 1601–1800. Next reporting section: 1701–1750; await explicit authorization. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -80,7 +80,7 @@
 | 59 | `crates/horizon-protocol/src/resolver.rs` | Adaptable | largely adaptable/reusable for 1.20.1 and Android. Keep the SRV selection rules and injected DNS provider; verify target-version behavior and ensure the Android host supplies current DNS servers. |
 | 60 | `crates/horizon-protocol/src/resolver/dns.rs` | Adaptable | Reusable for 1.20.1 query, UDP/TCP fallback and platform DNS-source abstraction; verify parser edge behavior and Android active-network wiring. No protocol-version-specific rewrite is indicated. |
 | 61 | `crates/horizon-protocol/src/attachment_sync.rs` | Unnecessary; Adaptable; Optional/future | Attachment sync is not a baseline protocol feature; bounded NBT handling may inform a future extension. |
-| 62 | `crates/horizon-protocol/src/hash_ops.rs` | Reference; Version-specific | Version-specific and unsuitable for protocol 1.20.1; retain only as a reference for implementing the newer Codec-hash scheme. |
+| 62 | `crates/horizon-protocol/src/hash_ops.rs` | undetermined; Reference; Version-specific | Version-specific and unsuitable for protocol 1.20.1; retain only as a reference for implementing the newer Codec-hash scheme. |
 | 63 | `crates/horizon-protocol/src/mod_list.rs` | Unnecessary; Adaptable; Optional/future | The mod-list packet is not vanilla 1.20.1; file-hash parity may inform a future optional mod-compatibility layer. |
 | 64 | `crates/horizon-protocol/src/mod_net.rs` | Unnecessary; Adaptable; Optional/future | Custom mod networking is not in the vanilla baseline; preserve only generic codec-validation ideas for a future extension. |
 | 65 | `crates/horizon-protocol/src/quiet.rs` | Unnecessary; Adaptable; Optional/future | The custom quiet/batching packet is not baseline gameplay; bounded batching may inform a future extension. |
@@ -89,7 +89,7 @@
 | 68 | `crates/horizon-protocol/src/crypto/blocks.rs` | Adaptable | The CFB8 algorithm is adaptable; the custom ARM AES backend is usable only after security review and safe feature dispatch. |
 | 69 | `crates/horizon-protocol/src/item/hash.rs` | Unnecessary; Version-specific | Version-specific and unusable for 1.20.1; unnecessary for the target protocol. The ItemStack+NBT path must be rewritten. |
 | 70 | `crates/horizon-protocol/src/item/hash/exact.rs` | Unnecessary; Version-specific | Version-specific and unnecessary for the 1.20.1 core; predicate parsing for the target version must be rewritten separately. |
-| 71 | `crates/horizon-protocol/src/item/hash/gameplay.rs` | Version-specific | Version-specific and unusable for 1.20.1; the legacy implementation must be written separately. |
+| 71 | `crates/horizon-protocol/src/item/hash/gameplay.rs` | undetermined; Version-specific | Version-specific and unusable for 1.20.1; the legacy implementation must be written separately. |
 | 72 | `crates/horizon-protocol/src/item/hash/raw.rs` | Adaptable; Version-specific | Version-specific and unusable for 1.20.1; the golden-vector/oracle-testing method is reusable. |
 | 73 | `crates/horizon-protocol/src/item/skip.rs` | Unnecessary; Version-specific | Version-specific and unnecessary for 1.20.1; the legacy ItemStack decoder must be implemented separately. |
 | 74 | `crates/horizon-client/src/chunk_io.rs` | Adaptable | Adaptable; the current code is tied to Horizon's save/toast systems and must be rewritten. |
@@ -163,36 +163,35 @@
 | 127 | `crates/horizon-client-render/src/world.rs` | Adaptable | Adaptable as resident-world orchestration; ownership and invalidation should be simplified and verified against 1.20.1. |
 | 128 | `crates/horizon-client-render/src/chunk/block_entity.rs` | Adaptable | Adaptable as typed-data architecture; enum/extension types must be rebuilt for 1.20.1 and revision semantics made safer. |
 | 129 | `crates/horizon-world/src/compression.rs` | Adaptable | Adaptable as bounded compression layer; LZ4 variant and codec-ID table require version verification. |
-| 130 | `crates/horizon-world/src/datafix/mod.rs` | Reference | Reference for migration architecture only; current 26.3 fix pipeline is unsuitable for base and must be independently versioned if legacy imports are required. |
+| 130 | `crates/horizon-world/src/datafix/mod.rs` | undetermined; Reference | Reference for migration architecture only; current 26.3 fix pipeline is unsuitable for base and must be independently versioned if legacy imports are required. |
 | 131 | `crates/horizon-world/src/datafix/block_state_data.rs` | Unnecessary; Reference | Unnecessary for 1.20.1 base; retain only as historical migration reference if pre-1.13 import becomes a requirement. |
 | 132 | `crates/horizon-world/src/datafix/chunk_flatten.rs` | Unnecessary | Unnecessary for 1.20.1 runtime; keep only if pre-1.13 world import becomes explicit. |
 | 133 | `crates/horizon-world/src/datafix/world_upgrader.rs` | Unnecessary; Optional/future | Unnecessary for first 1.20.1 milestone; transactional background conversion is a future-tool pattern only. |
-| 134 | `crates/horizon-world/src/datafix/tests.rs` | Reference | Reference-only for migration-test structure; expected 26.3 output is not a 1.20.1 oracle. |
+| 134 | `crates/horizon-world/src/datafix/tests.rs` | undetermined; Reference | Reference-only for migration-test structure; expected 26.3 output is not a 1.20.1 oracle. |
 | 135 | `crates/horizon-world/examples/probe/datafix_world.rs` | Adaptable; Unnecessary | Unnecessary in production; adaptable as development-only runner with safer destination safeguards. |
 | 136 | `crates/horizon-client/examples/probe/dispatch.rs` | Adaptable | Adaptable as development-only test harness utility; no production dependency. |
 | 137 | `crates/horizon-world/examples/probe/dispatch.rs` | Adaptable | Adaptable as development/test harness only; not shipping runtime. |
 | 138 | `crates/horizon-world/examples/probe/chunk_dump.rs` | Adaptable | Adaptable as host-side worldgen parity tool; current generator/resources/fixtures are 26.3-specific. |
 | 139 | `crates/horizon-core/src/no_ai.rs` | Unnecessary; Reference | Unnecessary for vanilla 1.20.1 base; retain as reference only if developer/agent control is introduced. |
 | 140 | `crates/horizon-core/src/random/worldgen.rs` | Adaptable | Adaptable RNG architecture; exact source selection and worldgen semantics need 1.20.1 validation/versioning. |
-
 | 141 | `.claude/skills/vanilla-parity/SKILL.md` | Adaptable; Rewrite required | Use the parity-review method, but rebuild the mapping and oracle for Minecraft 1.20.1. |
 | 142 | `.dockerignore` | Adaptable | Keep Docker contexts small and private; rewrite exclusions after verifying RustChunk build inputs. |
 | 143 | `.gitattributes` | Adaptable | Enforce stable line endings for RustChunk-generated files and cross-platform checks. |
 | 144 | `.githooks/pre-commit` | Adaptable | Useful local public-tree check; must be backed by CI because hooks can be bypassed. |
 | 145 | `.githooks/pre-push` | Adaptable | Useful pre-push public-tree guard; must be backed by CI and checker tests. |
-| 146 | `.github/actionlint.yaml` | Reference; Optional/future | Only relevant if RustChunk adopts self-hosted CI runners; runner trust is critical. |
+| 146 | `.github/actionlint.yaml` | undetermined; Reference; Optional/future | Only relevant if RustChunk adopts self-hosted CI runners; runner trust is critical. |
 | 147 | `.github/CODEOWNERS` | Adaptable | Protect signing, update, resource-acquisition and release paths with enforced owner review. |
 | 148 | `.github/ISSUE_TEMPLATE/bug_report.yml` | Adaptable | Strong Android bug-triage template; rewrite fields and verify log privacy/redaction. |
 | 149 | `.github/ISSUE_TEMPLATE/config.yml` | Adaptable | Issue routing pattern only; replace the Horizon-specific destination. |
 | 150 | `.github/ISSUE_TEMPLATE/native-build.yml` | Unnecessary; Optional/future | Not needed for vanilla 1.20.1; Starling native builds are not Forge support. |
 
-## Part 7 — Entries 151–160
+## Part 7 — Entries 151–175
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
 | 151 | `.github/pull_request_template.md` | Adaptable; Rewrite required | Useful PR provenance and evidence checklist; replace 26.3 references and validate with CI. |
 | 152 | `.github/release-line.txt` | Undetermined | Meaning is not clear until its consumers are traced; do not copy the value yet. |
-| 153 | `.github/trusted-reviewers.txt` | Reference; Optional/future | Repository moderation allowlist only; consumer scripts and permissions need review. |
+| 153 | `.github/trusted-reviewers.txt` | undetermined; Reference; Optional/future | Repository moderation allowlist only; consumer scripts and permissions need review. |
 | 154 | `.github/workflows/cancel-on-close.yml` | Adaptable | CI cost-control pattern; verify pull_request_target safety and run-selection behavior. |
 | 155 | `.github/workflows/ci.yml` | Adaptable; Rewrite required | Strong CI foundation, but RustChunk needs 1.20.1 parity and separate Android/device gates. |
 | 156 | `.github/workflows/claim-command.yml` | Unnecessary; Optional/future | Contributor-claim automation only; not part of the client and requires parser/auth review. |
@@ -200,11 +199,6 @@
 | 158 | `.github/workflows/mojang-republish.yml` | Adaptable | Useful pinned-metadata change alert; rewrite and test against RustChunk's 1.20.1 acquisition lock. |
 | 159 | `.github/workflows/native-hook-stamp.yml` | Unnecessary; Optional/future | Generated native-hook ID service is irrelevant until an extension ABI is approved. |
 | 160 | `.github/workflows/native-mods.yml` | Unnecessary; Reference; Optional/future | High-risk Starling native-code pipeline; not Forge and not part of the vanilla client. |
-
-## Part 8 — Entries 161–175
-
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
 | 161 | `.github/workflows/overlap-note.yml` | Adaptable; Reference | Trusted main-branch, diff-only PR overlap automation; privileged event/runner isolation needs security tests. |
 | 162 | `.github/workflows/pack-bench.yml` | Adaptable; Optional/future | Resource-pack branch/base benchmark pattern; replace 26.3 fixtures and add Android measurements. |
 | 163 | `.github/workflows/parity-main.yml` | Adaptable; Rewrite required | Useful parity gate/bisect pattern; requires complete 1.20.1 oracle and protected cache/runner gates. |
@@ -213,37 +207,37 @@
 | 166 | `bench/bench.py` | Adaptable; Optional/future | Server-load benchmark only; later needs protocol-763 bots/server and process-cleanup hardening. |
 | 167 | `benchmarks/entity-model-document-2026-10-14/generate_fixture.py` | Adaptable; Reference; Optional/future | Deterministic synthetic model fixture; regenerate using 1.20.1 resource schema. |
 | 168 | `benchmarks/entity-model-document-2026-10-14/README.md` | Adaptable; Reference | Output-equality and warm/alternating method; 42.94× result is only a synthetic parser segment. |
-| 169 | `benchmarks/entity-model-document-2026-10-14/results.json` | Reference; Adaptable | Raw timings agree with README but lack independent fixture/source/hardware provenance. |
+| 169 | `benchmarks/entity-model-document-2026-10-14/results.json` | undetermined; Reference; Adaptable | Raw timings agree with README but lack independent fixture/source/hardware provenance. |
 | 170 | `benchmarks/graphics/after-4080.json` | Adaptable; Reference; Version-specific | RTX4080/Vulkan post-change report; RD16 drawn_sections=0 requires investigation. |
 | 171 | `benchmarks/graphics/after-lavapipe.json` | Adaptable; Reference; Version-specific | Software Vulkan stress data only; RD16 drawn_sections=0 and RD32 lows need context. |
-| 172 | `benchmarks/graphics/baseline-4080.json` | Reference; Version-specific | Historical RTX4080 baseline; zero/near-zero draw counters limit interpretation. |
-| 173 | `benchmarks/graphics/baseline-lavapipe.json` | Reference; Version-specific | Historical llvmpipe baseline; not a physical GPU or phone proxy. |
+| 172 | `benchmarks/graphics/baseline-4080.json` | undetermined; Reference; Version-specific | Historical RTX4080 baseline; zero/near-zero draw counters limit interpretation. |
+| 173 | `benchmarks/graphics/baseline-lavapipe.json` | undetermined; Reference; Version-specific | Historical llvmpipe baseline; not a physical GPU or phone proxy. |
 | 174 | `benchmarks/model-state-parse-2026-10-14.md` | Adaptable; Reference | Shared parse reuse gives a scoped synthetic 1.306× result; validate 1.20.1 and A22. |
 | 175 | `benchmarks/overlay-real-packs-2026-10-15.json` | Adaptable; Reference | Cache-hit/cold overlay methodology; pack schema is 26.3 and licenses remain separate. |
 
-## Part 9 — Entries 176–200
+## Part 8 — Entries 176–200
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 176 | `benchmarks/perf/horizon-m4pro-1080p-rd16.json` | Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
-| 177 | `benchmarks/perf/horizon-m4pro-1080p-rd32.json` | Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
-| 178 | `benchmarks/perf/horizon-m4pro-1080p-rd8.json` | Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
-| 179 | `benchmarks/perf/horizon-win-9800x3d-5080-rd16.json` | Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
-| 180 | `benchmarks/perf/horizon-win-9800x3d-5080-rd32.json` | Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
-| 181 | `benchmarks/perf/horizon-win-9800x3d-5080-rd8.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 182 | `benchmarks/perf/macmini-m4pro-loaded-2026-11-01.md` | Reference; Version-specific | The report explicitly says it is not a fair player comparison: system contention differs; vanilla draws 14% fewer… |
-| 183 | `benchmarks/perf/vanilla-m4pro-1080p-rd16.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 184 | `benchmarks/perf/vanilla-m4pro-1080p-rd32.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 185 | `benchmarks/perf/vanilla-m4pro-1080p-rd8.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 186 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd16.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 187 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd32.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 188 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd8.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 189 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd16.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 190 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd32.json` | Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
-| 191 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd8.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
-| 192 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd16.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
-| 193 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd32.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
-| 194 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd8.json` | Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 176 | `benchmarks/perf/horizon-m4pro-1080p-rd16.json` | undetermined; Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
+| 177 | `benchmarks/perf/horizon-m4pro-1080p-rd32.json` | undetermined; Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
+| 178 | `benchmarks/perf/horizon-m4pro-1080p-rd8.json` | undetermined; Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
+| 179 | `benchmarks/perf/horizon-win-9800x3d-5080-rd16.json` | undetermined; Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
+| 180 | `benchmarks/perf/horizon-win-9800x3d-5080-rd32.json` | undetermined; Reference; Adaptable | Use the report as a desktop methodology reference only; adapt the schema/scenario method and never transfer these device FPS values to Android. |
+| 181 | `benchmarks/perf/horizon-win-9800x3d-5080-rd8.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 182 | `benchmarks/perf/macmini-m4pro-loaded-2026-11-01.md` | undetermined; Reference; Version-specific | The report explicitly says it is not a fair player comparison: system contention differs; vanilla draws 14% fewer… |
+| 183 | `benchmarks/perf/vanilla-m4pro-1080p-rd16.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 184 | `benchmarks/perf/vanilla-m4pro-1080p-rd32.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 185 | `benchmarks/perf/vanilla-m4pro-1080p-rd8.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 186 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd16.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 187 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd32.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 188 | `benchmarks/perf/vanilla-mods-m4pro-1080p-rd8.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 189 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd16.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 190 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd32.json` | undetermined; Reference; Version-specific | Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw… |
+| 191 | `benchmarks/perf/vanilla-mods-win-9800x3d-5080-rd8.json` | undetermined; Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 192 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd16.json` | undetermined; Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 193 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd32.json` | undetermined; Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
+| 194 | `benchmarks/perf/vanilla-win-9800x3d-5080-rd8.json` | undetermined; Reference; Version-specific | Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the… |
 | 195 | `benchmarks/perf/windows-9800x3d-5080-2026-10-29.md` | Adaptable; Rewrite required; Version-specific | Use the benchmark controls and reporting method; rewrite workloads and environment for Minecraft 1.20.1 and Android/Mali. |
 | 196 | `benchmarks/rust-active-effect-tick-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Reuse the provenance-manifest format; rebuild game behavior and fixtures for 1.20.1. |
 | 197 | `benchmarks/rust-active-effects-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Reuse the provenance-manifest format; rebuild game behavior and fixtures for 1.20.1. |
@@ -251,7 +245,7 @@
 | 199 | `benchmarks/rust-attribute-health-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Reuse the provenance-manifest format; rebuild game behavior and fixtures for 1.20.1. |
 | 200 | `benchmarks/rust-attribute-map-queries-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Reuse the provenance-manifest format; rebuild game behavior and fixtures for 1.20.1. |
 
-## Part 10 — Entries 201–225
+## Part 9 — Entries 201–225
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -281,7 +275,7 @@
 | 224 | `benchmarks/rust-block-push-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | 26.3؛ collision shapes/entity selections کنترل‌شده‌اند؛ live entity indexing و teleport/network behavior خارج scope است |
 | 225 | `benchmarks/rust-block-state-codec-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | 26.3؛ registry metadata از دو JAR آمده؛ warning text و lifecycle/complete material codecs pending |
 
-## Part 11 — Entries 226–250
+## Part 10 — Entries 226–250
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -311,7 +305,7 @@
 | 249 | `benchmarks/rust-collision-2026-10-05/scoped-parity.json` | Adaptable; Reference; Version-specific | نسخه 26.3؛ uncached states و entity-context در این manifest پشتیبانی نمی‌شوند |
 | 250 | `benchmarks/rust-collision-context-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | 26.3؛ entity lifecycle، inventory mutation بعد از capture، minecart experimental contexts و live movement pending |
 
-## Part 12 — Entries 251–275
+## Part 11 — Entries 251–275
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -341,7 +335,7 @@
 | 274 | `benchmarks/rust-effect-sync-2026-10-07/synced-bytes-regression.json` | Adaptable; Version-specific | 26.3؛ heterogeneous serializer maps، entity schema/network codecs و complete item-use flow خارج scope است |
 | 275 | `benchmarks/rust-effect-sync-2026-10-07/synced-floats-regression.json` | Adaptable; Version-specific | 26.3؛ سایر serializers، type mismatch handling، wire codecs و player absorption integration pending |
 
-## Part 13 — Entries 276–300
+## Part 12 — Entries 276–300
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -371,7 +365,7 @@
 | 299 | `benchmarks/rust-fill-layer-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | 26.3؛ world side effects و other configured features/full worlds خارج scope‌اند |
 | 300 | `benchmarks/rust-float-log-2026-10-05/scoped-parity.json` | Adaptable; Version-specific | تست فقط scalar float log روی یک JDK/platform است؛ double Math.log، دیگر platformها، bulk composition، terrain یا… |
 
-## Part 14 — Entries 301–325
+## Part 13 — Entries 301–325
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -401,7 +395,7 @@
 | 324 | `benchmarks/rust-item-after-use-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Concrete consumables, complete inventory transactions and whole item-use lifecycle are not covered. |
 | 325 | `benchmarks/rust-item-blocking-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Real damageable item components, full combat and death flow are not integrated. |
 
-## Part 15 — Entries 326–350
+## Part 14 — Entries 326–350
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -411,12 +405,12 @@
 | 329 | `benchmarks/rust-item-stack-storage-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Component codecs, menu transactions, equipment synchronization and full use flow are not included. |
 | 330 | `benchmarks/rust-item-template-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Does not exercise every component codec or complete containers and use lifecycle. |
 | 331 | `benchmarks/rust-item-use-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Start-use path, synchronized flags, concrete consumables and full lifecycle remain pending. |
-| 332 | `benchmarks/rust-item-use-catalog-2026-10-07/scoped-parity.json` | Reference; Version-specific | Import is 26.3-specific; other component codecs, inventory, enchantments and use effects remain unverified. |
+| 332 | `benchmarks/rust-item-use-catalog-2026-10-07/scoped-parity.json` | undetermined; Reference; Version-specific | Import is 26.3-specific; other component codecs, inventory, enchantments and use effects remain unverified. |
 | 333 | `benchmarks/rust-item-use-lifecycle-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Starting use, actual synchronized flags, concrete consumables, remainders and complete tick are incomplete. |
 | 334 | `benchmarks/rust-item-use-start-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Transport, wire encoding, persistent data and server/client lifecycle are not exercised. |
-| 335 | `benchmarks/rust-java-hash-map-2026-10-07/scoped-parity.json` | Reference; Version-specific | JDK collection parity is not game logic; JDK version/platform semantics must not be assumed. |
-| 336 | `benchmarks/rust-java-identity-map-2026-10-07/cooldown-regression.json` | Reference; Version-specific | This is a Java/JDK regression context, not a complete in-game cooldown lifecycle. |
-| 337 | `benchmarks/rust-java-identity-map-2026-10-07/ordered-map-regression.json` | Reference; Version-specific | It is a JDK implementation comparison, not Minecraft feature parity. |
+| 335 | `benchmarks/rust-java-hash-map-2026-10-07/scoped-parity.json` | undetermined; Reference; Version-specific | JDK collection parity is not game logic; JDK version/platform semantics must not be assumed. |
+| 336 | `benchmarks/rust-java-identity-map-2026-10-07/cooldown-regression.json` | undetermined; Reference; Version-specific | This is a Java/JDK regression context, not a complete in-game cooldown lifecycle. |
+| 337 | `benchmarks/rust-java-identity-map-2026-10-07/ordered-map-regression.json` | undetermined; Reference; Version-specific | It is a JDK implementation comparison, not Minecraft feature parity. |
 | 338 | `benchmarks/rust-java-identity-map-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No top-level rust_output_sha256; JAR references have one matching output digest, but process identity inputs remain environment-dependent. |
 | 339 | `benchmarks/rust-liquid-collision-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Does not implement entity movement or fluid propagation in a live world. |
 | 340 | `benchmarks/rust-live-attribute-health-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Live refresh paths and complete damage/player tick are not fully integrated. |
@@ -431,7 +425,7 @@
 | 349 | `benchmarks/rust-living-health-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Full registered attribute binding, damage sources and complete player lifecycle are not covered. |
 | 350 | `benchmarks/rust-living-hurt-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Totems, criteria, blocking, source service and enclosing server tick are not fully integrated. |
 
-## Part 16 — Entries 351–375
+## Part 15 — Entries 351–375
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -445,53 +439,53 @@
 | 358 | `benchmarks/rust-model-baking-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No atlas packing, blockstate transform integration, shader/pixel or GPU parity. |
 | 359 | `benchmarks/rust-model-resolution-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Does not cover quad baking, blockstate variants, atlas, lighting or visual parity. |
 | 360 | `benchmarks/rust-movement-emission-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Does not play audio or connect to a live player movement loop. |
-| 361 | `benchmarks/rust-movement-registry-2026-10-07/scoped-parity.json` | Reference; Version-specific | 26.3 coefficients/tags are not 1.20.1 data; does not prove live player movement. |
+| 361 | `benchmarks/rust-movement-registry-2026-10-07/scoped-parity.json` | undetermined; Reference; Version-specific | 26.3 coefficients/tags are not 1.20.1 data; does not prove live player movement. |
 | 362 | `benchmarks/rust-movement-support-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Not an integrated Player movement loop; target block/attribute registries differ. |
-| 363 | `benchmarks/rust-native-attribute-updates-2026-10-07/input-scene.json` | Reference; Version-specific | No aggregate Rust output hash; scene manifest is an input description, not an acceptance result. |
-| 364 | `benchmarks/rust-native-attribute-updates-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux x86_64 Vulkan llvmpipe CPU renderer; default actor/scene smoke only, not game, GPU performance or Android evidence. |
+| 363 | `benchmarks/rust-native-attribute-updates-2026-10-07/input-scene.json` | undetermined; Reference; Version-specific | No aggregate Rust output hash; scene manifest is an input description, not an acceptance result. |
+| 364 | `benchmarks/rust-native-attribute-updates-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Linux x86_64 Vulkan llvmpipe CPU renderer; default actor/scene smoke only, not game, GPU performance or Android evidence. |
 | 365 | `benchmarks/rust-native-attribute-updates-2026-10-07/scene-motion.json` | Adaptable; Version-specific | No top-level Rust output digest despite reference data; fluids/effects/inventory/network and full Player tick are omitted. |
-| 366 | `benchmarks/rust-native-attribute-updates-2026-10-07/startup-smoke.json` | Reference; Version-specific | CPU llvmpipe scene only; startup snapshot cannot demonstrate playable game, Android FPS or native pixel parity. |
+| 366 | `benchmarks/rust-native-attribute-updates-2026-10-07/startup-smoke.json` | undetermined; Reference; Version-specific | CPU llvmpipe scene only; startup snapshot cannot demonstrate playable game, Android FPS or native pixel parity. |
 | 367 | `benchmarks/rust-native-blockstate-client-2026-10-06/startup-smoke.json` | Adaptable; Version-specific | Linux llvmpipe software renderer; no native pixel comparison or hardware FPS. |
-| 368 | `benchmarks/rust-native-chunk-models-2026-10-06/startup-smoke.json` | Reference; Version-specific | Linux llvmpipe and private screenshots; not Android GPU/frame pacing or whole-world loading evidence. |
-| 369 | `benchmarks/rust-native-crouch-2026-10-07/input-scene.json` | Reference; Version-specific | Controlled scene and query gates; full client/server tick, effects, vehicles and network are omitted. |
-| 370 | `benchmarks/rust-native-crouch-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe; only 8 cm recorded walk, no fluid/other poses/full client lifecycle or Android device result. |
+| 368 | `benchmarks/rust-native-chunk-models-2026-10-06/startup-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe and private screenshots; not Android GPU/frame pacing or whole-world loading evidence. |
+| 369 | `benchmarks/rust-native-crouch-2026-10-07/input-scene.json` | undetermined; Reference; Version-specific | Controlled scene and query gates; full client/server tick, effects, vehicles and network are omitted. |
+| 370 | `benchmarks/rust-native-crouch-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe; only 8 cm recorded walk, no fluid/other poses/full client lifecycle or Android device result. |
 | 371 | `benchmarks/rust-native-crouch-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Does not prove full LocalPlayer tick, GUI settings persistence, network or full gameplay. |
 | 372 | `benchmarks/rust-native-crouch-2026-10-07/sprint-input.json` | Adaptable; Version-specific | No full parent movement, complete client tick, GUI persistence, networking or gameplay parity. |
-| 373 | `benchmarks/rust-native-crouch-2026-10-07/startup-smoke.json` | Reference; Version-specific | 30-frame CPU llvmpipe startup; no active movement, game lifecycle or hardware FPS claim. |
-| 374 | `benchmarks/rust-native-health-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe resident scene; death/drop/respawn, full hunger and device performance are not tested. |
+| 373 | `benchmarks/rust-native-crouch-2026-10-07/startup-smoke.json` | undetermined; Reference; Version-specific | 30-frame CPU llvmpipe startup; no active movement, game lifecycle or hardware FPS claim. |
+| 374 | `benchmarks/rust-native-health-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe resident scene; death/drop/respawn, full hunger and device performance are not tested. |
 | 375 | `benchmarks/rust-native-health-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Full Player.tick, inventory/equipment, freezing, packets and death/drop/respawn services remain outside scope. |
 
-## Part 17 — Entries 376–400
+## Part 16 — Entries 376–400
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
-| 376 | `benchmarks/rust-native-health-2026-10-07/startup-smoke.json` | Reference; Version-specific | No player lifecycle or movement; Linux llvmpipe CPU renderer only. |
-| 377 | `benchmarks/rust-native-hunger-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Elapsed wall time is not simulation time; complete enclosing ticks, item use, death lifecycle and GPU/device evidence are absent. |
+| 376 | `benchmarks/rust-native-health-2026-10-07/startup-smoke.json` | undetermined; Reference; Version-specific | No player lifecycle or movement; Linux llvmpipe CPU renderer only. |
+| 377 | `benchmarks/rust-native-hunger-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Elapsed wall time is not simulation time; complete enclosing ticks, item use, death lifecycle and GPU/device evidence are absent. |
 | 378 | `benchmarks/rust-native-hunger-2026-10-07/scene-motion.json` | Adaptable; Version-specific | No complete outer Player.tick, item-use path, full death/drop/respawn or device integration. |
-| 379 | `benchmarks/rust-native-landing-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Damage request is not applied to health; Linux CPU scene only, no full gameplay or device acceptance. |
+| 379 | `benchmarks/rust-native-landing-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Damage request is not applied to health; Linux CPU scene only, no full gameplay or device acceptance. |
 | 380 | `benchmarks/rust-native-landing-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Controlled scene excludes many world callbacks, packet acceptance, full player tick and complete death flow. |
-| 381 | `benchmarks/rust-native-model-client-2026-10-06/startup-smoke.json` | Reference; Version-specific | Pre-final interactive view differs from final fingerprints; CPU llvmpipe only, no gameplay or complete pixel parity. |
+| 381 | `benchmarks/rust-native-model-client-2026-10-06/startup-smoke.json` | undetermined; Reference; Version-specific | Pre-final interactive view differs from final fingerprints; CPU llvmpipe only, no gameplay or complete pixel parity. |
 | 382 | `benchmarks/rust-native-motion-tick-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No full Player.aiStep/tick, local input, freezing, health/damage or complete gameplay claim. |
-| 383 | `benchmarks/rust-native-movement-statistics-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe; sprint/full gameplay and Android hardware FPS are not established. |
+| 383 | `benchmarks/rust-native-movement-statistics-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe; sprint/full gameplay and Android hardware FPS are not established. |
 | 384 | `benchmarks/rust-native-movement-statistics-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Still excludes complete client/server packet acceptance, inventory/effects and full Player.tick. |
-| 385 | `benchmarks/rust-native-scene-collision-2026-10-07/interactive-smoke.json` | Reference; Version-specific | No gameplay simulation; Vulkan llvmpipe CPU adapter, not target GPU or Android FPS. |
+| 385 | `benchmarks/rust-native-scene-collision-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | No gameplay simulation; Vulkan llvmpipe CPU adapter, not target GPU or Android FPS. |
 | 386 | `benchmarks/rust-native-scene-collision-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No aggregate Rust output hash; no gravity, tick schedule, fluid/entity gameplay or pixel renderer parity. |
-| 387 | `benchmarks/rust-native-scene-collision-2026-10-07/startup-smoke.json` | Reference; Version-specific | 30-frame CPU llvmpipe snapshot; not a performance benchmark or playable game proof. |
+| 387 | `benchmarks/rust-native-scene-collision-2026-10-07/startup-smoke.json` | undetermined; Reference; Version-specific | 30-frame CPU llvmpipe snapshot; not a performance benchmark or playable game proof. |
 | 388 | `benchmarks/rust-native-scene-motion-2026-10-07/collision-regression.json` | Adaptable; Version-specific | Collision adapter only; does not establish live player travel, gravity, tick, fluids or full gameplay. |
 | 389 | `benchmarks/rust-native-scene-motion-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Fluids, vehicles, effects, crouch, landing/damage, audio and network consumers remain controlled; no full player tick. |
-| 390 | `benchmarks/rust-native-scene-motion-2026-10-07/startup-smoke.json` | Reference; Version-specific | Linux llvmpipe CPU renderer only; no visual pixel parity or Android device measurement. |
-| 391 | `benchmarks/rust-native-sprint-2026-10-07/double-tap-smoke.json` | Reference; Version-specific | Linux llvmpipe; focus pauses walking, and full pose/fluid/effect/item-use/network lifecycle is outside scope. |
+| 390 | `benchmarks/rust-native-scene-motion-2026-10-07/startup-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe CPU renderer only; no visual pixel parity or Android device measurement. |
+| 391 | `benchmarks/rust-native-sprint-2026-10-07/double-tap-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe; focus pauses walking, and full pose/fluid/effect/item-use/network lifecycle is outside scope. |
 | 392 | `benchmarks/rust-native-sprint-2026-10-07/scene-motion.json` | Adaptable; Version-specific | No complete outer client/server tick, GUI persistence, effects, inventory, networking or full gameplay. |
 | 393 | `benchmarks/rust-native-sprint-2026-10-07/sprint-input.json` | Adaptable; Version-specific | Setter records requests; actual parent movement, GUI options and network lifecycle are separate. |
-| 394 | `benchmarks/rust-native-sprint-2026-10-07/sprint-key-smoke.json` | Reference; Version-specific | Linux llvmpipe; no fluid/effect/item-use/client-server lifecycle, native pixel or A22 performance claim. |
+| 394 | `benchmarks/rust-native-sprint-2026-10-07/sprint-key-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe; no fluid/effect/item-use/client-server lifecycle, native pixel or A22 performance claim. |
 | 395 | `benchmarks/rust-native-sprint-2026-10-07/sprint-scene.json` | Adaptable; Version-specific | Raw shift is recorded but crouch is unbound; effects/equipment/vehicles/fluids, complete ticks and networking remain excluded. |
-| 396 | `benchmarks/rust-native-walking-2026-10-07/interactive-smoke.json` | Reference; Version-specific | Linux llvmpipe development scene; no full gameplay, native pixel parity or device acceptance. |
+| 396 | `benchmarks/rust-native-walking-2026-10-07/interactive-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe development scene; no full gameplay, native pixel parity or device acceptance. |
 | 397 | `benchmarks/rust-native-walking-2026-10-07/local-input.json` | Adaptable; Version-specific | Does not establish full LocalPlayer tick, input remapping, sprint eligibility, pose/camera or network lifecycle. |
 | 398 | `benchmarks/rust-native-walking-2026-10-07/scene-motion.json` | Adaptable; Version-specific | Full Player.tick, inventory/equipment ticks, freezing, health/damage and network consumers are not covered. |
-| 399 | `benchmarks/rust-native-walking-2026-10-07/startup-smoke.json` | Reference; Version-specific | Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence. |
+| 399 | `benchmarks/rust-native-walking-2026-10-07/startup-smoke.json` | undetermined; Reference; Version-specific | Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence. |
 | 400 | `benchmarks/rust-neighbor-spread-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Actual chunks, neighbor callbacks and complete feature/world generation are pending. |
 
-## Part 18 — Entries 401–425
+## Part 17 — Entries 401–425
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -521,7 +515,7 @@
 | 424 | `benchmarks/rust-resident-collision-scan-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Controlled proxy; no live chunk/entity broad-phase |
 | 425 | `benchmarks/rust-resource-number-scanner-2026-10-06/model-baking.json` | Adaptable; Version-specific | CPU geometry only; no atlas/shader/GPU pixels |
 
-## Part 19 — Entries 426–450
+## Part 18 — Entries 426–450
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -551,7 +545,7 @@
 | 449 | `benchmarks/rust-spike-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No complete End chunk/world lifecycle |
 | 450 | `benchmarks/rust-spring-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | Tick execution/spreading/full worldgen absent |
 
-## Part 20 — Entries 451–475
+## Part 19 — Entries 451–475
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -581,7 +575,7 @@
 | 474 | `benchmarks/rust-vines-2026-10-06/scoped-parity.json` | Adaptable; Version-specific | No growth tick/neighbor/live chunk |
 | 475 | `benchmarks/rust-water-splash-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | No audio mixer/particle renderer/live movement |
 
-## Part 21 — Entries 476–500
+## Part 20 — Entries 476–500
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -611,7 +605,7 @@
 | 499 | `benchmarks/server-equal-work-2026-10-17/run-1-before-chunk-cache.json` | Unnecessary; Reference; Version-specific | High-load outliers/watchdog; server revision specific |
 | 500 | `benchmarks/server-equal-work-2026-10-17/run-2-chunk-cache.json` | Unnecessary; Reference; Version-specific | No matched vanilla baseline |
 
-## Part 22 — Entries 501–525
+## Part 21 — Entries 501–525
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -641,7 +635,7 @@
 | 524 | `crates/cargo-horizon-mod/template/content/block.json` | Unnecessary; Reference; Version-specific | Horizon API 26.3-specific |
 | 525 | `crates/cargo-horizon-mod/template/content/blockstate.json` | Unnecessary; Reference; Version-specific | Horizon paths/conventions |
 
-## Part 23 — Entries 526–550
+## Part 22 — Entries 526–550
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -671,7 +665,7 @@
 | 549 | `crates/horizon-assets/examples/model_choice_fixture.rs` | Adaptable; Reference; Version-specific | RNG target semantics need verification |
 | 550 | `crates/horizon-assets/examples/model_resolution_fixture.rs` | Adaptable; Reference; Version-specific | No GPU/final rendering |
 
-## Part 24 — Entries 551–575
+## Part 23 — Entries 551–575
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -701,7 +695,7 @@
 | 574 | `crates/horizon-bench/src/hardware.rs` | Adaptable; Reference; Version-specific | Android needs native APIs |
 | 575 | `crates/horizon-bench/src/lib.rs` | Adaptable; Reference; Version-specific | Upstream-specific schema; tests format logic only |
 
-## Part 25 — Entries 576–600
+## Part 24 — Entries 576–600
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -731,7 +725,7 @@
 | 599 | `crates/horizon-client-core/src/sound_source.rs` | Adaptable; Version-specific | Small static table; verify target ordering and server/client use sites rather than importing blindly. |
 | 600 | `crates/horizon-client-core/src/text.rs` | Adaptable; Version-specific | 823 logical lines; newer event/object fields; preserve local-only open_file trust boundary |
 
-## Part 26 — Entries 601–620
+## Part 25 — Entries 601–625
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -755,15 +749,16 @@
 | 618 | `crates/horizon-client-render/src/block_entity_anim.rs` | adaptable; version-specific | Rebuild 1.20.1 ticker catalog and client/server event behavior; later entity states are included. |
 | 619 | `crates/horizon-client-render/src/block_entity_cem.rs` | unnecessary; optional/future | Not vanilla core; model catalog and supported parts must be scoped to 1.20.1. |
 | 620 | `crates/horizon-client-render/src/block_entity_render.rs` | adaptable; version-specific | Model states/assets are 26.3; separate dynamic render, static cache and target-version entity model data. |
-## Part 27 — Entries 621–800
-
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
 | 621 | `crates/horizon-client-render/src/block_entity_render_tests.rs` | adaptable; reference; version-specific | Exercises vertex parity, cache invalidation, resource reloads and fallback paths for special block-entity models. |
 | 622 | `crates/horizon-client-render/src/bluemap.rs` | unnecessary; optional/future | Fetches and displays remote world-map tiles and metadata alongside the in-game world. |
 | 623 | `crates/horizon-client-render/src/bluemap_detect.rs` | unnecessary; optional/future | Detects a map endpoint from server-provided or discovered information before map tile loading. |
 | 624 | `crates/horizon-client-render/src/border.wgsl` | adaptable; version-specific | Computes the border overlay fragment colour/fade in the GPU shader. |
 | 625 | `crates/horizon-client-render/src/border_render.rs` | adaptable; version-specific | Builds border wall/plane geometry and animation parameters for the world-border pass. |
+
+## Part 26 — Entries 626–650
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 626 | `crates/horizon-client-render/src/breaking.rs` | adaptable; version-specific | Builds destroy-stage UVs and geometry for crack overlays on models/entities. |
 | 627 | `crates/horizon-client-render/src/brewing.rs` | rewrite required; version-specific | Resolves brewing operations, ingredient matches and brewing time from data-driven definitions/providers. |
 | 628 | `crates/horizon-client-render/src/camera.rs` | adaptable; version-specific | Maintains camera pose, projection, third-person clipping, view bob, hurt and interpolation state. |
@@ -789,6 +784,11 @@
 | 648 | `crates/horizon-client-render/src/entity.wgsl` | adaptable; version-specific | Implements entity texture, lighting, overlay, fog and special-layer rendering. |
 | 649 | `crates/horizon-client-render/src/environment.rs` | adaptable; version-specific | Resolves data-driven environmental attributes such as fog, sky, ambience and related visual/gameplay values. |
 | 650 | `crates/horizon-client-render/src/extras.rs` | unnecessary; optional/future | Keeps extra renderer/mobile settings outside vanilla options.txt. |
+
+## Part 27 — Entries 651–675
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 651 | `crates/horizon-client-render/src/fast_hash.rs` | adaptable; reference | Centralizes a fast non-cryptographic hasher choice for internal maps/sets. |
 | 652 | `crates/horizon-client-render/src/fog.rs` | adaptable; version-specific | Combines fog type, distances, colours, water/lava effects and render-time parameters. |
 | 653 | `crates/horizon-client-render/src/font.rs` | adaptable; version-specific | Loads bitmap, Unihex and TTF font providers, glyph metrics and atlas data. |
@@ -814,6 +814,11 @@
 | 673 | `crates/horizon-client-render/src/gfx/flat.rs` | adaptable; optional/future; version-specific | Flattens or batches section draw instances to reduce per-section draw overhead. |
 | 674 | `crates/horizon-client-render/src/gfx/flatten.wgsl` | adaptable; optional/future; version-specific | Generates flattened draw indices from draw ranges and page tables. |
 | 675 | `crates/horizon-client-render/src/gfx/frame_gen.rs` | unnecessary; optional/future; version-specific | Coordinates offscreen real frames, interpolation, presentation thread and camera/hand motion. |
+
+## Part 28 — Entries 676–700
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 676 | `crates/horizon-client-render/src/gfx/frame_gen/interpolation.rs` | unnecessary; optional/future; version-specific | Interpolates consecutive images using depth, motion vectors and optical flow. |
 | 677 | `crates/horizon-client-render/src/gfx/frame_gen/interpolation.wgsl` | unnecessary; optional/future; version-specific | Implements compute passes for depth dilation, vector fields, blending and inpainting. |
 | 678 | `crates/horizon-client-render/src/gfx/frame_gen/motion.rs` | unnecessary; optional/future; version-specific | Tracks independently moving entities by ID and rasterizes motion vectors. |
@@ -839,6 +844,11 @@
 | 698 | `crates/horizon-client-render/src/gfx/occlusion.rs` | adaptable; version-specific | Searches visible section connectivity from camera via open faces on a background worker, preserving last completed graph for frames. |
 | 699 | `crates/horizon-client-render/src/gfx/oit.rs` | unnecessary; optional/future | Uses multi-stage depth/transmittance accumulation and final composite for translucent surfaces. |
 | 700 | `crates/horizon-client-render/src/gfx/oit_features.rs` | unnecessary; optional/future | Applies OIT stages to particles, weather, border, text and other non-terrain draw categories. |
+
+## Part 29 — Entries 701–725
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 701 | `crates/horizon-client-render/src/gfx/pack_atlas.rs` | unnecessary; reference; optional/future | Optional shader-pack compatibility, not vanilla rendering. |
 | 702 | `crates/horizon-client-render/src/gfx/pack_center_depth.rs` | unnecessary; reference; optional/future | Not needed for vanilla gameplay/rendering. |
 | 703 | `crates/horizon-client-render/src/gfx/pack_draw.rs` | unnecessary; reference; optional/future | Only useful if a separate shader-pack API is built. |
@@ -864,6 +874,11 @@
 | 723 | `crates/horizon-client-render/src/gfx/stars.rs` | adaptable; version-specific | Useful sky-renderer optimization. |
 | 724 | `crates/horizon-client-render/src/gfx/stars.wgsl` | adaptable; version-specific | Useful with verified target star geometry. |
 | 725 | `crates/horizon-client-render/src/gfx/submit.rs` | adaptable; reference; optional/future | Experimental until exact-device profiling. |
+
+## Part 30 — Entries 726–750
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 726 | `crates/horizon-client-render/src/gfx/sunrise_fan.rs` | adaptable; version-specific | Useful sky optimization after parity. |
 | 727 | `crates/horizon-client-render/src/gfx/terrain_gles.wgsl.inc` | adaptable; version-specific | Useful only if GLES is selected, with Mali validation. |
 | 728 | `crates/horizon-client-render/src/gfx/terrain_source.rs` | adaptable; version-specific | Potential portability layer if GLES is chosen. |
@@ -889,6 +904,11 @@
 | 748 | `crates/horizon-client-render/src/hud_overlays.rs` | essential; version-specific | Core gameplay UI. |
 | 749 | `crates/horizon-client-render/src/inventory_effects.rs` | adaptable; version-specific | Secondary inventory feature. |
 | 750 | `crates/horizon-client-render/src/java_text.rs` | essential; version-specific | Important for options/config parity. |
+
+## Part 31 — Entries 751–775
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 751 | `crates/horizon-client-render/src/jigsaw_block.rs` | adaptable; version-specific | Implement when Jigsaw support is added. |
 | 752 | `crates/horizon-client-render/src/keypad.rs` | adaptable; reference; optional/future | Use as reference only; design editor/icons independently. |
 | 753 | `crates/horizon-client-render/src/level_loading.rs` | adaptable; version-specific | Useful after chunk streaming/login exists. |
@@ -914,6 +934,11 @@
 | 773 | `crates/horizon-client-render/src/mipmap.rs` | adaptable; version-specific | Useful asset-pipeline algorithm. |
 | 774 | `crates/horizon-client-render/src/mod_list.rs` | unnecessary; reference; optional/future | Must not be mistaken for Forge support. |
 | 775 | `crates/horizon-client-render/src/model_library.rs` | essential; version-specific | Core asset pipeline. |
+
+## Part 32 — Entries 776–800
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 776 | `crates/horizon-client-render/src/models.rs` | unnecessary; reference; optional/future | Defer from base client. |
 | 777 | `crates/horizon-client-render/src/models/catalog.rs` | essential; version-specific | Core model/mesher subsystem. |
 | 778 | `crates/horizon-client-render/src/models/cube.rs` | adaptable; version-specific | Optional mesher optimization. |
@@ -940,9 +965,9 @@
 | 799 | `crates/horizon-client-render/src/post_chain.rs` | adaptable; version-specific | Add after GPU pipeline/shader translator. |
 | 800 | `crates/horizon-client-render/src/post_chain.wgsl` | adaptable; version-specific | Fallback paired with verified target post chain. |
 
-## Part 29 — Entries 801–1000
+## Part 33 — Entries 801–825
 
-| No. | Source path | Decision | Review note |
+| No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
 | 801 | `crates/horizon-client-render/src/post_glsl.rs` | adaptable; reference; optional/future | Not a complete GLSL implementation; unsupported extensions and implicit semantics remain. |
 | 802 | `crates/horizon-client-render/src/potent_sulfur.rs` | unnecessary; version-specific | Not a vanilla 1.20.1 feature or registry entry. |
@@ -969,6 +994,11 @@
 | 823 | `crates/horizon-client-render/src/split_profiles/store.rs` | unnecessary; reference; optional/future | Atomic save/corrupt data handling must be checked. |
 | 824 | `crates/horizon-client-render/src/split_ui.rs` | unnecessary; reference; optional/future | Optional product layer with complicated multi-focus semantics. |
 | 825 | `crates/horizon-client-render/src/sprite_cache.rs` | adaptable; reference; version-specific | Path/size/mtime can miss same-size content replacement; cache must be versioned and bounded. |
+
+## Part 34 — Entries 826–850
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 826 | `crates/horizon-client-render/src/sprites.rs` | adaptable; version-specific | Codec variants, alpha and image bounds are version-specific. |
 | 827 | `crates/horizon-client-render/src/static_entity.wgsl` | adaptable; reference; version-specific | Coordinate-space mismatch can cause double camera offsets. |
 | 828 | `crates/horizon-client-render/src/streaming.rs` | adaptable; version-specific | A stale worker result or LOD substitute must never replace nearby authoritative chunk data; near residency policy is critical. |
@@ -994,6 +1024,11 @@
 | 848 | `crates/horizon-client/assets/horizon/lang/de_de.json` | unnecessary; reference; optional/future | Partial localization with substantial English fallback. |
 | 849 | `crates/horizon-client/assets/horizon/lang/en_us.json` | unnecessary; reference; optional/future | Reference for Horizon UI only, not for Minecraft 1.20.1 vanilla strings. |
 | 850 | `crates/horizon-client/assets/horizon/lang/es_es.json` | unnecessary; reference; optional/future | Incomplete localization; fallback will be common. |
+
+## Part 35 — Entries 851–875
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 851 | `crates/horizon-client/assets/horizon/lang/fr_fr.json` | unnecessary; reference; optional/future | Partial localization; long labels may affect layout. |
 | 852 | `crates/horizon-client/assets/horizon/lang/ms_my.json` | unnecessary; reference; optional/future | Coverage appears complete by key count, but key parity is not proof of translation quality. |
 | 853 | `crates/horizon-client/assets/horizon/lang/pl_pl.json` | unnecessary; reference; optional/future | Partial localization; inflection and long UI text need QA. |
@@ -1019,6 +1054,11 @@
 | 873 | `crates/horizon-client/assets/touch/custom_cross_pressed.png` | unnecessary; reference; optional/future | Rendered pixels inspected; ضربدر, pressed state; 24×24 RGBA. Reference only pending license/provenance review. |
 | 874 | `crates/horizon-client/assets/touch/custom_crown.png` | unnecessary; reference; optional/future | Rendered pixels inspected; تاج, default state; 24×24 RGBA. Reference only pending license/provenance review. |
 | 875 | `crates/horizon-client/assets/touch/custom_crown_pressed.png` | unnecessary; reference; optional/future | Rendered pixels inspected; تاج, pressed state; 24×24 RGBA. Reference only pending license/provenance review. |
+
+## Part 36 — Entries 876–900
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 876 | `crates/horizon-client/assets/touch/custom_fire.png` | unnecessary; reference; optional/future | Rendered pixels inspected; آتش, default state; 24×24 RGBA. Reference only pending license/provenance review. |
 | 877 | `crates/horizon-client/assets/touch/custom_fire_pressed.png` | unnecessary; reference; optional/future | Rendered pixels inspected; آتش, pressed state; 24×24 RGBA. Reference only pending license/provenance review. |
 | 878 | `crates/horizon-client/assets/touch/custom_flag.png` | unnecessary; reference; optional/future | Rendered pixels inspected; پرچم, default state; 24×24 RGBA. Reference only pending license/provenance review. |
@@ -1044,6 +1084,11 @@
 | 898 | `crates/horizon-client/assets/touch/debug.png` | unnecessary; reference; optional/future | Rendered pixels inspected; اشکال‌زدایی, default state; 24×24 RGBA. Reference only pending license/provenance review. |
 | 899 | `crates/horizon-client/assets/touch/debug_pressed.png` | unnecessary; reference; optional/future | Rendered pixels inspected; اشکال‌زدایی, pressed state; 24×24 RGBA. Reference only pending license/provenance review. |
 | 900 | `crates/horizon-client/assets/touch/dpad_down.png` | unnecessary; reference; optional/future | Rendered pixels inspected; جهت پایین, default state; 24×24 RGBA. Reference only pending license/provenance review. |
+
+## Part 37 — Entries 901–925
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 901 | `crates/horizon-client/assets/touch/dpad_down_pressed.png` | unnecessary; reference; optional/future | D-pad down pressed glyph; 24×24 RGBA; reference only, no reuse approval. |
 | 902 | `crates/horizon-client/assets/touch/dpad_left.png` | unnecessary; reference; optional/future | D-pad left default glyph; 24×24 RGBA; reference only, no reuse approval. |
 | 903 | `crates/horizon-client/assets/touch/dpad_left_pressed.png` | unnecessary; reference; optional/future | D-pad left pressed glyph; 24×24 RGBA; reference only, no reuse approval. |
@@ -1069,6 +1114,11 @@
 | 923 | `crates/horizon-client/assets/touch/sneak.png` | unnecessary; reference; optional/future | Sneak default glyph; 24×24 RGBA; reference only, no reuse approval. |
 | 924 | `crates/horizon-client/assets/touch/sneak_pressed.png` | unnecessary; reference; optional/future | Sneak pressed glyph; 24×24 RGBA; reference only, no reuse approval. |
 | 925 | `crates/horizon-client/assets/touch/stick.png` | unnecessary; reference; optional/future | Joystick base; 48×48 RGBA; use only as visual reference. |
+
+## Part 38 — Entries 926–950
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 926 | `crates/horizon-client/assets/touch/stick_knob.png` | unnecessary; reference; optional/future | Joystick knob; 24×24 RGBA; use only as visual reference. |
 | 927 | `crates/horizon-client/assets/touch/use.png` | unnecessary; reference; optional/future | Use-item default glyph; 24×24 RGBA; reference only, no reuse approval. |
 | 928 | `crates/horizon-client/assets/touch/use_pressed.png` | unnecessary; reference; optional/future | Use-item pressed glyph; 24×24 RGBA; reference only, no reuse approval. |
@@ -1094,6 +1144,11 @@
 | 948 | `crates/horizon-client/examples/probe/block_particles_fixture.rs` | adaptable; reference; version-specific | Break-particle positions from outline shape/offset and deterministic RNG; rebuild 1.20.1 block data. |
 | 949 | `crates/horizon-client/examples/probe/block_tint_probe.rs` | adaptable; reference; version-specific | Default block-model tint fallback; not biome/world tint; rebuild 1.20.1 tables. |
 | 950 | `crates/horizon-client/examples/probe/block_transform_fixture.rs` | adaptable; reference; version-specific | Block transformer/honeycomb lookup; state and transformation data are versioned. |
+
+## Part 39 — Entries 951–975
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 951 | `crates/horizon-client/examples/probe/breaking_fixture.rs` | adaptable; reference; version-specific | Destroy-crack overlay model geometry/UV oracle; rebuild target crack sprites and model states. |
 | 952 | `crates/horizon-client/examples/probe/camera_probe.rs` | adaptable; reference; version-specific | Exact numeric behavior is visible; source uses current model/input types. |
 | 953 | `crates/horizon-client/examples/probe/cauldron_fixture.rs` | adaptable; reference; version-specific | Item/tag table must be the 1.20.1 version. |
@@ -1119,6 +1174,11 @@
 | 973 | `crates/horizon-client/examples/probe/firework_tooltip_fixture.rs` | adaptable; reference; version-specific | Modern component schema may differ; 1.20.1 uses target NBT forms. |
 | 974 | `crates/horizon-client/examples/probe/first_person_probe.rs` | adaptable; reference; version-specific | Exact timing and item categories must match target 1.20.1. |
 | 975 | `crates/horizon-client/examples/probe/frame_limiter_probe.rs` | adaptable; reference; version-specific | Virtual-clock frame limiter oracle; desktop scheduler is not Android pacing evidence. |
+
+## Part 40 — Entries 976–1000
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 976 | `crates/horizon-client/examples/probe/game_loop_probe.rs` | adaptable; reference; version-specific | Timer, server tick rate, window scaling, mouse and key state; adapt lifecycle for Android. |
 | 977 | `crates/horizon-client/examples/probe/ghost_recipe_fixture.rs` | adaptable; reference; version-specific | Recipe and item data are version-specific. |
 | 978 | `crates/horizon-client/examples/probe/held_drop_fixture.rs` | adaptable; reference; version-specific | Item stack serialization and action order must match 1.20.1. |
@@ -1145,7 +1205,7 @@
 | 999 | `crates/horizon-client/examples/probe/pack_selection_fixture.rs` | adaptable; reference; version-specific | Pack selection ordering; required/server packs must remain fixed and unremovable. |
 | 1000 | `crates/horizon-client/examples/probe/particle_providers_probe.rs` | adaptable; reference; version-specific | Particle provider/tick fixture; prune newer particle types and replace hardcoded newer resources. |
 
-## Part 41 — Entries 1001–1020
+## Part 41 — Entries 1001–1025
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -1169,16 +1229,16 @@
 | 1018 | `crates/horizon-client/examples/probe/storage_menu_fixture.rs` | adaptable; reference | The fixture is intentionally narrow and does not model all slot layouts, inventories or menu packets. The shulker-box-in-shulker-box restriction and most container mappings are in 1.20.1 scope, but mapping tables must be rebuilt from target registries. |
 | 1019 | `crates/horizon-client/examples/probe/subtitle_fixture.rs` | adaptable; reference; version-specific | The test covers camera-relative subtitle presentation, expiration and listener visibility but does not render through an Android canvas/GPU. Text component styling is flattened to plain strings in the serialized output, and sound keys/data are versioned. |
 | 1020 | `crates/horizon-client/examples/probe/tab_list_fixture.rs` | adaptable; reference; version-specific | The fixture mixes stable player-list presentation with later fields such as list-order and show-hat behavior; current NumberFormat and skin texture structures are also tied to the pinned newer protocol. It simulates download states rather than networking. |
-
-## Part 42 — Entries 1021–1040
-
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
 | 1021 | `crates/horizon-client/examples/probe/team_rules_fixture.rs` | adaptable; reference; version-specific | Deterministic scoreboard-team rule probe; omits packet synchronization, lifecycle, collision resolution and rendering; rebuild 1.20.1 rules. |
 | 1022 | `crates/horizon-client/examples/probe/text_display_fixture.rs` | adaptable; reference; version-specific | Useful metadata-to-model test split; current packet ID and serializer schema are not 1.20.1. |
 | 1023 | `crates/horizon-client/examples/probe/text_display_render_fixture.rs` | adaptable; reference; version-specific | Headless text-display quad/layout oracle; rebuild metadata, fonts and atlas for 1.20.1; no GPU output. |
 | 1024 | `crates/horizon-client/examples/probe/toggle_keys_probe.rs` | adaptable; reference; version-specific | Reusable toggle-key state test pattern; key slots are source-specific and touch/multi-pointer cancellation is not covered. |
 | 1025 | `crates/horizon-client/examples/probe/tooltip_display_fixture.rs` | rewrite required; reference; version-specific | Modern tooltip_display item component is not the 1.20.1 legacy ItemStack/NBT schema. |
+
+## Part 42 — Entries 1026–1050
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1026 | `crates/horizon-client/examples/probe/trading_fixture.rs` | adaptable; reference; version-specific | Comprehensive merchant parity harness; rebuild trades, professions, RNG and NBT from 1.20.1. |
 | 1027 | `crates/horizon-client/examples/probe/translucency_fixture.rs` | adaptable; reference; version-specific | CPU quad-sort/cache oracle only; GPU blending and Android visual parity remain separate. |
 | 1028 | `crates/horizon-client/examples/probe/trident_probe.rs` | adaptable; reference; version-specific | Narrow projectile block-hit/movement probe; rebuild physics and block shapes for 1.20.1. |
@@ -1194,11 +1254,6 @@
 | 1038 | `crates/horizon-client/src/accounts.rs` | adaptable; reference; version-specific | Security-sensitive account/session coordinator; separate offline profiles from online auth and review providers, pins and Android secret storage independently. |
 | 1039 | `crates/horizon-client/src/advancements.rs` | adaptable; reference; version-specific | Advancement tree/progress/index/layout concepts are useful; 26.x predicate/data-component schemas need a 1.20.1 legacy rewrite. |
 | 1040 | `crates/horizon-client/src/ambience.rs` | adaptable; reference; version-specific | Ambient state/fade/RNG model is useful, but 26.x environment attributes must be adapted to 1.20.1 biome effects. |
-
-## Part 43 — Entries 1041–1060
-
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
 | 1041 | `crates/horizon-client/src/android_control_assets.rs` | adaptable; reference; version-specific | Use the integrity and pinned-revision download pattern only; Bedrock sample artwork is subject to Mojang terms and is not approved for redistribution. |
 | 1042 | `crates/horizon-client/src/android_control_theme.rs` | adaptable; reference; optional/future | Horizon-specific theme/raster/widget system; reuse only generic UI drawing ideas in an independently designed Android theme. |
 | 1043 | `crates/horizon-client/src/android_control_ui.rs` | adaptable; reference; version-specific | Editable touch-control editor and multi-pointer patterns are relevant; build a smaller RustChunk-owned UI/input subsystem. |
@@ -1209,6 +1264,11 @@
 | 1048 | `crates/horizon-client/src/attribute_updates.rs` | adaptable; reference; version-specific | Thin player attribute/health update bridge; omit newer waypoint attributes and validate server-level semantics. |
 | 1049 | `crates/horizon-client/src/auto_jump.rs` | adaptable; reference; version-specific | Auto-jump geometry/decision model; rebuild collision shapes and movement conditions from 1.20.1. |
 | 1050 | `crates/horizon-client/src/banner.rs` | rewrite required; reference; version-specific | Rebuild the banner data bridge for 1.20.1 legacy NBT; only the ordered layer/rendering model is reusable. |
+
+## Part 43 — Entries 1051–1075
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1051 | `crates/horizon-client/src/beehive.rs` | adaptable; reference; version-specific | Beehive storage/release/honey logic is relevant; replace 26.x environment attributes with 1.20.1 weather/time/obstruction rules. |
 | 1052 | `crates/horizon-client/src/benchmark.rs` | adaptable; reference; optional/future | Reproducible scene/FPS/memory benchmark design; Horizon scenes/backend hooks are not RustChunk or Galaxy A22 measurements. Destructive benchmark world requires isolation. |
 | 1053 | `crates/horizon-client/src/bin/horizon-ctl/commands.rs` | unnecessary; reference; optional/future | Horizon desktop control CLI is not core runtime; borrow a typed command registry only for a separately scoped developer tool. |
@@ -1219,11 +1279,6 @@
 | 1058 | `crates/horizon-client/src/block_pattern.rs` | adaptable; reference; version-specific | Generic oriented block-pattern matching can support 1.20.1 golems/Wither after target pattern/orientation verification. |
 | 1059 | `crates/horizon-client/src/block_predictions.rs` | adaptable; reference; version-specific | Client block prediction/ack model useful; sequence, teleport and correction behavior must match the 1.20.1 protocol. |
 | 1060 | `crates/horizon-client/src/block_transform.rs` | rewrite required; reference; version-specific | Reimplement 1.20.1 axe/hoe/shovel interactions independently; the newer block_transformer registry is not target data. |
-
-## Part 44 — Entries 1061–1080
-
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
 | 1061 | `crates/horizon-client/src/boss_overlay.rs` | adaptable; reference; version-specific | Useful state model, but packet enums are version-specific. Verify duplicate-add order, invalid enum clamping and renderer effects against 1.20.1. |
 | 1062 | `crates/horizon-client/src/breathing.rs` | unnecessary; reference; optional/future | Air arithmetic is useful, but purpose is a native mod event bridge with API-versioned server callbacks; RustChunk vanilla has no such extension lifecycle. |
 | 1063 | `crates/horizon-client/src/cauldron.rs` | adaptable; reference; version-specific | Decision tree is reusable, but ItemStack component access differs from 1.20.1 legacy NBT/BlockEntityTag; sound/effect ordering needs target verification. |
@@ -1239,6 +1294,11 @@
 | 1073 | `crates/horizon-client/src/debug_chart.rs` | adaptable; reference; optional/future | Useful telemetry separation, but hotkeys/counters/sample semantics are snapshot-specific; no Android/GPU metrics guaranteed. |
 | 1074 | `crates/horizon-client/src/debug_entries.rs` | adaptable; reference; optional/future | Configuration model reusable; entry catalogue, IDs and migration rules are 26.3-specific; profile schema cannot be copied unchanged. |
 | 1075 | `crates/horizon-client/src/debug_keys.rs` | adaptable; reference; version-specific | Good key lifecycle pattern; later debug mappings and Horizon repro keys are not target data. Deliberate crash behavior is unsafe for production/mobile. |
+
+## Part 44 — Entries 1076–1100
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1076 | `crates/horizon-client/src/debug_overlay.rs` | adaptable; reference; optional/future | Generic grouping useful; entry data is snapshot-specific. Linux /proc counters do not include GPU/Java memory; Android semantics need validation. Shader timings are Horizon-only. |
 | 1077 | `crates/horizon-client/src/debugworld.rs` | adaptable; reference; version-specific | Useful deterministic QA world, but grid order/count depend on registry order/version; current numeric IDs cannot be reused. |
 | 1078 | `crates/horizon-client/src/diagnostics/exit_reports.rs` | adaptable; reference; optional/future | Useful crash/OOM/ANR tooling. Raw traces/logs can contain sensitive content; keep local by default and redact before explicit export. Historical APIs require Android 11+. |
@@ -1264,6 +1324,11 @@
 | 1098 | `crates/horizon-client/src/game.rs` | rewrite required; reference; version-specific | Monolith mixes vanilla-like behavior with LAN/friends, native hooks, Discord, Bedrock inventory, LOD and later mechanics; ItemStack/NBT uses components. |
 | 1099 | `crates/horizon-client/src/game/advancements_screen.rs` | adaptable; reference; version-specific | Five roots match vanilla; visibility/assets/text wrapping/server positions need 1.20.1 parity. UI separate from trigger service. |
 | 1100 | `crates/horizon-client/src/game/advancements.rs` | rewrite required; reference; version-specific | Modern predicate/trigger schema, spear_mobs, entity variants and ItemStack components are not 1.20.1; tests unexecuted. |
+
+## Part 45 — Entries 1101–1125
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1101 | `crates/horizon-client/src/game/agent_navigation.rs` | adaptable; reference; optional/future | keep only generic search ideas; do not import agent commands. |
 | 1102 | `crates/horizon-client/src/game/agent_settings.rs` | unnecessary; reference; optional/future | do not port Horizon agent settings UI. |
 | 1103 | `crates/horizon-client/src/game/agent.rs` | unnecessary; reference; optional/future | keep out of runtime; task patterns only for approved QA tooling. |
@@ -1289,6 +1354,11 @@
 | 1123 | `crates/horizon-client/src/game/boat_passengers.rs` | adaptable; version-specific | Adapt vanilla boat passenger/collision subset; remove LAN and newer hooks. |
 | 1124 | `crates/horizon-client/src/game/boats.rs` | essential; rewrite required; version-specific | Essential vehicle feature area; implement anew for 1.20.1. |
 | 1125 | `crates/horizon-client/src/game/books.rs` | adaptable; rewrite required; version-specific | Book and lectern features are relevant, but legacy NBT/protocol/UI must be rebuilt. |
+
+## Part 46 — Entries 1126–1150
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1126 | `crates/horizon-client/src/game/bossbars.rs` | adaptable; version-specific | Boss-bar concepts adapt; version-specific packets and viewer logic require rebuilding. |
 | 1127 | `crates/horizon-client/src/game/breezes.rs` | unnecessary; reference; optional/future; version-specific | Later Breeze-specific particles; exclude from 1.20.1 vanilla. |
 | 1128 | `crates/horizon-client/src/game/brush.rs` | adaptable; version-specific | Archaeology is in target version; adapt legacy loot/NBT and interaction APIs. |
@@ -1314,6 +1384,11 @@
 | 1148 | `crates/horizon-client/src/game/commands/compute.rs` | unnecessary; reference; optional/future; version-specific | Later /compute command and context provider registries; exclude from vanilla 1.20.1. |
 | 1149 | `crates/horizon-client/src/game/commands/data.rs` | essential; rewrite required; version-specific | NBT command support matters for maps/datapacks; rewrite serializers and entity mutation for 1.20.1. |
 | 1150 | `crates/horizon-client/src/game/commands/effects.rs` | adaptable; version-specific | Vanilla effect/enchant command behavior adapts; translate registry and item data to target 1.20.1. |
+
+## Part 47 — Entries 1151–1175
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1151 | `crates/horizon-client/src/game/commands/execute.rs` | essential; rewrite required; version-specific | /execute semantics are foundational; rebuild source/fork/condition/store logic against 1.20.1. |
 | 1152 | `crates/horizon-client/src/game/commands/extra.rs` | unnecessary; reference; optional/future; version-specific | Mixed Horizon and later command collection; split and omit non-1.20.1 command surfaces. |
 | 1153 | `crates/horizon-client/src/game/commands/items.rs` | essential; rewrite required; version-specific | Item command/slot behavior is useful, but rewrite component-based mutations to 1.20.1 ItemStack NBT. |
@@ -1339,6 +1414,11 @@
 | 1173 | `crates/horizon-client/src/game/creatures.rs` | essential; rewrite required; version-specific | Critical creature engine area; must be modularly rewritten for 1.20.1 with later species and Horizon/LAN code excluded. |
 | 1174 | `crates/horizon-client/src/game/crossbow.rs` | adaptable; rewrite required; version-specific | Crossbow behavior adapts; charged component storage must be rewritten to target NBT. |
 | 1175 | `crates/horizon-client/src/game/cushions.rs` | unnecessary; reference; optional/future | Horizon-only cushion furniture entity; exclude from vanilla 1.20.1. |
+
+## Part 48 — Entries 1176–1200
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1176 | `crates/horizon-client/src/game/debug_keys.rs` | adaptable; rewrite required; version-specific | Debug keys are useful, but split/rewrite them against 1.20.1 and strip Horizon-only controls. |
 | 1177 | `crates/horizon-client/src/game/debug_lines.rs` | adaptable; version-specific | F3 data model adapts; rebuild exact 1.20.1 entry set and presentation. |
 | 1178 | `crates/horizon-client/src/game/debug_options.rs` | unnecessary; reference; optional/future; version-specific | Newer 26.3 DebugOptionsScreen; omit from the 1.20.1 baseline. |
@@ -1364,6 +1444,11 @@
 | 1198 | `crates/horizon-client/src/game/entity_culling.rs` | adaptable; optional/future; version-specific | Optional rendering optimization; preserve correctness and profile before enabling on Android. |
 | 1199 | `crates/horizon-client/src/game/entity_model_loading_tests.rs` | unnecessary; reference; optional/future | Test-only model-loading benchmark/equivalence fixture; no runtime code to port. |
 | 1200 | `crates/horizon-client/src/game/event_loop.rs` | adaptable; reference | Small reusable platform abstraction; adapt to Android/headless runtime. |
+
+## Part 49 — Entries 1201–1225
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1201 | `crates/horizon-client/src/game/events.rs` | unnecessary; optional/future | Horizon agent event feed and wait-for API; keep outside vanilla client baseline. |
 | 1202 | `crates/horizon-client/src/game/execution_role.rs` | adaptable; reference | Execution-role separation helps distinguish remote client and integrated-server ownership. |
 | 1203 | `crates/horizon-client/src/game/explosion.rs` | essential; rewrite required; version-specific | Core explosion physics/damage/drop behavior; rebuild to 1.20.1 and remove later extensions. |
@@ -1389,6 +1474,11 @@
 | 1223 | `crates/horizon-client/src/game/golems.rs` | essential; rewrite required; version-specific | Recognizes spawn patterns and creates snow/iron golems alongside later copper-golem/copper-chest additions. |
 | 1224 | `crates/horizon-client/src/game/growth.rs` | adaptable; rewrite required; version-specific | Implements sapling/plant growth and a shears interaction that removes eligible plant heads. |
 | 1225 | `crates/horizon-client/src/game/hand.rs` | essential; rewrite required; version-specific | Implements first-person hand interactions: ray picking, attacks, block breaking, item-use clicks, cooldown, swings and equip state; includes later reach/piercing features. |
+
+## Part 50 — Entries 1226–1250
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1226 | `crates/horizon-client/src/game/headless.rs` | adaptable; reference; optional/future | Runs a headless Game loop and shutdown/save at nominal 50 ms cadence. |
 | 1227 | `crates/horizon-client/src/game/ime.rs` | adaptable; version-specific | Handles OS IME preedit/commit, candidate/caret placement and text dispatch to focused screens. |
 | 1228 | `crates/horizon-client/src/game/imports.rs` | unnecessary; optional/future | Polls an Android Open With/share/file-picker inbox and presents import progress/results via HUD banners and chime. |
@@ -1414,6 +1504,11 @@
 | 1248 | `crates/horizon-client/src/game/lan_entities.rs` | essential; rewrite required; version-specific | Builds and serializes tracked non-mob entities including boats, minecarts, armor stands, item frames and paintings, plus passenger/leash relationships. |
 | 1249 | `crates/horizon-client/src/game/lan_far.rs` | unnecessary; optional/future | Provides Horizon-only far-terrain requests over horizon:lod custom payload, samples distant terrain on a worker and returns bounded replies. |
 | 1250 | `crates/horizon-client/src/game/lan_mobs.rs` | unnecessary; reference; optional/future | Chooses which player a mob targets in a hosted LAN world and builds player snapshots for host/guests, including effects, equipment and combat attribution. |
+
+## Part 51 — Entries 1251–1275
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1251 | `crates/horizon-client/src/game/lan_mount_menu.rs` | adaptable; rewrite required; version-specific | Implements a guest horse/mount inventory menu, slot sync, click handling, mount inventory and validity checks. |
 | 1252 | `crates/horizon-client/src/game/lan_particles.rs` | adaptable; rewrite required; version-specific | Constructs and sends server particle packets near LAN guests, including option serialization, spread/randomization, effects and explosion particles. |
 | 1253 | `crates/horizon-client/src/game/lan_pvp.rs` | unnecessary; reference; optional/future | Implements server-side PvP melee/projectile damage including critical/sweep, shields, armor, knockback, teams and PvP rule. |
@@ -1439,6 +1534,11 @@
 | 1273 | `crates/horizon-client/src/game/machines/native_energy.rs` | unnecessary; optional/future | Implements a Horizon native-mod energy-buffer API for reading, inserting, extracting and moving energy between mod block entities. |
 | 1274 | `crates/horizon-client/src/game/machines/native_fluids.rs` | unnecessary; optional/future | Implements a Horizon native-mod fluid tank API with sided tank access, cauldron conversion, insertion/extraction and block-to-block fluid transfer. |
 | 1275 | `crates/horizon-client/src/game/machines/native_items.rs` | unnecessary; optional/future | Implements Horizon native-mod sided container access, item insertion/extraction and loss-avoiding item movement. |
+
+## Part 52 — Entries 1276–1300
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1276 | `crates/horizon-client/src/game/maps.rs` | essential; rewrite required; version-specific | Implements map creation, exploration-map resolution, terrain color sampling, saved map data, player/banner/frame decorations, remote map packets and map rendering. |
 | 1277 | `crates/horizon-client/src/game/memory.rs` | unnecessary; optional/future | Builds a diagnostic memory census for client/server worlds, shared chunk sections, generation buffers, renderer CPU/GPU allocations and allocator tags. |
 | 1278 | `crates/horizon-client/src/game/minecarts.rs` | essential; rewrite required; version-specific | Implements minecart entities, rail shapes and movement, powered/activator rails, collisions, riders, variants, containers, TNT explosions, persistence and rendering. |
@@ -1464,6 +1564,11 @@
 | 1298 | `crates/horizon-client/src/game/native_block_entity_draw.rs` | unnecessary; reference; optional/future | Provides a native-mod block-entity drawing API with pose stack transforms, custom quads/cubes/blocks/items, culling bounds and cached kept geometry. |
 | 1299 | `crates/horizon-client/src/game/native_builds.rs` | unnecessary; optional/future | Android UI and workflow for compiling/download/installing native-mod game libraries from Starling or a custom build server, then selecting the library for the next app start. |
 | 1300 | `crates/horizon-client/src/game/native_claimed_items.rs` | unnecessary; reference; optional/future | Lets native client mods claim item right-clicks, receive bounded UseStart/UseStop events, inspect held-item data and raycast blocks including far LOD terrain. |
+
+## Part 53 — Entries 1301–1325
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1301 | `crates/horizon-client/src/game_mode_switcher.rs` | adaptable; reference; version-specific | Implements the F3+F4 debug gamemode selector: mode icon selection, cycling, pointer hit testing, hover state and display geometry. |
 | 1302 | `crates/horizon-client/src/game_rules_screen.rs` | essential; rewrite required; version-specific | Implements the gamerule settings screen, including rule search, boolean controls, bounded integer editing, category layout, scrolling, focus, keyboard/IME behavior and apply/discard actions. |
 | 1303 | `crates/horizon-client/src/gizmos.rs` | adaptable; reference; version-specific | Provides debug gizmo geometry and rendering helpers for lines, cuboids, arrows, chunk borders, hitboxes and camera-relative overlays. |
@@ -1489,6 +1594,11 @@
 | 1323 | `crates/horizon-client/src/lan/chunks.rs` | adaptable; reference; version-specific | Implements outbound chunk/biome/light packet encoding for resident and saved columns, including palette conversion, block entity update tags, heightmaps, light masks/layers, cache management and multi-threaded warm-up. |
 | 1324 | `crates/horizon-client/src/lan/code_of_conduct.rs` | unnecessary; reference; optional/future | Reads optional language-specific server code-of-conduct text files, strips formatting color codes, normalizes line endings and selects a language/fallback document. |
 | 1325 | `crates/horizon-client/src/lan/command_order.rs` | unnecessary; reference; optional/future | Stores a generated table of command-tree node paths and child names to impose deterministic registration/display order on the LAN command tree. |
+
+## Part 54 — Entries 1326–1350
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1326 | `crates/horizon-client/src/lan/command_suggestions.rs` | unnecessary; reference; optional/future | Provides generated ordering/selection metadata for command suggestion providers keyed by command argument paths. |
 | 1327 | `crates/horizon-client/src/lan/commands.rs` | unnecessary; reference; optional/future | Builds and sends the server's Brigadier command tree and command-completion data, including permission-aware command nodes and argument metadata. |
 | 1328 | `crates/horizon-client/src/lan/conn.rs` | unnecessary; reference; optional/future | Implements the LAN server connection lifecycle from admission and login through configuration and play, including authentication, packet routing and disconnect handling. |
@@ -1514,6 +1624,11 @@
 | 1348 | `crates/horizon-client/src/landing.rs` | essential; rewrite required; version-specific | Implements player fall/landing behavior and block landing reactions, producing sound, particle, damage, statistic and block-change events through the motion simulation. |
 | 1349 | `crates/horizon-client/src/locator_bar.rs` | unnecessary; reference; optional/future | Implements client-side waypoint state, style/animated sprite loading and locator-bar rendering with distance-based dots, arrows and contextual HUD priority. |
 | 1350 | `crates/horizon-client/src/lod_net.rs` | unnecessary; reference; optional/future | Defines Horizon's custom far-terrain protocol, bounded tile requests/replies, rate limits and LOD data decoding. |
+
+## Part 55 — Entries 1351–1375
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1351 | `CLAUDE.md` | unnecessary; reference; optional/future | Symlink to AGENTS.md (9-byte target); repository guidance metadata, not a separate source file. |
 | 1352 | `crates/horizon-client/src/game/native_components.rs` | unnecessary; reference; optional/future | Reads/writes native-mod item components through Horizon's custom stack data API. |
 | 1353 | `crates/horizon-client/src/game/native_criteria.rs` | unnecessary; reference; optional/future | Dispatches native-mod criteria/advancement observations from Horizon game events. |
@@ -1539,6 +1654,11 @@
 | 1373 | `crates/horizon-client/src/game/native_projectiles.rs` | unnecessary; reference; optional/future | Routes projectile impacts through native hooks and replays impacts canceled by mods. |
 | 1374 | `crates/horizon-client/src/game/native_quick_move.rs` | unnecessary; reference; optional/future | Routes shift-clicks in native mod containers and settles item remainders safely. |
 | 1375 | `crates/horizon-client/src/game/native_recipes.rs` | unnecessary; reference; optional/future | Builds native-mod recipe catalogues, tracks recipe-book state and syncs selected recipe content. |
+
+## Part 56 — Entries 1376–1400
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1376 | `crates/horizon-client/src/game/native_server.rs` | unnecessary; reference; optional/future | Horizon-specific native server-mod API and server-scoped operations. |
 | 1377 | `crates/horizon-client/src/game/native_shaders.rs` | unnecessary; reference; optional/future | Native shader-pack lifecycle and renderer callbacks. |
 | 1378 | `crates/horizon-client/src/game/native_ticks.rs` | unnecessary; reference; optional/future | Native-mod game/server/player/entity tick callback dispatch. |
@@ -1548,22 +1668,27 @@
 | 1382 | `crates/horizon-client/src/game/native_world_read.rs` | unnecessary; reference; optional/future | Read-only world/block queries through Horizon's native API. |
 | 1383 | `crates/horizon-client/src/game/natural_spawning.rs` | essential; adapt; 1.20.1 | Natural mob spawning, spawn placement, category caps and spawn finalization. |
 | 1384 | `crates/horizon-client/src/game/nautili.rs` | unnecessary; version mismatch; future | Nautilus mob AI and interactions; species is absent from Minecraft 1.20.1. |
-| 1385 | `crates/horizon-client/src/game/net_harness.rs` | optional; test only; no runtime | Local networking test harness; not production game runtime. |
+| 1385 | `crates/horizon-client/src/game/net_harness.rs` | undetermined; optional; test only; no runtime | Local networking test harness; not production game runtime. |
 | 1386 | `crates/horizon-client/src/game/nether_portal.rs` | essential; adapt; 1.20.1 | Portal contact, cooldown, destination search and dimension transfer. |
 | 1387 | `crates/horizon-client/src/game/no_resources.rs` | essential; adapt; 1.20.1 | Fallback behavior for absent or not-yet-loaded resources. |
 | 1388 | `crates/horizon-client/src/game/ominous_item_spawner.rs` | unnecessary; version mismatch; future | Ominous item spawner entity and timed item release; later-version feature. |
 | 1389 | `crates/horizon-client/src/game/options.rs` | essential; adapt; 1.20.1 | In-game settings UI, option changes and configuration persistence. |
-| 1390 | `crates/horizon-client/src/game/own_skin.rs` | optional; adapt; offline profile | Local player skin loading/customization; authenticated cloud upload must be gated. |
+| 1390 | `crates/horizon-client/src/game/own_skin.rs` | undetermined; optional; adapt; offline profile | Local player skin loading/customization; authenticated cloud upload must be gated. |
 | 1391 | `crates/horizon-client/src/game/packs.rs` | essential; adapt; 1.20.1 | Resource-pack discovery, layered server packs and asynchronous resource reload. |
-| 1392 | `crates/horizon-client/src/game/pad_menu.rs` | optional; controller feature | Controller focus/pointer navigation, menu input and on-screen keyboard. |
-| 1393 | `crates/horizon-client/src/game/pad.rs` | optional; controller feature | Controller polling, action mapping, movement/look, rumble and virtual input. |
-| 1394 | `crates/horizon-client/src/game/pad/android.rs` | optional; Android controller feature | Android controller device discovery and vibration bridge. |
-| 1395 | `crates/horizon-client/src/game/pad/hardware.rs` | optional; desktop only | gilrs controller backend and DualSense HID/haptics; exclude from Android baseline. |
+| 1392 | `crates/horizon-client/src/game/pad_menu.rs` | undetermined; optional; controller feature | Controller focus/pointer navigation, menu input and on-screen keyboard. |
+| 1393 | `crates/horizon-client/src/game/pad.rs` | undetermined; optional; controller feature | Controller polling, action mapping, movement/look, rumble and virtual input. |
+| 1394 | `crates/horizon-client/src/game/pad/android.rs` | undetermined; optional; Android controller feature | Android controller device discovery and vibration bridge. |
+| 1395 | `crates/horizon-client/src/game/pad/hardware.rs` | undetermined; optional; desktop only | gilrs controller backend and DualSense HID/haptics; exclude from Android baseline. |
 | 1396 | `crates/horizon-client/src/game/paintings.rs` | essential; adapt; 1.20.1 | Painting variants, placement/survival, breaking, ticking and rendering. |
 | 1397 | `crates/horizon-client/src/game/pandas.rs` | essential; adapt; 1.20.1 | Panda food pickup, bamboo interaction, breeding/age effects and particles. |
 | 1398 | `crates/horizon-client/src/game/passengers.rs` | essential; adapt; 1.20.1 | Entity passenger graphs, vehicle seating, jockeys and skeleton horse traps. |
-| 1399 | `crates/horizon-client/src/game/perf.rs` | optional; diagnostics | Performance sampling, GPU memory and stats overlay. |
+| 1399 | `crates/horizon-client/src/game/perf.rs` | undetermined; optional; diagnostics | Performance sampling, GPU memory and stats overlay. |
 | 1400 | `crates/horizon-client/src/game/persist.rs` | essential; adapt; 1.20.1 | Entity/chunk NBT persistence, passenger trees, attachments and scheduled ticks. |
+
+## Part 57 — Entries 1401–1425
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1401 | `crates/horizon-client/src/game/perspective.rs` | essential; rewrite required; 1.20.1 | Camera mode, collision zoom and player model/render pipeline. |
 | 1402 | `crates/horizon-client/src/game/pick_entity.rs` | essential; rewrite required; 1.20.1 | Entity ray-pick selection and creative pick-result mapping. |
 | 1403 | `crates/horizon-client/src/game/pickups.rs` | adaptable; reference; optional/future | Visual item/orb/arrow/trident pickup interpolation. |
@@ -1574,47 +1699,56 @@
 | 1408 | `crates/horizon-client/src/game/potent_sulfur.rs` | unnecessary; version mismatch; future | Later-version Potent Sulfur geyser; exclude from baseline. |
 | 1409 | `crates/horizon-client/src/game/potions.rs` | essential; rewrite required; 1.20.1 | Potion use, splash/lingering effects, clouds and HUD. |
 | 1410 | `crates/horizon-client/src/game/powder_snow.rs` | essential; adapt; 1.20.1 | Powder-snow bucket pickup and fire extinguishing. |
-| 1411 | `crates/horizon-client/src/game/prediction.rs` | optional; reference; LAN host | LAN-host guest movement replay; not remote-client baseline. |
+| 1411 | `crates/horizon-client/src/game/prediction.rs` | undetermined; optional; reference; LAN host | LAN-host guest movement replay; not remote-client baseline. |
 | 1412 | `crates/horizon-client/src/game/processing.rs` | unnecessary; reference; optional/future | Create native processing simulation; not Forge mod loading. |
 | 1413 | `crates/horizon-client/src/game/pumpkin.rs` | essential; adapt; 1.20.1 | Shears carving pumpkin, loot and orientation. |
 | 1414 | `crates/horizon-client/src/game/quick_actions.rs` | unnecessary; version mismatch; future | Later-version Quick Actions dialog registry/keybind flow. |
 | 1415 | `crates/horizon-client/src/game/raids.rs` | essential; rewrite required; 1.20.1 | Raids, patrol spawning, waves and village siege. |
 | 1416 | `crates/horizon-client/src/game/ram_limit.rs` | adaptable; reference; Android optimization | Adaptive render-distance policy under memory pressure. |
-| 1417 | `crates/horizon-client/src/game/random_textures.rs` | optional; reference; OptiFine compatibility | OptiFine random entity texture selection. |
+| 1417 | `crates/horizon-client/src/game/random_textures.rs` | undetermined; optional; reference; OptiFine compatibility | OptiFine random entity texture selection. |
 | 1418 | `crates/horizon-client/src/game/recipe_book.rs` | essential; rewrite required; 1.20.1 | Recipe-book search/filter, placement and ghost slots. |
 | 1419 | `crates/horizon-client/src/game/remote_camera.rs` | essential; adapt; 1.20.1 | Spectator camera attachment and entity post effects. |
 | 1420 | `crates/horizon-client/src/game/remote_chat.rs` | essential; rewrite required; 1.20.1 | Secure chat signing and last-seen acknowledgement. |
 | 1421 | `crates/horizon-client/src/game/remote_chunks.rs` | essential; rewrite required; 1.20.1 | Remote chunk decode, lighting, biome mapping and ordered insertion. |
 | 1422 | `crates/horizon-client/src/game/remote_mob_data.rs` | essential; rewrite required; 1.20.1 | Remote mob/player synchronized metadata and model state. |
-| 1423 | `crates/horizon-client/src/game/remote_mob_particles.rs` | optional; adapt; entity effects | Remote mob event particles and ravager feedback. |
+| 1423 | `crates/horizon-client/src/game/remote_mob_particles.rs` | undetermined; optional; adapt; entity effects | Remote mob event particles and ravager feedback. |
 | 1424 | `crates/horizon-client/src/game/remote_mob_use.rs` | essential; rewrite required; 1.20.1 | Client prediction of mob interaction and held-item fallback. |
 | 1425 | `crates/horizon-client/src/game/remote_objects.rs` | essential; rewrite required; 1.20.1 | Remote vehicle, armor stand, frame, painting and display lifecycle. |
-| 1426 | `crates/horizon-client/src/game/remote_projectiles.rs` | Essential for faithful multiplayer combat and projectile visuals; incorrect spawn decoding or interpolation is visible and may break hit timing. | Remote projectile spawn, metadata and interpolation for multiplayer combat. |
-| 1427 | `crates/horizon-client/src/game/remote_stations.rs` | Useful for correct workstation UI and interaction routing, but not central to connection or chunk delivery. | Workstation/station interactions and menu routing. |
-| 1428 | `crates/horizon-client/src/game/remote_vehicles.rs` | Essential for multiplayer riding, boats, minecarts and mounted travel; incorrect passenger state can detach players visually. | Remote vehicle/mount state, steering and passenger synchronization. |
-| 1429 | `crates/horizon-client/src/game/remote.rs` | Critical to joining and remaining synchronized with Aternos/Forge servers. It is also the integration point for chunk arrival latency and visible stale state. | Central multiplayer protocol dispatcher and synchronized remote game state. |
-| 1430 | `crates/horizon-client/src/game/render_control.rs` | Optional debugging aid; no baseline client requirement. | Developer control-socket rendering commands and A/B diagnostics. |
-| 1431 | `crates/horizon-client/src/game/render_tick.rs` | Important for visual fidelity, but separate from server-authoritative simulation and networking. | Frame visual updates for fog, weather, rain splashes and particles. |
-| 1432 | `crates/horizon-client/src/game/repro.rs` | Optional diagnostic subsystem with high value for diagnosing chunk stalls, crashes and state divergence. | Reproducible session capture/replay and privacy-filtered diagnostic export. |
-| 1433 | `crates/horizon-client/src/game/respawn_anchor.rs` | Essential survival gameplay and correct death/respawn behavior. | Respawn anchor charging, explosion and safe respawn resolution. |
-| 1434 | `crates/horizon-client/src/game/saves_control.rs` | Optional developer/admin utility; not required for playing on external servers. | Developer control commands for saved-world management and server-list inspection. |
-| 1435 | `crates/horizon-client/src/game/saving.rs` | Critical for preventing world loss and Android process-kill corruption; also relevant to smooth exit and reduced frame stalls. | Incremental world save, durable writer completion and Android background saving. |
-| 1436 | `crates/horizon-client/src/game/saws.rs` | Not required to connect to Forge 1.20.1 servers. May be a reference only if a separately specified native Create bridge is considered. | Create 6.0.10 native saw simulation; not Forge mod loading. |
-| 1437 | `crates/horizon-client/src/game/scoreboard.rs` | Essential multiplayer UI for Aternos minigames, teams, objectives and server-provided status. | Scoreboard objectives, scores, teams and display rendering. |
-| 1438 | `crates/horizon-client/src/game/screen_info.rs` | Useful shared UI foundation, especially for touch-friendly mobile presentation. | Reusable screen titles, prompts and navigation metadata. |
-| 1439 | `crates/horizon-client/src/game/screens.rs` | Essential client usability for inventory, crafting, containers and options; needs an Android-first UI adaptation. | Game screen/menu dispatcher and shared UI input/draw flow. |
-| 1440 | `crates/horizon-client/src/game/sculk_fixture.rs` | Essential for Deep Dark/Ancient City gameplay and redstone/vibration correctness. | Sculk fixture block interactions and vibration/game-event behavior. |
-| 1441 | `crates/horizon-client/src/game/sculk.rs` | Essential to 1.20.1 Deep Dark, Warden and vibration gameplay; needs exact target game-event behavior. | Sculk vibration, sensor, shrieker, catalyst and Warden event routing. |
-| 1442 | `crates/horizon-client/src/game/server_links.rs` | No 1.20.1 baseline requirement; possible future protocol feature. | Later-version server link prompt, validation and open/copy actions. |
-| 1443 | `crates/horizon-client/src/game/server_packs.rs` | Essential for many modded/community servers that require or offer server resource packs. | Server resource-pack consent, download, reload and status handling. |
-| 1444 | `crates/horizon-client/src/game/server_travel.rs` | Not required for a client that only connects to Aternos, but a useful future reference if RustChunk hosts local worlds or needs portal simulation. | LAN-host dimension/portal trips, vehicles, respawn and chunk-ready arrival. |
-| 1445 | `crates/horizon-client/src/game/setup.rs` | Useful launcher feature for Android, but should be independently designed around RustChunk packaging, storage and account policy. | Android account/resource/Java setup and onboarding UI. |
-| 1446 | `crates/horizon-client/src/game/setup/account_form.rs` | Useful for an Android launcher, but requires independent provider and credential handling. | Credential/offline account form, Android IME bridge and password handling. |
-| 1447 | `crates/horizon-client/src/game/setup/fishing.rs` | Cosmetic onboarding polish; no requirement for launching or connecting to servers. | Optional launcher fishing mini-game and generated sound/animation. |
-| 1448 | `crates/horizon-client/src/game/shader_packs.rs` | Optional renderer extension, potentially useful for visual features but not a prerequisite for Forge server connection. | External shader-pack loading, profiles, uniforms and mobile fallback. |
-| 1449 | `crates/horizon-client/src/game/shelf.rs` | No baseline requirement; possible future custom block/mod reference only. | Later-version wooden shelf inventory swap and item rendering. |
-| 1450 | `crates/horizon-client/src/game/shield.rs` | Essential combat interaction, but this implementation cannot be copied into 1.20.1 unchanged. | Shield item blocking, damage reduction, durability and disable rules. |
 
+## Part 58 — Entries 1426–1450
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1426 | `crates/horizon-client/src/game/remote_projectiles.rs` | essential; rewrite required; 1.20.1 | Remote projectile spawn, metadata and interpolation for multiplayer combat. |
+| 1427 | `crates/horizon-client/src/game/remote_stations.rs` | adaptable; rewrite required; 1.20.1 | Workstation/station interactions and menu routing. |
+| 1428 | `crates/horizon-client/src/game/remote_vehicles.rs` | essential; rewrite required; 1.20.1 | Remote vehicle/mount state, steering and passenger synchronization. |
+| 1429 | `crates/horizon-client/src/game/remote.rs` | essential; rewrite required; 1.20.1 | Central multiplayer protocol dispatcher and synchronized remote game state. |
+| 1430 | `crates/horizon-client/src/game/render_control.rs` | undetermined; optional; developer diagnostics only | Developer control-socket rendering commands and A/B diagnostics. |
+| 1431 | `crates/horizon-client/src/game/render_tick.rs` | essential; adapt; 1.20.1 | Frame visual updates for fog, weather, rain splashes and particles. |
+| 1432 | `crates/horizon-client/src/game/repro.rs` | undetermined; optional; reference; diagnostics | Reproducible session capture/replay and privacy-filtered diagnostic export. |
+| 1433 | `crates/horizon-client/src/game/respawn_anchor.rs` | essential; adapt; 1.20.1 | Respawn anchor charging, explosion and safe respawn resolution. |
+| 1434 | `crates/horizon-client/src/game/saves_control.rs` | undetermined; optional; developer diagnostics only | Developer control commands for saved-world management and server-list inspection. |
+| 1435 | `crates/horizon-client/src/game/saving.rs` | essential; adapt; 1.20.1 | Incremental world save, durable writer completion and Android background saving. |
+| 1436 | `crates/horizon-client/src/game/saws.rs` | unnecessary; reference; optional/future | Create 6.0.10 native saw simulation; not Forge mod loading. |
+| 1437 | `crates/horizon-client/src/game/scoreboard.rs` | essential; rewrite required; 1.20.1 | Scoreboard objectives, scores, teams and display rendering. |
+| 1438 | `crates/horizon-client/src/game/screen_info.rs` | adaptable; rewrite required; UI framework | Reusable screen titles, prompts and navigation metadata. |
+| 1439 | `crates/horizon-client/src/game/screens.rs` | essential; rewrite required; 1.20.1 | Game screen/menu dispatcher and shared UI input/draw flow. |
+| 1440 | `crates/horizon-client/src/game/sculk_fixture.rs` | essential; rewrite required; 1.20.1 | Sculk fixture block interactions and vibration/game-event behavior. |
+| 1441 | `crates/horizon-client/src/game/sculk.rs` | essential; rewrite required; 1.20.1 | Sculk vibration, sensor, shrieker, catalyst and Warden event routing. |
+| 1442 | `crates/horizon-client/src/game/server_links.rs` | unnecessary; version mismatch; future | Later-version server link prompt, validation and open/copy actions. |
+| 1443 | `crates/horizon-client/src/game/server_packs.rs` | essential; rewrite required; 1.20.1 | Server resource-pack consent, download, reload and status handling. |
+| 1444 | `crates/horizon-client/src/game/server_travel.rs` | undetermined; optional; reference; LAN host | LAN-host dimension/portal trips, vehicles, respawn and chunk-ready arrival. |
+| 1445 | `crates/horizon-client/src/game/setup.rs` | undetermined; optional; adapt; Android launcher | Android account/resource/Java setup and onboarding UI. |
+| 1446 | `crates/horizon-client/src/game/setup/account_form.rs` | undetermined; optional; adapt; Android launcher | Credential/offline account form, Android IME bridge and password handling. |
+| 1447 | `crates/horizon-client/src/game/setup/fishing.rs` | undetermined; optional; future polish | Optional launcher fishing mini-game and generated sound/animation. |
+| 1448 | `crates/horizon-client/src/game/shader_packs.rs` | undetermined; optional; reference; Android graphics | External shader-pack loading, profiles, uniforms and mobile fallback. |
+| 1449 | `crates/horizon-client/src/game/shelf.rs` | unnecessary; version mismatch; future | Later-version wooden shelf inventory swap and item rendering. |
+| 1450 | `crates/horizon-client/src/game/shield.rs` | essential; rewrite required; 1.20.1 | Shield item blocking, damage reduction, durability and disable rules. |
+
+## Part 59 — Entries 1451–1475
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1451 | `crates/horizon-client/src/game/shoulders.rs` | adaptable; version-specific | Parrot shoulder attachment, landing/dismount transitions, shoulder NBT and ambient behavior. |
 | 1452 | `crates/horizon-client/src/game/sign_edit.rs` | rewrite required; version-specific | Sign front/back editing, text input/filtering, dye/glow controls, orientation and click-event editing for local and hosted players. |
 | 1453 | `crates/horizon-client/src/game/sniffers.rs` | adaptable; version-specific | Sniffer egg hatching, sniffing behavior, particles, sounds and player-facing effects. |
@@ -1640,6 +1774,11 @@
 | 1473 | `crates/horizon-client/src/game/structure_blocks.rs` | adaptable; version-specific | Structure block save/load/scan, template NBT serialization/placement, redstone trigger and bounding-box visualization. |
 | 1474 | `crates/horizon-client/src/game/structure_edit.rs` | adaptable; version-specific | Structure-block edit screen, text fields, mode/options and SetStructureBlock request. |
 | 1475 | `crates/horizon-client/src/game/structures.rs` | adaptable; reference | Finds structures reaching a block position using chunk structure refs and cached structure starts/pieces. |
+
+## Part 60 — Entries 1476–1500
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1476 | `crates/horizon-client/src/game/subtitle_hud.rs` | adaptable; optional | Displays timed sound subtitles and directional cues as a HUD overlay. |
 | 1477 | `crates/horizon-client/src/game/sulfur_cubes.rs` | unnecessary; later-version content | Implements Sulfur Cube variants, swallowed-block behavior, shearing, explosive interactions, splitting, feeding and effects. |
 | 1478 | `crates/horizon-client/src/game/test_block_edit.rs` | unnecessary; later-version content | Provides an editor for GameTest TestBlock configuration and submits mode/message settings. |
@@ -1665,12 +1804,17 @@
 | 1498 | `crates/horizon-client/src/game/ui_control.rs` | unnecessary; developer-only | Exposes UI widget tree and agent commands to inspect/click/set widgets via synthetic input. |
 | 1499 | `crates/horizon-client/src/game/update_offer.rs` | unnecessary; optional/future; security review required | Checks GitHub releases for a newer Android APK, presents prompt, downloads/verifies and launches Android installer. |
 | 1500 | `crates/horizon-client/src/game/vault.rs` | unnecessary; later-version content | Runs Vault block-entity state, player/key interactions, reward ejection, state changes and display-item rendering. |
+
+## Part 61 — Entries 1501–1525
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1501 | `crates/horizon-client/src/game/villagers.rs` | adaptable; version-specific | Villager routines: food sharing/composting, village schedules, gossip, reputation, meetings, sleeping, breeding and golem summoning. |
 | 1502 | `crates/horizon-client/src/game/wandering_trader.rs` | adaptable; version-specific | World-saved wandering-trader spawn timers/chance, player/bell search, biome/space checks, trader and two leashed llamas, despawn. |
 | 1503 | `crates/horizon-client/src/game/win.rs` | adaptable; optional; version-specific | End poem/credits screen, portal-fill and timed scroll, keyboard navigation, completion and exit behavior. |
 | 1504 | `crates/horizon-client/src/game/wind.rs` | unnecessary; later-version content | Wind Charge/Breeze projectiles and bursts, knockback, particles, sounds and affected block interactions. |
 | 1505 | `crates/horizon-client/src/game/wither.rs` | adaptable; version-specific | Wither summoning, skull hits/blue-skull block destruction, Wither Rose, effects, target damage and multipart interactions. |
-| 1506 | `crates/horizon-client/src/game/world_content.rs` | reference; rewrite required; not Forge | Horizon per-world native content manifests and restart decisions when required local content differs. |
+| 1506 | `crates/horizon-client/src/game/world_content.rs` | undetermined; reference; rewrite required; not Forge | Horizon per-world native content manifests and restart decisions when required local content differs. |
 | 1507 | `crates/horizon-client/src/game/world_loading.rs` | adaptable; rewrite required; version-specific | Local-world creation/loading, level. |
 | 1508 | `crates/horizon-client/src/game/zombie_reinforcements.rs` | adaptable; version-specific | Zombie reinforcement calls: difficulty/attribute gates, sampled offsets and spawn validation. |
 | 1509 | `crates/horizon-client/src/game/zombie_villagers.rs` | adaptable; version-specific | Zombie-villager conversion and cure: weakness/golden apple, timer and restoration of profession/trades/XP/gossip/equipment. |
@@ -1690,14 +1834,19 @@
 | 1523 | `crates/horizon-client/src/mobs/armadillo.rs` | unnecessary; later-version content | Armadillo fear/shell state machine, threat sensing, rolling/unrolling/peek, damage reduction, breeding and baby-follow goals. |
 | 1524 | `crates/horizon-client/src/mobs/axolotl.rs` | adaptable; version-specific | Axolotl prey eligibility/hunting cooldown, play-dead damage roll, support-player event and baby/adult animation states. |
 | 1525 | `crates/horizon-client/src/mobs/bat.rs` | adaptable; version-specific | Bat resting/hanging, wake-up, target-air selection and flying movement, takeoff effect and animations. |
+
+## Part 62 — Entries 1526–1550
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1526 | `crates/horizon-client/src/mobs/bee.rs` | adaptable; version-specific | Implements Bee goals and state: flower seeking, nectar collection, hive entry/exit, breeding/temptation, anger persistence, stinging/poison, crop pollination and hive/home behavior. |
 | 1527 | `crates/horizon-client/src/mobs/body_anim.rs` | adaptable; client-rendering; version-specific | Contains species-specific body/model animation setup for many mobs, including movement cycles, head/body/limb poses, baby variants, attacks, sitting, swimming and special states. |
 | 1528 | `crates/horizon-client/src/mobs/brain.rs` | adaptable; core reference; version-specific | Provides shared vanilla Brain primitives: expiring memory TTL, timed behavior bookkeeping, nearby-living-entity sensing, walk targets, and MoveToTargetSink navigation. |
 | 1529 | `crates/horizon-client/src/mobs/breeze.rs` | unnecessary; later-version content | Implements Breeze AI, wind charge attacks, jumping/projectile behavior, knockback and associated movement/effects. |
 | 1530 | `crates/horizon-client/src/mobs/camel.rs` | adaptable; version-specific | Implements Camel behavior including sitting/standing timers, dash/jump, rider movement, passenger positioning, goals, breeding/temptation and animation. |
 | 1531 | `crates/horizon-client/src/mobs/caravan.rs` | adaptable; version-specific | Implements llama caravan membership and follow behavior: joining/leaving a leader, follower chain selection, distance checks and movement toward preceding llamas. |
-| 1532 | `crates/horizon-client/src/mobs/cem_anim.rs` | reference; optional/future; rewrite required | Parses and evaluates custom entity model animation expressions and channels for CEM/OptiFine-compatible resource-pack animations. |
-| 1533 | `crates/horizon-client/src/mobs/cem.rs` | reference; optional/future; rewrite required | Loads custom entity models and textures from CEM/OptiFine-style resource packs and resolves model replacements, layers, attachments and fallback behavior. |
+| 1532 | `crates/horizon-client/src/mobs/cem_anim.rs` | undetermined; reference; optional/future; rewrite required | Parses and evaluates custom entity model animation expressions and channels for CEM/OptiFine-compatible resource-pack animations. |
+| 1533 | `crates/horizon-client/src/mobs/cem.rs` | undetermined; reference; optional/future; rewrite required | Loads custom entity models and textures from CEM/OptiFine-style resource packs and resolves model replacements, layers, attachments and fallback behavior. |
 | 1534 | `crates/horizon-client/src/mobs/combat.rs` | adaptable; version-specific | Tracks recent mob combat damage history and supplies combat-state/death context, including the retention period used for hurt-by bookkeeping. |
 | 1535 | `crates/horizon-client/src/mobs/control.rs` | adaptable; core reference; version-specific | Implements mob MoveControl, LookControl, JumpControl and body-rotation controllers for ground, flying, swimming and special movement states. |
 | 1536 | `crates/horizon-client/src/mobs/conversion.rs` | adaptable; version-specific | Implements entity conversion between mob types while preserving selected state, equipment, effects, position, motion, riding and identity-linked data. |
@@ -1708,13 +1857,18 @@
 | 1541 | `crates/horizon-client/src/mobs/data.rs` | rewrite required; data-version-specific | Loads extracted mob runtime data for block pathfinding/placement, heightmaps, entity/biome tags, villager equipment/hats, CEM and texture/animation metadata. |
 | 1542 | `crates/horizon-client/src/mobs/dolphin.rs` | adaptable; version-specific | Implements Dolphin treasure finding, swimming-player gifts/Dolphin's Grace, jumping, item seeking/pickup/play and aquatic goal behavior. |
 | 1543 | `crates/horizon-client/src/mobs/doors.rs` | adaptable; version-specific | Implements mob door navigation/interactions, zombie/vindicator door breaking and raid illager door opening, plus Piglin path door management. |
-| 1544 | `crates/horizon-client/src/mobs/dragon_contacts.rs` | reference; version-specific; verification required | Handles Ender Dragon wing/head collision contacts with ordinary mobs, including pushing, damage and team-protection exceptions. |
+| 1544 | `crates/horizon-client/src/mobs/dragon_contacts.rs` | undetermined; reference; version-specific; verification required | Handles Ender Dragon wing/head collision contacts with ordinary mobs, including pushing, damage and team-protection exceptions. |
 | 1545 | `crates/horizon-client/src/mobs/drops.rs` | rewrite required; version-specific | Builds mob death drops: charged-creeper heads, loot-table rolls, equipment/drop chances, species extras, carried blocks, inventories and experience orbs. |
 | 1546 | `crates/horizon-client/src/mobs/enderman.rs` | adaptable; version-specific | Implements Enderman stare/anger detection, teleport behavior, projectile dodge, water/rain response, block pickup/placement and held-block rendering/death drops. |
 | 1547 | `crates/horizon-client/src/mobs/equine.rs` | adaptable; version-specific | Implements AbstractHorse behavior for horses, donkeys, mules and undead horses, including random stats/coats, taming/rearing/eating, breeding inheritance, rider movement/jump, sounds, textures and model animation; also contains Camel/Llama integration. |
 | 1548 | `crates/horizon-client/src/mobs/equip.rs` | rewrite required; version-specific | Implements mob equipment pickup gates and replacement comparisons for armor/weapons, including attribute-modifier calculation by slot group. |
 | 1549 | `crates/horizon-client/src/mobs/farm.rs` | adaptable; version-specific | Registers pig/cow/mooshroom/sheep/chicken goals, chicken egg laying and wing/fall animation, and climate-dependent sheep color selection. |
 | 1550 | `crates/horizon-client/src/mobs/finalize.rs` | rewrite required; core reference; version-specific | Implements Mob. |
+
+## Part 63 — Entries 1551–1575
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1551 | `crates/horizon-client/src/mobs/fox.rs` | adaptable; version-specific | Fox state, trust UUIDs, defensive behavior, stalking/pouncing, item pickup, berry and chorus-fruit behavior, poses and rendering. |
 | 1552 | `crates/horizon-client/src/mobs/frog.rs` | adaptable; version-specific | Frog amphibious AI, tongue prey capture, eating, frogspawn placement, long jumps, croaking and pose state. |
 | 1553 | `crates/horizon-client/src/mobs/gear.rs` | rewrite required; version-specific | Gear-side calculations for equipment slots, enchantments, trims, weapon damage and armor protection. |
@@ -1722,146 +1876,171 @@
 | 1555 | `crates/horizon-client/src/mobs/goat.rs` | adaptable; version-specific | Goat and screaming-goat ram attack, target selection, head lowering, charge, horn drops and long-jump behavior. |
 | 1556 | `crates/horizon-client/src/mobs/golem.rs` | adaptable; version-specific | Iron-golem village defense and gifting, attack/crack state, plus snow-golem snowball, melting and snow-trail behavior. |
 | 1557 | `crates/horizon-client/src/mobs/guardian.rs` | adaptable; version-specific | Guardian/Elder Guardian laser attack, swimming, spikes/thorns, land flop, beam animation and Mining Fatigue effect. |
-| 1558 | `crates/horizon-client/src/mobs/happy_ghast.rs` | exclude; post-1.20.1 | Happy Ghast/Ghastling lifecycle, harness equipment, controllable flight/riding, healing and multi-lead handling. |
+| 1558 | `crates/horizon-client/src/mobs/happy_ghast.rs` | unnecessary; post-1.20.1 | Happy Ghast/Ghastling lifecycle, harness equipment, controllable flight/riding, healing and multi-lead handling. |
 | 1559 | `crates/horizon-client/src/mobs/hostile.rs` | adaptable; version-specific | Creeper fuse/explosion and charged state, Spider wall/daylight behavior, Silverfish wake/infested-block behavior and Endermite handling. |
 | 1560 | `crates/horizon-client/src/mobs/illager.rs` | rewrite required; version-specific | Pillager/Vindicator/Evoker/Illusioner shared behavior, crossbow charge/fire lifecycle, Evoker spells and illager targeting/poses. |
 | 1561 | `crates/horizon-client/src/mobs/illusioner.rs` | adaptable; version-specific | Illusioner bow/spell behavior, invisibility and blindness, four mirror images, target selection and render offsets. |
 | 1562 | `crates/horizon-client/src/mobs/item_break.rs` | rewrite required; version-specific | Client equipment-break events, slot identifiers, equipment lookup and broken-item/scute particle handling. |
-| 1563 | `crates/horizon-client/src/mobs/keyframes.rs` | reference; optional client feature | Generic keyframe animation parser/interpolator for position, rotation and scale channels, including linear and Catmull-Rom sampling. |
+| 1563 | `crates/horizon-client/src/mobs/keyframes.rs` | undetermined; reference; optional client feature | Generic keyframe animation parser/interpolator for position, rotation and scale channels, including linear and Catmull-Rom sampling. |
 | 1564 | `crates/horizon-client/src/mobs/landing.rs` | adaptable; version-specific | Shared mob landing/block-fall integration for fall damage, sound, particles and block-specific effects. |
 | 1565 | `crates/horizon-client/src/mobs/leash.rs` | rewrite required; version-specific | Leash attachment/persistence for players, mobs, knots and vehicles, connection geometry, offsets and leash movement forces. |
 | 1566 | `crates/horizon-client/src/mobs/living.rs` | rewrite required; core reference; version-specific | Living mob movement/physics: fluid movement, collision, dimensions/poses, gravity, fall damage, jumping, bouncing and walk animation. |
 | 1567 | `crates/horizon-client/src/mobs/llama.rs` | adaptable; version-specific | Llama/Trader Llama coat, strength, chest capacity, taming temper, caravan, spit attack, breeding and despawn state. |
-| 1568 | `crates/horizon-client/src/mobs/monster_brain.rs` | exclude; post-1.20.1; architecture reference only | Brain memory/sensor/activity/behavior implementation for Breeze and Creaking. |
-| 1569 | `crates/horizon-client/src/mobs/nautilus.rs` | exclude; post-1.20.1 | Nautilus/Zombie Nautilus taming, saddle/armor, rider movement and dash, swimming, pufferfish charge, bubbles and breath effect. |
+| 1568 | `crates/horizon-client/src/mobs/monster_brain.rs` | unnecessary; post-1.20.1; architecture reference only | Brain memory/sensor/activity/behavior implementation for Breeze and Creaking. |
+| 1569 | `crates/horizon-client/src/mobs/nautilus.rs` | unnecessary; post-1.20.1 | Nautilus/Zombie Nautilus taming, saddle/armor, rider movement and dash, swimming, pufferfish charge, bubbles and breath effect. |
 | 1570 | `crates/horizon-client/src/mobs/nav.rs` | rewrite required; core reference; version-specific | PathNavigation variants, path creation/recompute, waypoint following, corner cutting, stuck detection and timeouts. |
 | 1571 | `crates/horizon-client/src/mobs/nether.rs` | adaptable; version-specific | Blaze and Ghast AI, movement, ranged fireball attacks, target selection, audio events and model animation. |
 | 1572 | `crates/horizon-client/src/mobs/panda.rs` | adaptable; version-specific | Panda gene inheritance, eating, sitting, rolling, sneezing, fear, breeding and model/item animation. |
 | 1573 | `crates/horizon-client/src/mobs/parrot.rs` | adaptable; version-specific | Parrot flying navigation, tree-seeking wander, flapping/gliding, jukebox dance and mob-imitating sounds. |
 | 1574 | `crates/horizon-client/src/mobs/path.rs` | rewrite required; core reference; version-specific | A* PathFinder, node/heap/path structures and Walk/Swim/Fly/Amphibious node evaluators. |
 | 1575 | `crates/horizon-client/src/mobs/phantom.rs` | adaptable; version-specific | Phantom circling/swooping, player targeting, cat avoidance, movement control, size scaling and flap animation. |
+
+## Part 64 — Entries 1576–1600
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1576 | `crates/horizon-client/src/mobs/piglin.rs` | rewrite required; version-specific | Piglin, Piglin Brute, Hoglin and Zoglin behavior: anger, hunting, bartering, equipment, riding, conversions and family interactions. |
 | 1577 | `crates/horizon-client/src/mobs/polar_bear.rs` | adaptable; version-specific | Polar Bear neutral-hostile transition, cub protection, warning posture and melee attack behavior. |
 | 1578 | `crates/horizon-client/src/mobs/rabbit.rs` | adaptable; version-specific | Rabbit variants and movement, hopping, temptation/avoidance, crop eating and Killer Bunny combat. |
 | 1579 | `crates/horizon-client/src/mobs/raider.rs` | adaptable; version-specific | Illager raider patrol state, raid leader/banner handling, village movement and shared raid behavior. |
-| 1580 | `crates/horizon-client/src/mobs/random_textures.rs` | reference; optional client feature | OptiFine/ETF-style random entity texture rule loading and variant-based texture selection. |
+| 1580 | `crates/horizon-client/src/mobs/random_textures.rs` | undetermined; reference; optional client feature | OptiFine/ETF-style random entity texture rule loading and variant-based texture selection. |
 | 1581 | `crates/horizon-client/src/mobs/ravager.rs` | adaptable; version-specific | Ravager charge and melee attacks, stun/roar state, knockback, damage reactions and foliage/block interaction. |
 | 1582 | `crates/horizon-client/src/mobs/render.rs` | rewrite required; optional client rendering; version-specific | Shared mob model rendering, pose assembly, geometry/vertex generation, model layers, textures and CPU/GPU rendering paths. |
 | 1583 | `crates/horizon-client/src/mobs/riders.rs` | rewrite required; version-specific | Entity riding relationships, passenger seat offsets, jockey/trap mounting, dismount and rider-driven movement. |
-| 1584 | `crates/horizon-client/src/mobs/seen_grid.rs` | reference; performance candidate; parity required | Spatial broad-phase grid for grouping entity bounding boxes and querying nearby collision candidates. |
+| 1584 | `crates/horizon-client/src/mobs/seen_grid.rs` | undetermined; reference; performance candidate; parity required | Spatial broad-phase grid for grouping entity bounding boxes and querying nearby collision candidates. |
 | 1585 | `crates/horizon-client/src/mobs/shulker.rs` | adaptable; version-specific | Shulker attachment/facing, shell opening, entity pushing, bullet homing/attacks and teleport behavior. |
-| 1586 | `crates/horizon-client/src/mobs/skin.rs` | reference; optional client feature; performance candidate | GPU skinning/cache path for mob geometry and pose-specific draw jobs, with CPU fallback. |
+| 1586 | `crates/horizon-client/src/mobs/skin.rs` | undetermined; reference; optional client feature; performance candidate | GPU skinning/cache path for mob geometry and pose-specific draw jobs, with CPU fallback. |
 | 1587 | `crates/horizon-client/src/mobs/sniffer.rs` | adaptable; version-specific | Sniffer sniffing, digging, seed-drop state, remembered excavation positions and model/animation state. |
 | 1588 | `crates/horizon-client/src/mobs/spawn_rules.rs` | rewrite required; version-specific; server-side reference | Mob spawn placement and validity rules using light, biome, block/fluid state, slime chunks and spawn reasons. |
 | 1589 | `crates/horizon-client/src/mobs/spawn_selection.rs` | rewrite required; version-specific; server-side reference | Natural mob spawn selection, category caps, weighted pack placement, player distance and structure/dimension modifiers. |
 | 1590 | `crates/horizon-client/src/mobs/spawner.rs` | adaptable; version-specific; server-side reference | Vanilla Monster Spawner block-entity state, spawn potentials, delay/near-player checks and client visual feedback. |
 | 1591 | `crates/horizon-client/src/mobs/spawning.rs` | rewrite required; version-specific; server-side reference | Local difficulty and mob finalizeSpawn initialization: variants, equipment, attributes, spawn reason and state. |
-| 1592 | `crates/horizon-client/src/mobs/spear_use.rs` | exclude; post-1.20.1 | Spear/Kinetic Weapon use, stab/charge behavior, knockback/dismount and spear-related hostile mob tactics. |
+| 1592 | `crates/horizon-client/src/mobs/spear_use.rs` | unnecessary; post-1.20.1 | Spear/Kinetic Weapon use, stab/charge behavior, knockback/dismount and spear-related hostile mob tactics. |
 | 1593 | `crates/horizon-client/src/mobs/species.rs` | rewrite required; core registry reference; version-specific | Central mob species metadata: entity classification, dimensions, movement flags, foods/tags, textures, sounds, model and animation identifiers. |
 | 1594 | `crates/horizon-client/src/mobs/strider.rs` | adaptable; version-specific | Strider movement and AI on lava, warmth/cold speed changes, floating and rider behavior. |
-| 1595 | `crates/horizon-client/src/mobs/sulfur_cube.rs` | exclude; post-1.20.1 | Sulfur Cube species, archetypes, swallowed-block/item state, bounce/friction variants, fuse and explosion behavior. |
+| 1595 | `crates/horizon-client/src/mobs/sulfur_cube.rs` | unnecessary; post-1.20.1 | Sulfur Cube species, archetypes, swallowed-block/item state, bounce/friction variants, fuse and explosion behavior. |
 | 1596 | `crates/horizon-client/src/mobs/sync.rs` | rewrite required; version-specific | Mob synchronized pose flags, entity-event routing and client animation/state update dispatch. |
 | 1597 | `crates/horizon-client/src/mobs/tame.rs` | rewrite required; version-specific | Tameable Wolf/Cat/Ocelot/Parrot behavior: ownership, sitting, following, defense, anger, begging, relaxation and animations. |
 | 1598 | `crates/horizon-client/src/mobs/trader.rs` | adaptable; version-specific | Wandering Trader routine: invisibility potion/milk, hostile avoidance, trading pause, visit movement, home restriction and despawn delay. |
-| 1599 | `crates/horizon-client/src/mobs/transport_items.rs` | exclude; post-1.20.1 | Copper Golem chest-to-chest item transport: chest search, queue/open interaction, pickup/place and visited/unreachable memory. |
-| 1600 | `crates/horizon-client/src/mobs/trial_spawner.rs` | exclude; post-1.20.1 | Trial Spawner configuration/state machine: player detection, waves, ominous conversion, reward ejection, item spawners and cooldown. |
+| 1599 | `crates/horizon-client/src/mobs/transport_items.rs` | unnecessary; post-1.20.1 | Copper Golem chest-to-chest item transport: chest search, queue/open interaction, pickup/place and visited/unreachable memory. |
+| 1600 | `crates/horizon-client/src/mobs/trial_spawner.rs` | unnecessary; post-1.20.1 | Trial Spawner configuration/state machine: player detection, waves, ominous conversion, reward ejection, item spawners and cooldown. |
+
+## Part 65 — Entries 1601–1625
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1601 | `crates/horizon-client/src/mobs/turtle.rs` | adaptable; version-specific | Turtle swimming/travel goals, egg laying and home-beach/breeding behavior. |
 | 1602 | `crates/horizon-client/src/mobs/undead.rs` | rewrite required; version-specific | Shared zombie, drowned, skeleton and other undead combat/conversion/equipment behavior; later Spear/Parched paths excluded. |
 | 1603 | `crates/horizon-client/src/mobs/vex.rs` | adaptable; version-specific | Vex phasing flight, Evoker target copying, charge attack and limited lifetime. |
 | 1604 | `crates/horizon-client/src/mobs/villager.rs` | rewrite required; core reference; version-specific | Villager state, profession/work/sleep/POI, inventory/food, gossip and trade-related behavior. |
 | 1605 | `crates/horizon-client/src/mobs/villager_brain.rs` | rewrite required; core reference; version-specific | Villager Brain: memories, sensors, POI acquisition, activity scheduling, trade, farm, breed and raid behavior. |
-| 1606 | `crates/horizon-client/src/mobs/villager_farming_tests.rs` | reference; tests only; version-specific | Regression-test checklist for villager farming and modded crop/seed behavior; not executed. |
-| 1607 | `crates/horizon-client/src/mobs/villager_hats.rs` | reference; optional client rendering; version-specific | Optional villager/zombie-villager headwear texture metadata and model-layer visibility. |
+| 1606 | `crates/horizon-client/src/mobs/villager_farming_tests.rs` | undetermined; reference; tests only; version-specific | Regression-test checklist for villager farming and modded crop/seed behavior; not executed. |
+| 1607 | `crates/horizon-client/src/mobs/villager_hats.rs` | undetermined; reference; optional client rendering; version-specific | Optional villager/zombie-villager headwear texture metadata and model-layer visibility. |
 | 1608 | `crates/horizon-client/src/mobs/warden.rs` | adaptable; version-specific | Warden anger/vibration response, melee/sonic boom, Darkness and animation state. |
 | 1609 | `crates/horizon-client/src/mobs/warden_brain.rs` | rewrite required; core reference; version-specific | Warden Brain memories, sensors, investigation, sniff/roar/dig and combat activity scheduling. |
 | 1610 | `crates/horizon-client/src/mobs/witch.rs` | adaptable; version-specific | Witch potion selection/drinking/throwing and raider-support behavior. |
 | 1611 | `crates/horizon-client/src/mobs/wither.rs` | adaptable; version-specific; boss simulation | Wither spawn charge, multi-head targeting/attack, skull projectiles, healing and block damage. |
 | 1612 | `crates/horizon-client/src/mobs/world.rs` | rewrite required; core reference; version-specific | Mob AI world queries: collision/ray clip, environment sampling and nearby entity lookup. |
 | 1613 | `crates/horizon-client/src/mobs/zombie_villager.rs` | adaptable; version-specific | Zombie Villager cure timer, Weakness/Strength and cure acceleration near tagged blocks. |
-| 1614 | `crates/horizon-client/src/mod_api.rs` | reference; not Forge; architecture only | Starling native mod API/lifecycle/Host contracts; not Forge Mod Loader or FML. |
-| 1615 | `crates/horizon-client/src/mod_api/generated.rs` | reference; not Forge; generated native API | Generated Starling native-mod hook declarations and dispatch tables; not Forge events or API. |
-| 1616 | `crates/horizon-client/src/mod_api/generated_host.rs` | reference; not Forge; architecture only | Generated Starling native Host implementation over its own entity/world/item/menu types. |
+| 1614 | `crates/horizon-client/src/mod_api.rs` | undetermined; reference; not Forge; architecture only | Starling native mod API/lifecycle/Host contracts; not Forge Mod Loader or FML. |
+| 1615 | `crates/horizon-client/src/mod_api/generated.rs` | undetermined; reference; not Forge; generated native API | Generated Starling native-mod hook declarations and dispatch tables; not Forge events or API. |
+| 1616 | `crates/horizon-client/src/mod_api/generated_host.rs` | undetermined; reference; not Forge; architecture only | Generated Starling native Host implementation over its own entity/world/item/menu types. |
 | 1617 | `crates/horizon-client/src/mod_content.rs` | rewrite required; partial Forge data overlay; version-specific | Starling native content/resource overlay and selected registry/tag/worldgen/structure additions. |
-| 1618 | `crates/horizon-client/src/mod_content_biomes.rs` | reference; partial Forge/NeoForge format support; version-specific | Partial parser for Forge/NeoForge add_features/remove_features biome modifiers; custom/spawn/carver serializers not covered. |
-| 1619 | `crates/horizon-client/src/mod_content_tests.rs` | reference; tests only; version-specific | Regression tests for overlay, registries/tags/worldgen/voxel collision and content declarations; not executed. |
+| 1618 | `crates/horizon-client/src/mod_content_biomes.rs` | undetermined; reference; partial Forge/NeoForge format support; version-specific | Partial parser for Forge/NeoForge add_features/remove_features biome modifiers; custom/spawn/carver serializers not covered. |
+| 1619 | `crates/horizon-client/src/mod_content_tests.rs` | undetermined; reference; tests only; version-specific | Regression tests for overlay, registries/tags/worldgen/voxel collision and content declarations; not executed. |
 | 1620 | `crates/horizon-client/src/motion.rs` | rewrite required; core reference; version-specific | Player input, movement, collision, jump, fall, fluids, flight/Elytra, sprint, effects and client/server sync. |
 | 1621 | `crates/horizon-client/src/motion/environment.rs` | rewrite required; version-specific | Player environmental damage and movement in liquids: fire, air/drowning, lava, bubble columns and liquid jumps. |
 | 1622 | `crates/horizon-client/src/motion/fluids.rs` | rewrite required; core reference; version-specific | Player fluid immersion/flow, water splash, bubble columns, fluid shape cache and passenger interaction. |
 | 1623 | `crates/horizon-client/src/multiplayer.rs` | rewrite required; client UI; protocol-specific | Multiplayer list/edit/delete, ping/status/favicon, direct connect, LAN discovery, friend invite and reconnect UI. |
 | 1624 | `crates/horizon-client/src/music.rs` | adaptable; version-specific; optional client feature | Situational music selection, delay/frequency, fades, biome/dimension volume and music-layer UI. |
-| 1625 | `crates/horizon-client/src/native_client_hooks.rs` | reference; not Forge; architecture only | One-time native client hook table for menu/living/ingredient callbacks; not Forge event bus. |
-| 1626 | `ROADMAP.md` | reference; project planning only | Project roadmap and staged compatibility/feature plan. |
-| 1627 | `SYNC.md` | reference; workflow notes only | Repository synchronization and contributor handoff notes. |
-| 1628 | `crates/horizon-client/src/native_data.rs` | reference; native Rust extension data only; not Forge | Compile-time/runtime lookup of data files shipped by Starling native mods. |
+| 1625 | `crates/horizon-client/src/native_client_hooks.rs` | undetermined; reference; not Forge; architecture only | One-time native client hook table for menu/living/ingredient callbacks; not Forge event bus. |
+
+## Part 66 — Entries 1626–1650
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1626 | `ROADMAP.md` | undetermined; reference; project planning only | Project roadmap and staged compatibility/feature plan. |
+| 1627 | `SYNC.md` | undetermined; reference; workflow notes only | Repository synchronization and contributor handoff notes. |
+| 1628 | `crates/horizon-client/src/native_data.rs` | undetermined; reference; native Rust extension data only; not Forge | Compile-time/runtime lookup of data files shipped by Starling native mods. |
 | 1629 | `crates/horizon-client/src/native_tombstone.rs` | adaptable; Android diagnostics | Bounded, privacy-conscious parser for Android protobuf tombstones. |
 | 1630 | `crates/horizon-client/src/nether_portal.rs` | adaptable; version-specific | Nether portal entry/cooldown state and entity transition timing. |
-| 1631 | `crates/horizon-client/src/no_resources.rs` | reference; launcher startup UX | Fallback screen when executable starts without launcher-prepared Minecraft files. |
-| 1632 | `crates/horizon-client/src/old_world.rs` | reference; world compatibility | Compatibility UI/state for old or customized worlds. |
+| 1631 | `crates/horizon-client/src/no_resources.rs` | undetermined; reference; launcher startup UX | Fallback screen when executable starts without launcher-prepared Minecraft files. |
+| 1632 | `crates/horizon-client/src/old_world.rs` | undetermined; reference; world compatibility | Compatibility UI/state for old or customized worlds. |
 | 1633 | `crates/horizon-client/src/patrol.rs` | adaptable; version-specific; server-side | Pillager patrol spawning, leader selection and movement/target behavior. |
-| 1634 | `crates/horizon-client/src/perf_overlay.rs` | reference; optional diagnostics | On-screen performance overlay for frame/CPU/GPU samples. |
-| 1635 | `crates/horizon-client/src/performance.rs` | reference; performance diagnostics | Performance telemetry and sample aggregation for diagnostic overlay. |
+| 1634 | `crates/horizon-client/src/perf_overlay.rs` | undetermined; reference; optional diagnostics | On-screen performance overlay for frame/CPU/GPU samples. |
+| 1635 | `crates/horizon-client/src/performance.rs` | undetermined; reference; performance diagnostics | Performance telemetry and sample aggregation for diagnostic overlay. |
 | 1636 | `crates/horizon-client/src/pick_item.rs` | rewrite required; version-specific | Pick-block/item behavior for client interaction. |
 | 1637 | `crates/horizon-client/src/platform.rs` | rewrite required; platform-specific | Platform abstraction for OS-specific client services. |
 | 1638 | `crates/horizon-client/src/portal_sections.rs` | adaptable; version-specific | Portal-related chunk/section lookup and bookkeeping. |
 | 1639 | `crates/horizon-client/src/pose.rs` | rewrite required; version-specific | Entity pose/dimension state for rendering and interaction bounds. |
-| 1640 | `crates/horizon-client/src/pregen.rs` | reference; optional offline utility | Chunk/world pre-generation scheduling and progress state. |
+| 1640 | `crates/horizon-client/src/pregen.rs` | undetermined; reference; optional offline utility | Chunk/world pre-generation scheduling and progress state. |
 | 1641 | `crates/horizon-client/src/preparer.rs` | rewrite required; launcher integration | Launcher preparation pipeline for game files. |
-| 1642 | `crates/horizon-client/src/preparer_install.rs` | reference; install UI | Install/preparation progress UI and state transitions. |
+| 1642 | `crates/horizon-client/src/preparer_install.rs` | undetermined; reference; install UI | Install/preparation progress UI and state transitions. |
 | 1643 | `crates/horizon-client/src/projectiles.rs` | rewrite required; core reference; version-specific | Projectile simulation, collision, motion and entity-specific behavior. |
 | 1644 | `crates/horizon-client/src/raid.rs` | rewrite required; version-specific; server-authoritative | Raid lifecycle, wave composition, omen trigger, victory/loss and rewards. |
-| 1645 | `crates/horizon-client/src/ram_limit.rs` | reference; mobile memory governor | Memory-pressure governor reducing expensive far-terrain/render work. |
+| 1645 | `crates/horizon-client/src/ram_limit.rs` | undetermined; reference; mobile memory governor | Memory-pressure governor reducing expensive far-terrain/render work. |
 | 1646 | `crates/horizon-client/src/random_tick_sections.rs` | adaptable; performance reference; version-specific | Section-level cache/index for random-tick candidate selection. |
 | 1647 | `crates/horizon-client/src/recipe_book.rs` | rewrite required; version-specific | Recipe-book state, filtering, grouping and recipe unlock model. |
-| 1648 | `crates/horizon-client/src/recipe_book_screen.rs` | reference; optional client UI | Recipe-book screen, search, overlay recipes, ghost slots and tooltips. |
+| 1648 | `crates/horizon-client/src/recipe_book_screen.rs` | undetermined; reference; optional client UI | Recipe-book screen, search, overlay recipes, ghost slots and tooltips. |
 | 1649 | `crates/horizon-client/src/save.rs` | rewrite required; core persistence/performance reference; version-specific | World/chunk/entity/POI persistence, region I/O, player/world save data, async writing and saved-chunk LOD. |
-| 1650 | `crates/horizon-client/src/save/gateway.rs` | reference; optional legacy migration | One-time migration of legacy Horizon End Gateway exits into chunk block-entity NBT. |
+| 1650 | `crates/horizon-client/src/save/gateway.rs` | undetermined; reference; optional legacy migration | One-time migration of legacy Horizon End Gateway exits into chunk block-entity NBT. |
+
+## Part 67 — Entries 1651–1675
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1651 | `crates/horizon-client/src/scoreboard_cmd.rs` | rewrite required; version-specific; optional client command layer | Scoreboard command parsing, argument completion and command-side objective, player-score, team and display-slot operations. |
-| 1652 | `crates/horizon-client/src/scoreboard_cmd_tests.rs` | reference; tests only | Unit tests for scoreboard command parsing, argument validation and scoreboard command behavior. |
-| 1653 | `crates/horizon-client/src/screen_layout.rs` | reference; optional client UI | Reusable screen geometry and layout calculations for common UI regions, rows, columns and control placement. |
-| 1654 | `crates/horizon-client/src/screen_narrator.rs` | reference; optional accessibility UI | Screen narration/accessibility text collection, ordering, focus and announcement behavior for menus, lists, buttons and edit fields. |
+| 1652 | `crates/horizon-client/src/scoreboard_cmd_tests.rs` | undetermined; reference; tests only | Unit tests for scoreboard command parsing, argument validation and scoreboard command behavior. |
+| 1653 | `crates/horizon-client/src/screen_layout.rs` | undetermined; reference; optional client UI | Reusable screen geometry and layout calculations for common UI regions, rows, columns and control placement. |
+| 1654 | `crates/horizon-client/src/screen_narrator.rs` | undetermined; reference; optional accessibility UI | Screen narration/accessibility text collection, ordering, focus and announcement behavior for menus, lists, buttons and edit fields. |
 | 1655 | `crates/horizon-client/src/server_packs/download.rs` | rewrite required; version-specific; security-sensitive | Server resource-pack download queue, HTTP headers, SHA-1 verification, cache reuse, progress events, JSON download log and cache cleanup. |
 | 1656 | `crates/horizon-client/src/shadows.rs` | adaptable; version-specific; rendering | Entity and display shadow radius/strength rules, camera-distance fading, block-light sampling and collision-shape-clipped shadow quads. |
 | 1657 | `crates/horizon-client/src/social_screen.rs` | adaptable; version-specific; optional client UI | Social Interactions screen with All/Hidden/Blocked tabs, search, player skins, hide/show chat actions, offline status and disabled report affordance. |
-| 1658 | `crates/horizon-client/src/spear.rs` | exclude; post-1.20.1 | Kinetic spear charge/dismount/knockback/damage conditions, attack reach and first-/third-person stab animation transforms. |
+| 1658 | `crates/horizon-client/src/spear.rs` | unnecessary; post-1.20.1 | Kinetic spear charge/dismount/knockback/damage conditions, attack reach and first-/third-person stab animation transforms. |
 | 1659 | `crates/horizon-client/src/spectator_menu.rs` | adaptable; version-specific; client UI | Spectator hotbar/menu pages for teleport-to-player and teleport-to-team, scrolling, selection, close action, fade timing and icons. |
 | 1660 | `crates/horizon-client/src/sprint.rs` | adaptable; version-specific; mobile input integration | Local sprint start/stop conditions, double-tap forward window, sprint-key handling, swimming/flying restrictions and analog-stick direction mapping. |
-| 1661 | `crates/horizon-client/src/starling_releases.rs` | exclude; Starling-specific launcher/release integration | Starling APK release discovery, ABI selection, update asset/digest validation, native-mod release parsing and build-server address validation. |
+| 1661 | `crates/horizon-client/src/starling_releases.rs` | unnecessary; Starling-specific launcher/release integration | Starling APK release discovery, ABI selection, update asset/digest validation, native-mod release parsing and build-server address validation. |
 | 1662 | `crates/horizon-client/src/stations.rs` | rewrite required; core gameplay reference; version-specific | Enchanting table offers, anvil repair/enchant/rename costs, grindstone results/XP, smithing transform/trim recipes and stonecutter recipe selection. |
-| 1663 | `crates/horizon-client/src/stats_overlay.rs` | reference; optional mobile diagnostics | Performance overlay showing FPS, frame/CPU/GPU time, 1% low, RAM/GPU memory, chunk/meshing queues, draw calls, temperature, thermal status, render distance and backend. |
-| 1664 | `crates/horizon-client/src/stick_memory.rs` | reference; Starling-specific mobile input preference | Persists per-server controller stick mode in `starling-servers.txt`, normalizing server address keys and replacing prior mode choices. |
-| 1665 | `crates/horizon-client/src/stopwatches.rs` | reference; optional command utility | Named elapsed-time stopwatches persisted in `data/minecraft/stopwatches.dat` as accumulated milliseconds. |
+| 1663 | `crates/horizon-client/src/stats_overlay.rs` | undetermined; reference; optional mobile diagnostics | Performance overlay showing FPS, frame/CPU/GPU time, 1% low, RAM/GPU memory, chunk/meshing queues, draw calls, temperature, thermal status, render distance and backend. |
+| 1664 | `crates/horizon-client/src/stick_memory.rs` | undetermined; reference; Starling-specific mobile input preference | Persists per-server controller stick mode in `starling-servers.txt`, normalizing server address keys and replacing prior mode choices. |
+| 1665 | `crates/horizon-client/src/stopwatches.rs` | undetermined; reference; optional command utility | Named elapsed-time stopwatches persisted in `data/minecraft/stopwatches.dat` as accumulated milliseconds. |
 | 1666 | `crates/horizon-client/src/structure_blocks.rs` | rewrite required; core worldgen/persistence reference; version-specific | Generated structure block entities, container loot unpacking, loot table caching, item components and deferred exploration-map search data. |
 | 1667 | `crates/horizon-client/src/text_display.rs` | adaptable; version-specific; rendering | Display/Text Display synced fields, interpolation, billboard transforms, transformation matrix decomposition, text wrapping/alignment/background and culling bounds. |
 | 1668 | `crates/horizon-client/src/tick_chunk_membership.rs` | adaptable; core performance reference; version-specific | Incremental cache of resident chunk membership for tick scheduler registration, including added/removed deltas and saved-tick waiting state. |
 | 1669 | `crates/horizon-client/src/ticket_levels.rs` | rewrite required; core simulation reference; version-specific | Chunk ticket level calculation for player view/simulation distance, forced chunks, portal tickets, entity/block/random ticking and loaded status. |
 | 1670 | `crates/horizon-client/src/title.rs` | rewrite required; client UI reference; version-specific | Title, world select/create/edit, multiplayer entry, world backup/recovery/optimization, data-pack/experiment flows, onboarding, account and ban-notice screen state. |
-| 1671 | `crates/horizon-client/src/title/account.rs` | exclude; Starling-specific account/auth UI | Account/profile screen for Microsoft, Ely.by and offline profiles, account status, device-code sign-in, credential fields, game-file download and profile management. |
+| 1671 | `crates/horizon-client/src/title/account.rs` | unnecessary; Starling-specific account/auth UI | Account/profile screen for Microsoft, Ely.by and offline profiles, account status, device-code sign-in, credential fields, game-file download and profile management. |
 | 1672 | `crates/horizon-client/src/title/buffet.rs` | adaptable; version-specific; optional client UI | Single-biome world creation screen with searchable biome list, sorted names, selected biome, scrolling and Done/Cancel actions. |
 | 1673 | `crates/horizon-client/src/title/confirm_experiments.rs` | adaptable; version-specific; optional client UI | Confirmation screen for data packs requiring experimental features, with warning text, details page listing feature flags, Proceed and Back actions. |
 | 1674 | `crates/horizon-client/src/title/create_world.rs` | adaptable; version-specific; client UI | Create-world options, game mode/difficulty/cheats, world preset, structures/bonus chest, game rules, data packs, experiments and tab/navigation layout. |
 | 1675 | `crates/horizon-client/src/title/experiments.rs` | adaptable; version-specific; optional client UI | Experiments screen listing shipped feature packs with enable/disable switches, descriptions, warning and Done/Cancel behavior. |
+
+## Part 68 — Entries 1676–1700
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
 | 1676 | `crates/horizon-client/src/title/flat.rs` | adaptable; version-specific UI | Superflat presets, layer editor, biome selection, structures and preview. |
-| 1677 | `crates/horizon-client/src/title/onboarding.rs` | exclude; Starling-specific UI | First-run onboarding, account prompts, controls hints, launcher links and setup actions. |
-| 1678 | `crates/horizon-client/src/title/tests.rs` | reference; tests only | Title/world screen tests for text, world listing/creation/editing, backups, navigation and errors. |
+| 1677 | `crates/horizon-client/src/title/onboarding.rs` | unnecessary; Starling-specific UI | First-run onboarding, account prompts, controls hints, launcher links and setup actions. |
+| 1678 | `crates/horizon-client/src/title/tests.rs` | undetermined; reference; tests only | Title/world screen tests for text, world listing/creation/editing, backups, navigation and errors. |
 | 1679 | `crates/horizon-client/src/title/world_management.rs` | adaptable; version-specific UI | World backup, restore, optimize, delete and open-folder actions. |
 | 1680 | `crates/horizon-client/src/toasts.rs` | adaptable; version-specific UI | Recipe, system, tutorial, advancement and social toast notifications. |
-| 1681 | `crates/horizon-client/src/ui_theme.rs` | exclude; Horizon/Starling-specific UI | Custom palette, fonts, atlas/cache, rounded geometry, boot screen and preferences. |
+| 1681 | `crates/horizon-client/src/ui_theme.rs` | unnecessary; Horizon/Starling-specific UI | Custom palette, fonts, atlas/cache, rounded geometry, boot screen and preferences. |
 | 1682 | `crates/horizon-client/src/vanillagen.rs` | rewrite required; core worldgen | Overworld generator/streaming integration, proto/final chunks, biomes, ticks, structures, block entities and saved proto restore. |
-| 1683 | `crates/horizon-client/src/vanillagen/lod.rs` | reference; far-render optimization | Async far decoration batches, cached LOD columns, vegetation/island estimates and detail requests. |
-| 1684 | `crates/horizon-client/src/vanillagen/lod/islands.rs` | reference; optional LOD | Estimates small End island cones from feature origins and deterministic radius/shrink. |
-| 1685 | `crates/horizon-client/src/vanillagen/lod/vegetation.rs` | reference; optional LOD | Estimates trees/chorus from biome feature JSON, expected counts and stable hashing. |
+| 1683 | `crates/horizon-client/src/vanillagen/lod.rs` | undetermined; reference; far-render optimization | Async far decoration batches, cached LOD columns, vegetation/island estimates and detail requests. |
+| 1684 | `crates/horizon-client/src/vanillagen/lod/islands.rs` | undetermined; reference; optional LOD | Estimates small End island cones from feature origins and deterministic radius/shrink. |
+| 1685 | `crates/horizon-client/src/vanillagen/lod/vegetation.rs` | undetermined; reference; optional LOD | Estimates trees/chorus from biome feature JSON, expected counts and stable hashing. |
 | 1686 | `crates/horizon-client/src/vanillagen/structure_mobs.rs` | rewrite required; worldgen mob finalization | Structure/chunk spawn finalizeSpawn, group data, equipment, attributes, brain NBT and passengers. |
 | 1687 | `crates/horizon-client/src/win_screen.rs` | adaptable; version-specific UI | End poem/credits parsing, player name, obfuscation, narration, scrolling and backgrounds. |
 | 1688 | `crates/horizon-client/src/world_spawn.rs` | adaptable; core world init | Initial spawn spiral, respawn column search, heightmap/fluid/top-face checks and candidate ordering. |
-| 1689 | `crates/horizon-client/tests/custom_component_api.rs` | reference; tests only | Tests custom component registration, NBT quotas/depth, content identity and mod acceptance. |
-| 1690 | `crates/horizon-client/tests/custom_component_unregistered.rs` | reference; tests only | Rejects an unregistered custom component wire ID. |
-| 1691 | `crates/horizon-client/tests/custom_component_wire.rs` | reference; tests only | Custom components across save NBT, wire slots, hashes, bundles, containers and malformed data. |
-| 1692 | `crates/horizon-client/tests/datapack_biome_sync.rs` | reference; tests only | Datapack biome registry sync and client reconstruction/recoloring. |
-| 1693 | `crates/horizon-client/tests/forced_chunks.rs` | reference; tests only | Forced chunk ticket rings, generation status and lighting. |
-| 1694 | `crates/horizon-client/tests/generation_saves.rs` | reference; tests only | Decoration consistency across travel/restart, proto restore, block entity IDs and tick persistence. |
-| 1695 | `crates/horizon-client/tests/lan_bot.rs` | reference; tests only; protocol integration | Offline protocol bot tests for login/config, registries, chunks/light, players/entities, recipes, menus, biome sync and LAN auth. |
-| 1696 | `crates/horizon-client/tests/launch_api.rs` | reference; tests only | Launch API JSON, CLI exit codes, crash report paths and home/game-dir handling. |
-| 1697 | `crates/horizon-client/tests/mod_api_hooks.rs` | reference; tests only; mod API | Compile/dispatch tests for key, movement and recipe-book category hooks. |
-| 1698 | `crates/horizon-client/tests/streaming_meshes.rs` | reference; tests only; core renderer regression | Tests loaded columns mesh on approach and relit neighbors remesh. |
-| 1699 | `crates/horizon-client/tests/tall_column.rs` | reference; tests only; height rendering | Tests streaming/light/meshing through 131 sections to y=1800. |
-| 1700 | `crates/horizon-client/tests/wide_states.rs` | reference; tests only; registry scale | Tests palette state IDs beyond 65,536 and 17-bit global storage. |
+| 1689 | `crates/horizon-client/tests/custom_component_api.rs` | undetermined; reference; tests only | Tests custom component registration, NBT quotas/depth, content identity and mod acceptance. |
+| 1690 | `crates/horizon-client/tests/custom_component_unregistered.rs` | undetermined; reference; tests only | Rejects an unregistered custom component wire ID. |
+| 1691 | `crates/horizon-client/tests/custom_component_wire.rs` | undetermined; reference; tests only | Custom components across save NBT, wire slots, hashes, bundles, containers and malformed data. |
+| 1692 | `crates/horizon-client/tests/datapack_biome_sync.rs` | undetermined; reference; tests only | Datapack biome registry sync and client reconstruction/recoloring. |
+| 1693 | `crates/horizon-client/tests/forced_chunks.rs` | undetermined; reference; tests only | Forced chunk ticket rings, generation status and lighting. |
+| 1694 | `crates/horizon-client/tests/generation_saves.rs` | undetermined; reference; tests only | Decoration consistency across travel/restart, proto restore, block entity IDs and tick persistence. |
+| 1695 | `crates/horizon-client/tests/lan_bot.rs` | undetermined; reference; tests only; protocol integration | Offline protocol bot tests for login/config, registries, chunks/light, players/entities, recipes, menus, biome sync and LAN auth. |
+| 1696 | `crates/horizon-client/tests/launch_api.rs` | undetermined; reference; tests only | Launch API JSON, CLI exit codes, crash report paths and home/game-dir handling. |
+| 1697 | `crates/horizon-client/tests/mod_api_hooks.rs` | undetermined; reference; tests only; mod API | Compile/dispatch tests for key, movement and recipe-book category hooks. |
+| 1698 | `crates/horizon-client/tests/streaming_meshes.rs` | undetermined; reference; tests only; core renderer regression | Tests loaded columns mesh on approach and relit neighbors remesh. |
+| 1699 | `crates/horizon-client/tests/tall_column.rs` | undetermined; reference; tests only; height rendering | Tests streaming/light/meshing through 131 sections to y=1800. |
+| 1700 | `crates/horizon-client/tests/wide_states.rs` | undetermined; reference; tests only; registry scale | Tests palette state IDs beyond 65,536 and 17-bit global storage. |
