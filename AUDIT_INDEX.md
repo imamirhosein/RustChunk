@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (200/200 complete; all eight 25-file checkpoints through 1800 are closed). Current 200-file stage: 1601–1800 complete. Stop at entry 1800; await explicit authorization for the next stage. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (200/200 complete; all eight 25-file checkpoints through 1800 are closed). Current 200-file stage: 1801–2000 active; 75/200 complete. Section 1801–1850 closed; section 1851–1900 active and authorized. Stop at 1900. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -397,8 +397,7 @@
 
 ## Part 14 — Entries 326–350
 
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
+| No. | Source path | Decision | One-line reason ||---:|---|---|---|
 | 326 | `benchmarks/rust-item-cooldowns-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Network synchronization and complete player/item lifecycle are absent. |
 | 327 | `benchmarks/rust-item-durability-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Full component codecs, enchantments and complete gameplay are not covered. |
 | 328 | `benchmarks/rust-item-particles-2026-10-07/scoped-parity.json` | Adaptable; Version-specific | Particle queues/rendering, sound/effects integration and real gameplay are outside scope. |
@@ -797,8 +796,7 @@
 | 656 | `crates/horizon-client-render/src/gfx/adreno.rs` | adaptable; reference; optional/future | Selects driver-specific GPU workarounds for Qualcomm Adreno variants. |
 | 657 | `crates/horizon-client-render/src/gfx/animate.rs` | adaptable; version-specific | Builds frame chains and animation state for atlas sprites, including mip levels. |
 | 658 | `crates/horizon-client-render/src/gfx/animate.wgsl` | adaptable; version-specific | Runs the GPU part of sprite-frame update and texture copy work. |
-| 659 | `crates/horizon-client-render/src/gfx/arena.rs` | adaptable; version-specific | Allocates paged GPU memory, free lists, compaction and spill/reuse for meshes. |
-| 660 | `crates/horizon-client-render/src/gfx/block_light.rs` | unnecessary; optional/future | Provides material/shader-pack access to block light values for custom material shading. |
+| 659 | `crates/horizon-client-render/src/gfx/arena.rs` | adaptable; version-specific | Allocates paged GPU memory, free lists, compaction and spill/reuse for meshes. || 660 | `crates/horizon-client-render/src/gfx/block_light.rs` | unnecessary; optional/future | Provides material/shader-pack access to block light values for custom material shading. |
 | 661 | `crates/horizon-client-render/src/gfx/compositor.rs` | adaptable; reference; optional/future | Composes multiple offscreen views into one surface. |
 | 662 | `crates/horizon-client-render/src/gfx/crumbling_tests.rs` | adaptable; reference; version-specific | Checks destroy overlay and GPU rendering regressions. |
 | 663 | `crates/horizon-client-render/src/gfx/cull.rs` | adaptable; version-specific | Reads occlusion results asynchronously and uses prior-frame visibility to skip hidden sections. |
@@ -1197,8 +1195,7 @@
 | 991 | `crates/horizon-client/examples/probe/mipmap_probe.rs` | adaptable; reference; version-specific | Filtering/alpha behavior affects foliage/cutout textures and needs Java parity. |
 | 992 | `crates/horizon-client/examples/probe/mob_ai_probe.rs` | adaptable; reference; version-specific | Mob AI sandbox/goal/event fixture; rebuild only 1.20.1 species and preserve phase/RNG order. |
 | 993 | `crates/horizon-client/examples/probe/mob_attributes_fixture.rs` | adaptable; reference; version-specific | Values come from newer registry data and include later attributes. |
-| 994 | `crates/horizon-client/examples/probe/music_fixture.rs` | adaptable; reference; version-specific | Music list and timing policy are versioned; fake backend isn't actual audio output. |
-| 995 | `crates/horizon-client/examples/probe/natural_spawn_fixture.rs` | adaptable; reference; version-specific | Natural spawn + classic Spawner are relevant; Trial Spawner/Vault are 1.21+ and excluded. |
+| 994 | `crates/horizon-client/examples/probe/music_fixture.rs` | adaptable; reference; version-specific | Music list and timing policy are versioned; fake backend isn't actual audio output. || 995 | `crates/horizon-client/examples/probe/natural_spawn_fixture.rs` | adaptable; reference; version-specific | Natural spawn + classic Spawner are relevant; Trial Spawner/Vault are 1.21+ and excluded. |
 | 996 | `crates/horizon-client/examples/probe/options_probe.rs` | adaptable; reference; version-specific | Horizon permits render distance 64 then normalizes above 32 for vanilla comparison; this is a deliberate extension. |
 | 997 | `crates/horizon-client/examples/probe/pack_resources_fixture.rs` | adaptable; reference; version-specific | Pack overlay/resource lookup oracle; rebuild 1.20.1 formats and reject silent parse fallback. |
 | 998 | `crates/horizon-client/examples/probe/pack_screen_fixture.rs` | adaptable; reference; version-specific | Screen labels/compatibility levels and UI structure can be Horizon-specific. |
@@ -1597,8 +1594,7 @@
 
 ## Part 54 — Entries 1326–1350
 
-| No. | Source path | Decision | One-line reason |
-|---:|---|---|---|
+| No. | Source path | Decision | One-line reason ||---:|---|---|---|
 | 1326 | `crates/horizon-client/src/lan/command_suggestions.rs` | unnecessary; reference; optional/future | Provides generated ordering/selection metadata for command suggestion providers keyed by command argument paths. |
 | 1327 | `crates/horizon-client/src/lan/commands.rs` | unnecessary; reference; optional/future | Builds and sends the server's Brigadier command tree and command-completion data, including permission-aware command nodes and argument metadata. |
 | 1328 | `crates/horizon-client/src/lan/conn.rs` | unnecessary; reference; optional/future | Implements the LAN server connection lifecycle from admission and login through configuration and play, including authentication, packet routing and disconnect handling. |
@@ -1997,8 +1993,7 @@
 | 1656 | `crates/horizon-client/src/shadows.rs` | adaptable; version-specific; rendering | Entity and display shadow radius/strength rules, camera-distance fading, block-light sampling and collision-shape-clipped shadow quads. |
 | 1657 | `crates/horizon-client/src/social_screen.rs` | adaptable; version-specific; optional client UI | Social Interactions screen with All/Hidden/Blocked tabs, search, player skins, hide/show chat actions, offline status and disabled report affordance. |
 | 1658 | `crates/horizon-client/src/spear.rs` | unnecessary; post-1.20.1 | Kinetic spear charge/dismount/knockback/damage conditions, attack reach and first-/third-person stab animation transforms. |
-| 1659 | `crates/horizon-client/src/spectator_menu.rs` | adaptable; version-specific; client UI | Spectator hotbar/menu pages for teleport-to-player and teleport-to-team, scrolling, selection, close action, fade timing and icons. |
-| 1660 | `crates/horizon-client/src/sprint.rs` | adaptable; version-specific; mobile input integration | Local sprint start/stop conditions, double-tap forward window, sprint-key handling, swimming/flying restrictions and analog-stick direction mapping. |
+| 1659 | `crates/horizon-client/src/spectator_menu.rs` | adaptable; version-specific; client UI | Spectator hotbar/menu pages for teleport-to-player and teleport-to-team, scrolling, selection, close action, fade timing and icons. || 1660 | `crates/horizon-client/src/sprint.rs` | adaptable; version-specific; mobile input integration | Local sprint start/stop conditions, double-tap forward window, sprint-key handling, swimming/flying restrictions and analog-stick direction mapping. |
 | 1661 | `crates/horizon-client/src/starling_releases.rs` | unnecessary; Starling-specific launcher/release integration | Starling APK release discovery, ABI selection, update asset/digest validation, native-mod release parsing and build-server address validation. |
 | 1662 | `crates/horizon-client/src/stations.rs` | rewrite required; core gameplay reference; version-specific | Enchanting table offers, anvil repair/enchant/rename costs, grindstone results/XP, smithing transform/trim recipes and stonecutter recipe selection. |
 | 1663 | `crates/horizon-client/src/stats_overlay.rs` | undetermined; reference; optional mobile diagnostics | Performance overlay showing FPS, frame/CPU/GPU time, 1% low, RAM/GPU memory, chunk/meshing queues, draw calls, temperature, thermal status, render distance and backend. |
@@ -2226,3 +2221,33 @@
 | 1848 | `crates/horizon-mod-registry/src/lib.rs` | unnecessary; server-tooling; security-sensitive | Hosted registry API must not enter Android client. |
 | 1849 | `crates/horizon-mod-registry/src/main.rs` | unnecessary; server-tooling | Registry main launches hosted Axum service, not Minecraft client. |
 | 1850 | `crates/horizon-mod-registry/src/ratings.rs` | unnecessary; server-tooling | SQLite rating persistence belongs to hosted registry backend. |
+
+## Part 75 — Entries 1851–1875
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1851 | `crates/horizon-mod-registry/tests/submit.rs` | undetermined; tests only; server-tooling | Mock-driven server tests only; fixtures and test expectations describe Horizon 26. |
+| 1852 | `crates/horizon-mods/Cargo.toml` | rewrite required; version-specific; optional | Custom package/index formats and modern dependency versions; no Android target declaration or Forge bridge. |
+| 1853 | `crates/horizon-mods/src/api_level.rs` | rewrite required; reference; version-specific | Hard-coded Horizon function catalog and level 7; unknown import is conservatively treated as newer; only component imports are parsed. |
+| 1854 | `crates/horizon-mods/src/content.rs` | rewrite required; core reference; version-specific | Modern component and registry schema is not 1. |
+| 1855 | `crates/horizon-mods/src/fetch.rs` | unnecessary; optional; external-service | Completion marker trusts cache contents without rehash; duplicate archive paths can overwrite; bounded aggregate extraction exists. |
+| 1856 | `crates/horizon-mods/src/index.rs` | rewrite required; security-sensitive; reference | HTTPS validation is prefix-only rather than full URL parsing; resource-pack inspection checks path traversal but lacks explicit total expanded-byte/entry caps; revocation metadata validation is limited; unknown kinds are retained but not installable. |
+| 1857 | `crates/horizon-mods/src/index/native.rs` | unnecessary; optional/future; toolchain-specific | Native bundle build pipeline is Horizon-specific; content entries are skipped from source bundle and no RustChunk/Forge native mod ABI exists. |
+| 1858 | `crates/horizon-mods/src/index/registry.rs` | unnecessary; server-tooling; security-sensitive | New repository releases can be imported from configured repo without per-release review; review returns notes rather than hard errors for owner changes; date validation checks shape not calendar validity. |
+| 1859 | `crates/horizon-mods/src/index/registry/tests.rs` | undetermined; tests only; server-tooling | Tests use Horizon sample versions and custom formats; none executed during this audit. |
+| 1860 | `crates/horizon-mods/src/index/tests.rs` | undetermined; tests only | Sample game target is 26. |
+| 1861 | `crates/horizon-mods/src/lib.rs` | adaptable; module-structure reference | Small organization file; public API is tied to Horizon-specific formats. |
+| 1862 | `crates/horizon-mods/src/manifest.rs` | rewrite required; version-specific; security-sensitive | Manifest API 0. |
+| 1863 | `crates/horizon-mods/src/modpack.rs` | rewrite required; optional; security-sensitive | Extraction writes through existing filesystem paths without explicit symlink-safe openat semantics; duplicate ZIP paths can be processed repeatedly; custom . |
+| 1864 | `crates/horizon-mods/tests/index/coords_hud-0.1.0.hmod` | unnecessary; fixture-only | Binary test fixture only; custom Horizon format, not Forge . |
+| 1865 | `crates/horizon-mods/tests/index/coords_hud-0.1.0.hmod.minisig` | unnecessary; fixture-only; security-sensitive | Throwaway test signature; no production trust root. |
+| 1866 | `crates/horizon-mods/tests/index/cozy-1.0.0.hpack` | unnecessary; fixture-only | Custom Horizon modpack format; binary fixture only. |
+| 1867 | `crates/horizon-mods/tests/index/glow-1.0.0.hshader` | unnecessary; fixture-only | Not a Minecraft 1. |
+| 1868 | `crates/horizon-mods/tests/index/index-v1.json` | adaptable; reference; version-specific | Sample versions target 26. |
+| 1869 | `crates/horizon-mods/tests/index/test.pub` | unnecessary; fixture-only; security-sensitive | Test-only key; private half deleted; not a RustChunk production key. |
+| 1870 | `crates/horizon-narrator/Cargo.toml` | adaptable; optional; platform-specific | No target_os=android backend or Android speech dependency is declared; Android does not match target_os=linux. |
+| 1871 | `crates/horizon-narrator/examples/say.rs` | unnecessary; example-only | Example-only; sleep duration uses message byte length and is not a reliable completion signal for multilingual speech. |
+| 1872 | `crates/horizon-narrator/src/lib.rs` | adaptable; optional; platform-specific; architecture reference | Global mutex is held while calling sink methods; speech command channel is unbounded; set_volume does not validate finite 0. |
+| 1873 | `crates/horizon-narrator/src/screen.rs` | adaptable; optional; UI reference | Collector retains old entries indefinitely; generation i64 increment can overflow in very long-lived state; caller must maintain stable widget IDs and monotonic clock. |
+| 1874 | `crates/horizon-narrator/src/speech.rs` | adaptable; optional; platform-specific | Unbounded std mpsc command channel; thread spawn failure reported asynchronously as inactive; cfg targets omit Android backend. |
+| 1875 | `crates/horizon-narrator/src/speech/linux.rs` | unnecessary; platform-specific; optional | Compiled only for target_os=linux, not target_os=android; native libraries may be unavailable; unbounded piece queue and batch counter can wrap; raw C ABI needs ABI/library validation. |

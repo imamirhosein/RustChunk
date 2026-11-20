@@ -5,15 +5,15 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Previous stage: 1601–1800 complete and closed.
-- Active stage: **1801–2000**, progress **50/200**.
-- Authorization consumed: **1801–1850 only**. Stop at 1850; no authorization for later sections.
+- Active stage: **1801–2000**, progress **75/200**.
+- Authorization: **1801–1900 granted**. Section 1801–1850 is closed; continue only through 1900, then stop.
 
 ## Stage partition
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 1801–1850 | 1801–1825 — COMPLETE | 1826–1850 — COMPLETE | **CLOSED — 50/50** |
-| 1851–1900 | 1851–1875 — LOCKED | 1876–1900 — LOCKED | NOT AUTHORIZED |
+| 1851–1900 | 1851–1875 — COMPLETE | 1876–1900 — AUTHORIZED / NEXT | ACTIVE — 25/50 |
 | 1901–1950 | 1901–1925 — LOCKED | 1926–1950 — LOCKED | NOT AUTHORIZED |
 | 1951–2000 | 1951–1975 — LOCKED | 1976–2000 — LOCKED | NOT AUTHORIZED |
 
@@ -29,7 +29,7 @@
 
 ## Next action
 
-**STOP at 1850.** Wait for new explicit authorization before 1851–1900. Once authorized, recompute paths from the pinned tree minus the complete Index.
+**Continue at 1876** under the user's explicit authorization for 1851–1900. Complete 1876–1900 and then STOP at 1900. Do not inspect 1901+ without new authorization.
 
 ## Rules
 
@@ -40,3 +40,11 @@
 - Do not claim tests/build/benchmark/APK/device/Forge/server validation unless performed.
 - Do not change application source, `main` or existing backups.
 - Backup only after entries 1001–2000 and global verification 1–2000.
+
+
+## Checkpoint 1851–1875 closeout
+
+- Canonical pinned-tree entries 1851–1875 complete; all 25 source blobs SHA/size verified and fully read.
+- Active stage progress: 75/200. Section 1851–1900 is authorized; first checkpoint closed, second checkpoint 1876–1900 is next.
+- Six audit documents committed/read back together. Ledger: 75 records, exactly 15 fields each. Index: 1,875 sequential unique paths.
+- **Next: 1876–1900. STOP at 1900.** 1901–2000 remain locked.

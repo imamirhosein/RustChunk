@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–1850 complete (50/200); both checkpoints closed. Next section 1851–1900 is not authorized.
-- Reporting rule: STOP at entry 1850 after both authorized 25-file checkpoints are complete. Wait for fresh explicit authorization before entry 1851.
+- Current progress: entries 1801–1875 complete (75/200); section 1851–1900 is active (25/50), checkpoint 1851–1875 closed; 1876–1900 remains authorized.
+- Reporting rule: complete the authorized section 1851–1900, then STOP at 1900 and wait for fresh explicit authorization before entry 1901.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests/examples are inspected only; they are not executed.
@@ -397,8 +397,7 @@
 - Decision: rewrite required; version-specific
 - 1.20.1 implications: Build target NBT and rendering from 1.20.1; do not consume modern component form directly.
 - Follow-up checks: Verify pattern IDs, color enum mapping, block-entity NBT and modded patterns.
-- RustChunk implementation mapping: RustChunk banner ItemStack/BlockEntityTag adapter for 1.20.1.
-- Evidence required before adoption: 1.20.1 banner item and block-entity round-trip fixtures plus Forge custom-pattern tests.
+- RustChunk implementation mapping: RustChunk banner ItemStack/BlockEntityTag adapter for 1.20.1.- Evidence required before adoption: 1.20.1 banner item and block-entity round-trip fixtures plus Forge custom-pattern tests.
 - Completion state: COMPLETE — 56 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 1605-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
 ### 1824. `crates/horizon-items/src/blocks.rs`
@@ -797,8 +796,7 @@
 - Source SHA: `0ff5b28f4464a27523f136b6b1653f3623f8c4a3`
 - Size: 12970 bytes; 390 logical lines
 - Coverage: 1–390 (EOF)
-- Purpose: GitHub API adapter for repo lookup, release staging, branches and PRs.
-- Dependencies / cross-references: ureq, OAuth/API endpoints, registry token, Entry model, JSON/Base64 and files.
+- Purpose: GitHub API adapter for repo lookup, release staging, branches and PRs.- Dependencies / cross-references: ureq, OAuth/API endpoints, registry token, Entry model, JSON/Base64 and files.
 - Implementation / logic: Does OAuth profile lookup, reads entries, checks public repositories, uploads releases, manages branches/resets, commits files and opens PRs.
 - Findings: Upload reads whole file in memory; branch reset force-updates; raw OAuth state inserted by helper (caller uses random hex and signed-cookie check); token not zeroized explicitly.
 - RustChunk relevance: Reference for a separate mod portal only.
@@ -859,3 +857,430 @@
 - RustChunk implementation mapping: Separate optional backend DB only if RustChunk runs a mod portal.
 - Evidence required before adoption: SQLite migration, integer-boundary, privacy and restore tests.
 - Completion state: COMPLETE — 129 logical lines read through EOF; contiguous coverage; pinned SHA and 4187-byte size match the recursive tree; tests/examples inspected only, not run.
+
+## Checkpoint 1851–1875
+
+### 1851. `crates/horizon-mod-registry/tests/submit.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `ab08ac94af6c6cfc79805b7d2e27f12059920b70`
+- Size: 42905 bytes; 1056 logical lines
+- Coverage: 1–400, 401–800, 801–1056 (EOF)
+- Purpose: Integration tests for registry submissions, GitHub PR creation, owner updates, ratings, rejection cases and retry behavior.
+- Dependencies / cross-references: Axum router, mock GitHub API, temporary ZIP fixtures, HMAC, SQLite-backed registry and Tower test client.
+- Implementation / logic: Exercises sign-in/CSRF, upload checks, signatures, PR generation, owner-update HMAC, limits, retry/timeout and rating flows.
+- Findings: Mock-driven server tests only; fixtures and test expectations describe Horizon 26.3 packages, not Forge behavior. No test was executed.
+- RustChunk relevance: Server/backend test reference only; no Android gameplay or chunk/rendering implementation.
+- Decision: undetermined; tests only; server-tooling
+- 1.20.1 implications: No direct 1.20.1 client semantics; registry fixture uses game 26.3 and custom .hmod/.hnmod formats.
+- Follow-up checks: Review service behavior if a separate mod portal is ever built; execute tests only in an isolated server workspace.
+- RustChunk implementation mapping: No player-client mapping; possible backend regression-test patterns only.
+- Evidence required before adoption: Isolated registry build, test execution, security review and mock/real GitHub boundary tests.
+- Completion state: COMPLETE — 1056 logical lines read through EOF in contiguous chunks <=400; pinned SHA and 42905-byte size match; tests inspected, not run.
+
+### 1852. `crates/horizon-mods/Cargo.toml`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `0c003cc7ebfecc8efebaa7391fee8e90d3e788c4`
+- Size: 1166 bytes; 29 logical lines
+- Coverage: 1–29 (EOF)
+- Purpose: Manifest for Horizon's mod package/content/index crate.
+- Dependencies / cross-references: Serde/JSON/TOML, ZIP deflate, log; optional wasmparser, SHA-256, minisign and shader API behind index feature.
+- Implementation / logic: Defines Rust 1.95 package, feature-gated registry index dependencies and workspace lints.
+- Findings: Custom package/index formats and modern dependency versions; no Android target declaration or Forge bridge.
+- RustChunk relevance: Package-format concept can inform a separate RustChunk mod metadata layer, not a direct dependency.
+- Decision: rewrite required; version-specific; optional
+- 1.20.1 implications: Must model Forge 1.20.1 mods, metadata, dependencies and loader lifecycle rather than Horizon API/content package.
+- Follow-up checks: Check Android Rust MSRV and ZIP/crypto crate support only after selecting required components.
+- RustChunk implementation mapping: New RustChunk mod metadata/verification crate, isolated from game runtime until needed.
+- Evidence required before adoption: Android ARM64 dependency build, license/security review and Forge 1.20.1 metadata interoperability.
+- Completion state: COMPLETE — 29 logical lines read through EOF; pinned SHA and 1166-byte size match; tests not present.
+
+### 1853. `crates/horizon-mods/src/api_level.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e3df644cc115c8f1d7a3ec3e8e22301051de89e5`
+- Size: 7240 bytes; 204 logical lines
+- Coverage: 1–204 (EOF)
+- Purpose: Versioned compatibility level for Horizon's Wasm component imports.
+- Dependencies / cross-references: Horizon WIT function names, wasmparser, registry index api_level field and fixed LEVEL/FUNCTIONS table.
+- Implementation / logic: Maps imported interface.function names to the newest API level; embeds and reads a 27-byte marker in Wasm binaries.
+- Findings: Hard-coded Horizon function catalog and level 7; unknown import is conservatively treated as newer; only component imports are parsed.
+- RustChunk relevance: Compatibility-gating pattern is useful, but the API contract itself is unrelated to Forge mod compatibility.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Use Forge/Minecraft 1.20.1 mod loader versions, mod IDs, dependency ranges and protocol compatibility; do not reuse Horizon levels.
+- Follow-up checks: Define explicit RustChunk/Forge compatibility metadata and reject unsupported loader/game versions before install.
+- RustChunk implementation mapping: RustChunk profile mod resolver and metadata compatibility gate, not a replacement for Forge.
+- Evidence required before adoption: Differential tests against Forge 47.4.x metadata, malformed Wasm/parser bounds if Wasm is retained, and Android build.
+- Completion state: COMPLETE — 204 logical lines read through EOF; pinned SHA and 7240-byte size match; embedded unit tests inspected, not run.
+
+### 1854. `crates/horizon-mods/src/content.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `96af309222f040d401946eb411153fb6d44328da`
+- Size: 99453 bytes; 2486 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2486 (EOF)
+- Purpose: Loads and validates Horizon content assets and declarative blocks, items, effects, menus and kinetic machines.
+- Dependencies / cross-references: Manifest namespaces/capabilities, serde JSON, ZIP reader, file walker, block/item component schema and content fetch cache.
+- Implementation / logic: Scans directories/archives, caps file counts and bytes, parses typed declarations, checks namespace ownership, geometry, state properties, machine metadata and cross-declaration references.
+- Findings: Modern component and registry schema is not 1.20.1 legacy NBT/Forge registry data. Several custom machine behaviors are Starling/Create-like; block model/shape validation is partial relative to Minecraft's full state/model rules.
+- RustChunk relevance: Strong architecture reference for bounded asset scanning and typed data validation; not a drop-in game data engine.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Rebuild against 1.20.1 registries, BlockState/ItemStack NBT, Forge data loaders, loot/recipe serializers and vanilla collision/render semantics.
+- Follow-up checks: Differentially compare all declarations against 1.20.1/Forge; fuzz ZIP paths/JSON; test namespace collisions, state-space limits and shape boundaries.
+- RustChunk implementation mapping: RustChunk data-pack/mod asset ingestion layer, with target-specific registries and serializers.
+- Evidence required before adoption: 1.20.1 vanilla+Forge parity fixtures, malformed archive fuzzing, Android ARM64 memory/CPU tests and explicit block geometry/render validation.
+- Completion state: COMPLETE — 2486 logical lines read through EOF in contiguous chunks <=400; pinned SHA and 99453-byte size match; tests inspected, not run.
+
+### 1855. `crates/horizon-mods/src/fetch.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f26c14d7c051f5e6f01d8c65281262b8dd56a2e6`
+- Size: 11529 bytes; 294 logical lines
+- Coverage: 1–294 (EOF)
+- Purpose: Downloads and unpacks optional external mod assets from Modrinth by SHA-512.
+- Dependencies / cross-references: Manifest Fetch metadata, Modrinth version API/CDN, ZIP archive, content path/size limits and JSON normalizer.
+- Implementation / logic: Finds file by hash, enforces Modrinth CDN URL prefix, extracts selected assets into partial cache, normalizes JSON and writes completion marker.
+- Findings: Completion marker trusts cache contents without rehash; duplicate archive paths can overwrite; bounded aggregate extraction exists. Feature is third-party-asset fetch, not standard mod install.
+- RustChunk relevance: Optional asset-fetch pattern only; not needed for ordinary Forge mod downloads from user/server sources.
+- Decision: unnecessary; optional; external-service
+- 1.20.1 implications: RustChunk should not silently fetch unrelated external assets; any mod downloads need explicit source, consent, integrity and cache policy.
+- Follow-up checks: If adopted, verify cached files, reject duplicate paths, constrain extraction roots and test CDN redirects/host validation.
+- RustChunk implementation mapping: Separate optional asset acquisition/cache module; never part of Minecraft packet or chunk pipeline.
+- Evidence required before adoption: Hash verification, malicious ZIP/duplicate-entry tests, path traversal and cache-tamper tests on Android.
+- Completion state: COMPLETE — 294 logical lines read through EOF; pinned SHA and 11529-byte size match; tests inspected, not run.
+
+### 1856. `crates/horizon-mods/src/index.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `382556b50c238fc07eef17bdbf4852da32a81ab1`
+- Size: 25608 bytes; 695 logical lines
+- Coverage: 1–695 (EOF)
+- Purpose: Parses and validates mod registry index, file trust, signatures, revocations and package contents.
+- Dependencies / cross-references: Serde, SHA-256, minisign, ZIP, horizon-mods manifest/modpack/shader validators and optional index feature.
+- Implementation / logic: Checks project/version IDs, file names, HTTPS strings, sizes, signatures, dependency hashes, revocations and inspects package-specific manifests before install.
+- Findings: HTTPS validation is prefix-only rather than full URL parsing; resource-pack inspection checks path traversal but lacks explicit total expanded-byte/entry caps; revocation metadata validation is limited; unknown kinds are retained but not installable.
+- RustChunk relevance: Integrity/index design is a useful pattern; package kinds and trust policy need redesign for Forge ecosystem.
+- Decision: rewrite required; security-sensitive; reference
+- 1.20.1 implications: Forge 1.20.1 mod distribution requires Modrinth/CurseForge/local sources, loader/game dependency constraints, signed hash manifests and safe archive inspection.
+- Follow-up checks: Use URL parser and allowlisted schemes/hosts, ZIP bomb bounds, canonical revocation schema, dependency-cycle checks and strict manifest parsing.
+- RustChunk implementation mapping: RustChunk optional mod catalog/installer trust layer, separate from Forge's actual mod loader.
+- Evidence required before adoption: Threat model, URL/parser fuzzing, ZIP bomb corpus, signature vectors, dependency resolution tests and Android storage permission tests.
+- Completion state: COMPLETE — 695 logical lines read through EOF; pinned SHA and 25608-byte size match; tests inspected, not run.
+
+### 1857. `crates/horizon-mods/src/index/native.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `64dafe6e3b70667d7ef5874e8b94acb13d52d9ff`
+- Size: 17259 bytes; 464 logical lines
+- Coverage: 1–464 (EOF)
+- Purpose: Reads and validates source-only Horizon native mixin bundles.
+- Dependencies / cross-references: ZIP, serde JSON, TOML, manifest identity, Rust source/data path policy and build-service bundle format.
+- Implementation / logic: Rejects unsafe paths and WebAssembly, caps source entry count/expanded bytes, checks manifest/mixin identity and emits deterministic build ZIP.
+- Findings: Native bundle build pipeline is Horizon-specific; content entries are skipped from source bundle and no RustChunk/Forge native mod ABI exists.
+- RustChunk relevance: Bounded source-bundle validation pattern only; not a route to load Forge mods from Rust.
+- Decision: unnecessary; optional/future; toolchain-specific
+- 1.20.1 implications: Forge 1.20.1 uses Java bytecode/mod loader; this bundle format cannot replace Forge .jar mods or mixins without a separate compiler/loader.
+- Follow-up checks: Do not execute uploaded source; enforce per-entry and aggregate limits, duplicate/path checks and build isolation if a service is added.
+- RustChunk implementation mapping: No base client mapping; separate future mod-build service only.
+- Evidence required before adoption: Sandboxed build service, malicious ZIP tests, dependency pinning, output reproducibility and Android-independent validation.
+- Completion state: COMPLETE — 464 logical lines read through EOF; pinned SHA and 17259-byte size match; tests inspected, not run.
+
+### 1858. `crates/horizon-mods/src/index/registry.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `5d9cd1047ed3db336bae29018e719b0199beaafa`
+- Size: 26181 bytes; 689 logical lines
+- Coverage: 1–689 (EOF)
+- Purpose: Builds and reviews the hosted mod registry from TOML project entries and release assets.
+- Dependencies / cross-references: Index models, SHA-256/minisign, package inspection, local registry cache, GitHub release URLs and review workflow.
+- Implementation / logic: Loads entries/revocations, validates versions and files, resolves repository page metadata, builds index, checks release assets and flags immutable-file/owner/kind changes.
+- Findings: New repository releases can be imported from configured repo without per-release review; review returns notes rather than hard errors for owner changes; date validation checks shape not calendar validity.
+- RustChunk relevance: Backend registry governance reference, not a game client component.
+- Decision: unnecessary; server-tooling; security-sensitive
+- 1.20.1 implications: Keep GitHub automation, release signing and repository authority on a backend; do not embed tokens or CI trust in Android launcher.
+- Follow-up checks: Validate repo ownership and release provenance, calendar dates, version ordering, revoked IDs, duplicate cache records and signed build artifacts.
+- RustChunk implementation mapping: Separate RustChunk mod catalog backend only if explicitly built.
+- Evidence required before adoption: Threat model, hostile repository tests, release asset hash/signature validation and review authorization tests.
+- Completion state: COMPLETE — 689 logical lines read through EOF; pinned SHA and 26181-byte size match; tests inspected, not run.
+
+### 1859. `crates/horizon-mods/src/index/registry/tests.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c35ad4acf63bb2270784451aa6fca1352098d050`
+- Size: 13747 bytes; 408 logical lines
+- Coverage: 1–408 (EOF)
+- Purpose: Tests registry index construction, repository-backed releases, immutable versions and kind transitions.
+- Dependencies / cross-references: Scratch registry checkout, sample signed/unsigned packages, cache files and index builder.
+- Implementation / logic: Asserts sample index reproduction, signature/hash failures, review notes, mod-to-native transition and release/page resolution.
+- Findings: Tests use Horizon sample versions and custom formats; none executed during this audit.
+- RustChunk relevance: Backend regression-test reference only.
+- Decision: undetermined; tests only; server-tooling
+- 1.20.1 implications: No 1.20.1 runtime implications.
+- Follow-up checks: Run only in isolated backend workspace after implementing registry; add adversarial repository/release fixtures.
+- RustChunk implementation mapping: No player-client mapping.
+- Evidence required before adoption: Test execution, malicious repo/path fixtures, release integrity and cache migration tests.
+- Completion state: COMPLETE — 408 logical lines read through EOF; pinned SHA and 13747-byte size match; tests inspected, not run.
+
+### 1860. `crates/horizon-mods/src/index/tests.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f507296291ebafc08a7946bd965fe41354a301bd`
+- Size: 10611 bytes; 260 logical lines
+- Coverage: 1–260 (EOF)
+- Purpose: Tests sample index parsing, package checks, signatures, revocation and resource-pack validation.
+- Dependencies / cross-references: Index parser, test public key, .hmod/.hpack/.hshader fixtures and ZIP creation helpers.
+- Implementation / logic: Exercises unknown kinds, tampering, signatures, manifest parity, resource-pack metadata and installable API-level selection.
+- Findings: Sample game target is 26.3; resource-pack ZIP inspection lacks demonstrated expanded-size stress coverage; tests were not run.
+- RustChunk relevance: Test fixture patterns for package trust and negative validation cases.
+- Decision: undetermined; tests only
+- 1.20.1 implications: Build equivalent fixtures for Forge 1.20.1 .jar/mod metadata and vanilla resource packs; do not assume custom formats.
+- Follow-up checks: Add ZIP bomb, duplicate entry, malformed URL, revocation and signature boundary tests.
+- RustChunk implementation mapping: RustChunk installer test corpus only.
+- Evidence required before adoption: Run unit tests in isolated workspace and fuzz archive/index parsers.
+- Completion state: COMPLETE — 260 logical lines read through EOF; pinned SHA and 10611-byte size match; tests inspected, not run.
+
+### 1861. `crates/horizon-mods/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `19c61266b60256bfbce3bcb3d0d902e3c9b584c9`
+- Size: 430 bytes; 14 logical lines
+- Coverage: 1–14 (EOF)
+- Purpose: Module façade for Horizon mod APIs, content, fetch, manifest and modpack crates.
+- Dependencies / cross-references: Sibling Rust modules and feature-gated index module.
+- Implementation / logic: Exports public modules and selected manifest/content types.
+- Findings: Small organization file; public API is tied to Horizon-specific formats.
+- RustChunk relevance: Module-boundary reference only.
+- Decision: adaptable; module-structure reference
+- 1.20.1 implications: No game-version semantics.
+- Follow-up checks: Keep client/server/loader APIs separated and avoid unnecessary public surface.
+- RustChunk implementation mapping: RustChunk crate organization.
+- Evidence required before adoption: Static API review and cargo feature matrix.
+- Completion state: COMPLETE — 14 logical lines read through EOF; pinned SHA and 430-byte size match.
+
+### 1862. `crates/horizon-mods/src/manifest.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `31903fb51870fa5fd2a5329a919330e8150e1667`
+- Size: 25891 bytes; 627 logical lines
+- Coverage: 1–627 (EOF)
+- Purpose: Defines Horizon mod manifest, capability model, package reader/writer and file discovery.
+- Dependencies / cross-references: Serde/TOML, ZIP, Wasm component APIs, content path checker and platform-independent package files.
+- Implementation / logic: Validates mod IDs, API levels, side/capabilities, namespaces, optional asset fetch and package structure; reads/writes .hmod.
+- Findings: Manifest API 0.1/0.2/0.3 and capability model are not Forge 1.20.1 metadata; directory Package::read reads Wasm without a streaming cap before checking size; archive writer relies on ZIP path checks but doesn't reject duplicate content names.
+- RustChunk relevance: Metadata validation and explicit capability declarations are useful patterns, not a compatible mod format.
+- Decision: rewrite required; version-specific; security-sensitive
+- 1.20.1 implications: Forge mod metadata, dependencies, mixins, access transformers and loader versions must be modeled as Forge 47.x expects; do not substitute this manifest.
+- Follow-up checks: Stream/cap directory Wasm reads, reject duplicate ZIP entries, cap archive entry counts and align metadata with Forge dependency graph.
+- RustChunk implementation mapping: RustChunk mod metadata/index layer only if it preserves real Forge jars and Forge semantics.
+- Evidence required before adoption: Android archive tests, malformed ZIP corpus, manifest fuzzing and Forge 1.20.1 metadata parity.
+- Completion state: COMPLETE — 627 logical lines read through EOF; pinned SHA and 25891-byte size match; tests inspected, not run.
+
+### 1863. `crates/horizon-mods/src/modpack.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2ee9543737fd5a52d2701608342cec578938f918`
+- Size: 10798 bytes; 300 logical lines
+- Coverage: 1–300 (EOF)
+- Purpose: Reads Horizon .hpack manifests and extracts constrained profile overrides.
+- Dependencies / cross-references: ZIP, TOML manifest, listed mod IDs, storage directory policy and game home paths.
+- Implementation / logic: Validates pack version and mod hashes, constrains override destinations and extracts options/resourcepacks/mod storage.
+- Findings: Extraction writes through existing filesystem paths without explicit symlink-safe openat semantics; duplicate ZIP paths can be processed repeatedly; custom .hpack schema differs from common Forge modpack formats.
+- RustChunk relevance: Profile packaging/override whitelist is useful concept; direct format reuse is not.
+- Decision: rewrite required; optional; security-sensitive
+- 1.20.1 implications: Forge modpacks typically carry manifests and actual mod artifacts/loader metadata; retain 1.20.1 Forge install semantics and safe profile isolation.
+- Follow-up checks: Reject symlink traversal, duplicate entries, oversized/zip-bomb archives and path collisions; stage writes then atomically replace.
+- RustChunk implementation mapping: RustChunk profile import/export and safe overrides subsystem.
+- Evidence required before adoption: Malicious archive/symlink tests, extraction rollback, duplicate path and Android scoped-storage validation.
+- Completion state: COMPLETE — 300 logical lines read through EOF; pinned SHA and 10798-byte size match; tests inspected, not run.
+
+### 1864. `crates/horizon-mods/tests/index/coords_hud-0.1.0.hmod`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `1a4a5ba35e922e3837f43a4c85ae532885f95956`
+- Size: 438 bytes; binary fixture
+- Coverage: binary ZIP; complete base64 blob fetched
+- Purpose: Signed Horizon example mod package fixture.
+- Dependencies / cross-references: ZIP contains horizon-mod.toml and mod.wasm; referenced by sample index and registry tests.
+- Implementation / logic: Fixture is a 438-byte archive whose SHA-256 is pinned by sample index.
+- Findings: Binary test fixture only; custom Horizon format, not Forge .jar.
+- RustChunk relevance: Test data only.
+- Decision: unnecessary; fixture-only
+- 1.20.1 implications: No runtime adoption; cannot substitute for Forge 1.20.1 mod JAR.
+- Follow-up checks: Preserve only as a fixture if testing Horizon format parser.
+- RustChunk implementation mapping: No application mapping.
+- Evidence required before adoption: Reproduce exact hash and archive structure before any fixture use.
+- Completion state: COMPLETE — Complete binary blob fetched; pinned SHA and 438-byte size match; not executed.
+
+### 1865. `crates/horizon-mods/tests/index/coords_hud-0.1.0.hmod.minisig`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `5f9b17534b7f4945deede8bd1c3bd6150f1c3965`
+- Size: 278 bytes; 5 logical lines
+- Coverage: 1–5 (EOF)
+- Purpose: Minisign signature fixture for the sample coordinates HUD package.
+- Dependencies / cross-references: Test public key test.pub and .hmod package hash/signature.
+- Implementation / logic: Contains untrusted comment, signature payload and trusted comment identifying coords_hud 0.1.0.
+- Findings: Throwaway test signature; no production trust root.
+- RustChunk relevance: Useful signature fixture pattern only.
+- Decision: unnecessary; fixture-only; security-sensitive
+- 1.20.1 implications: Never trust this test key or signature for released RustChunk mods.
+- Follow-up checks: Generate a dedicated production signing key offline and keep secrets out of launcher/source repository.
+- RustChunk implementation mapping: Test-only signing fixture.
+- Evidence required before adoption: Verify against exact fixture and ensure no test key is trusted in production.
+- Completion state: COMPLETE — 5 logical lines read through EOF; pinned SHA and 278-byte size match.
+
+### 1866. `crates/horizon-mods/tests/index/cozy-1.0.0.hpack`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `b256634800edef5c08a63d9036273dd9d3bb83d4`
+- Size: 471 bytes; binary fixture
+- Coverage: binary ZIP; complete base64 blob fetched
+- Purpose: Horizon sample modpack archive fixture with one options override.
+- Dependencies / cross-references: ZIP contains horizon-modpack.toml and overrides/options.txt.
+- Implementation / logic: Archive is referenced by sample index with pinned hash/size and exercised by registry/index tests.
+- Findings: Custom Horizon modpack format; binary fixture only.
+- RustChunk relevance: Test data only.
+- Decision: unnecessary; fixture-only
+- 1.20.1 implications: No direct Forge 1.20.1 pack compatibility.
+- Follow-up checks: Use as a negative/format fixture only, not as RustChunk's modpack format.
+- RustChunk implementation mapping: No application mapping.
+- Evidence required before adoption: Exact hash and archive parsing verification in isolated fixture tests.
+- Completion state: COMPLETE — Complete binary blob fetched; pinned SHA and 471-byte size match; not executed.
+
+### 1867. `crates/horizon-mods/tests/index/glow-1.0.0.hshader`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `dda1651f89f0f8cdb22180846e9e10316dcb1680`
+- Size: 689 bytes; binary fixture
+- Coverage: binary ZIP; complete base64 blob fetched
+- Purpose: Horizon WGSL shader pack fixture.
+- Dependencies / cross-references: ZIP contains horizon-shaders.toml and post.wgsl.
+- Implementation / logic: Sample index pins archive hash/size; shader validator tests exercise valid and invalid WGSL.
+- Findings: Not a Minecraft 1.20.1 shaderpack or OptiFine/Iris shader archive.
+- RustChunk relevance: Test data only.
+- Decision: unnecessary; fixture-only
+- 1.20.1 implications: Forge 1.20.1 shader ecosystem requires actual supported renderer/shader API, not Horizon .hshader.
+- Follow-up checks: Keep separate from resource-pack/mod ZIP handling; validate only with its own format parser.
+- RustChunk implementation mapping: No application mapping.
+- Evidence required before adoption: Renderer-specific shader compatibility and exact fixture hash check.
+- Completion state: COMPLETE — Complete binary blob fetched; pinned SHA and 689-byte size match; not executed.
+
+### 1868. `crates/horizon-mods/tests/index/index-v1.json`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `5b4a87d0972bcd09dabf57b4869d10a5ea4f4c74`
+- Size: 4349 bytes; 139 logical lines
+- Coverage: 1–139 (EOF)
+- Purpose: Sample registry index containing mod, modpack, shader and unknown future kind.
+- Dependencies / cross-references: References test package hashes, signatures, project metadata, dependencies and revocation.
+- Implementation / logic: Defines schema 1 projects with version/game/API metadata, file URLs, SHA-256, signatures and revoked entry.
+- Findings: Sample versions target 26.3; unknown kind demonstrates forward retention but not installability; future_field intentionally tolerated.
+- RustChunk relevance: Index schema example and integrity fixture only.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Need explicit Forge 1.20.1 loader/game compatibility and real .jar source provenance; do not reuse sample entries as runtime data.
+- Follow-up checks: Validate schema evolution, URL parsing, unknown fields, dependency graph and revocation semantics.
+- RustChunk implementation mapping: RustChunk optional catalog schema fixture.
+- Evidence required before adoption: Parser round-trip, unknown-kind and malformed-data tests.
+- Completion state: COMPLETE — 139 logical lines read through EOF; pinned SHA and 4349-byte size match.
+
+### 1869. `crates/horizon-mods/tests/index/test.pub`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `5cb41bd62d869630ba2e4e742663318247f6cb51`
+- Size: 113 bytes; 3 logical lines
+- Coverage: 1–3 (EOF)
+- Purpose: Public half of the throwaway minisign test key.
+- Dependencies / cross-references: Paired with signature fixture and sample index.
+- Implementation / logic: Contains key identifier comment and base64 public key.
+- Findings: Test-only key; private half deleted; not a RustChunk production key.
+- RustChunk relevance: Test fixture only.
+- Decision: unnecessary; fixture-only; security-sensitive
+- 1.20.1 implications: Never pin this key in production launcher or trust store.
+- Follow-up checks: Generate and distribute an independent RustChunk signing key with rotation/revocation plan.
+- RustChunk implementation mapping: No app mapping.
+- Evidence required before adoption: Key provenance, offline private-key custody and signature verification tests.
+- Completion state: COMPLETE — 3 logical lines read through EOF; pinned SHA and 113-byte size match.
+
+### 1870. `crates/horizon-narrator/Cargo.toml`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `31eaf3d2ee0b876d4e85435b3b6f68f74f1861b7`
+- Size: 1159 bytes; 28 logical lines
+- Coverage: 1–28 (EOF)
+- Purpose: Manifest for cross-platform text-to-speech and screen narration crate.
+- Dependencies / cross-references: Windows SAPI, macOS AppKit speech, Linux libloading/flite; log.
+- Implementation / logic: Declares target-specific native speech dependencies and Rust 1.85 minimum.
+- Findings: No target_os=android backend or Android speech dependency is declared; Android does not match target_os=linux.
+- RustChunk relevance: Accessibility architecture is relevant, but this manifest does not establish Android narrator support.
+- Decision: adaptable; optional; platform-specific
+- 1.20.1 implications: Android TTS needs JNI/Android TextToSpeech bridge or another verified backend; Linux Flite code is not compiled for Android.
+- Follow-up checks: Add Android target implementation and lifecycle/thread tests; check native dependency packaging.
+- RustChunk implementation mapping: Optional RustChunk accessibility narrator crate with Android adapter.
+- Evidence required before adoption: Android API integration, lifecycle, locale/voice, interruption and memory tests.
+- Completion state: COMPLETE — 28 logical lines read through EOF; pinned SHA and 1159-byte size match.
+
+### 1871. `crates/horizon-narrator/examples/say.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2d76ce239076344c6470eaad1f49c8359a858f33`
+- Size: 1074 bytes; 29 logical lines
+- Coverage: 1–29 (EOF)
+- Purpose: CLI example for testing platform speech output.
+- Dependencies / cross-references: horizon-narrator public API and command-line args.
+- Implementation / logic: Parses optional volume, initializes narrator, queues speech and sleeps heuristically before exit.
+- Findings: Example-only; sleep duration uses message byte length and is not a reliable completion signal for multilingual speech.
+- RustChunk relevance: Useful manual diagnostic pattern only; not mobile gameplay code.
+- Decision: unnecessary; example-only
+- 1.20.1 implications: No Android CLI or platform backend proof.
+- Follow-up checks: Replace fixed sleep with completion signaling if adapting diagnostic harness.
+- RustChunk implementation mapping: Developer diagnostic only.
+- Evidence required before adoption: Platform smoke tests and asynchronous completion test.
+- Completion state: COMPLETE — 29 logical lines read through EOF; pinned SHA and 1074-byte size match.
+
+### 1872. `crates/horizon-narrator/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `3e66cf3b5bb232aaf112d0ebbf123dc239a5c531`
+- Size: 13352 bytes; 422 logical lines
+- Coverage: 1–400, 401–422 (EOF)
+- Purpose: Core narrator state, status filtering, queued speech API and screen-narration façade.
+- Dependencies / cross-references: Speech::Sink trait, global Mutex<GameNarrator>, speech thread and platform modules.
+- Implementation / logic: Maintains Off/All/Chat/System states, volume, recent 32 messages and asynchronous queued/interrupting speech.
+- Findings: Global mutex is held while calling sink methods; speech command channel is unbounded; set_volume does not validate finite 0..1 range; platform open failure disables narration.
+- RustChunk relevance: Accessibility state machine and bounded recent-message idea are reusable; implementation needs Android adapter and queue bounds.
+- Decision: adaptable; optional; platform-specific; architecture reference
+- 1.20.1 implications: No Android speech backend in this source; volume and thread semantics need mobile-specific handling.
+- Follow-up checks: Bound speech queue, validate/clamp volume, avoid slow platform calls under global lock and handle lifecycle cancellation.
+- RustChunk implementation mapping: Optional RustChunk accessibility service separate from render/game thread.
+- Evidence required before adoption: Concurrency stress, queue flood, NaN/range, Android lifecycle and TTS interruption tests.
+- Completion state: COMPLETE — 422 logical lines read through EOF in contiguous chunks <=400; pinned SHA and 13352-byte size match; tests inspected, not run.
+
+### 1873. `crates/horizon-narrator/src/screen.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `748e0a88c10a8ff68dbc7d54eb3a3a78fd8c12d8`
+- Size: 14121 bytes; 418 logical lines
+- Coverage: 1–400, 401–418 (EOF)
+- Purpose: Screen narration collector, widget priority selection and delayed narration scheduling.
+- Dependencies / cross-references: BTreeMap keyed by element type/depth, generation counter, screen trigger/time state.
+- Implementation / logic: Collects changed narration elements in order, suppresses after screen init and schedules mouse/keyboard/system narration.
+- Findings: Collector retains old entries indefinitely; generation i64 increment can overflow in very long-lived state; caller must maintain stable widget IDs and monotonic clock.
+- RustChunk relevance: Useful UI accessibility behavior for RustChunk settings/menus, not Minecraft protocol or renderer core.
+- Decision: adaptable; optional; UI reference
+- 1.20.1 implications: Port interaction model to Android accessibility/TalkBack conventions; do not assume desktop mouse/keyboard timing.
+- Follow-up checks: Prune stale entries, bound depth/count, test clock rollback/overflow and dynamic widget removal.
+- RustChunk implementation mapping: Optional UI narration layer around RustChunk settings screens.
+- Evidence required before adoption: Android TalkBack/TTS parity, long-session memory tests and navigation accessibility tests.
+- Completion state: COMPLETE — 418 logical lines read through EOF in contiguous chunks <=400; pinned SHA and 14121-byte size match; tests inspected, not run.
+
+### 1874. `crates/horizon-narrator/src/speech.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `52f74f8f69902fd606ed78bcae53e900523cdb16`
+- Size: 4306 bytes; 130 logical lines
+- Coverage: 1–130 (EOF)
+- Purpose: Platform speech trait, worker thread and command dispatch.
+- Dependencies / cross-references: std mpsc channels, per-platform speech backends and thread spawn.
+- Implementation / logic: Opens one platform speech backend on a dedicated thread, forwards Say/Clear commands and polls backend idle every 50 ms.
+- Findings: Unbounded std mpsc command channel; thread spawn failure reported asynchronously as inactive; cfg targets omit Android backend.
+- RustChunk relevance: Thread-isolated speech abstraction is useful but needs bounded queue and Android backend.
+- Decision: adaptable; optional; platform-specific
+- 1.20.1 implications: Android is not covered by Windows/macOS/Linux cfg selection; unsupported platform returns error.
+- Follow-up checks: Implement Android JNI/TTS backend, bounded queue, explicit shutdown and completion/cancellation semantics.
+- RustChunk implementation mapping: Optional RustChunk accessibility adapter.
+- Evidence required before adoption: Android device tests, queue backpressure and thread lifecycle stress.
+- Completion state: COMPLETE — 130 logical lines read through EOF; pinned SHA and 4306-byte size match.
+
+### 1875. `crates/horizon-narrator/src/speech/linux.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2316653ee2b4d3b1f74dcca9f2c2b341be6ba19f`
+- Size: 8293 bytes; 206 logical lines
+- Coverage: 1–206 (EOF)
+- Purpose: Linux Flite text-to-speech backend with dynamically loaded native libraries.
+- Dependencies / cross-references: libloading, libflite.so, libflite_cmu_us_kal16.so, C ABI pointers, atomic batch counter and worker channel.
+- Implementation / logic: Loads Flite symbols, registers voice, splits text into pieces, synthesizes/rescales audio and plays sequentially.
+- Findings: Compiled only for target_os=linux, not target_os=android; native libraries may be unavailable; unbounded piece queue and batch counter can wrap; raw C ABI needs ABI/library validation.
+- RustChunk relevance: Not usable as Android backend by cfg; C-ABI ownership pattern is platform-specific.
+- Decision: unnecessary; platform-specific; optional
+- 1.20.1 implications: Android requires a distinct platform adapter; Linux shared libraries cannot be assumed present in Android app sandbox.
+- Follow-up checks: Do not force cfg(linux) on Android; validate FFI signatures, library lifetime, queue bounds and cancellation.
+- RustChunk implementation mapping: No direct mapping; optional Linux desktop backend only.
+- Evidence required before adoption: Linux ABI/runtime tests and separate Android TTS implementation/device validation.
+- Completion state: COMPLETE — 206 logical lines read through EOF; pinned SHA and 8293-byte size match.

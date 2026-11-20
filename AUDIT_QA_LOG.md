@@ -1280,3 +1280,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings: modern bundle/cooldown/enchantment/item-component schemas require 1.20.1 rewrites; loot engine has incomplete context/predicate behavior; random sequences and recipe filters require target parity; MCP and mod-registry service crates are developer/backend tooling only.
 - Tests/examples inspected only, not executed. No build, benchmark, APK, Android device, Forge launch or server-join validation. No application source changed; audit documentation only.
 - Section 1801–1850 is **COMPLETE/CLOSED (50/50)**. Do not inspect 1851 or later without new explicit user authorization. main and backups untouched; no backup until entries 1001–2000 and global verification are complete.
+
+
+## Source-audit checkpoint 1851–1875 — 2026-11-20
+
+- Completed canonical entries 1851–1875 (25/25) from the pinned Starling recursive tree. The exact sequence was recomputed by excluding indexed paths 1–1850 and taking the next 25 blobs.
+- All 25 files were fetched serially and reviewed completely. Long files were read in contiguous chunks of at most 400 lines: submit.rs (1–1056), content.rs (1–2486), index.rs (1–695), registry.rs (1–689), native.rs (1–464), registry/tests.rs (1–408), manifest.rs (1–627), narrator/lib.rs (1–422), screen.rs (1–418), speech/linux.rs (1–206). Other text files were read to EOF; four ZIP fixtures were fetched as complete binary blobs and their pinned SHA/size checked.
+- Every source blob SHA and byte size matches the untruncated pinned tree. Active Ledger now contains 75 entries (1801–1875), each with exactly 15 fields. Index contains 1,875 sequential unique paths; new paths and Decisions align with Ledger.
+- Findings: Horizon's custom .hmod/.hpack/.hshader and mod API-level formats are not Forge 1.20.1 formats; content declarations require a full target-version rewrite. Registry/index trust logic offers design patterns but has URL parsing, ZIP expansion, revocation and repository governance follow-ups. Modpack extraction needs symlink-safe writes and duplicate-entry handling. The narrator subsystem has no Android backend: Linux code is cfg(target_os=linux), not Android; queues are unbounded in speech dispatch. Screen narration is a UI accessibility reference only.
+- Four binary fixtures (HMOD, HPACK, HSHADER, public-key/signature/index fixtures) were inspected as source test assets; no fixture was executed. Embedded tests/examples were inspected only, not run.
+- No application source changed. No build, unit test, benchmark, APK, Android device, Forge launch, Minecraft join, server or renderer validation was performed.
+- This checkpoint is committed with the six required audit documents in one transaction; each will be read back individually from GitHub and cross-checked.
+- Section 1851–1900 remains authorized. **Continue at 1876**; after completing 1876–1900, STOP at 1900 and request fresh authorization. Do not inspect 1901+.
+- `main` and existing backup refs remain untouched. No backup is due; backup only after entries 1001–2000 and global verification 1–2000.

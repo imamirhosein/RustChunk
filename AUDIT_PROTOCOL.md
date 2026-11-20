@@ -397,3 +397,11 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Both 25-file checkpoints committed as separate six-document transactions; all six docs were read back after each commit.
 - Section 1851–1900 is locked; do not inspect it without fresh explicit user authorization.
 - Preserve serial review, full EOF, <=400-line contiguous chunks, source SHA/size verification, exactly 15 Ledger fields, no unverified test/build claims and no app source changes.
+
+## 16. Checkpoint 1851–1875 closeout and authorization state — 2026-11-20
+
+- Active stage 1801–2000: **75/200 complete**. Entries 1801–1850 are closed; checkpoint 1851–1875 is complete.
+- Section 1851–1900 is authorized and active (25/50). Continue serially at 1876 through 1900 under the same grant; stop at 1900 and obtain fresh explicit permission before 1901.
+- At this checkpoint the six-document transaction is mandatory: active Ledger, `AUDIT_INDEX.md`, `AUDIT_QA_LOG.md`, `AUDIT_CONTINUITY.md`, this Protocol and `AUDIT_200_FILE_BOUNDARY.md`. Read back each separately after commit and verify HEAD, 15 fields per Ledger entry, sequential unique Index paths and matching decisions.
+- Findings from 1851–1875: Horizon custom package/content/index and native bundle formats are not Forge 1.20.1 equivalents. Registry/index logic needs URL, ZIP bomb, revocation and trust-governance hardening before any reuse. Modpack extraction needs symlink-safe writes. Narrator code lacks Android target support and uses unbounded queues; UI narration remains an optional accessibility reference.
+- Keep one source fetch at a time, complete EOF, contiguous chunks <=400, pinned SHA/size verification, no test execution, no app source changes, and no unsupported validation claims. `main` and backups remain unchanged. Backup only after entries 1001–2000 and global verification 1–2000.

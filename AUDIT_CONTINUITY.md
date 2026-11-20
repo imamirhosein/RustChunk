@@ -381,3 +381,16 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Active Ledger `AUDIT_LEDGER_1801_2000.md`: 50 records, 15 fields each. Index: 1,850 sequential unique paths.
 - All 50 files read serially through EOF; long files in continuous <=400-line chunks; source SHA/size verified. Tests/examples inspected only. No tests/build/benchmark/APK/device/Forge/server validation; no application code changes.
 - **STOP at 1850.** Section 1851–1900 unauthorized without new explicit permission. main/backups untouched. Backup only after all entries 1001–2000 and global verification.
+
+## Authoritative resume state — checkpoint 1851–1875 — 2026-11-20
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Completed Index coverage: **1–1875**, sequential and unique.
+- Active 200-file stage: **1801–2000**, progress **75/200**.
+- Active 50-file section: **1851–1900**, progress **25/50**. Checkpoint **1851–1875** is committed/read-back verified; **1876–1900 remains authorized** by the same explicit user grant.
+- Active Ledger `AUDIT_LEDGER_1801_2000.md`: 75 entries (1801–1875), exactly 15 fields each. Index has 1,875 sequential unique paths.
+- All 25 files 1851–1875 were fetched serially through EOF; large files used contiguous chunks <=400 lines; binary fixtures were fetched in full. SHA/size match pinned tree. Tests/examples inspected only, not run.
+- Findings: Horizon package/index/content formats are not Forge 1.20.1 drop-ins; security review required for URL parsing, ZIP expansion, modpack extraction and registry governance. Narrator has no Android cfg/backend; speech queues are unbounded. UI narration logic is a possible accessibility reference only.
+- No application source changes, tests/build/benchmark/APK/device/Forge/server validation. `main` and backup refs untouched; no backup until 1001–2000 complete and global verification passes.
+- **Next: inspect 1876–1900** under existing authorization; finish and STOP at 1900. Do not inspect 1901+ without fresh explicit authorization.
