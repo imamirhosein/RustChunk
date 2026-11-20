@@ -1174,3 +1174,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No source/application code changed; only audit documentation was updated.
 - Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
 - Checkpoint 1626–1650 closes reporting section 1601–1650 (50/50). Stop at entry 1650 and wait for fresh explicit authorization before 1651–1700.
+
+## Source-audit checkpoint 1651–1675 — 2026-11-20
+
+- Completed entries 1651–1675 inclusive (25/25) from pinned Starling source tree `5432370d573642041585c69b40fb045b27133488`.
+- All 25 source files were read through EOF in serial order. Files above 400 logical lines were inspected in consecutive, gap-free chunks no larger than 400 lines; exact ranges, logical line counts, SHA and byte sizes are recorded in the active Ledger.
+- All 25 blob SHAs and byte sizes match the pinned source tree. Index paths and decisions match the corresponding Ledger entries; each new Ledger entry contains exactly 15 required fields.
+- Important 1.20.1 references: spectator menu, sprint state, workstation logic, structure block entities/loot, display entities, tick-chunk membership, ticket levels and world creation UI. All still require exact target-version source/data/RNG/NBT/packet parity before adoption.
+- Excluded from the 1.20.1 baseline: kinetic spear and Starling-specific release/account systems. Scoreboard command code, social screen, screen narrator, shadows, server pack download, and title/account integrations require target-version rewrites or optional separation.
+- `tick_chunk_membership.rs` and `ticket_levels.rs` are potential core CPU optimization references; no performance improvement is claimed. Android profiling and differential tests have not been run.
+- Embedded tests were inspected as source only; none were executed. No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- No source/application code changed. Only audit documentation is included in this checkpoint.
+- Only `starling-1.20.1-port-audit` is to be updated. `main` and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1651–1675 is closed. Continue with 1676–1700 under the user's already-issued authorization; stop at entry 1700 for fresh authorization.

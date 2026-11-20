@@ -256,3 +256,17 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - No source/application code changed. Embedded tests were inspected but not run. No build, unit test, benchmark, APK, device, Forge or server validation was performed.
 - **STOP at 1650.** Do not inspect 1651 or later until fresh explicit user authorization.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest verified checkpoint — 1651–1675 — 2026-11-20
+
+- Completed entries: **1651–1675 inclusive (25/25)** from pinned source `5432370d573642041585c69b40fb045b27133488`.
+- Active 200-file stage: **1601–1800**, now **75/200 complete**.
+- Active 50-file section: **1651–1700**. Checkpoint **1651–1675** is complete; checkpoint **1676–1700** remains covered by the user's current authorization. Do not ask for intermediate authorization.
+- Active Ledger: **75 entries**, 1601–1675, exactly 15 fields per entry. Index: **1,675 sequential entries and 1,675 unique paths**.
+- All 25 files 1651–1675 were read completely through EOF. Exact contiguous coverage, line counts, SHA and byte sizes are recorded in the Ledger and match the pinned source tree.
+- Index/Ledger path and Decision alignment is verified for entries 1651–1675.
+- Findings: several target-era gameplay references remain candidates for adaptation after 1.20.1 parity checks; spear and Starling-specific release/account systems are excluded from the baseline. Tick membership and ticket levels are optimization references, not tested improvements.
+- No source/application code changed. Embedded tests were inspected but not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
+- Checkpoint commit SHA will be added after atomic five-document commit and read-back.
+- **Next: inspect entry 1676**, the next unindexed blob in pinned tree order. Complete checkpoint 1676–1700; stop at **1700** and wait for fresh authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.

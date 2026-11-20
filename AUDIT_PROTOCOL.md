@@ -277,3 +277,18 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Preserve 200 / 50 / 25 cadence, serial file inspection, full EOF and max 400-line chunks. After each 25 files, commit all five audit docs atomically, read each back individually and verify branch HEAD.
 - No source/application code changed. Embedded tests are inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
 - `main` and backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest authoritative resume state — checkpoint 1651–1675 — 2026-11-20
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1–1675**.
+- Active 200-file stage: **1601–1800**, completed **75/200**.
+- Active reporting section: **1651–1700**. Checkpoint **1651–1675** is complete and committed; **1676–1700 is already authorized** by the same user instruction. Proceed without asking for mid-section permission.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **75 entries** (1601–1675), with exactly 15 fields each. Index: **1,675 sequential unique paths**.
+- The 25 files 1651–1675 were read through EOF serially; files above 400 lines were read in continuous chunks no larger than 400. SHA/size/coverage are in the Ledger.
+- **Next source file is entry 1676**, the next unindexed blob in pinned tree order. Verify remaining source-tree order and no duplicate paths before reading.
+- Preserve exact 200 / 50 / 25 cadence, serial review, complete EOF and max 400-line chunks. After entries 1676–1700, update all five audit docs in one atomic commit, read all five back individually and verify branch HEAD.
+- **STOP at entry 1700** and wait for fresh explicit authorization before 1701 or any later source file.
+- No source/application code changed. Embedded tests are inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
+- `main` and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
