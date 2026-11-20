@@ -397,7 +397,8 @@
 - Decision: rewrite required; version-specific
 - 1.20.1 implications: Build target NBT and rendering from 1.20.1; do not consume modern component form directly.
 - Follow-up checks: Verify pattern IDs, color enum mapping, block-entity NBT and modded patterns.
-- RustChunk implementation mapping: RustChunk banner ItemStack/BlockEntityTag adapter for 1.20.1.- Evidence required before adoption: 1.20.1 banner item and block-entity round-trip fixtures plus Forge custom-pattern tests.
+- RustChunk implementation mapping: RustChunk banner ItemStack/BlockEntityTag adapter for 1.20.1.
+- Evidence required before adoption: 1.20.1 banner item and block-entity round-trip fixtures plus Forge custom-pattern tests.
 - Completion state: COMPLETE — 56 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 1605-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
 ### 1824. `crates/horizon-items/src/blocks.rs`
@@ -796,7 +797,8 @@
 - Source SHA: `0ff5b28f4464a27523f136b6b1653f3623f8c4a3`
 - Size: 12970 bytes; 390 logical lines
 - Coverage: 1–390 (EOF)
-- Purpose: GitHub API adapter for repo lookup, release staging, branches and PRs.- Dependencies / cross-references: ureq, OAuth/API endpoints, registry token, Entry model, JSON/Base64 and files.
+- Purpose: GitHub API adapter for repo lookup, release staging, branches and PRs.
+- Dependencies / cross-references: ureq, OAuth/API endpoints, registry token, Entry model, JSON/Base64 and files.
 - Implementation / logic: Does OAuth profile lookup, reads entries, checks public repositories, uploads releases, manages branches/resets, commits files and opens PRs.
 - Findings: Upload reads whole file in memory; branch reset force-updates; raw OAuth state inserted by helper (caller uses random hex and signed-cookie check); token not zeroized explicitly.
 - RustChunk relevance: Reference for a separate mod portal only.

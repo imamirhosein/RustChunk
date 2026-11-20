@@ -405,3 +405,9 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - At this checkpoint the six-document transaction is mandatory: active Ledger, `AUDIT_INDEX.md`, `AUDIT_QA_LOG.md`, `AUDIT_CONTINUITY.md`, this Protocol and `AUDIT_200_FILE_BOUNDARY.md`. Read back each separately after commit and verify HEAD, 15 fields per Ledger entry, sequential unique Index paths and matching decisions.
 - Findings from 1851–1875: Horizon custom package/content/index and native bundle formats are not Forge 1.20.1 equivalents. Registry/index logic needs URL, ZIP bomb, revocation and trust-governance hardening before any reuse. Modpack extraction needs symlink-safe writes. Narrator code lacks Android target support and uses unbounded queues; UI narration remains an optional accessibility reference.
 - Keep one source fetch at a time, complete EOF, contiguous chunks <=400, pinned SHA/size verification, no test execution, no app source changes, and no unsupported validation claims. `main` and backups remain unchanged. Backup only after entries 1001–2000 and global verification 1–2000.
+
+
+## 17. Post-commit read-back correction — 2026-11-20
+
+- If read-back detects malformed Ledger field joins or Index row joins, correct the document formatting transparently in a documentation-only follow-up commit, retain original content/decisions, and read back all six checkpoint documents again.
+- For checkpoint 1851–1875, two inherited Ledger joins (1823, 1847) and three inherited Index joins (660, 995, 1660) were repaired. Final counts: 75 Ledger entries with 15 fields each; 1,875 sequential unique Index paths.

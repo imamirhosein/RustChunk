@@ -48,3 +48,9 @@
 - Active stage progress: 75/200. Section 1851–1900 is authorized; first checkpoint closed, second checkpoint 1876–1900 is next.
 - Six audit documents committed/read back together. Ledger: 75 records, exactly 15 fields each. Index: 1,875 sequential unique paths.
 - **Next: 1876–1900. STOP at 1900.** 1901–2000 remain locked.
+
+
+## Post-commit documentation QA correction
+
+- Two inherited Ledger field line-break defects (1823, 1847) and three Index row line-break defects (660, 995, 1660) were repaired in a follow-up documentation-only commit. Decisions and path identities unchanged.
+- Corrected state: 75 Ledger entries, 15 fields each; 1,875 sequential unique Index rows.

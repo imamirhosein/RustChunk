@@ -394,3 +394,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Findings: Horizon package/index/content formats are not Forge 1.20.1 drop-ins; security review required for URL parsing, ZIP expansion, modpack extraction and registry governance. Narrator has no Android cfg/backend; speech queues are unbounded. UI narration logic is a possible accessibility reference only.
 - No application source changes, tests/build/benchmark/APK/device/Forge/server validation. `main` and backup refs untouched; no backup until 1001–2000 complete and global verification passes.
 - **Next: inspect 1876–1900** under existing authorization; finish and STOP at 1900. Do not inspect 1901+ without fresh explicit authorization.
+
+
+## Read-back integrity correction — 2026-11-20
+
+- Post-checkpoint read-back caught two inherited Ledger field-joining defects (entries 1823 and 1847) and three inherited Index row joins (660, 995, 1660). The missing newlines were restored without changing decisions, paths or source evidence.
+- After correction: Ledger 75 entries, exactly 15 distinct fields each; Index 1,875 sequential unique rows. Six audit documents re-read after corrective commit.
+- Continue 1876–1900 under existing authorization; stop at 1900.

@@ -1293,3 +1293,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - This checkpoint is committed with the six required audit documents in one transaction; each will be read back individually from GitHub and cross-checked.
 - Section 1851–1900 remains authorized. **Continue at 1876**; after completing 1876–1900, STOP at 1900 and request fresh authorization. Do not inspect 1901+.
 - `main` and existing backup refs remain untouched. No backup is due; backup only after entries 1001–2000 and global verification 1–2000.
+
+
+## Documentation integrity correction — checkpoint 1851–1875 — 2026-11-20
+
+- Read-back QA found two inherited Ledger formatting joins that collapsed adjacent field labels: entries 1823 (`RustChunk implementation mapping` joined to `Evidence required before adoption`) and 1847 (`Purpose` joined to `Dependencies / cross-references`). Inserted the missing line breaks; both entries now have all 15 distinct required fields. No source findings or decisions changed.
+- Index read-back found three inherited adjacent-row joins at entries 660, 995 and 1660 (`||` without a line break). Restored the row boundaries; numbering and path content were unchanged. The index now contains 1,875 parseable sequential rows and 1,875 unique paths.
+- This is a documentation-only corrective commit following the checkpoint commit. The six audit documents are read back again after the correction.
