@@ -1343,3 +1343,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings: Horizon Relay is optional friend-session transport, not public Minecraft server transport; rate/configuration and bridge concurrency require hardening. Release-signing uses tag-bound Ed25519/SHA-256 but checksum asset paths need validation. Server-files/server-manager crates target dedicated-server behavior and include Java-properties/Gson compatibility utilities; input limits, weak entropy fallback for management secret, and unbounded cache/list concerns need follow-up. The admin panel uses textContent and same-origin requests, but backend authorization must be verified and polling can overlap.
 - Tests/examples were inspected only; none were run. No build, benchmark, APK, Android device, Forge launch, Minecraft join, Aternos or renderer validation was performed. No application/game source code changed; audit documents only.
 - Section 1951–2000 remains authorized by the user's current permission. Checkpoint 1951–1975 is closed; continue with 1976–2000, then stop at 2000 for explicit permission before global verification and final backup.
+
+
+## Source-audit checkpoint 1976–2000 — 2026-11-20
+
+- Completed entries 1976–2000 inclusive (25/25), closing the authorized section 1951–2000 (50/50) and the active 200-file stage 1801–2000 (200/200).
+- The 25 paths are exactly the next 25 blobs after excluding Index entries 1–1975 from the complete pinned Starling recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 (`truncated:false`).
+- All files were inspected one at a time through EOF. Files over 400 logical lines were read in contiguous, gap-free chunks no larger than 400 lines. Source SHA and byte sizes recorded in the Ledger match the pinned tree.
+- Active Ledger now contains 200 records (1801–2000), each with exactly 15 fields. Index contains 2,000 sequential unique paths; the 25 new Ledger paths and Decisions align with Index.
+- Findings: the remaining `horizon-server` crate is a dedicated-server supervisor/admin subsystem explicitly targeting Minecraft Java 26.3, not a mobile Minecraft client. It includes HTTP/API/panel/management WebSocket/MCP, GS4 query and RCON services, backups, settings, OS service integration and docs. Security follow-ups include plaintext HTTP on remotely reachable API/panel binds, unbounded API/management connections and notification queues, backup symlink/ZIP extraction limits, weak entropy fallback reused for secrets, path containment and strict version parity. The management schema advertises more operations than its method dispatcher visibly handles.
+- Embedded tests/examples were inspected only; none were run. No build, benchmark, APK, Android device, Forge launch, Minecraft join, Aternos or renderer validation was performed. No application/game source code changed; audit documents only.
+- All sections in stage 1801–2000 are closed: 1801–1850, 1851–1900, 1901–1950 and 1951–2000 (50/50 each).
+- **STOP at entry 2000.** Do not begin global verification of entries 1–2000 or create the final backup until the user explicitly authorizes the next phase. No incremental backup was made.

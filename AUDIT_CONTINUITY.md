@@ -7,17 +7,16 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-20**.
-- Completed and committed entries: **1–1975**.
+- Completed and committed entries: **1–2000**.
 - Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1801–2000**, **175/200 complete**.
-- Closed reporting sections: **1801–1850**, **1851–1900**, and **1901–1950**.
-- Active section: **1951–2000**, authorized; checkpoint **1951–1975 complete/closed**, checkpoint **1976–2000 still authorized**.
-- Active Ledger: `AUDIT_LEDGER_1801_2000.md`, **175 entries** (1801–1975), each with exactly 15 fields.
-- Index: **1,975 sequential entries and 1,975 unique paths**.
-- Next source entry: **1976**. Continue one file at a time through 2000 under the current authorization.
-- **STOP at 2000.** Ask explicit permission before global verification of entries 1–2000 and then creating the final backup.
-- Preserve the 200 / 50 / 25 cadence: commit and read-back verify each 25-file checkpoint; report and stop at each 50-file boundary.
-- No incremental backup. Existing `main` and backup refs remain untouched.
+- Active stage **1801–2000: COMPLETE — 200/200**.
+- Closed reporting sections: **1801–1850**, **1851–1900**, **1901–1950**, and **1951–2000** (50/50 each).
+- Active Ledger: `AUDIT_LEDGER_1801_2000.md`, **200 entries** (1801–2000), each with exactly 15 fields.
+- Index: **2,000 sequential entries and 2,000 unique paths**.
+- No further source entry is authorized or pending in this 200-file stage. **STOP at 2000.**
+- Next phase, only after fresh explicit user permission: **global verification of all entries 1–2000 against the pinned source tree and audit documents**. If verification passes, proceed to the **final backup**.
+- Do not create an incremental backup. Existing `main` and backup refs remain untouched.
+- Preserve the 200 / 50 / 25 cadence and read-back verification. Tests/examples remain inspected-only unless the user separately authorizes execution.
 
 ## Source pin and selection
 
@@ -450,3 +449,14 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Findings include relay limits/concurrency hardening, safe checksum path validation, dedicated-server-only file/settings modules, Java-properties/Gson parity limits, weak entropy fallback for management secret, and server-panel polling/backend-auth follow-up.
 - Tests/examples inspected only; none run. No build, benchmark, APK, device, Forge, server join, Aternos or renderer validation. No application code changed.
 - **STOP at 2000** and ask permission for full verification 1–2000, then final backup. No backup is due before that global verification.
+
+
+## Final checkpoint — entries 1976–2000 — 2026-11-20
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries 1976–2000 were the next 25 blobs after excluding Index entries 1–1975. Each file was inspected serially through EOF; files over 400 lines were read in contiguous, gap-free chunks no larger than 400 lines. Recorded SHA and size match the pinned tree.
+- Active stage 1801–2000 is **200/200 complete**; all four 50-file sections are closed. Ledger holds **200 entries** (1801–2000), each with exactly 15 fields; Index has **2,000** sequential unique paths and the final Ledger entries align.
+- The `horizon-server` subsystem audited in this final segment is dedicated-server management for Minecraft Java 26.3, not the RustChunk Android Minecraft client. No Forge 1.20.1/Aternos/client support was demonstrated.
+- Tests/examples inspected only; none executed. No build, benchmark, APK, Android, Forge, server join, Aternos or renderer validation. No application source was modified.
+- **STOP at 2000.** Wait for explicit permission to perform global verification of entries 1–2000. Create the final backup only after that verification passes; no incremental backup was created.

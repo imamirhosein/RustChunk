@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–1975 complete (175/200); section 1901–1950 closed (50/50); section 1951–2000 is authorized and in progress (1951–1975 checkpoint closed; 1976–2000 remains authorized).
-- Reporting rule: complete the authorized section 1951–2000 in two 25-file checkpoints, then STOP at 2000 and wait for permission before global verification and final backup.
+- Current progress: entries 1801–2000 complete (200/200); sections 1801–1850, 1851–1900, 1901–1950 and 1951–2000 are closed (50/50 each). Global verification of entries 1–2000 and final backup are pending explicit user authorization.
+- Reporting rule: section 1951–2000 is complete; STOP at 2000 and wait for explicit permission before global verification of entries 1–2000, followed by the final backup.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests/examples are inspected only; they are not executed.
@@ -2989,4 +2989,429 @@
 - Follow-up checks: Add in-flight poll guard/backoff, independent handling for optional endpoints, CSRF/session review, backend authorization tests and DOM injection tests.
 - RustChunk implementation mapping: Optional RustChunk admin frontend; keep entirely separate from client gameplay.
 - Evidence required before adoption: Browser tests for XSS, CSRF, overlapping polls, session expiry and every management action.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1976. `crates/horizon-server/src/admin.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `316db518a08b16dac6d2204af5a4e846d6da8bbe`
+- Size: 16333 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements the dedicated-server management API for kicking/banning/pardoning players, operator and allowlist changes, and Prometheus metrics.
+- Dependencies / cross-references: horizon-server API router and Shared state; server user-list files, UUID/profile lookup, metrics and game console/control endpoint.
+- Implementation / logic: Parses JSON actions, validates names/reasons/IP syntax at the route layer, serializes mutations, forwards vanilla console commands and emits response/metrics data.
+- Findings: The moderation API is server control-plane code, not a launcher or game client. Its player-name predicate accepts arbitrary non-ASCII non-space/control characters; confirm exact vanilla 26.3 constraints. Request handling depends on authenticated API routing.
+- RustChunk relevance: Shows structured moderation routing and metrics, but not Android launcher or Minecraft client functionality.
+- Decision: reference; dedicated-server admin API; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Test names against vanilla 26.3; enforce exact player/IP validation; test concurrent moderation and failure recovery; bound metric labels and all text fields.
+- RustChunk implementation mapping: No direct gameplay mapping; a separate optional RustChunk server-admin companion could adapt typed moderation routes.
+- Evidence required before adoption: Version-matched vanilla command/API parity, adversarial input tests, auth tests and concurrent mutation tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1977. `crates/horizon-server/src/api.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e3c1417da25e93693133ca6833bef2cd123b6578`
+- Size: 44281 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements the Horizon dedicated-server supervisor's authenticated HTTP control API, shared state, metrics, logs, backups, restore, update and panel login routes.
+- Dependencies / cross-references: horizon-server state, minimal HTTP transport, config/settings, backup, engine, process/supervisor, authentication token and panel modules.
+- Implementation / logic: Defines API route metadata and dispatch; reads/writes private API token metadata; authenticates Bearer requests and validates Host for private binds; exposes typed status/player/log/event/config/update/backup operations.
+- Findings: Useful patterns include explicit route table, token comparison and route metadata. `write_private` applies Unix 0600 only when creating a file and does not repair permissions on an existing one; writes are direct rather than atomic. Public bind is possible by configuration and then relies on bearer-token security.
+- RustChunk relevance: Potential architectural reference for a future admin companion; no proof of Forge 1.20.1 gameplay support.
+- Decision: adaptable; authenticated control API patterns; server tooling
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Repair existing file permissions; use atomic private-file replacement; enforce TLS or a trusted secure tunnel for non-loopback binds; audit every route's auth/CSRF and input/path limits.
+- RustChunk implementation mapping: Only isolated authenticated control-plane patterns for a separate RustChunk companion; keep out of gameplay process.
+- Evidence required before adoption: Route-by-route authorization tests, permissions/atomic-write tests, network TLS verification, path traversal tests and API fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1978. `crates/horizon-server/src/backup.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c446d56ca7cc593bd6bb58e3889dc29e0d078a43`
+- Size: 12540 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Creates, lists, prunes, deletes and restores ZIP backups of the dedicated server's world and selected configuration/player-list files.
+- Dependencies / cross-references: zip archive writer/reader, filesystem paths, server config, world level.dat validation, backup directory and supervisor save/stop coordination.
+- Implementation / logic: Writes archives through a `.part` file then renames; recursively adds the world while skipping session.lock; restore extracts into a staging directory, validates level.dat, moves the old world aside and installs the restored world.
+- Findings: Staging and preserving the old world are positive. Recursive `path.is_dir()` follows symlinked directories and can escape the intended root; restore has no explicit decompressed-size/file-count ceiling and its two renames are not a fully transactional swap. The duration parser uses a byte index derived from string length and can panic for multibyte suffixes.
+- RustChunk relevance: Atomic staging and recovery concepts may transfer to launcher instance backup, but server-specific paths and risks need a rewrite.
+- Decision: adaptable; backup workflow reference; security-sensitive
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Use symlink-safe traversal rooted at canonical server dir; cap archive entries and total expanded bytes; validate every ZIP path; make restore rollback-safe; fix duration parsing using char boundaries and checked arithmetic.
+- RustChunk implementation mapping: Reusable only as a separately designed backup subsystem; do not copy into mobile client.
+- Evidence required before adoption: Symlink/path traversal fixtures, ZIP bomb tests, interrupted restore recovery, large-world memory/disk benchmarks and duration parser fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1979. `crates/horizon-server/src/cli.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `47cd6d00da5cde503d30b0335bbc6fabba48734f`
+- Size: 23145 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Provides command-line operations for launching/stopping/status/report/logs/console/backups/restore/player management and moderation of a managed dedicated server.
+- Dependencies / cross-references: API Client, server supervisor lock/state, backup module, process spawning, logs, engine control and interactive terminal I/O.
+- Implementation / logic: Starts a detached supervisor, waits for status, issues API requests, tails or displays logs, asks for confirmation before restore and wraps player/config operations.
+- Findings: Startup wait timeout does not necessarily terminate the spawned server process; offline log display reads the complete latest.log into memory before selecting lines. CLI behavior is server administration and assumes the target Horizon version.
+- RustChunk relevance: Useful operational UX ideas, but not necessary for the RustChunk mobile launcher core.
+- Decision: reference; server CLI; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Terminate or track child on timeout; tail logs with bounded memory and a maximum line count; test process orphaning, shutdown and terminal/nonterminal behavior.
+- RustChunk implementation mapping: Could inspire separate RustChunk CLI/diagnostic tool, not Android game runtime.
+- Evidence required before adoption: Process lifecycle tests on Windows/Linux/macOS, huge-log tests, timeout/crash recovery and CLI integration outputs.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1980. `crates/horizon-server/src/config.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `10c8c28a77d643db3f30960b288cb7112d6a589f`
+- Size: 32901 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Defines, parses, validates, persists and imports the dedicated server's typed server.toml and related vanilla server.properties settings.
+- Dependencies / cross-references: TOML, Java Properties compatibility helpers, user-list/server settings modules, server directory paths and file I/O.
+- Implementation / logic: Provides default template, Config structs, typed property mapping, validation, config load/update/import and generation of server.properties before server start.
+- Findings: The template and fixed version assumptions target Minecraft Java 26.3, not 1.20.1. World-name validation rejects separators and `..` but permits `.`, which can resolve the world directory to the server root. Config reads and writes have no explicit file-size cap or atomic replacement.
+- RustChunk relevance: Useful validation design pattern but not suitable as a drop-in 1.20.1 configuration schema.
+- Decision: reference; version-specific server config; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Reject dot/dot-dot and platform-reserved names; canonicalize world paths under server root; cap TOML size; use atomic writes; derive exact defaults and keys from vanilla/Forge 1.20.1.
+- RustChunk implementation mapping: No direct launcher config mapping; only generic typed-config/validation ideas after a new platform schema is defined.
+- Evidence required before adoption: 1.20.1/Forge parity fixtures for every key/default, path traversal tests, atomic-write interruption tests and config fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1981. `crates/horizon-server/src/console.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9d948e815b40b600d4ea83da5d65a98b492c2e2a`
+- Size: 5523 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements an interactive terminal console attached to the running dedicated-server supervisor.
+- Dependencies / cross-references: Server event stream, terminal detection/alternate screen, API command route, player/status display and log events.
+- Implementation / logic: Shows recent logs and periodically refreshed status, streams new events and sends typed console commands; Ctrl-D detaches without stopping the game.
+- Findings: Separation between detaching a console and stopping the server is clear. Multiple display/update sources may interleave terminal output; behavior is host CLI only.
+- RustChunk relevance: May inform developer diagnostics but does not address Minecraft 1.20.1 game performance or networking.
+- Decision: reference; terminal management UX; host-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Test terminal resize, non-TTY input/output, concurrent events, dropped connections and graceful detach.
+- RustChunk implementation mapping: Optional desktop diagnostic console only; exclude from Android game runtime.
+- Evidence required before adoption: PTY integration tests across supported terminals and process shutdown/detach tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1982. `crates/horizon-server/src/discord.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `949ea1c2a63693e3713ae975007a7d438e14fbec`
+- Size: 25335 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Sends dedicated-server chat, join/leave, death, kick and announcement messages to a Discord webhook, including a rendered chat image.
+- Dependencies / cross-references: Webhook HTTP client, event/log stream, pixel/font rendering, queue/batching, rate-limit handling and Discord webhook API.
+- Implementation / logic: Batches events, renders chat text to an image, escapes mentions/Markdown, disables allowed_mentions and handles retry-after/backoff.
+- Findings: Mention suppression and filtered-chat handling are good. Event text is rendered before a strict input-size cap, allowing large input to consume memory/CPU. A non-finite Retry-After value such as NaN must be rejected before converting to Duration to avoid panic; failed sends may drop queued messages.
+- RustChunk relevance: Not needed for Minecraft client/Forge compatibility; only relevant if RustChunk later includes server operations.
+- Decision: unnecessary; optional Discord server integration; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Cap event bytes/codepoints before image rendering; validate finite Retry-After; define bounded retry queue and drop policy; test webhook outages, malformed headers and large text.
+- RustChunk implementation mapping: Optional server-side Discord integration only, isolated from Android client.
+- Evidence required before adoption: Webhook mock tests, memory/CPU stress tests, malformed Retry-After fuzzing and delivery/retry policy tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1983. `crates/horizon-server/src/engine.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f358ac94ded89dfe510e6191a2664d64f1cc6f88`
+- Size: 22989 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Locates and launches Horizon's headless dedicated-server engine and its prepared game resources, with a private TCP control endpoint.
+- Dependencies / cross-references: Horizon engine/client binaries, prepared-resource manifest, JVM/native launcher environment, local control socket/port and server process.
+- Implementation / logic: Finds executable and resources, verifies prepared manifests, starts game with server args and serves/uses a loopback control endpoint authenticated by a token.
+- Findings: Resource discovery hardcodes Minecraft 26.3 locations, not 1.20.1. `check_prepared` skips a manifest hash check when its key is absent, so incomplete manifests may pass some checks. Control metadata/replies lack visible size ceilings.
+- RustChunk relevance: The process/control patterns may inform tooling but the executable/resource assumptions cannot be ported directly.
+- Decision: reference; headless server engine; version-specific
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Parameterize and version-pin resource layout; require all mandatory manifest hashes; bound control metadata, frame and reply sizes; test process exit, timeout and token handling.
+- RustChunk implementation mapping: Generic child-process supervision/control channel ideas only; create a distinct Android client/game launch path.
+- Evidence required before adoption: Version-matched 1.20.1 resource manifests, strict malformed-manifest tests, process lifecycle tests and local IPC fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1984. `crates/horizon-server/src/events.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3445ea40b9084352a9d1921586cab0868a75d51d`
+- Size: 10414 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Maintains numbered server/log/game events and exposes them through JSON polling or Server-Sent Events for dashboard clients.
+- Dependencies / cross-references: Shared server state, engine control endpoint, event queue, HTTP response streaming and management notifications.
+- Implementation / logic: Keeps the last 2,000 events, polls game typed events every 250ms, supports since/type filters, Last-Event-ID reconnection and 15-second keepalive.
+- Findings: Bounded event count and replay cursor are useful. Individual event payload sizes are not capped; streaming clients can hold worker threads while writes block, with no clear client cap or write timeout.
+- RustChunk relevance: Potentially reusable for RustChunk diagnostics, not core gameplay or Forge mod compatibility.
+- Decision: adaptable; event stream pattern; server tooling
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Bound serialized event bytes, apply backpressure/slow-client disconnects, cap SSE clients, add write timeouts and test reconnect/overflow behavior.
+- RustChunk implementation mapping: A bounded event bus may be adapted for launcher logs/diagnostics, but replace server-specific event types.
+- Evidence required before adoption: Large-event and slow-client tests, reconnect-after-overflow tests and concurrency/resource stress results.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1985. `crates/horizon-server/src/http.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1d01580356572b3de581df212152ca4e8d6148da`
+- Size: 11940 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements the small HTTP/1.1 transport used by the dedicated-server control API and panel.
+- Dependencies / cross-references: Rust TCP streams, std I/O, JSON response encoding, API route handler and WebSocket upgrade helpers.
+- Implementation / logic: Reads one request per connection, caps line length at 8KiB and body size at 1MiB, times out reads after 10 seconds, writes fixed or streamed responses, and spawns a thread per connection.
+- Findings: The per-line/body limits are positive. Header count guard allows 65 rather than the apparent 64; connections/threads are unbounded; response reads in the client helper are unbounded. Most importantly, the API itself is plain HTTP, so remote bearer tokens are exposed unless traffic is constrained to loopback or a trusted encrypted tunnel.
+- RustChunk relevance: Limits and routing patterns may be informative, but its plaintext/unbounded connection architecture is unsuitable as-is.
+- Decision: adaptable; minimal HTTP reference; security-sensitive
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Reject duplicate/conflicting Content-Length and Transfer-Encoding; cap connections/threads and response sizes; set write timeouts; enforce TLS for non-loopback traffic; test parser smuggling/fuzz cases.
+- RustChunk implementation mapping: Do not reuse as public network transport; if needed, adapt bounded parsing and route separation in a separate authenticated/TLS control client.
+- Evidence required before adoption: HTTP parser fuzzing, slowloris/concurrency tests, request-smuggling tests, TLS deployment tests and bounded-response tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1986. `crates/horizon-server/src/init.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `71d01277cfc646a1a5c93938d1dd03a86670b6fa`
+- Size: 11627 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements first-run dedicated-server initialization: EULA, world, seed, port, online mode, whitelist, players/operators and resource discovery.
+- Dependencies / cross-references: Server config/import, EULA file handling, user profile lookup, user lists, game engine discovery and terminal prompts.
+- Implementation / logic: Supports command flags/environment variables or interactive prompts, imports existing server.properties, writes EULA false by default unless accepted, populates lists and writes server.toml.
+- Findings: Explicit EULA consent is a positive safeguard. Initialization mutates multiple files before final server.toml publication, so a later failure can leave partial state; world and port inputs should be validated before mutations.
+- RustChunk relevance: Useful consent and wizard sequencing ideas, but not a client-launcher implementation.
+- Decision: reference; dedicated-server init flow; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Prevalidate all answers and canonicalized world path; stage and atomically publish changes; test failure at every write/network/engine step; align profile validation with 1.20.1.
+- RustChunk implementation mapping: Not part of launcher; setup wizard patterns may inform future RustChunk instance setup.
+- Evidence required before adoption: Failure-injection tests, EULA consent tests, filesystem rollback tests and version-matched account/profile tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1987. `crates/horizon-server/src/lists.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f5c695e2244f18897e0ac57e65e4b9a11882ff58`
+- Size: 9002 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements op/deop and whitelist commands by editing vanilla JSON lists while stopped or delegating to the live game.
+- Dependencies / cross-references: Server config, supervisor directory lock, profile resolver, user-list JSON handling and console/API command path.
+- Implementation / logic: Uses a lock to prevent the server starting during file edits; while running forwards commands, with a special offline whitelist add path that updates the JSON file and reloads it.
+- Findings: Clear separation between live server ownership and offline file mutation. Profile resolution and list format are tied to Horizon's newer server data; offline whitelist special case should be parity-tested.
+- RustChunk relevance: Potentially useful format/locking concepts, but not needed for joining Aternos or managing client accounts.
+- Decision: reference; dedicated-server access lists; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Compare offline UUID/profile behavior against vanilla 1.20.1; test lock races and partial writes; make user-list file updates atomic and bounded.
+- RustChunk implementation mapping: Optional account/list reference for server companion; do not confuse offline server UUID logic with launcher authentication.
+- Evidence required before adoption: Vanilla 1.20.1 offline/online UUID parity, lock race tests and corrupt-list recovery tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1988. `crates/horizon-server/src/main.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d650cffd3efad51df5d9dd2c3fce3dc4b6b511d9`
+- Size: 9603 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Defines the horizon-server executable entry point, help text, command routing and basic option parsing.
+- Dependencies / cross-references: All horizon-server modules, process exit codes, filesystem paths and CLI option strings.
+- Implementation / logic: Parses --dir, dispatches lifecycle, config, console, player moderation, backup/restore, service, panel, update and MCP commands.
+- Findings: Help text explicitly identifies Minecraft Java Edition 26.3. Several subcommands use permissive ad-hoc argument checks; port is parsed as u16 and zero remains accepted until later configuration validation.
+- RustChunk relevance: No direct launcher functionality; useful only as a command-line UX example.
+- Decision: reference; server command dispatcher; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Use a typed CLI parser or strict per-command arg validation; reject invalid port early; test unknown/duplicate/missing options.
+- RustChunk implementation mapping: Could inspire a separate RustChunk dev CLI, but not a dependency of the Android app.
+- Evidence required before adoption: CLI parser tests and cross-platform invocation tests for every command/flag.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1989. `crates/horizon-server/src/management.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `40454bd83d7c2329e09dd7b4c78c9034c0e21d1e`
+- Size: 43397 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements the dedicated server's Vanilla-compatible JSON-RPC 2.0 management protocol over WebSocket, optionally protected by TLS.
+- Dependencies / cross-references: Management schema/method handlers, HTTP WebSocket upgrade, custom WebSocket socket, TLS certificates, server events, engine control and server properties.
+- Implementation / logic: Creates TLS/server settings and credentials, accepts WebSocket clients, authenticates with bearer or subprotocol secret plus Origin checks, dispatches RPC and broadcasts notifications/heartbeats.
+- Findings: TLS and Origin-aware authentication are useful security controls. Connection count is not capped and notification channel/outbox is unbounded; a slow client can stall the shared notifier. RPC behavior is explicitly pinned to Vanilla 26.3, not 1.20.1.
+- RustChunk relevance: Not a substitute for Minecraft 1.20.1 client networking; only administrative protocol patterns can transfer.
+- Decision: reference; server management WebSocket; version-specific
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Cap simultaneous clients and queued notification bytes; disconnect slow consumers; validate complete WebSocket handshake headers/frame limits; use strong fail-closed entropy and version-specific protocol fixtures.
+- RustChunk implementation mapping: No direct client protocol mapping; optionally build a separate server-admin transport if RustChunk needs remote management.
+- Evidence required before adoption: WebSocket/RPC fuzzing, slow-client/resource exhaustion tests, TLS/auth tests and exact 1.20.1 protocol comparison.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1990. `crates/horizon-server/src/management_methods.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7dd94ce6ab4f45bdc0f4eb8f1400878f95b3c13c`
+- Size: 35634 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements the management protocol's method calls for players, server state, game rules, settings, allowlist, operators and ban lists.
+- Dependencies / cross-references: management.rs dispatch/schema, engine control channel, server console, config persistence and horizon-server-files user-list/profile models.
+- Implementation / logic: Converts JSON DTOs, forwards operations to the game control endpoint, persists selected changed settings and constructs player/ban/operator notifications.
+- Findings: The schema lists a larger method surface than this dispatcher visibly handles; several advertised settings fall through to an unsupported-method error. IP DTO conversion stores input as strings without parsing an IP address; list loading ignores read/parse errors and can report empty lists.
+- RustChunk relevance: Good example of schema-driven conversion, but its implementation is partial relative to its own schema and tied to 26.3.
+- Decision: adaptable; typed server API conversion; version-specific
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Generate parity tests ensuring every advertised incoming schema method has a handler; parse/normalize IP addresses; surface corrupt list errors; validate UUID syntax and DTO bounds.
+- RustChunk implementation mapping: Only typed API conversion patterns are reusable; do not port these server RPC methods into client protocol.
+- Evidence required before adoption: Schema-to-handler exhaustive coverage, malformed DTO tests, corrupt list tests and version-matched vanilla parity.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1991. `crates/horizon-server/src/management_schema.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e0627c55300d97fcf894c362a8361aaa06991c38`
+- Size: 16090 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Declares the management JSON-RPC OpenRPC 1.3.2 document, 89 methods and component schemas exposed by rpc.discover.
+- Dependencies / cross-references: management.rs dispatch and methods, serde_json and Vanilla 26.3 management API definitions.
+- Implementation / logic: Stores methods in vanilla order, builds JSON schema references and assembles the discover response with parameter/result descriptions.
+- Findings: Static schema generation makes capabilities discoverable, but advertised methods should be mechanically compared with actual handlers; the implementation file audited immediately before it does not appear to handle every incoming settings method.
+- RustChunk relevance: Schema-generation pattern only; all method names and DTOs need fresh 1.20.1 evidence before reuse.
+- Decision: reference; management protocol schema; version-specific
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Add exhaustive method/handler parity checks, schema validation for required/optional fields and compare generated output with the exact vanilla 26.3 reference.
+- RustChunk implementation mapping: Schema-first API design may be adapted for a separate management API; not for Minecraft game protocol.
+- Evidence required before adoption: OpenRPC schema validation, all-method positive/negative integration tests and upstream-version parity artifact.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1992. `crates/horizon-server/src/management_tls.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d726d89f7cfdf13262b4de5d6706cf524bf912fc`
+- Size: 6714 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Loads or generates the PKCS12 certificate/key store and rustls server configuration for the dedicated-server management protocol.
+- Dependencies / cross-references: p12_keystore, rustls ring provider, rcgen, SHA-256 fingerprint, server config and SystemEntropy secret generator.
+- Implementation / logic: Loads configured keystore, extracts a private key/certificate chain, computes fingerprint, builds TLS server config, or generates a self-signed localhost/host certificate.
+- Findings: Certificate fingerprint pinning is useful. Keystore bytes are read wholly with no explicit size bound; configured path is joined directly to server dir and can escape it; generated password uses SystemEntropy with its previously noted weak time/PRNG fallback.
+- RustChunk relevance: Generic TLS patterns may transfer, but management service and key format are not required for Minecraft client play.
+- Decision: adaptable; TLS primitives; security-sensitive
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Bound keystore file size; enforce canonical path containment/permissions; replace entropy fallback with OS CSPRNG that fails closed; test SAN/hostname and certificate rotation.
+- RustChunk implementation mapping: Potentially adapt generic rustls certificate loading for secure update/admin services; keep separate from game protocol.
+- Evidence required before adoption: CSPRNG assurance, path traversal/oversize tests, TLS hostname/fingerprint tests and certificate rotation tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1993. `crates/horizon-server/src/mcp.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c1ac757387bf2c9d6e433044b7579fcd644476f6`
+- Size: 19129 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Exposes a Model Context Protocol server over stdin/stdout so an agent can inspect and operate a Horizon dedicated server.
+- Dependencies / cross-references: horizon_mcp JSON-RPC framing, local API Client, server commands, moderation/config/backup routes and serde_json.
+- Implementation / logic: Advertises tools and argument schemas, maps tool calls to authenticated API HTTP requests and requires confirm=true for destructive backup/restore/stop operations.
+- Findings: Explicit confirmation for destructive tools and separated protocol stdout are good. Tool inventory advertises some operations with broad destructive/read-only annotations that should be audited against actual effects; user input and returned API output need bounded sizes.
+- RustChunk relevance: Not needed for the RustChunk launcher/game client.
+- Decision: unnecessary; optional MCP server integration; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Validate all tool schemas against request mappings, refine annotations, cap line/response lengths, restrict arbitrary run_command policy and test malformed MCP frames.
+- RustChunk implementation mapping: Do not include in mobile client core; optional separate management adapter only if expressly required.
+- Evidence required before adoption: MCP conformance suite, malicious tool-argument tests, output-size limits and audited destructive-action confirmation matrix.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1994. `crates/horizon-server/src/panel.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3b9bfd3e965df9ffe691440bd9f22a70d2f2dd31`
+- Size: 13174 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Serves the static web administration panel and manages one-time login links, browser sessions, Host validation and request protection.
+- Dependencies / cross-references: Embedded HTML/CSS/JS, HTTP server, API token helpers, shared panel auth state and server API routes.
+- Implementation / logic: Redeems expiring codes into sessions, limits sessions and failed logins, checks Host, requires X-Horizon for non-GET actions, sets SameSite/HttpOnly cookie and CSP/security headers.
+- Findings: One-time code and CSP/CSRF defenses are positive. Panel is served over HTTP and cookie lacks Secure; a non-loopback/public bind can expose login/session traffic. Login-link code list is only pruned on another link/login and can grow during repeated issuance.
+- RustChunk relevance: Some browser hardening patterns can transfer to a separate companion UI, not to the launcher runtime.
+- Decision: reference; web admin panel auth; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Require HTTPS for remote binds, Secure cookies on TLS, bound and prune pending codes at issuance, add session expiry, test DNS rebinding/Host behavior and CSRF/XSS.
+- RustChunk implementation mapping: Optional external admin web UI; keep separated from the Android launcher.
+- Evidence required before adoption: HTTPS/session tests, expired-code growth tests, CSRF/XSS and host-rebinding tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1995. `crates/horizon-server/src/process.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8e8d24c70fef5434e9b8812e052c843ffa4c3a5b`
+- Size: 861 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Wraps process creation so Windows console child processes can be launched without opening a new console window when the parent has no console.
+- Dependencies / cross-references: std::process::Command and windows-sys console/threading APIs behind cfg(windows).
+- Implementation / logic: Creates Command and conditionally applies CREATE_NO_WINDOW based on GetConsoleWindow.
+- Findings: Small platform-specific helper with narrowly scoped unsafe call; no game or network logic.
+- RustChunk relevance: Irrelevant to Android launcher and Minecraft gameplay.
+- Decision: unnecessary; Windows server process helper; host-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Compile-check on supported Windows targets and ensure the cfg-gated dependency remains optional for other platforms.
+- RustChunk implementation mapping: No Android mapping; optional Windows host tooling helper.
+- Evidence required before adoption: Windows process-spawn tests/builds and cross-target compilation.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1996. `crates/horizon-server/src/query.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `003ec4f913183d9edce46a20ec1f85528fd2b832`
+- Size: 25709 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements Vanilla GS4 UDP Query handshake, challenge-token validation, basic/full status packets and cached player/server metadata.
+- Dependencies / cross-references: UDP sockets, server.properties, ServerProperties parser, game control endpoint, Shared server phase and QueryThreadGs4 packet format.
+- Implementation / logic: Binds query UDP port, issues per-source challenge tokens, caches full-stat bytes for five seconds, caches player info for one second and answers basic/full stat requests.
+- Findings: Packet-size cap and challenge protocol are present. Challenge map is keyed by source address but has no cardinality ceiling and can grow under many spoofed/source addresses until prune; full-stat response size depends on player names/count without a response cap. Uses 24-bit challenge token as vanilla-style behavior.
+- RustChunk relevance: Not required for the RustChunk launcher to join public/Aternos servers.
+- Decision: reference; GS4 query server; version-specific
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Cap challenge entries, bound full-stat bytes/player fields, add rate limits and UDP amplification tests; compare all wire bytes against vanilla 1.20.1 if implementing query.
+- RustChunk implementation mapping: Optional server query utility only, not client networking.
+- Evidence required before adoption: Packet parity fixtures from exact target version, spoofing/amplification/resource stress and malformed UDP fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1997. `crates/horizon-server/src/rcon.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5b58d0da340d83d323bed59dfe5c1f38ff11e2ae`
+- Size: 26337 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements Vanilla RCON TCP remote console with bounded request packets, password authentication, login deadline and command forwarding.
+- Dependencies / cross-references: TCP listener, server properties, constant-time same_token helper, game control endpoint and supervisor logs.
+- Implementation / logic: Parses little-endian RCON frames, limits request to 1460 bytes, allows 16 concurrent clients, closes connections that fail to log in within 30 seconds and chunks command output.
+- Findings: Connection cap, packet bound, deadline and constant-time password check are positive. Default server-ip empty binds 0.0.0.0; deployments need firewall/TLS/tailnet guidance. Reply chunk uses Unicode scalar count rather than vanilla's 4096 UTF-16 code units, so supplementary characters may differ.
+- RustChunk relevance: No role in launcher, chunk rendering, Forge mod loading or Aternos join protocol.
+- Decision: reference; RCON server; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Require secure network exposure or TLS tunnel, compare exact UTF-16 chunk behavior, fuzz frame parsing and stress login/connection limits.
+- RustChunk implementation mapping: Separate optional server admin utility only; do not use as player connection implementation.
+- Evidence required before adoption: RCON 1.20.1 wire parity, UTF-16 boundary fixtures, network exposure tests and protocol fuzzing.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1998. `crates/horizon-server/src/reference.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b2d2e8d16a6b996cef11dccbed1731a9ebcb6497`
+- Size: 6997 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Generates the server reference Markdown from help text, config template and API routes, with tests detecting stale docs.
+- Dependencies / cross-references: Horizon server HELP, config::TEMPLATE, config::TYPED, API ROUTES and filesystem under cfg(test).
+- Implementation / logic: Parses comments and keys from the config template, renders command/API tables and compares generated output against docs/api/server-reference.md.
+- Findings: Source-derived docs and stale-doc tests improve maintainability. The implementation is compiled for tests and has brittle text parsing/source scanning; the test was inspected only and not executed.
+- RustChunk relevance: No direct game feature; useful only for maintaining future RustChunk documentation.
+- Decision: adaptable; generated documentation test pattern; test-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Run the documentation test in CI; validate Markdown escaping and parser behavior for new TOML syntax/routes.
+- RustChunk implementation mapping: Could adapt docs-from-source pattern for RustChunk developer docs, not runtime code.
+- Evidence required before adoption: Passing generated-doc test and fixtures for special characters/new sections/routes.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 1999. `crates/horizon-server/src/service.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2907e762d88198778b38358b1c42037f8dba0999`
+- Size: 19029 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Installs/removes/prints OS service definitions for running the Horizon server supervisor at login/boot on systemd, launchd and Windows Task Scheduler.
+- Dependencies / cross-references: CLI process helpers, current release layout, filesystem, environment user/home, systemctl/launchctl/schtasks and service XML/plist templates.
+- Implementation / logic: Builds service names/definitions, writes user/system systemd units, launchd agents or UTF-16 scheduled-task XML, then enables/starts or disables/removes them.
+- Findings: Uses least-privilege Windows task and explicit service restart behavior. systemd unit interpolates program and working-directory strings without escaping embedded newlines/control syntax; a crafted directory path could alter unit content. Windows temp XML name is predictable in temp directory and merits race/symlink-safe creation.
+- RustChunk relevance: Not applicable to Android launcher runtime.
+- Decision: reference; OS service integration; host-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Escape/reject systemd control chars and validate user field; use secure create_new temp files with owner-only permissions; test paths with quotes/newlines and permission boundaries.
+- RustChunk implementation mapping: No Android mapping; optional Linux desktop server service support only.
+- Evidence required before adoption: Service file injection fixtures, temp-path race tests, least-privilege and OS integration tests.
+- Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
+
+### 2000. `crates/horizon-server/src/settings.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `14878876e83ecf64ca492d5cc37f683d8d52349b`
+- Size: 12837 bytes
+- Coverage: 1–EOF; complete file read (files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines).
+- Purpose: Implements `horizon-server config` display and updates, typed TOML parsing, remote-change allowlist and live/restart classification.
+- Dependencies / cross-references: Config::load/update_all, authenticated API Client, vanilla console commands, serde_json and TOML values.
+- Implementation / logic: Parses section.field=value changes using existing TOML field types, applies numeric bounds, persists all changes and sends live-supported commands for difficulty/game mode/whitelist.
+- Findings: Clear separation of saved/live/restart settings and secret masking in config display are useful. `properties` accepts loose values and changeable-remotely relies on a denylist; this needs review whenever a new sensitive property is added. Settings/defaults belong to the newer 26.3 server schema.
+- RustChunk relevance: A generic settings workflow may transfer, but current property names and defaults cannot be copied to Forge 1.20.1.
+- Decision: adaptable; typed config change workflow; server-only
+- 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
+- Follow-up checks: Use an explicit remote-change allowlist rather than denylist; ensure unknown/secret properties stay hidden; add atomic writes, version-specific property mapping and batch validation tests.
+- RustChunk implementation mapping: Typed config change classification may inspire RustChunk settings management after building a distinct launcher/game schema.
+- Evidence required before adoption: Security tests for remote property changes, secret redaction, atomic write failure and 1.20.1 setting parity.
 - Completion state: COMPLETE — full content read through EOF; source blob SHA and byte size match the complete pinned recursive tree; embedded tests/examples were inspected only, not run.
