@@ -5,15 +5,15 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Previous stage: 1601–1800 complete and closed.
-- Active stage: **1801–2000**, progress **75/200**.
-- Authorization: **1801–1900 granted**. Section 1801–1850 is closed; continue only through 1900, then stop.
+- Active stage: **1801–2000**, progress **100/200**.
+- Authorization: **1801–1900 granted**. Sections 1801–1850 and 1851–1900 are closed; stop at 1900.
 
 ## Stage partition
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 1801–1850 | 1801–1825 — COMPLETE | 1826–1850 — COMPLETE | **CLOSED — 50/50** |
-| 1851–1900 | 1851–1875 — COMPLETE | 1876–1900 — AUTHORIZED / NEXT | ACTIVE — 25/50 |
+| 1851–1900 | 1851–1875 — COMPLETE | 1876–1900 — COMPLETE | **CLOSED — 50/50** |
 | 1901–1950 | 1901–1925 — LOCKED | 1926–1950 — LOCKED | NOT AUTHORIZED |
 | 1951–2000 | 1951–1975 — LOCKED | 1976–2000 — LOCKED | NOT AUTHORIZED |
 
@@ -29,7 +29,7 @@
 
 ## Next action
 
-**Continue at 1876** under the user's explicit authorization for 1851–1900. Complete 1876–1900 and then STOP at 1900. Do not inspect 1901+ without new authorization.
+**STOP at 1900.** The authorized section 1851–1900 is complete. Do not inspect 1901+ without new explicit authorization.
 
 ## Rules
 
@@ -54,3 +54,11 @@
 
 - Two inherited Ledger field line-break defects (1823, 1847) and three Index row line-break defects (660, 995, 1660) were repaired in a follow-up documentation-only commit. Decisions and path identities unchanged.
 - Corrected state: 75 Ledger entries, 15 fields each; 1,875 sequential unique Index rows.
+
+
+## Checkpoint 1876–1900 closeout
+
+- Canonical pinned-tree entries 1876–1900 complete; all 25 files read through EOF and SHA/size matched.
+- Section 1851–1900 closed: 50/50. Stage 1801–2000 progress: 100/200.
+- Ledger: 100 entries, 15 fields each. Index: 1,900 sequential unique paths; Ledger/Index paths and decisions aligned.
+- **STOP at 1900.** Section 1901–1950 remains locked pending fresh explicit authorization.

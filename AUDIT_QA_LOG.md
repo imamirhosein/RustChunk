@@ -1300,3 +1300,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Read-back QA found two inherited Ledger formatting joins that collapsed adjacent field labels: entries 1823 (`RustChunk implementation mapping` joined to `Evidence required before adoption`) and 1847 (`Purpose` joined to `Dependencies / cross-references`). Inserted the missing line breaks; both entries now have all 15 distinct required fields. No source findings or decisions changed.
 - Index read-back found three inherited adjacent-row joins at entries 660, 995 and 1660 (`||` without a line break). Restored the row boundaries; numbering and path content were unchanged. The index now contains 1,875 parseable sequential rows and 1,875 unique paths.
 - This is a documentation-only corrective commit following the checkpoint commit. The six audit documents are read back again after the correction.
+
+
+## Source-audit checkpoint 1876–1900 — 2026-11-20
+
+- Completed canonical entries 1876–1900 (25/25), recomputed as the next 25 blobs in the complete pinned recursive tree after excluding indexed paths 1–1875.
+- All 25 source files were fetched serially and read through EOF. Files over 400 lines were inspected in contiguous chunks no larger than 400 lines: CEM expr.rs (1–997), CEM model.rs (1–1234), CIT (1–1363), CTM (1–879), CTM connect.rs (1–657), Fusion texture.rs (1–418). Other text files were read to EOF. SHA and byte sizes match the pinned tree.
+- Findings: the OptiFine-format crate has high potential for optional resource-pack visuals, particularly CTM neighbour masks and CEM expression/model parsing, but must be validated against Minecraft/Forge 1.20.1. CIT currently incorporates post-1.20.5/1.21.5 component semantics and needs a 1.20.1 NBT-specific adapter. CTM property discovery/read needs file/byte limits. Filesystem traversal follows symlinks without proving file targets remain inside the resource root. Properties parser has a UTF-8 boundary panic risk when an escaped multibyte character is scanned.
+- The narrator backends remain desktop-specific (Linux Flite, macOS AppKit, Windows SAPI); none is an Android implementation. CEM benchmark/example code and embedded unit tests were inspected only, not executed.
+- Active Ledger now contains 100 entries (1801–1900), exactly 15 fields each. Index has 1,900 sequential unique paths; new paths/decisions match Ledger.
+- No application source changed. No build/test/benchmark/APK/Android device/Forge launch/Minecraft join/server/renderer validation was performed.
+- The authorized section 1851–1900 is now **CLOSED — 50/50**. **STOP at 1900**. Entries 1901–1950 remain locked pending fresh explicit user authorization.
+- `main` and existing backups remain untouched. No backup is due; backup only after entries 1001–2000 and global verification 1–2000.

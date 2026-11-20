@@ -401,3 +401,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Post-checkpoint read-back caught two inherited Ledger field-joining defects (entries 1823 and 1847) and three inherited Index row joins (660, 995, 1660). The missing newlines were restored without changing decisions, paths or source evidence.
 - After correction: Ledger 75 entries, exactly 15 distinct fields each; Index 1,875 sequential unique rows. Six audit documents re-read after corrective commit.
 - Continue 1876–1900 under existing authorization; stop at 1900.
+
+
+## Authoritative resume state — section 1851–1900 closed — 2026-11-20
+
+- Repository `imamirhosein/RustChunk`, branch `starling-1.20.1-port-audit`.
+- Pinned source `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Index coverage **1–1900**, sequential and unique. Active Ledger coverage **1801–1900**, 100 entries, 15 fields each.
+- Active 200-file stage **1801–2000: 100/200**. Section **1801–1850 CLOSED**, section **1851–1900 CLOSED (50/50)**. Next section **1901–1950 LOCKED**.
+- Findings: OptiFine-format parser may support optional resource-pack visuals, especially CTM/CEM, but needs 1.20.1 parity and Android integration. CIT includes later item-component semantics; must use 1.20.1 NBT. CTM/file traversal need resource bounds and symlink containment. `properties.rs` has a UTF-8 boundary panic risk on escaped multibyte characters. Desktop narrator backends do not provide Android TTS.
+- Tests/benchmarks/examples were inspected only, not run. No source code changes, build, APK, device, Forge, server or renderer validation.
+- `main` and backup refs untouched. No backup until entries 1001–2000 complete and global 1–2000 verification passes.
+- **STOP at 1900.** Do not inspect 1901+ until new explicit authorization.

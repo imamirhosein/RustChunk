@@ -2254,3 +2254,34 @@
 | 1873 | `crates/horizon-narrator/src/screen.rs` | adaptable; optional; UI reference | Collector retains old entries indefinitely; generation i64 increment can overflow in very long-lived state; caller must maintain stable widget IDs and monotonic clock. |
 | 1874 | `crates/horizon-narrator/src/speech.rs` | adaptable; optional; platform-specific | Unbounded std mpsc command channel; thread spawn failure reported asynchronously as inactive; cfg targets omit Android backend. |
 | 1875 | `crates/horizon-narrator/src/speech/linux.rs` | unnecessary; platform-specific; optional | Compiled only for target_os=linux, not target_os=android; native libraries may be unavailable; unbounded piece queue and batch counter can wrap; raw C ABI needs ABI/library validation. |
+
+
+## Part 100 — Entries 1876–1900
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1876 | `crates/horizon-narrator/src/speech/linux_split.rs` | unnecessary; platform-specific helper | Only used by Linux backend. |
+| 1877 | `crates/horizon-narrator/src/speech/mac.rs` | unnecessary; platform-specific | Queue is unbounded. |
+| 1878 | `crates/horizon-narrator/src/speech/windows.rs` | unnecessary; platform-specific | Volume is cast to SAPI integer without explicit finite/range validation. |
+| 1879 | `crates/horizon-optifine/Cargo.toml` | adaptable; optional; version-specific | Workspace Rust version and crate dependencies must be checked against RustChunk toolchain/Android build. |
+| 1880 | `crates/horizon-optifine/examples/cem_expr_bench.rs` | undetermined; benchmark/example only | Synthetic single-entity workload. |
+| 1881 | `crates/horizon-optifine/src/blink.rs` | adaptable; optional; resource-pack feature | Blink properties use read_to_string rather than Java-compatible Latin-1 decoder. |
+| 1882 | `crates/horizon-optifine/src/cem/curves.rs` | adaptable; optional; animation subsystem | Public keyframe helper assumes non-empty frames and can underflow/index panic when called directly with an empty slice. |
+| 1883 | `crates/horizon-optifine/src/cem/expr.rs` | adaptable; optional; core reference for CEM only | Parser caps nesting 64 and nodes 1024. |
+| 1884 | `crates/horizon-optifine/src/cem/files.rs` | adaptable; optional; resource-pack feature | CEM discovery is limited to assets/minecraft namespace. |
+| 1885 | `crates/horizon-optifine/src/cem/json.rs` | adaptable; optional; parser reference | No intrinsic input-byte/node-count cap. |
+| 1886 | `crates/horizon-optifine/src/cem/mod.rs` | adaptable; module-structure reference | Small module organization file. |
+| 1887 | `crates/horizon-optifine/src/cem/model.rs` | rewrite required; optional; version-specific | Target model schema and transforms need OptiFine/EMF 1.20.1 parity. |
+| 1888 | `crates/horizon-optifine/src/cit.rs` | rewrite required; optional; version-specific | File explicitly follows 1.21 component rules and CIT Resewn Continuation. |
+| 1889 | `crates/horizon-optifine/src/ctm.rs` | adaptable; optional; rendering feature | `load` reads each properties file fully without a per-file byte cap. |
+| 1890 | `crates/horizon-optifine/src/ctm/connect.rs` | adaptable; optional; renderer-specific | Public repeat_index assumes sensible width/height. |
+| 1891 | `crates/horizon-optifine/src/emissive.rs` | adaptable; optional; rendering feature | Properties suffix files are size-capped, but overlay discovery inherits walker count/symlink constraints. |
+| 1892 | `crates/horizon-optifine/src/fusion.rs` | unnecessary; optional; third-party format | Fusion is a separate mod's format, not native vanilla or Forge connected-texture format. |
+| 1893 | `crates/horizon-optifine/src/fusion/layout.rs` | unnecessary; optional; third-party format | Layout tables are derived from public wiki/example template images. |
+| 1894 | `crates/horizon-optifine/src/fusion/model.rs` | unnecessary; optional; third-party format | Reference resolution is capped at 32 hops. |
+| 1895 | `crates/horizon-optifine/src/fusion/predicate.rs` | adaptable; optional; renderer-specific | Nested predicates rely on JSON parser depth cap rather than a dedicated predicate-node budget. |
+| 1896 | `crates/horizon-optifine/src/fusion/texture.rs` | unnecessary; optional; third-party format | This is a mod-specific .mcmeta extension. |
+| 1897 | `crates/horizon-optifine/src/lib.rs` | adaptable; optional; architecture reference | Broad public surface may pull in features unnecessary for RustChunk and increase binary/dependency footprint.. |
+| 1898 | `crates/horizon-optifine/src/matchers.rs` | adaptable; optional; parser utility | Range parser accepts reversed bounds that simply never match. |
+| 1899 | `crates/horizon-optifine/src/paths.rs` | rewrite required; security-sensitive; reference | File symlinks are not canonicalized against the resource root before returned paths are opened. |
+| 1900 | `crates/horizon-optifine/src/properties.rs` | rewrite required; parser correctness/security-sensitive | `split` scans UTF-8 bytes and advances two bytes after backslash. |

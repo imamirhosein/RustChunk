@@ -411,3 +411,11 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 
 - If read-back detects malformed Ledger field joins or Index row joins, correct the document formatting transparently in a documentation-only follow-up commit, retain original content/decisions, and read back all six checkpoint documents again.
 - For checkpoint 1851–1875, two inherited Ledger joins (1823, 1847) and three inherited Index joins (660, 995, 1660) were repaired. Final counts: 75 Ledger entries with 15 fields each; 1,875 sequential unique Index paths.
+
+
+## 18. Closeout of authorized section 1851–1900 — 2026-11-20
+
+- Entries 1876–1900 completed as the second 25-file checkpoint; section 1851–1900 is now closed at 50/50.
+- Six-document atomic update required: Ledger, Index, QA, Continuity, Protocol and Boundary. Commit all six together, read each back individually and verify 100 Ledger entries/15 fields each, 1,900 sequential unique Index paths, source SHA/size and matching Ledger/Index paths/decisions.
+- Do not inspect 1901–1950 without fresh explicit user authorization. Stop at 1900.
+- Main/backup refs remain untouched; no source changes or test/build/device/Forge/server/renderer claims. Backup only after the full 1001–2000 range and global verification.

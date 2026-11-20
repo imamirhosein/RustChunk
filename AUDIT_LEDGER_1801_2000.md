@@ -1286,3 +1286,431 @@
 - RustChunk implementation mapping: No direct mapping; optional Linux desktop backend only.
 - Evidence required before adoption: Linux ABI/runtime tests and separate Android TTS implementation/device validation.
 - Completion state: COMPLETE — 206 logical lines read through EOF; pinned SHA and 8293-byte size match.
+
+
+## Checkpoint 1876–1900
+
+### 1876. `crates/horizon-narrator/src/speech/linux_split.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `77615043eb7f0d01f3fa11a77d345ed44e876f26`
+- Size: 2793 bytes; 84 logical lines
+- Coverage: 1–84 (EOF)
+- Purpose: Pure helper splitting narrator text into Flite-sized speech units at punctuation.
+- Dependencies / cross-references: Linux speech backend; Java String.isBlank whitespace semantics; no external dependencies.
+- Implementation / logic: Splits punctuation runs while preserving leading spaces of nonblank pieces and implements Java whitespace classification.
+- Findings: Only used by Linux backend; behavior differs from generic Rust whitespace for NBSP and U+0085; pure helper has no Android runtime role.
+- RustChunk relevance: Small text segmentation algorithm can be reused only if Android TTS needs the same chunking.
+- Decision: unnecessary; platform-specific helper
+- 1.20.1 implications: Not part of Minecraft 1.20.1 gameplay; Android TTS should use its own sentence/chunk policy.
+- Follow-up checks: Test Unicode whitespace and long multilingual messages if reused.
+- RustChunk implementation mapping: Optional narrator adapter utility, not core launcher.
+- Evidence required before adoption: Android speech tests for punctuation, CJK/emoji and chunk boundaries.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1877. `crates/horizon-narrator/src/speech/mac.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `260862e8ce43f01b593b2e81940efe70884c47ec`
+- Size: 4518 bytes; 109 logical lines
+- Coverage: 1–109 (EOF)
+- Purpose: macOS AppKit NSSpeechSynthesizer backend with system voice/rate and a private message queue.
+- Dependencies / cross-references: objc2, AppKit run loop, NSSpeechSynthesizer, VecDeque.
+- Implementation / logic: Runs synthesizer on speech worker thread, pumps current run loop in idle, polls speaking state and starts next queued message.
+- Findings: Queue is unbounded; interrupt stops active speech but leaves queued messages ahead of interrupting message; AppKit run-loop callback timing is polled rather than integrated as a delegate.
+- RustChunk relevance: Platform lifecycle/queue reference only; not portable to Android.
+- Decision: unnecessary; platform-specific
+- 1.20.1 implications: Android must use Android TextToSpeech/JNI and lifecycle; AppKit is unavailable.
+- Follow-up checks: Bound queue, define interrupt semantics and ensure UI/main-thread constraints for any macOS reuse.
+- RustChunk implementation mapping: No RustChunk Android mapping; optional desktop speech backend.
+- Evidence required before adoption: macOS thread/run-loop tests; Android TTS tests independently.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1878. `crates/horizon-narrator/src/speech/windows.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f40058ca0002698c70f4f0283e65e6ac0d7a93e8`
+- Size: 2939 bytes; 84 logical lines
+- Coverage: 1–84 (EOF)
+- Purpose: Windows SAPI SpVoice backend for asynchronous speech.
+- Dependencies / cross-references: windows crate SAPI and COM APIs, HSTRING, ManuallyDrop.
+- Implementation / logic: Initializes COM MTA on worker thread, creates SpVoice, supports async plain-text speech, purge-before-speak and queue skip; releases voice before COM uninitialize.
+- Findings: Volume is cast to SAPI integer without explicit finite/range validation; Windows-only COM implementation.
+- RustChunk relevance: Lifecycle ordering and per-thread COM ownership are platform-specific references.
+- Decision: unnecessary; platform-specific
+- 1.20.1 implications: No Android support or Forge integration; SAPI cannot be used on Android.
+- Follow-up checks: Validate volume centrally and test COM failure/teardown paths if desktop backend is retained.
+- RustChunk implementation mapping: No Android implementation mapping.
+- Evidence required before adoption: Windows COM apartment, failure, cancellation and volume boundary tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1879. `crates/horizon-optifine/Cargo.toml`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a15595b286f0cd9722aa1d77fa4953f855e290e0`
+- Size: 673 bytes; 18 logical lines
+- Coverage: 1–18 (EOF)
+- Purpose: Manifest for OptiFine-format resource-pack parsing crate.
+- Dependencies / cross-references: horizon-core, log, regex with std/unicode features; horizon-bench dev dependency.
+- Implementation / logic: Declares Rust crate with parser modules for CEM, CIT, CTM, Fusion, paths, properties and matchers.
+- Findings: Workspace Rust version and crate dependencies must be checked against RustChunk toolchain/Android build; no direct Forge bridge.
+- RustChunk relevance: Strong optional reference for resource-pack feature parsing, but no runtime rendering integration by itself.
+- Decision: adaptable; optional; version-specific
+- 1.20.1 implications: Minecraft 1.20.1 resource pack semantics differ from later data-component mappings; ensure target-version compatibility and ARM64 compile.
+- Follow-up checks: Audit license/dependency tree, MSRV, regex footprint and Android cross-compilation.
+- RustChunk implementation mapping: Optional RustChunk resource-pack parser crate behind feature flag.
+- Evidence required before adoption: Android ARM64 build, dependency size, resource-pack compatibility fixtures and renderer integration.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1880. `crates/horizon-optifine/examples/cem_expr_bench.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `8d6f0cbf41d0dae118b5b8892d867d403fbb67f2`
+- Size: 4505 bytes; 137 logical lines
+- Coverage: 1–137 (EOF)
+- Purpose: Standalone microbenchmark for compiled CEM animation expressions over two million entity frames.
+- Dependencies / cross-references: horizon-optifine::cem::expr, horizon-bench CPU timer, Instant and black_box.
+- Implementation / logic: Compiles a walk/idle/head animation expression set once, evaluates each over 2,000,000 simulated frames and reports wall/CPU time.
+- Findings: Synthetic single-entity workload; benchmark was not run; results would not establish Android Mali or whole-game FPS.
+- RustChunk relevance: Benchmark design can inform isolated expression evaluator profiling only.
+- Decision: undetermined; benchmark/example only
+- 1.20.1 implications: No direct 1.20.1 game or Android performance evidence.
+- Follow-up checks: Run on target ARM64 device with realistic entity counts, thermal controls and full rendering load before making performance claims.
+- RustChunk implementation mapping: Optional CEM evaluator benchmark harness.
+- Evidence required before adoption: Repeatable Android ARM64 measurements and comparison against vanilla/Forge behavior.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1881. `crates/horizon-optifine/src/blink.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `681928d04dfcd3ae411a9836107002c11bcc5d59`
+- Size: 9378 bytes; 245 logical lines
+- Coverage: 1–245 (EOF)
+- Purpose: ETF-compatible blinking texture discovery and per-entity frame timing.
+- Dependencies / cross-references: RandomTextures, resource-root file walker, Properties and filesystem.
+- Implementation / logic: Finds `_blink.png`/`_blink2.png`, optional blink properties, maps random variants and computes shut/half/open frame from tick and phase.
+- Findings: Blink properties use read_to_string rather than Java-compatible Latin-1 decoder; invalid UTF-8 silently falls back to defaults; file discovery inherits walker symlink/count limitations.
+- RustChunk relevance: Useful optional entity texture feature, not required for chunk renderer.
+- Decision: adaptable; optional; resource-pack feature
+- 1.20.1 implications: ETF/OptiFine entity texture behavior must be checked against 1.20.1 pack conventions and client atlas implementation.
+- Follow-up checks: Use shared bounded properties reader with Java encoding behavior; test huge frequency, missing files, random variants and symlinked packs.
+- RustChunk implementation mapping: Optional RustChunk entity texture feature layer.
+- Evidence required before adoption: 1.20.1 resource-pack fixtures, atlas upload tests, Android file access and long-session memory checks.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1882. `crates/horizon-optifine/src/cem/curves.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2161f9906d0ac46ec46349ea00f0102a1a533d8d`
+- Size: 4945 bytes; 158 logical lines
+- Coverage: 1–158 (EOF)
+- Purpose: Math curves/easing, interpolation and keyframe/spline helpers for CEM animations.
+- Dependencies / cross-references: f32 math; expression evaluator calls ease, keyframe, Catmull-Rom, Hermite and Bezier functions.
+- Implementation / logic: Implements easing families, bounce, lerp, keyframe/loop, Catmull-Rom, Hermite and quadratic/cubic Bezier.
+- Findings: Public keyframe helper assumes non-empty frames and can underflow/index panic when called directly with an empty slice; expression parser currently enforces at least one frame.
+- RustChunk relevance: Useful animation math reference; requires guards and parity checks.
+- Decision: adaptable; optional; animation subsystem
+- 1.20.1 implications: Not chunk/rendering logic; CEM support may be optional for 1.20.1 resource packs.
+- Follow-up checks: Add empty-frame guard, NaN/out-of-range behavior tests and compare curves against EMF/OptiFine.
+- RustChunk implementation mapping: Optional RustChunk CEM animation evaluator.
+- Evidence required before adoption: Differential test vectors from 1.20.1 OptiFine/EMF and ARM64 numerical tolerance tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1883. `crates/horizon-optifine/src/cem/expr.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `2fe9c48b5010b9ee4ef914c2953819c6beee95e6`
+- Size: 35900 bytes; 997 logical lines
+- Coverage: 1–400, 401–800, 801–997 (EOF)
+- Purpose: Compiles CEM expression strings into a flat stack bytecode and evaluates per entity/frame.
+- Dependencies / cross-references: CEM variable resolver slots, curves helpers, thread-local seeded/unseeded random state and bounded parser.
+- Implementation / logic: Implements arithmetic/comparison, lazy if/boolean branches, math functions, random, keyframes/splines and bytecode stack-depth validation.
+- Findings: Parser caps nesting 64 and nodes 1024; runtime evaluation is allocation-free; `nbt()`/unknown context semantics require caller mapping; random() is thread-local and launch-dependent.
+- RustChunk relevance: Strong reusable architecture for animation expression VM, but CEM variable names and semantics must be reimplemented.
+- Decision: adaptable; optional; core reference for CEM only
+- 1.20.1 implications: No Forge 1.20.1 integration; expression inputs depend on entity/model transforms and vanilla timing semantics.
+- Follow-up checks: Compare supported functions/variables with OptiFine 1.20.1/EMF; validate slots, stack bounds, deterministic random and invalid-expression handling.
+- RustChunk implementation mapping: Optional RustChunk CEM VM isolated from render loop; compile once, evaluate from per-entity state.
+- Evidence required before adoption: Differential expression corpus, fuzz parser, stack invariants, per-frame ARM64 profiling and game-version parity.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1884. `crates/horizon-optifine/src/cem/files.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f4fe5f63798293628ef13c716470f0b41d30187a`
+- Size: 5348 bytes; 137 logical lines
+- Coverage: 1–137 (EOF)
+- Purpose: Discovers and loads EMF/OptiFine .jem custom entity models and resolves atlas texture names.
+- Dependencies / cross-references: Filesystem, BTreeMap, model parser, MAX_BYTES cap and resource-root path.
+- Implementation / logic: Prioritizes EMF folder over OptiFine and flat file over nested; reads .jem/.jpm text under MAX_BYTES and logs parser warnings.
+- Findings: CEM discovery is limited to assets/minecraft namespace; metadata-then-read has a file-growth race; local pack symlinks are followed by path joins.
+- RustChunk relevance: Useful CEM loading precedence and bounded file-read pattern.
+- Decision: adaptable; optional; resource-pack feature
+- 1.20.1 implications: CEM models are not Minecraft chunk geometry; preserve 1.20.1 entity/model compatibility.
+- Follow-up checks: Use streaming capped reads, canonical-root checks and verify modded namespace support.
+- RustChunk implementation mapping: Optional RustChunk entity model loader.
+- Evidence required before adoption: CEM fixtures, symlink escape tests, malformed/oversized JSON and atlas registration tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1885. `crates/horizon-optifine/src/cem/json.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `8b0bb2150991dd47db32f17f8a58784e9a3df20a`
+- Size: 11637 bytes; 341 logical lines
+- Coverage: 1–341 (EOF)
+- Purpose: Lenient Gson-like JSON parser for CEM .jem/.jpm files preserving object key order.
+- Dependencies / cross-references: Custom byte parser, UTF-8 lossy conversion, depth limit 128.
+- Implementation / logic: Accepts BOM, comments, trailing commas, single quotes, bare keys, `=`/`=>`, surrogate pairs and ordered duplicate keys.
+- Findings: No intrinsic input-byte/node-count cap; callers rely on MAX_BYTES. Object lookup returns last duplicate key while iteration preserves all duplicates; parser recursion bounded at 128.
+- RustChunk relevance: Parser may be reused for lenient CEM only after resource limits and duplicate-key policy are explicit.
+- Decision: adaptable; optional; parser reference
+- 1.20.1 implications: JSON semantics should match 1.20.1 OptiFine/EMF, not general mod config parsing.
+- Follow-up checks: Add byte/token/array/object limits, duplicate-key compatibility tests, malformed UTF-8 and surrogate fuzzing.
+- RustChunk implementation mapping: Optional CEM-specific parser, not shared generic settings parser.
+- Evidence required before adoption: Fuzzing, depth/size limits, differential Gson tests and Android memory stress.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1886. `crates/horizon-optifine/src/cem/mod.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `e569f11e6df30f3b7a9a52ce18ef464f300d10d1`
+- Size: 371 bytes; 11 logical lines
+- Coverage: 1–11 (EOF)
+- Purpose: CEM module façade exporting expression, curves, JSON, files and model APIs.
+- Dependencies / cross-references: Sibling cem modules.
+- Implementation / logic: Declares modules and re-exports selected public types/functions.
+- Findings: Small module organization file; API is specific to Horizon CEM parser.
+- RustChunk relevance: Module organization reference only.
+- Decision: adaptable; module-structure reference
+- 1.20.1 implications: No direct game behavior.
+- Follow-up checks: Keep CEM behind optional feature and avoid coupling with core chunk pipeline.
+- RustChunk implementation mapping: RustChunk optional CEM module structure.
+- Evidence required before adoption: Static API and feature-matrix review.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1887. `crates/horizon-optifine/src/cem/model.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `07bba1f08e33f117b30858b09d598e18b2aee458`
+- Size: 50118 bytes; 1234 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1234 (EOF)
+- Purpose: Parses CEM entity model geometry, bones, boxes, sprites, animations and model inheritance.
+- Dependencies / cross-references: CEM JSON parser, expression VM, atlas texture paths, model bone/quad types and geometry limits.
+- Implementation / logic: Builds bones and parts, applies baseId inheritance, parses boxes/sprites, transforms, animation expressions and bakes quads with bounded node/animation budgets.
+- Findings: Target model schema and transforms need OptiFine/EMF 1.20.1 parity; geometry flips and face normals need differential verification; some invalid numeric vectors default to zero rather than rejecting.
+- RustChunk relevance: Substantial reusable CEM architecture, but not Minecraft chunk mesh or world renderer.
+- Decision: rewrite required; optional; version-specific
+- 1.20.1 implications: CEM entities are separate from chunk meshing; don't conflate model geometry with terrain chunks or Forge model loader.
+- Follow-up checks: Verify UV/normal winding for invertAxis/box mirror, negative/zero dimensions, baseId resolution, animation cost limits and 1.20.1 transform semantics.
+- RustChunk implementation mapping: Optional RustChunk CEM entity model renderer, separate from chunk pipeline.
+- Evidence required before adoption: Golden model fixtures from 1.20.1 OptiFine/EMF, face normals, UVs, matrix transforms, parser fuzz and Mali GPU tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1888. `crates/horizon-optifine/src/cit.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `89718087fbee1fecaa1e20b8d5718677c1214a4a`
+- Size: 52741 bytes; 1363 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1363 (EOF)
+- Purpose: Parses Custom Item Textures rules, item/armor/elytra/enchantment matches, components, assets and glint options.
+- Dependencies / cross-references: Properties, matchers, path resolver, legacy NBT mapping and OpenGL blend-factor enum.
+- Implementation / logic: Builds rules from CIT properties, resolves texture/model assets, maps legacy NBT tests to component paths and orders rules by weight/path.
+- Findings: File explicitly follows 1.21 component rules and CIT Resewn Continuation; several legacy tag mappings target post-1.20.5/1.21.5 components and are not valid 1.20.1 NBT semantics.
+- RustChunk relevance: Potential optional resource-pack feature, but must be version-specialized.
+- Decision: rewrite required; optional; version-specific
+- 1.20.1 implications: 1.20.1 still uses legacy item NBT and Forge ItemStack behavior; remove later component assumptions and map against exact 1.20.1 NBT.
+- Follow-up checks: Build 1.20.1-specific legacy NBT matcher, validate damage/stack/enchantment semantics and OpenGL blend compatibility.
+- RustChunk implementation mapping: Optional RustChunk CIT layer only after version-specific stack adapter.
+- Evidence required before adoption: Differential CIT Resewn/OptiFine 1.20.1 corpus, item NBT fixtures, renderer blend tests and Android resource pack tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1889. `crates/horizon-optifine/src/ctm.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `1b4c78d828f9f4a9766181918ac1bcd038d578ef`
+- Size: 33616 bytes; 879 logical lines
+- Coverage: 1–400, 401–800, 801–879 (EOF)
+- Purpose: Parses OptiFine/Continuity connected-texture properties and produces ordered CTM rules.
+- Dependencies / cross-references: Properties, matchers, resource path helpers, filesystem and CTM neighbour-mask module.
+- Implementation / logic: Supports CTM, compact, horizontal/vertical, random/repeat/fixed and overlay methods, block/tile matching, faces, biome/height/name predicates and tile caps.
+- Findings: `load` reads each properties file fully without a per-file byte cap; discovery has no global file-count cap and follows symlinks; some unknown option values silently default.
+- RustChunk relevance: High relevance to resource-pack visual compatibility, but requires renderer/world neighbour integration.
+- Decision: adaptable; optional; rendering feature
+- 1.20.1 implications: 1.20.1 block states, face directions, biomes and model sprite atlas must match Forge/Minecraft exactly.
+- Follow-up checks: Bound property reads and number of files; validate tile weights/size and compare all CTM templates with OptiFine 1.20.1.
+- RustChunk implementation mapping: Optional resource-pack CTM rules feeding a renderer-side neighbour query.
+- Evidence required before adoption: Template image parity, world block state tests, malformed/oversized pack tests, ARM64 and Mali performance.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1890. `crates/horizon-optifine/src/ctm/connect.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `66ac83a8a1a6925381e8a98277dda1de8f385b4f`
+- Size: 22969 bytes; 657 logical lines
+- Coverage: 1–400, 401–657 (EOF)
+- Purpose: Computes connected-texture neighbour masks and maps masks to CTM/Fusion tile indices.
+- Dependencies / cross-references: Face axes, neighbour callbacks, 47-tile templates, overlay/compact tables and deterministic hash.
+- Implementation / logic: Computes texture axes from quad positions/UVs, neighbour offsets, symmetry, repeat indices and weighted deterministic random tile choices.
+- Findings: Public repeat_index assumes sensible width/height; extreme direct arguments can overflow intermediate i64 product; callers' tile caps currently constrain normal paths; all tile tables require golden-template parity.
+- RustChunk relevance: Reusable renderer-side CTM/Fusion algorithm; among the more directly useful visual subsystems.
+- Decision: adaptable; optional; renderer-specific
+- 1.20.1 implications: Must use exact 1.20.1 quad UV conventions, block face orientation and world neighbour semantics.
+- Follow-up checks: Guard public dimensions, validate normals/UVs for all rotations, compare all 256 masks and run on Mali GPU.
+- RustChunk implementation mapping: RustChunk optional connected-texture renderer adapter.
+- Evidence required before adoption: Exhaustive mask tests, Forge baked-quad fixtures, orientation parity and Android GPU profiling.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1891. `crates/horizon-optifine/src/emissive.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `f49e42c9f482d35ed9145ef484240837bae6ca86`
+- Size: 11679 bytes; 302 logical lines
+- Coverage: 1–302 (EOF)
+- Purpose: Pairs emissive overlay textures with entity atlas textures, random variants and blink frames.
+- Dependencies / cross-references: Resource walker, RandomTextures, Blinks, Properties and filesystem.
+- Implementation / logic: Reads suffix configuration from first available properties file, finds `_e` overlays, maps atlas names and tracks random-variant overlays.
+- Findings: Properties suffix files are size-capped, but overlay discovery inherits walker count/symlink constraints; only entity atlas is scanned here, block/item atlas needs separate handling.
+- RustChunk relevance: Useful optional emissive texture pairing concept.
+- Decision: adaptable; optional; rendering feature
+- 1.20.1 implications: Needs separate block/item/entity atlas integration and 1.20.1 renderer lightmap/full-bright behavior.
+- Follow-up checks: Bound file enumeration, validate suffix/path handling and verify overlay draw order/lightmap on target renderer.
+- RustChunk implementation mapping: Optional emissive overlay pass in resource-pack renderer.
+- Evidence required before adoption: 1.20.1 atlas fixtures, lightmap/shader compatibility, symlink/huge-pack tests and Mali overdraw profiling.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1892. `crates/horizon-optifine/src/fusion.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c3769c661c0ade0e0e587c97ce631dfdeb10f20a`
+- Size: 2309 bytes; 65 logical lines
+- Coverage: 1–65 (EOF)
+- Purpose: Fusion resource-pack module façade and shared typed JSON field helpers.
+- Dependencies / cross-references: CEM lenient JSON parser, Fusion layout/model/predicate/texture modules.
+- Implementation / logic: Exports metadata/model/predicate/layout types and parses boolean/string/integer fields.
+- Findings: Fusion is a separate mod's format, not native vanilla or Forge connected-texture format; numeric conversion should retain explicit range checks.
+- RustChunk relevance: Optional compatibility target only if RustChunk chooses Fusion pack support.
+- Decision: unnecessary; optional; third-party format
+- 1.20.1 implications: No Forge core or chunk renderer requirement; implement only behind optional pack-format support.
+- Follow-up checks: Confirm current Fusion specification/version and test integer boundary conversion.
+- RustChunk implementation mapping: Optional Fusion parser module only.
+- Evidence required before adoption: Fusion pack corpus, schema/version tests and renderer integration.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1893. `crates/horizon-optifine/src/fusion/layout.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `d21d63a1353cd1c5cae63f597cec2a6a15d782b9`
+- Size: 14883 bytes; 400 logical lines
+- Coverage: 1–400 (EOF)
+- Purpose: Maps Fusion connected-texture neighbour masks to tile layouts and overlay tile sequences.
+- Dependencies / cross-references: CTM connect masks, fixed full/simple templates, compact and overlay layout algorithms.
+- Implementation / logic: Supports pieced/simple/full/vertical/horizontal/compact/overlay layouts and enumerates overlay pieces by joined sides/corners.
+- Findings: Layout tables are derived from public wiki/example template images; need versioned fixture verification; overlay sequence order affects alpha compositing.
+- RustChunk relevance: Potential reusable layout math if Fusion compatibility is explicitly required.
+- Decision: unnecessary; optional; third-party format
+- 1.20.1 implications: Not required for vanilla/Forge 1.20.1 base client; keep separate from OptiFine CTM semantics.
+- Follow-up checks: Compare every mask/layout against exact Fusion examples and verify overlay order and blending.
+- RustChunk implementation mapping: Optional Fusion renderer layout adapter.
+- Evidence required before adoption: Exhaustive 256-mask fixture, image golden tests and Android GPU overlay validation.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1894. `crates/horizon-optifine/src/fusion/model.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a3c888cc3c2b17057446ab994e040d1e0ccc9803`
+- Size: 8971 bytes; 245 logical lines
+- Coverage: 1–245 (EOF)
+- Purpose: Parses Fusion block model types and per-texture connection references with inheritance.
+- Dependencies / cross-references: Lenient CEM JSON, Fusion predicates, connection model, keyed texture refs.
+- Implementation / logic: Supports base/connecting/composite type identification, all-face/keyed predicates, #key references, default fallback and parent inheritance.
+- Findings: Reference resolution is capped at 32 hops; malformed/empty references fall back to default or no predicate; this is Fusion model-loader logic only.
+- RustChunk relevance: Optional third-party format reference.
+- Decision: unnecessary; optional; third-party format
+- 1.20.1 implications: No core Forge requirement; model loader integration and inheritance must match selected Fusion version.
+- Follow-up checks: Test reference chains at boundary, dangling refs, duplicate keys and parent/child overrides.
+- RustChunk implementation mapping: Optional Fusion model adapter.
+- Evidence required before adoption: Fusion model fixture corpus and model inheritance/render integration tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1895. `crates/horizon-optifine/src/fusion/predicate.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `36b44bc1d893d5ea757e204d3cb07cf799c3f7db`
+- Size: 13342 bytes; 350 logical lines
+- Coverage: 1–350 (EOF)
+- Purpose: Parses Fusion connection predicates and evaluates per-neighbour world queries.
+- Dependencies / cross-references: BlockMatch parser, JSON, CTM mask directions and caller-provided world query callbacks.
+- Implementation / logic: Supports same block/state, match block/state, in-front, face-visible, direction, and/or/not/constant predicates.
+- Findings: Nested predicates rely on JSON parser depth cap rather than a dedicated predicate-node budget; callback semantics must align with world block/face visibility.
+- RustChunk relevance: Predicate AST/query abstraction is reusable for optional connected textures.
+- Decision: adaptable; optional; renderer-specific
+- 1.20.1 implications: Forge 1.20.1 block state and face-visibility checks must be supplied by the client world adapter.
+- Follow-up checks: Add explicit predicate node cap and test all directions/face occlusion against vanilla 1.20.1.
+- RustChunk implementation mapping: Optional renderer neighbour-query adapter.
+- Evidence required before adoption: World-query correctness, malformed/deep JSON fuzzing and Android performance tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1896. `crates/horizon-optifine/src/fusion/texture.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `0be229bc42f3d735febf87effa6f9a0eda122169`
+- Size: 13948 bytes; 418 logical lines
+- Coverage: 1–400, 401–418 (EOF)
+- Purpose: Parses Fusion texture .mcmeta metadata for base, connecting, random, continuous and scrolling textures.
+- Dependencies / cross-references: Lenient JSON parser, Fusion layout/predicate, numeric/enum helpers.
+- Implementation / logic: Validates layout, connection predicates, random grids/seeds, per-tile animation and scrolling frame parameters.
+- Findings: This is a mod-specific .mcmeta extension; dimensions/seed semantics and animation timing must match exact Fusion version; recursive sub_texture depth relies on JSON parser limit.
+- RustChunk relevance: Optional third-party resource-pack format.
+- Decision: unnecessary; optional; third-party format
+- 1.20.1 implications: Not vanilla 1.20.1 metadata; only parse when Fusion compatibility is intentionally implemented.
+- Follow-up checks: Check multiplication/frame dimensions against actual image sizes and compare animation behavior to Fusion reference.
+- RustChunk implementation mapping: Optional Fusion texture metadata adapter.
+- Evidence required before adoption: Image dimension, animation frame, seed determinism and Fusion pack corpus tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1897. `crates/horizon-optifine/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `c3084d88a5fe4e623b024e73b92e55a7fa64ff93`
+- Size: 1563 bytes; 31 logical lines
+- Coverage: 1–31 (EOF)
+- Purpose: OptiFine-format resource-pack crate façade and public parser exports.
+- Dependencies / cross-references: Sibling blink/CEM/CIT/CTM/emissive/Fusion/matcher/path/property modules.
+- Implementation / logic: Exports optional resource-pack parser features without direct game types.
+- Findings: Broad public surface may pull in features unnecessary for RustChunk and increase binary/dependency footprint.
+- RustChunk relevance: Module organization reference only.
+- Decision: adaptable; optional; architecture reference
+- 1.20.1 implications: No direct 1.20.1 runtime; choose feature-gated subsets to reduce Android footprint.
+- Follow-up checks: Measure dependency size and isolate optional features in Cargo features.
+- RustChunk implementation mapping: Optional RustChunk resource-pack module façade.
+- Evidence required before adoption: Android binary size and compile-feature matrix.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1898. `crates/horizon-optifine/src/matchers.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `13e5bd4a85e4cabda8a09370aa09b4a2939b02cc`
+- Size: 10936 bytes; 307 logical lines
+- Coverage: 1–307 (EOF)
+- Purpose: Implements OptiFine-style name/glob/regex, integer range, ID and block-state matchers.
+- Dependencies / cross-references: regex crate, block ID/state adapters and property parsers.
+- Implementation / logic: Provides O(pattern×name) glob, anchored regex, ranges, inclusion/exclusion IDs and block state lists.
+- Findings: Range parser accepts reversed bounds that simply never match; empty/invalid namespace tokens can be retained; regex crate avoids catastrophic backtracking but patterns still need input limits.
+- RustChunk relevance: Useful resource-pack matcher primitives with strict input normalization.
+- Decision: adaptable; optional; parser utility
+- 1.20.1 implications: IDs and state values must match 1.20.1 registry identifiers and property sets exactly.
+- Follow-up checks: Reject malformed/empty IDs and reversed ranges; fuzz Unicode glob, regex, numeric bounds and block state lists.
+- RustChunk implementation mapping: Optional shared matcher crate for CIT/CTM.
+- Evidence required before adoption: Differential matcher corpus, regex/input-size limits and 1.20.1 registry integration.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1899. `crates/horizon-optifine/src/paths.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `a351d85089e9b7d0b1eee3bfe7393236c134c4dd`
+- Size: 8576 bytes; 242 logical lines
+- Coverage: 1–242 (EOF)
+- Purpose: Resolves resource paths and walks OptiFine/MCPatcher feature folders under an overlay resource root.
+- Dependencies / cross-references: Filesystem canonicalization, HashSet, prepared resource-root files and path validators.
+- Implementation / logic: Rejects dot/dotdot/empty/backslash segments, follows directory symlinks once by canonical path, sorts discovered property/resource files.
+- Findings: File symlinks are not canonicalized against the resource root before returned paths are opened; walker has no file-count cap; symlink targets can expose files outside intended pack root.
+- RustChunk relevance: Path normalization is valuable but needs stronger containment and enumeration limits.
+- Decision: rewrite required; security-sensitive; reference
+- 1.20.1 implications: Android SAF/scoped-storage and pack overlay symlink behavior differ; do not rely on desktop filesystem link semantics.
+- Follow-up checks: Canonicalize every file target and prove it remains under permitted roots; cap depth, files and aggregate bytes.
+- RustChunk implementation mapping: RustChunk resource-pack filesystem adapter.
+- Evidence required before adoption: Symlink escape, huge directory, path encoding and Android storage tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
+
+### 1900. `crates/horizon-optifine/src/properties.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `3b4b2c7ab242d49995b342a98e488f61c1a15c73`
+- Size: 7743 bytes; 210 logical lines
+- Coverage: 1–210 (EOF)
+- Purpose: Parses Java .properties syntax including comments, continuations, escapes and duplicate keys.
+- Dependencies / cross-references: UTF-8 text input, HashMap index, custom byte/character scanning and Java-style Unicode escape handling.
+- Implementation / logic: Supports `=`, `:`, whitespace separators, continuations, \\t/\\n/\\uXXXX escapes and equals-first mode for CIT keys.
+- Findings: `split` scans UTF-8 bytes and advances two bytes after backslash; an escaped multibyte character can leave the slice index inside a UTF-8 code point and panic. Invalid/incomplete Unicode escapes are silently dropped rather than Java-compatible failure behavior.
+- RustChunk relevance: Important shared parser for CIT/CTM/ETF; requires Unicode safety before reuse.
+- Decision: rewrite required; parser correctness/security-sensitive
+- 1.20.1 implications: 1.20.1 packs may contain Java properties encoding/escape behavior; preserve exact Java Properties.load semantics and Latin-1 handling.
+- Follow-up checks: Make scanning char-boundary safe, test escaped multibyte UTF-8, malformed Unicode/surrogate pairs, CRLF/continuations and Latin-1 decoding.
+- RustChunk implementation mapping: RustChunk resource-pack properties parser shared by optional pack features.
+- Evidence required before adoption: Fuzz UTF-8 boundary cases, Java reference vectors, parser size limits and Android file encoding tests.
+- Completion state: COMPLETE — full source file read and SHA/size verified against pinned tree; tests not run.
