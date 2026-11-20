@@ -425,3 +425,14 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Key findings: the Horizon port-pack is a separate 1.21.1→26.3 conversion tool, not a Forge 1.20.1 runtime loader. Some ideas can inform optional pack tooling/resource packs, but density/worldgen/ItemStack and folder mod outputs need 1.20.1-specific rewrites. JAR/API/archive bounds and redirects need follow-up hardening.
 - Tests/examples inspected only, not run. No build/test/benchmark/APK/device/Forge/server/renderer validation. No app source changes.
 - **Next: inspect 1926–1950** under the existing authorization. Then close and STOP at 1950. Do not inspect 1951+ without fresh explicit authorization.
+
+
+## Authoritative closeout — section 1901–1950 — 2026-11-20
+
+- Overall Index coverage: **1–1950**, sequential and unique.
+- Active 200-file stage **1801–2000: 150/200 complete**.
+- Section **1901–1950 COMPLETE/CLOSED (50/50)**; both checkpoints 1901–1925 and 1926–1950 were separately committed and read back from GitHub.
+- Active Ledger `AUDIT_LEDGER_1801_2000.md`: 150 records (1801–1950), exactly 15 fields each. Index: 1,950 sequential unique paths, paths/Decisions aligned.
+- Source entries 1926–1950 were read serially through EOF; files >400 lines used gap-free chunks <=400; SHA/size matched pinned tree. Tests/examples inspected only; no test/build/benchmark/APK/device/Forge/server/renderer validation; no application code changed.
+- Findings: the port-pack upgrade/worldgen files target 26.2→26.3 and contain hard-coded/lossy transformations; Prepare is host-side Java/JDK exporter and asset-import infrastructure, not the Android game process; protocol probes use newer protocol and are not Forge 1.20.1 validation; Relay is optional friend-session service.
+- **STOP at 1950.** Section 1951–2000 remains locked pending fresh explicit user authorization. main/backups untouched; backup only after all entries 1001–2000 and global verification.

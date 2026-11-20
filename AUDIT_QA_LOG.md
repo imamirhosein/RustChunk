@@ -1322,3 +1322,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings: Horizon's port-pack is a standalone modpack conversion/checking tool for newer Horizon content formats, not a Forge 1.20.1 mod loader. Its OptiFine/ETF rules may be optional resource-pack references; its 1.21.1→26.3 carry, worldgen, density and resource transformations require target-version rewrites. JAR/network/archive paths have remaining size/redirect/hash hardening checks, while resourcepacks has stronger path/size/no-overwrite controls. Class census/check verdicts do not prove mods execute.
 - Embedded tests/examples and harness references were inspected only; none were run. No build, benchmark, APK, Android device, Forge launch, Minecraft join or renderer validation was performed. No application/game source code changed; audit documents only.
 - User authorization covers section 1901–1950. Checkpoint 1901–1925 is now closed; 1926–1950 remains authorized. Stop at 1950 for fresh authorization.
+
+
+## Source-audit checkpoint 1926–1950 — 2026-11-20
+
+- Completed entries 1926–1950 inclusive (25/25) from pinned Starling source tree 5432370d573642041585c69b40fb045b27133488; paths match exactly the next 25 blobs after excluding Index entries 1–1925.
+- All 25 files were read serially through EOF. Long files were read in consecutive, gap-free chunks no larger than 400 logical lines. Every recorded blob SHA and byte size matches the complete pinned recursive tree.
+- Active Ledger now contains 150 records (1801–1950), exactly 15 fields each. Index contains 1,950 sequential unique paths; new Ledger paths and Decisions align with Index.
+- Findings: upgrade/features, density/settings and the large worldgen mapper are explicit 26.2→26.3 migration code with hard-coded/version-specific/lossy transforms. Horizon Prepare is desktop Java-exporter/asset staging infrastructure; it uses JVM tools and large heap, so it is not an Android runtime component. SHA-1 local asset imports are carefully staged, while several helper readers still lack size/depth bounds. Protocol examples are diagnostic/test harnesses for the pinned new protocol and do not prove Forge 1.20.1 compatibility. Horizon Relay is optional friend-tunnel infrastructure, not public-server client transport.
+- Embedded tests/examples were inspected only; none were run. No build, benchmark, APK, Android device, Forge launch, Minecraft join or renderer validation was performed. No game/application source code changed; audit documentation only.
+- Section 1901–1950 is **COMPLETE/CLOSED (50/50)**. Do not inspect 1951 or later without fresh explicit authorization. main and existing backup refs remain untouched; backup only after entries 1001–2000 and global verification 1–2000.

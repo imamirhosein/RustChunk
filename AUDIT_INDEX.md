@@ -2316,3 +2316,34 @@
 | 1923 | `crates/horizon-port-pack/src/resourcepacks.rs` | adaptable; core tooling reference; security-sensitive | undefined |
 | 1924 | `crates/horizon-port-pack/src/resourcepacks/tests.rs` | undetermined; tests only; reference | undefined |
 | 1925 | `crates/horizon-port-pack/src/upgrade/density.rs` | rewrite required; tooling-only; worldgen-specific; version-specific | This module upgrades 26.2 to 26.3 density schemas and is not a 1.20.1 implementation. |
+
+
+## Part 77 — Entries 1926–1950
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1926 | `crates/horizon-port-pack/src/upgrade/features.rs` | rewrite required; tooling-only; worldgen-specific | undefined |
+| 1927 | `crates/horizon-port-pack/src/upgrade/mod.rs` | rewrite required; tooling-only; version-specific; security-sensitive | undefined |
+| 1928 | `crates/horizon-port-pack/src/upgrade/noise.rs` | rewrite required; tooling-only; worldgen-specific; numeric-review | undefined |
+| 1929 | `crates/horizon-port-pack/src/upgrade/registries.rs` | rewrite required; tooling-only; registry-specific | undefined |
+| 1930 | `crates/horizon-port-pack/src/upgrade/settings.rs` | rewrite required; tooling-only; worldgen-specific | undefined |
+| 1931 | `crates/horizon-port-pack/src/worldgen.rs` | rewrite required; tooling-only; worldgen-specific; security-sensitive | undefined |
+| 1932 | `crates/horizon-port-pack/src/yung.rs` | unnecessary; mod-specific migration; version-specific | undefined |
+| 1933 | `crates/horizon-prepare/build.rs` | adaptable; build-tooling reference; cache-integrity-sensitive | undefined |
+| 1934 | `crates/horizon-prepare/output-versions.txt` | reference; build metadata only | undefined |
+| 1935 | `crates/horizon-prepare/src/exporters.rs` | adaptable; preparation-tooling reference; version-specific | undefined |
+| 1936 | `crates/horizon-prepare/src/files.rs` | adaptable; core preparation reference; cross-platform | undefined |
+| 1937 | `crates/horizon-prepare/src/inventory.rs` | adaptable; tooling reference; archive-security-sensitive | undefined |
+| 1938 | `crates/horizon-prepare/src/launch_api.rs` | adaptable; launcher tooling reference; versioned-api | undefined |
+| 1939 | `crates/horizon-prepare/src/pool.rs` | adaptable; preparation reference; concurrency-sensitive | undefined |
+| 1940 | `crates/horizon-prepare/src/pyjson.rs` | adaptable; parser reference; robustness-sensitive | undefined |
+| 1941 | `crates/horizon-prepare/src/sounds.rs` | adaptable; core launcher reference; asset-integrity-sensitive | undefined |
+| 1942 | `crates/horizon-prepare/src/survival.rs` | adaptable; core reference; version-specific | undefined |
+| 1943 | `crates/horizon-prepare/src/worker.rs` | unnecessary; preparation-tooling; resource-sensitive | undefined |
+| 1944 | `crates/horizon-prepare/tests/java_selection.rs` | reference; tests only; launcher-tooling | undefined |
+| 1945 | `crates/horizon-prepare/tests/support/java_probe.rs` | unnecessary; test fixture only | undefined |
+| 1946 | `crates/horizon-protocol/examples/item_wire_probe.rs` | reference; example only; version-specific | undefined |
+| 1947 | `crates/horizon-protocol/examples/net_replay.rs` | adaptable; benchmark reference; protocol-specific | undefined |
+| 1948 | `crates/horizon-protocol/examples/probe.rs` | reference; example only; protocol-specific | undefined |
+| 1949 | `crates/horizon-protocol/examples/stop_sound_probe.rs` | reference; example only; test-harness | undefined |
+| 1950 | `crates/horizon-relay/Cargo.toml` | unnecessary; optional server-only; network-specific | undefined |
