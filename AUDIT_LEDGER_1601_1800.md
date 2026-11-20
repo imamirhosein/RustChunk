@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1601–1800 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1601–1775 complete (175/200); reporting sections 1601–1650, 1651–1700 and 1701–1750 are closed; checkpoint 1751–1775 is complete; checkpoint 1776–1800 remains authorized.
-- Reporting rule: STOP at entry 1800. Do not inspect entry 1801 or later before fresh explicit authorization.
+- Current progress: entries 1601–1800 complete (200/200); reporting sections 1601–1650, 1651–1700, 1701–1750 and 1751–1800 are closed; checkpoints 1776–1800 complete.
+- Reporting rule: STOP at entry 1800. Wait for fresh explicit authorization before inspecting entry 1801 or later.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests are inspected only; they are not executed.
@@ -2983,3 +2983,428 @@
 - RustChunk implementation mapping: RustChunk 1.20.1 block/biome palettes and PackedStorage.
 - Evidence required before adoption: 1.20.1 PalettedContainer/PalettedContainer.Strategy/BitStorage sources and Forge registry-size fixtures.
 - Completion state: COMPLETE — 1306 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 50805-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1776. `crates/horizon-core/src/position.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2c657ca41355a61b92dd9f4ce2fb9b1b34d8856b`
+- Size: 5616 bytes; 184 logical lines
+- Coverage: 1–184 (EOF)
+- Purpose: Block, section and chunk coordinates with packed encodings.
+- Dependencies / cross-references: BlockPos/SectionPos/ChunkPos, signed bit packing, packet and storage index layouts.
+- Implementation / logic: Implements pack/unpack, wrapping offsets, negative-coordinate floor conversion and region-local coordinates.
+- Findings: Packed layouts are observable protocol/storage contracts.
+- RustChunk relevance: High relevance to chunk coordinates, section updates and palette indexing.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Verify packed formats and index layouts against 1.20.1 before porting.
+- Follow-up checks: Test signed limits, negative boundaries, truncation, overflow and packet/storage index permutations.
+- RustChunk implementation mapping: RustChunk position subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 184 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 5616-byte size match the source tree.
+
+### 1777. `crates/horizon-core/src/position/iter.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `980df68c670ae49307ca0dc39a6f7b4ef92fc158`
+- Size: 5416 bytes; 159 logical lines
+- Coverage: 1–159 (EOF)
+- Purpose: Inclusive block-box iterators with direction-dependent visit order.
+- Dependencies / cross-references: BlockPos, AABB, Vec3 and axis step ordering.
+- Implementation / logic: Enumerates closed block boxes and floored AABB bounds with an i32 iteration cap.
+- Findings: Axis order, face inclusion and overflow policy may differ by vanilla caller.
+- RustChunk relevance: Useful for traversal and collision candidates.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild target 1.20.1 iterator order from exact source and call sites.
+- Follow-up checks: Test inclusive faces, negative coordinates, NaN directions, triple ties and oversized boxes.
+- RustChunk implementation mapping: RustChunk iter subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 159 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 5416-byte size match the source tree.
+
+### 1778. `crates/horizon-core/src/prepared_files.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2f9e8721845b3b68430a0665596ab3dc81c5109d`
+- Size: 23296 bytes; 584 logical lines
+- Coverage: 1–400, 401–584 (EOF)
+- Purpose: Packed cache of selected prepared-resource files in one indexed binary.
+- Dependencies / cross-references: Prepared root, horizon-resources.json, file offsets, symlink checks and read_at.
+- Implementation / logic: Writes aligned data/assets/structure files, verifies root/source identity and exposes bounded reads/listing.
+- Findings: Horizon-specific cache; excludes sounds and some paths; dynamic mod resources need separate precedence/invalidation.
+- RustChunk relevance: Possible startup-I/O optimization pattern, not gameplay logic.
+- Decision: unnecessary; optional; version-specific
+- 1.20.1 implications: Do not port before defining RustChunk VFS/resource-pack/Forge-mod lookup semantics.
+- Follow-up checks: Test stale/corrupt cache, root relocation, symlinks, concurrent replacement, path traversal and mod overlays.
+- RustChunk implementation mapping: RustChunk prepared_files subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 584 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 23296-byte size match the source tree.
+
+### 1779. `crates/horizon-core/src/random.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dc4e20fd14efd2434bfd563fb1fe9f2c086b9c41`
+- Size: 11755 bytes; 368 logical lines
+- Coverage: 1–368 (EOF)
+- Purpose: LegacyRandom and Xoroshiro random streams with Java-style APIs.
+- Dependencies / cross-references: RandomSource, positional factories, 48-bit LCG, Xoroshiro128++ and Gaussian cache.
+- Implementation / logic: Implements bounded integers, nextLong/boolean/float/double/Gaussian, fork and reseed.
+- Findings: Draw order, sign extension and Gaussian caching are essential; stream choice is version-specific.
+- RustChunk relevance: Critical to deterministic worldgen.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 source selection and Java 17 draw semantics.
+- Follow-up checks: Compare JDK sequences, rejection, nextLong, Gaussian, fork/reseed and draw counts.
+- RustChunk implementation mapping: RustChunk random subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 368 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 11755-byte size match the source tree.
+
+### 1780. `crates/horizon-core/src/random/hash.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `15cd501744758e242037a067ea6006124784962f`
+- Size: 5788 bytes; 157 logical lines
+- Coverage: 1–157 (EOF)
+- Purpose: MD5 name-to-seed transform for positional factories.
+- Dependencies / cross-references: MD5 rounds, UTF-8/UTF-16 encoding and seed words.
+- Implementation / logic: Streaming MD5 derives two u64 words from string or UTF-16 input.
+- Findings: Internal seed transform, not authentication; encoding/use are version-sensitive.
+- RustChunk relevance: Useful only if target 1.20.1 uses the same MD5 scheme.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Verify target positional name-hash algorithm first.
+- Follow-up checks: Compare RFC vectors, surrogate behavior and Java outputs.
+- RustChunk implementation mapping: RustChunk hash subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 157 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 5788-byte size match the source tree.
+
+### 1781. `crates/horizon-core/src/random/positional.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `100bc672ba2d29ccb37ff38b3b7cddd3f601feda`
+- Size: 6149 bytes; 166 logical lines
+- Coverage: 1–166 (EOF)
+- Purpose: Positional random factories derived from coordinates, seeds and names.
+- Dependencies / cross-references: Legacy/Xoroshiro RNGs, BlockPos, Java string hash and MD5 seeds.
+- Implementation / logic: Implements position/name/seed derivation strategies and Mth.getSeed arithmetic.
+- Findings: Algorithms and target selection are version-sensitive.
+- RustChunk relevance: Critical architecture reference for reproducible worldgen.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Port exact 1.20.1 positional factory and algorithm selection.
+- Follow-up checks: Test extreme/negative coordinates, UTF-16 names, stream variants and draw counts.
+- RustChunk implementation mapping: RustChunk positional subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 166 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 6149-byte size match the source tree.
+
+### 1782. `crates/horizon-core/src/release.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4e7378601a18b6c70ba50a7b63ff17b4f8f8c25c`
+- Size: 2465 bytes; 67 logical lines
+- Coverage: 1–67 (EOF)
+- Purpose: Build release/nightly identity metadata.
+- Dependencies / cross-references: Cargo version and HORIZON_VERSION/HORIZON_NIGHTLY variables.
+- Implementation / logic: Selects release/crate version and formats nightly labels.
+- Findings: Build metadata only; independent of Minecraft protocol/game version.
+- RustChunk relevance: Reference for launcher diagnostics only.
+- Decision: unnecessary; reference
+- 1.20.1 implications: Use RustChunk's own release metadata.
+- Follow-up checks: Check reproducibility, empty values and report identity.
+- RustChunk implementation mapping: RustChunk release subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 67 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 2465-byte size match the source tree.
+
+### 1783. `crates/horizon-core/src/storage.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f93057bfa9c5d80604bbcc9e6da73eff7e832b7f`
+- Size: 10715 bytes; 292 logical lines
+- Coverage: 1–292 (EOF)
+- Purpose: Packed integer storage in padded 64-bit words.
+- Dependencies / cross-references: Bit widths, masks, multiply-shift lookup and PackedStorage.
+- Implementation / logic: Implements checked/unchecked reads/writes, fill and unpack with architecture-specific lookup.
+- Findings: Multiply-shift is x86-only; ARM64 division may be faster.
+- RustChunk relevance: Highly relevant to palette memory.
+- Decision: adaptable; core reference; version-specific; architecture-specific
+- 1.20.1 implications: Rebuild 1.20.1 BitStorage and tune for Android ARM64.
+- Follow-up checks: Test widths, padding, invalid writes, unpack and on-device hot loops.
+- RustChunk implementation mapping: RustChunk storage subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 292 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 10715-byte size match the source tree.
+
+### 1784. `crates/horizon-core/src/text.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f6333826f459a86877e0d72ad1972e7108be91d0`
+- Size: 1272 bytes; 33 logical lines
+- Coverage: 1–33 (EOF)
+- Purpose: Java-compatible BMP decimal integer parser.
+- Dependencies / cross-references: Unicode digit table, UTF-8 chars and i32 bounds.
+- Implementation / logic: Parses signs and BMP decimal digit blocks using JDK 25 rules.
+- Findings: JDK 25 semantics differ from the older Java baseline for Minecraft 1.20.1.
+- RustChunk relevance: Low-level compatibility reference only.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Match Java 17 behavior, not JDK 25.
+- Follow-up checks: Test digit scripts, signs, non-BMP input and overflow against Java 17.
+- RustChunk implementation mapping: RustChunk text subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 33 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 1272-byte size match the source tree.
+
+### 1785. `crates/horizon-core/src/ticks/generation.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `322bab64747a876828df5c8e4c5f05229cc62f28`
+- Size: 3665 bytes; 107 logical lines
+- Coverage: 1–107 (EOF)
+- Purpose: Proto-chunk scheduled tick storage and generation-stage routing.
+- Dependencies / cross-references: SavedTick/ScheduledTick, ChunkTicks, FxHashSet and BlockPos.
+- Implementation / logic: Keeps first type/position request, preserves saved delay/priority and routes to chunk containers.
+- Findings: Deduplication and pending-list semantics are version-sensitive.
+- RustChunk relevance: Important for block/fluid ticks during generation.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 ProtoChunkTicks/LevelChunkTicks lifecycle.
+- Follow-up checks: Test duplicate loads, saved delay, promotion and chunk ownership.
+- RustChunk implementation mapping: RustChunk generation subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 107 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 3665-byte size match the source tree.
+
+### 1786. `crates/horizon-core/src/ticks/heap.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2621053929015312144d27359c3af3967a2547af`
+- Size: 3408 bytes; 101 logical lines
+- Coverage: 1–101 (EOF)
+- Purpose: Heap matching priority queue equal-key and iterator-removal behavior.
+- Dependencies / cross-references: Scheduled tick comparator, Vec heap and JDK PriorityQueue rules.
+- Implementation / logic: Implements push/pop and remove_if while tracking moved elements.
+- Findings: Equal comparator keys can reorder in saved/iterated results.
+- RustChunk relevance: Reference for exact tick ordering.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Match Java 17 PriorityQueue comparator/removal semantics.
+- Follow-up checks: Test equal keys, iteration and removeIf movement.
+- RustChunk implementation mapping: RustChunk heap subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 101 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 3408-byte size match the source tree.
+
+### 1787. `crates/horizon-core/src/ticks/index.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6f88cf70120bcc39774b9bfed8a6346eacb44569`
+- Size: 5055 bytes; 159 logical lines
+- Coverage: 1–159 (EOF)
+- Purpose: Maps chunk keys to tick deadlines with fastutil-like iteration.
+- Dependencies / cross-references: Open-address map, long keys, cluster shifting and rehash.
+- Implementation / logic: Implements put/remove/rehash and callback mutation during iteration.
+- Findings: Map iteration order influences equal-deadline chunk order.
+- RustChunk relevance: Reference for deadline indexing.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Verify target 1.20.1 fastutil order or preserve only necessary semantics.
+- Follow-up checks: Test zero/negative keys, rehash and delete during iteration.
+- RustChunk implementation mapping: RustChunk index subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 159 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 5055-byte size match the source tree.
+
+### 1788. `crates/horizon-core/src/ticks/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `688537673b949eb11dab0b019884cc4184e907d6`
+- Size: 22147 bytes; 637 logical lines
+- Coverage: 1–400, 401–637 (EOF)
+- Purpose: Level/chunk tick queues, ordering, collection and area mutation.
+- Dependencies / cross-references: ChunkTicks, ProtoChunkTicks, heap, deadline index and packed positions.
+- Implementation / logic: Implements due-tick collection, callbacks, save/unpack, area clear/copy and active membership.
+- Findings: Explicitly Java 26.3; scheduler semantics need a target-era rewrite.
+- RustChunk relevance: Critical tick architecture reference.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 LevelTicks/LevelChunkTicks and exact ordering.
+- Follow-up checks: Compare due order, tick cap, disabled chunks, callbacks, duplicates, serialization and area mutation.
+- RustChunk implementation mapping: RustChunk mod subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 637 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 22147-byte size match the source tree.
+
+### 1789. `crates/horizon-core/src/version.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `29994823ce19c7c531b3456dc4727c4501ea97b1`
+- Size: 1141 bytes; 21 logical lines
+- Coverage: 1–21 (EOF)
+- Purpose: Generated Minecraft release/protocol/data/pack version constants.
+- Dependencies / cross-references: Client version.json, protocol/data versions, Java major and pack formats.
+- Implementation / logic: Declares Minecraft 26.3, protocol 777, data version 5023 and Java 25.
+- Findings: Explicit values conflict with the 1.20.1 target.
+- RustChunk relevance: No direct adoption; metadata pattern only.
+- Decision: unnecessary; version-specific
+- 1.20.1 implications: Generate constants from actual Minecraft 1.20.1/Forge 47.x artifacts.
+- Follow-up checks: Verify protocol, data version, Java and pack formats.
+- RustChunk implementation mapping: RustChunk version subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 21 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 1141-byte size match the source tree.
+
+### 1790. `crates/horizon-core/tests/carving_bounds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0eae83caabb57855d2dd41806f615dd9b4a03f0d`
+- Size: 1738 bytes; 58 logical lines
+- Coverage: 1–58 (EOF)
+- Purpose: Carving bounds and shared ellipsoid budget tests.
+- Dependencies / cross-references: CarvingMask, carve_ellipsoid_with_budget, CarveError and ChunkPos.
+- Implementation / logic: Tests invalid Y bounds, atomic failure and candidate-budget exhaustion.
+- Findings: Tests target pinned implementation and were inspected only.
+- RustChunk relevance: Useful carver boundary checklist.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Translate to 1.20.1 build height and carver bounds.
+- Follow-up checks: Test target heights, negative Y, chunk borders and RNG budget; not run.
+- RustChunk implementation mapping: RustChunk carving_bounds subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 58 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 1738-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1791. `crates/horizon-core/tests/density_world_fields.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7bc9ed6dd162d18a850ee25c316d498631463fdb`
+- Size: 6856 bytes; 202 logical lines
+- Coverage: 1–202 (EOF)
+- Purpose: World-field and density blending integration tests.
+- Dependencies / cross-references: WorldFields, DensityBlender, cache/context and DensityCompiler.
+- Implementation / logic: Tests defaults/replacement, Z-X-Y iteration, partial writes and compiler optimization.
+- Findings: Includes raw/optimized spatial blender cases; tests not run.
+- RustChunk relevance: Useful blend test plan.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Rebuild the 1.20.1 blender provider and verify compiler rewrites.
+- Follow-up checks: Test weighting, context replacement, iteration and failures; not run.
+- RustChunk implementation mapping: RustChunk density_world_fields subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 202 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 6856-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1792. `crates/horizon-cosmetics/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f7ec8acf2ddc16d42a1d7e860d485dc2883e0b50`
+- Size: 509 bytes; 17 logical lines
+- Coverage: 1–17 (EOF)
+- Purpose: Manifest for optional player cosmetics.
+- Dependencies / cross-references: base64, glam, png, serde, ureq and Rust 2024.
+- Implementation / logic: Declares model/texture parsing and remote-fetch dependencies.
+- Findings: Optional Horizon feature, not required for Forge compatibility.
+- RustChunk relevance: Not needed for baseline gameplay.
+- Decision: unnecessary; optional; version-specific
+- 1.20.1 implications: Keep separate from core and review network/privacy first.
+- Follow-up checks: Review licenses, TLS, permissions and Android target compatibility.
+- RustChunk implementation mapping: RustChunk Cargo subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 17 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 509-byte size match the source tree.
+
+### 1793. `crates/horizon-cosmetics/src/fetch_tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a8e403135c96bec71480e3d8f4c5829335967547`
+- Size: 8413 bytes; 254 logical lines
+- Coverage: 1–254 (EOF)
+- Purpose: Tests for cosmetic fetch worker.
+- Dependencies / cross-references: Fake transport, TTL/backoff, UUIDs, item parser and cache.
+- Implementation / logic: Tests batching, TTL refresh, offline retry, disk cache and oversized-item rejection.
+- Findings: Mock service only; tests not run.
+- RustChunk relevance: Optional fetch design reference.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Translate only if cosmetics is desired.
+- Follow-up checks: Test UUID privacy, offline, cache corruption and shutdown; not run.
+- RustChunk implementation mapping: RustChunk fetch_tests subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 254 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 8413-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1794. `crates/horizon-cosmetics/src/fetch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0f3555c7835dc07a537274412366cac75dc23445`
+- Size: 15080 bytes; 469 logical lines
+- Coverage: 1–400, 401–469 (EOF)
+- Purpose: Worker fetching player cosmetics and caching item files.
+- Dependencies / cross-references: ureq, JSON, UUIDs, TTL/backoff, Item parser and disk cache.
+- Implementation / logic: Batches 64 players, retains prior answers and caches by item id/hash.
+- Findings: Third-party cosmetics network, not Minecraft protocol; sends identifiers externally if enabled.
+- RustChunk relevance: Not relevant to core gameplay; optional only.
+- Decision: unnecessary; optional; version-specific
+- 1.20.1 implications: Do not integrate without approval and Android privacy/TLS review.
+- Follow-up checks: Review UUID minimization, endpoint trust, limits, path safety and shutdown.
+- RustChunk implementation mapping: RustChunk fetch subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 469 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 15080-byte size match the source tree.
+
+### 1795. `crates/horizon-cosmetics/src/item.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `50c9458d9432d60d260a0a11c64bf1e4e4754e68`
+- Size: 17119 bytes; 553 logical lines
+- Coverage: 1–400, 401–553 (EOF)
+- Purpose: Parser/validator for cosmetic model JSON, geometry, UV and PNG.
+- Dependencies / cross-references: Serde, base64/png, glam, player bones and animations.
+- Implementation / logic: Validates limits and bakes box faces, textures and poses.
+- Findings: Custom cosmetic format unrelated to Forge ItemStack.
+- RustChunk relevance: Optional custom cosmetics renderer only.
+- Decision: unnecessary; optional; version-specific
+- 1.20.1 implications: Keep isolated from Forge registries and resource packs.
+- Follow-up checks: Fuzz malformed files, NaN, deep parts, UV and allocation bounds.
+- RustChunk implementation mapping: RustChunk item subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 553 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 17119-byte size match the source tree.
+
+### 1796. `crates/horizon-cosmetics/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `276bde9d268345196746340768a2eecd1471dd58`
+- Size: 1482 bytes; 36 logical lines
+- Coverage: 1–36 (EOF)
+- Purpose: Public API facade and opt-in switch for cosmetics.
+- Dependencies / cross-references: fetch/item/pose modules, service endpoint and environment overrides.
+- Implementation / logic: Exports APIs, declares an endpoint and enables cosmetics only via explicit environment override; default is off.
+- Findings: Optional Horizon feature and external service unrelated to baseline gameplay.
+- RustChunk relevance: Optional product feature only.
+- Decision: unnecessary; optional; version-specific
+- 1.20.1 implications: Keep cosmetics isolated from startup and required gameplay paths.
+- Follow-up checks: Check default-off behavior, env overrides, endpoint policy and feature isolation.
+- RustChunk implementation mapping: RustChunk lib subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 36 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 1482-byte size match the source tree.
+
+### 1797. `crates/horizon-cosmetics/src/pose.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4a293ea97e3e047f4029ea0618ac24b2ad1cd9f2`
+- Size: 8693 bytes; 214 logical lines
+- Coverage: 1–214 (EOF)
+- Purpose: Minecraft-style model pose and cosmetic attachment transforms.
+- Dependencies / cross-references: glam Mat4/Quat, player bones, parts and animations.
+- Implementation / logic: Composes translation, ZYX rotation and scale; tests swing/spin/bob transforms.
+- Findings: Custom cosmetics transform; tests not run and do not prove all vanilla renderer behavior.
+- RustChunk relevance: Optional mesh-rendering reference.
+- Decision: adaptable; optional; version-specific
+- 1.20.1 implications: Verify player bone matrices and render order against 1.20.1 first.
+- Follow-up checks: Test hierarchy, rotation, player variants and animation on Android GPU.
+- RustChunk implementation mapping: RustChunk pose subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 214 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 8693-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1798. `crates/horizon-dualsense/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `feb25026b23d3d7836e4c9268e07152b785dcaa2`
+- Size: 904 bytes; 23 logical lines
+- Coverage: 1–23 (EOF)
+- Purpose: Manifest for optional DualSense HID/haptics output.
+- Dependencies / cross-references: hidapi, CPAL and OS-specific cfg targets.
+- Implementation / logic: Declares rumble/adaptive trigger/LED dependencies; iOS excludes HID.
+- Findings: No Android-specific backend is declared.
+- RustChunk relevance: Not required for Android baseline.
+- Decision: unnecessary; platform-specific; optional
+- 1.20.1 implications: Do not include without proven Android HID/audio support.
+- Follow-up checks: Audit Android targets, permissions, USB/BT reports, audio and licensing.
+- RustChunk implementation mapping: RustChunk Cargo subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 23 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 904-byte size match the source tree.
+
+### 1799. `crates/horizon-dualsense/examples/dualsense.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6c0ac66427120cc354155a3f7a94a3aaf3604398`
+- Size: 8435 bytes; 276 logical lines
+- Coverage: 1–276 (EOF)
+- Purpose: Hardware diagnostic example for DualSense output and sensors.
+- Dependencies / cross-references: HID reports, rumble, adaptive triggers, lightbar, LEDs and Link.
+- Implementation / logic: Exercises status, motor measurements, LEDs, trigger effects and link lifecycle.
+- Findings: Hardware-only example, not gameplay input; not run on physical hardware.
+- RustChunk relevance: Optional diagnostics reference.
+- Decision: unnecessary; example only; platform-specific
+- 1.20.1 implications: Keep out of Android runtime without Android transport.
+- Follow-up checks: Verify reports, reconnect, rumble release and trigger reset on real hardware.
+- RustChunk implementation mapping: RustChunk dualsense subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 276 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 8435-byte size match the source tree.
+
+### 1800. `crates/horizon-dualsense/src/device.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f8e544ea6aa0b7e85ad5bdd1358aebf3d153b0cd`
+- Size: 17154 bytes; 499 logical lines
+- Coverage: 1–400, 401–499 (EOF)
+- Purpose: DualSense discovery, USB/BT transport and asynchronous output writer.
+- Dependencies / cross-references: hidapi, USB/BT reports, adaptive triggers, rumble, LEDs and worker thread.
+- Implementation / logic: Discovers pads, gates Bluetooth by OS/env, manages LED reset and sends/release output state.
+- Findings: Android backend is not declared and hardware code was not executed.
+- RustChunk relevance: No baseline Android value; optional controller output only.
+- Decision: unnecessary; platform-specific; optional
+- 1.20.1 implications: Do not port until a supported Android HID/audio backend exists.
+- Follow-up checks: Validate Android permissions, BT reports, reconnect, shutdown and motor/trigger release on hardware.
+- RustChunk implementation mapping: RustChunk device subsystem or isolated optional test/adapter, subject to the target-version checks above.
+- Evidence required before adoption: Exact 1.20.1 Java/Forge source, deterministic fixtures and target-device validation where applicable; inspected tests were not executed.
+- Completion state: COMPLETE — 499 logical lines read through EOF in the stated contiguous ranges; pinned blob SHA and 17154-byte size match the source tree.

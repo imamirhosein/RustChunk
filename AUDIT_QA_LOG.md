@@ -1235,3 +1235,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
 - Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
 - Checkpoint 1751–1775 is complete and committed with the audit documents. Continue with 1776–1800 under the user's existing authorization; **STOP at 1800** for fresh authorization.
+
+## Source-audit checkpoint 1776–1800 — 2026-11-20
+
+- Completed entries 1776–1800 inclusive (25/25) from pinned Starling source tree 5432370d573642041585c69b40fb045b27133488.
+- All 25 files were read through EOF in serial order. Files above 400 logical lines were inspected in consecutive, gap-free chunks of at most 400 lines; exact ranges, logical line counts, source SHA and byte sizes are recorded in the active Ledger.
+- All 25 blob SHAs and byte sizes match the pinned recursive tree. The Index now contains 1,800 sequential entries and 1,800 unique paths. The active Ledger contains 200 entries (1601–1800), each with exactly 15 fields; Index paths and Decisions align with the new records.
+- This checkpoint covers positional RNG, packed storage, generation/level tick scheduling, block coordinates and optional cosmetics/DualSense modules. Java 26.3 constants and RNG/tick semantics require reconstruction from the 1.20.1/Forge target.
+- The cosmetics crates are an optional Horizon-specific external service/custom model format, not Minecraft protocol or Forge items. DualSense HID/CPAL support has no declared Android backend and was not tested on Android or hardware.
+- Tests and hardware examples were inspected only; none were executed. No application/source code was changed.
+- No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1776–1800 is complete and committed with the audit documents. Reporting section 1751–1800 is now closed (50/50). **STOP at entry 1800**; wait for fresh explicit authorization before inspecting 1801 or later.

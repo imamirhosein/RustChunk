@@ -137,14 +137,13 @@ This section is the current resume authority and supersedes the older stage/auth
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Completed entries: **1–1775**.
+- Completed entries: **1–1800**.
 - Closed 200-file stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1601–1800**, with **175/200 complete**.
-- Closed reporting sections in the active stage: **1601–1650**, **1651–1700** and **1701–1750**.
-- Active reporting section: **1751–1800**; checkpoint **1751–1775** is complete and committed/read-back verified; checkpoint **1776–1800** is already authorized by the user's same instruction.
-- Current resume point: **entry 1776**. Continue through **1800** without a mid-section permission request, then **STOP at 1800** and wait for explicit authorization before entry 1801.
-- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, with **175 entries** (1601–1775), each containing exactly 15 required fields.
-- Index: **1,775 sequential entries and 1,775 unique paths**.
+- Active 200-file stage: **1601–1800**, **200/200 complete and closed**.
+- Closed reporting sections in the active stage: **1601–1650**, **1651–1700**, **1701–1750** and **1751–1800**; both 25-file checkpoints in section 1751–1800 are complete, committed and read-back verified.
+- Current authorization state: **STOP at 1800**. The next section, **1801–1850**, is not authorized. Wait for explicit user authorization before inspecting entry 1801 or later.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, with **200 entries** (1601–1800), each containing exactly 15 required fields.
+- Index: **1,800 sequential entries and 1,800 unique paths**.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
 - Preserve the exact 200 / 50 / 25 cadence, serial review, complete EOF coverage and maximum 400-line chunks. At every 25-file checkpoint, commit and read back the required audit documents; stop for user authorization at each 50-file boundary.
 - Existing backup refs remain untouched: `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19`.
@@ -354,4 +353,19 @@ This section is the current resume authority and supersedes the older stage/auth
 - Embedded tests/benchmarks were inspected only and not run. No build, tests, APK, device, Forge or server validation was performed.
 - After checkpoint 1776–1800, commit/read back all five audit documents and **STOP at 1800**.
 - Do not modify `main` or backup refs. No backup is due before entries 1001–2000 pass global verification.
+
+
+## Latest verified checkpoint — 1776–1800 — 2026-11-20
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
+- Completed entries: **1–1800**.
+- Active 200-file stage **1601–1800 is complete (200/200) and closed**.
+- Reporting section **1751–1800 is closed**; checkpoints **1751–1775** and **1776–1800** are complete.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **200 entries** (1601–1800), exactly 15 fields each. Index: **1,800 sequential unique paths**.
+- The 25 files 1776–1800 were read through EOF serially; ranges for files over 400 lines are consecutive and no larger than 400. SHA/size/coverage match the pinned tree. Index paths/Decisions align with the Ledger.
+- Findings: coordinate, RNG, packed storage and tick subsystems are substantial research references, but exact 1.20.1 random/tick/palette semantics need target-source reconstruction. Cosmetics are optional third-party features; DualSense HID/CPAL has no proven Android backend.
+- Embedded tests and hardware examples were inspected only and not run. No build/test/benchmark/APK/device/Forge/server validation was performed.
+- **STOP at entry 1800**. Do not inspect **1801–1850** until fresh explicit user authorization.
+- Do not modify `main` or backup refs. No backup is due before entries 1001–2000 are complete and globally verified.
 

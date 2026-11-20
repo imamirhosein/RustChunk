@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (175/200 complete; checkpoints through 1751–1775 are closed). Current 200-file stage: 1601–1800. Section 1701–1750 closed. Active section: 1751–1800; checkpoint 1751–1775 closed and 1776–1800 remains authorized. Stop at 1800. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (200/200 complete; all eight 25-file checkpoints through 1800 are closed). Current 200-file stage: 1601–1800 complete. Stop at entry 1800; await explicit authorization for the next stage. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2134,3 +2134,33 @@
 | 1773 | `crates/horizon-core/src/noise/stack.rs` | adaptable; version-specific | Ordered noise-layer aggregation and scalar/bulk summation. |
 | 1774 | `crates/horizon-core/src/noise/volume.rs` | adaptable; core reference; version-specific | Bounded density volume descriptor with Z-X-Y flat indexing. |
 | 1775 | `crates/horizon-core/src/paletted.rs` | rewrite required; core reference; version-specific | 26.3 palette strategy/wire thresholds differ from target 1.20.1. |
+
+## Part 72 — Entries 1776–1800
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1776 | `crates/horizon-core/src/position.rs` | adaptable; core reference; version-specific | Block/section/chunk packed formats and negative-coordinate layouts. |
+| 1777 | `crates/horizon-core/src/position/iter.rs` | adaptable; version-specific | Inclusive block-box iterator with directional traversal order. |
+| 1778 | `crates/horizon-core/src/prepared_files.rs` | unnecessary; optional; version-specific | Horizon prepared-resource binary cache, tied to its own VFS. |
+| 1779 | `crates/horizon-core/src/random.rs` | rewrite required; core reference; version-specific | Legacy/Xoroshiro streams and exact Java draw-consumption semantics. |
+| 1780 | `crates/horizon-core/src/random/hash.rs` | adaptable; version-specific | MD5 name-derived seed transform for positional RNG. |
+| 1781 | `crates/horizon-core/src/random/positional.rs` | rewrite required; core reference; version-specific | Position/name/seed factories differ between Legacy and Xoroshiro. |
+| 1782 | `crates/horizon-core/src/release.rs` | unnecessary; reference | Release/nightly build labels, separate from Minecraft version. |
+| 1783 | `crates/horizon-core/src/storage.rs` | adaptable; core reference; version-specific; architecture-specific | Packed storage; ARM64 path needs on-device measurement. |
+| 1784 | `crates/horizon-core/src/text.rs` | rewrite required; version-specific | Integer parser explicitly uses JDK 25 digit semantics, not Java 17. |
+| 1785 | `crates/horizon-core/src/ticks/generation.rs` | adaptable; core reference; version-specific | Proto-chunk tick deduplication and generation-stage routing. |
+| 1786 | `crates/horizon-core/src/ticks/heap.rs` | adaptable; version-specific | Priority queue heap with JDK equal-key/removal behavior. |
+| 1787 | `crates/horizon-core/src/ticks/index.rs` | adaptable; version-specific | Deadline hash index and fastutil-compatible traversal order. |
+| 1788 | `crates/horizon-core/src/ticks/mod.rs` | rewrite required; core reference; version-specific | Full scheduled tick engine explicitly based on Java 26.3. |
+| 1789 | `crates/horizon-core/src/version.rs` | unnecessary; version-specific | Hard-coded Minecraft 26.3/protocol 777/data version 5023. |
+| 1790 | `crates/horizon-core/tests/carving_bounds.rs` | undetermined; reference; tests only | Carving bounds and iteration-budget regression cases. |
+| 1791 | `crates/horizon-core/tests/density_world_fields.rs` | undetermined; reference; tests only | World-field defaults, blending order and graph optimization tests. |
+| 1792 | `crates/horizon-cosmetics/Cargo.toml` | unnecessary; optional; version-specific | Optional remote cosmetics dependencies, not core client requirements. |
+| 1793 | `crates/horizon-cosmetics/src/fetch_tests.rs` | undetermined; reference; tests only | Cosmetics batching, TTL, offline retry and disk cache tests. |
+| 1794 | `crates/horizon-cosmetics/src/fetch.rs` | unnecessary; optional; version-specific | Third-party cosmetics fetch worker; separate from Minecraft protocol. |
+| 1795 | `crates/horizon-cosmetics/src/item.rs` | unnecessary; optional; version-specific | Custom cosmetic model/texture format, unrelated to ItemStack. |
+| 1796 | `crates/horizon-cosmetics/src/lib.rs` | unnecessary; optional; version-specific | Opt-in cosmetics facade with external service endpoint. |
+| 1797 | `crates/horizon-cosmetics/src/pose.rs` | adaptable; optional; version-specific | Custom player-bone pose and animation matrices for cosmetics. |
+| 1798 | `crates/horizon-dualsense/Cargo.toml` | unnecessary; platform-specific; optional | DualSense HID/CPAL manifest has no declared Android backend. |
+| 1799 | `crates/horizon-dualsense/examples/dualsense.rs` | unnecessary; example only; platform-specific | Hardware output/rumble/trigger diagnostic; not gameplay input. |
+| 1800 | `crates/horizon-dualsense/src/device.rs` | unnecessary; platform-specific; optional | USB/Bluetooth HID writer; Android compatibility is unproven. |

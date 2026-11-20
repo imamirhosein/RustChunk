@@ -7,14 +7,13 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-20**.
-- Completed and committed entries: **1–1775**.
+- Completed and committed entries: **1–1800**.
 - Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1601–1800**, with **175/200 complete**.
-- Closed reporting sections: **1601–1650**, **1651–1700** and **1701–1750**.
-- Active reporting section: **1751–1800**; checkpoint **1751–1775** is complete, committed and read-back verified; checkpoint **1776–1800** remains authorized by the user's same instruction.
-- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **175 entries** (1601–1775), each with exactly 15 fields.
-- Index: **1,775 sequential entries and 1,775 unique paths**.
-- Continue with entry **1776** under the current authorization. **STOP at entry 1800** and wait for fresh explicit authorization before 1801.
+- Active 200-file stage: **1601–1800**, **200/200 complete**; this stage is closed.
+- Closed reporting sections: **1601–1650**, **1651–1700**, **1701–1750** and **1751–1800**.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **200 entries** (1601–1800), each with exactly 15 fields.
+- Index: **1,800 sequential entries and 1,800 unique paths**.
+- **STOP at entry 1800.** The next section, **1801–1850**, is not authorized; wait for explicit user authorization before inspecting entry 1801.
 - Preserve the 200 / 50 / 25 cadence: commit and read-back verify each 25-file checkpoint; report and stop at each 50-file boundary.
 - Next backup remains due only after entries 1001–2000 are complete and globally verified. Existing backup refs remain untouched.
 
@@ -71,10 +70,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 
 - Entries 1–1000: complete and historically QA-reviewed.
 - Entries 1001–1200, 1201–1400 and 1401–1600: complete; prior stages closed.
-- Entries 1601–1775: complete in the active Ledger; reporting sections 1601–1650, 1651–1700 and 1701–1750 are closed; checkpoint 1751–1775 is complete.
-- Index: 1,775 sequential entries and 1,775 unique paths.
-- Active Ledger: 175 entries (1601–1775), each with exactly 15 required fields.
-- Source SHAs, byte sizes and complete EOF coverage for entries 1751–1775 are recorded in the active Ledger and were verified against the pinned source tree.
+- Entries 1601–1800: complete in the active Ledger; reporting sections 1601–1650, 1651–1700, 1701–1750 and 1751–1800 are closed.
+- Index: 1,800 sequential entries and 1,800 unique paths.
+- Active Ledger: 200 entries (1601–1800), each with exactly 15 required fields.
+- Source SHAs, byte sizes and complete EOF coverage for entries 1776–1800 are recorded in the active Ledger and were verified against the pinned source tree.
 - No source or application code was modified. Embedded tests were inspected only, not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
 
 ## Historical duplicate corrections
@@ -331,5 +330,19 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Findings: geometry/collision, noise, density and palette implementations are substantial architecture references but the core explicitly targets Java 26.3 and is not a playable game. Android ARM64 math, 1.20.1 noise/RNG behavior and PalettedContainer thresholds all require independent target verification.
 - Embedded tests and benchmarks were inspected only, not executed. No source/application code changed. No build, tests, benchmark, APK, device, Forge or server validation was performed.
 - **Next: continue at entry 1776** under the current authorization; finish through **1800**, then stop for fresh authorization.
+- `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+
+## Latest verified checkpoint — 1776–1800 — 2026-11-20
+
+- Completed entries: **1776–1800 inclusive (25/25)** from pinned source `5432370d573642041585c69b40fb045b27133488`.
+- Active 200-file stage: **1601–1800**, now **200/200 complete and closed**.
+- Reporting section **1751–1800** is closed; checkpoints **1751–1775** and **1776–1800** are complete, committed and read-back verified.
+- Active Ledger: **200 entries**, 1601–1800, each with exactly 15 fields. Index: **1,800 sequential entries and 1,800 unique paths**.
+- All 25 files were read through EOF serially; files above 400 logical lines were read in consecutive chunks of at most 400. Source SHA, byte size and coverage match the pinned tree.
+- Index paths and Decisions align with the new Ledger entries.
+- Findings: RNG, packed storage, tick scheduler and coordinate code are important 1.20.1 research references, but this source contains Java 26.3 constants and version-specific behavior. Cosmetics and DualSense are optional Horizon subsystems; no Android HID/CPAL implementation is established.
+- Embedded tests/hardware examples were inspected only, not executed. No source/application code changed. No build, tests, benchmarks, APK, device, Forge or server validation was performed.
+- **STOP at entry 1800**. The next section is **1801–1850**; wait for fresh explicit authorization before inspecting it.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
 
