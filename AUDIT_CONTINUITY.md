@@ -1,17 +1,21 @@
 # RustChunk Audit Continuity
 
-Last reconciled: 2026-11-19
+Last reconciled: 2026-11-20
 Repository: imamirhosein/RustChunk
 Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed and committed entries: **1–1475**.
-- Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**.
-- Active 200-file stage: **1401–1600**; completed **1401–1475** (75/200).
-- Reporting section **1401–1450** is closed. Section **1451–1500** is authorized; checkpoint **1451–1475** is complete and checkpoint **1476–1500** remains.
-- Continue through 1500 without another permission request inside this already authorized section.
-- Cadence: four 50-file sections per 200-file stage; two exact 25-file checkpoints per 50. Commit/read-back/verify each checkpoint; stop for approval after every 50-file section.
+- Last reconciled: **2026-11-20**.
+- Completed and committed entries: **1–1700**.
+- Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
+- Active 200-file stage: **1601–1800**, with **100/200 complete**.
+- Closed reporting sections: **1601–1650** and **1651–1700**; each closed after its two 25-file checkpoints.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, **100 entries** (1601–1700), each with exactly 15 fields.
+- Index: **1,700 sequential entries and 1,700 unique paths**.
+- **STOP at entry 1700.** The next section, **1701–1750**, is not authorized; wait for explicit user authorization before inspecting entry 1701.
+- Preserve the 200 / 50 / 25 cadence: commit and read-back verify each 25-file checkpoint; report and stop at each 50-file boundary.
+- Next backup remains due only after entries 1001–2000 are complete and globally verified. Existing backup refs remain untouched.
 
 ## Source pin and selection
 
@@ -65,12 +69,12 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 ## Existing completed work
 
 - Entries 1–1000: complete and historically QA-reviewed.
-- Entries 1001–1200: complete; stage closed.
-- Entries 1201–1400: complete; stage closed and globally QA-verified.
-- Entries 1401–1450: complete; both 25-file checkpoints committed and the 50-file section closed.
-- Active Ledger `AUDIT_LEDGER_1401_1600.md`: 75 entries (1401–1475), each with exactly 15 fields.
-- Index at this boundary: 1,450 sequential entries and 1,450 unique paths.
-- No source or application code was modified. No tests/builds/device/server validation was run.
+- Entries 1001–1200, 1201–1400 and 1401–1600: complete; prior stages closed.
+- Entries 1601–1700: complete in the active Ledger; both 50-file reporting sections 1601–1650 and 1651–1700 are closed.
+- Index: 1,700 sequential entries and 1,700 unique paths.
+- Active Ledger: 100 entries (1601–1700), each with exactly 15 required fields.
+- Source SHAs, byte sizes and complete EOF coverage for entries 1601–1700 are recorded in the active Ledger and were verified against the pinned source tree.
+- No source or application code was modified. Embedded tests were inspected only, not run. No build, tests, benchmark, APK, device, Forge or server validation was performed.
 
 ## Historical duplicate corrections
 

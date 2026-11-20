@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1601–1800 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1601–1625 complete (25/200); checkpoint 1601–1625 closed; checkpoint 1626–1650 remains authorized.
-- Reporting rule: stop at entry 1650 and wait for explicit authorization before inspecting entry 1651 or later.
+- Current progress: entries 1601–1700 complete (100/200); reporting sections 1601–1650 and 1651–1700 are closed; next section 1701–1750 is not yet authorized.
+- Reporting rule: STOP at entry 1700. Wait for explicit user authorization before inspecting entry 1701 or later.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests are inspected only; they are not executed.

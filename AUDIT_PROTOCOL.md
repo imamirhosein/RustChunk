@@ -20,7 +20,7 @@ This is the single authoritative protocol for the Starling source audit on `star
 - Do not ask for permission between the two 25-file checkpoints inside an already authorized 50-file section. Do not cross a 50-file boundary on assumed or implied permission.
 - Do not change the 200 / 50 / 25 cadence unless the user explicitly changes it.
 
-## 3. Active stage state after checkpoint 1451–1475
+## 3. Historical stage state after checkpoint 1451–1475 (superseded by current state in Section 12)
 
 - Entries 1–1475 are complete. The 200-file stage 1401–1600 is 75/200 complete.
 - Reporting section **1401–1450** is closed.
@@ -131,20 +131,24 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-19)
+## 12. Current authoritative resume state (2026-11-20)
+
+This section is the current resume authority and supersedes the older stage/authorization snapshots retained elsewhere in this document as historical records.
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Completed entries: **1–1475**.
-- Closed reporting sections include **1201–1250**, **1251–1300**, **1301–1350**, **1351–1400**, and **1401–1450**.
-- Active 200-file stage: **1401–1600**; completed 75/200.
-- Current authorized section: **1451–1500**; checkpoint 1451–1475 committed, checkpoint 1476–1500 remains authorized.
-- Stop at 1500; no file beyond this boundary may be inspected until section 1501–1550 is explicitly authorized.
-- Active Ledger: `AUDIT_LEDGER_1401_1600.md`; Index: `AUDIT_INDEX.md`; QA: `AUDIT_QA_LOG.md`; Continuity: `AUDIT_CONTINUITY.md`.
-- Index: 1,475 sequential entries and 1,475 unique paths. Active Ledger: 75 entries (1401–1475), each with exactly 15 required fields.
+- Completed entries: **1–1700**.
+- Closed 200-file stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
+- Active 200-file stage: **1601–1800**, with **100/200 complete**.
+- Closed reporting sections in the active stage: **1601–1650** and **1651–1700**; both 25-file checkpoints in each section are complete, committed and read-back verified.
+- Current authorization state: **STOP at 1700**. The next section, **1701–1750**, is not authorized. Wait for explicit user authorization before inspecting entry 1701 or later.
+- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, with **100 entries** (1601–1700), each containing exactly 15 required fields.
+- Index: **1,700 sequential entries and 1,700 unique paths**.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
-- Existing backup refs remain read-only and untouched: `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19`.
-- `main` remains untouched. No tests/builds/device/server validation was performed. Next backup is due after entries 1001–2000 are complete and globally verified.
+- Preserve the exact 200 / 50 / 25 cadence, serial review, complete EOF coverage and maximum 400-line chunks. At every 25-file checkpoint, commit and read back the required audit documents; stop for user authorization at each 50-file boundary.
+- Existing backup refs remain untouched: `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19`.
+- `main` remains untouched. No tests, builds, benchmarks, APK builds, device checks, Forge launches or server validation were performed.
+- The next backup is due only after entries **1001–2000** are complete and the full 1–2000 audit passes global verification.
 
 ## 13. Historical corrections preserved
 
