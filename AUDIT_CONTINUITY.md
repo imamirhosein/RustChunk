@@ -270,3 +270,17 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Checkpoint commit SHA will be added after atomic five-document commit and read-back.
 - **Next: inspect entry 1676**, the next unindexed blob in pinned tree order. Complete checkpoint 1676–1700; stop at **1700** and wait for fresh authorization.
 - `main` and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest verified checkpoint — 1676–1700 — 2026-11-20
+
+- Completed entries: **1676–1700 inclusive (25/25)** from pinned source 5432370d573642041585c69b40fb045b27133488.
+- Active 200-file stage: **1601–1800**, now **100/200 complete**.
+- Section **1651–1700** is closed; both checkpoints 1651–1675 and 1676–1700 are complete.
+- Active Ledger: **100 entries**, 1601–1700, exactly 15 fields each. Index: **1,700 sequential entries and 1,700 unique paths**.
+- All 25 files 1676–1700 were read completely through EOF; contiguous coverage, line counts, SHA and byte sizes match the pinned source tree.
+- Index/Ledger path and Decision alignment is verified for entries 1676–1700.
+- Findings: worldgen and far LOD are high-value references but need strict 1.20.1 parity and isolation from gameplay; several UI, account, custom protocol and launcher modules are Starling-specific. Far mesh/lighting tests are relevant to the user's visual chunk-loading issue, but were not run.
+- No source/application code changed. No build/test/benchmark/APK/device/Forge/server validation was performed.
+- Checkpoint commit SHA will be added after atomic five-document commit and read-back.
+- **STOP at entry 1700** and wait for fresh explicit authorization before 1701.
+- main and backup refs remain untouched. No backup is due; backup only after entries 1001–2000 are complete and globally verified.

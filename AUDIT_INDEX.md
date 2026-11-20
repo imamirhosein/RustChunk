@@ -1840,3 +1840,28 @@
 | 1673 | `crates/horizon-client/src/title/confirm_experiments.rs` | adaptable; version-specific; optional client UI | Confirmation screen for data packs requiring experimental features, with warning text, details page listing feature flags, Proceed and Back actions. |
 | 1674 | `crates/horizon-client/src/title/create_world.rs` | adaptable; version-specific; client UI | Create-world options, game mode/difficulty/cheats, world preset, structures/bonus chest, game rules, data packs, experiments and tab/navigation layout. |
 | 1675 | `crates/horizon-client/src/title/experiments.rs` | adaptable; version-specific; optional client UI | Experiments screen listing shipped feature packs with enable/disable switches, descriptions, warning and Done/Cancel behavior. |
+| 1676 | `crates/horizon-client/src/title/flat.rs` | adaptable; version-specific UI | Superflat presets, layer editor, biome selection, structures and preview. |
+| 1677 | `crates/horizon-client/src/title/onboarding.rs` | exclude; Starling-specific UI | First-run onboarding, account prompts, controls hints, launcher links and setup actions. |
+| 1678 | `crates/horizon-client/src/title/tests.rs` | reference; tests only | Title/world screen tests for text, world listing/creation/editing, backups, navigation and errors. |
+| 1679 | `crates/horizon-client/src/title/world_management.rs` | adaptable; version-specific UI | World backup, restore, optimize, delete and open-folder actions. |
+| 1680 | `crates/horizon-client/src/toasts.rs` | adaptable; version-specific UI | Recipe, system, tutorial, advancement and social toast notifications. |
+| 1681 | `crates/horizon-client/src/ui_theme.rs` | exclude; Horizon/Starling-specific UI | Custom palette, fonts, atlas/cache, rounded geometry, boot screen and preferences. |
+| 1682 | `crates/horizon-client/src/vanillagen.rs` | rewrite required; core worldgen | Overworld generator/streaming integration, proto/final chunks, biomes, ticks, structures, block entities and saved proto restore. |
+| 1683 | `crates/horizon-client/src/vanillagen/lod.rs` | reference; far-render optimization | Async far decoration batches, cached LOD columns, vegetation/island estimates and detail requests. |
+| 1684 | `crates/horizon-client/src/vanillagen/lod/islands.rs` | reference; optional LOD | Estimates small End island cones from feature origins and deterministic radius/shrink. |
+| 1685 | `crates/horizon-client/src/vanillagen/lod/vegetation.rs` | reference; optional LOD | Estimates trees/chorus from biome feature JSON, expected counts and stable hashing. |
+| 1686 | `crates/horizon-client/src/vanillagen/structure_mobs.rs` | rewrite required; worldgen mob finalization | Structure/chunk spawn finalizeSpawn, group data, equipment, attributes, brain NBT and passengers. |
+| 1687 | `crates/horizon-client/src/win_screen.rs` | adaptable; version-specific UI | End poem/credits parsing, player name, obfuscation, narration, scrolling and backgrounds. |
+| 1688 | `crates/horizon-client/src/world_spawn.rs` | adaptable; core world init | Initial spawn spiral, respawn column search, heightmap/fluid/top-face checks and candidate ordering. |
+| 1689 | `crates/horizon-client/tests/custom_component_api.rs` | reference; tests only | Tests custom component registration, NBT quotas/depth, content identity and mod acceptance. |
+| 1690 | `crates/horizon-client/tests/custom_component_unregistered.rs` | reference; tests only | Rejects an unregistered custom component wire ID. |
+| 1691 | `crates/horizon-client/tests/custom_component_wire.rs` | reference; tests only | Custom components across save NBT, wire slots, hashes, bundles, containers and malformed data. |
+| 1692 | `crates/horizon-client/tests/datapack_biome_sync.rs` | reference; tests only | Datapack biome registry sync and client reconstruction/recoloring. |
+| 1693 | `crates/horizon-client/tests/forced_chunks.rs` | reference; tests only | Forced chunk ticket rings, generation status and lighting. |
+| 1694 | `crates/horizon-client/tests/generation_saves.rs` | reference; tests only | Decoration consistency across travel/restart, proto restore, block entity IDs and tick persistence. |
+| 1695 | `crates/horizon-client/tests/lan_bot.rs` | reference; tests only; protocol integration | Offline protocol bot tests for login/config, registries, chunks/light, players/entities, recipes, menus, biome sync and LAN auth. |
+| 1696 | `crates/horizon-client/tests/launch_api.rs` | reference; tests only | Launch API JSON, CLI exit codes, crash report paths and home/game-dir handling. |
+| 1697 | `crates/horizon-client/tests/mod_api_hooks.rs` | reference; tests only; mod API | Compile/dispatch tests for key, movement and recipe-book category hooks. |
+| 1698 | `crates/horizon-client/tests/streaming_meshes.rs` | reference; tests only; core renderer regression | Tests loaded columns mesh on approach and relit neighbors remesh. |
+| 1699 | `crates/horizon-client/tests/tall_column.rs` | reference; tests only; height rendering | Tests streaming/light/meshing through 131 sections to y=1800. |
+| 1700 | `crates/horizon-client/tests/wide_states.rs` | reference; tests only; registry scale | Tests palette state IDs beyond 65,536 and 17-bit global storage. |

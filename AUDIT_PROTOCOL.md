@@ -292,3 +292,17 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 - **STOP at entry 1700** and wait for fresh explicit authorization before 1701 or any later source file.
 - No source/application code changed. Embedded tests are inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
 - `main` and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
+
+## Latest authoritative resume state — checkpoint 1676–1700 — 2026-11-20
+
+- Repository: imamirhosein/RustChunk; branch: starling-1.20.1-port-audit.
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488.
+- Completed entries: **1–1700**.
+- Active 200-file stage: **1601–1800**, completed **100/200**.
+- Section **1651–1700** is closed. Both 25-file checkpoints 1651–1675 and 1676–1700 are complete.
+- Active Ledger: AUDIT_LEDGER_1601_1800.md, **100 entries** (1601–1700), exactly 15 fields each. Index: **1,700 sequential unique paths**.
+- The 25 files 1676–1700 were read through EOF serially; files above 400 lines were read in continuous chunks no larger than 400. SHA/size/coverage are in the Ledger.
+- **STOP at entry 1700**. Do not inspect entry 1701 or later until the user gives fresh explicit authorization.
+- Preserve exact 200 / 50 / 25 cadence, serial review, complete EOF and max 400-line chunks. At the next authorized checkpoint, update all five audit docs atomically, read all five back individually and verify branch HEAD.
+- No source/application code changed. Embedded tests were inspected only, not run. No build/test/benchmark/APK/device/Forge/server validation has been performed.
+- main and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 are complete and globally verified.
