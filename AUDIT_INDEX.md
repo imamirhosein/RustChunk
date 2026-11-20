@@ -1,5 +1,5 @@
 
-- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (100/200 complete; checkpoints 1601–1625, 1626–1650, 1651–1675 and 1676–1700 closed). Current 200-file stage: 1601–1800. Next reporting section: 1701–1750; await explicit authorization. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
+- Source ledgers: entries 1–400 in [AUDIT_LEDGER_1_400.md](AUDIT_LEDGER_1_400.md); entries 401–600 in [AUDIT_LEDGER_401_600.md](AUDIT_LEDGER_401_600.md); entries 601–800 in [AUDIT_LEDGER_601_800.md](AUDIT_LEDGER_601_800.md); entries 801–1000 in [AUDIT_LEDGER_801_1000.md](AUDIT_LEDGER_801_1000.md); entries 1001–1200 in [AUDIT_LEDGER_1001_1200.md](AUDIT_LEDGER_1001_1200.md) (complete); entries 1201–1400 in [AUDIT_LEDGER_1201_1400.md](AUDIT_LEDGER_1201_1400.md) (complete); entries 1401–1600 in [AUDIT_LEDGER_1401_1600.md](AUDIT_LEDGER_1401_1600.md) (complete); entries 1601–1800 in [AUDIT_LEDGER_1601_1800.md](AUDIT_LEDGER_1601_1800.md) (125/200 complete; checkpoints 1601–1625, 1626–1650, 1651–1675, 1676–1700 and 1701–1725 closed). Current 200-file stage: 1601–1800. Active section: 1701–1750; checkpoint 1701–1725 closed and 1726–1750 authorized; stop at 1750. Cadence: four 50-file sections per 200-file stage; two 25-file checkpoints per section.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2044,3 +2044,33 @@
 | 1698 | `crates/horizon-client/tests/streaming_meshes.rs` | undetermined; reference; tests only; core renderer regression | Tests loaded columns mesh on approach and relit neighbors remesh. |
 | 1699 | `crates/horizon-client/tests/tall_column.rs` | undetermined; reference; tests only; height rendering | Tests streaming/light/meshing through 131 sections to y=1800. |
 | 1700 | `crates/horizon-client/tests/wide_states.rs` | undetermined; reference; tests only; registry scale | Tests palette state IDs beyond 65,536 and 17-bit global storage. |
+
+## Part 69 — Entries 1701–1725
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 1701 | `crates/horizon-client/windows-segment-heap.manifest` | unnecessary; version-specific | Windows-only application manifest; not relevant to Android runtime. |
+| 1702 | `crates/horizon-command/Cargo.toml` | unnecessary; reference | Workspace-specific command crate metadata, not runtime behavior. |
+| 1703 | `crates/horizon-command/src/args.rs` | rewrite required; core reference; version-specific | Broad argument parser, but newer registry and argument types require 1.20.1 reconstruction. |
+| 1704 | `crates/horizon-command/src/block.rs` | adaptable; version-specific | Block-state/property parser pattern needs target registry and tag parity. |
+| 1705 | `crates/horizon-command/src/codec.rs` | rewrite required; version-specific | Codec schemas include Dialog and other post-1.20.1 forms. |
+| 1706 | `crates/horizon-command/src/component.rs` | rewrite required; version-specific | Text/style component codec includes newer content and click-action forms. |
+| 1707 | `crates/horizon-command/src/item.rs` | rewrite required; core reference; version-specific | Uses data components; 1.20.1 item arguments use legacy NBT semantics. |
+| 1708 | `crates/horizon-command/src/lib.rs` | adaptable; core reference; version-specific | Brigadier dispatch, parse context and suggestions are valuable with target-specific arguments/tree. |
+| 1709 | `crates/horizon-command/src/network.rs` | adaptable; version-specific | Server command-tree adapter must decode 1.20.1 protocol parser IDs. |
+| 1710 | `crates/horizon-command/src/packrat.rs` | adaptable; core reference | Reusable grammar engine; surrounding argument grammars still need target parity. |
+| 1711 | `crates/horizon-command/src/selector.rs` | adaptable; core reference; version-specific | Selector parser includes @n and later registry behavior absent from target baseline. |
+| 1712 | `crates/horizon-command/src/snbt.rs` | adaptable; core reference; version-specific | SNBT architecture useful, but syntax includes newer numeric and built-in forms. |
+| 1713 | `crates/horizon-command/src/tests.rs` | undetermined; reference; tests only | Command regression inventory; contains later-version cases and tests were not run. |
+| 1714 | `crates/horizon-command/src/tree_data.rs` | adaptable; version-specific | Data/tag command structure is useful; newer compute branches must be excluded. |
+| 1715 | `crates/horizon-command/src/tree_execute.rs` | adaptable; core reference; version-specific | Complex execute redirect tree; newer stopwatch/items/slots branches require exclusion. |
+| 1716 | `crates/horizon-command/src/tree_extra.rs` | unnecessary; version-specific | Mostly Starling hosted-game and newer dedicated-server commands. |
+| 1717 | `crates/horizon-command/src/tree_misc.rs` | adaptable; version-specific | Command registration patterns useful; current item/tick/random forms are newer. |
+| 1718 | `crates/horizon-command/src/tree_scoreboard.rs` | adaptable; version-specific | Scoreboard/team base useful; NumberFormat and display-autoupdate are newer. |
+| 1719 | `crates/horizon-command/src/tree_world.rs` | adaptable; version-specific | Several world commands are relevant, but exact branch signatures differ. |
+| 1720 | `crates/horizon-command/src/vanilla_order.rs` | unnecessary; version-specific | Generated command order belongs to the newer command tree. |
+| 1721 | `crates/horizon-command/src/vanilla.rs` | adaptable; core reference; version-specific | Dispatcher composition is useful; Clock/Timeline and newer feature branches differ. |
+| 1722 | `crates/horizon-core/Cargo.toml` | adaptable; reference | Core/parity tool separation pattern; manifest itself is workspace-specific. |
+| 1723 | `crates/horizon-core/examples/biome_zoom_fixture.rs` | adaptable; reference | Biome zoom parity fixture pattern; calculations require 1.20.1 oracle. |
+| 1724 | `crates/horizon-core/examples/generation_tick_fixture.rs` | adaptable; core reference | Scheduled tick lifecycle fixture is relevant; target semantics must be verified. |
+| 1725 | `crates/horizon-core/examples/paletted_fixture.rs` | adaptable; core reference | Palette wire and packed-storage round-trip fixture is relevant to large modpacks. |

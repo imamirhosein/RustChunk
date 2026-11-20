@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1601–1800 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1601–1700 complete (100/200); reporting sections 1601–1650 and 1651–1700 are closed; next section 1701–1750 is not yet authorized.
-- Reporting rule: STOP at entry 1700. Wait for explicit user authorization before inspecting entry 1701 or later.
+- Current progress: entries 1601–1725 complete (125/200); reporting sections 1601–1650 and 1651–1700 are closed; checkpoint 1701–1725 is complete; checkpoint 1726–1750 remains authorized.
+- Reporting rule: STOP at entry 1750. Do not inspect entry 1751 or later before fresh explicit authorization.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests are inspected only; they are not executed.
@@ -1708,3 +1708,428 @@
 - RustChunk implementation mapping: RustChunk palette tests.
 - Evidence required before adoption: 1.20.1 PalettedContainer source and synthetic registry.
 - Completion state: COMPLETE — 41 logical lines read through EOF in contiguous chunks no larger than 400; pinned blob SHA and 1560 byte size match source tree; tests were inspected only and not run.
+
+### 1701. `crates/horizon-client/windows-segment-heap.manifest`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `67c8d113c62331dc59e8edc37631ac34c7ccfee6`
+- Size: 707 bytes; 16 logical lines
+- Coverage: 1–16 (EOF)
+- Purpose: Windows application manifest settings for the Horizon client executable.
+- Dependencies / cross-references: Windows PE application manifest and Segment Heap process-heap policy.
+- Implementation / logic: Declares assembly identity, compatibility and execution-level metadata, and opts the executable into Segment Heap.
+- Findings: Platform deployment metadata only; no Android runtime, rendering or Minecraft logic.
+- RustChunk relevance: No direct Android target value; at most a desktop packaging reference.
+- Decision: unnecessary; version-specific
+- 1.20.1 implications: Do not include this manifest in Android artifacts.
+- Follow-up checks: Revisit only if RustChunk gains a separately packaged Windows executable.
+- RustChunk implementation mapping: None for the Android application.
+- Evidence required before adoption: A concrete Windows packaging target and Windows compatibility testing.
+- Completion state: COMPLETE — 16 logical lines read through EOF; pinned blob SHA and 707-byte size match the source tree.
+
+### 1702. `crates/horizon-command/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `10191ed6f669ed3291bc3847b12f7b62f8a16c27`
+- Size: 468 bytes; 15 logical lines
+- Coverage: 1–15 (EOF)
+- Purpose: Cargo package manifest for the command-parser crate.
+- Dependencies / cross-references: Workspace settings and horizon-client-core, horizon-protocol and horizon-world crates.
+- Implementation / logic: Declares package metadata, workspace lints, Rust workspace versioning and crate identity.
+- Findings: Build metadata, not command behavior; dependencies are coupled to Starling workspace.
+- RustChunk relevance: Dependency-boundary example only; not a drop-in manifest.
+- Decision: unnecessary; reference
+- 1.20.1 implications: Use RustChunk workspace and target-compatible dependencies.
+- Follow-up checks: Review RustChunk workspace, MSRV and dependency graph before introducing a command crate.
+- RustChunk implementation mapping: RustChunk workspace manifest and supported Android toolchain.
+- Evidence required before adoption: Workspace graph, supported toolchain and dependency/license audit.
+- Completion state: COMPLETE — 15 logical lines read through EOF; pinned blob SHA and 468-byte size match the source tree.
+
+### 1703. `crates/horizon-command/src/args.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d49778698ac64b0142cefa8b2e865b8810bf3b9c`
+- Size: 68804 bytes; 1838 logical lines
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1838 (EOF)
+- Purpose: Defines command argument values, registries, parsers and completion suggestions.
+- Dependencies / cross-references: Brigadier Reader/Dispatcher, selector, block/item/NBT parsers, scoreboard and resource registries, text/component codecs.
+- Implementation / logic: Parses primitive, numeric, coordinate, entity, resource/tag, item/block, NBT, particle, scoreboard, slot and version-specific argument types; generates context-sensitive suggestions.
+- Findings: Includes Clock/Timeline, SlotSource, ResourceOrId and newer resource registry assumptions.
+- RustChunk relevance: Core reference for command UX and parser structure, but argument set and validation are not 1.20.1-compatible unchanged.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Rebuild supported ArgType set from Minecraft 1.20.1 Brigadier registrations and Forge 47.x packet schemas.
+- Follow-up checks: Compare target argument types, cursor rollback, error keys, range rules, registry lookup and suggestion sources.
+- RustChunk implementation mapping: RustChunk command argument layer and completion adapters.
+- Evidence required before adoption: 1.20.1 argument sources, Brigadier version, Forge command packet captures and differential parser tests.
+- Completion state: COMPLETE — 1838 logical lines read through EOF; pinned blob SHA and 68804-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1704. `crates/horizon-command/src/block.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `db38a6fbd3ee9f4d3320388e6efec292697e2a96`
+- Size: 16212 bytes; 460 logical lines
+- Coverage: 1–400, 401–460 (EOF)
+- Purpose: Parses block states and block predicates, including properties, tags, optional block-entity NBT and suggestions.
+- Dependencies / cross-references: Block and block-tag registries, property definitions, SNBT parser and block-entity registry.
+- Implementation / logic: Validates property names/values, rejects duplicate or unknown properties, parses vague tag properties and tracks suggestion state.
+- Findings: Core algorithm is reusable in concept, but registry shape and codec behavior come from the newer target snapshot.
+- RustChunk relevance: Relevant to command parsing and block selection in modded worlds.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild registry/property access and NBT availability using 1.20.1 BlockState/BlockEntity rules and Forge registries.
+- Follow-up checks: Test property ordering, duplicate properties, tags, empty states, SNBT rollback and completion against 1.20.1.
+- RustChunk implementation mapping: RustChunk BlockStateArgument and BlockPredicate parser.
+- Evidence required before adoption: 1.20.1 block-state definitions, block-tag fixtures and differential parser cases.
+- Completion state: COMPLETE — 460 logical lines read through EOF; pinned blob SHA and 16212-byte size match the source tree.
+
+### 1705. `crates/horizon-command/src/codec.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `40f5c1ce0cc5d512f44c678125fcd08caf6186f5`
+- Size: 7641 bytes; 205 logical lines
+- Coverage: 1–205 (EOF)
+- Purpose: Reproduces codec validation and errors for resource-or-inline command arguments.
+- Dependencies / cross-references: SNBT Tag model, resource registries, DataFixerUpper-style codecs, loot predicates/modifiers, context providers, slot sources and dialogs.
+- Implementation / logic: Validates maps, required fields, registry type dispatch, element-or-list encodings and inline ResourceOrId values.
+- Findings: Dialog, SlotSource and newer context-provider codecs exceed the 1.20.1 command/data schema.
+- RustChunk relevance: Codec error ordering and validation helpers may inform a target-specific parser.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Implement only registries and codec schemas present in 1.20.1/Forge; exclude newer dialog/context-provider IDs.
+- Follow-up checks: Verify target-era loot predicate/function codecs, resource-or-id semantics and exact failure cursor/message behavior.
+- RustChunk implementation mapping: RustChunk versioned command codec validation module.
+- Evidence required before adoption: 1.20.1 codec sources, registries and malformed-SNBT differential fixtures.
+- Completion state: COMPLETE — 205 logical lines read through EOF; pinned blob SHA and 7641-byte size match the source tree.
+
+### 1706. `crates/horizon-command/src/component.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2933afeca43484d5cbba69e8658f9beeb37b37a5`
+- Size: 11139 bytes; 364 logical lines
+- Coverage: 1–364 (EOF)
+- Purpose: Validates text Component and Style SNBT codecs and reproduces partial/error results.
+- Dependencies / cross-references: NBT tags, text/color helpers, entity selectors, NBT paths and click/hover event codecs.
+- Implementation / logic: Decodes component content variants, style fields, click/hover actions, selectors, NBT sources and object components.
+- Findings: Object content, dialog click action and other codec shapes are newer than the 1.20.1 text component model.
+- RustChunk relevance: Important architecture reference for validating command-supplied components and style values.
+- Decision: rewrite required; version-specific
+- 1.20.1 implications: Rebuild around 1.20.1 ComponentSerialization and Style.Serializer fields/actions; exclude newer content/action kinds.
+- Follow-up checks: Compare text/translatable/score/selector/NBT components, colors, style booleans and click/hover payloads with 1.20.1.
+- RustChunk implementation mapping: RustChunk 1.20.1 text component SNBT codec.
+- Evidence required before adoption: Target-era component codec source and positive/negative SNBT fixtures.
+- Completion state: COMPLETE — 364 logical lines read through EOF; pinned blob SHA and 11139-byte size match the source tree.
+
+### 1707. `crates/horizon-command/src/item.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `da9c4b8b091c61c0425a1216d1f1706d86a4a472`
+- Size: 21806 bytes; 657 logical lines
+- Coverage: 1–400, 401–657 (EOF)
+- Purpose: Parses item stacks and item predicates using the newer data-component representation.
+- Dependencies / cross-references: Item/data-component registries, SNBT, Packrat grammar engine and block-entity data.
+- Implementation / logic: Parses bracketed component assignments/removals and predicate expressions, validates values and suggests component IDs.
+- Findings: The central data model is post-1.20.1; 1.20.1 uses legacy item NBT semantics and a different item command argument.
+- RustChunk relevance: Parser architecture and negative-test concepts are useful, not the payload model.
+- Decision: rewrite required; core reference; version-specific
+- 1.20.1 implications: Do not port component syntax as baseline behavior; rebuild ItemArgument/ItemPredicateArgument for 1.20.1 ItemStack and NBT.
+- Follow-up checks: Test count/damage predicates, item NBT matching, enchantments, custom names, block-entity data and Forge items.
+- RustChunk implementation mapping: RustChunk 1.20.1 item stack and item predicate arguments.
+- Evidence required before adoption: 1.20.1 ItemParser/ItemPredicateParser source and Forge modded-item fixtures.
+- Completion state: COMPLETE — 657 logical lines read through EOF; pinned blob SHA and 21806-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1708. `crates/horizon-command/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f809dd166f7075a77c39abd44bb7731ee44c6fdb`
+- Size: 41388 bytes; 1149 logical lines
+- Coverage: 1–400, 401–800, 801–1149 (EOF)
+- Purpose: Implements the Brigadier-style command dispatcher, reader, parse context, completion suggestions and smart usage.
+- Dependencies / cross-references: Args, vanilla command tree, text components, command protocol tree, selectors and suggestion providers.
+- Implementation / logic: Builds literal/argument nodes, parses redirects and permissions, records argument ranges/errors, merges/sorts completions and derives usage strings.
+- Findings: Core dispatch architecture is broadly useful; Starling mod-command integration and newer providers/argument assumptions are project-specific.
+- RustChunk relevance: High-value reference for client command parsing, chat coloring, Tab completion and context.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild target command tree and argument model while preserving only Brigadier semantics verified against Forge 47.x.
+- Follow-up checks: Test parse branch selection, redirects, permission pruning, UTF-8 cursor boundaries, suggestion merge/dedup and signed message ranges.
+- RustChunk implementation mapping: RustChunk Brigadier-compatible dispatcher and chat completion layer.
+- Evidence required before adoption: Forge 1.20.1 Brigadier dependency/source, command tree captures and differential tests.
+- Completion state: COMPLETE — 1149 logical lines read through EOF; pinned blob SHA and 41388-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1709. `crates/horizon-command/src/network.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bf03276631438fe6ca51397ce3b06b3b18a79bc4`
+- Size: 19453 bytes; 498 logical lines
+- Coverage: 1–400, 401–498 (EOF)
+- Purpose: Converts a server-sent command tree packet into a local dispatcher.
+- Dependencies / cross-references: Horizon protocol command packet, parser ID table, ArgumentProperties, local vanilla tree and suggestion providers.
+- Implementation / logic: Remaps root/node indices, matches local nodes by path, decodes parser properties and binds custom providers.
+- Findings: Parser IDs, property payloads, command node layout and providers are tied to the pinned newer protocol.
+- RustChunk relevance: Useful network-to-command-tree adapter pattern for multiplayer client UX.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Decode exact 1.20.1 ClientboundCommandsPacket and Forge extensions; do not reuse current parser IDs or payload parsing unchanged.
+- Follow-up checks: Compare parser ID mapping, property flags, redirects, restricted nodes and server suggestions against 1.20.1 captures.
+- RustChunk implementation mapping: RustChunk versioned server command-tree decoder feeding local Brigadier.
+- Evidence required before adoption: 1.20.1 protocol specification, Forge command packet captures and interoperability tests.
+- Completion state: COMPLETE — 498 logical lines read through EOF; pinned blob SHA and 19453-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1710. `crates/horizon-command/src/packrat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ebe9df09d0a6dbfd84a15d8292ad869327a26592`
+- Size: 20129 bytes; 627 logical lines
+- Coverage: 1–400, 401–627 (EOF)
+- Purpose: Implements a memoizing packrat grammar engine with scoped values, backtracking and error collection.
+- Dependencies / cross-references: Command Reader, SNBT grammar, item predicate grammar and completion suggestions.
+- Implementation / logic: Supports named/custom rules, sequence/alternation/optional/repeated terms, cuts, lookahead, frame scopes and furthest-position errors.
+- Findings: Generic grammar machinery is relatively independent of Minecraft version; surrounding grammars are not.
+- RustChunk relevance: Strong reusable architecture candidate for complex command arguments and SNBT parsing.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Port only after checking UTF-8 cursor and error behavior; supply target-era argument/SNBT grammars.
+- Follow-up checks: Verify memoization, frame merging, cut, repeated separators, furthest error and suggestions with fixtures.
+- RustChunk implementation mapping: RustChunk packrat/parser combinator module for command grammars.
+- Evidence required before adoption: Unit tests for grammar engine and differential SNBT/item-predicate fixtures against 1.20.1.
+- Completion state: COMPLETE — 627 logical lines read through EOF; pinned blob SHA and 20129-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1711. `crates/horizon-command/src/selector.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `91fc9d9e25cdfccdbc4c6a1d063cbb4e6f8c9b56`
+- Size: 29084 bytes; 816 logical lines
+- Coverage: 1–400, 401–800, 801–816 (EOF)
+- Purpose: Parses entity selectors, UUID/player targets and selector completion suggestions.
+- Dependencies / cross-references: Entity/player registries, GameMode, NBT parser, scoreboard, advancement and predicate registries.
+- Implementation / logic: Handles selector kinds, options, invertible sets, ranges, entity types/tags, teams, gamemode, scores, advancements and NBT.
+- Findings: Includes @n and newer registry/suggestion behavior; these are not assumed to exist in 1.20.1.
+- RustChunk relevance: Core command parser reference for vanilla entity targeting and online-player completion.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild selector kinds, option registration order, validation and suggestions from 1.20.1 EntitySelectorParser.
+- Follow-up checks: Compare duplicate/inversion, player-vs-entity rules, UUID parsing, permissions, score/advancement filters and error cursors.
+- RustChunk implementation mapping: RustChunk 1.20.1 entity selector parser used by commands and packet tree.
+- Evidence required before adoption: Mojang-mapped 1.20.1 selector source, registry/tag fixtures and differential selector test matrix.
+- Completion state: COMPLETE — 816 logical lines read through EOF; pinned blob SHA and 29084-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1712. `crates/horizon-command/src/snbt.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7472c7ae3e0fe45500917e7aae7f4c4f0611fdd5`
+- Size: 31817 bytes; 981 logical lines
+- Coverage: 1–400, 401–800, 801–981 (EOF)
+- Purpose: Parses SNBT into NBT tags and supplies command argument completion/error behavior.
+- Dependencies / cross-references: Packrat grammar engine, NBT Tag/Compound representation, Java numeric parsing and selector UUID parser.
+- Implementation / logic: Parses scalar numbers, typed arrays, lists, compounds, quoted/unquoted strings, escapes and built-in operations.
+- Findings: Adds binary/hex numerals, underscore separators, signed/unsigned suffixes, Unicode-name escapes and bool/uuid builtins beyond 1.20.1.
+- RustChunk relevance: High-value parser architecture reference; grammar details must be versioned.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Reconstruct 1.20.1 TagParser grammar and number/escape semantics; do not accept newer syntax on 1.20.1 servers.
+- Follow-up checks: Test numeric boundaries/suffixes, typed arrays, duplicate keys, escaping, trailing input and error positions against 1.20.1.
+- RustChunk implementation mapping: RustChunk 1.20.1 SNBT parser and completion engine.
+- Evidence required before adoption: Target TagParser source and differential SNBT corpus including malformed input.
+- Completion state: COMPLETE — 981 logical lines read through EOF; pinned blob SHA and 31817-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1713. `crates/horizon-command/src/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `69a9c402d2b778914fefd0f7f9a61f8395720454`
+- Size: 33064 bytes; 881 logical lines
+- Coverage: 1–400, 401–800, 801–881 (EOF)
+- Purpose: Test inventory for command parsing, vanilla errors, permissions, suggestions and command-tree behavior.
+- Dependencies / cross-references: Dispatcher, vanilla registrations, selector/block/item/NBT parsers and registry fixtures.
+- Implementation / logic: Defines smoke and edge-case tests for targets, coordinates, execute/data/scoreboard/world commands and dedicated commands.
+- Findings: Includes 26.3-era additions such as /tick, newer /random, @n and modern nodes; tests read but not run.
+- RustChunk relevance: Useful test-case inventory, not proof of RustChunk correctness or 1.20.1 parity.
+- Decision: undetermined; reference; tests only
+- 1.20.1 implications: Translate relevant cases and expected values from the 1.20.1 command tree; remove later-version features.
+- Follow-up checks: Build a target-version command regression matrix and execute it only in RustChunk test environment.
+- RustChunk implementation mapping: RustChunk 1.20.1 Brigadier/command integration tests.
+- Evidence required before adoption: 1.20.1 command source/packet fixture and runnable RustChunk test harness.
+- Completion state: COMPLETE — 881 logical lines read through EOF; pinned blob SHA and 33064-byte size match the source tree; embedded tests were inspected only, not run.
+
+### 1714. `crates/horizon-command/src/tree_data.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `34ce17bea6933e7322298ddf15092ed6717eba13`
+- Size: 6162 bytes; 181 logical lines
+- Coverage: 1–181 (EOF)
+- Purpose: Registers the /data and /tag command trees.
+- Dependencies / cross-references: Dispatcher, argument types, selectors, NBT/NBT path parsing and context-provider codecs.
+- Implementation / logic: Builds merge/get/remove/modify providers for entity, block and storage sources, then tag add/remove/list.
+- Findings: Base structure is recognizable, but new compute context-provider subcommands are later additions.
+- RustChunk relevance: Useful blueprint for organizing target-era data commands.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Keep only branches present in 1.20.1 and map arguments to legacy item/NBT semantics.
+- Follow-up checks: Compare /data modify source operations, path parsing, permissions and tag command registration with 1.20.1.
+- RustChunk implementation mapping: RustChunk 1.20.1 data/tag command tree.
+- Evidence required before adoption: Target Commands.java/DataCommands sources and parser fixtures.
+- Completion state: COMPLETE — 181 logical lines read through EOF; pinned blob SHA and 6162-byte size match the source tree.
+
+### 1715. `crates/horizon-command/src/tree_execute.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `53085410ad3cd277d3d7174b25eaff0352fcef45`
+- Size: 8907 bytes; 249 logical lines
+- Coverage: 1–249 (EOF)
+- Purpose: Registers the /execute command tree and redirect/conditional branches.
+- Dependencies / cross-references: Dispatcher redirects, selector/entity arguments, coordinates, scoreboard, block/biome/data predicates and registries.
+- Implementation / logic: Creates as/at/positioned/rotated/facing/align/anchored/in/on/store/if/unless/run branches and conditional nodes.
+- Findings: Contains newer stopwatch, item/slot and relation forms beyond 1.20.1; baseline forms need target verification.
+- RustChunk relevance: High-value model of a complex Brigadier redirecting command tree.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Rebuild /execute grammar exactly for 1.20.1, preserving redirect/fork semantics but excluding newer nodes.
+- Follow-up checks: Test every modifier, nested execute, if/unless, store target, function fork and error cursor against vanilla.
+- RustChunk implementation mapping: RustChunk 1.20.1 execute tree and parse-context adapter.
+- Evidence required before adoption: Mojang-mapped 1.20.1 ExecuteCommand source and differential command fixtures.
+- Completion state: COMPLETE — 249 logical lines read through EOF; pinned blob SHA and 8907-byte size match the source tree.
+
+### 1716. `crates/horizon-command/src/tree_extra.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d1dc7116c907d93d97d0ec9c7a26a8f511011d34`
+- Size: 10424 bytes; 279 logical lines
+- Coverage: 1–279 (EOF)
+- Purpose: Registers hosted-game and dedicated-server administration command trees.
+- Dependencies / cross-references: Permission constants, profile/entity arguments, text components, test instance registry and Dispatcher.
+- Implementation / logic: Adds dialog, kick, posteffect, fetchprofile, spectate, publish, waypoint, debug, JFR/test and dedicated op/ban/whitelist.
+- Findings: Most command families are Starling/26.3-specific; dedicated-vs-integrated selection and permissions are the transferable concepts.
+- RustChunk relevance: Limited reference for server-side command registration and admin separation.
+- Decision: unnecessary; version-specific
+- 1.20.1 implications: Do not register these names into the 1.20.1 baseline; implement only commands present in the target server.
+- Follow-up checks: Compare Commands.CommandSelection behavior and administrative permissions in 1.20.1.
+- RustChunk implementation mapping: Optional dedicated/integrated command registration policy.
+- Evidence required before adoption: 1.20.1 Commands registration source and RustChunk server-mode model.
+- Completion state: COMPLETE — 279 logical lines read through EOF; pinned blob SHA and 10424-byte size match the source tree.
+
+### 1717. `crates/horizon-command/src/tree_misc.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1bcd880bbf21f6e057abb898d4f5b00c1eeb7d80`
+- Size: 11995 bytes; 319 logical lines
+- Coverage: 1–319 (EOF)
+- Purpose: Registers miscellaneous item, bossbar, function, schedule, random, tick, team-message, reload and datapack command trees.
+- Dependencies / cross-references: Dispatcher, Item/SlotSource, resource registries, GameRules and permissions.
+- Implementation / logic: Constructs nested literal/argument branches, redirects aliases, applies permission levels and attaches item/resource arguments.
+- Findings: Item uses modern component/slot machinery and Stopwatch/Random/Tick commands are newer than 1.20.1.
+- RustChunk relevance: Command-tree construction pattern is useful; exact command set is not.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild registrations from 1.20.1 sources; retain only target-era forms for item, bossbar, function, schedule and datapack.
+- Follow-up checks: Check target branches, min/max constraints, aliases, command IDs and permissions.
+- RustChunk implementation mapping: RustChunk target-era miscellaneous command registration module.
+- Evidence required before adoption: 1.20.1 command sources and regression fixtures for every supported branch.
+- Completion state: COMPLETE — 319 logical lines read through EOF; pinned blob SHA and 11995-byte size match the source tree.
+
+### 1718. `crates/horizon-command/src/tree_scoreboard.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9bb22a4a6932c6dd348145fe7878d6130fbfcad1`
+- Size: 8862 bytes; 216 logical lines
+- Coverage: 1–216 (EOF)
+- Purpose: Registers scoreboard, team and trigger command trees.
+- Dependencies / cross-references: ScoreHolder, objective/criteria/team/scoreboard-slot arguments and component/style parsing.
+- Implementation / logic: Builds objective/player/team management operations, trigger commands and suggestion providers.
+- Findings: NumberFormat and display-autoupdate branches belong to a later schema; conventional scoreboard operations remain relevant.
+- RustChunk relevance: Useful organizational reference for a 1.20.1 command subsystem.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Remove later number-format/display-auto-update branches and align criteria/slot forms with 1.20.1.
+- Follow-up checks: Verify objective criteria, operations, team visibility/collision literals, trigger permissions and suggestion order.
+- RustChunk implementation mapping: RustChunk 1.20.1 scoreboard/team/trigger command tree.
+- Evidence required before adoption: Target ScoreboardCommand/TeamCommand sources and expected parse/suggestion results.
+- Completion state: COMPLETE — 216 logical lines read through EOF; pinned blob SHA and 8862-byte size match the source tree.
+
+### 1719. `crates/horizon-command/src/tree_world.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `86ebba0caf210268fd5ff0f92bfd8ff15af3888b`
+- Size: 16260 bytes; 419 logical lines
+- Coverage: 1–400, 401–419 (EOF)
+- Purpose: Registers world/entity command trees for recipe, damage, rotation, sound, particle, attribute, ride, forceload, biome, border and loot.
+- Dependencies / cross-references: Entity/Player selectors, block positions, sound/particle/attribute registries, slots, loot codecs and Dispatcher.
+- Implementation / logic: Builds nested command branches with argument constraints, aliases and execution IDs.
+- Findings: Includes later /swing and expanded item-slot/loot forms; several core commands also exist in 1.20.1.
+- RustChunk relevance: Good structural reference, but not a target-era specification.
+- Decision: adaptable; version-specific
+- 1.20.1 implications: Rebuild registrations against 1.20.1 command signatures; exclude commands and forms absent in target.
+- Follow-up checks: Verify parameter order/ranges for fillbiome, forceload, worldborder, attributes, particles, sounds and loot.
+- RustChunk implementation mapping: RustChunk 1.20.1 world command tree modules.
+- Evidence required before adoption: Mojang-mapped 1.20.1 command sources and command packet fixtures.
+- Completion state: COMPLETE — 419 logical lines read through EOF; pinned blob SHA and 16260-byte size match the source tree.
+
+### 1720. `crates/horizon-command/src/vanilla_order.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fda8cc69a2b357d68d348d8024cc851566cf5beb`
+- Size: 5804 bytes; 242 logical lines
+- Coverage: 1–242 (EOF)
+- Purpose: Generated child-node ordering table for the command dispatcher.
+- Dependencies / cross-references: Vanilla command-tree registration and tools/generate_command_order.py.
+- Implementation / logic: Lists path-specific child order for root, execute, item, loot and scoreboard nodes.
+- Findings: Reflects the newer pinned command set and is generated from that tree; copying it gives wrong 1.20.1 commands/order.
+- RustChunk relevance: Shows Brigadier child registration order affects usage and completion order.
+- Decision: unnecessary; version-specific
+- 1.20.1 implications: Generate a fresh ordering fixture from the 1.20.1 command tree rather than reuse this table.
+- Follow-up checks: Compare registration order, smart usage and Tab completion order after target-tree construction.
+- RustChunk implementation mapping: RustChunk 1.20.1 generated command-order fixture if order replication is needed.
+- Evidence required before adoption: Target 1.20.1 child-order oracle and generated output.
+- Completion state: COMPLETE — 242 logical lines read through EOF; pinned blob SHA and 5804-byte size match the source tree.
+
+### 1721. `crates/horizon-command/src/vanilla.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `adee86016d6945d5e06ccca593675b8c0947a085`
+- Size: 26455 bytes; 682 logical lines
+- Coverage: 1–400, 401–682 (EOF)
+- Purpose: Builds the shared vanilla command dispatcher and conditionally selects integrated, dedicated, development and Horizon trees.
+- Dependencies / cross-references: All command tree modules, vanilla_order, gamerule registry, Dispatcher and versioned resource arguments.
+- Implementation / logic: Registers broad commands, applies permissions and generated ordering, caches trees and optionally adds Horizon pregeneration commands.
+- Findings: Contains newer Clock/Timeline time commands, Stopwatch and Minecart Improvements branches plus Horizon-specific /pregen.
+- RustChunk relevance: Useful dispatcher composition and integrated/dedicated selection architecture.
+- Decision: adaptable; core reference; version-specific
+- 1.20.1 implications: Build command tree from 1.20.1 Commands.java and Forge 47.x feature set; omit newer time/stopwatch/feature branches.
+- Follow-up checks: Check root order, aliases, permissions, gamerules and integrated/dedicated differences against 1.20.1.
+- RustChunk implementation mapping: RustChunk command-tree assembly and server-mode selection layer.
+- Evidence required before adoption: Target 1.20.1 Commands source, Forge command registrations and packet captures.
+- Completion state: COMPLETE — 682 logical lines read through EOF; pinned blob SHA and 26455-byte size match the source tree.
+
+### 1722. `crates/horizon-core/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `97c9356b87738441531292ef1be67a73a365bcbc`
+- Size: 816 bytes; 41 logical lines
+- Coverage: 1–41 (EOF)
+- Purpose: Cargo manifest for simulation-foundations core and parity binaries.
+- Dependencies / cross-references: Workspace settings, pinned libm dependency, RNG-trace feature and six parity executable targets.
+- Implementation / logic: Declares package metadata, feature toggling and targets for parity, tick, geometry, noise, density and float-log comparisons.
+- Findings: Workspace-specific build graph; binary declarations are tooling, not runtime modules.
+- RustChunk relevance: Useful pattern for isolating deterministic simulation code from parity tools.
+- Decision: adaptable; reference
+- 1.20.1 implications: Create a RustChunk core crate only with target-version boundaries and verified numerical dependencies.
+- Follow-up checks: Audit license/MSRV and decide whether parity tools belong in dev-only targets or separate crates.
+- RustChunk implementation mapping: RustChunk simulation/core manifest and development parity tools.
+- Evidence required before adoption: RustChunk workspace graph, target toolchain and dependency/license review.
+- Completion state: COMPLETE — 41 logical lines read through EOF; pinned blob SHA and 816-byte size match the source tree.
+
+### 1723. `crates/horizon-core/examples/biome_zoom_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4099bed1379de74ebb473905f80f79884bc26e29`
+- Size: 1839 bytes; 46 logical lines
+- Coverage: 1–46 (EOF)
+- Purpose: Text-based differential fixture transport for biome zoom and seed-obfuscation calculations.
+- Dependencies / cross-references: BiomeZoom, noise-quart calculations, BlockPos and private input/output fixture files.
+- Implementation / logic: Reads scripted seed/block/position operations, calls the relevant functions and writes deterministic text results.
+- Findings: Development oracle adapter, not runtime generation; malformed rows can panic due to unchecked fields.
+- RustChunk relevance: Useful shape for comparing worldgen calculations against a 1.20.1 oracle.
+- Decision: adaptable; reference
+- 1.20.1 implications: Replace current functions with exact 1.20.1 biome zoom/noise semantics and keep outside production runtime.
+- Follow-up checks: Add malformed-input handling and compare seed/zoom outputs for fixed target-version fixtures.
+- RustChunk implementation mapping: Optional RustChunk biome-parity fixture executable.
+- Evidence required before adoption: 1.20.1 BiomeManager/zoom source and trusted input/output corpus.
+- Completion state: COMPLETE — 46 logical lines read through EOF; pinned blob SHA and 1839-byte size match the source tree.
+
+### 1724. `crates/horizon-core/examples/generation_tick_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3d154e82ae8c9cc5d543a538459e770e8209f055`
+- Size: 6883 bytes; 188 logical lines
+- Coverage: 1–188 (EOF)
+- Purpose: Differential fixture for scheduled-tick containers across proto and level chunk stages.
+- Dependencies / cross-references: ProtoChunkTicks, ChunkTicks, SavedTick, ScheduledTick, TickPriority and WorldGenTickAccess.
+- Implementation / logic: Replays reset/load/schedule/query/dump/snapshot/promote/unpack/remove operations and emits events/counts.
+- Findings: Captures lifecycle/container transitions; fixture alone does not prove behavior matches 1.20.1.
+- RustChunk relevance: High-value test design for chunk tick persistence and generation promotion.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Rebuild semantics from 1.20.1 ProtoChunkTicks/LevelChunkTicks and scheduled tick ordering.
+- Follow-up checks: Compare duplicate scheduling, chunk lookup order, priority/sub-order, promotion, failure propagation and save/load.
+- RustChunk implementation mapping: RustChunk chunk tick differential fixture and regression tests.
+- Evidence required before adoption: Target-era tick source and deterministic fixture outputs; no execution performed.
+- Completion state: COMPLETE — 188 logical lines read through EOF; pinned blob SHA and 6883-byte size match the source tree.
+
+### 1725. `crates/horizon-core/examples/paletted_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `feff4db89dda52a5ff68d4161976e0b2cd4c4d63`
+- Size: 4230 bytes; 136 logical lines
+- Coverage: 1–136 (EOF)
+- Purpose: Differential fixture for PalettedContainer edits, wire serialization and packed storage round trips.
+- Dependencies / cross-references: PalettedContainer, Strategy, palette/long-array encoding, VarInt and VanillaPalettedContainerOracle.
+- Implementation / logic: Replays set operations, calculates hashes/checkpoints, serializes/rereads wire data, packs storage and compares loaded values.
+- Findings: Useful regression harness pattern; strategy parameters and wire rules are newer-version-specific.
+- RustChunk relevance: Directly relevant to large modpack registry sizes and section palette correctness.
+- Decision: adaptable; core reference
+- 1.20.1 implications: Rebuild block/biome palette strategy and network/NBT formats from exact 1.20.1 rules; do not reuse bit widths or thresholds without proof.
+- Follow-up checks: Test local/global palette transitions, bits-per-entry limits, packed-long layout, VarInt lengths and read/write/save/load parity.
+- RustChunk implementation mapping: RustChunk 1.20.1 PalettedContainer differential fixture.
+- Evidence required before adoption: 1.20.1 PalettedContainer/BitStorage source and controlled registry-size fixtures.
+- Completion state: COMPLETE — 136 logical lines read through EOF; pinned blob SHA and 4230-byte size match the source tree.

@@ -1199,3 +1199,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No source/application code changed. Only audit documentation is included in this checkpoint.
 - Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; next backup remains after entries 1001–2000 are complete and globally verified.
 - Section 1651–1700 is closed. Stop at entry 1700 and wait for fresh explicit authorization before 1701.
+
+## Source-audit checkpoint 1701–1725 — 2026-11-20
+
+- Completed entries 1701–1725 inclusive (25/25) from pinned Starling source tree 5432370d573642041585c69b40fb045b27133488.
+- All 25 files were read through EOF in serial order. Files above 400 logical lines were inspected in consecutive, gap-free chunks of at most 400 lines; exact ranges, logical line counts, SHA and byte sizes are recorded in the active Ledger.
+- All 25 blob SHAs and byte sizes match the pinned recursive tree. The Index now contains 1,725 sequential entries and 1,725 unique paths. The active Ledger contains 125 entries (1601–1725), each with exactly 15 fields; new Index paths and Decisions align with the Ledger.
+- Command parsing is a substantial reusable architecture reference: Brigadier dispatch, selector parsing, SNBT grammar, block-state parsing, completion and differential tests. However, the pinned source includes newer item data components, command nodes, protocol parser IDs and Clock/Timeline features; these must be reconstructed from 1.20.1/Forge 47.x evidence.
+- Core parity fixtures for scheduled ticks and paletted-container wire/storage behavior are relevant to RustChunk testing, but were only inspected. No embedded tests or examples were executed.
+- Windows Segment Heap manifest and most hosted-game commands are not applicable to the Android baseline. No application/source code was changed.
+- No Rust build, unit test, benchmark, APK build, Forge launch, Android device validation, Minecraft join, LAN, UPnP or relay test was performed.
+- Only starling-1.20.1-port-audit is updated. main and backup refs remain untouched. No backup is due; the next backup remains after entries 1001–2000 are complete and globally verified.
+- Checkpoint 1701–1725 is complete and committed with the audit documents. Continue with 1726–1750 under the user's existing authorization; stop at 1750 for fresh authorization.
