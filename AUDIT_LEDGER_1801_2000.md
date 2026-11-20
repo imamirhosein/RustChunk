@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–1825 complete (25/200); reporting section 1801–1850 authorized; checkpoint 1826–1850 remains authorized.
+- Current progress: entries 1801–1825 complete (25/200); first checkpoint closed. The second checkpoint 1826–1850 remains authorized.
 - Reporting rule: STOP at entry 1850 after both authorized 25-file checkpoints are complete. Wait for fresh explicit authorization before entry 1851.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
@@ -197,7 +197,24 @@
 - Evidence required before adoption: Fuzzed parser, strict bounds, canonicalization and reviewed PAKE integration.
 - Completion state: COMPLETE — 403 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 13395-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1812. `crates/horizon-friends/src/portmap.rs`
+
+### 1812. `crates/horizon-friends/src/lib.rs`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: `1d13b6dce79f84a9a0517192a2d7d471922b2510`
+- Size: 8147 bytes; 230 logical lines
+- Coverage: 1–230 (EOF)
+- Purpose: Shared module façade and TCP stream pump for Horizon's invite-based friend-to-friend world tunnel.
+- Dependencies / cross-references: code/crypto/direct/guest/host/invite/portmap/reach/session/stun/wire modules; getrandom; TCP streams, threads, mpsc channels and optional relay URL.
+- Implementation / logic: Exports friend modules and the `friend:` address prefix; supplies OS randomness, absolute handshake deadline cancellation, direct/relay mode selection, relay DNS resolution and bidirectional forwarding between a plain game TCP stream and authenticated SecureReader/SecureWriter.
+- Findings: Bridges an already-established game stream; does not implement Minecraft login or packet negotiation. Deadline tests address slow byte-by-byte peers but were inspected only. Relay URL parsing is a simple host:port/tcp:// parser and needs caller-side validation.
+- RustChunk relevance: Optional friend-hosting/tunnel only; it does not help join ordinary public Forge/Aternos servers.
+- Decision: unnecessary; optional/future; network-specific
+- 1.20.1 implications: Transparent transport only for peers using Horizon's separate invite/relay protocol; not compatible with a normal public server address or vanilla/Forge negotiation.
+- Follow-up checks: Review deadline-thread cancellation/leaks, Android lifecycle and network switches, relay URL validation, socket shutdown races, IPv6/NAT and resource limits.
+- RustChunk implementation mapping: Keep as an isolated optional friends-tunnel adapter. Never route ordinary multiplayer through it or couple it to the Minecraft packet codec.
+- Evidence required before adoption: Two-device Android interoperability, NAT/relay tests, network-switch/cancellation stress, secure-stream audit and verified 1.20.1 integrated-server behavior.
+- Completion state: COMPLETE — 230 logical lines read through EOF; SHA and size match the complete pinned recursive tree; tests were inspected only, not run.
+### 1813. `crates/horizon-friends/src/portmap.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `6ad9a2b9477b8b37be1638388db4ca8baafb3b6e`
 - Size: 35392 bytes; 980 logical lines
@@ -214,7 +231,7 @@
 - Evidence required before adoption: Security review against malicious SSDP, router matrix, Android lifecycle/consent and lease cleanup tests.
 - Completion state: COMPLETE — 980 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 35392-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1813. `crates/horizon-friends/src/reach.rs`
+### 1814. `crates/horizon-friends/src/reach.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b8176315cbd54f0b22095bf906015d29dcc7fcf6`
 - Size: 13014 bytes; 361 logical lines
@@ -231,7 +248,7 @@
 - Evidence required before adoption: Android interface coverage, controlled network scenarios, consent review and classification verification.
 - Completion state: COMPLETE — 361 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 13014-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1814. `crates/horizon-friends/src/session.rs`
+### 1815. `crates/horizon-friends/src/session.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `389aa85df38bafffe773a238b6c4af0bedf81dbc`
 - Size: 6788 bytes; 195 logical lines
@@ -248,7 +265,7 @@
 - Evidence required before adoption: Interoperability traces, fault injection and Android network-switch tests.
 - Completion state: COMPLETE — 195 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 6788-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1815. `crates/horizon-friends/src/stun.rs`
+### 1816. `crates/horizon-friends/src/stun.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e1716d268c53eb4b35ff391a6b270c1e3c234c23`
 - Size: 7343 bytes; 207 logical lines
@@ -265,7 +282,7 @@
 - Evidence required before adoption: RFC vectors, malicious-response fuzzing, Android UDP/DNS tests and privacy review.
 - Completion state: COMPLETE — 207 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 7343-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1816. `crates/horizon-friends/src/wire.rs`
+### 1817. `crates/horizon-friends/src/wire.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `5991bdf2f363145abca3da88da5e6294a082ed2a`
 - Size: 6747 bytes; 206 logical lines
@@ -282,7 +299,7 @@
 - Evidence required before adoption: Versioned spec, parser fuzzing, malicious-relay tests and cross-version interop.
 - Completion state: COMPLETE — 206 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 6747-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1817. `crates/horizon-hdr/Cargo.toml`
+### 1818. `crates/horizon-hdr/Cargo.toml`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `297c758b1334ce590d7c7b1b1fb4ab98723e518e`
 - Size: 896 bytes; 23 logical lines
@@ -299,7 +316,7 @@
 - Evidence required before adoption: Android target build, Vulkan capability enumeration and real-device display validation.
 - Completion state: COMPLETE — 23 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 896-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1818. `crates/horizon-hdr/src/lib.rs`
+### 1819. `crates/horizon-hdr/src/lib.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4f7d737692eef53e552178d20119a7d4718f8f09`
 - Size: 3924 bytes; 99 logical lines
@@ -316,7 +333,7 @@
 - Evidence required before adoption: Android GPU extension query, Vulkan validation, lifecycle tests and calibrated display measurement.
 - Completion state: COMPLETE — 99 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 3924-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1819. `crates/horizon-hdr/src/wayland.rs`
+### 1820. `crates/horizon-hdr/src/wayland.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `d5742ba2e94a5ed96f308eb69275ebaaebbfd658`
 - Size: 8283 bytes; 231 logical lines
@@ -333,7 +350,7 @@
 - Evidence required before adoption: Linux compositor integration tests, not needed for Android baseline.
 - Completion state: COMPLETE — 231 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 8283-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1820. `crates/horizon-items/Cargo.toml`
+### 1821. `crates/horizon-items/Cargo.toml`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4663c4d9505e17dd6956a1b9589c0cd43faba352`
 - Size: 716 bytes; 22 logical lines
@@ -350,7 +367,7 @@
 - Evidence required before adoption: 1.20.1 Forge/vanilla registries and NBT fixtures plus Android toolchain proof.
 - Completion state: COMPLETE — 22 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 716-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1821. `crates/horizon-items/examples/enchantment_components_probe.rs`
+### 1822. `crates/horizon-items/examples/enchantment_components_probe.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `2221ff609fc617fa1789468fad228696cda0c078`
 - Size: 1470 bytes; 45 logical lines
@@ -367,7 +384,7 @@
 - Evidence required before adoption: 1.20.1 source fixtures, deterministic output and vanilla/Forge oracle comparison.
 - Completion state: COMPLETE — 45 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 1470-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1822. `crates/horizon-items/src/banner_layer.rs`
+### 1823. `crates/horizon-items/src/banner_layer.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `5f76ad575779866f9c4b259bca433406cf97d6a9`
 - Size: 1605 bytes; 56 logical lines
@@ -384,7 +401,7 @@
 - Evidence required before adoption: 1.20.1 banner item and block-entity round-trip fixtures plus Forge custom-pattern tests.
 - Completion state: COMPLETE — 56 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 1605-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1823. `crates/horizon-items/src/blocks.rs`
+### 1824. `crates/horizon-items/src/blocks.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `d7dcb5db6c640e599e0d422844cbd56f56fcac83`
 - Size: 21467 bytes; 581 logical lines
@@ -401,7 +418,7 @@
 - Evidence required before adoption: Complete 1.20.1 export, all-state coverage and shape/fluid/light parity fixtures.
 - Completion state: COMPLETE — 581 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 21467-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
 
-### 1824. `crates/horizon-items/src/blocks/decode.rs`
+### 1825. `crates/horizon-items/src/blocks/decode.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `7feb3ac41c445c3c347145003e158ad061bcadac`
 - Size: 10111 bytes; 293 logical lines
@@ -417,21 +434,3 @@
 - RustChunk implementation mapping: RustChunk block-facts decoder or generated registry loader with strict target schema.
 - Evidence required before adoption: Property/fuzz tests, malformed-shape rejection, memory benchmarks and exact 1.20.1 facts parity.
 - Completion state: COMPLETE — 293 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 10111-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
-
-### 1825. `crates/horizon-items/src/blocks/decode_tests.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `c222e26bd04e479fc200ddffcafbc50e1f146056`
-- Size: 6279 bytes; 166 logical lines
-- Coverage: 1–166 (EOF)
-- Purpose: Regression tests for shape canonicalization and typed gameplay-facts decoder.
-- Dependencies / cross-references: Parent decode module, serde_json, RawValue, Arc pointer identity, temp filesystem and BlockRegistry fixture.
-- Implementation / logic: Compares shape values/interning with legacy Value semantics; tests defaults, duplicate keys, wrong types, overflow/depth errors and validation order.
-- Findings: Strong test inventory for decoder compatibility and malformed JSON; all tests were inspected only, not executed.
-- RustChunk relevance: Useful test design for RustChunk block-fact ingestion, not production code.
-- Decision: undetermined; reference; tests only
-- 1.20.1 implications: Port test intents rather than modern schema; add 1.20.1 shape/registry fixtures and Android-scale memory cases.
-- Follow-up checks: Run on target Rust toolchain, extend malformed geometry/fuzz corpus and compare to 1.20.1 oracle.
-- RustChunk implementation mapping: RustChunk block-facts unit/property/fuzz tests; no production mapping.
-- Evidence required before adoption: Executed tests, deterministic 1.20.1 fixtures, fuzz corpus and verified decoder compatibility.
-- Completion state: COMPLETE — 166 logical lines read through EOF; coverage is contiguous; pinned blob SHA and 6279-byte size match the recursive source tree; embedded tests/examples were inspected only, not run.
-

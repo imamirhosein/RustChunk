@@ -1259,3 +1259,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No application/source code changed. Only audit documentation is committed.
 - First 50-file section 1801–1850 remains authorized; next checkpoint 1826–1850 is authorized. Do not inspect 1851 or later. Stop at 1850 for new authorization.
 - Only starling-1.20.1-port-audit is updated; main and backup refs remain untouched. No backup is due before entries 1001–2000 and global verification are complete.
+
+
+## Corrected checkpoint registration — entries 1801–1825 — 2026-11-20
+
+- Recomputed source order from the complete pinned tree after excluding entries 1–1800. The initial list had omitted `crates/horizon-friends/src/lib.rs`; inserted at 1812. The corrected first 25 paths end at `crates/horizon-items/src/blocks/decode.rs` (1825).
+- Rebuilt this checkpoint's Index and Ledger numbering from the canonical pinned order. The previous entry `blocks/decode_tests.rs` moves to 1826 and will be committed with the second checkpoint.
+- The six checkpoint documents are corrected together. `storage.rs` under horizon-mod-registry/src does not exist in the pinned tree; the prior 404 was confirmed by the recursive tree.
+- Files were read serially to EOF; long files were covered in contiguous chunks <=400 lines. The missing lib was reviewed fully (230 lines). This correction records that the first candidate enumeration was incomplete rather than concealing it.
+- This repaired checkpoint contains 25 Ledger entries, exactly 15 fields each; Index numbering and paths 1801–1825 are sequential and unique.
+- Tests/examples inspected only; none run. No build/device/Forge/server validation. No application source changed.

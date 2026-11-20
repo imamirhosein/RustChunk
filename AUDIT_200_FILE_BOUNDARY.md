@@ -1,47 +1,40 @@
 # RustChunk — 200-File Audit Boundary Register
 
 - Repository: `imamirhosein/RustChunk`
-- Audit branch: `starling-1.20.1-port-audit`
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
-- Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Purpose: authoritative progress/authorization map for the current 200-file stage; not a replacement for the detailed 15-field Ledger.
-- Previous stage: **1601–1800 complete and closed**; entries 1–1800 already indexed.
-- Current stage: **1801–2000**; progress after checkpoint 1801–1825: **25/200**.
-- User authorization: **1801–1850 only**; complete this section and stop at 1850.
+- Branch: `starling-1.20.1-port-audit`
+- Source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Pinned tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (complete, not truncated)
+- Stage: 1801–2000; current formally registered progress **25/200**.
+- Authorization: only section 1801–1850 is authorized. Stop at 1850.
 
-## 200-file stage partition
+## Stage partition
 
-| 50-file section | Checkpoint 1 | Checkpoint 2 | Section state |
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 1801–1850 | 1801–1825 — COMPLETE (checkpoint commit/read-back in progress) | 1826–1850 — AUTHORIZED, not started | ACTIVE; authorized |
+| 1801–1850 | 1801–1825 — COMPLETE (corrected) | 1826–1850 — AUTHORIZED; registration pending | ACTIVE |
 | 1851–1900 | 1851–1875 — LOCKED | 1876–1900 — LOCKED | NOT AUTHORIZED |
 | 1901–1950 | 1901–1925 — LOCKED | 1926–1950 — LOCKED | NOT AUTHORIZED |
 | 1951–2000 | 1951–1975 — LOCKED | 1976–2000 — LOCKED | NOT AUTHORIZED |
 
-## Completed checkpoint 1801–1825
+## Corrected checkpoint 1801–1825
 
-- Entries: 25/25 complete.
-- Paths: 25 new unique source paths; numbering continues 1801–1825.
-- All source files read through EOF serially; pinned SHA and byte size checked against the full tree.
-- Long files covered only by continuous, gap-free ranges of at most 400 logical lines.
-- Active detailed Ledger: `AUDIT_LEDGER_1801_2000.md`.
-- Index after registration: 1,825 sequential entries and 1,825 unique paths.
-- Embedded tests/examples inspected only; none were run.
-- Commit transaction contains this register, Ledger, Index, QA Log, Continuity and Protocol.
+- Canonical paths are the next 25 blobs in the pinned tree after excluding entries 1–1800.
+- `crates/horizon-friends/src/lib.rs` is 1812; initial omission was corrected. This checkpoint now ends at `crates/horizon-items/src/blocks/decode.rs`.
+- `crates/horizon-items/src/blocks/decode_tests.rs` is entry 1826 in the next checkpoint.
+- 25 entries, 25 unique paths, 15 fields per Ledger entry; source blob SHA/size verified.
+- Files read completely through EOF; long files use contiguous chunks <=400 lines.
+- `crates/horizon-mod-registry/src/storage.rs` is absent from the pinned tree and is not an entry.
+- Tests/examples inspected only; no tests/build/APK/device/Forge/server validation.
 
 ## Next authorized work
 
-1. Continue in exact pinned-tree order at **1826**.
-2. Inspect through **1850**; complete checkpoint 1826–1850 with 25 exact records.
-3. Commit and read back all six checkpoint artifacts, then QA the 50-file section.
-4. **STOP at 1850.** Do not inspect 1851+ until fresh explicit user authorization.
+Complete the corrected second checkpoint 1826–1850, then close and stop at 1850. Do not inspect 1851+ without new explicit authorization.
 
-## Non-negotiable boundary rules
+## Rules
 
-- One source file at a time; do not fetch/check files in parallel.
-- A file is incomplete until EOF is read. Files over 400 logical lines require consecutive gap-free chunks of at most 400 lines.
-- Never duplicate an Index path or reuse an entry number.
-- Keep exactly 15 fields in every Ledger entry.
-- Never claim tests/build/benchmark/APK/device/Forge/server validation unless actually performed.
-- Do not change application source code, `main`, or existing backup refs.
-- Backup is due only after entries 1001–2000 and global 1–2000 verification are complete.
+- One source file at a time; no parallel reads.
+- Full EOF coverage; chunks <=400 logical lines, contiguous.
+- Match every path, SHA and byte size to the full pinned tree.
+- Exactly 15 Ledger fields; unique sequential Index paths.
+- No application source changes, no main/backups modification.
+- Backup only after 1001–2000 and global 1–2000 verification.

@@ -362,3 +362,11 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - After the atomic checkpoint commit, read back the Ledger, Index, QA Log, Continuity, Protocol and Boundary register individually and verify consistency.
 - **Next: inspect 1826–1850** under existing authorization. Finish the remaining 25, then **STOP at 1850**. Do not inspect 1851+ without fresh explicit authorization.
 - main and existing backup refs remain untouched. No backup is due; next backup only after entries 1001–2000 and global verification are complete.
+
+
+## Corrected checkpoint 1801–1825 registration — 2026-11-20
+
+- Active stage 1801–2000: 25/200 formally registered in corrected canonical order.
+- `crates/horizon-friends/src/lib.rs` inserted at 1812 after discovery during complete-tree reconciliation; first 25 now end at `crates/horizon-items/src/blocks/decode.rs` (1825). `blocks/decode_tests.rs` is reassigned to 1826.
+- The initial 25-file candidate enumeration omitted one pinned path; final numbering is repaired and the correction retained in QA.
+- The six checkpoint docs are read back after commit; the second authorized checkpoint is 1826–1850. Stop at 1850; 1851+ is unauthorized.

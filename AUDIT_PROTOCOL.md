@@ -384,3 +384,8 @@ This section supersedes older stage-specific Ledger names and the five-document 
 - `AUDIT_200_FILE_BOUNDARY.md` must mark later sections/checkpoints as locked/not authorized until the corresponding user permission arrives; never infer permission from a progress record.
 - Preserve serial source reading, complete EOF, maximum 400-line contiguous chunks, source SHA/size verification, no test execution and no application code changes. Keep main and existing backup refs untouched.
 - No backup is due until all entries 1001–2000 are complete and global verification of entries 1–2000 has passed.
+
+
+## Corrected checkpoint ordering note — 2026-11-20
+
+For the 1801–1850 section, derive the canonical path sequence by excluding only entries 1–1800 from the pinned recursive tree, then take the next 50 blobs. Do not exclude already registered but potentially misnumbered records from 1801 onward when reconciling this section. The missing `crates/horizon-friends/src/lib.rs` belongs at 1812. Checkpoint 1801–1825 ends at `crates/horizon-items/src/blocks/decode.rs`; `blocks/decode_tests.rs` belongs at 1826. The correction must be committed/read back as a checkpoint transaction.

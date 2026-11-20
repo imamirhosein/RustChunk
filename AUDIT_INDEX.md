@@ -2166,7 +2166,7 @@
 | 1800 | `crates/horizon-dualsense/src/device.rs` | unnecessary; platform-specific; optional | USB/Bluetooth HID writer; Android compatibility is unproven. |
 
 
-## Part 73 — Entries 1801–1825
+## Part 73 — Entries 1801–1825 (corrected against pinned source tree)
 
 | No. | Source path | Decision | One-line reason |
 |---:|---|---|---|
@@ -2181,17 +2181,17 @@
 | 1809 | `crates/horizon-friends/src/guest.rs` | unnecessary; optional/future; version-specific | Guest-side direct/relay friend tunnel; one local loopback game connection. |
 | 1810 | `crates/horizon-friends/src/host.rs` | unnecessary; optional/future; network-specific | Host-side integrated-server sharing over direct/relay paths. |
 | 1811 | `crates/horizon-friends/src/invite.rs` | rewrite required; optional/future; security-sensitive | Versioned endpoint invite codec; decoder endpoint count needs hardening. |
-| 1812 | `crates/horizon-friends/src/portmap.rs` | unnecessary; optional/future; security-sensitive; platform-specific | PCP/NAT-PMP/UPnP router port mapping; explicit consent and SSRF review required. |
-| 1813 | `crates/horizon-friends/src/reach.rs` | adaptable; reference; optional/future; privacy-sensitive | Interface, CGNAT and STUN reachability analysis for hosting. |
-| 1814 | `crates/horizon-friends/src/session.rs` | adaptable; reference; version-specific; optional/future | Negotiates direct versus relay path for Horizon friend sessions. |
-| 1815 | `crates/horizon-friends/src/stun.rs` | unnecessary; optional/future; privacy-sensitive | STUN public-IP discovery; default third-party disclosure. |
-| 1816 | `crates/horizon-friends/src/wire.rs` | adaptable; reference; version-specific | Bounded JSON relay control framing, distinct from Minecraft protocol. |
-| 1817 | `crates/horizon-hdr/Cargo.toml` | unnecessary; optional; platform-specific; version-specific | Manifest for optional wgpu/Vulkan HDR metadata and Linux Wayland dependencies. |
-| 1818 | `crates/horizon-hdr/src/lib.rs` | adaptable; optional/future; platform-specific; architecture-specific | Vulkan HDR metadata bridge; platform/GPU support unverified. |
-| 1819 | `crates/horizon-hdr/src/wayland.rs` | unnecessary; platform-specific | Linux Wayland display-luminance watcher; not Android. |
-| 1820 | `crates/horizon-items/Cargo.toml` | rewrite required; version-specific | Modern Horizon block/item component crate manifest; target-specific dependencies. |
-| 1821 | `crates/horizon-items/examples/enchantment_components_probe.rs` | undetermined; reference; example only | Offline item-component/enchantment fixture probe; example only. |
-| 1822 | `crates/horizon-items/src/banner_layer.rs` | rewrite required; version-specific | Modern banner pattern component NBT conversion; incompatible with legacy 1.20.1 schema. |
-| 1823 | `crates/horizon-items/src/blocks.rs` | rewrite required; core reference; version-specific | Per-block-state gameplay facts loader; architecture useful, source-version data differs. |
-| 1824 | `crates/horizon-items/src/blocks/decode.rs` | adaptable; core reference; version-specific | Typed low-allocation JSON/shape decoder; validate geometry semantics strictly. |
-| 1825 | `crates/horizon-items/src/blocks/decode_tests.rs` | undetermined; reference; tests only | Decoder regression tests for shape interning, malformed JSON and defaults; tests not run. |
+| 1812 | `crates/horizon-friends/src/lib.rs` | unnecessary; optional/future; network-specific | Friend-tunnel module façade and stream pump; not normal Aternos transport. |
+| 1813 | `crates/horizon-friends/src/portmap.rs` | unnecessary; optional/future; security-sensitive; platform-specific | PCP/NAT-PMP/UPnP router port mapping; explicit consent and SSRF review required. |
+| 1814 | `crates/horizon-friends/src/reach.rs` | adaptable; reference; optional/future; privacy-sensitive | Interface, CGNAT and STUN reachability analysis for hosting. |
+| 1815 | `crates/horizon-friends/src/session.rs` | adaptable; reference; version-specific; optional/future | Negotiates direct versus relay path for Horizon friend sessions. |
+| 1816 | `crates/horizon-friends/src/stun.rs` | unnecessary; optional/future; privacy-sensitive | STUN public-IP discovery; default third-party disclosure. |
+| 1817 | `crates/horizon-friends/src/wire.rs` | adaptable; reference; version-specific | Bounded JSON relay control framing, distinct from Minecraft protocol. |
+| 1818 | `crates/horizon-hdr/Cargo.toml` | unnecessary; optional; platform-specific; version-specific | Manifest for optional wgpu/Vulkan HDR metadata and Linux Wayland dependencies. |
+| 1819 | `crates/horizon-hdr/src/lib.rs` | adaptable; optional/future; platform-specific; architecture-specific | Vulkan HDR metadata bridge; platform/GPU support unverified. |
+| 1820 | `crates/horizon-hdr/src/wayland.rs` | unnecessary; platform-specific | Linux Wayland display-luminance watcher; not Android. |
+| 1821 | `crates/horizon-items/Cargo.toml` | rewrite required; version-specific | Modern Horizon block/item component crate manifest; target-specific dependencies. |
+| 1822 | `crates/horizon-items/examples/enchantment_components_probe.rs` | undetermined; reference; example only | Offline item-component/enchantment fixture probe; example only. |
+| 1823 | `crates/horizon-items/src/banner_layer.rs` | rewrite required; version-specific | Modern banner pattern component NBT conversion; incompatible with legacy 1.20.1 schema. |
+| 1824 | `crates/horizon-items/src/blocks.rs` | rewrite required; core reference; version-specific | Per-block-state gameplay facts loader; architecture useful, source-version data differs. |
+| 1825 | `crates/horizon-items/src/blocks/decode.rs` | adaptable; core reference; version-specific | Typed low-allocation JSON/shape decoder; validate geometry semantics strictly. |
