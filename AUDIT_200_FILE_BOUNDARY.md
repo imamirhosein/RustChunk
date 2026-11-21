@@ -4,45 +4,41 @@
 - Branch: `starling-1.20.1-port-audit`
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Previous stages: 1–1000, 1001–1200, 1201–1400 and 1401–1600 complete and closed.
-- Current stage: **1801–2000 — COMPLETE (200/200)**.
-- Closed sections: **1801–1850**, **1851–1900**, **1901–1950**, **1951–2000** (50/50 each).
-- Final section authorization 1951–2000 has been fully consumed; no source files remain authorized in this stage.
-- **STOP at 2000.** Global verification of entries 1–2000 and final backup await explicit user authorization.
+- Entries through 2000 are complete; global structural/provenance verification and final 1–2000 backup are preserved.
+- Current stage: **2001–2200**, progress **25/200**.
+- One-time authorization: **2001–2100** only (two adjacent 50-file sections); 2101–2200 is locked.
 
 ## Stage partition
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 1801–1850 | 1801–1825 — COMPLETE | 1826–1850 — COMPLETE | CLOSED — 50/50 |
-| 1851–1900 | 1851–1875 — COMPLETE | 1876–1900 — COMPLETE | CLOSED — 50/50 |
-| 1901–1950 | 1901–1925 — COMPLETE | 1926–1950 — COMPLETE | CLOSED — 50/50 |
-| 1951–2000 | 1951–1975 — COMPLETE | 1976–2000 — **COMPLETE** | CLOSED — 50/50 |
+| 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2051–2100 | 2051–2075 — PRE-AUTHORIZED | 2076–2100 — PRE-AUTHORIZED | AUTHORIZED IN ADVANCE — 0/50 |
+| 2101–2150 | LOCKED | LOCKED | NOT AUTHORIZED |
+| 2151–2200 | LOCKED | LOCKED | NOT AUTHORIZED |
 
-## Final checkpoint 1976–2000
+## Checkpoint 2001–2025
 
-- Exact paths were the next 25 blobs in the complete pinned source tree after excluding Index entries 1–1975.
-- All 25 files were inspected one at a time through EOF; files over 400 lines were read in contiguous, gap-free chunks no larger than 400 lines.
-- Every recorded source SHA and size was matched with the pinned recursive tree.
-- Active Ledger: `AUDIT_LEDGER_1801_2000.md`, 200 records (1801–2000), exactly 15 fields each.
-- Index: 2,000 sequential unique paths; new Ledger paths and Decisions align with Index.
-- The final inspected source segment was the `horizon-server` crate, a dedicated-server management/control subsystem targeting Minecraft Java 26.3; it is not proof of Forge 1.20.1 Android client support.
-- Embedded tests/examples inspected only; none executed. No build, benchmark, APK, device, Forge launch, server join, Aternos or renderer validation. No application/game source changed.
-- No incremental backup created.
+- Exact paths are the next 25 blobs after excluding Index entries 1–2000 from the complete pinned tree.
+- All files were inspected one at a time through EOF. Files over 400 lines were read in consecutive, gap-free ranges no larger than 400 lines: supervisor.rs 1–899; update.rs 1–1200; check.rs 1–607; manifest.rs 1–1175; stages.rs 1–697.
+- Each entry has exactly 15 required fields. Blob SHA and exact byte size match the pinned tree.
+- Index: 2,025 sequential unique paths. Active Ledger: 25 records (2001–2025).
+- Findings include server signal/supervisor/update/WebSocket issues and shader API issues: ImageGather not counted in texture budget; incomplete stage-key validation; symlink-following package traversal and late aggregate size checks; substring-based set_surface detection.
+- Shader API and samples are Horizon API 0.1/Naga 30.0.1 and renderer-specific, not drop-in Minecraft 1.20.1 Java shader support.
+- Tests/examples inspected only; none run. No build, benchmark, APK, Android, Forge, server join, Aternos or renderer validation. No app source changed.
 
-## Global verification and final backup — 2026-11-21
+## Authorization and next actions
 
-- Global verification of entries **1–2000 PASSED**.
-- Reconciled all nine Ledgers and the 2,000-row Index: sequential numbering, unique paths, exact 15 required fields, matching paths/decisions, source SHA and byte-size alignment with the pinned recursive tree.
-- Corrected 25 missing byte-size fields (entries 1–20 and 96–100) and normalized 97 Ledger Decision fields (entries within 1201–1800) to the already-recorded Index classifications while preserving their explanations.
-- All four 50-file sections in 1801–2000 are closed; no further entries in this stage remain.
-- Final backup branch: `backup/audit-2000-final-2026-11-21`; it is created from the verified audit commit and must be read back against the working branch.
-- No app/game source changes; no tests/build/benchmark/APK/device/Forge/server/Aternos/renderer validation.
-- **STOP at 2000.** Any entry 2001+ requires fresh explicit user authorization.
+- Complete 2026–2050 under current authorization. Commit and read back all six audit documents at 2050.
+- At 2050, report the first 50-file section, then continue directly into pre-authorized 2051–2100; retain checkpoints 2051–2075 and 2076–2100.
+- Close section 2051–2100 and **STOP at 2100**. Ask before entry 2101.
+- The 100-file authorization is a one-time exception only; future sections return to the default 50-file boundary approval rule.
 
 ## Rules
 
-- No further file 2001+ until a separately authorized next audit range exists.
+- One source file at a time; complete through EOF; long files in contiguous chunks no larger than 400 lines.
+- Verify each path, SHA and byte size against the pinned tree.
+- Exactly 15 Ledger fields per record; sequential unique Index paths; Ledger/Index decisions align.
 - Never claim tests/build/benchmark/APK/device/Forge/server/Aternos/renderer validation unless actually performed.
-- Do not modify application source, `main` or existing backups.
-- Do not create incremental backups. Final backup only after global verification of 1–2000.
+- Do not modify app source, `main` or existing backups.
+- Next backup only after 1,000 additional completed entries (entry 3000) and global verification.

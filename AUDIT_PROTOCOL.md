@@ -92,7 +92,7 @@ Before committing, verify:
 - The Index is globally sequential and contains no repeated paths.
 - Active Ledger entry count and Continuity resume state are correct.
 
-Commit the six-document checkpoint as one Git commit. Re-fetch all five documents from GitHub and verify their saved contents/blob SHAs and expected state. Do not call a checkpoint durable until read-back succeeds.
+Commit the six-document checkpoint as one Git commit. Re-fetch all six documents from GitHub and verify their saved contents/blob SHAs and expected state. Do not call a checkpoint durable until read-back succeeds.
 
 ## 8. Reporting and cross-chat continuity
 
@@ -134,17 +134,24 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all five document
 
 ## 12. Current authoritative resume state (2026-11-21)
 
-- Repository: `imamirhosein/RustChunk`.
-- Working branch: `starling-1.20.1-port-audit`.
-- Completed source-audit entries: **1–2000**.
-- Closed 200-file stages: **1–1000**, **1001–1200**, **1201–1400**, **1401–1600**, and **1801–2000**; all reporting sections in stage 1801–2000 are closed.
-- Active source-audit stage: **none**. The latest stage 1801–2000 is **200/200 complete**, with sections 1801–1850, 1851–1900, 1901–1950 and 1951–2000 closed.
-- Index: **2,000 sequential entries and 2,000 unique paths**.
+- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
+- Completed source entries: **1–2025**.
+- Active 200-file stage: **2001–2200**, progress **25/200**.
+- Active section: **2001–2050**; checkpoint 2001–2025 complete; checkpoint 2026–2050 authorized.
+- The user pre-authorized the adjacent section **2051–2100** as a one-time expansion. Preserve 25-file commits and report at the regular 50-file boundaries.
+- At 2050, report then continue through 2051–2100 without asking again. **STOP at 2100** and request permission before 2101.
+- **2101–2200 is not authorized.**
+- Active Ledger: `AUDIT_LEDGER_2001_2200.md`; Index: **2,025 sequential unique paths**.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
-- Global verification of entries **1–2000 PASSED** on 2026-11-21. See the final Global QA section and Continuity closeout.
-- Final backup branch: `backup/audit-2000-final-2026-11-21`. Existing `main` and 1,000-entry backups remain unchanged.
-- **STOP at 2000.** Do not inspect entry 2001+ until a new explicit user authorization is received.
-- No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validations were performed; this audit remains a source/document review, not runtime compatibility proof.
+- Global verification and final backup through entry 2000 remain the last completed backup milestone. Next backup only after 1,000 additional entries (entry 3000) and global verification.
+- No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation is implied. No application source changes.
+
+## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
+
+- The user explicitly expanded this one reporting window to **100 source entries**, covering adjacent sections **2001–2050** and **2051–2100**.
+- This is not a permanent change to the 200 / 50 / 25 protocol. Keep 25-file checkpoint commits and report at every 50-file boundary.
+- At 2050, report completion of 2001–2050 and continue the already-authorized 2051–2100 without another permission request.
+- At 2100, close the section and STOP; get fresh explicit permission before inspecting entry 2101 or later.
 
 ## 13. Historical corrections preserved
 

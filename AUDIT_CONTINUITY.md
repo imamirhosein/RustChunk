@@ -6,17 +6,17 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Last reconciled: **2026-11-20**.
-- Completed and committed entries: **1–2000**.
-- Closed prior stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active stage **1801–2000: COMPLETE — 200/200**.
-- Closed reporting sections: **1801–1850**, **1851–1900**, **1901–1950**, and **1951–2000** (50/50 each).
-- Active Ledger: `AUDIT_LEDGER_1801_2000.md`, **200 entries** (1801–2000), each with exactly 15 fields.
-- Index: **2,000 sequential entries and 2,000 unique paths**.
-- No further source entry is authorized or pending in this 200-file stage. **STOP at 2000.**
-- Next phase, only after fresh explicit user permission: **global verification of all entries 1–2000 against the pinned source tree and audit documents**. If verification passes, proceed to the **final backup**.
-- Do not create an incremental backup. Existing `main` and backup refs remain untouched.
-- Preserve the 200 / 50 / 25 cadence and read-back verification. Tests/examples remain inspected-only unless the user separately authorizes execution.
+- Last reconciled: **2026-11-21**.
+- Completed source entries: **1–2025**.
+- Previous completed stages: **1–1000**, **1001–1200**, **1201–1400**, **1401–1600**, and **1801–2000**; stage 1801–2000 and its four reporting sections are closed.
+- Active 200-file stage: **2001–2200**, progress **25/200**.
+- Current section: **2001–2050**; checkpoint 2001–2025 complete/committed; 2026–2050 authorized.
+- Next section: **2051–2100** is pre-authorized by the same one-time expanded instruction.
+- The one-time authorization covers **2001–2100 only**. Keep exact 25-file commits. Report at 2050, then continue 2051–2100 without another permission request. **STOP at 2100** and ask before 2101–2150.
+- Active Ledger: `AUDIT_LEDGER_2001_2200.md`, 25 records (2001–2025), exactly 15 fields each. Index: **2,025 sequential unique paths**.
+- Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Global verification and final backup through entry 2000 remain intact. Next backup only after 1,000 additional entries (through 3000) and global verification.
+- No application source changed. Embedded tests/examples are inspection-only unless separately authorized.
 
 ## Source pin and selection
 

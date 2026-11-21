@@ -1375,3 +1375,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Earlier source review and checkpoint records document full-file/EOF inspection and contiguous <=400-line chunks for long files. This global pass did not fetch every upstream file again solely to recalculate line counts.
 - No tests, examples, builds, benchmarks, APKs, Android-device tests, Minecraft launches, Forge 1.20.1 client runs, server joins, Aternos sessions or renderer validations were executed.
 - The final backup branch is `backup/audit-2000-final-2026-11-21`; it is created only after this verification commit and is read back against the verified working branch. Existing `main` and 1,000-entry backup refs remain read-only.
+
+
+## Source-audit checkpoint 2001–2025 — 2026-11-21
+
+- Completed entries 2001–2025 (25/25), the next lexically ordered source blobs after Index entries 1–2000 in the complete pinned Starling tree.
+- All 25 files were inspected one at a time through EOF. Files over 400 logical lines were read in contiguous, gap-free ranges no larger than 400 lines: supervisor.rs 1–899; update.rs 1–1200; check.rs 1–607; manifest.rs 1–1175; stages.rs 1–697.
+- Every entry contains all 15 required Ledger fields exactly once. Each exact source blob SHA and byte size matches the complete pinned recursive tree.
+- Findings: server supervisor signal/setup race, silent reload failures and unbounded console queue; updater lacks download/unpack bounds and has non-atomic Windows switch; WebSocket RFC6455 checks/idle timeout gaps; shader checker omits ImageGather from texture-read budget; manifest omits some stage-key validation; package loader follows symlinks and checks aggregate memory too late; stage composer uses substring detection for set_surface.
+- The shader API and examples are Horizon API 0.1/Naga 30.0.1 and renderer-specific, not drop-in Minecraft 1.20.1 Java shader support.
+- Tests/examples were inspected only; none were run. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation. No app source changed.
+- One-time authorization covers entries 2001–2100 (two 50-file sections); checkpoint 2001–2025 is closed, 2026–2050 and 2051–2100 remain authorized. Stop at 2100; 2101+ is unauthorized.
