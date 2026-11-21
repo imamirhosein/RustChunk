@@ -3,8 +3,8 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: **75/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 75 records.
-- Section 2401–2450 CLOSED (50/50); section 2451–2500 progress 25/50. One-time authorization ends at 2500. STOP at 2500; 2501+ needs fresh permission.
+- Current stage 2401–2600: **100/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 100 records.
+- Sections 2401–2450 and 2451–2500 CLOSED (50/50 each). One-time 100-file authorization 2401–2500 EXHAUSTED. **STOP at 2500; 2501+ needs fresh permission.**
 - Keep 25-file commits, 50-file reports, max 400-line chunks. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
@@ -133,7 +133,7 @@
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
-| 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
 | 2501–2550 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
 | 2551–2600 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
 
@@ -249,3 +249,12 @@
 - Active Ledger 75 entries with 15 fields; Index 2,475 sequential unique paths.
 - One-time authorization 2401–2500 remains active; next 2476–2500 authorized; report and stop at 2500.
 - No source changes, tests/build/runtime validation or backup at 2475.
+
+
+## Checkpoint 2476–2500 — COMPLETE (25/25); one-time grant exhausted
+
+- All 25 files inspected through EOF; path/SHA/size match pinned tree.
+- Long files <=400: entity_fluid.rs 1–400/401–454; inventory_use.rs 1–400/401–485.
+- Active Ledger 100 entries with 15 fields; Index 2,500 sequential unique paths.
+- One-time authorization 2401–2500 fully exhausted. STOP at 2500; 2501+ requires fresh permission.
+- No source changes, tests/build/runtime validation or backup at 2500.

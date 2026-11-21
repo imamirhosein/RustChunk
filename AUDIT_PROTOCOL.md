@@ -137,12 +137,12 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
-- Completed entries **1–2475**.
-- Active stage 2401–2600: **75/200**. Section 2401–2450 closed; section 2451–2500 is 25/50.
-- One-time authorization 2401–2500 remains active. Checkpoint **2476–2500** is authorized. Keep 25-file commits/50-file reports. Report at 2500, then **STOP**. No authorization for 2501+.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 75 records, exactly 15 fields. Index: 2,475 unique sequential paths and aligned Decisions.
+- Completed entries **1–2500**.
+- Active stage 2401–2600: **100/200**. Reporting sections 2401–2450 and 2451–2500 are both closed (50/50 each).
+- One-time exceptional authorization **2401–2500 is EXHAUSTED**. **STOP at 2500**; no authorization for 2501+ until fresh explicit user permission.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 100 records, exactly 15 fields. Index: 2,500 unique sequential paths and aligned Decisions.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use immutable commit only.
-- Next lexical unindexed entry 2476; exclude indexed/in-flight paths.
+- Next lexical unindexed entry 2501 is NOT AUTHORIZED.
 - Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -702,3 +702,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Continue 2476–2500; report at 2500 and STOP. No 2501+ authorization.
 - Key flags include UUID half-zero behavior, zero tick position, legacy mapping typo, JSON parser UTF-16/strictness edges, panic-unsafe MARKING flag and region chunk short-circuit.
 - No app source changes, tests/build/runtime validation or backup at 2475.
+
+
+## 38. One-time authorization exhausted — entries 2401–2500 — 2026-11-21
+
+- Exceptional 100-file grant 2401–2500 is fully consumed. The 200-file stage 2401–2600 is 100/200 complete; both 50-file sections 2401–2450 and 2451–2500 are closed.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md` contains 100 records; Index 2,500 sequential unique paths. Exactly 15 fields per entry; source path/SHA/size and Index Decision align.
+- **STOP at entry 2500**. No file 2501 or later may be inspected or registered until fresh explicit authorization.
+- Findings to validate before porting: FluidState amount range, inventory pickup return after partial merge, integer codec for stack size, default Damage component semantics.
+- No source code changes, tests/build/runtime validation or backup at 2500. Next backup after 3000 and global verification.

@@ -1617,3 +1617,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings: UUID half-zero conversions may drop valid UUIDs; tick position zero may be skipped; legacy enchanting-table mapping appears misspelled; malformed map decoration can fall back to empty key; JSON parser has strict apostrophe/lone-surrogate/trailing-null risks; schema MARKING thread-local reset is not panic-safe; mixed-version region test confirms short-circuit leaves later old chunks unconverted.
 - Active Ledger 75 entries with 15 fields; Index 2,475 unique sequential paths. Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation.
 - Continue 2476–2500 under same one-time authorization; STOP at 2500. No backup at 2475.
+
+
+## Audit checkpoint 2476–2500 — 2026-11-21
+
+- Completed 2476–2500 (25/25); paths/SHAs/sizes match pinned tree; Index now 2,500 sequential unique paths.
+- Long-file coverage: entity_fluid.rs 1–400/401–454; inventory_use.rs 1–400/401–485. All other files <=400 lines read fully.
+- Findings: public FluidState::new accepts out-of-range amount used as direct shape-cache index; inventory_pickup can return false after partial merge; item_defaults truncates fractional max_stack_size; item_durability may require explicit Damage component contrary to vanilla default semantics.
+- Active Ledger has 100 records, each 15 fields; Index 2,500 unique sequential paths. Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation.
+- One-time authorization 2401–2500 fully exhausted. STOP at 2500; 2501+ requires fresh explicit permission. No backup at 2500.
