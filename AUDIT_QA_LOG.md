@@ -1476,3 +1476,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 Ledger entries contain the exact 15 required fields; the global Index has 2,225 sequential unique paths and the new Ledger has 225 records (2001–2225). No application source changed.
 - No tests/examples were executed; no build, benchmark, APK, Android device, renderer, Minecraft, Forge, multiplayer server or Aternos validation was performed.
 - The 200-file stage **2201–2400** is 25/200 complete. Current 50-file section **2201–2250** is 25/50 complete; checkpoint **2226–2250** remains authorized. Continue without asking at 2225 and **STOP at 2250**.
+
+
+## Audit checkpoint 2226–2250 — 2026-11-21
+
+- Completed entries **2226–2250 (25/25)** in deterministic lexical path order after excluding the full existing Index set. Every source was read individually through EOF; long files were read in consecutive, gap-free chunks of at most 400 lines. SHA and exact byte size match the complete pinned tree.
+- Thread infrastructure findings: pool construction can report one worker after every spawn failed; registration removal can block behind a slow source callback; memory watcher Once startup cannot recover from initial thread-spawn failure; u64::MAX shares the no-limit sentinel; OS signal/priority/path handling needs per-platform verification.
+- `chunkgen_bench.rs` has a truncated-output verifier flaw: expected candidates left active at EOF may still be treated as matched. Do not rely on benchmark pass results before fixing this.
+- Differential fixtures cover effects, attributes, vertical anchors, basic feature placement, biome chunk/generation/source/temperature/placement, collision scanning, block entities and block landing. They are mock/test transports and are not production implementations. Risks include invalid equal-key comparator ordering, recursive nested placement without a depth guard, f64 normalization losing large integer precision and many trusted-fixture unwrap/index operations.
+- All 25 entries contain exactly the 15 required Ledger fields. The new Ledger has **250 entries (2001–2250)**; global Index has **2,250 sequential unique paths**, no duplicates, and matching path/Decision rows.
+- Tests/examples were inspected only; none were run. No app source changed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Section **2201–2250 is closed at 50/50**. Next range **2251–2300** requires fresh explicit authorization.

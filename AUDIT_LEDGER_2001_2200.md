@@ -3937,3 +3937,463 @@
 - The previously fetched 2201–2207 assets were re-fetched and inspected under the new authorization; they are now valid completed entries.
 - Active Ledger: 225 records (2001–2225), exactly 15 fields each. Index: 2,225 sequential unique paths. No app source changed; no tests/builds/APK/device/Forge/server/Aternos/renderer validation.
 - Continue at 2226–2250 under the same authorization; preserve 25-file checkpoints and STOP at 2250.
+
+### 2226. `crates/horizon-threads/src/jobs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b3019b7f708c2285e1c824beb7da91c0f8f3f52e`
+- Size: 25495 bytes
+- Coverage: Complete read through EOF: 705 logical lines; consecutive, gap-free chunks of at most 400 lines; exact pinned-tree size and SHA verified.
+- Purpose: Thread-pool scheduler and dynamic job-source registration
+- Dependencies / cross-references: Rust standard library and platform APIs; horizon-threads crate manifest and adjacent worker/memory modules.
+- Implementation / logic: Defines worker pool creation, priority/idle scheduling, registration lifecycle, job polling and wake/idle coordination.
+- Findings: Pool::new reports at least one worker via started.max(1) even when every OS thread spawn failed, potentially leaving queued work with zero actual workers. A slow/blocking source.next under registration synchronization can delay unregister; dropping a registration from its own job can deadlock. Requires concurrency/race tests around idle/wake and deregistration.
+- RustChunk relevance: Potentially useful as isolated platform/threading design or operational test reference; not Minecraft gameplay/protocol code.
+- Decision: rewrite required; scheduler ideas only after thread-lifecycle and failure semantics are corrected
+- 1.20.1 implications: No Minecraft 1.20.1 registry, chunk, packet or Forge mod-loading implementation.
+- Follow-up checks: Inject zero/partial thread-spawn failure; stress register/unregister and idle/wake races; test blocking source.next and self-deregistration without deadlock.
+- RustChunk implementation mapping: Keep this as a separate platform/diagnostic layer; implement target-specific interfaces and failure-safe lifecycle in RustChunk rather than importing OS-specific details.
+- Evidence required before adoption: Target-specific build/test evidence, injected failure and concurrency tests, Android ARM64/NDK validation, and resource/handle leak checks.
+- Completion state: COMPLETE — all 705 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 25495-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2227. `crates/horizon-threads/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `da62d2ba8bd74cd7ee0d99a79a588006fa0223f5`
+- Size: 24051 bytes
+- Coverage: Complete read through EOF: 590 logical lines; consecutive, gap-free chunks of at most 400 lines; exact pinned-tree size and SHA verified.
+- Purpose: Cross-platform thread, process-priority, signal, handle and filesystem helpers
+- Dependencies / cross-references: Rust standard library and platform APIs; horizon-threads crate manifest and adjacent worker/memory modules.
+- Implementation / logic: Provides OS-specific foreground/idle priority, stop-signal handling, inherited std-handle support, path/junction helpers and allocator/runtime diagnostics.
+- Findings: Unix getpriority handling needs errno-aware distinction for a valid -1 priority versus failure. Signal handlers replace prior handlers without restoring them; signal-safety assumptions for atomics and handler work need target verification. Windows junction/path conversions using lossy strings can mangle non-UTF paths. Child std-handle inheritance and Windows process behavior need platform tests.
+- RustChunk relevance: Potentially useful as isolated platform/threading design or operational test reference; not Minecraft gameplay/protocol code.
+- Decision: adaptable; split pure lifecycle abstraction from OS backends; do not port process-control code wholesale
+- 1.20.1 implications: No Minecraft 1.20.1 registry, chunk, packet or Forge mod-loading implementation.
+- Follow-up checks: Run per-OS tests for signal install/restore, errno handling, process priority, inherited handles and non-UTF Windows paths; verify Android async-signal safety.
+- RustChunk implementation mapping: Keep this as a separate platform/diagnostic layer; implement target-specific interfaces and failure-safe lifecycle in RustChunk rather than importing OS-specific details.
+- Evidence required before adoption: Target-specific build/test evidence, injected failure and concurrency tests, Android ARM64/NDK validation, and resource/handle leak checks.
+- Completion state: COMPLETE — all 590 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 24051-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2228. `crates/horizon-threads/src/memory_limit.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `68c8c5b6e930f9f50e1d00ea75964dfb0728ff28`
+- Size: 17047 bytes
+- Coverage: Complete read through EOF: 449 logical lines; consecutive, gap-free chunks of at most 400 lines; exact pinned-tree size and SHA verified.
+- Purpose: Process memory pressure watcher and platform-specific memory-limit controls
+- Dependencies / cross-references: Rust standard library and platform APIs; horizon-threads crate manifest and adjacent worker/memory modules.
+- Implementation / logic: Tracks configured limits, periodically samples process memory and exposes soft-cap/last-resort shrink signals through platform-specific implementations.
+- Findings: Watcher startup uses Once; if initial thread spawn fails, Once is consumed and later attempts cannot restart enforcement. u64::MAX doubles as the no-limit sentinel while Some(u64::MAX) is representable, causing ambiguity. Platform paths and callback semantics need failure-injection tests.
+- RustChunk relevance: Potentially useful as isolated platform/threading design or operational test reference; not Minecraft gameplay/protocol code.
+- Decision: adaptable; retain only a bounded, restartable memory-pressure interface; reimplement per Android target
+- 1.20.1 implications: No Minecraft 1.20.1 registry, chunk, packet or Forge mod-loading implementation.
+- Follow-up checks: Inject first watcher spawn failure and verify retry; distinguish no-limit from u64::MAX; test memory sampling, callbacks and shrink lifecycle on Android/Linux/Windows.
+- RustChunk implementation mapping: Keep this as a separate platform/diagnostic layer; implement target-specific interfaces and failure-safe lifecycle in RustChunk rather than importing OS-specific details.
+- Evidence required before adoption: Target-specific build/test evidence, injected failure and concurrency tests, Android ARM64/NDK validation, and resource/handle leak checks.
+- Completion state: COMPLETE — all 449 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 17047-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2229. `crates/horizon-world/examples/attribute_memory.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b814711ac1dbe873fd8f9f21e32f719323d4999a`
+- Size: 1458 bytes
+- Coverage: Complete read through EOF: 47 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Held-live attribute allocation workload for external RSS measurement
+- Dependencies / cross-references: horizon-world BlockLandingRegistry, collision/movement registries, NBT, entity obstruction and core geometry.
+- Implementation / logic: Builds a registry, constructs up to 100,000 zombie attribute containers, optionally ensures four attributes per entity, emits a summary and holds allocations while waiting on stdin.
+- Findings: The entity count is bounded, but positional arguments are indexed without arity checks and unknown attribute ids/entities are unwrapped; malformed invocation panics. This is an external profiling workload, not an allocator contract or game runtime.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; profiling example only; do not ship in the client
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Differential-test landing rules, collision shapes, damage sources, sound and event order against Java 1.20.1; validate NBT resources and chunk/entity mutation.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 47 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 1458-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2230. `crates/horizon-world/examples/behaviour_load_profile.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d9d7a11476d0fbfb31f60b81745b8e27e1bce319`
+- Size: 1131 bytes
+- Coverage: Complete read through EOF: 32 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Registry and behaviour-resource load-time profiler
+- Dependencies / cross-references: horizon-world BlockLandingRegistry, collision/movement registries, NBT, entity obstruction and core geometry.
+- Implementation / logic: Loads the client registry, optionally selects a cache directory, loads behaviours three times and reports elapsed milliseconds.
+- Findings: Resource path is required with expect; the profile is a one-process timing sample and does not isolate disk cache, warm-up or device variance. It measures Horizon's resource loader, not Minecraft/Forge load time.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; benchmark harness only; repeat with controlled Android/1.20.1 resources before drawing performance conclusions
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Differential-test landing rules, collision shapes, damage sources, sound and event order against Java 1.20.1; validate NBT resources and chunk/entity mutation.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 32 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 1131-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2231. `crates/horizon-world/examples/chunkgen_bench.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2eb433600d2e75b8efbd75d4268f7b1e0d0a23e0`
+- Size: 24990 bytes
+- Coverage: Complete read through EOF: 652 logical lines; consecutive, gap-free chunks of at most 400 lines; exact pinned-tree size and SHA verified.
+- Purpose: Chunk-generation benchmark and binary output verifier
+- Dependencies / cross-references: horizon-world generation/resource registries, NBT/loot systems and CLI argument inputs; depends on prepared client data packs.
+- Implementation / logic: Runs seeded generation across configurable work, records NBT-like output/checksums and compares generated candidate output against expected fixture streams.
+- Findings: Verifier can accept truncated output: after EOF it may leave still-active candidates marked as matched rather than requiring every expected line to be consumed. This is a correctness flaw in the benchmark's oracle comparison. CLI size/thread/coordinate inputs also lack robust bounds and may cause zero-work, overflow, panic or excessive allocations.
+- RustChunk relevance: Benchmark harness only; no shipped runtime value and no verified Android/Minecraft performance measurement.
+- Decision: reference; do not trust its pass result until EOF completeness and argument validation are fixed
+- 1.20.1 implications: No runtime compatibility claim; these examples consume Horizon-specific resource/registry formats and are not drop-in Forge 1.20.1 tooling.
+- Follow-up checks: Add truncated-output and missing-tail regression cases; require every expected line and stream EOF; validate CLI bounds/checked coordinate arithmetic and zero-thread behavior.
+- RustChunk implementation mapping: Keep benchmark/oracle code under tools or examples; never include it in the Android runtime dependency graph.
+- Evidence required before adoption: Reproducible benchmark corpus, complete output verification, versioned resource hashes, and separate Android device measurements.
+- Completion state: COMPLETE — all 652 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 24990-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2232. `crates/horizon-world/examples/lod_grid_bench.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4f93737779901b382c93adb73405f37e964fe8a9`
+- Size: 4184 bytes
+- Coverage: Complete read through EOF: 99 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Far-terrain LOD grid timing and checksum benchmark
+- Dependencies / cross-references: horizon-world generation/resource registries, NBT/loot systems and CLI argument inputs; depends on prepared client data packs.
+- Implementation / logic: Loads overworld generator resources, warms a worker, samples tiles at selected levels and emits span/shape checksums with optional dump.
+- Findings: tiles is not validated: zero leads to division by zero in per-tile metrics; negative values produce misleading/empty work. Level shifts and tile-coordinate multiplication can overflow or panic for invalid levels/large values. The benchmark's 5-column coordinate formula assumes a bounded tile layout.
+- RustChunk relevance: Benchmark harness only; no shipped runtime value and no verified Android/Minecraft performance measurement.
+- Decision: reference; LOD benchmark idea only; validate parameters and do not treat numbers as Android or Minecraft client performance
+- 1.20.1 implications: No runtime compatibility claim; these examples consume Horizon-specific resource/registry formats and are not drop-in Forge 1.20.1 tooling.
+- Follow-up checks: Reject tiles<=0 and invalid levels; checked shifts/coordinate math; add deterministic workload size checks and run device-separated benchmarks only after correctness.
+- RustChunk implementation mapping: Keep benchmark/oracle code under tools or examples; never include it in the Android runtime dependency graph.
+- Evidence required before adoption: Reproducible benchmark corpus, complete output verification, versioned resource hashes, and separate Android device measurements.
+- Completion state: COMPLETE — all 99 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 4184-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2233. `crates/horizon-world/examples/loot_fill.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b1b5ee0d508f95b9fea78953a02e9093bb015c5e`
+- Size: 1391 bytes
+- Coverage: Complete read through EOF: 36 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Vanilla-format loot-table fill oracle
+- Dependencies / cross-references: horizon-world generation/resource registries, NBT/loot systems and CLI argument inputs; depends on prepared client data packs.
+- Implementation / logic: Loads loot resources, iterates supplied table names and seeds, fills a 27-slot container and prints item/count/damage/enchantment records.
+- Findings: No cap on table/seed argument counts or generated output; missing positional arguments return usage errors but large input lists can create unbounded work/output. It is a CLI oracle, not loot implementation integration evidence.
+- RustChunk relevance: Loot-table oracle utility only; no evidence of Forge loot-mod compatibility.
+- Decision: reference; fixture/oracle utility only; do not ship
+- 1.20.1 implications: No runtime compatibility claim; these examples consume Horizon-specific resource/registry formats and are not drop-in Forge 1.20.1 tooling.
+- Follow-up checks: Bound table/seed arguments and output; validate table identifiers and test known Java 1.20.1 loot tables with the correct registry snapshot.
+- RustChunk implementation mapping: Keep benchmark/oracle code under tools or examples; never include it in the Android runtime dependency graph.
+- Evidence required before adoption: Reproducible benchmark corpus, complete output verification, versioned resource hashes, and separate Android device measurements.
+- Completion state: COMPLETE — all 36 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 1391-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2234. `crates/horizon-world/examples/probe/active_effect_tick_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1e366bf447b2032c345323938b9c54ff936edf62`
+- Size: 17616 bytes
+- Coverage: Complete read through EOF: 529 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Differential fixture for active-effect ticking, random sources and consume effects
+- Dependencies / cross-references: horizon-world active_effects/status_effect hooks; deterministic Java-compatible random sources; adjacent effect/consume fixtures.
+- Implementation / logic: Models effect keys/instances, hidden effects, callback events/failures, storage mutation, tick and consume-effect operations; compares deterministic state/event output.
+- Findings: Key::tie_break returns Less when identity <= other.identity; if two distinct keys share identity this violates ordering consistency and can corrupt collision-bin ordering assumptions. Extensive unwrap/indexing relies on trusted generated JSON; side is incorporated into output filenames. No fixture corpus or oracle comparison was executed.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; useful behavioral test design only; repair comparator and validate fixture inputs before relying on results
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Make key comparator return Equal for equal identity (or enforce unique identity); fuzz malformed corpus schema; compare callback traces with Java oracle.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 529 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 17616-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2235. `crates/horizon-world/examples/probe/active_effects_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `70395e813bbd4280915c7b910db873de3a4b713e`
+- Size: 10216 bytes
+- Coverage: Complete read through EOF: 316 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Differential fixture for ActiveEffects map, callbacks and effect identity
+- Dependencies / cross-references: horizon-world active_effects/status_effect hooks; deterministic Java-compatible random sources; adjacent effect/consume fixtures.
+- Implementation / logic: Serializes effect map, object identity, hidden-chain data and callback events while exercising add/remove/force/blend/get operations.
+- Findings: Its JavaKey tie_break uses the same <= comparison; duplicate identity values can return Less in both directions. Input arrays and ids are trusted and indexed/unwrap-heavy; side-based input/output paths are not sandboxed. This is fixture harness behavior, not production collection implementation.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; test-only transport; comparator and input-contract limitations must be recorded
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Make key comparator return Equal for equal identity (or enforce unique identity); fuzz malformed corpus schema; compare callback traces with Java oracle.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 316 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 10216-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2236. `crates/horizon-world/examples/probe/anchor_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `230b056992e3970ff97329ad53e02c14d026a835`
+- Size: 2376 bytes
+- Coverage: Complete read through EOF: 71 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Vertical-anchor serialization and resolution comparison fixture
+- Dependencies / cross-references: horizon-world worldgen::anchor types and WorldGenerationContext.
+- Implementation / logic: Exercises bottom/top/sea-level and absolute/relative anchors against generation contexts, including JSON decoding and resolution outputs.
+- Findings: JSON values are unwrapped and narrowed from i64 to i32, so malformed/out-of-range fixture values panic or wrap. No production validation is implemented in this example; actual VerticalAnchor behavior lives in the library.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; use as an oracle shape only; validate numeric ranges in a RustChunk-owned fixture runner
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate i32 conversions/context ranges and JSON shape; differential-test anchor serialization against Java 1.20.1.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 71 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 2376-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2237. `crates/horizon-world/examples/probe/attribute_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `79cf4e236c12a2201190508bbbe225a7d8ca99c8`
+- Size: 7158 bytes
+- Coverage: Complete read through EOF: 194 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Attribute modifier state and observer-failure differential fixture
+- Dependencies / cross-references: horizon-world::attributes Instance/Definition/Modifier/Observer APIs.
+- Implementation / logic: Exercises base values, transient/permanent modifiers, operation grouping, pack/unpack, copying and observer callback errors for two attribute instances.
+- Findings: Fixture schema is trusted: it assumes two definitions, valid modifier indices and valid Operation::ALL indices. Numerous unwraps/indexes turn malformed corpus data into panics. No production Attribute implementation is included in this example.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; fixture-only coverage; use library code for behavior and add schema validation to any new oracle
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate fixture schemas, handles and indexes; test callback failure/mutation order against Java reference implementation; keep examples unexecuted until authorized.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 194 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 7158-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2238. `crates/horizon-world/examples/probe/attribute_health_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `05e779aacbec934e5c980b1aa9e0bac6b9989174`
+- Size: 10936 bytes
+- Coverage: Complete read through EOF: 309 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Attribute-health and food/health integration fixture
+- Dependencies / cross-references: horizon-world attribute_health, live/entity attributes, food and living_health APIs.
+- Implementation / logic: Combines entity/live attribute implementations, health synchronization, absorption, food ticking, healing, starvation and injected observer errors.
+- Findings: The test adapter assumes catalog keys, two instances, valid operation/difficulty/attribute indexes and parseable bit strings. Invalid fixture data panics; comments explicitly state this fixture does not test cross-attribute hash order.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; useful integration matrix concept only; not a production health subsystem
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate fixture schemas, handles and indexes; test callback failure/mutation order against Java reference implementation; keep examples unexecuted until authorized.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 309 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 10936-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2239. `crates/horizon-world/examples/probe/attribute_map_queries_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8b7bf110a50f70ba50e13d9403d325b2a49ba0ef`
+- Size: 19814 bytes
+- Coverage: Complete read through EOF: 504 logical lines; consecutive, gap-free chunks of at most 400 lines; exact pinned-tree size and SHA verified.
+- Purpose: Attribute-map query, stored-effect notification and prototype differential fixture
+- Dependencies / cross-references: Includes stored_effect_attributes_fixture.rs; uses attribute_map queries, effect_notifications and active_effects.
+- Implementation / logic: Includes a shared stored-effect fixture and implements query, lookup, instance edits, modifier notification, refresh and effect integration cases.
+- Findings: The fixture relies on generated handle/index invariants and unchecked references into instance/template/supplier arrays. Its key-order/comparator assumptions and input schema are not validated at runtime. The side argument forms fixture filenames directly. No production API behavior is proved by this transport alone.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; fixture coverage only; preserve its modeled call ordering but add bounded and validated inputs
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate fixture schemas, handles and indexes; test callback failure/mutation order against Java reference implementation; keep examples unexecuted until authorized.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 504 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 19814-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2240. `crates/horizon-world/examples/probe/attribute_updates_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6bf9d815e34d490cc2272a66e4af813768ad0d8f`
+- Size: 21523 bytes
+- Coverage: Complete read through EOF: 637 logical lines; consecutive, gap-free chunks of at most 400 lines; exact pinned-tree size and SHA verified.
+- Purpose: Differential fixture for attribute-update propagation and effect notifications
+- Dependencies / cross-references: horizon-world attribute_updates, living_health, effect_notifications, active_effects and ObjectOpenSet.
+- Implementation / logic: Models pending update sets, health/absorption state, effect eligibility/add/update/remove, passenger packets and callback failure/mutation sequences.
+- Findings: Key::tie_break has the same <= ordering defect under duplicate identities. Many JSON arrays/indexes are trusted; side is interpolated into input/output paths. It tests callback ordering in a mock world, not live network packet compatibility with Minecraft 1.20.1.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; extract ordering scenarios only; validate comparator and fixture schema before oracle use
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Make key comparator return Equal for equal identity (or enforce unique identity); fuzz malformed corpus schema; compare callback traces with Java oracle.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 637 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 21523-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2241. `crates/horizon-world/examples/probe/basic_feature_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2e6bf9d73822c4d1716e6d50b90356f036ff17a5`
+- Size: 6189 bytes
+- Coverage: Complete read through EOF: 175 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Basic world-feature placement fixture
+- Dependencies / cross-references: horizon-world feature/placement, registry BlockStateId and random sources.
+- Implementation / logic: Decodes a basic feature and optional placement modifiers, then places repeatedly against an in-memory mock block world with deterministic pseudo-block lookup and injected read/write failures.
+- Findings: The mock height query always returns Unavailable; rem_euclid denominator is fixture-provided and can be zero, and malformed/negative repeat values produce panic or empty-loop behavior. Not a complete terrain/world integration.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; feature placement test harness only; do not treat it as a supported feature implementation
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Reject zero divisor, invalid coordinates and unbounded repeats; compare placement sequence and random draw count with Java oracle.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 175 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 6189-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2242. `crates/horizon-world/examples/probe/biome_chunk_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e0c7f1686643e1b3b54c3191a8d13f2be647400c`
+- Size: 3985 bytes
+- Coverage: Complete read through EOF: 104 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: BiomeChunk fill, retrogen and noise-biome query fixture
+- Dependencies / cross-references: horizon-world BiomeChunk and RetrogenBiomeResolver; core ChunkPos.
+- Implementation / logic: Tests section filling, injected resolver failures, previous-biome retention and coordinate queries using deterministic mock biome ids.
+- Findings: Fixture height is narrowed/cast and later used as usize for section loops; negative or implausible dimensions can yield huge iteration. rem_euclid divisor comes from input and can be zero. It is a focused storage/fill fixture, not actual climate biome generation.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; retain section/retrogen scenario coverage only; validate dimensions and divisors
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate min/height/divisors and cap section loops; test partial-fill failure and retrogen behavior across negative world heights.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 104 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 3985-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2243. `crates/horizon-world/examples/probe/biome_generation_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f5a609a5c3f44289e2f6c9fe93029f9aa2572c8d`
+- Size: 5229 bytes
+- Coverage: Complete read through EOF: 129 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Seeded climate-router and biome-source generation fixture
+- Dependencies / cross-references: horizon-core density graph, climate, biome zoom and horizon-world biome_source/router/biome_chunk.
+- Implementation / logic: Loads noise/density/preset registry JSON, compiles a seeded density graph, resolves fixed/checkerboard/end/preset sources, fills biome chunks and queries block-to-quart zoom.
+- Findings: Uses min + height - 1 and height conversions without local bounds validation; invalid dimensions could overflow or create excessive loops. Data is loaded from a synthetic fixture bundle, so it is not by itself proof of exact vanilla 1.20.1 registry/codec parity.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; useful generator test design; pin registries and validate bounds before adoption
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Use exact versioned 1.20.1 noise/density/preset registries; validate height math and compare seeded samples to Java generator outputs.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 129 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 5229-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2244. `crates/horizon-world/examples/probe/biome_placement_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `36a8cb7e6d36a44fe15dce683bf1d075a57552f9`
+- Size: 6106 bytes
+- Coverage: Complete read through EOF: 175 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Biome-filtered feature-placement and nested callback fixture
+- Dependencies / cross-references: horizon-world FeaturePlacer/PlacementModifier and core random generators.
+- Implementation / logic: Exercises direct modifier invocation, contextual placement, top-feature identity, query/feature failures, nested placement and legacy/worldgen random streams.
+- Findings: When nested=true, the feature callback recursively invokes another biome placement with the same nested flag; if the biome predicate keeps accepting and no injected feature failure terminates it, recursion can grow without bound. Direct mode only invokes modifiers[0], explicitly relying on a unit-biome-filter corpus rather than arbitrary modifier chains.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; use only for controlled oracle scenarios; add recursion depth/cycle guard in any new test harness
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Add nested-depth/cycle limit and exercise direct modifier chains beyond the single-filter corpus; compare random-consumption and biome query order.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 175 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 6106-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2245. `crates/horizon-world/examples/probe/biome_source_codec_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `70347bbc6c385af91de16f2e132303b821a60219`
+- Size: 3019 bytes
+- Coverage: Complete read through EOF: 79 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Registry-aware biome-source encode/decode fixture
+- Dependencies / cross-references: horizon-world BiomeSourceCatalog, tags, climate sampler and density registry.
+- Implementation / logic: Builds biome and tag catalogues, decodes and re-encodes sources, lists possible biomes and samples deterministic resolver positions.
+- Findings: Normalization converts every JSON number through f64 before comparing bits; integer JSON values above 2^53 lose precision and distinct values may collapse. This is a differential-oracle blind spot if large integer fields enter the schema; `assert!` also assumes no tag names are missing.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; codec oracle only after preserving integer-vs-float JSON representation
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Preserve integer JSON numbers exactly; avoid f64-normalizing all numeric values; add codec round-trip tests for large integers and missing tags.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 79 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 3019-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2246. `crates/horizon-world/examples/probe/biome_source_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `021e67a0fc2ab3f4d4491342943bac8931e436c7`
+- Size: 2794 bytes
+- Coverage: Complete read through EOF: 79 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Fixed, checkerboard and End biome-source differential fixture
+- Dependencies / cross-references: FixedBiomeSource, CheckerboardBiomeSource, EndBiomeSource and mock DensitySampler.
+- Implementation / logic: Samples source implementations at many positions, traces erosion sampler calls and tests sampler failure paths.
+- Findings: Fixture JSON and position/biome indexes are unwrapped; checkerboard scale and erosion bit patterns depend on trusted corpus. It isolates source algorithms but not registry codec or full generation parity.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; focused source oracle only; keep separate from full generator validation
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate positions/scales and compare End erosion sampling/cache call order against Java implementation.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 79 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 2794-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2247. `crates/horizon-world/examples/probe/biome_temperature_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e5b367947d4a342100f226eeffd5a9c5299250e1`
+- Size: 4590 bytes
+- Coverage: Complete read through EOF: 119 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Biome temperature, weather threshold and cache fixture
+- Dependencies / cross-references: horizon-world biome_temperature settings/cache and core BlockPos.
+- Implementation / logic: Exercises temperature adjustment, precipitation decisions, warm/rain, cold/snow, frozen-iceberg checks, cache fills, cache dumps and thread-local worker recreation.
+- Findings: Input JSON/hex strings and operation indexes are unvalidated. Negative fill counts silently run no loop; thread operation creates a fresh worker, so it does not prove cross-thread cache sharing or parallel safety.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; temperature oracle scenarios only; distinguish thread recreation from concurrent worker behavior
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate hex float and operation schema; test cache semantics with genuine concurrent access rather than a fresh worker per nested thread operation.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 119 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 4590-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2248. `crates/horizon-world/examples/probe/block_collision_scan_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b561a84759bf910aa7251b44fd8410e6a6fb5587`
+- Size: 6919 bytes
+- Coverage: Complete read through EOF: 199 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Block-collision scanning and ground-support fixture
+- Dependencies / cross-references: horizon-world BlockCollisionScan, CollisionContext, VoxelShape and ground-support APIs.
+- Implementation / logic: Supplies deterministic mock chunks/blocks/shapes, suffocation flags, injected errors, scan hit iteration and supporting-block search.
+- Findings: Palette/state indices and AABB bit inputs are trusted; a malformed fixture may panic. The one-million scan budget bounds the harness but does not establish production-world chunk loading, collision-shape correctness or target-version parity.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; useful collision scenario generator only; validate shape and chunk bounds against target 1.20.1
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Validate palette indexes/AABBs and chunk-missing semantics; compare collision scan order and support search with Java 1.20.1 world collision results.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 199 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 6919-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2249. `crates/horizon-world/examples/probe/block_entity_storage_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `687eed79077b8ba9d78272a65ebe61ee2b71a7f9`
+- Size: 6102 bytes
+- Coverage: Complete read through EOF: 169 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Prototype block-entity active/pending storage fixture
+- Dependencies / cross-references: horizon-world ProtoBlockEntities and NBT Tag; line-oriented test input protocol.
+- Implementation / logic: Exercises chunk resets, pending/active positions, marker tags, mutation, save conversion, sorted dump and size counts.
+- Findings: Input::tag reads a value token before checking the kind; a `none` kind therefore still needs a placeholder token or it panics. `pending()` panics when marker is absent/not Long. split_whitespace cannot preserve arbitrary strings with spaces. This is a strict fixture line protocol, not a robust NBT reader.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; block-entity scenario harness only; do not reuse its parser for untrusted NBT
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Use a typed parser with explicit token counts and bounded NBT decoding; test malformed marker tags, `none` encoding and arbitrary string values.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 169 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 6102-byte size match. Tests/examples were inspected, not executed.
+
+
+### 2250. `crates/horizon-world/examples/probe/block_landing_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a6ab6ac33893265dfa165a807bfe8a60b0f14633`
+- Size: 10826 bytes
+- Coverage: Complete read through EOF: 310 logical lines; full file within one read; exact pinned-tree size and SHA verified.
+- Purpose: Block landing, bounce, fall damage, sound and push integration fixture
+- Dependencies / cross-references: horizon-world BlockLandingRegistry, collision/movement registries, NBT, entity obstruction and core geometry.
+- Implementation / logic: Loads block/movement/collision registries from NBT, builds landing definitions and simulates collision queries, entity AABB pushes, teleportation, sound/damage/event and block mutation with injected failures.
+- Findings: The mock `collision_shape` expects registered cached shapes and panics if assumptions fail. Entity/world flags and binary NBT inputs are trusted; this harness is not a full game server nor a target-1.20.1 packet/event test. No example was executed.
+- RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
+- Decision: reference; integration-oracle design only; independently validate entity collision and block effects against Java 1.20.1
+- 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
+- Follow-up checks: Differential-test landing rules, collision shapes, damage sources, sound and event order against Java 1.20.1; validate NBT resources and chunk/entity mutation.
+- RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
+- Evidence required before adoption: Java 1.20.1 reference outputs, version-pinned registry/packet data, valid/invalid corpus coverage and explicit test results; no Aternos claim without live connection tests.
+- Completion state: COMPLETE — all 310 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 10826-byte size match. Tests/examples were inspected, not executed.
+
+
+## Checkpoint 2226–2250 — complete (25/25); section 2201–2250 closed
+
+- Entries 2226–2250 were inspected individually to EOF in serial order. Long files were covered in contiguous, gap-free chunks no larger than 400 lines. Every path, source SHA and byte size matches the complete pinned recursive tree.
+- The jobs, memory-limit and cross-platform thread helpers expose worker-start, unregister/wake, sentinel and platform API concerns that need failure/concurrency tests before any reuse.
+- The chunkgen benchmark contains an output-verifier EOF flaw that can accept truncated results; benchmark results must not be trusted until corrected.
+- The remaining examples are benchmark or differential-fixture transports with trusted-corpus assumptions. They are not shipped runtime features. A fixture key comparator can violate ordering when distinct keys have equal identity; the biome source codec's f64 normalization can lose large integer precision; nested placement mode can recurse without bound if its predicates keep accepting.
+- No test/example was executed. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer-server or Aternos validation was performed.
+- Ledger contains **250 records (2001–2250)** with exactly 15 fields each. Index contains **2,250 sequential unique paths** with matching Decisions. Reporting section **2201–2250 is CLOSED (50/50)**.
+- The one-time authorization is exhausted. **STOP at 2250** and require fresh explicit permission before entry 2251.

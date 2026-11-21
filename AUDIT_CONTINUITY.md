@@ -7,16 +7,16 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2225**.
-- Active 200-file stage: **2201–2400**, progress **25/200**.
-- Current reporting section: **2201–2250**, progress **25/50**; checkpoint 2201–2225 is complete and 2226–2250 is already authorized.
-- The user's current one-time authorization covers the full **2201–2250** window. Keep 25-file commits; do not stop/request permission at 2225; **STOP at 2250** and request fresh permission before 2251.
-- Active Ledger AUDIT_LEDGER_2001_2200.md now contains **225 records (2001–2225)** with exactly 15 fields; Index contains **2,225 sequential unique paths**.
-- Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; complete recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 (truncated:false).
-- The formerly accidental fetches 2201–2207 were re-fetched and inspected under this authorization; they are now included in the audit and Index.
-- Entry 2214 is a custom Horizon star, not Pixelarticons; its separate asset-license provenance needs resolution. Allocator and platform/UI findings are recorded in the new Ledger entries.
-- Existing final backup still covers entries 1–2000. No backup is due at 2225; next backup after entry 3000 and global verification.
-- No application source changed. No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed source entries: **1–2250**.
+- Active 200-file stage: **2201–2400**, progress **50/200**.
+- Closed reporting section: **2201–2250 (50/50)**, checkpoints **2201–2225** and **2226–2250** both complete and read-back verified.
+- The one-time user authorization for **2201–2250** is exhausted. **STOP before entry 2251**; obtain fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_2001_2200.md` contains **250 records (2001–2250)** with exactly 15 fields; Index contains **2,250 sequential unique paths**.
+- Pinned upstream: `starling-client/starling` @ `${pinned}`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Seven previously fetched assets 2201–2207 were re-fetched and included under the new 2201–2250 authorization; all are now legitimate completed entries.
+- Entry 2214 remains a custom Horizon star with unresolved separate asset-license provenance. The jobs/threads/memory issues and chunkgen benchmark verifier defect from 2226–2250 are documented.
+- Existing final backup still covers entries **1–2000** only. No backup at 2250; next backup only after entry 3000 and global verification.
+- No application source changed. Tests/examples were inspected only, not run; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -564,3 +564,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Ledger has 225 records (2001–2225) with 15 fields per record; Index has 2,225 sequential unique paths.
 - Checkpoint 2226–2250 remains within the same one-time authorization. Continue without a pause at 2225; STOP at 2250.
 - No app source change or runtime validation. No backup at this checkpoint.
+
+## Latest verified checkpoint — 2226–2250 — 2026-11-21
+
+- Entries 2226–2250 (25/25) inspected serially through EOF; SHA/size align with the pinned tree. Long files are covered contiguously in chunks <=400 lines.
+- Ledger contains 250 records (2001–2250), 15 fields each; Index has 2,250 sequential unique paths with Decisions aligned.
+- 50-file section 2201–2250 is closed. Authorization exhausted. Stop before 2251 and request fresh permission.
+- No application source change, tests or runtime validation. No backup at this boundary.

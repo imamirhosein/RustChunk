@@ -1,12 +1,13 @@
 # RustChunk — 200-File Audit Boundary Register
 
-- Repository: imamirhosein/RustChunk
-- Branch: starling-1.20.1-port-audit
-- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Pinned recursive tree: aa193ad1daa40ab307340c4a61dc6b0176bd0e23 (truncated:false)
-- Entries 1–2000 passed global structural/provenance verification and final backup; entries 2001–2200 are closed.
-- Current 200-file stage: 2201–2400, progress 25/200.
-- Current authorized section: 2201–2250, progress 25/50. Checkpoint 2201–2225 is complete; 2226–2250 is already authorized. STOP at 2250, not at 2225.
+- Repository: `imamirhosein/RustChunk`
+- Branch: `starling-1.20.1-port-audit`
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
+- Entries **1–2000** passed global structural/provenance verification and final backup; entries **2001–2250** are now complete.
+- Current 200-file stage: **2201–2400**, progress **50/200**.
+- Reporting section **2201–2250 is CLOSED (50/50)**. Both 25-file checkpoints are complete and committed.
+- **STOP at 2250.** Next section 2251–2300 requires fresh explicit user authorization.
 
 ## Stage partition
 
@@ -127,3 +128,21 @@
 - Ledger: 225 records in 2001–2225; exactly 15 fields each. Index: 2,225 sequential unique paths; decisions align.
 - The seven previously fetched assets 2201–2207 were re-fetched and reviewed within this explicit authorization; they are now included as complete entries.
 - Continue immediately at 2226 under the same authorization. Preserve the next exact 25-file checkpoint, then STOP at 2250. No authorization exists for 2251+.
+
+
+## Current stage partition — 2201–2400
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50; authorization exhausted |
+| 2251–2300 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+
+## Checkpoint 2226–2250 — COMPLETE (25/25)
+
+- Each source was inspected individually through EOF; paths, SHAs and byte sizes align with the complete pinned tree. Long files were read in sequential, gap-free chunks no larger than 400 lines.
+- New Ledger records 2226–2250 contain exactly 15 required fields. Combined Ledger count is 250 (2001–2250); Index is 2,250 sequential unique paths with Decisions aligned.
+- Critical recorded findings: jobs pool can misreport active worker count after spawn failure; memory watcher Once cannot retry after spawn failure; chunkgen benchmark may accept truncated output; fixture-only comparator, recursive placement and numeric-normalization blind spots.
+- No tests/examples executed; no app source changed; no runtime/build/device/game validation.
+- **STOP at 2250.** No permission exists for 2251 or later until the user explicitly authorizes the next 50-file section.

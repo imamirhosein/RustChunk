@@ -134,16 +134,16 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 
 ## 12. Current authoritative resume state (2026-11-21)
 
-- Repository: imamirhosein/RustChunk; working branch: starling-1.20.1-port-audit.
-- Completed source entries: 1–2225.
-- Active 200-file stage: 2201–2400, progress 25/200.
-- Active reporting section: 2201–2250, progress 25/50; checkpoint 2201–2225 is complete and 2226–2250 is pre-authorized.
-- The user's one-time authorization covers 2201–2250 only. Keep exact 25-file checkpoint commits; continue 2226–2250 without requesting permission at 2225; STOP at 2250 and request new explicit authorization before 2251.
-- Active Ledger AUDIT_LEDGER_2001_2200.md: 225 records (2001–2225); Index: 2,225 sequential unique paths.
-- Upstream starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 is complete (truncated:false).
-- Entries 1–2000 have global structural/provenance verification and final backup backup/audit-2000-final-2026-11-21. Next backup only after 1,000 further completed entries (entry 3000) and global verification.
-- Seven assets 2201–2207 previously fetched out of range were re-fetched and inspected under the present authorization; they are now completed audit entries.
-- No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation is implied. No application source changes.
+- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
+- Completed source entries: **1–2250**.
+- Active 200-file stage: **2201–2400**, progress **50/200**.
+- Closed reporting section: **2201–2250 (50/50)**, checkpoints **2201–2225** and **2226–2250** complete.
+- The one-time user authorization for **2201–2250** is exhausted. **STOP before 2251**; request fresh explicit authorization.
+- Active Ledger: `AUDIT_LEDGER_2001_2200.md`, **250 records (2001–2250)** with exactly 15 required fields; Index: **2,250 sequential unique paths**.
+- Upstream: `starling-client/starling` @ `${pinned}`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after 1,000 additional entries (entry 3000) and global verification.
+- The 2201–2207 assets previously fetched before authorization were re-fetched and inspected under the 2201–2250 authorization; they are recorded as completed entries.
+- Tests/examples inspected only, not executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source changes.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -577,3 +577,12 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Theme entries contain unvalidated public float inputs and only source-level tests; the Windows GDI boot painter is not an Android backend. The unsafe heap-census allocator needs independent soundness review.
 - The user has authorized the complete 50-file window 2201–2250. Preserve commits at 2201–2225 and 2226–2250. Do not stop/request permission at 2225; STOP only at 2250.
 - No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation; no application source changed. No backup at this checkpoint.
+
+
+## 23. Closed reporting section — entries 2201–2250 — 2026-11-21
+
+- The user authorized exactly one regular 50-file section, **2201–2250**, with the standard two 25-file checkpoint commits. Both checkpoints are complete and verified.
+- Ledger contains **250 records (2001–2250)** with all 15 required fields exactly once. Index contains **2,250 sequential unique paths**; Ledger/Index Decisions align.
+- Entries 2226–2250 include thread-pool, cross-platform thread and memory watcher facilities plus examples/fixtures for attributes, effects, worldgen, biome, collision, block-entity and landing behavior. The benchmark verifier flaw and fixture-oracle limitations are documented in Ledger/QA.
+- Tests/examples were inspected only; none were run. No application source change or runtime validation.
+- **STOP at 2250.** The authorization is exhausted; 2251–2300 requires fresh explicit permission. Preserve 25-file commits and 50-file reporting boundaries by default.
