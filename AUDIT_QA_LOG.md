@@ -1544,3 +1544,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Structural read-back checks: 200 + 100 records; sequential ranges with no gaps; all 300 records have the 15 required fields exactly once; 300 unique source paths; every Ledger path and primary Decision aligns with the matching Index row.
 - Global Index remains 2,300 sequential unique paths. Reporting sections 2201–2250 and 2251–2300 remain closed; user authorization for 2301–2350 remains active, with STOP at 2350.
 - Historical QA notes reporting 300 records in the old Ledger describe the pre-correction physical layout and are retained as historical snapshots. No upstream source or RustChunk application code changed. Tests/examples were not run; no build, APK, device, Minecraft, Forge, server or Aternos validation was performed.
+
+## Audit checkpoint 2301–2325 — 2026-11-21
+
+- Completed entries **2301–2325 (25/25)** after the complete Index boundary in deterministic lexical path order. The recursive source tree is complete (`truncated:false`); each path, blob SHA and exact byte size matches the pinned upstream commit.
+- Coverage: fluid boxes/states/flow/occupancy/shapes, food and NBT persistence, ground state, height providers/maps, interaction shapes, inventory pickup/ticks/use/start, item after-use/blocking/cooldowns/durability/particles, stack storage/templates and item-use catalog/basic use.
+- These are synthetic differential-test transports, not shipped runtime features. Common limits include trusted JSON/NBT inputs, unchecked array/registry indexes, numeric narrowing, unbounded sample/particle counts and fixed mock inventory/item sets. `item_durability_fixture.rs` uses `unenchanted_change`, so enchantment durability changes are not covered.
+- `inventory_pickup_fixture.rs` (410 lines) was read in ranges 1–400 and 401–410; `inventory_use_start_fixture.rs` (436) in 1–400 and 401–436.
+- All 25 Ledger entries contain exactly 15 fields. Active Ledger has **125 records (2201–2325)**; Index has **2,325 sequential unique paths** with matching Decisions.
+- No examples/tests were executed; no RustChunk app source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
+- The user's one-time expanded authorization covers **2301–2400**. Continue with 2326–2350 without asking at 2325; proceed through the remaining two checkpoints; **STOP at 2400**.

@@ -136,15 +136,14 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 
 ## 12. Current authoritative resume state (2026-11-21)
 
-- Repository: imamirhosein/RustChunk; working branch: starling-1.20.1-port-audit.
-- Completed source entries: 1–2300.
-- Active 200-file stage: 2201–2400, progress 100/200.
-- Reporting sections 2201–2250 and 2251–2300 are closed (50/50); all four 25-file checkpoints are committed and read-back verified.
-- User authorization covers 2301–2350, including checkpoints 2301–2325 and 2326–2350. Do not pause at 2325. STOP at 2350 and request fresh permission before 2351.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md` contains 200 records (2001–2200); active Ledger `AUDIT_LEDGER_2201_2400.md` contains 100 records (2201–2300). Every entry has exactly 15 fields; Index contains 2,300 sequential unique paths.
-- Upstream starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 is complete. Future source selection is lexical after latest indexed path; historical IDs remain stable.
-- Decisions 2276–2300 are normalized to adaptable; reference. Fixture-only/no-runtime status remains in Findings/Relevance. Entry 2280 is 303 logical lines.
-- Entries 1–2000 have final backup backup/audit-2000-final-2026-11-21. Next backup only after entry 3000 and global verification.
+- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
+- Completed source entries: **1–2325**.
+- Active 200-file stage: **2201–2400**, progress **125/200**.
+- Sections **2201–2250** and **2251–2300** are closed; section **2301–2350** is in progress (**25/50**); section **2351–2400** remains authorized.
+- The user's one-time expanded authorization covers **2301–2400**. Checkpoint **2301–2325** is complete; continue through 2326–2350, 2351–2375 and 2376–2400 without permission pauses at 2325/2350/2375; **STOP at 2400** and request fresh permission before 2401.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Active Ledger `AUDIT_LEDGER_2201_2400.md`: **125 records (2201–2325)** with exactly 15 fields per entry. Index: **2,325 sequential unique paths**.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`). Future selection remains deterministic lexical path order after the latest indexed path, excluding all Index paths; historical IDs remain stable.
+- Entries 1–2000 have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification.
 - Tests/examples inspected only; none executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source change.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -637,3 +636,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The 300 entry numbers, source paths, Decisions, SHA/size/coverage evidence and Index rows are unchanged. All 300 records pass the 15-field and Ledger/Index alignment checks.
 - Earlier QA/Continuity/Protocol statements that the old Ledger held 225, 275 or 300 records are historical snapshots of the pre-correction layout, not the current file partition.
 - Current authorization remains 2301–2350; do not pause at 2325 and STOP at 2350.
+
+## 30. One-time expanded authorization 2301–2400 and checkpoint 2301–2325 — 2026-11-21
+
+- The user extended the current exceptional window to **2301–2400 (100 files total, one time only)**. This does not permanently change the 200/50/25 cadence.
+- Checkpoint **2301–2325 is COMPLETE (25/25)**. Checkpoints **2326–2350**, **2351–2375** and **2376–2400** remain covered by the same grant. Do not pause for permission at 2325, 2350 or 2375. **STOP at 2400** and request explicit permission before 2401.
+- Active Ledger `AUDIT_LEDGER_2201_2400.md` contains **125 records (2201–2325)** with exactly 15 required fields; Index contains **2,325 sequential unique paths** with matching Decisions.
+- All 25 files were read through EOF; 2313 (410 lines) and 2316 (436 lines) were read in contiguous chunks no larger than 400 lines. Source SHAs and sizes match the complete pinned tree.
+- These files are test/fixture transports for fluid, food, heightmaps, interaction shapes, inventory and item use; they are not shipped runtime implementations. Tests/examples were inspected, not executed.
+- No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
