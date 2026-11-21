@@ -319,16 +319,16 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Stage closed at 200/200. Stop at 2600; fresh authorization is required for 2601+.
 
 
-## Active stage 2601–2800 — first 50-file section complete
+## Active stage 2601–2800 — second 50-file section underway
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2601–2650 | 2601–2625 — **COMPLETE** | 2626–2650 — **COMPLETE** | **CLOSED — 50/50** |
-| 2651–2700 | 2651–2675 — **AUTHORIZED** | 2676–2700 — **AUTHORIZED** | PRE-AUTHORIZED — 0/50 |
+| 2651–2700 | 2651–2675 — **COMPLETE** | 2676–2700 — **AUTHORIZED** | OPEN — 25/50 |
 | 2701–2750 | 2701–2725 — NOT AUTHORIZED | 2726–2750 — NOT AUTHORIZED | **STOP after 2700** |
 
 - Standard 200 / 50 / 25 protocol is unchanged. The one-time exception covers exactly 100 files: two 50-file sections and four 25-file commits.
-- Section 2601–2650 is complete and verified. Both checkpoints and the six-document update were committed atomically.
-- Continue with 2651–2675 and 2676–2700 under the existing explicit grant; report at 2700 and **STOP**.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: 50 records. Index: 2,650 sequential unique paths. No backup is due before 3000/global verification.
+- Checkpoint 2651–2675 is complete and verified. Continue with 2676–2700 under the same explicit grant.
+- **STOP at 2700** and do not inspect or prepare entry 2701+.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: 75 records. Index: 2,675 sequential unique paths. No backup is due before 3000/global verification.
 - No source changes; tests/examples not executed; no build or runtime validation.

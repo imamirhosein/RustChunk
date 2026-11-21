@@ -134,16 +134,16 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-21; after checkpoint 2626–2650)
+## 12. Current authoritative resume state (2026-11-21; after checkpoint 2651–2675)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
-- Completed entries **1–2650**. Stage 2401–2600 remains closed and globally verified.
-- Active 200-file stage **2601–2800**: **50/200** complete. Section **2601–2650** is closed (50/50); both 25-file checkpoints are committed and read-back verified.
-- The one-time exceptional grant covers **2601–2700**. Continue through **2651–2675** and **2676–2700** without another request at 2650. Report at 2700 and **STOP**; 2701+ is not authorized.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **50 records (2601–2650)**, every record has exactly 15 fields. Index: **2,650 sequential unique paths**, with new entries aligned to Ledger paths and Decisions.
+- Completed entries **1–2675**. Stage 2401–2600 remains closed and globally verified.
+- Active 200-file stage **2601–2800**: **75/200** complete. Section 2601–2650 is closed (50/50); section 2651–2700 is 25/50 complete.
+- One-time exceptional grant covers exactly **2601–2700**. Checkpoints 2601–2625, 2626–2650 and 2651–2675 are committed and verified. The remaining authorized checkpoint is **2676–2700**. Complete it, report and **STOP at 2700**; 2701+ is not authorized.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **75 records (2601–2675)**, each with exactly 15 fields. Index: **2,675 sequential unique paths**, with new entries aligned to Ledger paths and Decisions.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use the immutable commit only.
-- Recursive source tree is complete and untruncated. The 100-entry candidate list was selected in strict raw lexical order after excluding all 2,600 earlier Index paths; entry 2700 is the 100th candidate.
-- Standard 200 / 50 / 25 cadence remains. Commit every 25 files, report at 50-file boundaries and stop at the authorization boundary.
+- Recursive source tree is complete and untruncated. The 100-entry candidate list was selected in strict raw lexical order after excluding all 2,600 earlier Index paths; entry 2700 is the 100th authorized path.
+- Standard 200 / 50 / 25 cadence remains. Commit every 25 files and stop at the exceptional authorization boundary.
 - Backup only after 3000 and global verification. No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 
@@ -795,3 +795,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Section **2601–2650** is closed at 50/50. The one-time authorization remains active for section **2651–2700**.
 - Continue with exact checkpoints 2651–2675 and 2676–2700, committing all six audit documents after each. No permission request is needed at 2650 because the same explicit grant covers all 100 files.
 - **STOP after entry 2700**. Entry 2701 and later are outside the authorization.
+
+
+## 49. Second 50-file section underway under one-time authorization — 2026-11-21
+
+- The second section **2651–2700** is 25/50 complete. Checkpoint **2651–2675** is committed and independently verified.
+- Checkpoint **2676–2700** remains covered by the same explicit exceptional grant. Continue without asking at the 2675 checkpoint.
+- Commit all six audit documents atomically after the final 25 entries and perform full read-back QA.
+- **STOP immediately after entry 2700**. No review, candidate inspection or entry creation for 2701+ is authorized.

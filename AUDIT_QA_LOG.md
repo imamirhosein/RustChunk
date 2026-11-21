@@ -1731,3 +1731,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Removed a stale historical sentence that still read as a current STOP-at-2600 authorization after the 2601–2700 one-time grant had been issued.
 - The 2401–2600 statement is now clearly marked as historical/closed. Current authorization remains exactly 2601–2700; stop after 2700.
 - This is documentation-only. No source file changed and no additional source entry was inspected.
+
+
+## Audit checkpoint 2651–2675 — 2026-11-21 — COMPLETE
+
+- Entries 2651–2675 were individually inspected through EOF at pinned Starling commit `5432370d573642041585c69b40fb045b27133488`. The complete source tree is untruncated; all 25 paths, blob SHAs and Git tree byte sizes were checked against it.
+- Long-file reads were contiguous and gap-free: `generator.rs` 1–400/401–800/801–1200/1201–1600/1601–2000/2001–2400/2401–2800/2801–3200/3201–3600/3601–4000/4001–4400/4401–4575; `generator_decoration.rs` 1–400/401–800/801–1200/1201–1481; `generator_structures.rs` 1–400/401–800/801–841; `material_condition.rs` 1–400/401–748; `material_condition/codec.rs` 1–400/401–468; `material_stage.rs` 1–400/401–426; `overrides.rs` 1–400/401–478; `placement.rs` 1–400/401–505.
+- `generator_blocks.rs`, `height_provider.rs`, `iceberg.rs`, `live.rs`, `long_set.rs`, `material_condition/density.rs`, `library.rs`, `noise.rs`, `rule.rs`, `material_extensions.rs`, `material_surface.rs`, `ore_feature.rs`, `placement/chain.rs` and `placement/context.rs` were read through EOF in whole-file calls/chunks no larger than 400 lines.
+- Ledger now contains **75 records (2601–2675)**; every record has exactly 15 required fields. Index contains **2,675 sequential unique paths**, with the 25 new paths and Decisions aligned to Ledger. New active paths are strictly raw-lexically ordered.
+- Important 1.20.1 risks: later-version generator stage orchestration and worldgen resource schemas; structure/feature sorting; material-condition/rule codecs; datapack overlay paths; and placement modifier/random/world-mutation semantics. No direct compatibility is assumed.
+- Embedded tests/examples were inspected only; none were executed. No RustChunk product source was modified. No build, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed. No backup is due at this checkpoint.
