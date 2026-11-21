@@ -5,7 +5,7 @@
 - Entries 1–2000 globally verified/backed up; entries 2001–2650 inspected and committed; active 200-file stage is **2601–2800 (50/200)**.
 - Section **2601–2650 is closed (50/50)**. The user’s one-time exceptional grant covers **2601–2700**; section 2651–2700 is pre-authorized.
 
-- Independent full-stage QA passed after correcting the active 2401–2600 range to strict raw lexical path order. No missing/duplicate paths, schema errors, Ledger/Index mismatches or source provenance errors remain. **STOP at 2600**; 2601+ requires fresh permission.
+- Historical note: the 2401–2600 stage was fully QA-verified and closed after its lexical-order correction. It is not the current authorization boundary; the active 2601–2800 stage and the user’s one-time 2601–2700 grant are stated below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
 
 ## Stage partition

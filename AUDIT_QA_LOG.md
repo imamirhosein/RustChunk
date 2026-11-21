@@ -1724,3 +1724,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger now contains 50 records (2601–2650); every entry has exactly 15 required fields. Index has 2,650 sequential unique paths; entries 2626–2650 are path/Decision-aligned and strictly ordered.
 - Compatibility risks: carver/density codecs and RNG, climate index tie semantics, decoration scheduler ordering, feature catalogue versions, End structure side effects and WorldGenRegion/ProtoChunk writes/ticks.
 - Embedded tests/examples inspected only, none executed. No RustChunk source code changed; no build, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation. No backup due at this checkpoint.
+
+
+## Boundary-register wording correction — 2026-11-21
+
+- Removed a stale historical sentence that still read as a current STOP-at-2600 authorization after the 2601–2700 one-time grant had been issued.
+- The 2401–2600 statement is now clearly marked as historical/closed. Current authorization remains exactly 2601–2700; stop after 2700.
+- This is documentation-only. No source file changed and no additional source entry was inspected.
