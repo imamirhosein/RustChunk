@@ -928,3 +928,462 @@
 - Active Ledger now has 50 records (2401–2450), every entry exactly 15 fields. Index has 2,450 sequential unique paths and matching Decisions.
 - Tests/examples inspected only, none executed. No application source changed, no build/APK/device/runtime validation. No backup at 2450.
 - Section 2401–2450 CLOSED (50/50). Continue 2451–2475 under existing 2401–2500 grant; report at 2500 and STOP.
+
+### 2451. `crates/horizon-world/src/datafix/fixes_b.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `708d266c8ffecbf5c9b0c020eac8787fb21fc3b1`
+- Size: 55416 bytes
+- Coverage: Complete through EOF: 1471 logical lines; consecutive ranges 1–400,401–800,801–1200,1201–1471; each <=400 lines.
+- Purpose: Modern entity/item/world datafix registrations and migrations
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Registers ordered schema-version fixes for entities, item components, worldgen settings, attributes, structures and related saved data.
+- Findings: Multiple fixes share version keys and order is semantic. UUID conversion helpers require both long halves nonzero; malformed/valid UUIDs with one zero half may be lost. Some unknown IDs collapse to fallback names.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Differential-test UUID half-zero cases, duplicate version registrations, unknown IDs and all migration steps with matching Java DataFixer versions; do not use post-1.20.1 fixes in target runtime.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1471 logical lines through EOF; pinned SHA and 55416-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2452. `crates/horizon-world/src/datafix/fixes_c.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9ef351d38a09b332f1ad782e7079b207611062f2`
+- Size: 34539 bytes
+- Coverage: Complete through EOF: 1043 logical lines; consecutive ranges 1–400,401–800,801–1043; each <=400 lines.
+- Purpose: World/chunk/biome and entity datafixes for later schemas
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Registers world-gen settings, biome containers, chunk status, POI, structure and entity migration steps.
+- Findings: Version-specific assumptions include fixed biome container layouts and old tick/height encodings; malformed lists may be replaced by defaults. Some keys are repeated across ordered substeps.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test chunk/biome layouts at every version boundary, missing sections, invalid palettes and preservation of unknown NBT.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1043 logical lines through EOF; pinned SHA and 34539-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2453. `crates/horizon-world/src/datafix/fixes_cliffs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c9861c4079ba3b71eb8877c79f46cee9294fc876`
+- Size: 57632 bytes
+- Coverage: Complete through EOF: 1623 logical lines; consecutive ranges 1–400,401–800,801–1200,1201–1623; each <=400 lines.
+- Purpose: Chunk/height/biome/structure migration around 1.18-era world changes
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Migrates old chunk levels, heightmaps, biome containers, carving masks, structures, ticks and status metadata.
+- Findings: 1623 lines read 1–400/401–800/801–1200/1201–1623. Tick conversion skips packed position <=0, which may discard valid local origin (0,0,0); confirm native semantics. Coordinate differences use abs and may hit i32::MIN edge behavior.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test origin tick, negative chunk coords, extreme coordinate deltas, packed biome/heightmap boundaries and old/new section formats against Java.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1623 logical lines through EOF; pinned SHA and 57632-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2454. `crates/horizon-world/src/datafix/fixes_flat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `29f24b0efa2b9ac0e16734d195545050c5520051`
+- Size: 42176 bytes
+- Coverage: Complete through EOF: 1224 logical lines; consecutive ranges 1–400,401–600,601–800,801–1200,1201–1224; each <=400 lines.
+- Purpose: Flat-world, structure, item and block-name legacy migrations
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Registers older DataFixer steps for flat generators, block/item renames, chunk layouts, structures and legacy metadata.
+- Findings: 1224 lines read in 1–400/401–600/601–800/801–1200/1201–1224. Unknown flat structure names can fall back to a default config; palette and biome conversions assume known version schemas.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test unknown structure IDs, malformed flat-layer strings, chunk palettes and migration boundaries; keep legacy mappings separate from 1.20.1 registry.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1224 logical lines through EOF; pinned SHA and 42176-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2455. `crates/horizon-world/src/datafix/fixes_legacy.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2bb5f08a9664a52471e8ba682ca109c3dc372a09`
+- Size: 28146 bytes
+- Coverage: Complete through EOF: 787 logical lines; consecutive ranges 1–400,401–787; each <=400 lines.
+- Purpose: Legacy pre-flattening item/entity/block-entity and UUID migrations
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Handles old entity IDs, equipment, block IDs, spawn eggs, item stacks, UUID strings, signs, inventories and block-entity layouts.
+- Findings: 787 lines read 1–400/401–787. UUID parser accepts variable component widths and masks overflow rather than enforcing canonical UUID groups; recursive Riding chains can exhaust stack on adversarial depth.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test malformed UUID widths/overflow, deeply nested Riding chains, unknown entity/block-entity IDs and exact 1.12 conversion behavior.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 787 logical lines through EOF; pinned SHA and 28146-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2456. `crates/horizon-world/src/datafix/fixes_mid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `54a4f51c0af5f830e3955b560997d2adb9f19cf8`
+- Size: 62365 bytes
+- Coverage: Complete through EOF: 1815 logical lines; consecutive ranges 1–400,401–800,801–1200,1201–1600,1601–1815; each <=400 lines.
+- Purpose: Mid-era chunk, entity, biome, palette and packed-storage datafixes
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Migrates block/biome containers, UUIDs, entity tags, worldgen settings, heightmaps and packed bit-storage formats.
+- Findings: 1815 lines read 1–400/401–800/801–1200/1201–1600/1601–1815. UUID-from-longs returns None when either half is zero; may drop valid UUIDs. Packed-storage alignment and boundary behavior need exact 1.18-era oracle tests.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test UUID half-zero values, non-power-of-two bit widths, packed-long final-word boundaries, empty/short arrays and chunk palette round trips.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1815 logical lines through EOF; pinned SHA and 62365-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2457. `crates/horizon-world/src/datafix/fixes_old.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `82a5a62f3a4395be4d5bd0276ff9f9e8d9d01ccf`
+- Size: 24301 bytes
+- Coverage: Complete through EOF: 714 logical lines; consecutive ranges 1–400,401–714; each <=400 lines.
+- Purpose: Old DataFixer migrations for entities, signs, spawners and world data
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Implements early fixes for entity names/UUIDs, block entities, riding/passengers, spawn data, stats, POI and old chunk metadata.
+- Findings: 714 lines read 1–400/401–714. Several conversions silently default unknown enum/variant values; recursive entity tree transformations assume finite depth and well-formed compounds.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test malformed legacy tags, unknown enum values, nested passenger depth and id/version boundaries with Java oracle.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 714 logical lines through EOF; pinned SHA and 24301-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2458. `crates/horizon-world/src/datafix/flat_tables.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cea46f64c62f6112ddbc0f0848abb91aac757878`
+- Size: 97674 bytes
+- Coverage: Complete through EOF: 2791 logical lines; consecutive ranges 1–400,401–800,801–1200,1201–1600,1601–2000,2001–2200,2201–2400,2401–2791; each <=400 lines.
+- Purpose: Static legacy flattening, block/item/entity and biome mapping tables
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Provides static lookup tables used by legacy block/item/entity/biome and statistics datafixers.
+- Findings: 2791 lines checked in <=400-line ranges; static tuple tables parsed for duplicate keys, none found in checked tuple maps. Contains apparent `minecraft:enhanting_table` misspelling in legacy item-to-block-entity mapping; verify if source historical typo or broken lookup.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Verify enchanting-table mapping against original Java tables and test all legacy aliases/IDs; preserve historical order and do not use as target-version registry.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 2791 logical lines through EOF; pinned SHA and 97674-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2459. `crates/horizon-world/src/datafix/items.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a5ce49972fbd2b253257b008fceb8740f879c79a`
+- Size: 46538 bytes
+- Coverage: Complete through EOF: 1411 logical lines; consecutive ranges 1–400,401–600,601–800,801–1000,1001–1200,1201–1411; each <=400 lines.
+- Purpose: ItemStack, item-name, component, profile and map-decoration datafixes
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Converts legacy stacks/tags into modern component patches, migrates books, banners, block predicates, maps, equipment, containers and entity/block-entity payloads.
+- Findings: 1411 lines read in 1–400/401–600/601–800/801–1000/1001–1200/1201–1411. Malformed map-decoration IDs can fall back to empty key instead of leaving stack untouched; typo `enhanting_table` appears in legacy mapping path.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test malformed map decorations, unknown component IDs, duplicate map keys, item count/damage edge cases and enchanting-table item mapping against Java.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1411 logical lines through EOF; pinned SHA and 46538-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2460. `crates/horizon-world/src/datafix/json.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4cab8ff1d2e4ae0e9c1ca054b17737efbf8d1551`
+- Size: 20988 bytes
+- Coverage: Complete through EOF: 644 logical lines; consecutive ranges 1–400,401–644; each <=400 lines.
+- Purpose: Gson-compatible JSON parser, stable writer and JSON/NBT conversion
+- Dependencies / cross-references: horizon-world DataFixer schemas, NBT, region files, JSON, registry snapshots and historical version tables.
+- Implementation / logic: Implements strict/lenient JSON reading, UTF-16 strings, numeric exact-long parsing, stable key ordering and NBT conversion.
+- Findings: 644 lines read 1–400/401–644. Strict quoted parser appears to accept escaped apostrophe; UTF-16 escape conversion rejects lone surrogates; lenient top-level null may return early despite trailing input. Exact-long exponent arithmetic has extreme i64 overflow risk.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test strict/lenient grammar, lone surrogate escapes, trailing tokens after null, extreme exponents and Java Gson/NbtOps parity.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 644 logical lines through EOF; pinned SHA and 20988-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2461. `crates/horizon-world/src/datafix/progress.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `de254d8c3e43cbc9cba7c5824362ecd516744118`
+- Size: 9344 bytes
+- Coverage: Complete through EOF: 282 logical lines; full file; no gaps.
+- Purpose: Concurrent world-upgrade progress, cancellation and file-fixer statistics
+- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
+- Implementation / logic: Stores atomic totals/status/type/progress and per-dimension progress behind Mutex for UI polling.
+- Findings: 282 lines; relaxed atomics are used consistently for independent counters; poisoned dimension mutex silently drops updates and reads as zero.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test concurrent polling, cancellation visibility, overflow and poisoned-mutex fallback with Java screen semantics.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 282 logical lines through EOF; pinned SHA and 9344-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2462. `crates/horizon-world/src/datafix/schema_flat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12730c255521ac21c330e3dfec7ed346e59bcac6`
+- Size: 20043 bytes
+- Coverage: Complete through EOF: 508 logical lines; consecutive ranges 1–400,401–508; each <=400 lines.
+- Purpose: Pre-1.14 DataFixer schema walkers and untyped entity-tree marking
+- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
+- Implementation / logic: Walks legacy entity/block-entity/chunk/spawner schemas and marks unknown trees to preserve untyped data.
+- Findings: 508 lines read 1–400/401–508. MARKING thread-local bool is set/reset manually; panic during walk can leave it true for later work on same thread. Nested mark_untyped calls can also clear outer state.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Use RAII/thread-local nesting counter; test panic recovery, nested calls and unknown entity-list preservation.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 508 logical lines through EOF; pinned SHA and 20043-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2463. `crates/horizon-world/src/datafix/schema.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9f5ab287a4c7f8bb360e47b894ec0ac6d048ce75`
+- Size: 37580 bytes
+- Coverage: Complete through EOF: 947 logical lines; consecutive ranges 1–400,401–600,601–800,801–947; each <=400 lines.
+- Purpose: Versioned DataFixer schema registry and typed traversal
+- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
+- Implementation / logic: Defines entity/item/block-entity/structure/biome/component schema traversal and version-gated known-ID tables.
+- Findings: 947 lines read 1–400/401–600/601–800/801–947. Schema registration and repeated key order are critical; recursive tree walking assumes finite NBT depth. Unknown IDs intentionally remain untyped.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test all schema version cutovers, unknown IDs, deeply nested NBT, component/tag renames and DataVersion transitions.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 947 logical lines through EOF; pinned SHA and 37580-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2464. `crates/horizon-world/src/datafix/text.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `56c4e8da8261a92477c8e48681c4267ba1aca0b5`
+- Size: 8042 bytes
+- Coverage: Complete through EOF: 252 logical lines; full file; no gaps.
+- Purpose: 1.21.5 text-component and hover/click event migrations
+- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
+- Implementation / logic: Unflattens JSON text strings, rewrites legacy hover events, stringifies boolean style flags and changes hover/click fields.
+- Findings: 252 lines; URI validator approximates java.net.URI and chat-character filter uses UTF-16 units; malformed legacy hover payloads are converted to display text rather than rejected.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test URI authority/escape edge cases, lone surrogates, malformed hover actions and 1.21.5 schema behavior.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 252 logical lines through EOF; pinned SHA and 8042-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2465. `crates/horizon-world/src/datafix/world_upgrader_tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a8bc69d9ac7085c0a691748ea5a28f6e9a2ae61c`
+- Size: 10245 bytes
+- Coverage: Complete through EOF: 298 logical lines; full file; no gaps.
+- Purpose: World-upgrader region, progress, cancellation and cache-erasure tests
+- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
+- Implementation / logic: Builds temporary worlds/region files and tests conversion, skip, POI defaults, cache removal, recreation, cancellation and thread join.
+- Findings: 298 lines; test explicitly confirms a current/skipped chunk short-circuits the rest of that region-file pass, so an older later chunk remains unconverted. Mixed-version chunks can therefore leave stale data unless native behavior is intentional.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Validate mixed-version chunks in one region and compare Java loop semantics; add regression test ensuring every old chunk is visited if required.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 298 logical lines through EOF; pinned SHA and 10245-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2466. `crates/horizon-world/src/dynamic_support.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5a3e12afd84312d8a11aadbd5abd2e16867650e9`
+- Size: 9917 bytes
+- Coverage: Complete through EOF: 254 logical lines; full file; no gaps.
+- Purpose: Dynamic support/collision shapes for bamboo, dripstone, scaffolding, powder snow, shulkers and moving pistons
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Selects state-specific shape, position-seeded offsets and live block-entity/piston callbacks; exposes support and collision shape paths.
+- Findings: Shulker collision uses snapshot bounding box while support uses open/closed state callback; Direction discriminants index fixed six-element shape array.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test all six directions, open/closed snapshots, position-seeded offsets and moving-piston absence with Java 1.20.1.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 254 logical lines through EOF; pinned SHA and 9917-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2467. `crates/horizon-world/src/edge_backoff.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4303b2d7436977993c53c24b884f060a45d633ee`
+- Size: 3609 bytes
+- Coverage: Complete through EOF: 108 logical lines; full file; no gaps.
+- Purpose: Player/self crouch edge-backoff movement reduction
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Reduces horizontal movement in 0.05 increments while collision probes indicate unsupported ground.
+- Findings: 108 lines; max_up_step is not validated for negative/NaN values; query budget exhaustion returns error after earlier world callbacks have already occurred.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test zero/negative/NaN step, all mover types, diagonal reduction, budget exhaustion and exact collision probe order.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 108 logical lines through EOF; pinned SHA and 3609-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2468. `crates/horizon-world/src/effect_attribute_modifiers.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `53aaac1629f0a72ddda2734b4fdb020480728162`
+- Size: 4740 bytes
+- Coverage: Complete through EOF: 139 logical lines; full file; no gaps.
+- Purpose: Status-effect attribute modifier template creation and reentrant traversal
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Adds/removes permanent modifiers through ObjectOpenMap cursor while callbacks may mutate definitions.
+- Findings: Re-reads indexed entry after remove callback in add_modifiers; remove_modifiers does not re-read because it has no later use. Cursor invalidation is surfaced explicitly.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test callback replacement/rehash, removal errors, amplifier overflow and identity/order parity.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 139 logical lines through EOF; pinned SHA and 4740-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2469. `crates/horizon-world/src/effect_notifications.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cea64b21de47c4d999685e00fe8845d00de5f2cf`
+- Size: 8779 bytes
+- Coverage: Complete through EOF: 246 logical lines; full file; no gaps.
+- Purpose: Effect eligibility, attribute refresh and server-player passenger notifications
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Implements immunity-tag precedence, update/remove packets, attribute modifier hooks and pending-update traversal.
+- Findings: Immunity tags are exclusive priority order (Infested before Oozing before Poison/Regeneration). Packet send loops query current entity ID per passenger; stable connection captured before virtual call.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test overlapping immunity tags, passenger list mutation, callback errors, attribute-set rehash and packet ordering.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 246 logical lines through EOF; pinned SHA and 8779-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2470. `crates/horizon-world/src/effect_particles.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `60494dcf062dfe293d161060a6e9b64faecb25a1`
+- Size: 4553 bytes
+- Coverage: Complete through EOF: 125 logical lines; full file; no gaps.
+- Purpose: Registered status-effect particle factories and option identity
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Loads versioned particle catalog; creates fresh color particles and reuses registered constant particle Arc identity.
+- Findings: Catalog validates DataVersion and ambient alpha; equality is pointer identity, so fresh equal-color options remain unequal by design.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test duplicate IDs, invalid colors, constant identity reuse and synchronized-list equality with Java.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 125 logical lines through EOF; pinned SHA and 4553-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2471. `crates/horizon-world/src/effect_sync.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `50d8c61342843a7dfa590caf752490f457ca56e4`
+- Size: 6721 bytes
+- Coverage: Complete through EOF: 208 logical lines; full file; no gaps.
+- Purpose: Effect particle, ambient, invisibility and glowing synchronized state
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Builds particle list, computes all-ambient, updates shared flags and mirrors client/server glowing logic.
+- Findings: Flag reads sign-extend u8 through i8 before bit tests; shift uses wrapping_shl to mirror Java int shift masking. Empty effects clear particles/invisibility but ambient flag is not rewritten on that branch.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test signed high bits, shift counts, empty-effect ambient state and repeated virtual level/client queries.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 208 logical lines through EOF; pinned SHA and 6721-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2472. `crates/horizon-world/src/entity_collision.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8ef42b648946f81a2f12d086a2fb38b09786560f`
+- Size: 2694 bytes
+- Coverage: Complete through EOF: 77 logical lines; full file; no gaps.
+- Purpose: EntityGetter collision-shape selection from ordered entity snapshot
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Inflates AABB, filters source/spectator/nonintersecting candidates and asks provider collision policy in native order.
+- Findings: No explicit candidate budget; broadphase may return supersets, but snapshot handles must remain available through callbacks.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test source-null semantics, vehicle relationships, candidate ordering and pathological dense entity sets.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 77 logical lines through EOF; pinned SHA and 2694-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2473. `crates/horizon-world/src/entity_fluid_tick.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `22e6fd4d26ce3c67acab376b993aa8104b43f6fb`
+- Size: 2383 bytes
+- Coverage: Complete through EOF: 62 logical lines; full file; no gaps.
+- Purpose: Entity water-entry splash, fall reset and water/lava current application
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Runs fluid interaction update, captures water/lava membership, handles splash transitions and applies current forces.
+- Findings: is_pushed_by_fluid queried twice by design; water/lava membership captured before splash callbacks, preserving native phase ordering.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test callback mutation between the two push checks, splash transitions, fast-lava and current ordering.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 62 logical lines through EOF; pinned SHA and 2383-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2474. `crates/horizon-world/src/entity_fluid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a4c64e357070dcf09f8aa52abf8f91da38444932`
+- Size: 16671 bytes
+- Coverage: Complete through EOF: 454 logical lines; consecutive ranges 1–400,401–454; each <=400 lines.
+- Purpose: Entity fluid immersion trackers, loaded-chunk checks and current accumulation
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Scans loaded chunks/sections in Z-X-Y order, tracks fluid heights/eyes, maps current to first matching tag and applies player average vs mob direction.
+- Findings: 454 lines read 1–400/401–454. Query budget counts chunk, section and fluid cells; tracker/current writes persist if later provider call fails. Float NaN behavior uses Java-compatible max helper.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test missing chunks, negative sections, NaN surfaces, overlapping fluid tags, query-budget exhaustion and partial-state semantics.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 454 logical lines through EOF; pinned SHA and 16671-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2475. `crates/horizon-world/src/entity_move.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `25d7aef14bfd8a4c17a6212ebd697dd9afd9cefe`
+- Size: 8093 bytes
+- Coverage: Complete through EOF: 214 logical lines; full file; no gaps.
+- Purpose: Entity.move collision, support, fall reset, movement history and emission ordering
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Coordinates piston limits, stuck multiplier, edge backoff, collision resolution, position/history, flags, fall damage, restitution and movement emission.
+- Findings: No-physics branch sets position/record/flags then returns without later fall/ground/emission callbacks. MovementHistory compresses oldest two at 100 entries; exact +0.0 check distinguishes negative zero.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test no-physics callback order, negative-zero movement, 100-entry history compression, piston/shulker movers and client authority.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 214 logical lines through EOF; pinned SHA and 8093-byte size verified; inspected, not modified; tests not executed.
+
+
+## Checkpoint 2451–2475 — COMPLETE (25/25)
+
+- All 25 files inspected individually through EOF; paths, SHAs and sizes match pinned source tree.
+- Long-file ranges <=400: fixes_b.rs 1–400/401–800/801–1200/1201–1471; fixes_c.rs 1–400/401–800/801–1043; fixes_cliffs.rs 1–400/401–800/801–1200/1201–1623; fixes_flat.rs 1–400/401–600/601–800/801–1200/1201–1224; fixes_legacy.rs 1–400/401–787; fixes_mid.rs 1–400/401–800/801–1200/1201–1600/1601–1815; fixes_old.rs 1–400/401–714; flat_tables.rs 1–400/401–800/801–1200/1201–1600/1601–2000/2001–2200/2201–2400/2401–2791; items.rs 1–400/401–600/601–800/801–1000/1001–1200/1201–1411; json.rs 1–400/401–644; schema_flat.rs 1–400/401–508; schema.rs 1–400/401–600/601–800/801–947; entity_fluid.rs 1–400/401–454.
+- Key risks: DataFixer migration files span multiple historical and post-1.20.1 versions; UUID half-zero handling; possible loss of origin tick; apparent enchanting-table typo; malformed JSON/UTF-16 compatibility; manual thread-local mark reset; current-chunk short-circuit in region-upgrader tests; entity/fluid callbacks and movement need Java parity.
+- Active Ledger now has **75 records (2401–2475)**, each with exactly 15 fields. Index has **2,475 sequential unique paths** and matching Decisions.
+- Tests/examples inspected only, none executed. No application source changed, no build/APK/device/runtime validation. No backup at 2475.
+- Continue with **2476–2500** under the same one-time authorization; report and STOP at 2500.

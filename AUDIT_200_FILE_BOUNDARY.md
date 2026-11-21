@@ -3,8 +3,8 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: 50/200; active Ledger `AUDIT_LEDGER_2401_2600.md` has 50 records.
-- Section 2401–2450 CLOSED (50/50). One-time authorization 2401–2500 remains active; 2451–2500 pre-authorized. STOP at 2500; 2501+ needs fresh permission.
+- Current stage 2401–2600: **75/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 75 records.
+- Section 2401–2450 CLOSED (50/50); section 2451–2500 progress 25/50. One-time authorization ends at 2500. STOP at 2500; 2501+ needs fresh permission.
 - Keep 25-file commits, 50-file reports, max 400-line chunks. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
@@ -133,7 +133,7 @@
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
-| 2451–2500 | 2451–2475 — AUTHORIZED | 2476–2500 — AUTHORIZED | PRE-AUTHORIZED BY ONE-TIME 100-FILE GRANT |
+| 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — AUTHORIZED | IN PROGRESS — 25/50 |
 | 2501–2550 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
 | 2551–2600 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
 
@@ -240,3 +240,12 @@
 - Active Ledger 50 entries with 15 fields; Index 2,450 sequential unique paths.
 - Authorization 2401–2500 remains active; continue 2451–2475; report at 2500 and stop.
 - No source changes, tests or build/runtime validation; no backup at 2450.
+
+
+## Checkpoint 2451–2475 — COMPLETE (25/25)
+
+- All 25 files inspected through EOF in lexical order after excluding Index/in-flight paths; SHAs/sizes match pinned tree.
+- Long files <=400 lines: fixes_b, fixes_c, fixes_cliffs, fixes_flat, fixes_legacy, fixes_mid, fixes_old, flat_tables, items, json, schema_flat, schema and entity_fluid.
+- Active Ledger 75 entries with 15 fields; Index 2,475 sequential unique paths.
+- One-time authorization 2401–2500 remains active; next 2476–2500 authorized; report and stop at 2500.
+- No source changes, tests/build/runtime validation or backup at 2475.

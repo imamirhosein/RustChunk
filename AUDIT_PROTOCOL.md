@@ -137,12 +137,12 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
-- Completed entries 1–2450.
-- Active stage 2401–2600: 50/200. Section 2401–2450 CLOSED (50/50).
-- User renewed one-time authorization 2401–2500 (100 files). Checkpoints 2451–2475 and 2476–2500 authorized. Keep 25-file commits/50-file reports. Report at 2500, then STOP. No authorization for 2501+.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 50 records, exactly 15 fields. Prior Ledger 2201–2400 closed. Index: 2,450 unique sequential paths and aligned Decisions.
+- Completed entries **1–2475**.
+- Active stage 2401–2600: **75/200**. Section 2401–2450 closed; section 2451–2500 is 25/50.
+- One-time authorization 2401–2500 remains active. Checkpoint **2476–2500** is authorized. Keep 25-file commits/50-file reports. Report at 2500, then **STOP**. No authorization for 2501+.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 75 records, exactly 15 fields. Index: 2,475 unique sequential paths and aligned Decisions.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use immutable commit only.
-- Next lexical unindexed entry 2451; exclude indexed/in-flight paths.
+- Next lexical unindexed entry 2476; exclude indexed/in-flight paths.
 - Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -693,3 +693,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - One-time authorization 2401–2500 remains active. Continue 2451–2475 and 2476–2500, report at 2500; STOP at 2500 and require fresh permission before 2501+.
 - Notable flags: duplicate survival queries, probable consumable RNG overdraw, NaN consume-effect predicate, malformed condition vacuous truth, filesystem enumeration errors suppressed and unchecked legacy coordinate ranges.
 - Datafix resources are pinned to 26.3, not directly reusable for 1.20.1. No app source changes, tests/build/runtime validation or backup at 2450.
+
+
+## 37. Checkpoint 2451–2475 — COMPLETE — 2026-11-21
+
+- Checkpoint 2451–2475 complete (25/25). Section 2451–2500 is 25/50; 2476–2500 authorized by same one-time 100-file grant.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md` contains 75 entries; Index 2,475 sequential unique paths. Every entry has 15 fields and matching source path/SHA/size/Decision.
+- Continue 2476–2500; report at 2500 and STOP. No 2501+ authorization.
+- Key flags include UUID half-zero behavior, zero tick position, legacy mapping typo, JSON parser UTF-16/strictness edges, panic-unsafe MARKING flag and region chunk short-circuit.
+- No app source changes, tests/build/runtime validation or backup at 2475.

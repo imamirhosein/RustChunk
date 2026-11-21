@@ -6,14 +6,14 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: 1–2450.
-- Active 200-file stage 2401–2600: 50/200.
-- Reporting section 2401–2450 CLOSED (50/50).
-- User renewed one-time authorization 2401–2500 (100 files). Next checkpoint 2451–2475 is authorized; 2476–2500 also covered. Report at 2500, then STOP; 2501+ requires fresh permission.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 50 records (2401–2450), exactly 15 fields. Prior ledgers 2001–2200 and 2201–2400 closed. Index: 2,450 unique sequential paths.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; tracking branch moved; never use moving HEAD.
-- Next entry 2451, next lexical unindexed source path. Verify next 25 paths, SHAs, sizes and duplicate exclusion before reading.
-- Backup covers 1–2000 only. No backup at 2450; next after 3000 and global verification.
+- Completed entries: **1–2475**.
+- Active 200-file stage 2401–2600: **75/200**.
+- Section 2401–2450 CLOSED (50/50); section 2451–2500 progress **25/50**.
+- One-time authorization 2401–2500 remains active. Next checkpoint **2476–2500** is authorized; report and STOP at 2500. 2501+ requires fresh explicit permission.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 75 records (2401–2475), exactly 15 fields. Prior ledgers 2001–2200 and 2201–2400 closed. Index: **2,475 unique sequential paths**.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving branch.
+- Next file: **2476**, next lexical unindexed source path. Verify next 25 paths/SHAs/sizes and in-flight exclusions.
+- Backup covers 1–2000 only. No backup at 2475; next after 3000 and global verification.
 - No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -641,3 +641,11 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Ledger 50 records; Index 2,450 unique sequential paths; 15 fields per entry.
 - Key flags: duplicate survival queries; probable consumable RNG overdraw; NaN consume-effect predicate; malformed condition vacuous truth; suppressed filesystem enumeration errors; legacy coordinate overflow.
 - Next 2451–2475 under existing exception; report at 2500 and stop.
+
+
+## Latest verified checkpoint — 2451–2475 — 2026-11-21
+
+- All 25 files read through EOF; large files chunked <=400 lines. Index and pinned-tree SHAs/sizes matched.
+- Ledger 75 records; Index 2,475 unique sequential paths; 15 fields per entry.
+- Key flags: UUID half-zero handling, origin tick zero, legacy mapping typo, JSON parser edge cases, panic-unsafe thread-local mark, region-upgrader short-circuit.
+- Next 2476–2500 under current grant; report and stop at 2500.

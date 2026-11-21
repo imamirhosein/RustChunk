@@ -1608,3 +1608,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - 2446 legacy mapping structurally checked: 1695 rows, monotonic unique IDs, no malformed columns/IDs/property order; generated from 26.3, not 1.20.1.
 - Active Ledger 50 records, each 15 fields; Index 2,450 unique sequential paths. Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation.
 - Section 2401–2450 closed. Continue 2451–2475 under existing 100-file grant; report at 2500 and STOP.
+
+
+## Audit checkpoint 2451–2475 — 2026-11-21
+
+- Completed 2451–2475 (25/25); paths/SHAs/sizes match pinned tree; Index now 2,475 sequential unique paths.
+- Long files read through EOF in contiguous <=400-line ranges: fixes_b, fixes_c, fixes_cliffs, fixes_flat, fixes_legacy, fixes_mid, fixes_old, flat_tables, items, json, schema_flat, schema and entity_fluid.
+- Findings: UUID half-zero conversions may drop valid UUIDs; tick position zero may be skipped; legacy enchanting-table mapping appears misspelled; malformed map decoration can fall back to empty key; JSON parser has strict apostrophe/lone-surrogate/trailing-null risks; schema MARKING thread-local reset is not panic-safe; mixed-version region test confirms short-circuit leaves later old chunks unconverted.
+- Active Ledger 75 entries with 15 fields; Index 2,475 unique sequential paths. Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation.
+- Continue 2476–2500 under same one-time authorization; STOP at 2500. No backup at 2475.
