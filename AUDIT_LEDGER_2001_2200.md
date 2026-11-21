@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **100/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
+- Current progress: **125/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
 - One-time expanded authorization: entries **2001–2100 only**, comprising sections 2001–2050 and 2051–2100. Both 50-file sections 2001–2050 and 2051–2100 are covered by the user's one-time authorization; no mid-section permission request is needed at 2050.
 - Cadence unchanged: exact checkpoints of 25 files, boundary reports at every 50 files; continue through 2100 then stop. Entries 2101–2200 are not authorized.
 - Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
@@ -1737,3 +1737,438 @@
 - Each new Ledger record contains exactly the 15 required fields. Active Ledger now holds **100 entries (2001–2100)**.
 - The 50-file section **2051–2100 is closed (50/50)**. This consumes the one-time authorization. **STOP at 2100**; entries 2101+ are not authorized.
 - Tests/examples were inspected only, not executed. No application source changed and no runtime/build/device compatibility validation was performed.
+
+
+
+### 2101. `crates/horizon-telemetry-server/src/main.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4f0b2dc3722c30e073e9f1abb419e692a054ee99`
+- Size: 3074 bytes; 69 logical lines
+- Coverage: 1–69 (EOF)
+- Purpose: Starts the standalone telemetry HTTP service, initializes SQLite and schedules upkeep, live-count history and official-server status recording.
+- Dependencies / cross-references: horizon-telemetry-server App/Config/router, Store, Tokio runtime, Axum TCP listener and history/status helpers.
+- Implementation / logic: Creates a two-worker multithread runtime, binds a TCP listener, opens the database, starts 10-minute maintenance and minute live/official recorders, then serves Axum with Ctrl-C shutdown.
+- Findings: Binds all interfaces at 0.0.0.0 with no configurable bind host; deployment must provide trusted ingress/firewall. Synchronous SQLite maintenance and record_live execute directly inside async tasks, potentially blocking the two Tokio workers. Spawned recorder/upkeep tasks are not explicitly stopped or joined on shutdown.
+- RustChunk relevance: Reference for a separately deployed backend process only; irrelevant to the Android Minecraft client runtime.
+- Decision: rewrite required; standalone telemetry server entry point; host-only
+- 1.20.1 implications: No Minecraft Java client protocol, Forge lifecycle or chunk/render functionality is implemented; service uses a Rust 1.90/edition 2024 host stack.
+- Follow-up checks: Make bind address explicit, move blocking database operations off Tokio workers, add graceful task cancellation/join and expose readiness/health separately from liveness.
+- RustChunk implementation mapping: Do not include a web server in RustChunk Android. Any optional telemetry companion must be a separately deployable, least-privilege service.
+- Evidence required before adoption: Load/shutdown tests, trusted-ingress tests, blocking-worker saturation tests and host deployment review.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2102. `crates/horizon-telemetry-server/src/store.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `786c5a961af0527d451167bccaf570ae791d11a3`
+- Size: 31343 bytes; 739 logical lines
+- Coverage: 1–400; 401–739 (EOF)
+- Purpose: Stores telemetry batches in SQLite, maintains normalized system rows, compressed reports, daily aggregates and retention/deletion migrations.
+- Dependencies / cross-references: rusqlite Connection, telemetry Batch/Payload/System/Summary, server classes/summary/history/export/hub/intake and zstd codecs.
+- Implementation / logic: Creates tables and indexes, writes each batch transactionally, packs fixed-size frame summaries, rebuilds dirty day aggregates, handles install deletion/expiry, groups hardware classes and decompresses reports with a 1 MiB output cap.
+- Findings: Benchmark uploads and hardware export first materialize all matching rows/results in memory; large retained datasets can create memory spikes. unpack checks blob length but does not reject non-finite floats. Migrations have no schema-version table and perf-column ALTER precedes the separate systems-table transaction, so a failed migration can leave a partially advanced schema. Some malformed stored zstd/JSON bodies silently become JSON null.
+- RustChunk relevance: Potential database schema/transaction patterns only for a separate opt-in service; no game world or chunk storage.
+- Decision: rewrite required; telemetry persistence, aggregation and migrations; host-only
+- 1.20.1 implications: Telemetry server uses SQLite and serde payload schemas, not Minecraft 1.20.1 world/chunk formats or Forge storage.
+- Follow-up checks: Bound query result and aggregation sizes, stream/paginate benchmark data, validate finite summaries, add explicit schema version/migration transaction strategy and surface corrupt rows as diagnostics.
+- RustChunk implementation mapping: Do not reuse its tables as Minecraft save data. If RustChunk later offers telemetry, isolate its data layer and retention/deletion policy.
+- Evidence required before adoption: Migration fault-injection, corrupt blob/JSON, large dataset memory tests, aggregate overflow tests and deletion/retention verification.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2103. `crates/horizon-telemetry-server/src/summary.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `456a1d0e65231120a87eeab898be6c55f239be02`
+- Size: 11195 bytes; 307 logical lines
+- Coverage: 1–307 (EOF)
+- Purpose: Filters benchmark reports for comparability, groups by GPU/CPU/render distance/game, computes per-install then cross-install medians and suppresses small groups.
+- Dependencies / cross-references: Telemetry Benchmark JSON, coarse hardware classes, upload install IDs, benchmark fixture schema and website aggregation rules.
+- Implementation / logic: Checks format/version/game/scenario/VSync/cap/offscreen/four scene presence and hardware names; builds per-group installs and class breakdowns, medians and newest versions.
+- Findings: Validation is permissive: absent mods on a minecraft report counts as vanilla; phase presence does not require exactly one of each scene; any numeric render distance passes then is cast f64 to i64, truncating fractions and saturating out-of-range values. Reports/metrics are not fully schema-validated before grouping.
+- RustChunk relevance: Reference for privacy-aware benchmark aggregation, not a client performance system.
+- Decision: rewrite required; benchmark comparability and aggregation rules; optional telemetry
+- 1.20.1 implications: Runs may describe Horizon or plain vanilla, and the current scenario/hardware contract is not a Forge 1.20.1 performance oracle.
+- Follow-up checks: Validate full benchmark schema and numeric ranges, require exact scene/repeat coverage, canonicalize render distance as an integer and reject ambiguous mods/unknown app metadata.
+- RustChunk implementation mapping: Keep benchmarking opt-in and separate; define a RustChunk-specific report schema for 1.20.1 Forge and client-side mods.
+- Evidence required before adoption: Schema fuzzing, client/server/site fixture parity, malformed numeric tests and cross-version benchmark reproducibility.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2104. `crates/horizon-telemetry-server/tests/export.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ebfef45ed8cbbc6cca67d7f312e1192abdb8079d`
+- Size: 10683 bytes; 313 logical lines
+- Coverage: 1–313 (EOF)
+- Purpose: Exercises protected benchmark/hardware export endpoints, Bearer authentication, rate limiting, pagination, no-store and gzip response behavior.
+- Dependencies / cross-references: Axum router, App/Config, export handlers, Store, uploaded telemetry batches, export token and HTTP content encoding.
+- Implementation / logic: Uploads in-memory test reports/perf sessions, checks token-off/incorrect-token responses, pages raw benchmark results and hardware summaries and decompresses gzip responses.
+- Findings: Covers only small in-memory fixtures and successful/invalid token paths; does not stress unbounded hardware aggregation, huge responses, concurrent deletion/export, token rotation, malformed headers or timing properties.
+- RustChunk relevance: Host-side regression tests for a future telemetry service only.
+- Decision: reference; protected telemetry export HTTP tests; test-only
+- 1.20.1 implications: Does not test the Minecraft client, Android networking, Forge handshake or Aternos connectivity.
+- Follow-up checks: Add large-history/pagination limits, concurrent export/delete tests, authorization rotation, response-size caps and hostile header tests.
+- RustChunk implementation mapping: Do not put protected export credentials or endpoints in the Android client.
+- Evidence required before adoption: Executed host tests plus large dataset, concurrency, token lifecycle and redaction tests before adopting server behavior.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2105. `crates/horizon-telemetry-server/tests/fixtures/benchmarks/README.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `205f7c541b96b8affbdfcaed7ed8a5938a2ac454`
+- Size: 1170 bytes; 14 logical lines
+- Coverage: 1–14 (EOF)
+- Purpose: Documents shared benchmark aggregation fixture inputs, expected outputs, rejection reasons and install-threshold behavior.
+- Dependencies / cross-references: tests/fixtures/benchmarks/items.jsonl, expected.json, summary.rs and website-side benchmark test copy.
+- Implementation / logic: Explains a three-install GPU/CPU/render-distance group, excluded undersized groups, invalid runs and hardware-class breakdown rules.
+- Findings: Fixture copy must be changed in sync with the separate website repository; synthetic identifiers/metrics do not prove real-world benchmark comparability.
+- RustChunk relevance: Reference for a shared fixture discipline across client/server/web projects.
+- Decision: reference; benchmark fixture README; test documentation
+- 1.20.1 implications: Fixture data is Horizon benchmark schema; not Forge 1.20.1 evidence.
+- Follow-up checks: Keep copies synchronized with checksum or generated fixture workflow and add realistic 1.20.1 modded and vanilla runs.
+- RustChunk implementation mapping: Use as a testing pattern only; create RustChunk-owned fixtures and explicit consent coverage.
+- Evidence required before adoption: Fixture parity checks, real target-client report corpus and privacy regression cases.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2106. `crates/horizon-telemetry-server/tests/fixtures/benchmarks/expected.json`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5718fb4d44b52c92cce35f39b577908f5d1551a5`
+- Size: 609 bytes; 21 logical lines
+- Coverage: 1–21 (EOF)
+- Purpose: Provides the golden JSON output for the benchmark summary test fixture.
+- Dependencies / cross-references: summary.rs, items.jsonl and website aggregator's copied expected fixture.
+- Implementation / logic: Defines the minimum install count and one expected RTX 4080/i7 group with medians and coarse hardware breakdowns.
+- Findings: One deterministic golden sample covers only a narrow valid result; it does not cover edge rounding, ties, invalid numbers, duplicates, missing metadata or version sort anomalies.
+- RustChunk relevance: Reference test data only.
+- Decision: reference; benchmark golden output; test-only
+- 1.20.1 implications: No relation to Minecraft 1.20.1 or Forge gameplay correctness.
+- Follow-up checks: Expand table-driven golden cases for numeric boundaries, repeated runs/install, missing data and stable ordering.
+- RustChunk implementation mapping: Use as a fixture pattern, not as an expected RustChunk performance target.
+- Evidence required before adoption: Golden tests against a separately authored RustChunk benchmark schema.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2107. `crates/horizon-telemetry-server/tests/fixtures/benchmarks/items.jsonl`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fe541cb4d89414f039f3fd78fbe5c543346d79ff`
+- Size: 29497 bytes; 14 logical lines
+- Coverage: 1–14 (EOF)
+- Purpose: Supplies line-oriented benchmark uploads used to verify aggregation, rejection and privacy filtering.
+- Dependencies / cross-references: summary.rs tests, README fixture documentation and expected.json.
+- Implementation / logic: Contains valid Horizon runs across installs/versions plus deliberately rejected VSync-on, offscreen, capped, missing-scene, wrong-version and underspecified runs.
+- Findings: Records are synthetic; only one primary valid GPU group meets threshold. Secret-like fields are sentinel values and demonstrate redaction checks, not actual private data. Fixture does not represent Forge/mod-heavy workloads.
+- RustChunk relevance: Useful for designing negative benchmark/privacy tests only.
+- Decision: reference; benchmark item fixture corpus; test-only
+- 1.20.1 implications: All report values and app names use Horizon's schema and do not establish 1.20.1 compatibility.
+- Follow-up checks: Add corrupt JSON, duplicate phases, fractions/out-of-range values, modded profiles and multiple backend/device scenarios.
+- RustChunk implementation mapping: Create independent anonymized RustChunk fixture reports, including Forge 47.x with declared mod lists only when user opts in.
+- Evidence required before adoption: Reproducible synthetic/real-device corpus, privacy leakage scan and site/client/server parity.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2108. `crates/horizon-telemetry-server/tests/github.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `81f480b587b73efa0842bd9e3244a4e5f4592888`
+- Size: 1555 bytes; 41 logical lines
+- Coverage: 1–41 (EOF)
+- Purpose: Tests report-text neutralization and formatting before turning web bug reports into GitHub issues.
+- Dependencies / cross-references: github::issue, neutralise(), markdown quote formatter and label constants.
+- Implementation / logic: Checks mentions, issue references, HTML-like text, closing keywords, template body/title and labels.
+- Findings: Only a handful of crafted strings; Unicode normalization, nested Markdown, encoded URLs, control characters, long text and actual GitHub rendering are not covered.
+- RustChunk relevance: Support-service regression tests only.
+- Decision: reference; GitHub report neutralization tests; test-only
+- 1.20.1 implications: No Minecraft/Forge/client functionality.
+- Follow-up checks: Add adversarial Unicode/Markdown/link corpus and cap GitHub response sizes; test issue body as GitHub renders it.
+- RustChunk implementation mapping: Keep support intake separate from the Android client and require an explicit user action to submit reports.
+- Evidence required before adoption: Adversarial sanitizer fuzz tests and a mocked GitHub API response-size/error suite.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2109. `crates/horizon-telemetry-server/tests/hub.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9f2b534560838e6d7455310efeb4e17eb4008d3e`
+- Size: 10730 bytes; 332 logical lines
+- Coverage: 1–332 (EOF)
+- Purpose: Exercises hub voting, web report submission, GitHub outage retry, duplicate prevention, rate limits, daily caps and retention.
+- Dependencies / cross-references: hub/intake handlers, SQLite queue/vote tables, App maintenance and injected fake GitHub filer.
+- Implementation / logic: Uses in-memory Store and fake GitHub to verify one-vote-per-browser, report template, one-day duplicate, bot honeypot, retries, limits and expiry.
+- Findings: Tests are sequential; no concurrent duplicate POST or concurrent file_pending/POST race is tested, nor crash after GitHub accepted but before filed state persisted. Voter identity is self-generated and shape-only.
+- RustChunk relevance: Useful server test patterns, not game client behavior.
+- Decision: reference; hub intake and retry tests; test-only
+- 1.20.1 implications: Community website functionality, not Minecraft multiplayer; report text retention requires consent/privacy policy.
+- Follow-up checks: Add atomic queue lease/idempotency, concurrent report retry tests, crash recovery, authenticated voting/anti-abuse and duplicate-field validation.
+- RustChunk implementation mapping: Do not embed community reporting/voting service into gameplay; optional support action remains explicit opt-in.
+- Evidence required before adoption: Concurrent duplicate race tests, post-success crash simulation and full retention/deletion lifecycle tests.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2110. `crates/horizon-telemetry-server/tests/live.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a76e0efb757202f0a7dc2a90eb8979eec06963ca`
+- Size: 11642 bytes; 342 logical lines
+- Coverage: 1–342 (EOF)
+- Purpose: Exercises the anonymous live count API, ping validation, rate limits, session capacity, launcher/game end-to-end calls and minute history.
+- Dependencies / cross-references: telemetry::live Ping/Count, App, server history, HTTP router and Minecraft status test server.
+- Implementation / logic: Tests periodic session refresh/expiry, invalid ping payloads, per-address throttling, max sessions, local HTTP client round-trip and official-server status records.
+- Findings: Tests validate the telemetry protocol only; the client/server sessions are not Minecraft multiplayer sessions. Fixed sleeps/timeouts can be timing-sensitive and proxy trust is set true in test config.
+- RustChunk relevance: Reference for a standalone optional presence counter only.
+- Decision: reference; live endpoint integration tests; test-only
+- 1.20.1 implications: Not evidence of actual Aternos join, server-list ping in game or Forge packet compatibility.
+- Follow-up checks: Add restart, burst/expiry boundary and proxy-spoofing tests; test the live ping only under an explicit opt-in policy if RustChunk adopts it.
+- RustChunk implementation mapping: Keep live telemetry IDs distinct from Minecraft server connection state and do not transmit without deliberate consent decision.
+- Evidence required before adoption: Host integration tests plus explicit user consent, TLS and target Android network validation.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2111. `crates/horizon-telemetry-server/tests/server.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3103f8097c25a46d300cadb4e603a392c9085382`
+- Size: 16337 bytes; 514 logical lines
+- Coverage: 1–400; 401–514 (EOF)
+- Purpose: Exercises batch ingestion, anonymized aggregates, hardware breakdowns, slow-frame reports, daily cap, retention/deletion, database footprint and uploader end-to-end.
+- Dependencies / cross-references: batch/outbox/upload, App/router, Store, benchmark summary, SQLite schema and Config.
+- Implementation / logic: Creates synthetic telemetry batches, checks group privacy threshold, deletes install rows, expiry, IPv6/proxy rate limits and a 10,000-session storage test.
+- Findings: Coverage is broad but still sequential/synthetic; no concurrent daily-cap race, corrupted DB migration, malicious stored payload, server overload, real Android upload or network retry-under-process-death scenario is tested.
+- RustChunk relevance: Strong host-side design/test reference for optional telemetry persistence and privacy.
+- Decision: reference; telemetry server integration tests; test-only
+- 1.20.1 implications: Uploader HTTP end-to-end does not exercise Minecraft 1.20.1 gameplay, Forge mods, Aternos or Android ARM64.
+- Follow-up checks: Add race/failure injection around count_on+insert, process death during upload, concurrent delete/upload, migration rollback and hostile data sizes.
+- RustChunk implementation mapping: Keep telemetry separate from RustChunk's actual game connection and world persistence; user-configurable opt-in only.
+- Evidence required before adoption: Load/concurrency/failure injection, migration matrix, ARM64 network tests and privacy deletion proof.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2112. `crates/horizon-telemetry-server/tests/summary.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d2121d0804a51e02742ef49eb12f47c3ea94ccde`
+- Size: 6124 bytes; 181 logical lines
+- Coverage: 1–181 (EOF)
+- Purpose: Checks summary aggregation against shared expected fixtures and verifies HTTP upload, anonymization and group removal after install deletion.
+- Dependencies / cross-references: summary.rs, fixtures, Axum router, telemetry Batch and SQLite Store.
+- Implementation / logic: Tests rejection reasons, per-install medians, rounding, client upload and site-compatible summary, then deletes an install to drop group below threshold.
+- Findings: Golden corpus is narrow and synthetic; no exact-one-phase rule, duplicate phase, non-finite/huge numeric, semver edge ordering or Forge mod identity tests.
+- RustChunk relevance: Reference for cross-repository fixture parity only.
+- Decision: reference; benchmark summary tests; test-only
+- 1.20.1 implications: Does not establish 1.20.1 Forge client performance measurement validity.
+- Follow-up checks: Expand schema/range fuzzing and independent Java or Rust client report generation for actual target game.
+- RustChunk implementation mapping: Use testing method only; design RustChunk report schema separately.
+- Evidence required before adoption: Cross-language golden corpus and report provenance from real target-client runs.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2113. `crates/horizon-telemetry/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `913eac453230b329133dd4ae49035f5e2ad3b353`
+- Size: 946 bytes; 30 logical lines
+- Coverage: 1–30 (EOF)
+- Purpose: Declares the shared telemetry library's Rust package, MSRV, serde/zstd dependencies and optional network-upload/live feature groups.
+- Dependencies / cross-references: Workspace edition/license/lints, serde/serde_json, ruzstd, getrandom and optional ureq TLS.
+- Implementation / logic: Default features enable upload and live networking; server can disable defaults, while clients selectively build features.
+- Findings: Default feature set turns on both upload and live ping support, and the latter is explicitly not gated by per-kind consent. Ureq TLS/native dependency and getrandom impact need Android ABI/footprint audit.
+- RustChunk relevance: Architecture reference for feature-separated optional client networking only.
+- Decision: adaptable; telemetry crate feature separation; optional dependency design
+- 1.20.1 implications: Manifest is edition 2024/Rust 1.90, outside the existing 1.20.1 game ABI and not validated for Android ARM64/Windows 7.
+- Follow-up checks: Make opt-in upload/live features non-default or require explicit compile/runtime gates; audit TLS, libc and getrandom on target ABIs.
+- RustChunk implementation mapping: Do not add this crate to RustChunk until privacy policy, target toolchain and binary size are reviewed.
+- Evidence required before adoption: Locked ARM64 Android/Windows build, dependency/license/security audit and disabled-by-default telemetry tests.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2114. `crates/horizon-telemetry/src/batch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5baf368718cdfd2e7a908a587d4b3cae9f335b8d`
+- Size: 6374 bytes; 198 logical lines
+- Coverage: 1–198 (EOF)
+- Purpose: Defines the compressed wire Batch format, bounded zstd decode, schema/install/item validation and batch splitting.
+- Dependencies / cross-references: serde, ruzstd, Item::validate and consent install ID validation.
+- Implementation / logic: Encodes JSON batches with up to 64 items; limits compressed payload to 256 KiB and inflated JSON to 1 MiB; validates schema and every item.
+- Findings: Batch::json and split convert serialization errors into empty/zero-size fallback instead of propagating them; split sizing is approximate with a 1 KiB safety margin. Decoder does not explicitly reject trailing/concatenated compressed frames. JSON payload validation remains shallow for nested numeric/hardware fields.
+- RustChunk relevance: Useful transport safety pattern for separate optional telemetry, not Minecraft network protocol.
+- Decision: adaptable; bounded telemetry batch codec; optional library
+- 1.20.1 implications: Uses telemetry application schema and zstd JSON, not Minecraft 1.20.1 packet framing or Forge negotiation.
+- Follow-up checks: Return serialization errors explicitly, prove worst-case split bounds, reject trailing compressed data if not intended and validate payload fields strictly.
+- RustChunk implementation mapping: Do not reuse as game protocol; use only for a separately versioned telemetry channel.
+- Evidence required before adoption: Compression bomb, concatenated frame, malformed numeric and max-size split fuzzing plus target ABI tests.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2115. `crates/horizon-telemetry/src/consent.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `df1fb3368c1900669b8ef0b9d5bf5404c407287f`
+- Size: 6580 bytes; 191 logical lines
+- Coverage: 1–191 (EOF)
+- Purpose: Stores per-kind consent, consent version/time and a random install pseudonym used for data deletion.
+- Dependencies / cross-references: CONSENT_VERSION, Choices/Kind, random_hex and atomic file persistence helper.
+- Implementation / logic: Defaults all choices off; allows data only after current-version answer with nonempty install ID; records choices and can replace pseudonym on reset.
+- Findings: Install ID is retained when all choices are turned off for later deletion; this is deliberate but requires clear UX. Save errors surface to caller, but fallback random source in crate root is weak if OS RNG fails.
+- RustChunk relevance: Strong privacy-control pattern for opt-in data collection, with caveat about fallback entropy.
+- Decision: adaptable; per-kind consent and pseudonymous install lifecycle; optional library
+- 1.20.1 implications: Not tied to Minecraft or Forge; consent versioning is an application/privacy requirement.
+- Follow-up checks: Use cryptographically secure OS randomness only; fail closed if entropy unavailable; explain retention/deletion semantics and ensure live ping policy is separately consented.
+- RustChunk implementation mapping: Any telemetry in RustChunk should be off by default, per-category, revocable and inspectable before sending.
+- Evidence required before adoption: Consent UI tests, migration/version reset tests, RNG-failure test and verified local/remote deletion behavior.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2116. `crates/horizon-telemetry/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cdccc1da6996b341e4fee438b3f5bf54fa4e68b9`
+- Size: 4820 bytes; 127 logical lines
+- Coverage: 1–127 (EOF)
+- Purpose: Defines the shared telemetry crate modules, consent schema version, default service endpoint, paths, date helpers, random IDs and atomic file writes.
+- Dependencies / cross-references: batch, consent, live, outbox, payload, scrub, server_status, system and optional upload modules.
+- Implementation / logic: Exports shared API; resolves environment endpoint override/off switch; writes JSON through temporary file then rename.
+- Findings: random_hex falls back to repeated bytes derived from current nanoseconds when getrandom fails, so install/session IDs and temporary names are predictable and can collide. Endpoint override accepts arbitrary scheme/URL without validation. write_atomic has no explicit permission restriction or fsync durability.
+- RustChunk relevance: Useful module separation and off-switch design only; security-sensitive primitives must be replaced.
+- Decision: rewrite required; shared telemetry control and persistence primitives; security-sensitive
+- 1.20.1 implications: Not a game/client foundation; crate's Rust 1.90 and dependencies need target verification.
+- Follow-up checks: Fail closed on RNG failure, validate https/http endpoint policy, set restrictive file permissions, clean temp files and fsync/rename with platform-safe replacement.
+- RustChunk implementation mapping: Do not copy random fallback or silently enable telemetry. Keep any data store outside game saves with user control.
+- Evidence required before adoption: Injected RNG failure, filesystem race/permission/power-loss tests, endpoint validation and platform-specific atomic replace.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2117. `crates/horizon-telemetry/src/live.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4ef661ec82d6a2bacdc5f2b5355a772b3dbe85de`
+- Size: 6347 bytes; 180 logical lines
+- Coverage: 1–180 (EOF)
+- Purpose: Implements the anonymous playing ping and the live count HTTP client used to display public online totals.
+- Dependencies / cross-references: serde Ping/Count, consent is_install_id format check, platform detection and ureq networking.
+- Implementation / logic: Builds a new 128-bit session ID, sends one four-field ping, fetches count and validates version/platform/session syntax.
+- Findings: The source explicitly says live pings do not wait for consent, unlike every other telemetry kind. Session entropy inherits the predictable random_hex fallback. Endpoint may be plaintext HTTP when overridden; no server authentication or certificate pinning beyond ureq defaults.
+- RustChunk relevance: Potential optional online counter only, not the game's multiplayer session system.
+- Decision: rewrite required; live presence ping and count client; privacy-sensitive optional feature
+- 1.20.1 implications: No relation to Forge protocol, Aternos player list or world join; it's a website-presence counter.
+- Follow-up checks: Make opt-in explicit and independent from performance consent, force TLS except local dev, fail if RNG unavailable and document session retention.
+- RustChunk implementation mapping: Never confuse live telemetry with multiplayer state; leave disabled unless the user explicitly chooses to share presence.
+- Evidence required before adoption: Privacy review, TLS/endpoint tests and end-to-end target device test with the player's explicit setting.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2118. `crates/horizon-telemetry/src/outbox.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3464b177bfd06ead12e8a37846b8c84d9cdc4a6c`
+- Size: 7600 bytes; 236 logical lines
+- Coverage: 1–236 (EOF)
+- Purpose: Persists pending telemetry items in a bounded local outbox shared by game and launcher, applies daily per-kind caps and removes withdrawn data.
+- Dependencies / cross-references: Consent, Item validation, write_atomic, local telemetry directory, daily Kept JSON and upload::flush.
+- Implementation / logic: Writes one JSON per item, caps at 200 files/2 MiB, evicts oldest, tracks daily counts and offers retain_allowed/pending/clear.
+- Findings: Game and launcher share a read-modify-write outbox and kept.json without cross-process lock/atomic counter transaction; concurrent pushes can exceed caps or collide. Directory scanning silently treats read errors as empty; it follows file metadata/read paths and has no symlink containment check. External oversized/corrupt files are read whole before validation/removal.
+- RustChunk relevance: Potential persistence pattern for an explicitly opt-in background uploader only.
+- Decision: rewrite required; shared telemetry outbox; concurrency and local-path sensitive
+- 1.20.1 implications: Not a Minecraft world/save format; storage is in telemetry subdirectory and independent of profile/mod data.
+- Follow-up checks: Add cross-process locking, exclusive file creation, canonical root confinement/no-follow symlink checks, size cap before read and checked byte accounting.
+- RustChunk implementation mapping: Do not let telemetry consume world saves or block launch; outbox must be separately bounded and user-clearable.
+- Evidence required before adoption: Concurrent launcher/game pushes, symlink/path tests, disk full/permissions, overlarge file and daily-cap race tests.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2119. `crates/horizon-telemetry/src/payload.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `658f5d2bc002b860766998cad4c70207be64d65d`
+- Size: 19370 bytes; 578 logical lines
+- Coverage: 1–400; 401–578 (EOF)
+- Purpose: Defines telemetry kinds, install payloads, machine/system details, performance settings, summaries and bounded frame timing histograms.
+- Dependencies / cross-references: serde serialization, batch validator, System hardware detector, Scrubber and performance spans.
+- Implementation / logic: Validates per-kind serialized byte limits, version size, bug text, benchmark object shape and slow-frame span count; Timings tracks tenths-of-ms bins and percentiles.
+- Findings: Validation is incomplete: non-finite/implausible Display.scale, timing summaries and SlowFrames numeric values are not rejected; benchmark report checks only object shape; System strings have no field-specific length/range rules beyond total item bytes. Timings count is u64 and increments unchecked while bucket counters saturate.
+- RustChunk relevance: Could inform a typed performance telemetry model after privacy/validation review; not part of game runtime protocol.
+- Decision: rewrite required; telemetry payload schema and timing aggregation; privacy-sensitive
+- 1.20.1 implications: Payload field names/settings and benchmark schema are Horizon-specific; no Forge 1.20.1 performance metrics are validated.
+- Follow-up checks: Validate every float/range/enum, constrain hardware strings and IDs, validate summary histogram consistency and version the schema when meaning changes.
+- RustChunk implementation mapping: Build separate RustChunk metrics with no raw frame stream, clear semantics and explicit consent; never collect world/server/player identifiers.
+- Evidence required before adoption: Property/fuzz tests for NaN/inf, bounds, bucket/summary consistency and privacy leakage; compare against real 1.20.1 workload.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2120. `crates/horizon-telemetry/src/scrub.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9f6f17d5ecdadd73dab678e20cbaabb93c07ec95`
+- Size: 12324 bytes; 362 logical lines
+- Coverage: 1–362 (EOF)
+- Purpose: Scrubs likely personal identifiers from telemetry text, including user folders/names, emails, IPv4/IPv6, UUIDs and caller-supplied private terms.
+- Dependencies / cross-references: String scanning helpers, environment username, caller-supplied terms and Crash/Bug text construction.
+- Implementation / logic: Performs path/name token replacements and heuristically recognizes address, email and UUID patterns.
+- Findings: Heuristic scanning cannot guarantee removal of all personal data; IP/UUID parsing is not a full standards parser and false positives can alter version/build strings. The scrubber is a caller-invoked utility, not enforced by Item::validate/outbox, so every producer must consistently call it.
+- RustChunk relevance: Useful privacy-defense-in-depth idea only, never a substitute for data minimization.
+- Decision: rewrite required; heuristic telemetry text scrubber; privacy-critical
+- 1.20.1 implications: No Minecraft or Forge integration; log formats and path conventions need platform coverage.
+- Follow-up checks: Scrub at each collection boundary and validate at serialization, add structured field allowlists rather than only regex-like text scans, use known identifiers and adversarial Unicode/path tests.
+- RustChunk implementation mapping: Prefer not to collect logs or identifiers. If reports are enabled, keep only player-selected text and inspectable previews.
+- Evidence required before adoption: Privacy red-team corpus, fuzzing, path variants, UUID/IP/email edge cases and proofs all producers invoke scrub.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2121. `crates/horizon-telemetry/src/server_status.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `801ad69061d5d34ba50d899bc6d089545fb70588`
+- Size: 10219 bytes; 268 logical lines
+- Coverage: 1–268 (EOF)
+- Purpose: Queries a Minecraft server's status ping to return online/max player counts for launcher UI and telemetry history.
+- Dependencies / cross-references: TCP sockets, handshake/status protocol framing, VarInt helpers, server address parsing and JSON response parser.
+- Implementation / logic: Parses host/port or bracketed IPv6, sends handshake/status request, reads a bounded 256 KiB response and extracts players online/max.
+- Findings: Only first DNS result is attempted; DNS lookup itself has no timeout and TCP timeout is per connect/read/write, not an overall deadline. IPv6 and malformed host validation is permissive. Handshake protocol constant 777 is Horizon 26.3, even though status servers often tolerate it.
+- RustChunk relevance: Useful protocol reference for a status-only probe, separate from game login/play protocol.
+- Decision: adaptable; bounded Minecraft status-ping client; protocol-version-specific
+- 1.20.1 implications: Status ping is not Forge handshake or Aternos join; protocol ID 777 maps to Horizon's target era, not 1.20.1.
+- Follow-up checks: Use 1.20.1 status protocol version, SRV lookup, all DNS addresses with bounded total deadline, strict host/port validation and response timeout.
+- RustChunk implementation mapping: Only use for server-list status display; implement actual play/Forge networking separately.
+- Evidence required before adoption: Golden packet tests against 1.20.1 vanilla/Forge servers, DNS/SRV failover and slow-trickle timeout tests.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2122. `crates/horizon-telemetry/src/system.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b5ad3f46cd35523c71c6d5e11aee5575972f3d72`
+- Size: 34613 bytes; 927 logical lines
+- Coverage: 1–400; 401–800; 801–927 (EOF)
+- Purpose: Collects coarse OS, CPU, memory, storage, power/form and GPU memory/vendor data for performance telemetry.
+- Dependencies / cross-references: OS procfs/sysfs, Windows registry/PowerShell, macOS system commands, filesystem/mount metadata and System payload fields.
+- Implementation / logic: Detects CPU names/core/thread counts, OS version, RAM, drive kind, battery/form and GPU VRAM by platform with OnceLock caches for selected probes.
+- Findings: Several commands have no timeout/output cap and may block startup. Linux non-NVIDIA VRAM scanning ignores requested vendor and may choose another adapter's largest memory. Some usize/u64 counts cast to u16/u32 without range checks; mountinfo escaping/spaces and complex storage stacks may misclassify; full OS/CPU/GPU/driver/display data is more identifying than coarse hardware categories.
+- RustChunk relevance: Potential hardware-detection implementation reference only, after privacy minimization and Android-specific design.
+- Decision: rewrite required; cross-platform hardware detection; privacy- and platform-sensitive
+- 1.20.1 implications: Starling's Windows/macOS/Linux probes do not support Android ARM64/Mali directly; RustChunk is Android and this code gives no Mali/Android detection evidence.
+- Follow-up checks: Implement explicit Android APIs/sysfs probes for only needed coarse values, cap command times/output, use checked numeric conversions and validate multi-GPU/vendor selection.
+- RustChunk implementation mapping: Do not collect detailed hardware by default. If opt-in, minimize to RAM bucket, GPU family and device class; never use serials or persistent identifiers.
+- Evidence required before adoption: Android ARM64/Mali tests, mixed-GPU regression, command timeout/resource tests and privacy review for every emitted field.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2123. `crates/horizon-telemetry/src/upload.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1621628fa5ac989bde86b3f7ac1eb67b9e05ddb5`
+- Size: 4657 bytes; 141 logical lines
+- Coverage: 1–141 (EOF)
+- Purpose: Uploads allowed outbox batches with retry/backoff and daily batch limits, offers send preview and remote deletion by install pseudonym.
+- Dependencies / cross-references: Consent, outbox, Batch codec, endpoint, ureq Agent and server DELETE /v1/installs.
+- Implementation / logic: Re-reads consent, removes withdrawn outbox items, splits batches and sends zstd; retries network/429/5xx failures with capped exponential delay and drops non-429 4xx.
+- Findings: Consent is checked before the loop but not coordinated with a simultaneous mid-flush withdrawal; state save errors are silently ignored, so retry counters may not persist. Endpoint override is not scheme-validated and a 400/401/413 permanently deletes the batch. retain_allowed and initial consent loads are separate reads.
+- RustChunk relevance: Upload design pattern only for optional, inspectable telemetry.
+- Decision: rewrite required; consent-aware network uploader; privacy and retry sensitive
+- 1.20.1 implications: Network upload is not needed for Minecraft multiplayer or Forge; no proof of Android ARM64 networking or current server operation.
+- Follow-up checks: Use TLS-only endpoint validation, serialize consent/flush/delete operations, propagate state persistence errors, distinguish permanent rejection categories and make withdrawal stop an in-flight uploader.
+- RustChunk implementation mapping: Keep uploader disabled by default, use explicit opt-in, show preview, allow local clear and remote deletion and never block gameplay.
+- Evidence required before adoption: Race tests for withdrawal/delete vs flush, process-crash retry persistence, TLS redirects, 429/4xx/5xx and target device network validation.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2124. `crates/horizon-telemetry/tests/consent_gating.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `68c5b4f6e3925f975c85214da98043db44a1e023`
+- Size: 7760 bytes; 231 logical lines
+- Coverage: 1–231 (EOF)
+- Purpose: Tests that missing, outdated or withdrawn consent prevents telemetry upload, and validates preview and remote deletion behavior.
+- Dependencies / cross-references: Consent, outbox, upload::flush/delete_remote, Batch decoder and local mock TCP HTTP server.
+- Implementation / logic: Uses a mock server to count connections and verify disabled/withdrawn uploads make none; checks per-kind filtering, failure retry and preview/deletion.
+- Findings: Tests do not cover in-flight withdrawal during a multi-batch flush, concurrent producers, DNS/TLS/redirect behavior, permission failures or the separately documented no-consent live ping.
+- RustChunk relevance: Valuable privacy regression test pattern, but its scope excludes live presence.
+- Decision: reference; telemetry consent gating tests; test-only
+- 1.20.1 implications: Only tests telemetry library behavior; it does not validate Minecraft 1.20.1/Forge gameplay.
+- Follow-up checks: Extend tests to live ping consent, concurrent toggle/flush, multi-process outbox, state-file write failures and TLS-only configuration.
+- RustChunk implementation mapping: RustChunk must make telemetry default-off and ensure every network call is covered by the consent state.
+- Evidence required before adoption: Executed tests plus device-level inspection proving no telemetry connections under every disabled state.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+### 2125. `crates/horizon-theme/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3cc6d232456a307d771d5489f508d3a919543bf8`
+- Size: 215 bytes; 8 logical lines
+- Coverage: 1–8 (EOF)
+- Purpose: Declares the minimal design-token/font/icon crate shared across Horizon launcher, website and game menus.
+- Dependencies / cross-references: No external dependencies in this manifest; Rust 2021 package metadata only.
+- Implementation / logic: Defines horizon-theme package name/version/license and description; manifest contains no dependency or feature declarations.
+- Findings: Manifest alone proves only a package boundary, not token definitions, font/icon licensing, runtime memory cost or Android asset integration.
+- RustChunk relevance: Possible UI resource separation reference only.
+- Decision: unnecessary; empty theme crate manifest for RustChunk core
+- 1.20.1 implications: Contains no Minecraft, Forge, networking, chunk or Android launcher implementation.
+- Follow-up checks: No direct code port; inspect actual theme source only if a separate visual system is later planned.
+- RustChunk implementation mapping: Keep theme/asset dependencies separate from the game engine; do not import an empty crate just for package naming.
+- Evidence required before adoption: Theme source and asset/license audit would be needed before any adoption decision.
+- Completion state: COMPLETE — source content reviewed serially through EOF; contiguous coverage confirmed in ranges no larger than 400 lines; exact blob SHA and byte size match the complete pinned tree; tests/examples were inspected only, not executed.
+
+## Checkpoint 2101–2125 — complete (25/25)
+
+- Entries 2101–2125 are the next 25 unique blobs after excluding Index entries 1–2100 from the complete pinned tree.
+- All 25 files were inspected one at a time through EOF. Files over 400 lines were read in contiguous, gap-free chunks no larger than 400 lines. Exact path, SHA and byte size match the pinned tree.
+- Each record contains exactly the 15 required fields. Active Ledger now holds **125 entries (2001–2125)**.
+- The user explicitly authorized the one-time range **2101–2200**. Continue to 2150 and then 2200 using four 25-file commits; **do not stop at 2150**. Stop only at 2200 and request fresh permission before 2201.
+- Tests/examples were inspected only; no application source changed and no build, runtime, Android or game compatibility validation was performed.

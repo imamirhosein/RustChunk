@@ -5,8 +5,8 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **100/200**.
-- One-time authorization: **2001–2100** only (two adjacent 50-file sections); 2101–2200 is locked.
+- Current stage: **2001–2200**, progress **125/200**.
+- One-time authorizations: **2001–2100** and **2101–2200**. For the second window, preserve 25-file commits but do not stop or request permission at 2150; stop only at 2200.
 
 ## Stage partition
 
@@ -14,8 +14,8 @@
 |---|---|---|---|
 | 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
 | 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — **COMPLETE** | **CLOSED — 50/50** |
-| 2101–2150 | LOCKED | LOCKED | NOT AUTHORIZED |
-| 2151–2200 | LOCKED | LOCKED | NOT AUTHORIZED |
+| 2101–2150 | 2101–2125 — **COMPLETE** | 2126–2150 — PRE-AUTHORIZED | IN PROGRESS — 25/50; CONTINUE AT 2126 |
+| 2151–2200 | 2151–2175 — PRE-AUTHORIZED | 2176–2200 — PRE-AUTHORIZED | PRE-AUTHORIZED — STOP ONLY AT 2200 |
 
 ## Checkpoint 2001–2025
 
@@ -31,8 +31,8 @@
 
 - Section 2001–2050 is complete and closed. Continue 2051–2100 under the user's already-issued one-time authorization.
 - At 2050, report the first 50-file section, then continue directly into pre-authorized 2051–2100; retain checkpoints 2051–2075 and 2076–2100.
-- Close section 2051–2100 and **STOP at 2100**. Ask before entry 2101.
-- The 100-file authorization is a one-time exception only; future sections return to the default 50-file boundary approval rule.
+- Section 2051–2100 was closed at entry 2100. The user has now issued a second one-time exception for **2101–2200**.
+- Complete all four 25-file checkpoints through entry 2200. **Do not stop at 2150**; close the exceptional window and STOP at 2200. Ask before entry 2201.
 
 ## Rules
 
@@ -69,3 +69,11 @@
 - Each Ledger record has exactly 15 required fields; new Index paths and Decision labels align.
 - The reviewed shader test packs are Horizon-only. Telemetry is a separate opt-in Rust 1.90 backend; it is not part of the Android Minecraft client. Static risks include proxy trust, container privilege, blocking DB operations and unbounded analytics work.
 - The one-time 100-file authorization is consumed. **STOP at 2100** and ask before any file 2101+.
+
+
+## Second exceptional window — checkpoint 2101–2125 COMPLETE
+
+- Completed entries 2101–2125 (25/25); active Ledger now has 125 records (2001–2125) and the global Index has 2,125 sequential unique paths.
+- Every source was read serially through EOF; long-file coverage is contiguous and no range exceeds 400 lines. SHA and exact byte sizes match the complete pinned tree.
+- Exact 15 required fields per Ledger entry; new Index paths and Decision labels align.
+- Next checkpoints 2126–2150, 2151–2175 and 2176–2200 are all covered by the user's explicit one-time authorization. **Do not stop/request permission at 2150. STOP only at 2200.**

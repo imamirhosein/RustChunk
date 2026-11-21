@@ -514,3 +514,14 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Pinned source remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete.
 - Next backup only after 1,000 additional completed entries (entry 3000) and global verification. No incremental backups at section checkpoints.
 - Tests/examples inspected only; no tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation. No application source changed.
+
+
+## 17. Second one-time expanded authorization — entries 2101–2200 — 2026-11-21
+
+- The user explicitly authorizes **all entries 2101–2200** as one exceptional 100-file window. This is a specific exception to the standard 50-file STOP/approval boundary; it does not permanently change the default 200 / 50 / 25 protocol.
+- Preserve exact 25-file checkpoint transactions: 2101–2125, 2126–2150, 2151–2175, 2176–2200. At each checkpoint, update and commit the six audit documents together, re-fetch all six and verify structure/provenance/Index alignment before proceeding.
+- At **2150 do not stop and do not ask for permission**. Continue directly with 2151–2175 and 2176–2200 under this same explicit authorization.
+- At **2200**, close the 100-file exceptional window, report the checkpoint, and **STOP**. Entries 2201+ require fresh explicit permission.
+- Latest verified state at this checkpoint: completed entries **1–2125**; active Ledger has **125 entries (2001–2125)**; Index has **2,125 sequential unique paths**. Branch HEAD before this checkpoint transaction was `0966527cdee32a1a5de0a97287aeb7d7491b08c3`.
+- Tests/examples inspected only, not executed. No build, benchmark, APK, Android device, Forge, Minecraft multiplayer, Aternos or renderer validation is implied. No app source changed.
+- Backup policy unchanged: no backup at 25/50/100/200-file checkpoint boundaries. Next backup only after 1,000 additional completed entries (entry 3000) and global verification.

@@ -1417,3 +1417,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Privacy boundary: documentation describes opt-in telemetry, in-memory IP rate-limit data, retention of raw hardware/report rows and protected export endpoints. This is design/documentation evidence, not proof of deployment. RustChunk must not silently add telemetry.
 - Tests/examples were inspected only; none executed. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation was performed. No application source changed.
 - Section **2051–2100 is closed (50/50)**. The one-time authorization is consumed. **STOP at 2100** and request new explicit permission before 2101.
+
+
+## Checkpoint 2101–2125 — 2026-11-21
+
+- Completed entries **2101–2125 (25/25)** serially in pinned-tree order. Every source was read to EOF; oversized sources used contiguous chunks no larger than 400 lines.
+- Exact SHA and byte size for every source match the complete recursive tree. Ledger holds **125 entries (2001–2125)** with exactly 15 fields each; Index has **2,125 sequential unique paths** and the new path/Decision rows align.
+- Findings: the telemetry host service binds all interfaces and performs synchronous SQLite work in Tokio tasks; raw benchmark/hardware aggregation can materialize large datasets; benchmark validity checks are permissive; shared telemetry uses time-derived fallback pseudonyms if OS randomness fails; the live presence ping is explicitly outside per-kind consent; the outbox is shared by game and launcher without inter-process locking; scrub is heuristic and caller-invoked rather than enforced; hardware detection does not target Android/Mali and collects detailed system traits.
+- Consent-gating tests verify disabled/withdrawn payload upload but do not cover live ping, which is separately enabled by default features and documented as no-consent. This is a policy blocker for direct adoption.
+- Tests/examples inspected only; none run. No build, benchmark, APK, Android, Forge, game join, Aternos or renderer validation was performed. No app source changed.
+- Continue through **2126–2150**, then **2151–2175** and **2176–2200** under the same explicit 100-file exception. **Do not stop/request permission at 2150; stop at 2200.**

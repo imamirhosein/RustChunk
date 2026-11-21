@@ -509,3 +509,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Main findings: Horizon shader fixture packs do not prove client compatibility; telemetry is a separate opt-in host service. Notable static risks: proxy trust, container privilege, blocking SQLite in async handlers, unbounded export/history work and report idempotency races.
 - Tests/examples were inspected only. No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation was performed. No application source changed.
 - No backup at 25/50/100/200-file checkpoints. Next backup only after 1,000 additional completed entries (entry 3000) and global verification. Existing `main` and backups remain untouched.
+
+
+## Verified checkpoint — entries 2101–2125 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Entries **2101–2125 (25/25)** were inspected serially, one source file at a time, through EOF. Large files were read in contiguous, gap-free chunks no larger than 400 lines. Exact paths, SHAs and byte sizes match the pinned tree.
+- Active Ledger contains **125 entries (2001–2125)**, each with the exact 15 fields. Index contains **2,125 sequential unique paths**; the new path/Decision entries align.
+- The user explicitly authorized a second exceptional window **2101–2200**. Complete the next three 25-file checkpoints 2126–2150, 2151–2175 and 2176–2200 without pausing at 2150. **STOP only at 2200** and ask before 2201.
+- Key findings: telemetry code is host-service infrastructure, not Minecraft gameplay; the live ping bypasses consent; fallback random IDs are predictable; outbox/consent/upload operations have race windows; scrub is best-effort; detailed hardware probes are not Android/Mali-ready. No evidence of 1.20.1 Forge client compatibility was established.
+- Tests/examples were inspected only; none executed. No build/test/benchmark/APK/device/Minecraft/Forge/server/Aternos/renderer validation was performed; no application code changed.
+- No backup at this checkpoint. Next backup only after 1,000 additional completed entries (entry 3000) and global verification. `main` and existing backups remain untouched.
