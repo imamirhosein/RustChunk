@@ -1704,3 +1704,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The active range is now strictly sorted by raw lexical path order; no gaps, duplicates, field-count issues, provenance mismatches or Ledger/Index alignment errors remain.
 - Stage 2401–2600 is closed at 200/200. The historical 1–2400 entries were not renumbered.
 - Tests/examples were not executed. No RustChunk application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+
+
+## Audit checkpoint 2601–2625 — 2026-11-21 — COMPLETE
+
+- Entries 2601–2625 were inspected individually through EOF against pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- The pinned recursive tree is complete and untruncated (5,749 entries / 4,968 blobs). Every new path, blob SHA and byte size matches the pinned tree.
+- Long-file coverage was contiguous and gap-free: `aquifer/noise_based.rs` 1–400/401–642; `blending.rs` 1–400/401–800/801–1031; `block_feature.rs` 1–400/401–539. Other files were read whole through EOF.
+- New stage Ledger: 25 records (2601–2625), each with exactly 15 required fields. Index: 2,625 sequential unique paths; all new paths and Decisions align with the Ledger.
+- Main compatibility risks include modern 26.3 noise/aquifer schemas, biome/registry identities, legacy chunk blending, feature placement/RNG order, collision/raycast callbacks and Forge 47 integration.
+- Tests/examples were inspected only; none were executed. No RustChunk application source changed. No build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed. No backup is due at this checkpoint.

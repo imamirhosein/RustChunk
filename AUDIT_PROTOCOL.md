@@ -777,3 +777,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The active 200 entries (2401–2600) are ordered by strict raw lexical path comparison and numbered sequentially.
 - Ledger and Index each contain the expected complete range; all 15 fields, source references, Coverage/Completion lines, paths, SHAs, byte sizes and per-entry Decisions agree.
 - The stage is closed at 200/200. Stop at 2600; 2601+ requires fresh explicit authorization.
+
+
+## 47. One-time exceptional authorization — 2601–2700 — 2026-11-21
+
+- The user explicitly authorized exactly **100 new source files: entries 2601–2700**. This is a one-time exception to the normal 50-file authorization boundary only; it does not change the standard cadence.
+- Preserve the normal checkpoint process: four exact 25-file commits (2601–2625, 2626–2650, 2651–2675 and 2676–2700), grouped into two 50-file sections (2601–2650 and 2651–2700). Every checkpoint updates all six audit documents atomically, then re-fetches and verifies them.
+- At 2650, report the completed 50-file section and proceed to 2651–2675 because the same explicit grant covers all 100 files. Do not request permission at 2650.
+- **STOP after entry 2700** and its boundary QA. Entry 2701 and later are outside the grant and require a fresh explicit authorization.
+- The 100 candidates were selected from the complete pinned recursive tree after excluding all 2,600 indexed paths; the tree is untruncated and the 100th authorized path is entry 2700.
