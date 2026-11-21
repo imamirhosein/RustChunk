@@ -2305,6 +2305,431 @@
 - No tests/examples executed; no app source changes, builds, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation. No backup at 2525; next backup only after entry 3000 and global verification.
 
 
+### 2526. `crates/horizon-world/src/level/pistons.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `af9352feb4a8df4fdd6c3b9330943bc31e929e78`
+- Size: 36047 bytes
+- Coverage: Complete through EOF: 954 logical lines; ranges 1–200/201–400/401–600/601–800/801–954; no gaps.
+- Purpose: Piston extension/retraction, structure resolution and moving-block lifecycle.
+- Dependencies / cross-references: LevelAccess/Sim, Ticks, block states, neighbor updates, piston events and host entity callbacks.
+- Implementation / logic: Resolves pushed/destroyed block sets, checks movement constraints, mutates states, queues moving pistons and handles client event replay.
+- Findings: Move and ticker order are semantic; entity collision and push results remain host-owned. Verify all refusal and block-entity cases.
+- RustChunk relevance: High-value world behavior reference, not a complete entity/world adapter.
+- Decision: adaptable; reference; entity-integration required
+- 1.20.1 implications: Regenerate 1.20.1 piston limits, tags, block entities, event payloads and Forge piston hooks.
+- Follow-up checks: Compare push/pull order, immovable blocks, slime/honey, block entities, cancelled moves and client event replay.
+- RustChunk implementation mapping: Use a versioned piston subsystem that emits ordered move plans; keep entity collision in explicit host callbacks.
+- Evidence required before adoption: Java 1.20.1 piston sources, deterministic move traces, block-entity/cancellation cases and Forge piston-hook tests.
+- Completion state: COMPLETE — 954 logical lines through EOF; pinned SHA and 36047-byte size match; inspected, not modified; tests not executed.
+
+### 2527. `crates/horizon-world/src/level/place.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2f4372415975cf31801af01e9ee3fa81f74543aa`
+- Size: 73280 bytes
+- Coverage: Complete through EOF: 1816 logical lines; ranges 1–200/201–400/401–600/601–800/801–1000/1001–1200/1201–1400/1401–1600/1601–1800/1801–1816; no gaps.
+- Purpose: Block-item placement state selection and specialized placement for block families.
+- Dependencies / cross-references: PlaceContext, block/item registry, StateTable, survival/shape queries, LevelAccess hooks, flags and events.
+- Implementation / logic: Computes target position/orientation, derives states, dispatches placement handlers, merges/places paired blocks and emits updates.
+- Findings: The double-height path prepares or clears the upper cell before the main placement write is known to succeed; partial-write/cancel behavior needs exact Java comparison.
+- RustChunk relevance: Core player-world interaction reference, not an inventory or item-use implementation.
+- Decision: adaptable; reference; Forge-placement-hooks required
+- 1.20.1 implications: Use the 1.20.1 block/item catalogue, state properties and Forge placement callbacks; do not reuse modern catalogue data.
+- Follow-up checks: Test paired blocks, refused writes, replaceability, collision, waterlogging, permission and dispenser contexts.
+- RustChunk implementation mapping: Implement a 1.20.1 placement engine with explicit context and paired-write outcome handling.
+- Evidence required before adoption: Java 1.20.1 BlockItem/BlockBehaviour placement, failed-write traces and Forge placement-event tests.
+- Completion state: COMPLETE — 1816 logical lines through EOF; pinned SHA and 73280-byte size match; inspected, not modified; tests not executed.
+
+### 2528. `crates/horizon-world/src/level/portal.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b59dd477c5c93675fa66b029c22e277e736c9e70`
+- Size: 6799 bytes
+- Coverage: Complete through EOF: 184 logical lines; full file; no gaps.
+- Purpose: Portal frame detection and portal-block placement.
+- Dependencies / cross-references: LevelAccess/Sim, portal shape checks, block tags/registry, state writes and dimension metadata.
+- Implementation / logic: Finds valid portal frames and fills the interior with portal states.
+- Findings: Multiple writes do not surface every individual write result; a host refusal may leave partial creation. Exact frame/tag data is version-specific.
+- RustChunk relevance: Useful isolated frame algorithm, dependent on host world lifecycle.
+- Decision: adaptable; reference; partial-write validation required
+- 1.20.1 implications: Rebuild 1.20.1 frame rules, axis/state IDs, dimensions and Forge portal hooks.
+- Follow-up checks: Test frame variants, blocked writes, unloaded chunks, interior ordering and malformed frames.
+- RustChunk implementation mapping: Port as a version-scoped portal-frame service with ordered writes and explicit result.
+- Evidence required before adoption: Java 1.20.1 PortalShape/NetherPortalBlock sources, frame matrix, cancelled-write traces and Forge portal evidence.
+- Completion state: COMPLETE — 184 logical lines through EOF; pinned SHA and 6799-byte size match; inspected, not modified; tests not executed.
+
+### 2529. `crates/horizon-world/src/level/portal_travel.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3bd8a11f4c686ce183cbe31d18b830e27b513157`
+- Size: 22767 bytes
+- Coverage: Complete through EOF: 628 logical lines; ranges 1–200/201–400/401–600/601–628; no gaps.
+- Purpose: Portal search, rectangle selection and exit-position calculation.
+- Dependencies / cross-references: Portal helpers, dimension metadata, chunk search, entity dimensions/pose and collision callbacks.
+- Implementation / logic: Finds nearest/largest portal areas, searches candidates, computes relative exit placement and creates a destination portal when needed.
+- Findings: Tie-breaking and iteration order affect destination choice. Actual entity teleport, dimension transfer and collision resolution are host responsibilities; creation can partially fail.
+- RustChunk relevance: Valuable travel geometry reference, not a complete cross-dimension entity implementation.
+- Decision: adaptable; reference; dimension-and-entity integration required
+- 1.20.1 implications: Match 1.20.1 search radius, world border, entity pose, custom dimensions and Forge travel hooks.
+- Follow-up checks: Compare portal ties, nearest selection, exit collision, scaled coordinates, search limits and failed creation.
+- RustChunk implementation mapping: Separate portal search/geometry from RustChunk's authoritative entity/dimension transfer service.
+- Evidence required before adoption: Java 1.20.1 PortalForcer/PortalShape/entity travel sources and Forge custom-dimension traces.
+- Completion state: COMPLETE — 628 logical lines through EOF; pinned SHA and 22767-byte size match; inspected, not modified; tests not executed.
+
+### 2530. `crates/horizon-world/src/level/query.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5b293f81dc24369ad09e68ddd9b3d63891dd5c73`
+- Size: 10213 bytes
+- Coverage: Complete through EOF: 262 logical lines; full file; no gaps.
+- Purpose: Shared block/fluid/support/collision and classification queries.
+- Dependencies / cross-references: LevelAccess/Sim, BlockRegistry/StateTable, tags, voxel shapes and moving-piston records.
+- Implementation / logic: Provides state, fluid, support, collision and block-class queries for behavior modules.
+- Findings: Dynamic support/collision depends on block-entity state; static state-only queries cannot represent every moving or host-defined shape.
+- RustChunk relevance: Reusable world-query seam with explicit dynamic context.
+- Decision: adaptable; reference; dynamic-block-entity integration required
+- 1.20.1 implications: Regenerate target block facts/shapes; Forge blocks can extend collision/support rules.
+- Follow-up checks: Compare sturdy faces, occlusion, moving pistons and mod-defined collision/support.
+- RustChunk implementation mapping: Use pure registry queries plus explicit host dynamic-shape callbacks.
+- Evidence required before adoption: Java 1.20.1 BlockStateBase/VoxelShape support code and Forge custom-block conformance.
+- Completion state: COMPLETE — 262 logical lines through EOF; pinned SHA and 10213-byte size match; inspected, not modified; tests not executed.
+
+### 2531. `crates/horizon-world/src/level/rails.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cd71619b6461c6d8b5a64dc146d23507cb5e9ddd`
+- Size: 27152 bytes
+- Coverage: Complete through EOF: 756 logical lines; ranges 1–200/201–400/401–600/601–756; no gaps.
+- Purpose: Rail shape updates, powered propagation, detector rails and tripwire hooks.
+- Dependencies / cross-references: LevelAccess/Sim, block properties, redstone, neighbor updates, scheduled ticks and entity/minecart queries.
+- Implementation / logic: Recomputes rail connections/shapes, updates powered chains and checks detector/tripwire conditions.
+- Findings: Direction/iteration order and propagation bounds are observable; minecart entity queries are supplied by the host.
+- RustChunk relevance: Reference for redstone-connected rail state; no minecart physics here.
+- Decision: adaptable; reference; minecart-integration required
+- 1.20.1 implications: Use 1.20.1 rail properties and entity types; support Forge rail extensions explicitly.
+- Follow-up checks: Test junctions, slopes, powered propagation length, detector bounds and tripwire limits against Java.
+- RustChunk implementation mapping: Keep block transitions in world core and supply bounded entity queries through a host API.
+- Evidence required before adoption: Java 1.20.1 rail/tripwire sources, deterministic layouts and Forge rail/minecart tests.
+- Completion state: COMPLETE — 756 logical lines through EOF; pinned SHA and 27152-byte size match; inspected, not modified; tests not executed.
+
+### 2532. `crates/horizon-world/src/level/redstone.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `590f3bcdb80ffe7b3bd2556080e91fefc12bf4fc`
+- Size: 59404 bytes
+- Coverage: Complete through EOF: 1507 logical lines; ranges 1–200/201–400/401–600/601–800/801–1000/1001–1200/1201–1400/1401–1507; no gaps.
+- Purpose: Vanilla redstone signal and block component behavior.
+- Dependencies / cross-references: LevelAccess/Sim, StateTable, tags/shapes, neighbor updater, ticks, comparator outputs and experimental helpers.
+- Implementation / logic: Implements signal strength, wire recomputation, torches, repeaters, comparators, buttons, observers and related block behavior.
+- Findings: Exact direction/class order, emulated Java collection order, event sequencing and RNG draws are semantic. Pinned source is 59,404 bytes and 1,507 lines; this corrects the earlier erroneous progress estimate.
+- RustChunk relevance: Strong candidate for a dedicated deterministic world-simulation subsystem after target-version regeneration.
+- Decision: adaptable; core candidate; Java parity required
+- 1.20.1 implications: Rebuild class/property/tag maps for 1.20.1 and gate experimental behavior exactly; later registry content is not target proof.
+- Follow-up checks: Diff circuits, signal strengths, wire loops, burnout, comparator/repeater timing, observer pulses, update order and RNG traces.
+- RustChunk implementation mapping: Implement against RustChunk authoritative versioned world state with observable ordered neighbor changes.
+- Evidence required before adoption: Java 1.20.1 redstone sources, deterministic circuit corpus, RNG/event traces and Forge redstone hooks.
+- Completion state: COMPLETE — 1507 logical lines through EOF; pinned SHA and 59404-byte size match; inspected, not modified; tests not executed.
+
+### 2533. `crates/horizon-world/src/level/redstone/experimental.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b7cc9d6b621be93408c936d1496d0f6474103741`
+- Size: 8046 bytes
+- Coverage: Complete through EOF: 214 logical lines; full file; no gaps.
+- Purpose: Experimental redstone graph evaluation and ordered propagation.
+- Dependencies / cross-references: Redstone module, orientation context, state properties, LevelAccess and neighbor updates.
+- Implementation / logic: Builds local wire graph, evaluates signal and applies changes in discovery order.
+- Findings: An assertion assumes a monotonic signal invariant; prove it for every legal experimental configuration. Separate from ordinary redstone logic.
+- RustChunk relevance: Optional reference only; exclude from stable world core absent exact feature.
+- Decision: reference; experimental-feature-gated; do not enable by default
+- 1.20.1 implications: Confirm the exact 1.20.1 experiment/configuration and algorithm before considering it.
+- Follow-up checks: Test cycles, loops, source removal, orientation bias and assertion reachability against target Java.
+- RustChunk implementation mapping: Keep isolated behind a disabled-by-default versioned feature interface.
+- Evidence required before adoption: Java 1.20.1 experimental redstone source/config and deterministic graph traces.
+- Completion state: COMPLETE — 214 logical lines through EOF; pinned SHA and 8046-byte size match; inspected, not modified; tests not executed.
+
+### 2534. `crates/horizon-world/src/level/removal.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6fe55c79073c1affb1e5024637f111982dbd379d`
+- Size: 6657 bytes
+- Coverage: Complete through EOF: 163 logical lines; full file; no gaps.
+- Purpose: Block-removal side effects, block-entity inventory spill and drop/experience dispatch.
+- Dependencies / cross-references: LevelAccess/Sim, block-entity hooks, registry, loot/drop events and random source.
+- Implementation / logic: Dispatches pre-removal behavior and emits inventory/drop/experience-related events before state replacement.
+- Findings: Drop location and RNG order matter; fixed block-entity mapping needs an extension path for arbitrary Forge block entities.
+- RustChunk relevance: Important lifecycle reference; item stacks, loot tables and entity spawning are host-owned.
+- Decision: adaptable; reference; block-entity-and-drop integration required
+- 1.20.1 implications: Regenerate the 1.20.1 block-entity set and implement Forge pre-remove callbacks.
+- Follow-up checks: Verify inventory spill, empty containers, creative/silk-touch, drop offsets, XP and failed writes.
+- RustChunk implementation mapping: Use typed pre-remove events; host owns inventory, loot, item entities and XP.
+- Evidence required before adoption: Java 1.20.1 BlockEntity/container removal sources and Forge block-entity tests.
+- Completion state: COMPLETE — 163 logical lines through EOF; pinned SHA and 6657-byte size match; inspected, not modified; tests not executed.
+
+### 2535. `crates/horizon-world/src/level/sculk.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `46073cf5e7146a4a1223f4b21f03b8b2a2ba0184`
+- Size: 32236 bytes
+- Coverage: Complete through EOF: 871 logical lines; ranges 1–200/201–400/401–600/601–800/801–871; no gaps.
+- Purpose: Sculk charge cursors, spreader merge/decay, catalyst, shrieker and growth.
+- Dependencies / cross-references: LevelAccess/Sim, SculkSpreader, StateTable, tags, shapes and random source.
+- Implementation / logic: Merges and advances charge cursors, finds spread targets, places sculk/veins and emits events/particles.
+- Findings: Cursor cap/merge policy and traversal/RNG order are observable; wrapping distance semantics must be compared to Java integer behavior.
+- RustChunk relevance: Useful 1.20-era behavior reference, tied to versioned registry data.
+- Decision: adaptable; reference; version-and-RNG parity required
+- 1.20.1 implications: Regenerate 1.20.1 sculk tags/states and exact spread behavior; do not carry later registry IDs.
+- Follow-up checks: Compare cursor cap/merge, decay, distance edge cases, target scan order, XP/particles and random draws.
+- RustChunk implementation mapping: Implement data-driven SculkSpreader in RustChunk versioned world simulation.
+- Evidence required before adoption: Java 1.20.1 SculkSpreader/blocks sources, cursor persistence and Forge tag extension tests.
+- Completion state: COMPLETE — 871 logical lines through EOF; pinned SHA and 32236-byte size match; inspected, not modified; tests not executed.
+
+### 2536. `crates/horizon-world/src/level/shapes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e8a31f83cc7b98981a2c1d18befdfe6116c9a26f`
+- Size: 50532 bytes
+- Coverage: Complete through EOF: 1323 logical lines; ranges 1–200/201–400/401–600/601–800/801–1000/1001–1200/1201–1323; no gaps.
+- Purpose: Neighbor-dependent block update-shape behavior for many block families.
+- Dependencies / cross-references: LevelAccess/Sim, class-chain dispatch, state properties, tags, fluids, collision and neighbor updates.
+- Implementation / logic: Computes updateShape-style state changes for walls, fences, rails, stairs, doors, plants and more.
+- Findings: Class-chain and direction sequence are semantic; later block classes are mixed into dispatcher. Never alphabetically sort/flatten dispatch.
+- RustChunk relevance: Broad reference for architecture; needs a target-generated dispatch table.
+- Decision: adaptable; reference; target-version class-dispatch required
+- 1.20.1 implications: Remove later blocks and use exact 1.20.1 properties, tags, order and Forge callbacks.
+- Follow-up checks: Test each target block update family, multiple neighbors, waterlogging and unloaded boundaries.
+- RustChunk implementation mapping: Generate 1.20.1 dispatch and preserve ordered shape updates.
+- Evidence required before adoption: Java 1.20.1 updateShape sources, neighbor traces and Forge mod block hooks.
+- Completion state: COMPLETE — 1323 logical lines through EOF; pinned SHA and 50532-byte size match; inspected, not modified; tests not executed.
+
+### 2537. `crates/horizon-world/src/level/shelf.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f060fa530ae6665d61a9b05d5a4989e6750c46cb`
+- Size: 8291 bytes
+- Coverage: Complete through EOF: 241 logical lines; full file; no gaps.
+- Purpose: Modern shelf pairing, placement and interaction behavior.
+- Dependencies / cross-references: LevelAccess/Sim, StateTable, item/slot interactions, tags and events.
+- Implementation / logic: Computes shelf chain/part states and shelf interactions.
+- Findings: This shelf family is absent from vanilla 1.20.1; exclude its block/state data from target vanilla tables.
+- RustChunk relevance: Not applicable to vanilla 1.20.1; only a future mod-specific reference.
+- Decision: not applicable to 1.20.1; do not ship
+- 1.20.1 implications: No vanilla 1.20.1 shelf equivalent; any mod implementation belongs in its own adapter.
+- Follow-up checks: No vanilla parity work; future shelf mod must provide its registry/source/version evidence.
+- RustChunk implementation mapping: Keep outside the 1.20.1 vanilla core.
+- Evidence required before adoption: Proof from target 1.20.1 registry that absent; separate mod source/license and tests if ever needed.
+- Completion state: COMPLETE — 241 logical lines through EOF; pinned SHA and 8291-byte size match; inspected, not modified; tests not executed.
+
+### 2538. `crates/horizon-world/src/level/signals.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `95b7130d7532ae06d41b0aa2330a06b116625fd1`
+- Size: 1610 bytes
+- Coverage: Complete through EOF: 45 logical lines; full file; no gaps.
+- Purpose: Analog/redstone output notification helpers.
+- Dependencies / cross-references: LevelAccess/Sim, block registry, output signal queries and neighbor notifications.
+- Implementation / logic: Compares output states and triggers neighbor notifications for analog signal changes.
+- Findings: Small but order-sensitive bridge; missed host notification leaves stale comparator/wire state.
+- RustChunk relevance: Useful seam for central mutation/redstone pipeline.
+- Decision: adaptable; reference; redstone-host-contract required
+- 1.20.1 implications: Use 1.20.1 comparator semantics and Forge analog output hooks.
+- Follow-up checks: Test unchanged-state output change, comparator adjacency, flags and callback order.
+- RustChunk implementation mapping: Integrate with RustChunk central set-block/redstone notification pipeline.
+- Evidence required before adoption: Java 1.20.1 Level analog signal sources and Forge output tests.
+- Completion state: COMPLETE — 45 logical lines through EOF; pinned SHA and 1610-byte size match; inspected, not modified; tests not executed.
+
+### 2539. `crates/horizon-world/src/level/speleothem.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f9781279e9bfde6471e2cf793f04525605b58fdc`
+- Size: 14511 bytes
+- Coverage: Complete through EOF: 382 logical lines; full file; no gaps.
+- Purpose: Pointed-dripstone growth, survival, fluid drip and cauldron filling.
+- Dependencies / cross-references: LevelAccess/Sim, shape queries, fluids, random source, cauldron state and events.
+- Implementation / logic: Handles tip transitions, growth/collapse, drip delays and cauldron fill events.
+- Findings: Random draws, direction scans and entity fall damage callbacks are observable; entity outcomes are host-handled.
+- RustChunk relevance: Useful 1.20-era block behavior reference requiring exact target RNG and entity handling.
+- Decision: adaptable; reference; fluid-RNG-and-entity integration required
+- 1.20.1 implications: Verify exact 1.20.1 drip probabilities, fluid rules, cauldron callbacks and Forge fluid hooks.
+- Follow-up checks: Compare growth, tip states, drip chance/delay, cauldron sequence and falling stalactite outcomes.
+- RustChunk implementation mapping: Implement in versioned behavior and route damage/spawning through typed events.
+- Evidence required before adoption: Java 1.20.1 PointedDripstone sources, RNG traces and Forge fluid/entity cases.
+- Completion state: COMPLETE — 382 logical lines through EOF; pinned SHA and 14511-byte size match; inspected, not modified; tests not executed.
+
+### 2540. `crates/horizon-world/src/level/states.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8d2544953e51ed2db08fcf0d2ea44925050e6972`
+- Size: 13403 bytes
+- Coverage: Complete through EOF: 351 logical lines; ranges 1–200/201–351; no gaps.
+- Purpose: Arithmetic block-state property indexing and stride computation.
+- Dependencies / cross-references: BlockRegistry descriptors, StateTable, BlockStateId and property ordering.
+- Implementation / logic: Derives property slots/strides from contiguous state IDs and provides get/set/cycle/default operations.
+- Findings: Correctness depends on exact Cartesian-product and registry order; bounded identifiers and unchecked lookups require valid generated target metadata.
+- RustChunk relevance: Registry-critical; state mismatch would corrupt all downstream block behavior.
+- Decision: adaptable; registry-critical; 1.20.1 generation required
+- 1.20.1 implications: Generate exact 1.20.1 block/state/property table; prove Java StateDefinition order.
+- Follow-up checks: Exhaustively compare every target state/property, defaults, cycles, ID limits and malformed registries.
+- RustChunk implementation mapping: Use generated tables with strict load-time validation and fail closed on ordering mismatch.
+- Evidence required before adoption: Java 1.20.1 StateDefinition/BlockState sources, hashed registry dump and exhaustive mapping.
+- Completion state: COMPLETE — 351 logical lines through EOF; pinned SHA and 13403-byte size match; inspected, not modified; tests not executed.
+
+### 2541. `crates/horizon-world/src/level/survive.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1d0788b40534a2ea0f43a88f86f706e5b451e986`
+- Size: 26331 bytes
+- Coverage: Complete through EOF: 616 logical lines; ranges 1–200/201–400/401–600/601–616; no gaps.
+- Purpose: Block canSurvive/mayPlaceOn rules for numerous block classes.
+- Dependencies / cross-references: LevelAccess/Sim, class-chain data, state properties, tags, support faces, light and fluids.
+- Implementation / logic: Checks support, neighboring states, light/fluid, paired halves, plants, rails, torches and host survival overrides.
+- Findings: First matching class-chain rule and exact target tags matter; missing dynamic support facts may silently diverge.
+- RustChunk relevance: Strong placement-rule reference after target versioning.
+- Decision: adaptable; reference; target-version class-and-tag map required
+- 1.20.1 implications: Regenerate 1.20.1 class/tag data and Forge canSurvive/mayPlaceOn overrides.
+- Follow-up checks: Test each target override, class inheritance, dynamic piston support, waterlogging and mod hooks.
+- RustChunk implementation mapping: Implement as separate versioned survival service over explicit world queries.
+- Evidence required before adoption: Java 1.20.1 BlockState survival sources, tags and Forge survival tests.
+- Completion state: COMPLETE — 616 logical lines through EOF; pinned SHA and 26331-byte size match; inspected, not modified; tests not executed.
+
+### 2542. `crates/horizon-world/src/level/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4f4a92bd06ca0ef324ed299c0561c0b301549406`
+- Size: 118047 bytes
+- Coverage: Complete through EOF: 3515 logical lines; ranges 1–200/201–400/601–800/801–1000/1001–1200/1201–1400/1401–1600/1601–1800/1801–2000/2001–2200/2201–2400/2401–2600/2601–2800/2801–3000/3001–3200/3201–3400/3401–3515; no gaps.
+- Purpose: Integration test harness for blocks, fluids, redstone, pistons, interactions, sculk and ticks.
+- Dependencies / cross-references: Rust tests, fixture registry/resources, Behaviours and mock LevelAccess.
+- Implementation / logic: Builds in-memory test worlds and asserts block states, events, scheduled ticks and interaction results.
+- Findings: Fixture loader can return None when block-behaviours.json is missing and each test returns early; suite may silently skip without explicit resource/skip gates. Mock assumes loaded chunks.
+- RustChunk relevance: Use the patterns for a RustChunk differential/regression harness; never ship this test source.
+- Decision: fixture-only; do not ship
+- 1.20.1 implications: Create 1.20.1 fixture resources and fail CI on required test skips; later block cases are not target proof.
+- Follow-up checks: Check asset presence and skip count, then add unloaded/bounds/error mocks and Java differential traces.
+- RustChunk implementation mapping: Rebuild selected scenarios in a test-only 1.20.1 crate; exclude from Android release.
+- Evidence required before adoption: Non-skipped test output, pinned resource hashes, Java 1.20.1 state/event/RNG traces and Forge negative-path tests.
+- Completion state: COMPLETE — 3515 logical lines through EOF; pinned SHA and 118047-byte size match; inspected, not modified; tests not executed.
+
+### 2543. `crates/horizon-world/src/level/tick.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b1fedc8897f9e03dba483369d4a8a078146366de`
+- Size: 79690 bytes
+- Coverage: Complete through EOF: 1940 logical lines; ranges 1–200/201–400/401–600/601–800/801–1000/1001–1200/1201–1400/1401–1600/1601–1800/1801–1940; no gaps.
+- Purpose: Scheduled block/fluid ticks, random ticks and class-specific block tick logic.
+- Dependencies / cross-references: Behaviours/Sim, LevelAccess, Ticks, registry/state data, fluids, weather and random source.
+- Implementation / logic: Runs scheduled block then fluid ticks, per-block random behavior and chunk random-tick traversal with a 4096-bit candidate mask.
+- Findings: Queue errors can return early or be ignored; tick order, random draws and mask refresh are optimization-sensitive.
+- RustChunk relevance: Core simulation candidate; scheduler/RNG correctness affects nearly every behavior.
+- Decision: adaptable; core candidate; 1.20.1 tick parity required
+- 1.20.1 implications: Regenerate block classes/tags and exact 1.20.1 queue, game-rule and weather semantics.
+- Follow-up checks: Compare block-before-fluid order, priorities, deduplication, tick cap, LCG, section traversal, mask invalidation and RNG traces.
+- RustChunk implementation mapping: Create deterministic versioned scheduler/tick dispatcher with explicit queue error reporting.
+- Evidence required before adoption: Java 1.20.1 LevelTicks/ServerLevel/BlockState tick sources and exact tick/RNG traces.
+- Completion state: COMPLETE — 1940 logical lines through EOF; pinned SHA and 79690-byte size match; inspected, not modified; tests not executed.
+
+### 2544. `crates/horizon-world/src/level/ticks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fa0d882cb0972bb2251bcde20a9d62b2c6836511`
+- Size: 7117 bytes
+- Coverage: Complete through EOF: 182 logical lines; full file; no gaps.
+- Purpose: Per-level scheduled tick state, neighbor updater and random tick position generator.
+- Dependencies / cross-references: horizon-core LevelTicks/ChunkTicks, BlockId/FluidKind, NeighborUpdater and MovingPiston.
+- Implementation / logic: Owns block/fluid queues, shared sub-tick counter, random LCG, in-flight neighbor updates, block events and captured worldgen ticks.
+- Findings: Chunk lifecycle, save/load of ticks and transient entity/event collections remain caller responsibilities.
+- RustChunk relevance: Useful deterministic world-state component, not a complete persistence model.
+- Decision: adaptable; core candidate; persistence-and-order verification required
+- 1.20.1 implications: Match 1.20.1 queue persistence, priority ordering and chunk load/unload semantics.
+- Follow-up checks: Test duplicate ticks, same-time ordering, chunk reload, shared block/fluid counter and capture mode.
+- RustChunk implementation mapping: Create RustChunk tick-state storage with explicit persistence and chunk ownership contracts.
+- Evidence required before adoption: Java 1.20.1 LevelTicks/SavedTick sources, serialized fixtures and reload/order traces.
+- Completion state: COMPLETE — 182 logical lines through EOF; pinned SHA and 7117-byte size match; inspected, not modified; tests not executed.
+
+### 2545. `crates/horizon-world/src/level/timeline.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6ef96f5a792316690a4b1cf652e971f63369a7c2`
+- Size: 9389 bytes
+- Coverage: Complete through EOF: 235 logical lines; full file; no gaps.
+- Purpose: Time-window environment behavior for eyeblossoms, turtle eggs and dried ghasts.
+- Dependencies / cross-references: LevelAccess/Sim, dimension/day time, random source, block registry and events.
+- Implementation / logic: Maps day time to timed block actions, schedules nearby changes, ticks turtle eggs and handles dried-ghast hydration.
+- Findings: Eyeblossom and dried-ghast behavior postdates 1.20.1; isolate turtle egg behavior and verify exact target schedule/random window.
+- RustChunk relevance: Selective reference only; do not adopt module wholesale.
+- Decision: version-specific; selective reference; later blocks excluded
+- 1.20.1 implications: Exclude later blocks; compare turtle egg hatch timing/chance and event behavior with 1.20.1.
+- Follow-up checks: Test target day-time normalization, hatch windows, event order and RNG traces.
+- RustChunk implementation mapping: Separate generic timeline service from version-specific block callbacks.
+- Evidence required before adoption: Java 1.20.1 TurtleEggBlock/world timeline sources and deterministic day-time traces.
+- Completion state: COMPLETE — 235 logical lines through EOF; pinned SHA and 9389-byte size match; inspected, not modified; tests not executed.
+
+### 2546. `crates/horizon-world/src/level/update.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8b894d4e5427da89099c7506ae07f26a32d789b3`
+- Size: 23320 bytes
+- Coverage: Complete through EOF: 694 logical lines; ranges 1–200/201–400/401–600/601–694; no gaps.
+- Purpose: Level.setBlock mutation pipeline, shape updates and chained neighbor dispatcher.
+- Dependencies / cross-references: LevelAccess, Sim, NeighborUpdater, block registry, flags, block entities, events and Ticks.
+- Implementation / logic: Validates bounds/loading, writes state, runs block-entity side effects and schedules ordered shape/neighbor notifications.
+- Findings: One-million chained update cap drops excess work without a public error; raw writes and block identity can suppress later callbacks.
+- RustChunk relevance: Central world mutation candidate; every gameplay transition depends on this contract.
+- Decision: adaptable; core candidate; host-contract required
+- 1.20.1 implications: Rebuild 1.20.1 flags, update order, block-entity lifecycle and Forge hooks.
+- Follow-up checks: Test flags, failed writes, chunk bounds, block entities, moving piston, update cap and exact neighbor order.
+- RustChunk implementation mapping: Create one authoritative RustChunk state mutation pipeline with typed side effects and observable budget exhaustion.
+- Evidence required before adoption: Java 1.20.1 Level/LevelChunk/NeighborUpdater sources and Forge event traces.
+- Completion state: COMPLETE — 694 logical lines through EOF; pinned SHA and 23320-byte size match; inspected, not modified; tests not executed.
+
+### 2547. `crates/horizon-world/src/level/weather.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `93027d889375454e6952f938e6d3266ed3fbd46c`
+- Size: 5551 bytes
+- Coverage: Complete through EOF: 138 logical lines; full file; no gaps.
+- Purpose: Biome precipitation, motion-blocking surface and local rain/freeze/snow queries.
+- Dependencies / cross-references: Behaviours/LevelAccess, biome temperature data, dimension sea levels, block tags, fluids and light.
+- Implementation / logic: Computes precipitation kind, finds surface position, checks freezing water, snow placement and rain exposure.
+- Findings: Sea levels are hardcoded and top lookup scans a vertical column instead of using an authoritative heightmap; target biome/settings are external.
+- RustChunk relevance: Weather query architecture reference with host-provided biome and heightmap services.
+- Decision: adaptable; reference; biome-heightmap integration required
+- 1.20.1 implications: Use 1.20.1 biome temperatures, precipitation, dimension sea level and exact heightmap semantics; custom Forge dimensions need data.
+- Follow-up checks: Compare thresholds, heights, light, biome boundaries and custom dimensions with target Java.
+- RustChunk implementation mapping: Use chunk heightmaps and versioned biome/dimension metadata, not repeated scans.
+- Evidence required before adoption: Java 1.20.1 Biome/ServerLevel precipitation sources, heightmap fixtures and Forge biome tests.
+- Completion state: COMPLETE — 138 logical lines through EOF; pinned SHA and 5551-byte size match; inspected, not modified; tests not executed.
+
+### 2548. `crates/horizon-world/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f094b34d5fd9fec03ebdcde82fb04c5ba5eff873`
+- Size: 3484 bytes
+- Coverage: Complete through EOF: 152 logical lines; full file; no gaps.
+- Purpose: Public crate module surface, unsafe-code policy and data-version constant.
+- Dependencies / cross-references: Rust module declarations, horizon-core version constant and submodules.
+- Implementation / logic: Exports module surface, forbids unsafe code and aliases DATA_VERSION.
+- Findings: This is a module inventory only, not game implementation; listed modules belong to a newer source snapshot.
+- RustChunk relevance: Navigation/architecture reference only.
+- Decision: architectural reference; version-specific; do not copy wholesale
+- 1.20.1 implications: Design RustChunk crates around selected 1.20.1 systems and own DataVersion.
+- Follow-up checks: Inspect selected subsystem dependency graph and target version constants.
+- RustChunk implementation mapping: Use only as a map for decomposition, not copied crate structure.
+- Evidence required before adoption: RustChunk-owned crate graph and 1.20.1 DataVersion source.
+- Completion state: COMPLETE — 152 logical lines through EOF; pinned SHA and 3484-byte size match; inspected, not modified; tests not executed.
+
+### 2549. `crates/horizon-world/src/liquid_collision.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `89bc88f624f449e033a1e837798ef22381d3a9d8`
+- Size: 2214 bytes
+- Coverage: Complete through EOF: 63 logical lines; full file; no gaps.
+- Purpose: Context-sensitive water/lava collision selection and entity standing-on-fluid behavior.
+- Dependencies / cross-references: BlockState, CollisionContext, FluidState, EntityIdentity and LiquidCollisionWorld host callbacks.
+- Implementation / logic: Selects source liquid collision shape based on always-collide mode, living entity shape and fluid above.
+- Findings: Callback order and entity shape/standing behavior are host responsibilities; flowing fluids return empty collision.
+- RustChunk relevance: Useful isolated world/entity collision adapter.
+- Decision: adaptable; reference; entity-collision integration required
+- 1.20.1 implications: Match 1.20.1 fluid collision context and Forge custom fluid/entity behavior.
+- Follow-up checks: Test source/flowing fluids, above-fluid callback order, empty shapes and custom entity cases.
+- RustChunk implementation mapping: Port as a typed host callback boundary without hidden entity storage.
+- Evidence required before adoption: Java 1.20.1 LiquidBlock/CollisionContext and Forge fluid/entity tests.
+- Completion state: COMPLETE — 63 logical lines through EOF; pinned SHA and 2214-byte size match; inspected, not modified; tests not executed.
+
+### 2550. `crates/horizon-world/src/live_attribute_updates.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `632a414385532fe13226da13d3ad77c62fba6353`
+- Size: 3544 bytes
+- Coverage: Complete through EOF: 85 logical lines; full file; no gaps.
+- Purpose: Live entity attribute reads and pending-update refresh dispatch.
+- Dependencies / cross-references: LiveAttributes, AttributeMap, UpdateWorld, instance handles, cursor and entity callbacks.
+- Implementation / logic: Reads attribute values and iterates pending instances to dispatch specialized attribute refresh before clearing pending updates.
+- Findings: Callbacks may mutate map selection or pending cursor; failures must not clear the set. Only a small registered-attribute subset is specially classified.
+- RustChunk relevance: Entity subsystem integration pattern; not a world/block module.
+- Decision: adaptable; reference; entity-attribute-host integration required
+- 1.20.1 implications: Use 1.20.1 attribute holders/instances and Forge custom attribute registry/hooks.
+- Follow-up checks: Test map replacement, cursor invalidation, callback failure, custom attributes and refresh ordering.
+- RustChunk implementation mapping: Keep storage and refresh in a dedicated RustChunk entity crate behind typed world/attribute traits.
+- Evidence required before adoption: Java 1.20.1 AttributeMap/LivingEntity sources, callback mutation traces and Forge custom-attribute tests.
+- Completion state: COMPLETE — 85 logical lines through EOF; pinned SHA and 3544-byte size match; inspected, not modified; tests not executed.
+
 ## Checkpoint 2526–2550 — COMPLETE (25/25)
 
 - All 25 source files were re-read from the start, one at a time, through EOF. The pinned recursive tree at `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is untruncated; all 25 paths are blobs and each SHA/byte-size pair in these entries matches that tree.

@@ -2976,3 +2976,10 @@
 | 2548 | `crates/horizon-world/src/lib.rs` | architectural reference; version-specific; do not copy wholesale | Navigation only; do not copy the modern crate module surface wholesale. |
 | 2549 | `crates/horizon-world/src/liquid_collision.rs` | adaptable; reference; entity-collision integration required | Contextual liquid collision bridge; entity shape and standing rules belong to the host. |
 | 2550 | `crates/horizon-world/src/live_attribute_updates.rs` | adaptable; reference; entity-attribute-host integration required | Attribute refresh dispatch belongs in a separate entity subsystem with explicit callback lifecycle. |
+
+
+## Ledger/Index correction — 2026-11-21
+
+- The first checkpoint registration read-back exposed a material mismatch: Index had advanced to 2,550 while Ledger still contained only 2401–2525. The 25 new Index rows were present but the 25 corresponding Ledger records had not been appended.
+- This was corrected before declaring the checkpoint complete. The corrective atomic six-document commit includes all 25 Ledger entries 2526–2550; the intended final structural state is 150 Ledger records and 2,550 sequential Index rows with matching paths/Decisions.
+- This correction note is retained as an audit trail; the first registration must not be treated as the final completed checkpoint.

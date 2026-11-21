@@ -736,3 +736,10 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Checkpoint 2526–2550 is the second 25-file checkpoint of the 2501–2550 section and closes that section at 50/50. There is no stop at 2547 or any other intermediate number.
 - After a separate grant, complete 2551–2575 and 2576–2600, stopping at 2600. Only after that may the requested independent global verification of all 200 entries 2401–2600 be performed.
 - The existing backup and all earlier protected branches/commits remain unchanged; no incremental backup is created at 2550. Tests/examples remain unexecuted unless separately authorized.
+
+
+## 42. Checkpoint registration acceptance rule — 2026-11-21
+
+- An Index increase alone does not constitute a completed source audit. Every newly indexed file must have one complete Ledger record with all 15 required fields, exact pinned SHA/size and EOF coverage.
+- If post-commit read-back finds an Index/Ledger count or path mismatch, do not report the checkpoint complete. Correct all six audit documents in one atomic follow-up commit and repeat the complete read-back/structural check before accepting the boundary.
+- This rule applies to checkpoint 2526–2550 and all later checkpoints. The stop boundary and authorization limits remain those in section 41.

@@ -1648,3 +1648,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Structural check before commit: Ledger expected to hold 150 entries (2401–2550) with 15 fields per entry; Index expected to hold 2,550 sequential unique paths and matching Decisions. Post-commit read-back/global structural and provenance verification must still be performed; this entry does not claim that later 2551–2600 or the full 200-file 2401–2600 audit has been globally rechecked.
 - Tests/examples were read only; none were executed. No RustChunk product source was changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed. No backup at 2550.
 - The current authorization boundary is **2550**. The 2551–2600 section requires a separate explicit grant. After that section is complete, perform the requested independent global QA across 2401–2600.
+
+
+## Registration correction — 2526–2550 — 2026-11-21
+
+- Post-commit read-back of the initial checkpoint registration caught an omission: the Index had 2,550 rows but the Ledger still ended at 2525. The first registration was therefore not accepted as complete.
+- The 25 full Ledger records were then generated from the serially re-read sources, with exactly 15 fields per record, contiguous line coverage, pinned source SHA and size. Pre-commit validation of the corrected Ledger content found **150 records (2401–2550)** and no missing/duplicate required fields. The 25 new Index rows match the same source paths and Decisions.
+- A corrective commit updates the same six audit documents together. Its read-back is the final acceptance gate; until it passes, this checkpoint remains unaccepted.

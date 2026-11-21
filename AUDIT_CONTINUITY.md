@@ -678,3 +678,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - `redstone.rs` corrected to 59,404 bytes / 1,507 lines; prior interim estimate was inaccurate.
 - **STOP at 2550.** The latest user instruction supersedes previous historical notes that said the 2501–2600 grant covered both 50-file sections. A separate explicit authorization is required for 2551–2600. After that authorized range completes, recheck all 200 entries 2401–2600 independently.
 - Tests/examples not executed. No product source, build, APK or runtime verification. No backup at 2550.
+
+
+## Registration correction — 2526–2550 — 2026-11-21
+
+- The first commit's read-back showed that 25 Index rows had been added but their Ledger entries were missing. The checkpoint was not considered complete at that point.
+- A corrective six-document commit now adds the full 25 Ledger records and retains the matching 2,550 Index rows. The final checkpoint state is accepted only after all six documents are fetched from the corrective commit and their structure, path/Decision alignment and pinned source provenance are verified.
+- User's active stop boundary remains 2550. No 2551+ source is authorized yet.

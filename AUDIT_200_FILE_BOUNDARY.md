@@ -274,3 +274,10 @@
 
 - This historical authorization note is superseded by the current boundary section below. The active grant ends at 2550; a separate explicit grant is required for 2551–2600.
 - After the separately authorized 2551–2600 section is complete, perform independent structural/provenance QA across all 200 Ledger entries 2401–2600.
+
+
+## Registration correction — 2526–2550 — 2026-11-21
+
+- The first commit's post-commit check found the 25 new Index rows without their Ledger records. That commit was not accepted as completion.
+- The corrective atomic six-document commit supplies the missing 25 full Ledger entries. The boundary is accepted only after reading back all six documents from the corrective commit and verifying 150 Ledger records, 2,550 unique sequential Index rows and all 25 path/Decision links.
+- Stop remains exactly at 2550; 2551–2600 awaits a separate explicit grant.
