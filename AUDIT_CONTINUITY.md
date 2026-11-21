@@ -485,3 +485,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Tests/examples were inspected only, not run. No app source changed and no build/test/benchmark/APK/device/Forge/server/Aternos/render validation was performed.
 - No backup is due at this 25/50/100-file checkpoint. Next backup only after 1,000 additional entries (entry 3000) and global verification. `main` and prior backup refs remain untouched.
 - Next source path, verified from the pinned tree after excluding entries 1–2050: `crates/horizon-shaders/src/post.rs`.
+
+
+## Verified checkpoint — entries 2051–2075 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries **2051–2075 inclusive (25/25)** were reviewed serially, one source file at a time, through EOF. Long files were read in contiguous chunks of at most 400 lines. Paths, SHA and exact byte sizes match the pinned tree.
+- Active Ledger holds **75 entries (2001–2075)**, each with exactly 15 required fields. Index holds **2,075 sequential unique paths**; new path/Decision rows match.
+- Checkpoint **2051–2075 is closed**. The user's one-time authorization already covers **2076–2100**; continue without another permission request. At 2100 close section 2051–2100 and **STOP** before 2101.
+- Key findings: optional Horizon shaderpack pipeline lacks several aggregate resource bounds and fail-closed conditions; texture decoding needs strict memory caps; GLSL stage emulation and translation are token-heuristic and Horizon-ABI-specific; device workgroup limits and option text validation need hardening; test pack is Horizon-only.
+- Tests/examples were inspected only. No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation was performed, and no application code changed.
+- No backup at this checkpoint. Next backup only after 1,000 additional entries (entry 3000) and global verification. `main` and existing backup refs remain untouched.

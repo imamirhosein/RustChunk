@@ -487,3 +487,17 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
 - Next backup only after 1,000 additional completed entries (entry 3000) and global verification. No backup at 25/50/100/200-file boundaries.
 - No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation is implied. No application source changed.
+
+
+## 15. Latest authoritative resume state — after checkpoint 2051–2075 — 2026-11-21
+
+- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
+- Completed source entries: **1–2075**.
+- Active 200-file stage: **2001–2200**, progress **75/200**.
+- Section **2001–2050 is closed**; checkpoint **2051–2075 is complete**. All six audit documents are updated together per checkpoint.
+- The user's one-time expanded authorization covers entries **2001–2100**, with exact 25-file checkpoints and two 50-file reporting sections. Continue next at **2076–2100** without asking for permission.
+- At entry **2100**, close section **2051–2100** and **STOP**. Entries 2101–2200 remain unauthorized.
+- Active Ledger: `AUDIT_LEDGER_2001_2200.md`, 75 records. Index: **2,075 sequential unique paths**.
+- Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Next backup only after 1,000 additional completed entries (entry 3000) and global verification. No incremental backups at checkpoint boundaries.
+- Tests/examples inspected only; no tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation. No application source changed.

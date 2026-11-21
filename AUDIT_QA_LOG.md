@@ -1397,3 +1397,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Shader API 0.1 WGSL examples/tests and the separate GLSL shaderpack crate are Horizon-specific, with 26.3/Iris 1.11.7 assumptions and Naga 30.0.1 dependencies. They are not drop-in Minecraft Java 1.20.1 or Forge shader support.
 - Tests/examples were inspected only; none were executed. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation was performed. No application source changed.
 - Section **2001–2050 is closed**. The user pre-authorized **2051–2100** in this one-time 100-entry window; proceed without another request at 2050. Stop at 2100. Next backup only after 1,000 additional entries (3000) and global verification.
+
+
+## Checkpoint 2051–2075 — 2026-11-21
+
+- Completed entries **2051–2075 (25/25)** serially in pinned-tree order. Each file was read through EOF; every long file was read in contiguous, gap-free sections no longer than 400 logical lines.
+- Source SHA and exact byte size for all 25 entries match the full pinned recursive tree. Ledger records contain exactly 15 required fields each; Index has 2,075 sequential unique paths and the new paths/Decision labels align.
+- Main observations: shaderpack post-processing accepts conditions/resources without enough allocation limits; preprocessing lacks aggregate include/output bounds; texture decoding and raw 3D data need strict memory limits; geometry emulation is tied to triangle draw assumptions; GLSL translation is token-based and has incomplete linked-stage ABI/device-limit checks; public option APIs can substitute unvalidated text; compute ordering uses heuristics, not a formal memory model.
+- The post-test pack explicitly says it is authored for Horizon. It is not evidence of third-party Minecraft 1.20.1/Forge compatibility.
+- Tests/examples were inspected only; none executed. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation was performed. No application source changed.
+- Checkpoint **2051–2075 is complete**. Continue immediately through **2076–2100** under the existing one-time authorization; stop at 2100 and request permission before 2101.

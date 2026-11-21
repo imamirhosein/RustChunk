@@ -5,7 +5,7 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **50/200**.
+- Current stage: **2001–2200**, progress **75/200**.
 - One-time authorization: **2001–2100** only (two adjacent 50-file sections); 2101–2200 is locked.
 
 ## Stage partition
@@ -13,7 +13,7 @@
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
-| 2051–2100 | 2051–2075 — PRE-AUTHORIZED | 2076–2100 — PRE-AUTHORIZED | AUTHORIZED IN ADVANCE — 0/50 |
+| 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — PRE-AUTHORIZED | AUTHORIZED IN ADVANCE — 25/50 |
 | 2101–2150 | LOCKED | LOCKED | NOT AUTHORIZED |
 | 2151–2200 | LOCKED | LOCKED | NOT AUTHORIZED |
 
@@ -51,3 +51,12 @@
 - All 15 required Ledger fields occur exactly once; new Index rows align by entry number, path and Decision.
 - The shaderpack reader/translator is a distinct optional rendering extension, not the Minecraft Java game client. The reviewed implementation has unresolved bounds, symlink, parser and cross-version correctness requirements.
 - Continue at **2051–2075**; the next 50-file section **2051–2100 is pre-authorized**. Keep 25-file commits. Close and STOP at **2100**.
+
+
+## Checkpoint 2051–2075 — COMPLETE (25/25)
+
+- Entries 2051–2075 are complete; active Ledger has 75 records (2001–2075) and global Index has 2,075 sequential unique paths.
+- All 25 source files were reviewed one at a time through EOF. Long-file coverage was contiguous and gap-free in chunks of no more than 400 lines; source SHA and byte size match the pinned recursive tree.
+- Exactly 15 required fields per new Ledger entry; Index paths and Decisions align.
+- Findings center on optional shaderpack behavior: incomplete allocation/output caps, fail-open shader conditions, heuristic GLSL parsing and cross-stage contracts, geometry-emulation assumptions, weak image/texture resource limits, and unvalidated option text substitution. The test fixture identifies itself as Horizon-only.
+- Continue at **2076–2100** under pre-authorization; retain the 25-file checkpoint. Close section 2051–2100 at **50/50** and **STOP at 2100**. Ask before 2101.
