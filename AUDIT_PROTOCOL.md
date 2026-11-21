@@ -525,3 +525,24 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Latest verified state at this checkpoint: completed entries **1–2125**; active Ledger has **125 entries (2001–2125)**; Index has **2,125 sequential unique paths**. Branch HEAD before this checkpoint transaction was `0966527cdee32a1a5de0a97287aeb7d7491b08c3`.
 - Tests/examples inspected only, not executed. No build, benchmark, APK, Android device, Forge, Minecraft multiplayer, Aternos or renderer validation is implied. No app source changed.
 - Backup policy unchanged: no backup at 25/50/100/200-file checkpoint boundaries. Next backup only after 1,000 additional completed entries (entry 3000) and global verification.
+
+
+## 18. Complete binary asset inspection — 2026-11-21
+
+- A binary file is not complete merely because its extension, Git blob SHA, byte size or metadata is known. Never mark a binary asset COMPLETE after metadata-only inspection.
+- Fetch the entire blob using Base64, decode every byte and prove the decoded length equals the exact pinned-tree byte size; verify the Git blob SHA. If bytes are missing/corrupt/unavailable, stop that entry, record the limitation and do not count it toward the 25-file checkpoint.
+- For TrueType/OpenType SFNT, inspect signature and full table directory; validate table bounds; calculate every table checksum (handling head.checkSumAdjustment correctly) and whole-font checksum; inspect name, head/maxp/OS2, cmap coverage, hhea/hmtx metrics, loca/glyf outline records and GDEF/GSUB/GPOS scripts/features/lookups. Validate glyph references, contour/coordinate ranges and composite components. Derive language support from cmap/shaping, not filenames.
+- For other binary formats, use a format-specific complete parser/validator; byte count/SHA alone proves provenance, not semantic integrity.
+- Text remains full UTF-8 read-through-EOF in contiguous <=400-line ranges. For SVG, inspect full XML, dimensions/viewBox, every element/attribute, scripts/foreignObject/embedded resources, href/xlink and CSS URL references. Do not infer Android rendering compatibility without conversion/device validation.
+- Binary Coverage must state exact decoded byte count and structures parsed; logical line count is not applicable. If complete semantic parsing is impossible, mark incomplete and do not count it.
+- Keep static integrity distinct from Android rendering, runtime compatibility and performance.
+
+## 19. Latest authoritative resume state — after checkpoint 2126–2150 — 2026-11-21
+
+- Completed entries **1–2150**; active stage **2001–2200**, progress **150/200**.
+- Active Ledger: **150 records (2001–2150)**, each with exactly 15 fields. Index: **2,150 sequential unique paths**.
+- The second one-time authorization covers **2101–2200**. Continue checkpoints 2151–2175 and 2176–2200; do not ask or stop at 2150. **STOP at 2200** and ask before 2201.
+- Checkpoint 2126–2150 comprises 11 fully decoded/parsed TTF files, three complete OFL texts, one complete Hugeicons MIT notice and seven complete SVG files; all paths/SHAs/sizes match the complete pinned tree.
+- No reviewed font supports Arabic/Persian. Bricolage merged Cyrillic requires Geist attribution; font assets are OFL 1.1, Hugeicons subset MIT.
+- No build/tests/benchmark/APK/device/Android renderer/Minecraft/Forge/multiplayer/Aternos validation; no application source changed.
+- No incremental backup. Next backup only after 1,000 further completed entries (entry 3000) and global verification.

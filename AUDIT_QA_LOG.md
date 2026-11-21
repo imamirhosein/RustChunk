@@ -1427,3 +1427,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Consent-gating tests verify disabled/withdrawn payload upload but do not cover live ping, which is separately enabled by default features and documented as no-consent. This is a policy blocker for direct adoption.
 - Tests/examples inspected only; none run. No build, benchmark, APK, Android, Forge, game join, Aternos or renderer validation was performed. No app source changed.
 - Continue through **2126–2150**, then **2151–2175** and **2176–2200** under the same explicit 100-file exception. **Do not stop/request permission at 2150; stop at 2200.**
+
+
+## Checkpoint 2126–2150 — 2026-11-21
+
+- Completed entries **2126–2150 (25/25)** in pinned-tree order. All 25 paths, blob SHAs and byte sizes match the complete recursive source tree at `5432370d573642041585c69b40fb045b27133488`.
+- All 11 TTFs were fully fetched in Base64 and decoded to exact expected lengths. The complete SFNT directories/ranges, table checksums, whole-font checksums, metadata, cmap, GSUB/GPOS and glyph outline/component records were inspected. No binary file was treated as metadata-only.
+- Three OFL font notices, one Hugeicons MIT notice and seven SVGs were fully read through EOF. SVGs were checked for active, embedded and external resource references.
+- Typography: Bricolage faces have 703 glyphs/661 mappings; Geist 975/728 (Geist Mono 1,159/889); Pixelify 578/577. No family has Arabic/Persian cmap coverage. Geist Mono fixed-pitch flag and hmtx advances confirm 600-unit spacing glyphs and zero-advance combining marks.
+- Licensing: fonts are SIL OFL 1.1; retain copyright/license, do not sell the fonts alone, and keep derivatives under OFL. Bricolage's merged Cyrillic contribution requires Geist attribution. Hugeicons SVG subset is MIT; retain its copyright/permission notice.
+- SVGs are 24×24 currentColor vectors without active/external references. Android renderer compatibility is not proven and requires conversion/device validation.
+- Ledger has **150 entries (2001–2150)** with exactly 15 fields each; Index has **2,150 sequential unique paths**, and the newly added decisions align.
+- Tests/examples inspected only, not executed. No app source change, build, APK, Android device, renderer, Minecraft, Forge, server or Aternos validation.
+- Section **2101–2150 is closed (50/50)**. Continue 2151–2175 and 2176–2200 under existing one-time authorization. **Do not stop/ask at 2150; stop only at 2200.**

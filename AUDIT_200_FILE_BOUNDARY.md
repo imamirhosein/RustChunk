@@ -5,7 +5,7 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **125/200**.
+- Current stage: **2001–2200**, progress **150/200**.
 - One-time authorizations: **2001–2100** and **2101–2200**. For the second window, preserve 25-file commits but do not stop or request permission at 2150; stop only at 2200.
 
 ## Stage partition
@@ -14,7 +14,7 @@
 |---|---|---|---|
 | 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
 | 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — **COMPLETE** | **CLOSED — 50/50** |
-| 2101–2150 | 2101–2125 — **COMPLETE** | 2126–2150 — PRE-AUTHORIZED | IN PROGRESS — 25/50; CONTINUE AT 2126 |
+| 2101–2150 | 2101–2125 — **COMPLETE** | 2126–2150 — **COMPLETE** | **CLOSED — 50/50** |
 | 2151–2200 | 2151–2175 — PRE-AUTHORIZED | 2176–2200 — PRE-AUTHORIZED | PRE-AUTHORIZED — STOP ONLY AT 2200 |
 
 ## Checkpoint 2001–2025
@@ -77,3 +77,14 @@
 - Every source was read serially through EOF; long-file coverage is contiguous and no range exceeds 400 lines. SHA and exact byte sizes match the complete pinned tree.
 - Exact 15 required fields per Ledger entry; new Index paths and Decision labels align.
 - Next checkpoints 2126–2150, 2151–2175 and 2176–2200 are all covered by the user's explicit one-time authorization. **Do not stop/request permission at 2150. STOP only at 2200.**
+
+
+## Checkpoint 2126–2150 — COMPLETE (25/25)
+
+- All entries 2126–2150 were completely inspected in pinned-tree order; exact paths, SHAs and sizes match the full source tree.
+- All 11 TTFs were fully Base64-decoded and parsed: SFNT directories/ranges, all table and whole-font checksums, metadata, cmap/metrics, GSUB/GPOS and glyph outlines. No metadata-only binary review was used.
+- Three SIL OFL notices, one Hugeicons MIT notice and seven SVGs were fully read. SVGs were checked for executable/embedded/external resources.
+- No font supports Arabic/Persian; provide Persian-capable font, shaping, bidi and fallback. Geist Mono is fixed-width Latin code/log face; Pixelify decorative. Preserve all notices with shipped assets.
+- SVGs are simple 24×24 currentColor vectors, but Android vector renderer remains untested.
+- Ledger 150 records (2001–2150), 15 fields each; Index 2,150 sequential unique paths.
+- Section **2101–2150 CLOSED (50/50)**. Continue 2151–2175 and 2176–2200 under same authorization. **Do not stop at 2150; STOP only at 2200.**

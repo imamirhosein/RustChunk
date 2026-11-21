@@ -7,16 +7,15 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2025**.
-- Previous completed stages: **1–1000**, **1001–1200**, **1201–1400**, **1401–1600**, and **1801–2000**; stage 1801–2000 and its four reporting sections are closed.
-- Active 200-file stage: **2001–2200**, progress **25/200**.
-- Current section: **2001–2050**; checkpoint 2001–2025 complete/committed; 2026–2050 authorized.
-- Next section: **2051–2100** is pre-authorized by the same one-time expanded instruction.
-- The one-time authorization covers **2001–2100 only**. Keep exact 25-file commits. Report at 2050, then continue 2051–2100 without another permission request. **STOP at 2100** and ask before 2101–2150.
-- Active Ledger: `AUDIT_LEDGER_2001_2200.md`, 25 records (2001–2025), exactly 15 fields each. Index: **2,025 sequential unique paths**.
-- Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
-- Global verification and final backup through entry 2000 remain intact. Next backup only after 1,000 additional entries (through 3000) and global verification.
-- No application source changed. Embedded tests/examples are inspection-only unless separately authorized.
+- Completed source entries: **1–2150**.
+- Active 200-file stage: **2001–2200**, progress **150/200**.
+- Completed reporting sections: **2001–2050**, **2051–2100**, **2101–2150** (all closed 50/50). Checkpoints 2101–2125 and 2126–2150 are complete.
+- The user's second one-time exception authorizes **2101–2200**. Checkpoints 2151–2175 and 2176–2200 remain pre-authorized. Keep exact 25-file commits; **do not stop/request permission at 2150; STOP only at 2200** and ask before 2201.
+- Active Ledger has **150 records (2001–2150)** with exactly 15 fields each; Index has **2,150 sequential unique paths**.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Entries 2126–2142 are fully decoded/parsed binary fonts; 2137–2150 are complete UTF-8 license and SVG assets. Earlier UTF-8-only binary fetch limitation is resolved; no binary file was handled metadata-only.
+- No app source changed. Tests/examples remain inspection-only. No build/test/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Backup through 2000 remains `backup/audit-2000-final-2026-11-21`; no incremental backup at this checkpoint. Next backup only after 1,000 further entries (3000) and global verification.
 
 ## Source pin and selection
 
@@ -521,3 +520,16 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Key findings: telemetry code is host-service infrastructure, not Minecraft gameplay; the live ping bypasses consent; fallback random IDs are predictable; outbox/consent/upload operations have race windows; scrub is best-effort; detailed hardware probes are not Android/Mali-ready. No evidence of 1.20.1 Forge client compatibility was established.
 - Tests/examples were inspected only; none executed. No build/test/benchmark/APK/device/Minecraft/Forge/server/Aternos/renderer validation was performed; no application code changed.
 - No backup at this checkpoint. Next backup only after 1,000 additional completed entries (entry 3000) and global verification. `main` and existing backups remain untouched.
+
+
+## Verified checkpoint — entries 2126–2150 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Entries **2126–2150 (25/25)** are complete in exact tree order. All 11 TTF binaries were fully Base64-decoded to exact byte lengths and parsed; SFNT table ranges/checksums, whole-font checksums, naming/metrics, cmap/GSUB/GPOS and glyph outline records were reviewed. This is complete binary reading, not metadata-only.
+- Three OFL font notices, one Hugeicons MIT notice and seven SVGs were fully read as UTF-8 through EOF. All 25 SHAs/byte sizes match the source tree.
+- No reviewed font supports Arabic/Persian. RustChunk needs a Persian-capable face, shaping/bidi and fallback. Geist Mono is a fixed-pitch Latin code/log candidate; Pixelify is decorative only.
+- Fonts are SIL OFL 1.1; keep license/copyright, do not sell font files alone, and keep derivatives under OFL. Bricolage contains Cyrillic merged from Geist, so retain both notices. Hugeicons SVG subset is MIT.
+- Seven SVGs are compact 24×24 currentColor assets with no active/external resources; Android rendering remains unvalidated.
+- Active Ledger 150 records (2001–2150); Index 2,150 sequential unique paths. No app source changed and no tests/runtime validation performed.
+- Section **2101–2150 closed**. Continue 2151–2175 and 2176–2200 without pausing at 2150; **STOP at 2200** and ask before 2201.

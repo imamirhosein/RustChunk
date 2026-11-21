@@ -3,9 +3,9 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **125/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
-- One-time expanded authorization: entries **2001–2100 only**, comprising sections 2001–2050 and 2051–2100. Both 50-file sections 2001–2050 and 2051–2100 are covered by the user's one-time authorization; no mid-section permission request is needed at 2050.
-- Cadence unchanged: exact checkpoints of 25 files, boundary reports at every 50 files; continue through 2100 then stop. Entries 2101–2200 are not authorized.
+- Current progress: **150/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
+- One-time expanded authorizations: entries **2001–2100** and **2101–2200**. The second exception covers the complete 2101–2200 window; keep four 25-file commits, do not stop/request permission at 2150, and stop only at 2200.
+- Checkpoint cadence: exact 25-file atomic commits. Section 2101–2150 is now closed (50/50); continue 2151–2175 and 2176–2200 without stopping at 2150.
 - Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
 
@@ -2172,3 +2172,438 @@
 - Each record contains exactly the 15 required fields. Active Ledger now holds **125 entries (2001–2125)**.
 - The user explicitly authorized the one-time range **2101–2200**. Continue to 2150 and then 2200 using four 25-file commits; **do not stop at 2150**. Stop only at 2200 and request fresh permission before 2201.
 - Tests/examples were inspected only; no application source changed and no build, runtime, Android or game compatibility validation was performed.
+
+### 2126. `crates/horizon-theme/fonts/BricolageGrotesque-Bold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7ed87ef21866f4229343c63fa6bf6fe20b1b04b4`
+- Size: 100,856 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,856/100,856 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque Bold typeface, weight 700, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,856 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2127. `crates/horizon-theme/fonts/BricolageGrotesque-Medium.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b8fe07deaf686fbb75a9b54c12b4a33983a225aa`
+- Size: 100,864 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,864/100,864 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque Medium typeface, weight 500, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,864 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2128. `crates/horizon-theme/fonts/BricolageGrotesque-Regular.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `23426ef267e5bbf99122367b7e38944b6f1e10f0`
+- Size: 100,840 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,840/100,840 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque Regular typeface, weight 400, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,840 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2129. `crates/horizon-theme/fonts/BricolageGrotesque-SemiBold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6a13c98b1fc4136022fb0de4729149a88270be6c`
+- Size: 100,912 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,912/100,912 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque SemiBold typeface, weight 600, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,912 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2130. `crates/horizon-theme/fonts/BricolageGrotesqueDisplay-Bold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9b6053190626dfc62e857bc4ca9ed5e4317085ce`
+- Size: 100,836 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,836/100,836 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque Display Bold typeface, weight 700, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,836 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2131. `crates/horizon-theme/fonts/BricolageGrotesqueDisplay-SemiBold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `261ea47d0dd34dc6ae8269bb4fb67daba3bc130c`
+- Size: 100,868 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,868/100,868 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque Display SemiBold typeface, weight 600, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,868 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2132. `crates/horizon-theme/fonts/BricolageGrotesqueHeading-SemiBold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `481a33ca2080505b5a39453efbe8c701d16c2be1`
+- Size: 100,916 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 100,916/100,916 bytes; 15-table SFNT directory/ranges, table and whole-font checksums, name/OS2/cmap/metrics, GSUB/GPOS and all glyph outline records inspected; binary EOF verified.
+- Purpose: Static Bricolage Grotesque Heading SemiBold typeface, weight 600, version 1.001.
+- Dependencies / cross-references: TrueType SFNT head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/name/post/GDEF/GSUB/GPOS; Bricolage and Geist OFL notices.
+- Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
+- Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
+- RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
+- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
+- Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
+- RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
+- Evidence required before adoption: Target-device Latin/Persian mixed-script screenshots and shaping/fallback tests, APK footprint and OFL release review.
+- Completion state: COMPLETE — all 100,916 bytes decoded and parsed; pinned SHA/size, each SFNT table checksum and whole-font checksum verified; glyph outlines clean. No runtime test implied.
+
+### 2133. `crates/horizon-theme/fonts/Geist-Medium.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `96cb22f8bb85577f3d56c497ee82913883da0fbd`
+- Size: 127,660 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 127,660/127,660 bytes; all 18 SFNT tables/ranges/checksums, name/OS2/cmap, GSUB/GPOS, metrics and glyph outline records inspected to binary EOF.
+- Purpose: Static Geist Medium interface typeface, weight 500, version 1.800.
+- Dependencies / cross-references: SFNT TrueType metadata/glyph tables including GDEF/GSUB/GPOS; OFL-Geist.txt.
+- Implementation / logic: 18-table SFNT, 1,000 units/em, 975 glyphs/728 mappings; GSUB DFLT/latn (49 lookups), GPOS DFLT/cyrl/grek/latn (14); 4 empty, about 402–403 simple and 568–569 composite glyphs. All table/whole checksums pass; static, fsType 0.
+- Findings: No Arabic/Persian coverage. Greek/Cyrillic shaping support does not imply Arabic-script shaping. No invalid outlines or checksum errors.
+- RustChunk relevance: Adaptable Latin/Greek/Cyrillic UI typography, but not Persian localization.
+- Decision: adaptable; Latin/Greek/Cyrillic interface typography; no Arabic/Persian support
+- 1.20.1 implications: Persian needs a separate face and shaping/bidi/fallback. No Android/Minecraft runtime validation.
+- Follow-up checks: Test Latin/Greek/Cyrillic/Persian fallback, mixed-script metrics, GPOS placement, startup, heap and asset footprint.
+- RustChunk implementation mapping: Potential Latin UI family only when paired with Persian-capable fallback; keep separate from engine code.
+- Evidence required before adoption: Target-device mixed-script and Persian-shaping/fallback tests, accessibility, APK footprint and license review.
+- Completion state: COMPLETE — entire 127,660-byte binary decoded; exact SHA/size, all 18 SFNT table checksums and whole-font checksum verified; glyph structures parsed cleanly.
+
+### 2134. `crates/horizon-theme/fonts/Geist-Regular.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4da1b3a6dba4c809bea130138138754650e5a87e`
+- Size: 126,048 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 126,048/126,048 bytes; all 18 SFNT tables/ranges/checksums, name/OS2/cmap, GSUB/GPOS, metrics and glyph outline records inspected to binary EOF.
+- Purpose: Static Geist Regular interface typeface, weight 400, version 1.800.
+- Dependencies / cross-references: SFNT TrueType metadata/glyph tables including GDEF/GSUB/GPOS; OFL-Geist.txt.
+- Implementation / logic: 18-table SFNT, 1,000 units/em, 975 glyphs/728 mappings; GSUB DFLT/latn (49 lookups), GPOS DFLT/cyrl/grek/latn (14); 4 empty, about 402–403 simple and 568–569 composite glyphs. All table/whole checksums pass; static, fsType 0.
+- Findings: No Arabic/Persian coverage. Greek/Cyrillic shaping support does not imply Arabic-script shaping. No invalid outlines or checksum errors.
+- RustChunk relevance: Adaptable Latin/Greek/Cyrillic UI typography, but not Persian localization.
+- Decision: adaptable; Latin/Greek/Cyrillic interface typography; no Arabic/Persian support
+- 1.20.1 implications: Persian needs a separate face and shaping/bidi/fallback. No Android/Minecraft runtime validation.
+- Follow-up checks: Test Latin/Greek/Cyrillic/Persian fallback, mixed-script metrics, GPOS placement, startup, heap and asset footprint.
+- RustChunk implementation mapping: Potential Latin UI family only when paired with Persian-capable fallback; keep separate from engine code.
+- Evidence required before adoption: Target-device mixed-script and Persian-shaping/fallback tests, accessibility, APK footprint and license review.
+- Completion state: COMPLETE — entire 126,048-byte binary decoded; exact SHA/size, all 18 SFNT table checksums and whole-font checksum verified; glyph structures parsed cleanly.
+
+### 2135. `crates/horizon-theme/fonts/Geist-SemiBold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b2b0618fa4ef73c5585043410a6ed9ed8a3c8e2a`
+- Size: 127,872 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 127,872/127,872 bytes; all 18 SFNT tables/ranges/checksums, name/OS2/cmap, GSUB/GPOS, metrics and glyph outline records inspected to binary EOF.
+- Purpose: Static Geist SemiBold interface typeface, weight 600, version 1.800.
+- Dependencies / cross-references: SFNT TrueType metadata/glyph tables including GDEF/GSUB/GPOS; OFL-Geist.txt.
+- Implementation / logic: 18-table SFNT, 1,000 units/em, 975 glyphs/728 mappings; GSUB DFLT/latn (49 lookups), GPOS DFLT/cyrl/grek/latn (14); 4 empty, about 402–403 simple and 568–569 composite glyphs. All table/whole checksums pass; static, fsType 0.
+- Findings: No Arabic/Persian coverage. Greek/Cyrillic shaping support does not imply Arabic-script shaping. No invalid outlines or checksum errors.
+- RustChunk relevance: Adaptable Latin/Greek/Cyrillic UI typography, but not Persian localization.
+- Decision: adaptable; Latin/Greek/Cyrillic interface typography; no Arabic/Persian support
+- 1.20.1 implications: Persian needs a separate face and shaping/bidi/fallback. No Android/Minecraft runtime validation.
+- Follow-up checks: Test Latin/Greek/Cyrillic/Persian fallback, mixed-script metrics, GPOS placement, startup, heap and asset footprint.
+- RustChunk implementation mapping: Potential Latin UI family only when paired with Persian-capable fallback; keep separate from engine code.
+- Evidence required before adoption: Target-device mixed-script and Persian-shaping/fallback tests, accessibility, APK footprint and license review.
+- Completion state: COMPLETE — entire 127,872-byte binary decoded; exact SHA/size, all 18 SFNT table checksums and whole-font checksum verified; glyph structures parsed cleanly.
+
+### 2136. `crates/horizon-theme/fonts/GeistMono-Regular.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `50c9d5a667bc397a1495b0bb45a52bef4184661c`
+- Size: 148,516 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 148,516/148,516 bytes; all 18 SFNT tables/checksums, 1,159 glyphs, cmap, GSUB/GPOS, outlines and horizontal metrics parsed through binary EOF.
+- Purpose: Geist Mono Regular fixed-pitch face for code/diagnostic text, weight 400, version 1.700.
+- Dependencies / cross-references: SFNT name/head/maxp/OS2/cmap/hhea/hmtx/loca/glyf/post/GDEF/GSUB/GPOS; OFL-Geist attribution.
+- Implementation / logic: 18-table font, 1,159 glyphs/889 mappings; post.isFixedPitch=true. Mapped nonzero-width glyphs advance 600 units; combining marks have zero advance. GSUB 198 lookups; GPOS mark/mkmk, 7 lookups, no kern feature; all checksums pass.
+- Findings: No Arabic/Persian. Fixed-pitch flag corroborated by actual hmtx mapping; RTL code/log behavior and lack of kern feature require runtime tests.
+- RustChunk relevance: Potential monospaced Latin code/log font; not a Persian terminal font.
+- Decision: adaptable; fixed-pitch Latin code/log typography; no Arabic/Persian support
+- 1.20.1 implications: Mixed Persian RTL and LTR code needs explicit bidi/layout rules and script-capable fallback.
+- Follow-up checks: Test cursor, selection, combining marks, bidi code/log lines, columns and fallback on target Android.
+- RustChunk implementation mapping: Consider only for Latin identifiers, paths and LTR code after rendering validation; do not assume Persian fixed-width behavior.
+- Evidence required before adoption: Target-device terminal/log tests mixing RTL Persian and LTR snippets, caret/selection, advances, fallback and license checks.
+- Completion state: COMPLETE — all 148,516 bytes decoded; table/whole checksums, glyph outlines and hmtx advances inspected; no Android renderer test implied.
+
+### 2137. `crates/horizon-theme/fonts/OFL-BricolageGrotesque.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b11997b508b6efe934ca10fc3c478be5409e8e7e`
+- Size: 4,548 bytes; binary TTF, line count not applicable
+- Coverage: 1–undefined (EOF); complete UTF-8 text read, 4,548/4,548 bytes.
+- Purpose: SIL Open Font License 1.1 notice for OFL-BricolageGrotesque.
+- Dependencies / cross-references: Corresponding font copyright holders, bundled font binaries and related attribution notices.
+- Implementation / logic: Full OFL 1.1 preamble, permission, bundling/redistribution terms, reserved-font-name restriction, same-license obligation and disclaimer.
+- Findings: Fonts can be bundled/embedded with software when every copy carries the copyright and license notice; fonts cannot be sold by themselves; modified font software remains under OFL and reserved names cannot be reused without permission. Bricolage includes Cyrillic glyphs attributed to Geist.
+- RustChunk relevance: Required compliance material when the relevant font binaries ship.
+- Decision: essential; preserve SIL OFL 1.1 notices for bundled font assets
+- 1.20.1 implications: License obligation is independent of Minecraft/Forge compatibility.
+- Follow-up checks: Ship full notice with fonts; preserve both Bricolage and Geist attribution for the merged Cyrillic family; review modified-font renaming.
+- RustChunk implementation mapping: Add to RustChunk THIRD_PARTY_NOTICES and packaged release; distribute notices with corresponding fonts.
+- Evidence required before adoption: APK/archive inspection proving full notice and copyright present; review any modified font or reserved name.
+- Completion state: COMPLETE — all 4,548 UTF-8 bytes and undefined logical lines read through EOF; SHA/size exact.
+
+### 2138. `crates/horizon-theme/fonts/OFL-Geist.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `04e95fc550855eb44416b9db1f6722f5cb7342db`
+- Size: 4,383 bytes; binary TTF, line count not applicable
+- Coverage: 1–undefined (EOF); complete UTF-8 text read, 4,383/4,383 bytes.
+- Purpose: SIL Open Font License 1.1 notice for OFL-Geist.
+- Dependencies / cross-references: Corresponding font copyright holders, bundled font binaries and related attribution notices.
+- Implementation / logic: Full OFL 1.1 preamble, permission, bundling/redistribution terms, reserved-font-name restriction, same-license obligation and disclaimer.
+- Findings: Fonts can be bundled/embedded with software when every copy carries the copyright and license notice; fonts cannot be sold by themselves; modified font software remains under OFL and reserved names cannot be reused without permission. Bricolage includes Cyrillic glyphs attributed to Geist.
+- RustChunk relevance: Required compliance material when the relevant font binaries ship.
+- Decision: essential; preserve SIL OFL 1.1 notices for bundled font assets
+- 1.20.1 implications: License obligation is independent of Minecraft/Forge compatibility.
+- Follow-up checks: Ship full notice with fonts; preserve both Bricolage and Geist attribution for the merged Cyrillic family; review modified-font renaming.
+- RustChunk implementation mapping: Add to RustChunk THIRD_PARTY_NOTICES and packaged release; distribute notices with corresponding fonts.
+- Evidence required before adoption: APK/archive inspection proving full notice and copyright present; review any modified font or reserved name.
+- Completion state: COMPLETE — all 4,383 UTF-8 bytes and undefined logical lines read through EOF; SHA/size exact.
+
+### 2139. `crates/horizon-theme/fonts/OFL-PixelifySans.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6aa5bfbae9e8654b83e5fff942b9540830403022`
+- Size: 4,488 bytes; binary TTF, line count not applicable
+- Coverage: 1–undefined (EOF); complete UTF-8 text read, 4,488/4,488 bytes.
+- Purpose: SIL Open Font License 1.1 notice for OFL-PixelifySans.
+- Dependencies / cross-references: Corresponding font copyright holders, bundled font binaries and related attribution notices.
+- Implementation / logic: Full OFL 1.1 preamble, permission, bundling/redistribution terms, reserved-font-name restriction, same-license obligation and disclaimer.
+- Findings: Fonts can be bundled/embedded with software when every copy carries the copyright and license notice; fonts cannot be sold by themselves; modified font software remains under OFL and reserved names cannot be reused without permission. Bricolage includes Cyrillic glyphs attributed to Geist.
+- RustChunk relevance: Required compliance material when the relevant font binaries ship.
+- Decision: essential; preserve SIL OFL 1.1 notices for bundled font assets
+- 1.20.1 implications: License obligation is independent of Minecraft/Forge compatibility.
+- Follow-up checks: Ship full notice with fonts; preserve both Bricolage and Geist attribution for the merged Cyrillic family; review modified-font renaming.
+- RustChunk implementation mapping: Add to RustChunk THIRD_PARTY_NOTICES and packaged release; distribute notices with corresponding fonts.
+- Evidence required before adoption: APK/archive inspection proving full notice and copyright present; review any modified font or reserved name.
+- Completion state: COMPLETE — all 4,488 UTF-8 bytes and undefined logical lines read through EOF; SHA/size exact.
+
+### 2140. `crates/horizon-theme/fonts/PixelifySans-Bold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `295c9df90981c06f8367d484a7ecce845897dec1`
+- Size: 94,640 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 94,640/94,640 bytes; all 17 SFNT tables/checksums, metadata, cmap, GSUB/GPOS and glyph outlines inspected; EOF verified.
+- Purpose: Static Pixelify Sans Bold decorative pixel-style face, weight 700, version 1.000.
+- Dependencies / cross-references: SFNT metadata/glyph/shaping tables and OFL-PixelifySans.txt.
+- Implementation / logic: 17-table SFNT, 1,000 units/em, 578 glyphs/577 mappings; GSUB DFLT/latn 21 lookups, GPOS DFLT/latn 3; 389 simple, 187 composite, 2 empty glyphs; all checksums pass; static, fsType 0.
+- Findings: No Arabic/Persian mappings. No malformed outline/checksum issues. Pixel design is decorative and may reduce small-text readability.
+- RustChunk relevance: Optional retro/pixel styling for short labels only.
+- Decision: reference; decorative Pixelify pixel typography; no Arabic/Persian support
+- 1.20.1 implications: No Minecraft/Forge functionality; unsuitable as sole Persian or long-form UI face.
+- Follow-up checks: Test legibility at Android density/sizes, contrast/accessibility and Persian fallback; preserve OFL notice.
+- RustChunk implementation mapping: Optional theme-only asset; do not use for ordinary menus, help or long descriptions.
+- Evidence required before adoption: Target-density readability, fallback/accessibility, APK size and license tests.
+- Completion state: COMPLETE — full 94,640-byte binary decoded; exact SHA/size, 17 table checksums and whole-font checksum pass; outlines parsed cleanly.
+
+### 2141. `crates/horizon-theme/fonts/PixelifySans-Medium.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cb484bf30f3aa8fa26b5cb3338be79e4f4684df7`
+- Size: 93,812 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 93,812/93,812 bytes; all 17 SFNT tables/checksums, metadata, cmap, GSUB/GPOS and glyph outlines inspected; EOF verified.
+- Purpose: Static Pixelify Sans Medium decorative pixel-style face, weight 500, version 1.000.
+- Dependencies / cross-references: SFNT metadata/glyph/shaping tables and OFL-PixelifySans.txt.
+- Implementation / logic: 17-table SFNT, 1,000 units/em, 578 glyphs/577 mappings; GSUB DFLT/latn 21 lookups, GPOS DFLT/latn 3; 389 simple, 187 composite, 2 empty glyphs; all checksums pass; static, fsType 0.
+- Findings: No Arabic/Persian mappings. No malformed outline/checksum issues. Pixel design is decorative and may reduce small-text readability.
+- RustChunk relevance: Optional retro/pixel styling for short labels only.
+- Decision: reference; decorative Pixelify pixel typography; no Arabic/Persian support
+- 1.20.1 implications: No Minecraft/Forge functionality; unsuitable as sole Persian or long-form UI face.
+- Follow-up checks: Test legibility at Android density/sizes, contrast/accessibility and Persian fallback; preserve OFL notice.
+- RustChunk implementation mapping: Optional theme-only asset; do not use for ordinary menus, help or long descriptions.
+- Evidence required before adoption: Target-density readability, fallback/accessibility, APK size and license tests.
+- Completion state: COMPLETE — full 93,812-byte binary decoded; exact SHA/size, 17 table checksums and whole-font checksum pass; outlines parsed cleanly.
+
+### 2142. `crates/horizon-theme/fonts/PixelifySans-SemiBold.ttf`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a188a73c8304255a216883f434752ce467c3733e`
+- Size: 97,068 bytes; binary TTF, line count not applicable
+- Coverage: Full binary Base64-decoded: 97,068/97,068 bytes; all 17 SFNT tables/checksums, metadata, cmap, GSUB/GPOS and glyph outlines inspected; EOF verified.
+- Purpose: Static Pixelify Sans SemiBold decorative pixel-style face, weight 600, version 1.000.
+- Dependencies / cross-references: SFNT metadata/glyph/shaping tables and OFL-PixelifySans.txt.
+- Implementation / logic: 17-table SFNT, 1,000 units/em, 578 glyphs/577 mappings; GSUB DFLT/latn 21 lookups, GPOS DFLT/latn 3; 389 simple, 187 composite, 2 empty glyphs; all checksums pass; static, fsType 0.
+- Findings: No Arabic/Persian mappings. No malformed outline/checksum issues. Pixel design is decorative and may reduce small-text readability.
+- RustChunk relevance: Optional retro/pixel styling for short labels only.
+- Decision: reference; decorative Pixelify pixel typography; no Arabic/Persian support
+- 1.20.1 implications: No Minecraft/Forge functionality; unsuitable as sole Persian or long-form UI face.
+- Follow-up checks: Test legibility at Android density/sizes, contrast/accessibility and Persian fallback; preserve OFL notice.
+- RustChunk implementation mapping: Optional theme-only asset; do not use for ordinary menus, help or long descriptions.
+- Evidence required before adoption: Target-density readability, fallback/accessibility, APK size and license tests.
+- Completion state: COMPLETE — full 97,068-byte binary decoded; exact SHA/size, 17 table checksums and whole-font checksum pass; outlines parsed cleanly.
+
+### 2143. `crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `302d211baae1fe925d171278bd2e0235ec363909`
+- Size: 1,066 bytes; binary TTF, line count not applicable
+- Coverage: 1–undefined (EOF); full UTF-8 text read, 1,066/1,066 bytes.
+- Purpose: MIT license for the Hugeicons glass SVG icon subset.
+- Dependencies / cross-references: Hugeicons copyright 2025 and SVG entries 2144–2150.
+- Implementation / logic: MIT permissions to use/copy/modify/merge/publish/distribute/sublicense/sell conditioned on retaining copyright and permission notice in copies/substantial portions; as-is disclaimer.
+- Findings: Notice must accompany copies/substantial portions. This license file's scope is the reviewed Hugeicons glass subset, not every icon family in the repository.
+- RustChunk relevance: Required compliance material if these SVGs are copied.
+- Decision: essential; preserve MIT attribution for Hugeicons SVG assets
+- 1.20.1 implications: License compliance only; does not validate Android SVG rendering.
+- Follow-up checks: Keep the notice in THIRD_PARTY_NOTICES and release archive; verify icon scope.
+- RustChunk implementation mapping: Package icon files and MIT notice together; do not redistribute path data without attribution.
+- Evidence required before adoption: Release artifact check for notice and confirmation all reused icons belong to licensed subset.
+- Completion state: COMPLETE — all 1,066 UTF-8 bytes and undefined lines read through EOF; SHA and size match.
+
+### 2144. `crates/horizon-theme/icons/glass/ai-chat-02.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5f5ac0b19271dae5759e95f0fbfd320a9a1bde44`
+- Size: 1,117 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 1,117-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 ai chat bubble with sparkle line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 1,117 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+### 2145. `crates/horizon-theme/icons/glass/arrow-down-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5d66b58a8df7c401c8a780c2f92f083211f01482`
+- Size: 260 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 260-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 down arrow line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 260 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+### 2146. `crates/horizon-theme/icons/glass/arrow-right-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b7c75ab3b4e27ff191d74f7bf63c553d4c5da51e`
+- Size: 260 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 260-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 right arrow line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 260 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+### 2147. `crates/horizon-theme/icons/glass/cancel-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7e90dbd0bfb20246299a282a17e3782cd94fff28`
+- Size: 343 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 343-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 cancel / close mark line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 343 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+### 2148. `crates/horizon-theme/icons/glass/color-picker.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f3900cca9f77e4a74db470114a579c36349ba802`
+- Size: 1,009 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 1,009-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 color picker / eyedropper line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 1,009 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+### 2149. `crates/horizon-theme/icons/glass/computer-terminal-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2f53ac967c1fba76e5c22bd513b9bf9b7268153d`
+- Size: 975 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 975-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 computer terminal line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 975 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+### 2150. `crates/horizon-theme/icons/glass/computer.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `befd3999d55d58c1baae6e6c430aea2cb08c8867`
+- Size: 703 bytes; binary TTF, line count not applicable
+- Coverage: 1–1 (EOF); entire 703-byte UTF-8 SVG read and inspected.
+- Purpose: 24×24 computer / monitor line icon.
+- Dependencies / cross-references: SVG path geometry, currentColor stroke and Hugeicons MIT notice 2143.
+- Implementation / logic: Self-contained 24×24 SVG, viewBox 0 0 24 24, fill none, width/height 24, undefined path element(s), currentColor stroke width 1.6 with round caps/joins.
+- Findings: No script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external reference found. No Android renderer/conversion tested; icon contains no interaction or accessibility label.
+- RustChunk relevance: Adaptable optional launcher/settings glyph, not engine behavior.
+- Decision: adaptable; compact currentColor SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: Android VectorDrawable does not guarantee arbitrary SVG support; validate a converter or renderer. RTL may require semantic direction flipping for arrows.
+- Follow-up checks: Test conversion/rendering at target density, theme tint, scaling and RTL direction; provide parent control accessibility text; retain MIT notice.
+- RustChunk implementation mapping: Keep as separate visual asset; put interaction and accessibility semantics in the parent UI component.
+- Evidence required before adoption: Target Android renderer/conversion tests at multiple densities/themes, RTL/LTR semantics and license notice check.
+- Completion state: COMPLETE — all 703 bytes and full SVG line read to EOF; pinned SHA/size match; XML active/external references scanned. Rendering not claimed.
+
+## Checkpoint 2126–2150 — complete (25/25)
+
+- Entries 2126–2150 are the next 25 unique pinned-tree blobs after Index entries 1–2125; exact paths, SHAs and byte sizes match the complete recursive tree.
+- All 11 TTFs were fetched as complete Base64 blobs, decoded to exact byte lengths and parsed. SFNT directories/ranges, every table checksum and whole-font checksum, naming/OS2/cmap/metrics, GSUB/GPOS and glyph outline/component records were inspected. No font was treated metadata-only; no malformed outline or checksum discrepancy was found.
+- Three SIL OFL font notices, one Hugeicons MIT notice and all seven SVGs were read completely through EOF; exact source SHAs and sizes match the pinned tree.
+- None of the included fonts supports Arabic/Persian. Persian localization requires a dedicated Persian-capable face, shaping, bidi and fallback. Geist Mono is fixed-pitch for Latin/code output; Pixelify is decorative.
+- Font distribution must retain OFL 1.1 notices; Bricolage includes Cyrillic material attributed to Geist, so both projects' notices must be retained. Hugeicons SVG subset is MIT and requires its copyright/permission notice.
+- SVGs are minimal 24×24 currentColor assets with no active/external resources; Android rendering/conversion remains untested.
+- Active Ledger contains **150 entries (2001–2150)**, every record has exactly 15 fields. No application source changed; no build, APK, device, renderer, Minecraft, Forge, server or Aternos validation was performed.
