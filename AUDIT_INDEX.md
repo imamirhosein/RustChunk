@@ -1,4 +1,4 @@
-- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **200 records (2401–2600)**. Stage 2401–2600 is **200/200**; all four 50-file sections are CLOSED. Run independent full-stage QA across 2401–2600, then **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **200 records (2401–2600)**. Stage 2401–2600 is **200/200**; all four 50-file sections are CLOSED. Independent full-stage QA is complete: 200 entries, 2,600 sequential unique Index rows, exact Ledger alignment and pinned SHA/size match. Seven adjacent path-order inversions are documented; numbering is preserved. **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`

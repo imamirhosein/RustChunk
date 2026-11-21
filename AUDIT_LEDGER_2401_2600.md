@@ -4,9 +4,9 @@
 - Audit branch: `starling-1.20.1-port-audit`
 - Active stage: **2401–2600**; completed entries **2401–2600 (200/200)**.
 - All four 50-file sections from 2401–2600 are complete and recorded below; active stage progress is **200/200**.
-- The user's advance authorization has been completed through **2600**. **STOP at 2600**; finish independent full-stage QA across 2401–2600 before closing this stage.
+- The user's advance authorization through **2600** is complete. Independent full-stage QA passed with **seven historical adjacent path-order inversions** documented; all 200 records remain sequential and provenance-aligned. **STOP at 2600**.
 - Exact source is gitlink `upstream/starling` at `5432370d573642041585c69b40fb045b27133488`; do not follow the moving branch.
-- New entries are selected in deterministic lexical path order after excluding all 2,575 Index paths; pinned recursive tree is complete and untruncated.
+- This stage's source candidates were checked against the complete pinned tree and full Index. The final QA identified seven path-order inversions (recorded in QA Log); existing numbering is preserved.
 - Every entry has exactly the 15 required fields; source path, blob SHA and byte size are checked against the pinned tree.
 - Tests/examples inspected only; none executed. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
 

@@ -32,7 +32,7 @@ This is the single authoritative protocol for the Starling source audit on `star
 ## 4. Deterministic source selection and uniqueness
 
 - Fetch the recursive tree for the pinned upstream commit and confirm it is complete and not truncated.
-- Select source files in deterministic lexical path order from that pinned tree, excluding every path already present in the complete `AUDIT_INDEX.md`.
+- Select source files by strict raw lexical path comparison (not locale/natural sorting) across the complete candidate set from the pinned snapshot, excluding every path already present in the complete `AUDIT_INDEX.md`. Never assume all unindexed paths sort after the latest indexed path; scan the full candidate set.
 - A source path may appear exactly once in the full audit. Never assign a second entry number to a previously audited path. Never renumber an earlier entry to conceal duplication.
 - Verify each selected path exists in the pinned tree and obtain its exact blob SHA and byte size there.
 - Keep the full Index as the durable skip set, including all historical duplicate corrections recorded in the ledgers and QA log.
@@ -138,12 +138,12 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
 - Completed entries **1–2600**.
-- Active stage 2401–2600: **200/200**. Reporting sections 2401–2450, 2451–2500 and 2501–2550 are closed (50/50 each).
-- The user has explicitly pre-authorized the remaining section **2551–2600**, including checkpoints **2551–2575** and **2576–2600**. Continue through 2600 without requesting another grant at 2575 or an intermediate point. **STOP at 2600**; 2601+ requires fresh explicit authorization.
+- Active stage 2401–2600: **200/200 complete and QA-verified**. All four reporting sections (2401–2450, 2451–2500, 2501–2550, 2551–2600) are closed (50/50 each).
+- The user's advance authorization for **2551–2600** has been fully consumed. **STOP at 2600**; entry 2601+ requires fresh explicit authorization.
 - Active Ledger `AUDIT_LEDGER_2401_2600.md`: **200 records (2401–2600)**, exactly 15 fields each. Index: **2,600 sequential unique paths** with matching paths and Decisions.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable commit only.
-- Source inspection is complete through **2600**. Stop here and perform the independent full-stage QA across 2401–2600.
-- After entry 2600, perform the requested independent structural/provenance QA across all 200 entries 2401–2600 before closing the stage.
+- Source inspection and independent full-stage QA are complete through **2600**. Seven adjacent path-order inversions are documented in the QA Log; all structural and provenance checks passed. Preserve historical numbering.
+- The requested independent structural/provenance QA across all 200 entries 2401–2600 has passed; see the final QA Log entry.
 - Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -770,3 +770,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - All four 50-file sections are complete.
 - Stop source inspection at 2600 and perform the independent second-pass structural/provenance QA across every entry 2401–2600 before final acceptance.
 - No tests/examples executed. No application code changes or build/runtime/device/Forge/Aternos validation.
+
+
+## 46. Final QA — 2401–2600 — COMPLETE — 2026-11-21
+
+- The full stage contains 200 sequential Ledger entries (2401–2600) with exactly 15 fields each and 2,600 sequential unique Index rows.
+- All 200 source references point to the pinned Starling commit; every source path, SHA and byte size matches the untruncated recursive tree. Coverage and Completion logical-line counts agree. Index paths and Decisions align with every Ledger entry.
+- Seven adjacent path-order inversions were found at entry pairs 2419/2420, 2435/2436, 2462/2463, 2473/2474, 2482/2483, 2485/2486 and 2582/2583. They do not affect coverage/provenance; preserve historical numbering and see `AUDIT_QA_LOG.md` for exact paths.
+- For future selection, strictly raw-lexically sort the complete set of candidate paths and exclude the full Index; do not use a locale sort or infer that all remaining paths occur after the latest indexed path.
+- Stage 2401–2600 is closed at 200/200. Stop at entry 2600; 2601+ requires fresh explicit authorization.

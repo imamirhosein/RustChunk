@@ -4,8 +4,8 @@
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
 - Current stage 2401–2600: **200/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 200 records.
-- Sections 2401–2450, 2451–2500 and 2501–2550 CLOSED (50/50 each).
-- The user has explicitly pre-authorized 2551–2600, including checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575. **STOP at 2600**; 2601+ requires fresh permission.
+- All four sections 2401–2600 CLOSED (50/50 each).
+- Independent full-stage QA passed. Seven adjacent path-order inversions are documented; no missing/duplicate paths, schema errors, Ledger/Index mismatches or source provenance errors were found. **STOP at 2600**; 2601+ requires fresh permission.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
@@ -294,7 +294,7 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 | 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — COMPLETE | CLOSED — 50/50 |
 | 2551–2600 | 2551–2575 — COMPLETE | 2576–2600 — COMPLETE | CLOSED — 50/50 |
 
-**Both checkpoints 2551–2575 and 2576–2600 are complete. Stop at 2600 and perform the independent global QA across 2401–2600.**
+**Both checkpoints 2551–2575 and 2576–2600 are complete. Independent global QA across 2401–2600 has passed, with seven path-order inversions documented. Stop at 2600.**
 
 
 ## Checkpoint 2551–2575 — COMPLETE
@@ -309,3 +309,11 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Ledger: 200 entries. Index: 2,600 sequential unique paths.
 - All four 50-file sections in 2401–2600 are closed.
 - Source inspection stops at 2600. Complete independent second-pass QA across all 200 entries before final acceptance.
+
+
+## Final QA — 2401–2600 — COMPLETE
+
+- 200 Ledger entries, exact 15-field schemas, and 2,600 sequential unique Index paths.
+- All 200 source path/SHA/byte-size values match the pinned, untruncated tree; Ledger and Index paths/Decisions align; Coverage and Completion line counts match.
+- Seven historical path-order inversions are recorded in `AUDIT_QA_LOG.md`; numbering was preserved.
+- Stage closed at 200/200. Stop at 2600; fresh authorization is required for 2601+.

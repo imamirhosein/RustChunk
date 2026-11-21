@@ -9,11 +9,11 @@ Branch: starling-1.20.1-port-audit
 - Completed entries: **1–2600**.
 - Active 200-file stage 2401–2600: **200/200**.
 - All four 50-file sections from 2401–2600 are CLOSED (50/50 each).
-- The user has explicitly pre-authorized **2551–2600**, including both checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575. **STOP at 2600**; 2601+ requires fresh authorization.
+- The user's advance authorization for **2551–2600** has been consumed and completed. **STOP at 2600**; 2601+ requires fresh explicit authorization.
 - Active Ledger `AUDIT_LEDGER_2401_2600.md`: **200 records (2401–2600)**, exactly 15 fields each. Index: **2,600 sequential unique paths**, with paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving upstream.
-- All entries through **2600** have been inspected. Stop source inspection and perform independent full-stage QA across 2401–2600.
-- After entry 2600, run the separately requested QA pass across all entries **2401–2600**: duplicates, gaps, Ledger/Index alignment, 15-field counts, pinned-tree path/SHA/size, ordering and file-boundary correctness. Only then mark the 200-file stage closed.
+- All entries through **2600** have been inspected. The independent full-stage QA across 2401–2600 passed; seven adjacent path-order inversions are documented and historical numbering is preserved.
+- The independent QA is complete: no gaps/duplicates, exact 15-field records, full Ledger/Index alignment, matching pinned-tree path/SHA/size and full Coverage/Completion agreement. Seven path-order inversions were found and recorded; the 200-file stage is closed at 200/200 without renumbering.
 - Backup covers 1–2000 only. No backup at 2600; next backup after 3000 and global verification.
 - No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
@@ -715,3 +715,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - All four 50-file sections are closed. Stop source inspection at 2600.
 - Perform independent second-pass QA across all 200 entries 2401–2600 before final acceptance.
 - Tests/examples not executed; no application source changes or runtime validation.
+
+
+## Final full-stage QA — 2401–2600 — 2026-11-21
+
+- **200/200 complete and verified.** Ledger 200 records, each exactly 15 fields. Index 2,600 sequential unique paths.
+- All 200 pinned-tree paths, SHAs and byte sizes match; all Ledger entries align with Index paths and Decisions; Coverage/Completion line counts agree.
+- Seven adjacent path-order inversions were found and preserved with original numbering. Exact rows and corrective selection rule are in `AUDIT_QA_LOG.md`.
+- Stop at 2600. A new explicit authorization is required for 2601+.
+- Tests/examples not executed. No product source changes or runtime validation.
