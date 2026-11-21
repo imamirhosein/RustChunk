@@ -1,4 +1,4 @@
-- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **150 records (2401–2550)**. Stage 2401–2600 is 150/200; sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED. Entries 2551–2600 are **pre-authorized by the user**. Continue through 2600 and **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **175 records (2401–2575)**. Stage 2401–2600 is 175/200; checkpoint 2551–2575 is complete; sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED. Entries 2576–2600 remain **pre-authorized by the user**. Continue through 2600 and **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2975,6 +2975,31 @@
 | 2548 | `crates/horizon-world/src/lib.rs` | architectural reference; version-specific; do not copy wholesale | Navigation only; do not copy the modern crate module surface wholesale. |
 | 2549 | `crates/horizon-world/src/liquid_collision.rs` | adaptable; reference; entity-collision integration required | Contextual liquid collision bridge; entity shape and standing rules belong to the host. |
 | 2550 | `crates/horizon-world/src/live_attribute_updates.rs` | adaptable; reference; entity-attribute-host integration required | Attribute refresh dispatch belongs in a separate entity subsystem with explicit callback lifecycle. |
+| 2551 | `crates/horizon-world/src/living_air.rs` | adaptable; reference | Default airborne travel, relative input, ladder clamping and friction calculations. |
+| 2552 | `crates/horizon-world/src/living_damage.rs` | adaptable; reference | Inner living/player damage application after immunity and outer hit gates. |
+| 2553 | `crates/horizon-world/src/living_fall.rs` | adaptable; version-specific; reference | Fall-distance damage, passenger propagation and impulse-based fall-damage exemptions. |
+| 2554 | `crates/horizon-world/src/living_fluid.rs` | adaptable; reference | Water/lava travel, fluid escape and ridden-entity buoyancy. |
+| 2555 | `crates/horizon-world/src/living_health.rs` | adaptable; reference | Living health/absorption limits, healing and synchronized-float dirty-state behavior. |
+| 2556 | `crates/horizon-world/src/living_hurt.rs` | adaptable; version-specific; reference | Outer living damage dispatch, cooldown state and post-hit services. |
+| 2557 | `crates/horizon-world/src/living_landing.rs` | Rebuild from 1.20.1 Entity.checkFallDamage/LivingEntity landing and Forge block callbacks. | Living landing fluid refresh, changed-block notification, landing particles and fall handling. |
+| 2558 | `crates/horizon-world/src/living_motion.rs` | adaptable; reference | Default living jump, gravity, flying-speed and air-drag calculations. |
+| 2559 | `crates/horizon-world/src/living_use_flags.rs` | adaptable; version-specific; reference | Living-entity using-item and used-hand flags in synchronized byte storage. |
+| 2560 | `crates/horizon-world/src/loot.rs` | rewrite required; version-specific; reference | Large loot engine: data-pack overlays, pools/entries, conditions, modifiers, enchantments, stack splitting and entity context. |
+| 2561 | `crates/horizon-world/src/main.rs` | adaptable; optional; reference | Standalone CLI for region/NBT inspection, copying, block-data editing and codec conversion. |
+| 2562 | `crates/horizon-world/src/movement_emission.rs` | adaptable; reference | Movement distance accounting and step/swim/flap sound/event dispatch. |
+| 2563 | `crates/horizon-world/src/movement_properties.rs` | adaptable; version-specific; reference | Registry-bound block movement coefficients and reloadable movement tags. |
+| 2564 | `crates/horizon-world/src/movement_restitution.rs` | adaptable; reference | Post-collision bounce/restitution response and side-effect dispatch. |
+| 2565 | `crates/horizon-world/src/movement_statistics.rs` | adaptable; reference | Server-player movement stats and movement-related exhaustion. |
+| 2566 | `crates/horizon-world/src/movement_support.rs` | Recreate 1.20.1 support and fence/wall/gate semantics; regenerate water/bubble/tag identities. | Support-block position and block-derived jump/speed factors. |
+| 2567 | `crates/horizon-world/src/native_load_hooks.rs` | unnecessary; reference; privileged native-extension model only | Process-wide callbacks for native mod data-loading and loot behavior. |
+| 2568 | `crates/horizon-world/src/object_open_map.rs` | adaptable; reference | Fastutil-style object open-addressing map with nullable keys, indexed entries, cursors and mutable traversal. |
+| 2569 | `crates/horizon-world/src/object_open_set.rs` | adaptable; reference | Fastutil-style object open-addressing set with nullable member and live mutation-aware cursors. |
+| 2570 | `crates/horizon-world/src/piston_movement.rs` | adaptable; reference | Per-tick piston displacement accumulation and limiting. |
+| 2571 | `crates/horizon-world/src/piston_push.rs` | adaptable; reference | Moving piston push geometry, sticky honey selection, slime bounce and piston-base recovery. |
+| 2572 | `crates/horizon-world/src/piston_shape.rs` | adaptable; version-specific; reference | Moving-piston collision-shape selection, head interpolation and registry-bound piston-state mapping. |
+| 2573 | `crates/horizon-world/src/player_equipment.rs` | adaptable; reference | Player hand/equipment slot access and equip callback dispatch. |
+| 2574 | `crates/horizon-world/src/player_food.rs` | adaptable; reference | Player-specific hunger guards, exhaustion and direct-versus-virtual abilities. |
+| 2575 | `crates/horizon-world/src/player_health.rs` | adaptable; version-specific; reference | Player-specific health/absorption bridge to attributes and synchronized floats. |
 
 
 ## Ledger/Index correction — 2026-11-21

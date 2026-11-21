@@ -1672,3 +1672,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Result: checkpoint 2526–2550 is accepted as registered and provenance-aligned. This is not the final 200-entry QA; independent global verification across 2401–2600 remains due after entry 2600.
 - The user has now explicitly pre-authorized 2551–2600, including both checkpoints 2551–2575 and 2576–2600. Continue without a permission request at 2575; stop at 2600.
 - Tests/examples inspected only; none executed. No RustChunk application source changed, and no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+
+
+## Audit checkpoint 2551–2575 — 2026-11-21 — COMPLETE
+
+- Entries 2551–2575 were inspected one at a time through EOF against pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; all 25 paths, blob SHAs and byte sizes match the untruncated pinned tree.
+- Long-file coverage was sequential, gap-free and no larger than 400 logical lines: `loot.rs` 1–400/401–800/801–1200/1201–1600/1601–2000/2001–2298; `object_open_map.rs` 1–400/401–412; `piston_push.rs` 1–400/401–483. Other files were read whole through EOF.
+- Active Ledger contains **175 records (2401–2575)** with exactly 15 required fields per record; Index contains **2,575 sequential unique rows**, including all new entries with path and Decision alignment.
+- Main follow-ups: 1.20.1 rewrites for modern loot/item-component schemas and registry IDs; differential movement/hurt/fall/health/statistics callback order; fastutil cursor mutation parity; piston caller/collision guards; keep native function-pointer hooks out of Forge mod loading.
+- Tests/examples were read only and not executed. No RustChunk application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- User pre-authorization remains active for **2576–2600**. Continue without another permission request; stop exactly at **2600**, then perform independent full-stage QA over entries 2401–2600.

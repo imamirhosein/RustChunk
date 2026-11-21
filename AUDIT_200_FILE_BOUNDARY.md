@@ -3,7 +3,7 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: **150/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 150 records.
+- Current stage 2401–2600: **175/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 175 records.
 - Sections 2401–2450, 2451–2500 and 2501–2550 CLOSED (50/50 each).
 - The user has explicitly pre-authorized 2551–2600, including checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575. **STOP at 2600**; 2601+ requires fresh permission.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
@@ -270,7 +270,7 @@
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
 | 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
 | 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — COMPLETE | CLOSED — 50/50 |
-| 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | PRE-AUTHORIZED BY USER — 2026-11-21 |
+| 2551–2600 | 2551–2575 — COMPLETE | 2576–2600 — AUTHORIZED | OPEN — 25/50; REMAINING 25 PRE-AUTHORIZED |
 
 - The earlier 2550 stop note below records the prior boundary decision. It is superseded by the user's later explicit advance authorization for 2551–2600.
 - After the separately authorized 2551–2600 section is complete, perform independent structural/provenance QA across all 200 Ledger entries 2401–2600.
@@ -292,6 +292,13 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
 | 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
 | 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — COMPLETE | CLOSED — 50/50 |
-| 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | PRE-AUTHORIZED BY USER — 2026-11-21 |
+| 2551–2600 | 2551–2575 — COMPLETE | 2576–2600 — AUTHORIZED | OPEN — 25/50; REMAINING 25 PRE-AUTHORIZED |
 
-**Continue through 2600 under the user's advance grant. Stop at 2600.** After both checkpoints are complete, run the requested global QA across 2401–2600.
+**Checkpoint 2551–2575 is complete. Continue 2576–2600 under the user's advance grant. Stop at 2600.** After both checkpoints are complete, run the requested global QA across 2401–2600.
+
+
+## Checkpoint 2551–2575 — COMPLETE
+
+- Ledger: 175 entries. Index: 2,575 sequential unique paths.
+- The 2551–2575 checkpoint is closed. The remaining 2576–2600 checkpoint is pre-authorized.
+- Stop at entry 2600, then run the full 2401–2600 structural/provenance QA.
