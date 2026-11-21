@@ -727,3 +727,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Important follow-ups: mutable shared EMPTY stack, Stack count boundary behavior, Java HashMap capacity parity, symlink traversal, permissive JSON/resource defaults, BucketContent::Empty mapped to lava, cache pre-read size bounds and metadata-only fingerprints, swallowed placement failures, modern class/feature data and LevelAccess default hazards.
 - Continue 2526–2550 under the same grant, report at 2550, then continue 2551–2600. **STOP at 2600**. After that perform the explicitly requested QA pass over all 200 records 2401–2600 before closing the stage.
 - Tests/examples inspected only. No source changed, no tests/build/runtime/device/Forge/Aternos validation and no backup at 2525.
+
+
+## 41. Authorization-boundary correction — 2026-11-21 — supersedes section 39
+
+- The earlier section 39 recorded an exceptional authorization through entry 2600. The user's latest explicit instruction narrows the current grant: complete the second checkpoint of the 2501–2550 section and stop exactly at **2550**. The user will provide a separate authorization for **2551–2600**.
+- Therefore, every earlier statement in this protocol or supporting audit documents that treats 2551–2600 as already authorized is historical and superseded. Do not inspect, read, index, or register entry 2551 or any later source until the separate grant is received.
+- Checkpoint 2526–2550 is the second 25-file checkpoint of the 2501–2550 section and closes that section at 50/50. There is no stop at 2547 or any other intermediate number.
+- After a separate grant, complete 2551–2575 and 2576–2600, stopping at 2600. Only after that may the requested independent global verification of all 200 entries 2401–2600 be performed.
+- The existing backup and all earlier protected branches/commits remain unchanged; no incremental backup is created at 2550. Tests/examples remain unexecuted unless separately authorized.

@@ -131,6 +131,8 @@
 
 ## Current stage partition — 2401–2600
 
+## Historical authorization snapshot — superseded by the current boundary below
+
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
@@ -270,5 +272,5 @@
 | 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — AUTHORIZED | OPEN — 25/50 |
 | 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | AUTHORIZED UNDER SAME EXPLICIT GRANT |
 
-- User explicitly extended the active stage's remaining authorization through 2600. No permission request is needed at the 2550 boundary; report there and continue. **STOP at 2600**.
-- After 2600, perform independent structural/provenance QA across all 200 Ledger entries 2401–2600 before closing the stage.
+- This historical authorization note is superseded by the current boundary section below. The active grant ends at 2550; a separate explicit grant is required for 2551–2600.
+- After the separately authorized 2551–2600 section is complete, perform independent structural/provenance QA across all 200 Ledger entries 2401–2600.

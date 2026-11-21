@@ -2,9 +2,9 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active stage: **2401–2600**; completed entries **2401–2525 (125/200)**.
+- Active stage: **2401–2600**; completed entries **2401–2550 (150/200)**.
 - Latest checkpoint **2501–2525 (25/200)** is complete and recorded below.
-- User explicitly renewed the remaining stage authorization **2501–2600 (100 files)**; 25-file commits and 50-file reports remain mandatory. Report at 2550; **STOP at 2600**.
+- The user authorized entries **2501–2550**. A separate explicit grant is required for **2551–2600**. Report and **STOP at 2550**.
 - Exact source is gitlink `upstream/starling` at `5432370d573642041585c69b40fb045b27133488`; do not follow the moving branch.
 - New entries are selected in deterministic lexical path order after excluding all 2,500 Index paths; pinned recursive tree is complete and untruncated.
 - Every entry has exactly the 15 required fields; source path, blob SHA and byte size are checked against the pinned tree.
@@ -2303,3 +2303,15 @@
 - Ledger contains **125 records (2401–2525)**; every record has exactly 15 fields. Index now contains **2,525 sequential unique paths** with matching path/Decision rows.
 - Explicit user authorization covers **2501–2600**. Continue with 2526–2550 without requesting another permission; report at 2550. The second 50-file section 2551–2600 remains covered. **STOP at 2600**.
 - No tests/examples executed; no app source changes, builds, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation. No backup at 2525; next backup only after entry 3000 and global verification.
+
+
+## Checkpoint 2526–2550 — COMPLETE (25/25)
+
+- All 25 source files were re-read from the start, one at a time, through EOF. The pinned recursive tree at `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is untruncated; all 25 paths are blobs and each SHA/byte-size pair in these entries matches that tree.
+- Long-file coverage is recorded per entry; every range is contiguous, sequential and no larger than 200 logical lines. Smaller files were read whole.
+- Important findings: double-high placement may expose a partial-write ordering risk; portal creation has multiple writes whose refusal behavior must be checked; dynamic block/entity collision context is delegated to the host; redstone and shape dispatch depend on exact order; the state table assumes Java-compatible registry ordering; tests silently skip without prepared resources; scheduled tick and neighbor-update queue failures need explicit host handling; weather uses hardcoded sea levels and vertical scans.
+- `redstone.rs` metadata corrected from an earlier progress estimate: pinned blob is 59,404 bytes and 1,507 logical lines.
+- Ledger: **150 records (2401–2550)**, exactly 15 required fields each. Index: **2,550 sequential unique paths** with path/Decision alignment. Structural/provenance QA for 2401–2550 is recorded in the checkpoint QA entry.
+- Tests/examples inspected only; none executed. No application source changes or build/APK/device/Minecraft/Forge/server/Aternos validation. No backup at 2550.
+- The user's latest instruction makes this the stop boundary. **STOP at 2550.** Entries 2551–2600 require a separate explicit authorization. After that range is complete, recheck all 200 entries 2401–2600 as requested.
+

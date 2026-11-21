@@ -668,3 +668,13 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - User grant covers 2501–2600. Next checkpoint 2526–2550 is authorized; report at 2550, then continue to 2600 and STOP.
 - Independent structural/provenance QA of entries 2401–2500 passed; full-stage 2401–2600 QA is due only after entry 2600.
 - Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation or backup at 2525.
+
+
+## Latest verified checkpoint — 2526–2550 — 2026-11-21
+
+- Re-read all 25 sources from the beginning, individually and through EOF. Pinned recursive source tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is untruncated; exact paths, SHAs and byte sizes match. Long files were read in contiguous, gap-free 200-line chunks.
+- Ledger entries 2401–2550: 150 records, 15 required fields each. Index: 2,550 sequential unique paths with matching Decisions. Six-document commit and full read-back verification are the remaining checkpoint-registration steps at the time this note was prepared.
+- Important risks: paired placement partial writes, portal multi-write refusal, entity/block-entity host callbacks, ordered redstone/shape dispatch, registry-order dependence, tests that skip when resources are absent, scheduler/update budget error handling, modern-only block families and weather height/sea-level assumptions.
+- `redstone.rs` corrected to 59,404 bytes / 1,507 lines; prior interim estimate was inaccurate.
+- **STOP at 2550.** The latest user instruction supersedes previous historical notes that said the 2501–2600 grant covered both 50-file sections. A separate explicit authorization is required for 2551–2600. After that authorized range completes, recheck all 200 entries 2401–2600 independently.
+- Tests/examples not executed. No product source, build, APK or runtime verification. No backup at 2550.
