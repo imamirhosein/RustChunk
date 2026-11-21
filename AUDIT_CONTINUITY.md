@@ -24,7 +24,7 @@ Branch: starling-1.20.1-port-audit
 - Build the recursive source tree and verify it is complete/not truncated.
 - Select paths in deterministic lexical order, excluding every path already in the full Index. Never repeat or renumber a source path.
 
-- Index order reconciliation: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
+- Index order reconciliation: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,450 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2450. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,450 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
 - Current boundary: latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`; zero unindexed paths are lexically before/equal to it and 2,718 remain after it. For 2251–2300, continue in deterministic lexical order strictly after that path, excluding the full Index.
 - Verify every source SHA and byte size against the pinned tree.
 
@@ -632,7 +632,7 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - All 25 files read through EOF; long-file ranges: attachments.rs 1–400/401–695; live.rs 1–400/401–416; worldgen_parity.rs 1–200/201–400/401–600/601–800/801–915; block_landing.rs 1–400/401–464.
 - Ledger 25 records with 15 fields; Index 2,425 unique sequential paths.
 - Key flags: swallowed piston binding errors, empty modifier path, unchecked CLI selectors, callback partial mutation and coordinate defaults.
-- Next 2426–2450 under current authorization; report at 2450 and continue to 2500; stop there.
+- Section 2401–2450 is closed. Next checkpoint 2451–2475 is authorized under the same one-time 2401–2500 grant; report at 2500 and stop there.
 
 
 ## Latest verified checkpoint — 2426–2450 — 2026-11-21
