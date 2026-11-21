@@ -7,16 +7,15 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2275**.
-- Completed prior stage: **2001–2200 (200/200)**; active stage: **2201–2400**, progress **75/200**.
-- Closed reporting section: **2201–2250 (50/50)**; checkpoints **2201–2225** and **2226–2250** both complete and read-back verified.
-- The user has explicitly authorized the next standard section **2251–2300**. Checkpoint **2251–2275** is complete and read-back verified; **2276–2300** remains covered by the same authorization. Continue without another permission request at 2275; **STOP at 2300** and request permission before 2301.
-- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **275 records (2001–2275)** with exactly 15 fields; Index contains **2,275 sequential unique paths**.
-- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
-- Entries **2201–2207** were initially fetched before authorization but were then re-fetched, completely inspected, SHA/size matched and registered under the 2201–2250 authorization. They are current completed entries in both Ledger and Index, not exclusions.
-- Entry 2214 remains a custom Horizon star with unresolved separate asset-license provenance. Findings for the thread pool, memory watcher, chunkgen verifier and world fixture transports are recorded in entries 2226–2275.
-- The verified backup covers entries 1–2000 only. No backup at 2250; next backup only after entry 3000 and global verification.
-- No application source changed. Tests/examples were inspected only, not run; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed source entries: **1–2300**.
+- Active 200-file stage: **2201–2400**, progress **100/200**.
+- Reporting sections **2201–2250** and **2251–2300** are both closed (50/50); all four 25-file checkpoints are complete and read-back verified.
+- The one-time user authorization for **2251–2300** is exhausted. **STOP before entry 2301** and request fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **300 records (2001–2300)** with exactly 15 fields; Index contains **2,300 sequential unique paths**.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Stable historical Index numbering is retained; new source selection follows deterministic lexical path order after the latest indexed path. Entries 2201–2207 were re-fetched and audited after authorization and remain complete.
+- The verified backup covers entries 1–2000 only. No backup at 2300; next backup only after entry 3000 and global verification.
+- No application source changed. Tests/examples inspected only, not executed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -585,3 +584,9 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Entries 2251–2275 were inspected serially through EOF in deterministic lexical order after the Index boundary; SHA and exact sizes match. Three files over 400 lines were read in contiguous chunks of at most 400 lines.
 - Ledger 275 entries (2001–2275), exactly 15 fields; Index 2,275 sequential unique paths with Decisions aligned.
 - Next checkpoint 2276–2300 is already authorized; proceed without pausing at 2275, then STOP at 2300.
+
+## Closed section — 2251–2300 — 2026-11-21
+
+- Entries 2251–2300 are complete: both 25-file checkpoints are committed and read back. Ledger has 300 records (2001–2300), exactly 15 fields each; Index has 2,300 sequential unique paths.
+- Section 2251–2300 is closed (50/50); authorization exhausted. Stop before 2301 and request fresh permission.
+- No app source changed; no tests run or runtime/build/device/game validation.

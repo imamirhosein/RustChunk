@@ -1514,3 +1514,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 Ledger entries contain exactly 15 required fields. Ledger now contains **275 records (2001–2275)**; global Index contains **2,275 sequential unique paths** and matching Decisions.
 - Tests/examples inspected only; none run. No application source changes and no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 - The next checkpoint **2276–2300** remains covered by the same explicit authorization. Do not stop/request permission at 2275; **STOP at 2300**.
+
+
+## Audit checkpoint 2276–2300 — 2026-11-21
+
+- Completed entries **2276–2300 (25/25)** after the existing 2,275 Index entries, in deterministic lexical path order. Every file was inspected serially through EOF; long files used contiguous chunks no larger than 400 lines. Exact source SHA and size match the pinned recursive tree.
+- Effect notification and sync fixtures repeat the JavaKey tie-break `<=` defect: equal identities can compare as Less. Do not trust their comparator/corpus as an ordering oracle until corrected.
+- Damage reduction stubs armor effectiveness and enchantment protection; dynamic support, fluids, movement and entity collision use scripted/mock worlds. `entity_fluid_fixture` assumes non-empty pushed samples; extra-item inventory is fixed at 43 slots; many fixtures trust IDs/numeric fields.
+- Decoration/feature-region coverage is useful for 1.20.1 regression scenarios (retrogen, write zones, heightmaps, chunk ticks and seeded placement), but uses Horizon DATA_VERSION data and resident synthetic chunks. It does not prove async chunk streaming, rendering or Forge compatibility.
+- All 25 entries have exactly 15 fields; Ledger now has **300 records (2001–2300)**; Index has **2,300 sequential unique paths** with matching Decisions.
+- Tests/examples were inspected only; none were run. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
+- Section **2251–2300 is closed (50/50)**. Next range **2301–2350** requires fresh explicit authorization.

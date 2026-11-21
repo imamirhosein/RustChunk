@@ -135,19 +135,14 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2275**.
-- Active 200-file stage: **2201–2400**, progress **75/200**.
-- Closed reporting section: **2201–2250 (50/50)**; checkpoints **2201–2225** and **2226–2250** are committed and read-back verified.
-- The user has explicitly authorized the standard 50-file section **2251–2300**. Checkpoint **2251–2275** is complete and verified; **2276–2300** remains authorized. Do not pause at 2275. **STOP at 2300** and require fresh permission before 2301.
-- Active Ledger file: `AUDIT_LEDGER_2001_2200.md` (legacy filename), containing **275 records (2001–2275)** with exactly 15 required fields. Index contains **2,275 sequential unique paths**.
-- Upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
-- Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification; no incremental backups.
-- The seven assets 2201–2207 were initially fetched before authorization, then re-fetched and fully audited after the 2201–2250 authorization. They are now entries 2201–2207 in both Ledger and Index, with exact SHA/size matches; they are not pending or excluded.
-- Tests/examples inspected only, not executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source changes.
-
-## Historical-state interpretation
-
-Sections 13–21 and 23 below preserve dated authorizations and checkpoint snapshots. Statements such as “STOP at 2100”, “STOP at 2200”, “stop before 2201” and “stop before 2251” were correct only at those historical checkpoints; they are superseded for current work by this Section 12 and the latest authorization record in Section 24. Do not interpret historical authorization/status text as a current restriction or permission.
+- Completed source entries: **1–2300**.
+- Active 200-file stage: **2201–2400**, progress **100/200**.
+- Reporting sections **2201–2250** and **2251–2300** are closed (50/50); all four 25-file checkpoints are committed and read-back verified.
+- The user's one-time authorization for **2251–2300** is exhausted. **STOP before 2301** and request fresh explicit permission.
+- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **300 records (2001–2300)** with exactly 15 fields; Index contains **2,300 sequential unique paths**.
+- Upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). New selection follows lexical path order after the latest indexed source path; historical IDs are stable.
+- Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification; no incremental backup.
+- Tests/examples inspected only; none executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source changed.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -615,3 +610,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Findings concern mock-world assumptions, trusted corpus inputs, unbounded/unchecked fixture operations, incomplete enchantment paths and synthetic registry constraints. These examples are oracle transports, not production features. No example/test was executed.
 - The second checkpoint **2276–2300** is already covered by the same user authorization. Continue without asking at 2275. **STOP at 2300**, then request new permission before 2301.
 - No app source changed; no tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation. No backup at this checkpoint.
+
+## 26. Closed reporting section — entries 2251–2300 — 2026-11-21
+
+- Both 25-file checkpoints **2251–2275** and **2276–2300** are complete, committed across all six audit documents, and read-back verified.
+- Ledger contains **300 records (2001–2300)** with exactly 15 fields each. Index contains **2,300 sequential unique paths**, no duplicates and matching Decisions.
+- Entries 2276–2300 cover damage/effect/entity/collision/fluid/movement/inventory/decoration/feature fixtures; comparator, mock-world and versioned-data caveats are recorded in Ledger/QA.
+- Tests/examples inspected only; none run. No application source change or runtime/build validation.
+- **STOP at 2300.** Authorization exhausted; entry 2301–2350 requires fresh explicit user authorization.

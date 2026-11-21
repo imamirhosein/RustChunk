@@ -136,7 +136,7 @@
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
-| 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — COMPLETE | CLOSED — 50/50; authorization exhausted |
 | 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 | 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 
@@ -163,3 +163,12 @@
 - Ledger 275 entries (2001–2275), exactly 15 fields each; Index 2,275 sequential unique paths and matching decisions.
 - This checkpoint consists of differential mock fixtures for block properties, survival, push/update, collision, chunk stages, carving, climbing, combat/blocking, component patches and consumable/effect behavior. They are not production client code.
 - Next checkpoint **2276–2300** is already authorized. Do not stop/request permission at 2275; **STOP at 2300**. No authorization exists for 2301+.
+
+
+## Checkpoint 2276–2300 — COMPLETE (25/25)
+
+- Each source was inspected individually through EOF; long files were read in consecutive, gap-free chunks no larger than 400 lines. Source paths, SHAs and sizes match the pinned recursive tree.
+- Ledger contains 300 records (2001–2300), each with exactly 15 fields; Index contains 2,300 sequential unique paths with matching Decisions.
+- Section 2251–2300 is closed (50/50); active 200-file stage 2201–2400 is 100/200 complete.
+- Tests/examples inspected only; none executed. No app source changes or runtime/build/device/game validation.
+- **STOP at 2300**. No authorization exists for 2301+ until the user explicitly grants it.
