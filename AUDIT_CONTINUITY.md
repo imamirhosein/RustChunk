@@ -6,15 +6,15 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed source entries: **1–2350**.
-- Active 200-file stage: **2201–2400**, progress **150/200**.
-- Reporting sections 2201–2250, 2251–2300 and 2301–2350 are CLOSED (50/50 each); section 2351–2400 remains authorized.
-- The user's one-time expanded authorization covers **2301–2400**. Checkpoints 2301–2325 and 2326–2350 are complete; continue **2351–2375** and **2376–2400** without asking at 2375; **STOP at 2400** and request fresh permission before 2401.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md` has 200 records (2001–2200); active Ledger `AUDIT_LEDGER_2201_2400.md` has **150 records (2201–2350)** with exactly 15 fields each. Index has **2,350 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
-- Historical Index IDs remain stable; future selection is deterministic lexical path order after the latest indexed path, excluding the full Index. The 70 raw-tree-order divergences are historical chronology, not missing/duplicate paths; no further divergence occurred through entry 2350.
-- Existing backup covers entries 1–2000 only. No backup at 2350; next backup only after entry 3000 and global verification.
-- No application source changed. Tests/examples inspected only, not executed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed source entries: **1–2375**.
+- Active 200-file stage: **2201–2400**, progress **175/200**.
+- Reporting sections 2201–2250, 2251–2300 and 2301–2350 are CLOSED (50/50); section 2351–2400 is IN PROGRESS (**25/50**).
+- The user's one-time expanded authorization covers **2301–2400**. Checkpoints through **2351–2375** are complete; **2376–2400** remains authorized. Do not ask again; **STOP at 2400** and request permission before 2401.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200); active Ledger `AUDIT_LEDGER_2201_2400.md`: **175 records (2201–2375)**, exactly 15 fields each. Index contains **2,375 sequential unique paths**.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). Future selection must exclude both Index paths and any already completed current-but-not-yet-committed paths before selecting the next lexical path. This avoids repeating an in-flight checkpoint.
+- Historical Index IDs remain stable; 70 early raw-tree-order divergences are documented; no new raw-tree divergence from 2034–2375. Do not renumber.
+- Existing backup covers entries 1–2000 only. No backup at 2375; next backup after entry 3000 and global verification.
+- No app source changed. Tests/examples inspected only; none executed. No build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -610,3 +610,10 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Entries 2326–2350 (25/25) inspected individually through EOF. Files 2332 (598), 2342 (735) and 2344 (828) were read in contiguous ranges <=400 lines. Source SHAs/sizes match the pinned tree.
 - Active Ledger: 150 records (2201–2350), exactly 15 fields; Index: 2,350 sequential unique paths with matching Decisions.
 - Section 2301–2350 is closed. One-time authorization through 2400 remains active for 2351–2375 and 2376–2400; STOP at 2400.
+
+
+## Latest verified checkpoint — 2351–2375 — 2026-11-21
+
+- Entries 2351–2375 (25/25) inspected through EOF. Four long files (2362, 2363, 2371 and 2373) were read in contiguous chunks <=400 lines. SHA/size match pinned tree.
+- Active Ledger: 175 records (2201–2375), exactly 15 fields; Index: 2,375 sequential unique paths with Decisions aligned.
+- 2376–2400 remains covered by the one-time authorization. It was re-derived with the in-flight 2351–2375 paths excluded; no overlap. STOP at 2400.

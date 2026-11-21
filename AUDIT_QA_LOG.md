@@ -1565,3 +1565,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 Ledger entries contain exactly 15 fields. Active Ledger has **150 records (2201–2350)**; Index has **2,350 sequential unique paths** and matching Decisions.
 - Tests/examples inspected only; none executed. No application source change; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 - Section **2301–2350 is CLOSED (50/50)**. The same one-time authorization covers **2351–2400**; continue both 25-file checkpoints without asking at 2375, then **STOP at 2400**.
+
+
+## Audit checkpoint 2351–2375 — 2026-11-21
+
+- Completed entries **2351–2375 (25/25)** in deterministic lexical order after the full Index skip set. Pinned recursive tree is complete (`truncated:false`); all 25 source paths, SHAs and byte sizes match.
+- Source coverage: piston geometry/state; placement modifiers; player equipment/food/health/hurt/inventory/travel; portal; registered/server combat and damage; registry collision/fall-ray/fluid; replacement/restitution/retrogen; rule testing/scattered ore; integrated simple-block/placed-feature and SimpleContainer; spawn-origin CLI utility.
+- Fixture/tool limitations recorded: trusted JSON/NBT and unchecked state/slot/operation indexes; fixed/mock world/chunk/packet behavior; StoredPlayerFood unwraps callback failure; PlayerTravel scripts a hard-coded fluid position; ServerPlayerDamage returns armor effectiveness unchanged; ReplaceBlock/ScatteredOre height query is Unavailable; SimpleBlock uses private data and a hard-coded -64..319 world-height context. SpawnOrigin leaks the registry intentionally for process lifetime and uses external resource snapshots.
+- Long files read to EOF in contiguous ranges <=400: `registered_player_combat_fixture.rs` 1–400/401–609; `registry_collision_scan_fixture.rs` 1–400/401–591; `server_player_combat_fixture.rs` 1–400/401–629; `simple_block_fixture.rs` 1–400/401–773.
+- All 25 new Ledger records have exactly 15 required fields. Active Ledger: **175 records (2201–2375)**; global Index: **2,375 sequential unique paths**, matching path/Decision rows.
+- Examples/tests inspected only, none executed. No application source changes; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- The one-time authorization through **2400** remains active. Range 2351–2400 is in progress (25/50); continue 2376–2400 without asking, then **STOP at 2400**.

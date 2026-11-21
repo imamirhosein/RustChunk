@@ -137,14 +137,14 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2350**.
-- Active 200-file stage: **2201–2400**, progress **150/200**.
-- Sections **2201–2250**, **2251–2300** and **2301–2350** are closed (50/50 each); section **2351–2400** remains authorized.
-- The user's one-time expanded authorization covers **2301–2400**. Checkpoints **2301–2325** and **2326–2350** are complete; continue through **2351–2375** and **2376–2400** without a permission pause at 2375; **STOP at 2400** and request fresh permission before 2401.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Active Ledger `AUDIT_LEDGER_2201_2400.md`: **150 records (2201–2350)** with exactly 15 fields each. Index: **2,350 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`). Future selection is deterministic lexical order after the latest indexed path, excluding all Index paths; historical IDs remain stable.
+- Completed source entries: **1–2375**.
+- Active 200-file stage: **2201–2400**, progress **175/200**.
+- Sections **2201–2250**, **2251–2300** and **2301–2350** are closed (50/50 each); section **2351–2400** is in progress (25/50).
+- The user's one-time expanded authorization covers **2301–2400**. Checkpoints through **2351–2375** are complete; **2376–2400** remains authorized. Continue without pausing; **STOP at 2400** and request fresh permission before 2401.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Active Ledger `AUDIT_LEDGER_2201_2400.md`: **175 records (2201–2375)** with exactly 15 fields each. Index: **2,375 sequential unique paths**.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete. Future selection excludes all Index paths plus any current in-flight checkpoint paths; select the next lexical paths after the pending boundary to avoid duplicates.
 - Entries 1–2000 have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification.
-- Tests/examples inspected only; none executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source change.
+- Tests/examples inspected only; none run. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source change.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -655,3 +655,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - These are synthetic fixtures. Important limitations include invalid equal-identity JavaKey comparison, empty-sequence panic paths, fixed mock registries/worlds, trusted indexes/casts and private material-stage resource snapshots. No example or test was executed.
 - Reporting section **2301–2350 is CLOSED (50/50)**. The user's one-time authorization still covers **2351–2400**. Continue 2351–2375 and 2376–2400 without another permission request at 2375; **STOP at 2400**.
 - No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
+
+
+## 33. Checkpoint 2351–2375 — 2026-11-21
+
+- Entries **2351–2375 (25/25)** were inspected individually through EOF in deterministic lexical order after excluding the full Index. Exact path, source SHA and size match the pinned tree.
+- Active Ledger `AUDIT_LEDGER_2201_2400.md` contains **175 records (2201–2375)** with exactly 15 required fields; Index contains **2,375 sequential unique paths** and matching Decisions.
+- Long files: `registered_player_combat_fixture.rs` 1–400/401–609; `registry_collision_scan_fixture.rs` 1–400/401–591; `server_player_combat_fixture.rs` 1–400/401–629; `simple_block_fixture.rs` 1–400/401–773.
+- Important limitations: mock player/server/network adapters; fixed arrays and trusted indexes; unavailable heightmap paths in replace/scattered-ore mocks; PlayerFood unwraps stored-path callback errors; PlayerTravel hardcodes a fluid query; ServerPlayerDamage leaves armor modifier unchanged; SimpleBlock uses a hard-coded world-height context/private registry bundle.
+- The one-time authorization still covers **2376–2400**. Do not ask for permission before this final checkpoint; **STOP at 2400**.
+- No tests/examples executed, no application source changed and no runtime/build/device/Minecraft/Forge/Aternos validation.
