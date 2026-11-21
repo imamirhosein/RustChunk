@@ -1,4 +1,4 @@
-- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **200 records (2401–2600)**. Stage 2401–2600 is **200/200**; all four 50-file sections are CLOSED. Independent full-stage QA is complete: 200 entries, 2,600 sequential unique Index rows, exact Ledger alignment and pinned SHA/size match. Seven adjacent path-order inversions are documented; numbering is preserved. **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **200 records (2401–2600)**. Stage 2401–2600 is **200/200**; all four 50-file sections are CLOSED. Independent full-stage QA is complete: 200 entries, 2,600 sequential unique Index rows, strict raw lexical path order, exact Ledger alignment and pinned SHA/size match. **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2821,6 +2821,22 @@
 | 2399 | `crates/horizon-world/examples/probe/use_remainder_fixture.rs` | adaptable; reference | Item/template/slot indexes and counts are trusted; fixed mock inventory capacity/callbacks do not model complete player inventory or Forge capabilities. |
 | 2400 | `crates/horizon-world/examples/probe/value_provider_fixture.rs` | adaptable; reference | Provider IDs/names, sample count and state references are fixture-controlled; unknown providers or empty state lists can fail. Catalogue is not complete target-version registry. |
 
+
+
+
+
+
+
+## Ledger/Index correction — 2026-11-21
+
+- The first checkpoint registration read-back exposed a material mismatch: Index had advanced to 2,550 while Ledger still contained only 2401–2525. The 25 new Index rows were present but the 25 corresponding Ledger records had not been appended.
+- This was corrected before declaring the checkpoint complete. The corrective atomic six-document commit includes all 25 Ledger entries 2526–2550; the intended final structural state is 150 Ledger records and 2,550 sequential Index rows with matching paths/Decisions.
+- This correction note is retained as an audit trail; the first registration must not be treated as the final completed checkpoint.
+
+## Decision-alignment correction — 2026-11-21
+
+- Post-correction read-back found one remaining Index wording mismatch at 2536: the Index said `version-specific class-dispatch required`, while the Ledger's Decision was `target-version class-dispatch required`. The Index row has been normalized to the Ledger's exact Decision wording. No path or numbering changed.
+
 | 2401 | `crates/horizon-world/examples/probe/view_direction_fixture.rs` | adaptable; reference | JSON modes/vectors are unwrapped; malformed hex, short vectors or unknown modes panic. No camera/Android input integration. |
 | 2402 | `crates/horizon-world/examples/probe/water_splash_fixture.rs` | adaptable; reference | Passenger/mutation fields are trusted; unknown passenger panics. Fixed mock entity model and hard-coded budget/RNG checks. |
 | 2403 | `crates/horizon-world/examples/probe/world_border_fixture.rs` | adaptable; reference | Operation arrays unwrapped; limit narrows i64 to i32; fixed defaults, not packet/timing integration. |
@@ -2839,14 +2855,13 @@
 | 2416 | `crates/horizon-world/src/attributes/mod.rs` | adaptable; reference | Modifier::new accepts empty path; add_or_update_transient retains old operation bucket. Verify Java parity. |
 | 2417 | `crates/horizon-world/src/attributes/operation_map.rs` | adaptable; reference | Capacity uses f64 ceil/next_power_of_two; extreme lengths may overflow but allocation constrains them. Slot order is compatibility-critical. |
 | 2418 | `crates/horizon-world/src/bin/worldgen_parity.rs` | adaptable; reference | 915 lines read 1–200/201–400/401–600/601–800/801–915. CLI indexes args/bundle keys without full arity/range validation (e.g. settings_create). |
-| 2419 | `crates/horizon-world/src/block_collision_scan.rs` | adaptable; reference | Wrapping arithmetic intentional; budget counts skipped cursor cells. Correctness relies on may_reach_out never false-negative. |
-| 2420 | `crates/horizon-world/src/block_collision.rs` | adaptable; reference | PistonBlockBindings errors discarded with .ok(), conflating invalid metadata with no pistons. |
+| 2419 | `crates/horizon-world/src/block_collision.rs` | adaptable; reference | PistonBlockBindings errors discarded with .ok(), conflating invalid metadata with no pistons. |
+| 2420 | `crates/horizon-world/src/block_collision_scan.rs` | adaptable; reference | Wrapping arithmetic intentional; budget counts skipped cursor cells. Correctness relies on may_reach_out never false-negative. |
 | 2421 | `crates/horizon-world/src/block_entities.rs` | adaptable; reference | Missing/wrong-type coordinates default to zero; Long narrows to i32; pending_mut can alter coordinates without rekeying. |
 | 2422 | `crates/horizon-world/src/block_entity_push.rs` | adaptable; reference | Selection uses added-shape bounds; entity boxes re-read before each teleport; depends on stable handles/query order. |
 | 2423 | `crates/horizon-world/src/block_landing.rs` | adaptable; reference | 464 lines read 1–400/401–464. Farmland RNG draw precedes entity gating; hook contracts control event order; definitions strict for all block names. |
 | 2424 | `crates/horizon-world/src/block_placement.rs` | adaptable; reference | State IDs checked; relative coords wrap i32 by design; assumes complete pale-moss registry. |
 | 2425 | `crates/horizon-world/src/block_properties.rs` | adaptable; reference | Every state needs definitions and occlusion shape; face mask assumes Direction discriminants fit u8. |
-
 | 2426 | `crates/horizon-world/src/block_render.rs` | adaptable; reference | Requires every registry state to have render definition and cached shape; cache clears at 4096 pairs. Opaque face visibility only, not translucent sorting, fluids, meshing or lighting. |
 | 2427 | `crates/horizon-world/src/block_state_properties.rs` | adaptable; reference | 418 lines read 1–400/401–418. Registry/schema completeness and IDs trusted at binding boundaries; properties parsed from string snapshots, not live Forge state. |
 | 2428 | `crates/horizon-world/src/block_support.rs` | adaptable; reference | Cached geometry models context-free branch only; moving-piston/block-entity behavior remains callback-owned. Unsupported dynamic states return error. |
@@ -2856,8 +2871,8 @@
 | 2432 | `crates/horizon-world/src/bundle_weight.rs` | adaptable; reference | Weight cached in Rc OnceCell and permanently captures first ItemWeights view; mutations to that view leave stale weight. Fraction constructor does not fully normalize immediately. |
 | 2433 | `crates/horizon-world/src/chunk_status.rs` | adaptable; reference | by_name maps unknown names to Empty; parse/from_nbt return errors. Status assignment does not execute generation or lighting. |
 | 2434 | `crates/horizon-world/src/climbing.rs` | adaptable; reference | Only positive result updates last-climbable position; negative checks preserve old value. Facing limited to horizontal directions. |
-| 2435 | `crates/horizon-world/src/collision_context.rs` | adaptable; reference | with_position(None,y) ignores y and uses -MAX; can_stand_on_fluid calls entity callback before same-family test. |
-| 2436 | `crates/horizon-world/src/collision.rs` | adaptable; reference | Context-free branch only; uncached states must invoke block behavior. Older exports without canonical identity retain local aliases only. |
+| 2435 | `crates/horizon-world/src/collision.rs` | adaptable; reference | Context-free branch only; uncached states must invoke block behavior. Older exports without canonical identity retain local aliases only. |
+| 2436 | `crates/horizon-world/src/collision_context.rs` | adaptable; reference | with_position(None,y) ignores y and uses -MAX; can_stand_on_fluid calls entity callback before same-family test. |
 | 2437 | `crates/horizon-world/src/combat_rules.rs` | adaptable; reference | NaN/signed-zero behavior explicit; depends on correct weapon/server-level callbacks. |
 | 2438 | `crates/horizon-world/src/component_durability.rs` | adaptable; reference | Raw components remain while stack empty; grow/shrink wrap integers. Only one component family, not full ItemStack. |
 | 2439 | `crates/horizon-world/src/component_patch.rs` | adaptable; reference | set mutates patch before returning MissingPrototype for unsanitized removal without prototype; partial mutation documented, needs native exception parity. |
@@ -2872,7 +2887,6 @@
 | 2448 | `crates/horizon-world/src/datafix/dynamic.rs` | adaptable; reference | Number narrowing follows Java-style casts; stream clones lists and expands arrays. String conversions may be lossy for unpaired UTF-16. |
 | 2449 | `crates/horizon-world/src/datafix/files.rs` | adaptable; reference | 1147 lines read 1–200/201–400/401–600/601–800/801–1000/1001–1147. files_with_suffix/subdirectories suppress read_dir errors into empty lists, silently skipping inaccessible world data. Legacy chunk_x±8 ranges may overflow i32. Upgrade targets 26.3, not a 1.20.1 loader. |
 | 2450 | `crates/horizon-world/src/datafix/fixes_a.rs` | adaptable; reference | 1116 lines read 1–200/201–400/401–600/601–800/801–1000/1001–1116. Multiple fixes share same version/substep keys and order is semantic; chested-horse slot conversion subtracts unchecked numeric values. |
-
 | 2451 | `crates/horizon-world/src/datafix/fixes_b.rs` | adaptable; reference | Multiple fixes share version keys and order is semantic. UUID conversion helpers require both long halves nonzero; malformed/valid UUIDs with one zero half may be lost. Some unknown IDs collapse to fallback names. |
 | 2452 | `crates/horizon-world/src/datafix/fixes_c.rs` | adaptable; reference | Version-specific assumptions include fixed biome container layouts and old tick/height encodings; malformed lists may be replaced by defaults. Some keys are repeated across ordered substeps. |
 | 2453 | `crates/horizon-world/src/datafix/fixes_cliffs.rs` | adaptable; reference | 1623 lines read 1–400/401–800/801–1200/1201–1623. Tick conversion skips packed position <=0, which may discard valid local origin (0,0,0); confirm native semantics. Coordinate differences use abs and may hit i32::MIN edge behavior. |
@@ -2884,8 +2898,8 @@
 | 2459 | `crates/horizon-world/src/datafix/items.rs` | adaptable; reference | 1411 lines read in 1–400/401–600/601–800/801–1000/1001–1200/1201–1411. Malformed map-decoration IDs can fall back to empty key instead of leaving stack untouched; typo `enhanting_table` appears in legacy mapping path. |
 | 2460 | `crates/horizon-world/src/datafix/json.rs` | adaptable; reference | 644 lines read 1–400/401–644. Strict quoted parser appears to accept escaped apostrophe; UTF-16 escape conversion rejects lone surrogates; lenient top-level null may return early despite trailing input. Exact-long exponent arithmetic has extreme i64 overflow risk. |
 | 2461 | `crates/horizon-world/src/datafix/progress.rs` | adaptable; reference | 282 lines; relaxed atomics are used consistently for independent counters; poisoned dimension mutex silently drops updates and reads as zero. |
-| 2462 | `crates/horizon-world/src/datafix/schema_flat.rs` | adaptable; reference | 508 lines read 1–400/401–508. MARKING thread-local bool is set/reset manually; panic during walk can leave it true for later work on same thread. Nested mark_untyped calls can also clear outer state. |
-| 2463 | `crates/horizon-world/src/datafix/schema.rs` | adaptable; reference | 947 lines read 1–400/401–600/601–800/801–947. Schema registration and repeated key order are critical; recursive tree walking assumes finite NBT depth. Unknown IDs intentionally remain untyped. |
+| 2462 | `crates/horizon-world/src/datafix/schema.rs` | adaptable; reference | 947 lines read 1–400/401–600/601–800/801–947. Schema registration and repeated key order are critical; recursive tree walking assumes finite NBT depth. Unknown IDs intentionally remain untyped. |
+| 2463 | `crates/horizon-world/src/datafix/schema_flat.rs` | adaptable; reference | 508 lines read 1–400/401–508. MARKING thread-local bool is set/reset manually; panic during walk can leave it true for later work on same thread. Nested mark_untyped calls can also clear outer state. |
 | 2464 | `crates/horizon-world/src/datafix/text.rs` | adaptable; reference | 252 lines; URI validator approximates java.net.URI and chat-character filter uses UTF-16 units; malformed legacy hover payloads are converted to display text rather than rejected. |
 | 2465 | `crates/horizon-world/src/datafix/world_upgrader_tests.rs` | adaptable; reference | 298 lines; test explicitly confirms a current/skipped chunk short-circuits the rest of that region-file pass, so an older later chunk remains unconverted. Mixed-version chunks can therefore leave stale data unless native behavior is intentional. |
 | 2466 | `crates/horizon-world/src/dynamic_support.rs` | adaptable; reference | Shulker collision uses snapshot bounding box while support uses open/closed state callback; Direction discriminants index fixed six-element shape array. |
@@ -2895,21 +2909,20 @@
 | 2470 | `crates/horizon-world/src/effect_particles.rs` | adaptable; reference | Catalog validates DataVersion and ambient alpha; equality is pointer identity, so fresh equal-color options remain unequal by design. |
 | 2471 | `crates/horizon-world/src/effect_sync.rs` | adaptable; reference | Flag reads sign-extend u8 through i8 before bit tests; shift uses wrapping_shl to mirror Java int shift masking. Empty effects clear particles/invisibility but ambient flag is not rewritten on that branch. |
 | 2472 | `crates/horizon-world/src/entity_collision.rs` | adaptable; reference | No explicit candidate budget; broadphase may return supersets, but snapshot handles must remain available through callbacks. |
-| 2473 | `crates/horizon-world/src/entity_fluid_tick.rs` | adaptable; reference | is_pushed_by_fluid queried twice by design; water/lava membership captured before splash callbacks, preserving native phase ordering. |
-| 2474 | `crates/horizon-world/src/entity_fluid.rs` | adaptable; reference | 454 lines read 1–400/401–454. Query budget counts chunk, section and fluid cells; tracker/current writes persist if later provider call fails. Float NaN behavior uses Java-compatible max helper. |
+| 2473 | `crates/horizon-world/src/entity_fluid.rs` | adaptable; reference | 454 lines read 1–400/401–454. Query budget counts chunk, section and fluid cells; tracker/current writes persist if later provider call fails. Float NaN behavior uses Java-compatible max helper. |
+| 2474 | `crates/horizon-world/src/entity_fluid_tick.rs` | adaptable; reference | is_pushed_by_fluid queried twice by design; water/lava membership captured before splash callbacks, preserving native phase ordering. |
 | 2475 | `crates/horizon-world/src/entity_move.rs` | adaptable; reference | No-physics branch sets position/record/flags then returns without later fall/ground/emission callbacks. MovementHistory compresses oldest two at 100 entries; exact +0.0 check distinguishes negative zero. |
-
 | 2476 | `crates/horizon-world/src/entity_obstruction.rs` | adaptable; reference | AABB query and entity-state callbacks are ordered; no explicit candidate budget or unloaded-chunk policy in this adapter. |
 | 2477 | `crates/horizon-world/src/extra_items.rs` | adaptable; reference | Static identifiers are version-bound and assume registry IDs are supplied by matching data. |
 | 2478 | `crates/horizon-world/src/fall_damage.rs` | adaptable; reference | Float NaN/infinity and negative fall distance follow Rust/Java comparison/cast behavior; callback ordering controls damage and reset. |
-| 2479 | `crates/horizon-world/src/fluid_box.rs` | adaptable; reference | Assumes amount 0–8 and canonical fluid shape registry; callers can construct invalid FluidState unless constructor validates. |
-| 2480 | `crates/horizon-world/src/fluid_flow.rs` | adaptable; reference | Neighbor reads and fluid-family comparisons are callback-driven; tie and zero-vector handling need exact float parity. |
-| 2481 | `crates/horizon-world/src/fluid_occupancy.rs` | adaptable; reference | Uses state IDs as indexes into registry presence arrays; invalid IDs can panic. Chunk/section iteration and query budget are callback-sensitive. |
-| 2482 | `crates/horizon-world/src/fluid_shape.rs` | adaptable; reference | Indexing assumes amount <=8; invalid states can exceed the fixed table. |
-| 2483 | `crates/horizon-world/src/fluid.rs` | adaptable; reference | FluidState::new is public and accepts any u8 amount; FluidShapeCache indexes directly from it, so amount >8 can panic/out-of-bounds. from_json also defaults missing falling to true for nonempty fluid; verify default-state semantics. |
-| 2484 | `crates/horizon-world/src/food_properties.rs` | adaptable; reference | Effect probability and numeric values are data-driven; malformed component shapes rely on decoder defaults/errors. |
-| 2485 | `crates/horizon-world/src/food_storage.rs` | adaptable; reference | Float comparisons and exhaustion carry are compatibility-sensitive; fields are public and may be externally inconsistent. |
-| 2486 | `crates/horizon-world/src/food.rs` | adaptable; reference | Effect RNG/callback order and food-level checks are external hooks; a callback error may leave earlier food mutation committed. |
+| 2479 | `crates/horizon-world/src/fluid.rs` | adaptable; reference | FluidState::new is public and accepts any u8 amount; FluidShapeCache indexes directly from it, so amount >8 can panic/out-of-bounds. from_json also defaults missing falling to true for nonempty fluid; verify default-state semantics. |
+| 2480 | `crates/horizon-world/src/fluid_box.rs` | adaptable; reference | Assumes amount 0–8 and canonical fluid shape registry; callers can construct invalid FluidState unless constructor validates. |
+| 2481 | `crates/horizon-world/src/fluid_flow.rs` | adaptable; reference | Neighbor reads and fluid-family comparisons are callback-driven; tie and zero-vector handling need exact float parity. |
+| 2482 | `crates/horizon-world/src/fluid_occupancy.rs` | adaptable; reference | Uses state IDs as indexes into registry presence arrays; invalid IDs can panic. Chunk/section iteration and query budget are callback-sensitive. |
+| 2483 | `crates/horizon-world/src/fluid_shape.rs` | adaptable; reference | Indexing assumes amount <=8; invalid states can exceed the fixed table. |
+| 2484 | `crates/horizon-world/src/food.rs` | adaptable; reference | Effect RNG/callback order and food-level checks are external hooks; a callback error may leave earlier food mutation committed. |
+| 2485 | `crates/horizon-world/src/food_properties.rs` | adaptable; reference | Effect probability and numeric values are data-driven; malformed component shapes rely on decoder defaults/errors. |
+| 2486 | `crates/horizon-world/src/food_storage.rs` | adaptable; reference | Float comparisons and exhaustion carry are compatibility-sensitive; fields are public and may be externally inconsistent. |
 | 2487 | `crates/horizon-world/src/free_space.rs` | adaptable; reference | Only supplied candidate positions and collision provider policy are covered; no chunk-loading guarantee. |
 | 2488 | `crates/horizon-world/src/ground_support.rs` | adaptable; reference | Ground support may use a snapshot of entity position and block state; moving platform and unloaded-chunk behavior remain external. |
 | 2489 | `crates/horizon-world/src/heightmap.rs` | adaptable; reference | Packed bit width and section/minY offsets are version-sensitive; malformed or short long arrays may decode with fallback values rather than hard error. |
@@ -2949,7 +2962,6 @@
 | 2523 | `crates/horizon-world/src/level/interact.rs` | adaptable; reference; player-integration required | Block interaction routing and effects are comprehensive, but hit-slot inputs and empty-hand fallback require validation. |
 | 2524 | `crates/horizon-world/src/level/mod.rs` | adaptable; architectural reference | Defines the LevelAccess host boundary and event contract; numerous defaults can silently yield incorrect behavior if the host omits overrides. |
 | 2525 | `crates/horizon-world/src/level/orientation.rs` | adaptable; reference; redstone-experiment-gated | 48-context orientation mapping is compact and invertible by design; assertions and exact side-bias order need exhaustive verification. |
-
 | 2526 | `crates/horizon-world/src/level/pistons.rs` | adaptable; reference; entity-integration required | Preserve ordered piston move plans and block events; entity movement remains a host responsibility. |
 | 2527 | `crates/horizon-world/src/level/place.rs` | adaptable; reference; Forge-placement-hooks required | Placement covers many block families, but paired writes and Forge placement hooks need transactional parity. |
 | 2528 | `crates/horizon-world/src/level/portal.rs` | adaptable; reference; partial-write validation required | Portal frame detection is useful; multi-block placement refusal may leave partial state. |
@@ -3004,12 +3016,12 @@
 | 2577 | `crates/horizon-world/src/player_inventory.rs` | Rebuild 1.20.1 inventory/equipment layout and pre-component ItemStack; exclude Body/Saddle. | Player inventory slots, selected hotbar and shared equipment/stack references. |
 | 2578 | `crates/horizon-world/src/player_travel.rs` | Rebuild 1.20.1 Player.travel and swimming; check Forge overrides. | Player swimming and ability-flight adjustment around living travel. |
 | 2579 | `crates/horizon-world/src/powder_snow_collision.rs` | Verify 1.20.1 PowderSnowBlock/CollisionContext and tag semantics. | Context-dependent powder-snow collision shape and entity walkability. |
-| 2580 | `crates/horizon-world/src/registry_collision_scan.rs` | Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks. | Registry-bound collision scanning over resident chunks. |
-| 2581 | `crates/horizon-world/src/registry_fall_ray.rs` | Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown. | Registry-bound fall-reset ray behavior for reset blocks, portals and water. |
-| 2582 | `crates/horizon-world/src/registry_fluid.rs` | Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids. | Registry fluid contents, flow obstruction, ice membership and entity immersion. |
-| 2583 | `crates/horizon-world/src/registry/facts.rs` | Create a new 1.20.1 facts schema/data corpus; do not use 26.3 facts file. | Streaming deserializer for compact registry facts and shared state-property strings. |
-| 2584 | `crates/horizon-world/src/registry/json.rs` | Regenerate 1.20.1 property kinds and confirm target compact/full codec semantics. | Compact/full block-state JSON codec over a registry. |
-| 2585 | `crates/horizon-world/src/registry/snapshot.rs` | Version/hash-bind cache to 1.20.1 plus Forge and generated registry digest. | Compact registry snapshot format for states, shared strings, flags and lookup tables. |
+| 2580 | `crates/horizon-world/src/registry/facts.rs` | Create a new 1.20.1 facts schema/data corpus; do not use 26.3 facts file. | Streaming deserializer for compact registry facts and shared state-property strings. |
+| 2581 | `crates/horizon-world/src/registry/json.rs` | Regenerate 1.20.1 property kinds and confirm target compact/full codec semantics. | Compact/full block-state JSON codec over a registry. |
+| 2582 | `crates/horizon-world/src/registry/snapshot.rs` | Version/hash-bind cache to 1.20.1 plus Forge and generated registry digest. | Compact registry snapshot format for states, shared strings, flags and lookup tables. |
+| 2583 | `crates/horizon-world/src/registry_collision_scan.rs` | Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks. | Registry-bound collision scanning over resident chunks. |
+| 2584 | `crates/horizon-world/src/registry_fall_ray.rs` | Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown. | Registry-bound fall-reset ray behavior for reset blocks, portals and water. |
+| 2585 | `crates/horizon-world/src/registry_fluid.rs` | Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids. | Registry fluid contents, flow obstruction, ice membership and entity immersion. |
 | 2586 | `crates/horizon-world/src/retrogen.rs` | Rebuild 1.20.1 BelowZeroRetrogen, chunk statuses and dimension heights. | Below-zero retrogen metadata, bedrock masks, terrain transforms and biome resolution. |
 | 2587 | `crates/horizon-world/src/server_player_combat.rs` | Rebuild 1.20.1 ServerPlayer damage and Forge armor/damage event flow; enforce immutable schema. | Composed server-player hurt pipeline with synchronized health, armor and world services. |
 | 2588 | `crates/horizon-world/src/server_player_damage.rs` | Use 1.20.1 attribute set, damage reduction, exhaustion and Forge events. | Server-player inner damage bridge to armor, mitigation, health/absorption, food and stats. |
@@ -3025,14 +3037,3 @@
 | 2598 | `crates/horizon-world/src/synced_values.rs` | Rebuild 1.20.1 SynchedEntityData serializers, IDs and packet dirty behavior. | Generic synchronized values, dirty flags and observer callback semantics. |
 | 2599 | `crates/horizon-world/src/teleport_consume.rs` | Rebuild 1.20.1 chorus fruit/teleport and Forge event ordering; gate modern extras. | Random teleport consumable candidate generation, hook veto/mutation and success effects. |
 | 2600 | `crates/horizon-world/src/tick_data.rs` | Validate 1.20.1 ChunkSerializer saved tick schema and priority mapping. | NBT codec for saved scheduled block/fluid ticks. |
-
-
-## Ledger/Index correction — 2026-11-21
-
-- The first checkpoint registration read-back exposed a material mismatch: Index had advanced to 2,550 while Ledger still contained only 2401–2525. The 25 new Index rows were present but the 25 corresponding Ledger records had not been appended.
-- This was corrected before declaring the checkpoint complete. The corrective atomic six-document commit includes all 25 Ledger entries 2526–2550; the intended final structural state is 150 Ledger records and 2,550 sequential Index rows with matching paths/Decisions.
-- This correction note is retained as an audit trail; the first registration must not be treated as the final completed checkpoint.
-
-## Decision-alignment correction — 2026-11-21
-
-- Post-correction read-back found one remaining Index wording mismatch at 2536: the Index said `version-specific class-dispatch required`, while the Ledger's Decision was `target-version class-dispatch required`. The Index row has been normalized to the Ledger's exact Decision wording. No path or numbering changed.

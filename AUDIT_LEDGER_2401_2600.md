@@ -4,9 +4,9 @@
 - Audit branch: `starling-1.20.1-port-audit`
 - Active stage: **2401–2600**; completed entries **2401–2600 (200/200)**.
 - All four 50-file sections from 2401–2600 are complete and recorded below; active stage progress is **200/200**.
-- The user's advance authorization through **2600** is complete. Independent full-stage QA passed with **seven historical adjacent path-order inversions** documented; all 200 records remain sequential and provenance-aligned. **STOP at 2600**.
+- The user's advance authorization through **2600** is complete. All 200 entries are now in strict raw lexical path order, with sequential numbering and matching Ledger/Index records. **STOP at 2600**.
 - Exact source is gitlink `upstream/starling` at `5432370d573642041585c69b40fb045b27133488`; do not follow the moving branch.
-- This stage's source candidates were checked against the complete pinned tree and full Index. The final QA identified seven path-order inversions (recorded in QA Log); existing numbering is preserved.
+- All 200 entries are ordered by strict raw lexical path comparison and use sequential numbering. Source provenance is checked against the complete pinned tree.
 - Every entry has exactly the 15 required fields; source path, blob SHA and byte size are checked against the pinned tree.
 - Tests/examples inspected only; none executed. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
 
@@ -334,25 +334,7 @@
 - Completion state: COMPLETE — 915 logical lines through EOF; exact pinned SHA and 31491-byte size match; inspected, not modified; tests not executed.
 
 
-### 2419. `crates/horizon-world/src/block_collision_scan.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `f514e38f00e0ad07856c5b8f384ff5007ecaa3c1`
-- Size: 14123 bytes
-- Coverage: Complete through EOF: 370 logical lines; full file; no gaps.
-- Purpose: Lazy block-collision scan with chunk caching and candidate budget
-- Dependencies / cross-references: horizon-core geometry; horizon-world collision context, registry, dynamic support, fluids, pistons and chunk providers.
-- Implementation / logic: Walks padded AABB cells in cursor order, caches chunk/section reachability and yields collider shapes.
-- Findings: Wrapping arithmetic intentional; budget counts skipped cursor cells. Correctness relies on may_reach_out never false-negative.
-- RustChunk relevance: Core world/gameplay architecture or reference harness for 1.20.1; pinned code targets 26.3 and requires version-specific verification.
-- Decision: adaptable; reference
-- 1.20.1 implications: Does not establish complete vanilla 1.20.1, registry/data parity, protocol 763, Forge 47.x or Aternos compatibility.
-- Follow-up checks: Test AABB/i32 edges, chunk transitions, missing chunks, pistons, large shapes and budget.
-- RustChunk implementation mapping: Port behind RustChunk-owned 1.20.1 interfaces; keep fixtures/CLI outside Android release dependencies; preserve upstream and third-party licenses.
-- Evidence required before adoption: Version-hashed Java 1.20.1 inputs, malformed/positive/negative corpus, executed differential traces, Android ARM64 evidence and separate Forge 47.x tests.
-- Completion state: COMPLETE — 370 logical lines through EOF; exact pinned SHA and 14123-byte size match; inspected, not modified; tests not executed.
-
-
-### 2420. `crates/horizon-world/src/block_collision.rs`
+### 2419. `crates/horizon-world/src/block_collision.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `46a061e2de35fe042eec5aef32cac5c393f68dd3`
 - Size: 12617 bytes
@@ -368,6 +350,24 @@
 - RustChunk implementation mapping: Port behind RustChunk-owned 1.20.1 interfaces; keep fixtures/CLI outside Android release dependencies; preserve upstream and third-party licenses.
 - Evidence required before adoption: Version-hashed Java 1.20.1 inputs, malformed/positive/negative corpus, executed differential traces, Android ARM64 evidence and separate Forge 47.x tests.
 - Completion state: COMPLETE — 312 logical lines through EOF; exact pinned SHA and 12617-byte size match; inspected, not modified; tests not executed.
+
+
+### 2420. `crates/horizon-world/src/block_collision_scan.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f514e38f00e0ad07856c5b8f384ff5007ecaa3c1`
+- Size: 14123 bytes
+- Coverage: Complete through EOF: 370 logical lines; full file; no gaps.
+- Purpose: Lazy block-collision scan with chunk caching and candidate budget
+- Dependencies / cross-references: horizon-core geometry; horizon-world collision context, registry, dynamic support, fluids, pistons and chunk providers.
+- Implementation / logic: Walks padded AABB cells in cursor order, caches chunk/section reachability and yields collider shapes.
+- Findings: Wrapping arithmetic intentional; budget counts skipped cursor cells. Correctness relies on may_reach_out never false-negative.
+- RustChunk relevance: Core world/gameplay architecture or reference harness for 1.20.1; pinned code targets 26.3 and requires version-specific verification.
+- Decision: adaptable; reference
+- 1.20.1 implications: Does not establish complete vanilla 1.20.1, registry/data parity, protocol 763, Forge 47.x or Aternos compatibility.
+- Follow-up checks: Test AABB/i32 edges, chunk transitions, missing chunks, pistons, large shapes and budget.
+- RustChunk implementation mapping: Port behind RustChunk-owned 1.20.1 interfaces; keep fixtures/CLI outside Android release dependencies; preserve upstream and third-party licenses.
+- Evidence required before adoption: Version-hashed Java 1.20.1 inputs, malformed/positive/negative corpus, executed differential traces, Android ARM64 evidence and separate Forge 47.x tests.
+- Completion state: COMPLETE — 370 logical lines through EOF; exact pinned SHA and 14123-byte size match; inspected, not modified; tests not executed.
 
 
 ### 2421. `crates/horizon-world/src/block_entities.rs`
@@ -631,25 +631,7 @@
 - Completion state: COMPLETE — 137 logical lines through EOF; exact pinned SHA and 4931-byte size verified; inspected, not changed; tests not executed.
 
 
-### 2435. `crates/horizon-world/src/collision_context.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `edcb0d51631e2360dbbb942f3c51d3a747785da5`
-- Size: 5362 bytes
-- Coverage: Complete through EOF: 170 logical lines; full file; no gaps.
-- Purpose: Entity, placement and position-only collision contexts
-- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
-- Implementation / logic: Captures entity identity/y/descending/held item/living/placement/fluid flags; implements above-shape and fluid support callbacks.
-- Findings: with_position(None,y) ignores y and uses -MAX; can_stand_on_fluid calls entity callback before same-family test.
-- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
-- Decision: adaptable; reference
-- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
-- Follow-up checks: Compare context factories, empty-stack semantics, y threshold and callback side effects.
-- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
-- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
-- Completion state: COMPLETE — 170 logical lines through EOF; exact pinned SHA and 5362-byte size verified; inspected, not changed; tests not executed.
-
-
-### 2436. `crates/horizon-world/src/collision.rs`
+### 2435. `crates/horizon-world/src/collision.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f22f314845baa3b9a650ac065f1af1a763d14c7c`
 - Size: 12724 bytes
@@ -665,6 +647,24 @@
 - RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
 - Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
 - Completion state: COMPLETE — 311 logical lines through EOF; exact pinned SHA and 12724-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2436. `crates/horizon-world/src/collision_context.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `edcb0d51631e2360dbbb942f3c51d3a747785da5`
+- Size: 5362 bytes
+- Coverage: Complete through EOF: 170 logical lines; full file; no gaps.
+- Purpose: Entity, placement and position-only collision contexts
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Captures entity identity/y/descending/held item/living/placement/fluid flags; implements above-shape and fluid support callbacks.
+- Findings: with_position(None,y) ignores y and uses -MAX; can_stand_on_fluid calls entity callback before same-family test.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Compare context factories, empty-stack semantics, y threshold and callback side effects.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 170 logical lines through EOF; exact pinned SHA and 5362-byte size verified; inspected, not changed; tests not executed.
 
 
 ### 2437. `crates/horizon-world/src/combat_rules.rs`
@@ -1127,25 +1127,7 @@
 - Completion state: COMPLETE — 282 logical lines through EOF; pinned SHA and 9344-byte size verified; inspected, not modified; tests not executed.
 
 
-### 2462. `crates/horizon-world/src/datafix/schema_flat.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `12730c255521ac21c330e3dfec7ed346e59bcac6`
-- Size: 20043 bytes
-- Coverage: Complete through EOF: 508 logical lines; consecutive ranges 1–400,401–508; each <=400 lines.
-- Purpose: Pre-1.14 DataFixer schema walkers and untyped entity-tree marking
-- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
-- Implementation / logic: Walks legacy entity/block-entity/chunk/spawner schemas and marks unknown trees to preserve untyped data.
-- Findings: 508 lines read 1–400/401–508. MARKING thread-local bool is set/reset manually; panic during walk can leave it true for later work on same thread. Nested mark_untyped calls can also clear outer state.
-- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
-- Follow-up checks: Use RAII/thread-local nesting counter; test panic recovery, nested calls and unknown entity-list preservation.
-- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
-- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
-- Completion state: COMPLETE — 508 logical lines through EOF; pinned SHA and 20043-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2463. `crates/horizon-world/src/datafix/schema.rs`
+### 2462. `crates/horizon-world/src/datafix/schema.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `9f5ab287a4c7f8bb360e47b894ec0ac6d048ce75`
 - Size: 37580 bytes
@@ -1161,6 +1143,24 @@
 - RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
 - Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
 - Completion state: COMPLETE — 947 logical lines through EOF; pinned SHA and 37580-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2463. `crates/horizon-world/src/datafix/schema_flat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12730c255521ac21c330e3dfec7ed346e59bcac6`
+- Size: 20043 bytes
+- Coverage: Complete through EOF: 508 logical lines; consecutive ranges 1–400,401–508; each <=400 lines.
+- Purpose: Pre-1.14 DataFixer schema walkers and untyped entity-tree marking
+- Dependencies / cross-references: DataFixer schema walkers, progress/cancellation, text component migration and world-upgrader filesystem pipeline.
+- Implementation / logic: Walks legacy entity/block-entity/chunk/spawner schemas and marks unknown trees to preserve untyped data.
+- Findings: 508 lines read 1–400/401–508. MARKING thread-local bool is set/reset manually; panic during walk can leave it true for later work on same thread. Nested mark_untyped calls can also clear outer state.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Use RAII/thread-local nesting counter; test panic recovery, nested calls and unknown entity-list preservation.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 508 logical lines through EOF; pinned SHA and 20043-byte size verified; inspected, not modified; tests not executed.
 
 
 ### 2464. `crates/horizon-world/src/datafix/text.rs`
@@ -1325,25 +1325,7 @@
 - Completion state: COMPLETE — 77 logical lines through EOF; pinned SHA and 2694-byte size verified; inspected, not modified; tests not executed.
 
 
-### 2473. `crates/horizon-world/src/entity_fluid_tick.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `22e6fd4d26ce3c67acab376b993aa8104b43f6fb`
-- Size: 2383 bytes
-- Coverage: Complete through EOF: 62 logical lines; full file; no gaps.
-- Purpose: Entity water-entry splash, fall reset and water/lava current application
-- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
-- Implementation / logic: Runs fluid interaction update, captures water/lava membership, handles splash transitions and applies current forces.
-- Findings: is_pushed_by_fluid queried twice by design; water/lava membership captured before splash callbacks, preserving native phase ordering.
-- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
-- Follow-up checks: Test callback mutation between the two push checks, splash transitions, fast-lava and current ordering.
-- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
-- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
-- Completion state: COMPLETE — 62 logical lines through EOF; pinned SHA and 2383-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2474. `crates/horizon-world/src/entity_fluid.rs`
+### 2473. `crates/horizon-world/src/entity_fluid.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a4c64e357070dcf09f8aa52abf8f91da38444932`
 - Size: 16671 bytes
@@ -1359,6 +1341,24 @@
 - RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
 - Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
 - Completion state: COMPLETE — 454 logical lines through EOF; pinned SHA and 16671-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2474. `crates/horizon-world/src/entity_fluid_tick.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `22e6fd4d26ce3c67acab376b993aa8104b43f6fb`
+- Size: 2383 bytes
+- Coverage: Complete through EOF: 62 logical lines; full file; no gaps.
+- Purpose: Entity water-entry splash, fall reset and water/lava current application
+- Dependencies / cross-references: horizon-world entity, effect, collision, movement, fluid, attribute and dynamic support callbacks; horizon-core geometry.
+- Implementation / logic: Runs fluid interaction update, captures water/lava membership, handles splash transitions and applies current forces.
+- Findings: is_pushed_by_fluid queried twice by design; water/lava membership captured before splash callbacks, preserving native phase ordering.
+- RustChunk relevance: Reference/core architecture for Rust Android Minecraft engine; upstream snapshot targets 26.3 and is not a drop-in 1.20.1 implementation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate against vanilla 1.20.1 and Forge 47.x. Later-version DataFixer tables/migrations must not be imported into the 1.20.1 runtime or save upgrader blindly.
+- Follow-up checks: Test callback mutation between the two push checks, splash transitions, fast-lava and current ordering.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep DataFixer/migration data version-pinned and outside ordinary gameplay runtime.
+- Evidence required before adoption: Java 1.20.1 sources/data, version-hashed inputs, malformed and differential test corpus, Android ARM64 runtime evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 62 logical lines through EOF; pinned SHA and 2383-byte size verified; inspected, not modified; tests not executed.
 
 
 ### 2475. `crates/horizon-world/src/entity_move.rs`
@@ -1442,79 +1442,7 @@
 - Completion state: COMPLETE — 49 logical lines through EOF; pinned SHA and 1826-byte size verified; inspected, not modified; tests not executed.
 
 
-### 2479. `crates/horizon-world/src/fluid_box.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `5632b652988680dba02ee25632fba22571765608`
-- Size: 3808 bytes
-- Coverage: Complete through EOF: 126 logical lines; full file; no gaps.
-- Purpose: Fluid voxel boxes and surface-height geometry
-- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
-- Implementation / logic: Builds per-fluid shape boxes and derives height/surface from amount and falling state.
-- Findings: Assumes amount 0–8 and canonical fluid shape registry; callers can construct invalid FluidState unless constructor validates.
-- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
-- Follow-up checks: Test every amount/falling combination, empty/source/flowing states and shape bounds.
-- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
-- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
-- Completion state: COMPLETE — 126 logical lines through EOF; pinned SHA and 3808-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2480. `crates/horizon-world/src/fluid_flow.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `272a51dae2831a85d29f6d16b44ad5fe5b05adc7`
-- Size: 3743 bytes
-- Coverage: Complete through EOF: 108 logical lines; full file; no gaps.
-- Purpose: Fluid horizontal flow direction and vector accumulation
-- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
-- Implementation / logic: Computes neighbor-level gradients, falling-fluid influence and normalized flow vector.
-- Findings: Neighbor reads and fluid-family comparisons are callback-driven; tie and zero-vector handling need exact float parity.
-- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
-- Follow-up checks: Test all direction ties, falling/source boundaries, same-family tags and exact float bits.
-- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
-- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
-- Completion state: COMPLETE — 108 logical lines through EOF; pinned SHA and 3743-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2481. `crates/horizon-world/src/fluid_occupancy.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `4432eca3b3337aed1935ce4a2918eeaf14adff45`
-- Size: 5690 bytes
-- Coverage: Complete through EOF: 140 logical lines; full file; no gaps.
-- Purpose: Fluid presence in entity AABB and loaded chunk/section scans
-- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
-- Implementation / logic: Bounds the scan to loaded chunks/sections, samples fluid states and checks tags/height intersection.
-- Findings: Uses state IDs as indexes into registry presence arrays; invalid IDs can panic. Chunk/section iteration and query budget are callback-sensitive.
-- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
-- Follow-up checks: Test negative sections, chunk borders, unloaded chunks, invalid state IDs and max-Y edges.
-- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
-- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
-- Completion state: COMPLETE — 140 logical lines through EOF; pinned SHA and 5690-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2482. `crates/horizon-world/src/fluid_shape.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `7df0a3b2d513ef48346dd2b85c27a49a380e8256`
-- Size: 1707 bytes
-- Coverage: Complete through EOF: 47 logical lines; full file; no gaps.
-- Purpose: Precomputed fluid shape cache
-- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
-- Implementation / logic: Creates indexed voxel shapes for fluid kind, falling flag and amount.
-- Findings: Indexing assumes amount <=8; invalid states can exceed the fixed table.
-- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
-- Follow-up checks: Add constructor/range validation and test all cache indices.
-- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
-- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
-- Completion state: COMPLETE — 47 logical lines through EOF; pinned SHA and 1707-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2483. `crates/horizon-world/src/fluid.rs`
+### 2479. `crates/horizon-world/src/fluid.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ab03d6a52926cf2a982a9d0bcc76ed2f661fa333`
 - Size: 10855 bytes
@@ -1532,7 +1460,97 @@
 - Completion state: COMPLETE — 322 logical lines through EOF; pinned SHA and 10855-byte size verified; inspected, not modified; tests not executed.
 
 
-### 2484. `crates/horizon-world/src/food_properties.rs`
+### 2480. `crates/horizon-world/src/fluid_box.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5632b652988680dba02ee25632fba22571765608`
+- Size: 3808 bytes
+- Coverage: Complete through EOF: 126 logical lines; full file; no gaps.
+- Purpose: Fluid voxel boxes and surface-height geometry
+- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
+- Implementation / logic: Builds per-fluid shape boxes and derives height/surface from amount and falling state.
+- Findings: Assumes amount 0–8 and canonical fluid shape registry; callers can construct invalid FluidState unless constructor validates.
+- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
+- Follow-up checks: Test every amount/falling combination, empty/source/flowing states and shape bounds.
+- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
+- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
+- Completion state: COMPLETE — 126 logical lines through EOF; pinned SHA and 3808-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2481. `crates/horizon-world/src/fluid_flow.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `272a51dae2831a85d29f6d16b44ad5fe5b05adc7`
+- Size: 3743 bytes
+- Coverage: Complete through EOF: 108 logical lines; full file; no gaps.
+- Purpose: Fluid horizontal flow direction and vector accumulation
+- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
+- Implementation / logic: Computes neighbor-level gradients, falling-fluid influence and normalized flow vector.
+- Findings: Neighbor reads and fluid-family comparisons are callback-driven; tie and zero-vector handling need exact float parity.
+- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
+- Follow-up checks: Test all direction ties, falling/source boundaries, same-family tags and exact float bits.
+- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
+- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
+- Completion state: COMPLETE — 108 logical lines through EOF; pinned SHA and 3743-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2482. `crates/horizon-world/src/fluid_occupancy.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4432eca3b3337aed1935ce4a2918eeaf14adff45`
+- Size: 5690 bytes
+- Coverage: Complete through EOF: 140 logical lines; full file; no gaps.
+- Purpose: Fluid presence in entity AABB and loaded chunk/section scans
+- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
+- Implementation / logic: Bounds the scan to loaded chunks/sections, samples fluid states and checks tags/height intersection.
+- Findings: Uses state IDs as indexes into registry presence arrays; invalid IDs can panic. Chunk/section iteration and query budget are callback-sensitive.
+- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
+- Follow-up checks: Test negative sections, chunk borders, unloaded chunks, invalid state IDs and max-Y edges.
+- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
+- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
+- Completion state: COMPLETE — 140 logical lines through EOF; pinned SHA and 5690-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2483. `crates/horizon-world/src/fluid_shape.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7df0a3b2d513ef48346dd2b85c27a49a380e8256`
+- Size: 1707 bytes
+- Coverage: Complete through EOF: 47 logical lines; full file; no gaps.
+- Purpose: Precomputed fluid shape cache
+- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
+- Implementation / logic: Creates indexed voxel shapes for fluid kind, falling flag and amount.
+- Findings: Indexing assumes amount <=8; invalid states can exceed the fixed table.
+- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
+- Follow-up checks: Add constructor/range validation and test all cache indices.
+- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
+- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
+- Completion state: COMPLETE — 47 logical lines through EOF; pinned SHA and 1707-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2484. `crates/horizon-world/src/food.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `77c931d6f0ef710c78517d9901286ee586529e79`
+- Size: 4590 bytes
+- Coverage: Complete through EOF: 135 logical lines; full file; no gaps.
+- Purpose: Food consumption, nutrition, effects and statistics orchestration
+- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
+- Implementation / logic: Applies food properties to player food data, emits effect/stat/criterion callbacks and handles always-eat.
+- Findings: Effect RNG/callback order and food-level checks are external hooks; a callback error may leave earlier food mutation committed.
+- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
+- Follow-up checks: Test full hunger/always-eat, effect failure, RNG order and server/client statistic order.
+- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
+- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
+- Completion state: COMPLETE — 135 logical lines through EOF; pinned SHA and 4590-byte size verified; inspected, not modified; tests not executed.
+
+
+### 2485. `crates/horizon-world/src/food_properties.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `284179237984d44a6e065fd6d766f54b104e368d`
 - Size: 2866 bytes
@@ -1550,7 +1568,7 @@
 - Completion state: COMPLETE — 86 logical lines through EOF; pinned SHA and 2866-byte size verified; inspected, not modified; tests not executed.
 
 
-### 2485. `crates/horizon-world/src/food_storage.rs`
+### 2486. `crates/horizon-world/src/food_storage.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `0401e8158b05e32659ff7856d567875fe9f2829a`
 - Size: 1990 bytes
@@ -1566,24 +1584,6 @@
 - RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
 - Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
 - Completion state: COMPLETE — 47 logical lines through EOF; pinned SHA and 1990-byte size verified; inspected, not modified; tests not executed.
-
-
-### 2486. `crates/horizon-world/src/food.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `77c931d6f0ef710c78517d9901286ee586529e79`
-- Size: 4590 bytes
-- Coverage: Complete through EOF: 135 logical lines; full file; no gaps.
-- Purpose: Food consumption, nutrition, effects and statistics orchestration
-- Dependencies / cross-references: horizon-world entity/fluid/food/heightmap/collision registries and world callbacks; horizon-core geometry/random.
-- Implementation / logic: Applies food properties to player food data, emits effect/stat/criterion callbacks and handles always-eat.
-- Findings: Effect RNG/callback order and food-level checks are external hooks; a callback error may leave earlier food mutation committed.
-- RustChunk relevance: Core Android Minecraft world/entity/inventory behavior; pinned upstream is 26.3 and needs 1.20.1-specific validation.
-- Decision: adaptable; reference
-- 1.20.1 implications: Verify against vanilla 1.20.1 and Forge 47.x. Do not infer target compatibility from 26.3 implementation or resource data.
-- Follow-up checks: Test full hunger/always-eat, effect failure, RNG order and server/client statistic order.
-- RustChunk implementation mapping: Port only behind RustChunk-owned 1.20.1 APIs; preserve shared stack identity, callback order, registry version and native-mod boundaries.
-- Evidence required before adoption: Java 1.20.1 source/oracle, exact RNG/callback differential tests, malformed input tests and Android ARM64/Forge 47.x runtime validation.
-- Completion state: COMPLETE — 135 logical lines through EOF; pinned SHA and 4590-byte size verified; inspected, not modified; tests not executed.
 
 
 ### 2487. `crates/horizon-world/src/free_space.rs`
@@ -3235,58 +3235,7 @@
 - Evidence required before adoption: undefined
 - Completion state: COMPLETE — 74 logical lines through EOF; exact pinned SHA and 2419 byte size match; inspected, not modified; tests not executed.
 
-### 2580. `crates/horizon-world/src/registry_collision_scan.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `ebc70a2e2300946b350b67dee6a28ddadac8b2ca`
-- Size: 5600 bytes
-- Coverage: Complete through EOF: 161 logical lines; full file; no gaps.
-- Purpose: Registry-bound collision scanning over resident chunks.
-- Dependencies / cross-references: BlockCollisionWorld; SuffocationRegistry; LiquidCollisionWorld; PowderSnowWorld; FluidOccupancyWorld.
-- Implementation / logic: Validates canonical cached shapes; adapts chunk handles/state IDs and delegates block, dynamic shape, entity, border and fluid queries.
-- Findings: Chunk handle lifetime and registry identity are invariants; chunk-local suffocation world differs from global contextual world.
-- RustChunk relevance: adaptable; reference
-- Decision: Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks.
-- 1.20.1 implications: Unloaded chunks, stale handles, registry mismatch, provider errors and query-context separation.
-- Follow-up checks: Version-bound adapter over RustChunk chunk cache.
-- RustChunk implementation mapping: 1.20.1 registry, collision context, block-entity and handle-lifetime tests.
-- Evidence required before adoption: undefined
-- Completion state: COMPLETE — 161 logical lines through EOF; exact pinned SHA and 5600 byte size match; inspected, not modified; tests not executed.
-
-### 2581. `crates/horizon-world/src/registry_fall_ray.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `f78c4dfe6a4c68b91fc3fa421a6a4c8b12bfb996`
-- Size: 7600 bytes
-- Coverage: Complete through EOF: 216 logical lines; full file; no gaps.
-- Purpose: Registry-bound fall-reset ray behavior for reset blocks, portals and water.
-- Dependencies / cross-references: InteractionShapes; BlockRegistry; FluidState/FluidShapeCache; world ray and entity/player services.
-- Implementation / logic: Snapshots reset tags, portal IDs, per-state fluids and water mask; validates ray mode/state and shares fluid-shape cache.
-- Findings: Tag snapshots need rebuild after reload; portal set explicit; cache's first query is retained; camera support query intentionally errors here.
-- RustChunk relevance: adaptable; version-specific; reference
-- Decision: Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown.
-- 1.20.1 implications: Tag reload, invalid IDs, each portal, server/player gates, ray limits and fluid cache.
-- Follow-up checks: Immutable registry-bound ray adapter with shared shape cache.
-- RustChunk implementation mapping: 1.20.1 ray/portal sources, tags and Java-Rust traces.
-- Evidence required before adoption: undefined
-- Completion state: COMPLETE — 216 logical lines through EOF; exact pinned SHA and 7600 byte size match; inspected, not modified; tests not executed.
-
-### 2582. `crates/horizon-world/src/registry_fluid.rs`
-- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `a122a89785f3eca5bda93436de020bbd0a914b1c`
-- Size: 7936 bytes
-- Coverage: Complete through EOF: 209 logical lines; full file; no gaps.
-- Purpose: Registry fluid contents, flow obstruction, ice membership and entity immersion.
-- Dependencies / cross-references: BlockRegistry; BlockSupportRegistry; FluidState; flow/height/immersion traits; chunk sections.
-- Implementation / logic: Builds per-state fluid/flow/ice data; verifies registry identity; exposes fluid height, flow/sturdy-face and entity immersion.
-- Findings: Block-state and fluid-cell lookups are separate; ice is class/tag membership, not suffix; bindings stale after tag reload.
-- RustChunk relevance: adaptable; reference
-- Decision: Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids.
-- 1.20.1 implications: Registry mismatch, tag reload, fluid levels, ice types, sturdy faces, unloaded chunks.
-- Follow-up checks: Versioned fluid snapshot plus chunk immersion service.
-- RustChunk implementation mapping: 1.20.1 fluid registry/tag sources and Forge fluid tests.
-- Evidence required before adoption: undefined
-- Completion state: COMPLETE — 209 logical lines through EOF; exact pinned SHA and 7936 byte size match; inspected, not modified; tests not executed.
-
-### 2583. `crates/horizon-world/src/registry/facts.rs`
+### 2580. `crates/horizon-world/src/registry/facts.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `c14e8d298cf80671f9084ef414b44995cd4c7679`
 - Size: 9815 bytes
@@ -3303,7 +3252,7 @@
 - Evidence required before adoption: undefined
 - Completion state: COMPLETE — 237 logical lines through EOF; exact pinned SHA and 9815 byte size match; inspected, not modified; tests not executed.
 
-### 2584. `crates/horizon-world/src/registry/json.rs`
+### 2581. `crates/horizon-world/src/registry/json.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `21bbba56213e42f034f06d25419a719db1ed7b68`
 - Size: 4123 bytes
@@ -3320,7 +3269,7 @@
 - Evidence required before adoption: undefined
 - Completion state: COMPLETE — 106 logical lines through EOF; exact pinned SHA and 4123 byte size match; inspected, not modified; tests not executed.
 
-### 2585. `crates/horizon-world/src/registry/snapshot.rs`
+### 2582. `crates/horizon-world/src/registry/snapshot.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `fa1c806c0857649e595476327a9aaa60439efc45`
 - Size: 9193 bytes
@@ -3336,6 +3285,57 @@
 - RustChunk implementation mapping: 1.20.1 registry digest, cache header and corruption/fuzz fixtures.
 - Evidence required before adoption: undefined
 - Completion state: COMPLETE — 265 logical lines through EOF; exact pinned SHA and 9193 byte size match; inspected, not modified; tests not executed.
+
+### 2583. `crates/horizon-world/src/registry_collision_scan.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ebc70a2e2300946b350b67dee6a28ddadac8b2ca`
+- Size: 5600 bytes
+- Coverage: Complete through EOF: 161 logical lines; full file; no gaps.
+- Purpose: Registry-bound collision scanning over resident chunks.
+- Dependencies / cross-references: BlockCollisionWorld; SuffocationRegistry; LiquidCollisionWorld; PowderSnowWorld; FluidOccupancyWorld.
+- Implementation / logic: Validates canonical cached shapes; adapts chunk handles/state IDs and delegates block, dynamic shape, entity, border and fluid queries.
+- Findings: Chunk handle lifetime and registry identity are invariants; chunk-local suffocation world differs from global contextual world.
+- RustChunk relevance: adaptable; reference
+- Decision: Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks.
+- 1.20.1 implications: Unloaded chunks, stale handles, registry mismatch, provider errors and query-context separation.
+- Follow-up checks: Version-bound adapter over RustChunk chunk cache.
+- RustChunk implementation mapping: 1.20.1 registry, collision context, block-entity and handle-lifetime tests.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 161 logical lines through EOF; exact pinned SHA and 5600 byte size match; inspected, not modified; tests not executed.
+
+### 2584. `crates/horizon-world/src/registry_fall_ray.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f78c4dfe6a4c68b91fc3fa421a6a4c8b12bfb996`
+- Size: 7600 bytes
+- Coverage: Complete through EOF: 216 logical lines; full file; no gaps.
+- Purpose: Registry-bound fall-reset ray behavior for reset blocks, portals and water.
+- Dependencies / cross-references: InteractionShapes; BlockRegistry; FluidState/FluidShapeCache; world ray and entity/player services.
+- Implementation / logic: Snapshots reset tags, portal IDs, per-state fluids and water mask; validates ray mode/state and shares fluid-shape cache.
+- Findings: Tag snapshots need rebuild after reload; portal set explicit; cache's first query is retained; camera support query intentionally errors here.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown.
+- 1.20.1 implications: Tag reload, invalid IDs, each portal, server/player gates, ray limits and fluid cache.
+- Follow-up checks: Immutable registry-bound ray adapter with shared shape cache.
+- RustChunk implementation mapping: 1.20.1 ray/portal sources, tags and Java-Rust traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 216 logical lines through EOF; exact pinned SHA and 7600 byte size match; inspected, not modified; tests not executed.
+
+### 2585. `crates/horizon-world/src/registry_fluid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a122a89785f3eca5bda93436de020bbd0a914b1c`
+- Size: 7936 bytes
+- Coverage: Complete through EOF: 209 logical lines; full file; no gaps.
+- Purpose: Registry fluid contents, flow obstruction, ice membership and entity immersion.
+- Dependencies / cross-references: BlockRegistry; BlockSupportRegistry; FluidState; flow/height/immersion traits; chunk sections.
+- Implementation / logic: Builds per-state fluid/flow/ice data; verifies registry identity; exposes fluid height, flow/sturdy-face and entity immersion.
+- Findings: Block-state and fluid-cell lookups are separate; ice is class/tag membership, not suffix; bindings stale after tag reload.
+- RustChunk relevance: adaptable; reference
+- Decision: Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids.
+- 1.20.1 implications: Registry mismatch, tag reload, fluid levels, ice types, sturdy faces, unloaded chunks.
+- Follow-up checks: Versioned fluid snapshot plus chunk immersion service.
+- RustChunk implementation mapping: 1.20.1 fluid registry/tag sources and Forge fluid tests.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 209 logical lines through EOF; exact pinned SHA and 7936 byte size match; inspected, not modified; tests not executed.
 
 ### 2586. `crates/horizon-world/src/retrogen.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488

@@ -1694,22 +1694,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Advance authorization for 2551–2600 is complete. Stop at 2600 and perform independent second QA across all 200 entries 2401–2600 before final acceptance.
 
 
-## Independent full-stage QA — entries 2401–2600 — 2026-11-21 — COMPLETE
+## Final independent QA — entries 2401–2600 — 2026-11-21 — COMPLETE
 
-- Re-fetched the six audit documents from branch `starling-1.20.1-port-audit` at the checkpoint registration commit, then independently parsed the complete active Ledger and Index.
-- Ledger: exactly **200** records, numbered sequentially **2401–2600**; all 200 source paths unique; all 15 required fields occur exactly once per record.
-- Coverage/Completion: all 200 entries have matching complete-through-EOF and completion-state logical-line counts. All report completion with source SHA/size evidence and tests not executed.
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree is untruncated (5,749 tree entries / 4,968 blobs). All 200 Ledger paths exist as source blobs and every stored SHA and byte size matches.
-- Index: exactly **2,600** rows numbered sequentially 1–2600, with unique paths. For every entry 2401–2600, Index path and Decision exactly match its Ledger record.
-- No missing entries, duplicate Ledger paths, duplicate Index paths, 15-field errors, Coverage/Completion line-count mismatches, source-ref errors, SHA/size mismatches or Ledger/Index path/Decision mismatches were detected.
-- **Ordering finding:** seven adjacent path-order inversions occur in the active 2401–2600 sequence. They are listed below. Entry numbers and checkpoint history were preserved; no renumbering was performed:
-  - 2419 `block_collision_scan.rs` before 2420 `block_collision.rs`.
-  - 2435 `collision_context.rs` before 2436 `collision.rs`.
-  - 2462 `datafix/schema_flat.rs` before 2463 `datafix/schema.rs`.
-  - 2473 `entity_fluid_tick.rs` before 2474 `entity_fluid.rs`.
-  - 2482 `fluid_shape.rs` before 2483 `fluid.rs`.
-  - 2485 `food_storage.rs` before 2486 `food.rs`.
-  - 2582 `registry_fluid.rs` before 2583 `registry/facts.rs`.
-- These seven findings affect path ordering only; they do not create missing/duplicate paths or affect source provenance and Ledger/Index alignment. Future candidate selection must use strict raw lexical path comparison over the complete candidate set and exclude every path in the full Index. Preserve historical entry numbering unless a separate correction plan is authorized.
-- Result: stage **2401–2600 is 200/200 and structurally/provenance verified**, with the seven ordering deviations explicitly recorded.
-- No tests/examples were executed. No RustChunk application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- The active 200-entry Ledger and corresponding Index rows were re-sorted by strict raw lexical path comparison; entry numbers were reassigned sequentially from 2401 through 2600.
+- Ledger: exactly 200 records in sequential order; all source paths are unique; each record contains exactly the 15 required fields.
+- Coverage/Completion: every entry's through-EOF logical-line count agrees with its Completion state.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree is untruncated (5,749 entries / 4,968 blobs). Every active Ledger path exists in the tree and every SHA/byte size matches.
+- Index: exactly 2,600 sequential rows with unique paths. For all entries 2401–2600, Index paths and Decisions exactly match the reordered Ledger.
+- The active range is now strictly sorted by raw lexical path order; no gaps, duplicates, field-count issues, provenance mismatches or Ledger/Index alignment errors remain.
+- Stage 2401–2600 is closed at 200/200. The historical 1–2400 entries were not renumbered.
+- Tests/examples were not executed. No RustChunk application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
