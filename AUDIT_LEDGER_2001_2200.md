@@ -3,9 +3,9 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **25/200**. Checkpoint **2001–2025 complete and closed**; checkpoint **2026–2050 authorized**.
-- One-time expanded authorization: entries **2001–2100 only**, comprising sections 2001–2050 and 2051–2100. The second 50-file section is pre-authorized; no mid-section permission request is needed at 2050.
-- Cadence unchanged: exact checkpoints of 25 files, boundary reports at every 50 files, and a stop at **2100**. Entries 2101–2200 are not authorized.
+- Current progress: **50/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
+- One-time expanded authorization: entries **2001–2100 only**, comprising sections 2001–2050 and 2051–2100. Both 50-file sections 2001–2050 and 2051–2100 are covered by the user's one-time authorization; no mid-section permission request is needed at 2050.
+- Cadence unchanged: exact checkpoints of 25 files, boundary reports at every 50 files; continue through 2100 then stop. Entries 2101–2200 are not authorized.
 - Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
 
@@ -434,3 +434,436 @@
 - RustChunk implementation mapping: Optional sample after RustChunk sky API defined.
 - Evidence required before adoption: Golden screenshots and stage-order tests on desktop/Android.
 - Completion state: COMPLETE — full content read through EOF; source SHA and exact byte size match the pinned recursive tree; embedded tests/examples were inspected only and not executed.
+
+### 2026. `crates/horizon-shader-api/tests/check.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9cd377627b0b455a9fb264184cc79f85bb679c9d`
+- Size: 9294 bytes; 261 logical lines
+- Coverage: 1–261 (EOF)
+- Purpose: Tests horizon-shader-api's WGSL validation, stage composition, diagnostics, texture budgets and material/vertex behavior.
+- Dependencies / cross-references: Pack, Pack::from_files, check, Problem, StageKind, Naga WGSL validation.
+- Implementation / logic: The shader-pack check suite exercises valid packs, diagnostics, stage composition, texture-read budgets and material/vertex interfaces.
+- Findings: The budget case generates 70 textureLoad calls; no case exercises ImageGather, leaving the checker accounting gap unguarded. Tests are not a runtime proof.
+- RustChunk relevance: Useful as test design only; it exposes a missing texture-read budget regression case, not a runtime feature.
+- Decision: reference; WGSL checker test coverage; test-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Add ImageGather/GatherCmp budget cases, malformed packs, oversized files, deep calls and helper-chain regression coverage; retain diagnostics assertions.
+- RustChunk implementation mapping: Do not port test code; copy the missing negative cases into RustChunk shader-checker tests after a checker exists.
+- Evidence required before adoption: Budget tests must cover sample/gather/load/store combinations and demonstrate deterministic diagnostics; no execution evidence exists yet.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2027. `crates/horizon-shader-api/tests/reference.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6f9709123efd171b166dc526a34a50640c8d081f`
+- Size: 4531 bytes; 125 logical lines
+- Coverage: 1–125 (EOF)
+- Purpose: Checks WGSL stage preludes, Frame layout parity, sample pack compilation and generated reference documentation.
+- Dependencies / cross-references: Frame, StageKind, Pack, compose, generated `docs/api/shaders-reference.md`, Naga.
+- Implementation / logic: Compiles representative stage preludes, compares Frame WGSL size/member offsets to Rust offsets, checks sample-stage composition and generated-doc freshness.
+- Findings: Layout checks size and offsets but not a complete field-type/interface contract; Naga validation does not establish Android backend correctness.
+- RustChunk relevance: Useful as a pattern for checking Rust/WGSL layout and source diagnostics; no renderer execution.
+- Decision: reference; Naga shader-layout tests; test-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Assert every Frame member's WGSL type/alignment as well as offset/size; compare SPIR-V/Vulkan and Android backend output.
+- RustChunk implementation mapping: Use compile-time/host tests for Rust GPU structures, then device-specific backend and rendering comparisons.
+- Evidence required before adoption: Field-by-field ABI comparison, target-backend compilation and Android GPU validation are required before relying on layout parity.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2028. `crates/horizon-shader-api/tests/samples/schema-1/common.wgsl`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8fef8baf9e3866e2261fadcdfdda7ded3630be8b`
+- Size: 92 bytes; 3 logical lines
+- Coverage: 1–3 (EOF)
+- Purpose: Provides a minimal shared WGSL luminance function for the schema-1 sample pack.
+- Dependencies / cross-references: WGSL built-ins and shared shader include list in the sample manifest.
+- Implementation / logic: Defines Rec.709 luminance as a weighted dot product over RGB.
+- Findings: Math is generic, but color-space and input-linearization assumptions belong to the calling renderer.
+- RustChunk relevance: Generic luminance math may be reused only after matching linear-color conventions.
+- Decision: adaptable; generic luminance math; sample-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Check against the target renderer's linear/sRGB contract and known vanilla luminance fixtures.
+- RustChunk implementation mapping: Reuse only the weighted RGB formula if RustChunk's renderer input is already linear and matches the same convention.
+- Evidence required before adoption: Vanilla color-space reference images and unit tests for known RGB values.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2029. `crates/horizon-shader-api/tests/samples/schema-1/horizon-shaders.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `77211047f2dc68fb687ae8e66fdcae8d7671ad83`
+- Size: 1213 bytes; 76 logical lines
+- Coverage: 1–76 (EOF)
+- Purpose: Provides the schema-1 sample manifest consumed by the parser and pack tests.
+- Dependencies / cross-references: Schema-1 Manifest parser, sample WGSL files, reflection/shadow/material/tag/option schema.
+- Implementation / logic: Declares sample pack identity, shared WGSL, sky/material/post stages, options, reflection, shadow, tags and GPU budget.
+- Findings: Header claims every schema-1 key, but this fixture omits several optional schema features covered elsewhere by tests; it is not a complete conformance fixture.
+- RustChunk relevance: Useful as a sample fixture pattern, not as a Minecraft resource-pack schema.
+- Decision: reference; schema-1 manifest fixture; sample-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Make the fixture genuinely complete or narrow its header claim; test every schema key and reject undocumented keys.
+- RustChunk implementation mapping: Use only as a test fixture after a separate RustChunk shader manifest is specified.
+- Evidence required before adoption: Schema conformance suite proving the sample covers every claimed key and version.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2030. `crates/horizon-shader-api/tests/samples/schema-1/material.wgsl`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `eed97590e73580486564e8793b5be07ad2eba5e4`
+- Size: 564 bytes; 12 logical lines
+- Coverage: 1–12 (EOF)
+- Purpose: Implements the sample material function for terrain-like surfaces and optional fluid reflections.
+- Dependencies / cross-references: MaterialInput, Surface, Horizon WGSL prelude, reflection texture/sampler and frame flags.
+- Implementation / logic: Combines albedo, tint and lightmap, adds luminance modulation and optionally samples a reflection texture for fluid faces.
+- Findings: Uses Horizon MaterialInput/Surface fields and reflection bindings; fluid/face IDs and lighting semantics are not Minecraft 1.20.1 contracts.
+- RustChunk relevance: Surface composition is a renderer feature that must be rebuilt around the target game's actual data.
+- Decision: rewrite required; material stage function; Horizon-specific
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Reconstruct MaterialInput/Surface and fluid/face semantics from 1.20.1; test opaque, cutout, translucent and fluids.
+- RustChunk implementation mapping: Rebuild against a target-version `MaterialInput` contract; never copy the WGSL fields or IDs directly.
+- Evidence required before adoption: 1.20.1 Java/client source, modded-fluid integration fixtures and pixel-level render comparisons.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2031. `crates/horizon-shader-api/tests/samples/schema-1/post/grade.wgsl`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8daa1eab00ccb5d1ec0bcf74cfa7656d43ace094`
+- Size: 293 bytes; 8 logical lines
+- Coverage: 1–8 (EOF)
+- Purpose: Implements sample post-process saturation and tone mapping.
+- Dependencies / cross-references: PostInput, luminance helper, saturation and tonemap options.
+- Implementation / logic: Mixes luminance with source color using saturation and applies a tone-map branch.
+- Findings: The declared choice has three values, but `tonemap > 0` selects the same branch for both nonzero choices; Soft and Filmic are not distinguished.
+- RustChunk relevance: Color-grading math is an optional renderer feature, not vanilla gameplay behavior.
+- Decision: adaptable; post-process color grading; renderer-specific
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Implement each tonemap choice distinctly or reduce the declared choices; test linear/sRGB and alpha preservation.
+- RustChunk implementation mapping: Optional post-process pass once color-space and render graph are stable.
+- Evidence required before adoption: Distinct outputs for all declared choices plus image comparison on target backends.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2032. `crates/horizon-shader-api/tests/samples/schema-1/post/vignette.wgsl`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `84f7261cbc8c267a4e28766a5f362e40a9c06651`
+- Size: 287 bytes; 8 logical lines
+- Coverage: 1–8 (EOF)
+- Purpose: Implements sample post-process vignette darkening.
+- Dependencies / cross-references: PostInput, vignette and samples options, frame UV/color.
+- Implementation / logic: Darkens the image toward the corners behind a boolean option.
+- Findings: The manifest declares `samples`, but this shader never reads it; UV/color conventions are renderer-specific.
+- RustChunk relevance: Vignette is optional post-processing and unrelated to gameplay correctness.
+- Decision: adaptable; vignette post-process; renderer-specific
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Remove or consume the unused samples option; compare edge falloff and UV origin against renderer images.
+- RustChunk implementation mapping: Optional post-process shader only after renderer UV conventions are defined.
+- Evidence required before adoption: Image comparison with option on/off, multiple resolutions and UV origins.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2033. `crates/horizon-shader-api/tests/samples/schema-1/README.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a8ad4583b073b0ed8d14e9b48552c64919ac005f`
+- Size: 89 bytes; 1 logical lines
+- Coverage: 1–1 (EOF)
+- Purpose: Documents which tests consume the schema-1 sample files.
+- Dependencies / cross-references: tests/schema.rs and tests/reference.rs in horizon-shader-api.
+- Implementation / logic: Identifies the schema-1 fixture as input to schema and stage-reference tests.
+- Findings: Documentation is one line and does not describe the broader schema or prove compatibility.
+- RustChunk relevance: Documentation fixture only.
+- Decision: reference; shader fixture documentation; test-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Keep the README synchronized with the test fixture and actual schema.
+- RustChunk implementation mapping: Use as a reference for shader feature documentation.
+- Evidence required before adoption: Docs/test fixture diff and generated documentation check.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2034. `crates/horizon-shader-api/tests/samples/schema-1/sky.wgsl`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `55ca0ac1d6e0516a908ab8c857b7614d12c75d92`
+- Size: 65 bytes; 3 logical lines
+- Coverage: 1–3 (EOF)
+- Purpose: Implements the sample sky stage as a passthrough.
+- Dependencies / cross-references: SkyInput and Horizon sky-stage WGSL prelude.
+- Implementation / logic: Returns the supplied sky input color unchanged.
+- Findings: Only demonstrates function shape; sky color, cloud, sun and fog composition are Horizon-specific.
+- RustChunk relevance: Demonstrates a trivial stage signature only.
+- Decision: adaptable; sky pass passthrough; sample-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Test sky composition, weather, fog and overlays against 1.20.1 screenshots before reuse.
+- RustChunk implementation mapping: Use only to test shader stage interfaces after the sky pipeline is specified.
+- Evidence required before adoption: Target-version sky pass capture and weather/fog ordering tests.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2035. `crates/horizon-shader-api/tests/schema.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7a5a9970973112b6e8b4bb7e64c39ab48d8c3353`
+- Size: 23055 bytes; 664 logical lines
+- Coverage: 1–400; 401–664 (EOF)
+- Purpose: Exercises the schema-1 parser, validation rules, textures, package creation and read-back.
+- Dependencies / cross-references: Manifest, Pack, PageItem, OptionKind, ZIP/PNG helpers and test temp dirs.
+- Implementation / logic: Covers schema keys, validation failures, options, material/tag/light rules, pages, textures, PNG decoding, ZIP packaging and round-trip behavior.
+- Findings: Tests use PID-derived temporary directory names and remove them recursively; collision/isolation should be considered. No tests were run.
+- RustChunk relevance: Useful as validation-test ideas; tests do not establish cross-version compatibility.
+- Decision: reference; manifest and package validation tests; test-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Add isolation-safe temp dirs and package corruption/resource-limit cases; run only with separate authorization.
+- RustChunk implementation mapping: Translate selected parser edge cases into RustChunk tests; never import the fixture's Horizon schema as the game's resource format.
+- Evidence required before adoption: Adversarial manifest/ZIP/PNG tests, temp isolation and clean test-run evidence.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2036. `crates/horizon-shader-api/tests/sdk.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ef69a88a010922b3fc4fcc4f5724f70e63ec2bb4`
+- Size: 3477 bytes; 92 logical lines
+- Coverage: 1–92 (EOF)
+- Purpose: Exercises the shader SDK CLI and template/package workflow end to end.
+- Dependencies / cross-references: Pack, check, horizon-shader executable, CLI commands and temporary filesystem.
+- Implementation / logic: Exercises example pack validation, template generation, CLI check JSON and package round-trip through the built executable.
+- Findings: Subprocess output is captured without an explicit timeout or output cap; tests are host-only and were inspected, not executed.
+- RustChunk relevance: Useful as host-side CLI test organization, not Android app functionality.
+- Decision: reference; shader CLI integration tests; host-only
+- 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
+- Follow-up checks: Add subprocess timeout, output bounds and deterministic locale/platform tests; inspect CLI failure cleanup.
+- RustChunk implementation mapping: Mirror host-tool integration tests in RustChunk's independent shader SDK, with controlled temp paths and process limits.
+- Evidence required before adoption: Host CI on supported OSes, timeout/output cap tests and CLI exit-code evidence.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2037. `crates/horizon-shaders/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fe81875160424f3e6795bc7676a5fcd103c18a20`
+- Size: 727 bytes; 21 logical lines
+- Coverage: 1–21 (EOF)
+- Purpose: Declares the separate GLSL shader-pack reader/translator crate and its dependencies.
+- Dependencies / cross-references: Workspace Rust settings, horizon-core, Naga 30.0.1, half, PNG and ZIP.
+- Implementation / logic: Declares the separate `horizon-shaders` crate with Naga GLSL/WGSL input, PNG and ZIP dependencies under Rust 1.85.
+- Findings: Naga 30.0.1 and this dependency graph are tied to the pinned Starling workspace, not automatically suitable for Android or Java 1.20.1.
+- RustChunk relevance: Dependency choices are research input only; build/size/Android support must be checked independently.
+- Decision: reference; GLSL shaderpack dependencies; version-specific
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Check licenses, dependency graph, Naga backend support, native Android build footprint and ABI impact before adoption.
+- RustChunk implementation mapping: Choose versions only after Android ARM64 builds and dependency/licence audit; don't copy the manifest wholesale.
+- Evidence required before adoption: Android ARM64 dependency builds, APK size/memory measurements, licences and backend compatibility.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2038. `crates/horizon-shaders/examples/pack_report.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8b686b63b029a8f85f3a065251a35dc3566bdf5c`
+- Size: 18442 bytes; 505 logical lines
+- Coverage: 1–400; 401–505 (EOF)
+- Purpose: Reports which programs in a shader pack translate under synthetic Horizon pipeline inputs.
+- Dependencies / cross-references: horizon-shaders Pack/Properties/Macros, GameInputs, load_post, Naga SPIR-V writer.
+- Implementation / logic: Discovers packs, loads programs for dimension folders, groups translation failures, optionally prints programs, stress variants and SPIR-V results.
+- Findings: `--example N` prints at most one sample per cause; invalid `--dims` tokens are silently dropped; backend check examines only the first entry point; synthetic game inputs approximate rather than prove actual pipeline compatibility.
+- RustChunk relevance: Useful for offline shader-pack diagnostics, not runtime proof of the Android Vulkan pipeline.
+- Decision: reference; shader-pack diagnostic report tool; host-only
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Make --example behavior match help, reject invalid dimensions/arguments, test all entry points and derive real pipeline inputs.
+- RustChunk implementation mapping: An offline troubleshooting utility could be designed later; not part of the Android render loop.
+- Evidence required before adoption: Real packs and real pipeline input captures; every entry point and stress dimension verified.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2039. `crates/horizon-shaders/src/biomes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c9ede57e0a33a9281cb7486a2c019a31278c9e26`
+- Size: 5318 bytes; 159 logical lines
+- Coverage: 1–159 (EOF)
+- Purpose: Provides shader-pack biome constants, category inference and precipitation values.
+- Dependencies / cross-references: horizon-core version, biome registry identifiers and shader custom uniform constants.
+- Implementation / logic: Builds CAT/PPT/BIOME constants from an ordered biome list, maps legacy names, infers categories by name substrings and applies the 0.15 precipitation threshold.
+- Findings: Substring categories can misclassify modded/new names; exact biome registry ordering, legacy replacements, categories and temperature rule must come from 1.20.1 data.
+- RustChunk relevance: Potential shader compatibility extension only after exact 1.20.1 registry/category mappings.
+- Decision: rewrite required; biome category and precipitation constants; version-specific
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Use the exact 1.20.1 biome registry order, legacy map, category data and precipitation oracle; include modded biome fallback rules.
+- RustChunk implementation mapping: Implement a data-driven 1.20.1 adapter from vanilla registry data and verify with a Java oracle.
+- Evidence required before adoption: Java 1.20.1 registry oracle for every biome and precipitation threshold, including modded biomes.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2040. `crates/horizon-shaders/src/block_ids.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6ebcf6d992c0d0f2731c5b3fac20e5f2b7ce1734`
+- Size: 5927 bytes; 151 logical lines
+- Coverage: 1–151 (EOF)
+- Purpose: Parses shader-pack block/entity/item ID declarations and optional block-state filters.
+- Dependencies / cross-references: Properties parser, resource names and shader-pack block/entity/item configuration files.
+- Implementation / logic: Parses `block.<id>` style names and conjunctive state filters, prefers more filters, and exports plain entity/item IDs.
+- Findings: No identifier or ID-range validation; malformed/empty filters can be accepted; `%tag` expansion is absent and note wording is block-specific for all kinds.
+- RustChunk relevance: Useful for shaderpack-defined IDs after connecting to real 1.20.1 block-state/registry data.
+- Decision: adaptable; block state and entity/item ID rules; optional shaderpack extension
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Validate resource identifiers, signed/range-bounded IDs and filter grammar; implement tag expansion and registry-backed matching.
+- RustChunk implementation mapping: Map names through 1.20.1 registries and blockstate properties; keep separate from core vanilla IDs.
+- Evidence required before adoption: Registry and blockstate differential fixtures, malformed identifier fuzzing and tag semantics tests.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2041. `crates/horizon-shaders/src/condition.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e872f415fde53fbea100dc9c35edb9ac228f4e2d`
+- Size: 13963 bytes; 406 logical lines
+- Coverage: 1–400; 401–406 (EOF)
+- Purpose: Evaluates preprocessor conditional arithmetic and nested conditional directives.
+- Dependencies / cross-references: Macros lexer/expander, C-like operators, conditional directive stack.
+- Implementation / logic: Evaluates C-like `#if` arithmetic, defined(), nested conditionals and macro-expanded identifiers.
+- Findings: No short-circuit for &&/||; macro-expanded float values can be evaluated with integer division; #ifdef/#ifndef ignores extra tokens and can accept a missing name. Integer precision/overflow also diverges from C.
+- RustChunk relevance: Potential shaderpack conditional compatibility, but requires a real C/GLSL differential test suite.
+- Decision: adaptable; GLSL #if evaluator; optional shaderpack extension
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Implement short-circuit, macro float semantics, strict ifdef syntax, integer overflow semantics and differential tests against a C preprocessor.
+- RustChunk implementation mapping: Separate the shaderpack preprocessor from Minecraft protocol/game simulation; adopt only after differential conformance.
+- Evidence required before adoption: Differential tests against a reference C/GLSL preprocessor over a broad condition corpus and adversarial resource limits.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2042. `crates/horizon-shaders/src/config.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2fbf536fe43403a96859464d4a149bb93f7f1e86`
+- Size: 20257 bytes; 575 logical lines
+- Coverage: 1–400; 401–575 (EOF)
+- Purpose: Reads shader-pack render-target and shadow-map configuration from preprocessed GLSL.
+- Dependencies / cross-references: Preprocessed source, Properties/Pack, GLSL constant declarations and comment origins.
+- Implementation / logic: Reads DRAWBUFFERS/RENDERTARGETS comments, colortex formats/clear/mipmap settings and shadow constants after preprocessing.
+- Findings: Shadow settings do not consistently validate declared GLSL types, non-finite/range values can pass silently, and DRAWBUFFERS accepts out-of-range single digits 8/9.
+- RustChunk relevance: Potential optional render-target config reader, separate from chunk/world core.
+- Decision: adaptable; render-target and shadow config parser; renderer-specific
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Validate all supported GLSL types, finite numeric ranges, buffer index bounds and malformed directive fallback; test against OptiFine/Iris fixtures.
+- RustChunk implementation mapping: Keep shaderpack render-target settings in an optional rendering subsystem with explicit GPU capability checks.
+- Evidence required before adoption: Known shader-pack corpus comparisons, invalid-range fuzzing and device render-target capability validation.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2043. `crates/horizon-shaders/src/core_shader.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8a4f96db86e7efff3ba27705f6b3372a044daa99`
+- Size: 27257 bytes; 653 logical lines
+- Coverage: 1–400; 401–653 (EOF)
+- Purpose: Translates vanilla resource-pack core vertex/fragment GLSL into validated Naga modules.
+- Dependencies / cross-references: Naga GLSL frontend/validator, Glue, include callback, Horizon core shader uniform blocks.
+- Implementation / logic: Expands includes, strips comments, rewrites uniforms/samplers/attributes/varyings and validates paired vertex/fragment modules through Naga.
+- Findings: Hardcoded 26.3 uniform blocks and samplers; angle-bracket include paths are not traversal-normalized; fragment/vertex interfaces compare locations but not types/interpolation; line-oriented declaration parsing omits complex GLSL forms.
+- RustChunk relevance: Potential reference for a future Minecraft core shader bridge, but full 1.20.1 shader contracts must be reconstructed.
+- Decision: rewrite required; vanilla core GLSL translation; Minecraft 26.3-specific
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Add path normalization for all include forms, full GLSL declaration parsing, varying type/interpolation checks and 1.20.1 vanilla shader fixtures.
+- RustChunk implementation mapping: Treat the code as a structural reference only; build a new 1.20.1 shader bridge with exact vanilla uniform/binding contracts.
+- Evidence required before adoption: 1.20.1 vanilla core-shader source corpus, include security tests, varying ABI checks and cross-backend output.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2044. `crates/horizon-shaders/src/custom.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `671750e516c3c4d0727d09c666efce250a8e8f39`
+- Size: 28364 bytes; 720 logical lines
+- Coverage: 1–400; 401–720 (EOF)
+- Purpose: Parses and evaluates custom shader-pack uniforms and variables, including vector math and stateful functions.
+- Dependencies / cross-references: Properties, Macros, biome constants, builtin GameInputs and frame delta.
+- Implementation / logic: Parses file-ordered custom uniforms/variables, vector/scalar arithmetic, builtin calls, biome constants, deterministic random and smooth state.
+- Findings: `if`/`ifb` eagerly evaluate every branch, `in()` with no arguments can panic, Val::vector accepts unchecked component counts, and expression depth/argument counts are uncapped.
+- RustChunk relevance: Potential optional shaderpack custom-uniform runtime; correctness and resource limits need fixing first.
+- Decision: adaptable; custom expression evaluator; optional shaderpack extension
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Make conditional functions lazy, validate arity and component bounds, cap expression depth/arguments and define divide-by-zero behavior.
+- RustChunk implementation mapping: Keep custom expressions sandboxed and bounded in a separate optional subsystem.
+- Evidence required before adoption: Fuzzed expressions, no-panic guarantees, bounded CPU/memory, eager-vs-lazy behavior fixtures and Iris 1.11.7 differential evidence.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2045. `crates/horizon-shaders/src/discover.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7d01d41b33a01a7c762fffb1e77a69abf8ba079a`
+- Size: 2888 bytes; 82 logical lines
+- Coverage: 1–82 (EOF)
+- Purpose: Discovers available shader-pack folders and ZIP files in a directory.
+- Dependencies / cross-references: Filesystem read_dir, Path, Pack::open and ZIP/folder metadata.
+- Implementation / logic: Lists visible folders and ZIP files, probes each with Pack::open and sorts by case-insensitive name.
+- Findings: read_dir errors are silently converted to an empty result; probing every ZIP reads the full archive into memory; symlink folders/ZIPs can point outside the selected directory.
+- RustChunk relevance: Potential launcher UI shaderpack discovery, with safe path and archive handling.
+- Decision: adaptable; shader-pack discovery; host-only
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Report unreadable directories distinctly, bound pack probe sizes/counts and reject symlink escapes.
+- RustChunk implementation mapping: Provide a sandboxed shader-pack browser/selector; never let pack paths escape the selected import location.
+- Evidence required before adoption: Permission/symlink tests, large directory stress, unreadable folder behavior and bounded archive probes.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2046. `crates/horizon-shaders/src/lang.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `394727ce8b3edccbdb1daac12eafa0f6947c8c3e`
+- Size: 2655 bytes; 81 logical lines
+- Coverage: 1–81 (EOF)
+- Purpose: Loads shader-pack .lang localization files with English fallback.
+- Dependencies / cross-references: Pack::list/read_text and locale file names under `lang/`.
+- Implementation / logic: Loads English then the selected locale case-insensitively, preserving section formatting codes and allowing locale entries to override English.
+- Findings: Simple key=value parsing has no escape/continuation handling and duplicate keys silently use the last value; this is not Minecraft's general resource-language system.
+- RustChunk relevance: Localization fallback pattern only; Minecraft resource translation has a broader format.
+- Decision: adaptable; localization fallback utility; portable
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Test duplicate locale files, malformed UTF-8, empty keys, newline handling and target resource-bundle precedence.
+- RustChunk implementation mapping: Use as a small locale-overlay helper only, not as the client localization backend without adaptation.
+- Evidence required before adoption: Locale precedence against the target resource loader and malformed/duplicate translation fixtures.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2047. `crates/horizon-shaders/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ef16db4b58441a4369e5fec34723a44048e790a9`
+- Size: 3367 bytes; 70 logical lines
+- Coverage: 1–70 (EOF)
+- Purpose: Defines the public module/export surface of the horizon-shaders crate.
+- Dependencies / cross-references: All crate modules: pack, options, properties, preprocess, translate, post, textures, custom, etc.
+- Implementation / logic: Exports pack, options, properties, GLSL translation, custom uniforms, textures, render-target settings, localization and post-program types.
+- Findings: The crate documentation states it knows nothing of wgpu and targets a Horizon clean-room shader-pack specification; this export surface is not a Minecraft client API.
+- RustChunk relevance: Useful architecture map for optional shader support only.
+- Decision: reference; shaderpack crate public API map; module-boundary only
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Keep this module map synchronized when features are added; no independent implementation adoption is implied.
+- RustChunk implementation mapping: Treat exports as an index of optional Starling shaderpack components, not a RustChunk crate architecture.
+- Evidence required before adoption: Explicit architecture decision document and a separately scoped, tested shader subsystem.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2048. `crates/horizon-shaders/src/macros.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `48038cd8efebfb21ad955ece411d94562eb4ae00`
+- Size: 18751 bytes; 489 logical lines
+- Coverage: 1–400; 401–489 (EOF)
+- Purpose: Implements object-like and function-like shader macros plus renderer/version feature defines.
+- Dependencies / cross-references: Macros BTreeMap, lex, token parsing, properties and Horizon/Iris compatibility constants.
+- Implementation / logic: Provides MC_VERSION, render-stage and Iris feature macros, object/function macro expansion, token pasting and recursion hiding.
+- Findings: Expansion depth/output are unbounded; function macro arity is not validated; supported features named only as required are not defined as IRIS_FEATURE_*; defaults hardcode MC 26.3/Iris 1.11.7.
+- RustChunk relevance: Potential shaderpack preprocessor layer, after conformance and resource-bound hardening.
+- Decision: adaptable; GLSL macro compatibility layer; optional shaderpack extension
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Define supported feature semantics for both optional and required declarations; validate macro names/arity and cap recursive expansion/output.
+- RustChunk implementation mapping: Keep a bounded macro-expansion layer for optional shaderpack compatibility, isolated from normal game resource parsing.
+- Evidence required before adoption: Macro corpus differential tests, bounded recursive-expansion tests, required/optional feature tests and exact target-version defines.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2049. `crates/horizon-shaders/src/options.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a4e95299951ae5b91664a7dceef68900bca44b1f`
+- Size: 22952 bytes; 580 logical lines
+- Coverage: 1–400; 401–580 (EOF)
+- Purpose: Discovers player-selectable shader options, loads chosen values and rewrites shader source lines.
+- Dependencies / cross-references: Pack, Macros, Properties, Values and all shaderpack source files/includes.
+- Implementation / logic: Discovers switches/value options across sources and one-level includes, parses saved choices and applies them to source text.
+- Findings: switches_on misses switches tested only via `#if defined`; option_texts follows only one include level; public apply accepts arbitrary unvalidated replacement strings, while only Pack::with_chosen filters values.
+- RustChunk relevance: Potential option UI and persisted choices, but source rewriting must be strictly validated.
+- Decision: adaptable; shaderpack option discovery and apply; optional shaderpack extension
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Follow includes transitively by normalized path, align switches_on with #if defined detection and validate persisted replacements at every public entry point.
+- RustChunk implementation mapping: Implement choices in a safe immutable source overlay or typed AST, not unrestricted textual substitution.
+- Evidence required before adoption: Options corpus spanning direct/transitive includes and all #if forms; malicious saved-choice strings must not alter unrelated source.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+### 2050. `crates/horizon-shaders/src/pack.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `483f5112612527514914f521a54e258968c4e323`
+- Size: 12244 bytes; 345 logical lines
+- Coverage: 1–345 (EOF)
+- Purpose: Opens shader packs from a folder or ZIP and reads normalized files and chosen source values.
+- Dependencies / cross-references: Filesystem APIs, ZIP archive, Arc-backed in-memory bytes, normalize(), options::apply and Values.
+- Implementation / logic: Opens a `shaders/` folder or ZIP, normalizes logical paths, lists files and applies chosen values while reading source text.
+- Findings: ZIP input and decompressed entry sizes are unbounded; folder reads follow symlinks beyond the pack root; recursive file enumeration has no file/depth caps. Lexical path normalization alone does not prevent symlink escape.
+- RustChunk relevance: Pack abstraction is relevant, but must be rebuilt with bounded ZIP reads and symlink-safe filesystem access.
+- Decision: rewrite required; pack folder/ZIP resource reader; security-sensitive
+- 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
+- Follow-up checks: Bound archive bytes, file count and expanded entry size; canonicalize/reject symlinks and enforce pack-root containment on every read.
+- RustChunk implementation mapping: Rebuild resource loading with bounded decompression, canonical path checks and symlink-safe root confinement.
+- Evidence required before adoption: ZIP-bomb, symlink escape, TOCTOU, duplicate-entry, huge-file and path-traversal tests; strict memory/file-count caps.
+- Completion state: COMPLETE — full source content read serially through EOF; exact source SHA and byte size match the pinned recursive tree; tests/examples were inspected only and not executed.
+
+## Checkpoint 2026–2050 closeout
+
+- Entries 2026–2050 complete (25/25); active Ledger now holds 50 entries for 2001–2050.
+- All 25 source files were reviewed one at a time through EOF; files over 400 lines were read in consecutive, gap-free chunks no larger than 400 lines.
+- Exact path, SHA and byte size for all 25 entries match the complete pinned source tree. All 15 required fields occur exactly once per entry.
+- The 50-file section 2001–2050 is closed. Continue with 2051–2075 under the user's pre-authorized 100-file exception; next source path is `crates/horizon-shaders/src/post.rs`.
+- Continue to 2100, close that section, then stop. Entries 2101+ remain unauthorized.

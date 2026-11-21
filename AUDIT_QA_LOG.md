@@ -1386,3 +1386,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The shader API and examples are Horizon API 0.1/Naga 30.0.1 and renderer-specific, not drop-in Minecraft 1.20.1 Java shader support.
 - Tests/examples were inspected only; none were run. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation. No app source changed.
 - One-time authorization covers entries 2001–2100 (two 50-file sections); checkpoint 2001–2025 is closed, 2026–2050 and 2051–2100 remain authorized. Stop at 2100; 2101+ is unauthorized.
+
+
+## Checkpoint 2026–2050 — 2026-11-21
+
+- Completed entries **2026–2050 (25/25)** in exact pinned-tree order, serially one file at a time.
+- All files were read through EOF. Long-file coverage was contiguous and gap-free: `schema.rs` 1–400, 401–664; `pack_report.rs` 1–400, 401–505; `condition.rs` 1–400, 401–406; `config.rs` 1–400, 401–575; `core_shader.rs` 1–400, 401–653; `custom.rs` 1–400, 401–720; `macros.rs` 1–400, 401–489; `options.rs` 1–400, 401–580. Every other file was within one 400-line read.
+- Every new Ledger record contains the 15 required fields exactly once. All paths, source SHAs and exact byte sizes match the complete pinned recursive tree. Ledger and Index numbering/path/Decision entries align for this checkpoint.
+- Findings: the conditional evaluator lacks short-circuit and has macro-float/strictness gaps; render-target parser has type/range and output-index gaps; core-shader translator is 26.3-specific and validates varying locations but not full type/interpolation parity; custom expression evaluation eagerly evaluates if/ifb and can panic on in() with no args; macro expansion lacks depth/output bounds and supported required features are not consistently defined; option discovery misses transitive includes and some #if-defined switches; pack reader has unbounded ZIP/decompression and symlink-escape exposure.
+- Shader API 0.1 WGSL examples/tests and the separate GLSL shaderpack crate are Horizon-specific, with 26.3/Iris 1.11.7 assumptions and Naga 30.0.1 dependencies. They are not drop-in Minecraft Java 1.20.1 or Forge shader support.
+- Tests/examples were inspected only; none were executed. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation was performed. No application source changed.
+- Section **2001–2050 is closed**. The user pre-authorized **2051–2100** in this one-time 100-entry window; proceed without another request at 2050. Stop at 2100. Next backup only after 1,000 additional entries (3000) and global verification.

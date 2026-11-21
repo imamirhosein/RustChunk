@@ -15,7 +15,7 @@ This is the single authoritative protocol for the Starling source audit on `star
 - Every 200-file stage has **four consecutive 50-file reporting sections**.
 - Every 50-file section contains **exactly two 25-file checkpoints**.
 - One complete 200-file stage therefore contains four 50-file sections and eight 25-file checkpoints.
-- The **25-file checkpoint** is the durable Git commit and verification unit. Complete exactly 25 new files, update all five audit documents together, commit them together, re-fetch them from GitHub and verify the committed contents before inspecting the next 25 files.
+- The **25-file checkpoint** is the durable Git commit and verification unit. Complete exactly 25 new files, update all six audit documents together, commit them together, re-fetch them from GitHub and verify the committed contents before inspecting the next 25 files.
 - The **50-file boundary** is the user-facing report and authorization boundary. After the two 25-file checkpoints are committed and verified, report the completed section, identify the exact next 50-file range, and **STOP**. Do not inspect the next section until the user explicitly authorizes it.
 - Do not ask for permission between the two 25-file checkpoints inside an already authorized 50-file section. Do not cross a 50-file boundary on assumed or implied permission.
 - Do not change the 200 / 50 / 25 cadence unless the user explicitly changes it.
@@ -471,3 +471,19 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Final backup branch: `backup/audit-2000-final-2026-11-21`, pointing to the post-verification audit commit. Verify the branch ref and read back its audit documents before reporting completion.
 - This verification is structural, metadata, provenance and cross-document QA; it is not a fresh semantic source re-review or runtime compatibility evidence. No tests/builds/benchmarks/APK/device/Forge/server/Aternos/renderer checks were performed.
 - No application source changed. `main` and both earlier 1,000-entry backup refs remain unchanged. **STOP at 2000**; a new source range requires fresh explicit user authorization.
+
+
+## 14. Latest authoritative resume state — after checkpoint 2026–2050 — 2026-11-21
+
+- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
+- Completed source entries: **1–2050**.
+- Active 200-file stage: **2001–2200**, progress **50/200**.
+- Reporting section **2001–2050 is closed**. Checkpoints 2001–2025 and 2026–2050 are committed and read-back verified.
+- The user's one-time expanded authorization covers the next section **2051–2100** as well. Keep exact 25-file checkpoint transactions and report at the 50-file boundary; do not request permission at 2050.
+- Next checkpoint: **2051–2075**; next source path, derived from the complete pinned tree after excluding entries 1–2050: `crates/horizon-shaders/src/post.rs`.
+- Continue through checkpoint 2076–2100, then **STOP at 2100** and request explicit authorization before 2101.
+- **2101–2200 is not authorized.**
+- Active Ledger: `AUDIT_LEDGER_2001_2200.md`, 50 entries. Index: **2,050 sequential unique paths**.
+- Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Next backup only after 1,000 additional completed entries (entry 3000) and global verification. No backup at 25/50/100/200-file boundaries.
+- No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation is implied. No application source changed.

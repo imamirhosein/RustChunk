@@ -472,3 +472,16 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - `main`, `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19` remain unchanged. No application source was modified.
 - Scope limit: structural/provenance/metadata/cross-document QA only; not a fresh semantic re-review, and no tests/build/benchmark/APK/device/Forge/server/Aternos/renderer validation was performed.
 - **STOP at 2000.** No entry 2001+ is authorized; obtain a new explicit user instruction before starting another source section.
+
+
+## Verified checkpoint — entries 2026–2050 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries **2026–2050 inclusive (25/25)** were inspected serially through EOF in exact source-tree order. Eight long files were read in contiguous chunks of at most 400 lines. SHA and exact byte sizes match the pinned tree.
+- Active Ledger `AUDIT_LEDGER_2001_2200.md` now contains **50 entries (2001–2050)**, each with exactly 15 fields. Index contains **2,050 sequential unique paths**; checkpoint paths and Decisions match the Ledger.
+- Section **2001–2050 is closed**. The user's one-time authorization already covers **2051–2100**; continue with **2051–2075** and **2076–2100** without an intermediate permission request. Then **STOP at 2100** and ask before 2101.
+- Main findings: shaderpack compatibility is a separate optional subsystem; several correctness/resource issues remain in conditional evaluation, configuration parsing, custom expression evaluation, macro expansion, options discovery and ZIP/folder resource loading. No evidence of 1.20.1/Forge compatibility was found in this segment.
+- Tests/examples were inspected only, not run. No app source changed and no build/test/benchmark/APK/device/Forge/server/Aternos/render validation was performed.
+- No backup is due at this 25/50/100-file checkpoint. Next backup only after 1,000 additional entries (entry 3000) and global verification. `main` and prior backup refs remain untouched.
+- Next source path, verified from the pinned tree after excluding entries 1–2050: `crates/horizon-shaders/src/post.rs`.

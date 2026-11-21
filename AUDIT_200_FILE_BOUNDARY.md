@@ -4,15 +4,15 @@
 - Branch: `starling-1.20.1-port-audit`
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries through 2000 are complete; global structural/provenance verification and final 1–2000 backup are preserved.
-- Current stage: **2001–2200**, progress **25/200**.
+- Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
+- Current stage: **2001–2200**, progress **50/200**.
 - One-time authorization: **2001–2100** only (two adjacent 50-file sections); 2101–2200 is locked.
 
 ## Stage partition
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
 | 2051–2100 | 2051–2075 — PRE-AUTHORIZED | 2076–2100 — PRE-AUTHORIZED | AUTHORIZED IN ADVANCE — 0/50 |
 | 2101–2150 | LOCKED | LOCKED | NOT AUTHORIZED |
 | 2151–2200 | LOCKED | LOCKED | NOT AUTHORIZED |
@@ -29,7 +29,7 @@
 
 ## Authorization and next actions
 
-- Complete 2026–2050 under current authorization. Commit and read back all six audit documents at 2050.
+- Section 2001–2050 is complete and closed. Continue 2051–2100 under the user's already-issued one-time authorization.
 - At 2050, report the first 50-file section, then continue directly into pre-authorized 2051–2100; retain checkpoints 2051–2075 and 2076–2100.
 - Close section 2051–2100 and **STOP at 2100**. Ask before entry 2101.
 - The 100-file authorization is a one-time exception only; future sections return to the default 50-file boundary approval rule.
@@ -42,3 +42,12 @@
 - Never claim tests/build/benchmark/APK/device/Forge/server/Aternos/renderer validation unless actually performed.
 - Do not modify app source, `main` or existing backups.
 - Next backup only after 1,000 additional completed entries (entry 3000) and global verification.
+
+
+## Checkpoint 2026–2050 — CLOSED
+
+- Completed entries 2026–2050 (25/25), bringing the active Ledger to 50 entries (2001–2050) and the global Index to 2,050 sequential unique paths.
+- All source files were read one at a time through EOF; long files were inspected in sequential, gap-free chunks of no more than 400 lines. Exact SHA and byte size match the pinned tree.
+- All 15 required Ledger fields occur exactly once; new Index rows align by entry number, path and Decision.
+- The shaderpack reader/translator is a distinct optional rendering extension, not the Minecraft Java game client. The reviewed implementation has unresolved bounds, symlink, parser and cross-version correctness requirements.
+- Continue at **2051–2075**; the next 50-file section **2051–2100 is pre-authorized**. Keep 25-file commits. Close and STOP at **2100**.
