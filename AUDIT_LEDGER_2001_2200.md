@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **75/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
+- Current progress: **100/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
 - One-time expanded authorization: entries **2001–2100 only**, comprising sections 2001–2050 and 2051–2100. Both 50-file sections 2001–2050 and 2051–2100 are covered by the user's one-time authorization; no mid-section permission request is needed at 2050.
 - Cadence unchanged: exact checkpoints of 25 files, boundary reports at every 50 files; continue through 2100 then stop. Entries 2101–2200 are not authorized.
 - Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
@@ -1302,3 +1302,438 @@
 - Each new Ledger entry contains the 15 required fields exactly once. The active Ledger now contains **75 entries (2001–2075)**.
 - Checkpoint 2051–2075 is closed. Continue directly to **2076–2100** under the user's advance authorization; at 2100 close the 50-file section and stop. Entries 2101+ remain unauthorized.
 - No tests or examples were executed; no application source was changed and no runtime/build/device compatibility validation was performed.
+
+
+
+### 2076. `crates/horizon-shaders/tests/packs/terrain-test/README.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `13745ed66eea814069217b4e82722a6d85f84d07`
+- Size: 863 bytes; 11 logical lines
+- Coverage: 1–11 (EOF)
+- Purpose: Describes an in-house terrain diagnostic shaderpack and its program color cues.
+- Dependencies / cross-references: Terrain shader files, block.properties and Horizon-provided atlas/render-stage inputs.
+- Implementation / logic: Explains installation into shaderpacks and activation through HORIZON_SHADER_PACK.
+- Findings: Explicitly identifies the pack as Horizon's own code; not third-party compatibility evidence.
+- RustChunk relevance: Test fixture documentation only.
+- Decision: reference; Horizon terrain shaderpack README; test fixture only
+- 1.20.1 implications: No Minecraft 1.20.1, Forge or OptiFine/Iris compatibility demonstrated.
+- Follow-up checks: Keep description aligned with all stages and validate each documented visual cue.
+- RustChunk implementation mapping: Use only as an organization pattern for RustChunk renderer fixtures.
+- Evidence required before adoption: Third-party 1.20.1 shaderpacks and image-level renderer oracle.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2077. `crates/horizon-shaders/tests/packs/terrain-test/shaders/block.properties`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cd08c6a168697513bba90fb254f1fd37a114107b`
+- Size: 219 bytes; 3 logical lines
+- Coverage: 1–3 (EOF)
+- Purpose: Maps leaf block names to fixture block ID 1.
+- Dependencies / cross-references: Properties parser and shader block ID mapping.
+- Implementation / logic: One block.1 rule lists leaf names across a continued line.
+- Findings: Static Horizon fixture mapping, not a stable vanilla numeric registry contract.
+- RustChunk relevance: Fixture data only.
+- Decision: reference; Horizon block-ID fixture; test-only
+- 1.20.1 implications: 1.20.1 block identities must come from versioned registries and block states.
+- Follow-up checks: Verify names in target registry and include modded namespace cases.
+- RustChunk implementation mapping: No direct port; use registry-derived IDs in a future adapter.
+- Evidence required before adoption: Java 1.20.1 registry oracle and blockstate fixtures.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2078. `crates/horizon-shaders/tests/packs/terrain-test/shaders/composite.fsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d473ef24080889c73e4997ef0c76ad68a2aa9c48`
+- Size: 538 bytes; 19 logical lines
+- Coverage: 1–19 (EOF)
+- Purpose: Composite fragment diagnostic pass encodes view-space depth in blue on half the screen.
+- Dependencies / cross-references: colortex0, depthtex0, inverse projection matrix, far and DRAWBUFFERS.
+- Implementation / logic: Reads color/depth, reconstructs view-space position and writes normalized depth.
+- Findings: Projection conventions, homogeneous division and output attachment are Horizon-specific.
+- RustChunk relevance: Renderer diagnostic fixture only.
+- Decision: reference; Horizon composite fragment fixture; test-only
+- 1.20.1 implications: Legacy GLSL 120/Horizon uniforms; no vanilla 1.20.1 interface proof.
+- Follow-up checks: Test near/far clipping, depth=1, w edge cases and color behavior.
+- RustChunk implementation mapping: Conceptual depth-debug pass after RustChunk projection is specified.
+- Evidence required before adoption: Reference captures and pixel tests across depth extremes.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2079. `crates/horizon-shaders/tests/packs/terrain-test/shaders/composite.vsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `38e4e455c841fea9c4d780bea5f7e9196e67c8e6`
+- Size: 123 bytes; 8 logical lines
+- Coverage: 1–8 (EOF)
+- Purpose: Fullscreen vertex stage for the composite diagnostic pass.
+- Dependencies / cross-references: ftransform, gl_MultiTexCoord0 and texcoord varying.
+- Implementation / logic: Writes fullscreen position and forwards UV.
+- Findings: Requires Horizon compatibility-profile built-ins and quad state.
+- RustChunk relevance: Test-only fullscreen stage.
+- Decision: reference; Horizon fullscreen vertex fixture; test-only
+- 1.20.1 implications: No portable 1.20.1 render-stage ABI.
+- Follow-up checks: Confirm UV orientation and matrix assumptions on target renderer.
+- RustChunk implementation mapping: No direct reuse; retain only as pass-interface example.
+- Evidence required before adoption: Target renderer capture for UV mapping.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2080. `crates/horizon-shaders/tests/packs/terrain-test/shaders/gbuffers_skybasic.fsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8d62f3291acecbebf7bbfcf9af7a5ff71e26214d`
+- Size: 491 bytes; 15 logical lines
+- Coverage: 1–15 (EOF)
+- Purpose: Colors sky, stars and void differently based on render-stage constants.
+- Dependencies / cross-references: renderStage, MC_RENDER_STAGE_* defines and glcolor varying.
+- Implementation / logic: Applies stage-specific magenta/red/green diagnostics and writes color.
+- Findings: Injected stage constants and vertex-color contract are Horizon-specific.
+- RustChunk relevance: Sky diagnostic fixture only.
+- Decision: reference; Horizon sky-basic fragment fixture; test-only
+- 1.20.1 implications: Stage IDs are not a Minecraft 1.20.1 public contract.
+- Follow-up checks: Compare stage identifiers with target renderer and verify fog/weather order.
+- RustChunk implementation mapping: Use as concept for sky pipeline tests only.
+- Evidence required before adoption: Captured target sky/stars/void stages.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2081. `crates/horizon-shaders/tests/packs/terrain-test/shaders/gbuffers_skybasic.vsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7b3bd59ce8cf0fc5fb43c7e78125faffc41bfb41`
+- Size: 109 bytes; 8 logical lines
+- Coverage: 1–8 (EOF)
+- Purpose: Forwards vertex color to the sky fragment stage.
+- Dependencies / cross-references: gl_Color and glcolor varying.
+- Implementation / logic: Transforms position and passes fixed-function vertex color.
+- Findings: Depends on Horizon fixed-function compatibility inputs.
+- RustChunk relevance: Simple stage interface fixture.
+- Decision: reference; Horizon sky-basic vertex fixture; test-only
+- 1.20.1 implications: Not a portable core-profile or Minecraft Java ABI.
+- Follow-up checks: Test interpolation and color-space on target backend.
+- RustChunk implementation mapping: No direct runtime port.
+- Evidence required before adoption: Target GPU output and compatibility input tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2082. `crates/horizon-shaders/tests/packs/terrain-test/shaders/gbuffers_terrain.fsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4f6850575478f99bdfe99e672eeb7ec5697b28c9`
+- Size: 980 bytes; 28 logical lines
+- Coverage: 1–28 (EOF)
+- Purpose: Renders terrain diagnostic colors from atlas, lightmap, block ID and face-center UV.
+- Dependencies / cross-references: Texture/lightmap samplers, atlasSize, renderStage, mc_Entity/blockId and midTexCoord.
+- Implementation / logic: Combines texture and vertex color, discards low alpha, applies sky-light tint, highlights leaves and marks face centers.
+- Findings: Numeric block ID 1, atlas coordinates and Horizon stage/attribute semantics are test-only assumptions.
+- RustChunk relevance: Terrain shader input demonstration only.
+- Decision: reference; Horizon terrain fragment fixture; test-only
+- 1.20.1 implications: No target block ID, atlas or vertex ABI established for Minecraft 1.20.1.
+- Follow-up checks: Validate ID source, atlas transforms, cutout threshold, lightmap and translucent fallback.
+- RustChunk implementation mapping: Use only as diagnostic idea after RustChunk's vertex contract is fixed.
+- Evidence required before adoption: Target registry oracle and pixel captures for leaves/cutout/translucency.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2083. `crates/horizon-shaders/tests/packs/terrain-test/shaders/gbuffers_terrain.vsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1f26fd658a4949740dace58aa76d4c5e197cc324`
+- Size: 430 bytes; 19 logical lines
+- Coverage: 1–19 (EOF)
+- Purpose: Supplies atlas/lightmap UVs, face center, vertex color and block/entity ID to terrain fragment stage.
+- Dependencies / cross-references: mc_midTexCoord, mc_Entity, texture matrices, gl_Color and varyings.
+- Implementation / logic: Transforms position/UVs and forwards face center, color and entity ID.
+- Findings: Relies on Horizon vertex attributes and compatibility built-ins; defaults must be defined by renderer.
+- RustChunk relevance: Terrain vertex interface fixture.
+- Decision: reference; Horizon terrain vertex fixture; test-only
+- 1.20.1 implications: No Forge or Minecraft 1.20.1 vertex contract.
+- Follow-up checks: Verify attribute layout, precision, UV transforms and face-center generation.
+- RustChunk implementation mapping: Create target-version vertex input only after mesher/renderer contract stabilizes.
+- Evidence required before adoption: Device captures compared with actual target vertex stream.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2084. `crates/horizon-shaders/tests/packs/terrain-test/shaders/gbuffers_textured.fsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `563ddeb7c0ac5ce424002e2394715b7fa1ce4e3b`
+- Size: 367 bytes; 15 logical lines
+- Coverage: 1–15 (EOF)
+- Purpose: Tints the moon to distinguish it from the sun.
+- Dependencies / cross-references: Texture sampler, renderStage and texture/color varyings.
+- Implementation / logic: Samples texture times vertex color and changes red/blue channels for moon stage.
+- Findings: Horizon render-stage constant and blend behavior are fixture-specific.
+- RustChunk relevance: Celestial diagnostic shader only.
+- Decision: reference; Horizon textured fragment fixture; test-only
+- 1.20.1 implications: No vanilla 1.20.1 sky/celestial pipeline evidence.
+- Follow-up checks: Verify moon/sun identity, blend and alpha behavior against target renderer.
+- RustChunk implementation mapping: Use only as a renderer-test concept.
+- Evidence required before adoption: Target sky pass captures and blending checks.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2085. `crates/horizon-shaders/tests/packs/terrain-test/shaders/gbuffers_textured.vsh`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c29b1bba086ed1fe731ccb940c8adaa94f884715`
+- Size: 193 bytes; 10 logical lines
+- Coverage: 1–10 (EOF)
+- Purpose: Passes UV and vertex color for textured sky/celestial fallback.
+- Dependencies / cross-references: Texture matrix, gl_MultiTexCoord0, gl_Color and varyings.
+- Implementation / logic: Transforms position/UV and forwards vertex color.
+- Findings: Fixed-function inputs are supplied by Horizon renderer.
+- RustChunk relevance: Simple vertex fixture.
+- Decision: reference; Horizon textured vertex fixture; test-only
+- 1.20.1 implications: No portable 1.20.1 interface.
+- Follow-up checks: Verify matrices and color interpolation against target celestial renderer.
+- RustChunk implementation mapping: No direct port.
+- Evidence required before adoption: Target GPU output.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2086. `crates/horizon-shaders/tests/real_packs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f9e9f80fbd4374540c86b214bce61be7a02d062b`
+- Size: 17556 bytes; 423 logical lines
+- Coverage: 1–400; 401–423 (EOF)
+- Purpose: Ignored integration harness that discovers external shaderpacks, preprocesses stages, translates composite passes and optionally emits backend outputs.
+- Dependencies / cross-references: Horizon shader APIs, Pack, Macros, Properties, Lang, preprocess, Naga backend writers.
+- Implementation / logic: Requires HORIZON_TEST_SHADER_PACKS; walks base/dimension folders and reports parse/translation/backend results.
+- Findings: Marked ignored; external input, no timeout/output cap, read_dir errors flattened, origin indexing trusted. Synthetic GameInputs do not prove real draw ABI or MobileGlues.
+- RustChunk relevance: Validation-harness design only.
+- Decision: reference; ignored real shaderpack compatibility harness; test-only
+- 1.20.1 implications: Horizon renderer assumptions; no Minecraft 1.20.1, Forge, Aternos or Android evidence.
+- Follow-up checks: Use deterministic allowlisted pack corpus, bound time/output/resources and validate source origins.
+- RustChunk implementation mapping: Adopt harness pattern only after RustChunk has its own translator and versioned fixtures.
+- Evidence required before adoption: Executed corpus, resource caps and actual target Android backend validation.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2087. `crates/horizon-telemetry-server/.gitignore`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b83d22266ac8aa2f8df2edef68082c789727841d`
+- Size: 9 bytes; 1 logical lines
+- Coverage: 1–1 (EOF)
+- Purpose: Excludes Cargo build output.
+- Dependencies / cross-references: Cargo target directory.
+- Implementation / logic: Ignores /target/.
+- Findings: No further generated-file exclusions are declared here.
+- RustChunk relevance: Repository hygiene only.
+- Decision: reference; telemetry server gitignore; hygiene
+- 1.20.1 implications: No gameplay or launcher behavior.
+- Follow-up checks: Check where local DBs and generated artifacts are stored.
+- RustChunk implementation mapping: Mirror only needed build exclusions.
+- Evidence required before adoption: Git status after builds.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2088. `crates/horizon-telemetry-server/Cargo.lock`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `954c437c91542606395f88f6ce861de76bc8f852`
+- Size: 29554 bytes; 1159 logical lines
+- Coverage: 1–400; 401–800; 801–1159 (EOF)
+- Purpose: Pins the telemetry server dependency graph and package checksums.
+- Dependencies / cross-references: Standalone server manifest and transitive crates.
+- Implementation / logic: Cargo lockfile v4 includes axum, tokio, rusqlite, ureq, rustls, serde, compression and platform dependencies.
+- Findings: A lockfile is provenance, not an advisory/license audit; dependency set is host service, not Android client.
+- RustChunk relevance: Dependency provenance reference only.
+- Decision: reference; telemetry server lockfile; host-only
+- 1.20.1 implications: Do not import this lockfile wholesale into Android client; no target compatibility established.
+- Follow-up checks: Perform advisory/license/MSRV and reproducible build reviews separately before adoption.
+- RustChunk implementation mapping: Keep backend dependencies isolated from client workspace.
+- Evidence required before adoption: Current advisory review, licence audit and locked host build.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2089. `crates/horizon-telemetry-server/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a4fff1a5accf8539f97244c101c4485dba9a563f`
+- Size: 1394 bytes; 35 logical lines
+- Coverage: 1–35 (EOF)
+- Purpose: Declares a standalone Rust 2024/Rust 1.90 telemetry web-service workspace.
+- Dependencies / cross-references: Horizon telemetry client crate, axum, tokio, rusqlite, serde, zstd, flate2 and ureq.
+- Implementation / logic: Separate workspace prevents launcher building server; uses bundled SQLite and network/async dependencies.
+- Findings: Rust 1.90, edition 2024 and bundled SQLite/native dependency footprint are host-service decisions, not Android client requirements.
+- RustChunk relevance: Good architectural boundary example only.
+- Decision: reference; standalone telemetry server manifest; host service
+- 1.20.1 implications: No client/game protocol or Forge feature.
+- Follow-up checks: Review MSRV, feature sets, licenses and SQLite native build only if backend is planned.
+- RustChunk implementation mapping: Keep any telemetry service in separate workspace/crate.
+- Evidence required before adoption: Host build, license, MSRV and deployment evidence.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2090. `crates/horizon-telemetry-server/Dockerfile`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6a4a53c8d330983b64e4842eef4fdbcce12fe6e3`
+- Size: 714 bytes; 13 logical lines
+- Coverage: 1–13 (EOF)
+- Purpose: Builds telemetry service into a Debian runtime image.
+- Dependencies / cross-references: Root Cargo manifests and two telemetry crates.
+- Implementation / logic: Multi-stage Rust build with --locked, copies binary to Debian stable runtime, sets DB and trusted-proxy env.
+- Findings: No USER specified, so runtime likely root; floating image tags. TRUST_PROXY=1 only safe behind trusted ingress.
+- RustChunk relevance: Backend deployment pattern only.
+- Decision: rewrite required; telemetry Docker runtime hardening; host-only
+- 1.20.1 implications: Unrelated to Android client and Minecraft protocol.
+- Follow-up checks: Run non-root, pin base images/digests, restrict filesystem/network and ensure trusted-only proxy ingress.
+- RustChunk implementation mapping: Use least-privilege separate deployment if backend created.
+- Evidence required before adoption: Container inspection, non-root check, image scan and proxy trust tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2091. `crates/horizon-telemetry-server/README.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cd29f2c2d71ebc538543be2fb573f8d13f782e37`
+- Size: 11815 bytes; 117 logical lines
+- Coverage: 1–117 (EOF)
+- Purpose: Documents opt-in telemetry, aggregates, protected raw exports, hub reports/votes, live count, data retention and hosting.
+- Dependencies / cross-references: Telemetry client docs, HTTP routes, SQLite, environment config, website and GitHub integration.
+- Implementation / logic: Defines payload limits, retention, anonymization thresholds, export token, endpoints, caching and Railway deployment.
+- Findings: IP not stored persistently but used in-memory for rate limiting; rich hardware details and report text persist for documented periods. Token/proxy configuration governs sensitive surfaces; README isn't proof of deployed behavior.
+- RustChunk relevance: Useful product/privacy architecture reference, separate from game engine.
+- Decision: reference; opt-in telemetry server documentation; service policy
+- 1.20.1 implications: No launcher/game support; telemetry must never be silently enabled in RustChunk.
+- Follow-up checks: Compare docs with handlers and DB paths; review consent, deletion, retention, export token and proxy threat model.
+- RustChunk implementation mapping: Any future telemetry must be explicit opt-in, minimal, disableable and separated.
+- Evidence required before adoption: Privacy review, deletion/integration tests and deployment audit.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2092. `crates/horizon-telemetry-server/railway.json`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `30eb18c3391fc69ee38b8d812d9fcf74d5a1b35b`
+- Size: 547 bytes; 21 logical lines
+- Coverage: 1–21 (EOF)
+- Purpose: Defines Railway Docker build, health check, restart policy and single-region deployment.
+- Dependencies / cross-references: Railway schema, Dockerfile and SQLite volume.
+- Implementation / logic: Uses Dockerfile builder, /healthz and ON_FAILURE with up to five retries; one replica.
+- Findings: SQLite file motivates one replica; multi-instance scaling needs different storage/coordination; provider settings are external.
+- RustChunk relevance: Deployment artifact only.
+- Decision: reference; Railway deployment configuration; host service
+- 1.20.1 implications: No Android client relevance.
+- Follow-up checks: Keep single writer or migrate storage before scaling; verify volume and provider config.
+- RustChunk implementation mapping: No game integration.
+- Evidence required before adoption: Persistence/restore and replica safety validation.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2093. `crates/horizon-telemetry-server/src/classes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f4113963f1a63ad60949825fb206725bec577c00`
+- Size: 3574 bytes; 103 logical lines
+- Coverage: 1–103 (EOF)
+- Purpose: Maps raw hardware details to coarse public RAM/VRAM/storage/OS/GPU categories.
+- Dependencies / cross-references: Telemetry System payload and benchmark report JSON.
+- Implementation / logic: Applies RAM/VRAM thresholds and normalizes storage, OS and GPU kind.
+- Findings: Infinity enters highest bucket; unknown string values become absent. Buckets are policy categories, not precise hardware facts.
+- RustChunk relevance: Potential telemetry analytics utility only.
+- Decision: adaptable; coarse hardware classification; optional telemetry
+- 1.20.1 implications: No hardware detection or Minecraft runtime.
+- Follow-up checks: Reject nonfinite/implausible inputs, version thresholds and align website/client fixtures.
+- RustChunk implementation mapping: Keep outside render/game hot paths.
+- Evidence required before adoption: Fuzz malformed values and cross-check client/server/site.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2094. `crates/horizon-telemetry-server/src/export.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b683e7247382517053f1e742451b1be28aa540c2`
+- Size: 11538 bytes; 281 logical lines
+- Coverage: 1–281 (EOF)
+- Purpose: Implements token-protected raw benchmark and per-machine hardware export.
+- Dependencies / cross-references: Axum requests, App limits, SQLite Store and gzip.
+- Implementation / logic: Checks Bearer token, rate-limits failures, pages benchmark entries and aggregates machine data; no-store gzip response.
+- Findings: Hardware export materializes all matching machine aggregates before offset/limit pagination, risking memory spikes; offset addition needs checked math; raw hardware report is privileged data.
+- RustChunk relevance: Backend-only privileged export.
+- Decision: rewrite required; protected telemetry export; sensitive data surface
+- 1.20.1 implications: No game/Forge functionality.
+- Follow-up checks: Bound SQL pagination/aggregation, cap response size, check offset arithmetic and secure/rotate bearer token.
+- RustChunk implementation mapping: Never embed export service in client.
+- Evidence required before adoption: Authorization, large dataset, token/rate-limit and redaction tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2095. `crates/horizon-telemetry-server/src/github.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a800442e789d7d0e7629a20fea4c8a8de0f620f4`
+- Size: 5055 bytes; 128 logical lines
+- Coverage: 1–128 (EOF)
+- Purpose: Sanitizes hub report text and opens GitHub issues.
+- Dependencies / cross-references: serde_json, ureq, configured repo and GitHub token.
+- Implementation / logic: Neutralizes mentions/HTML/Markdown breakouts and posts issue with 20-second request timeout.
+- Findings: Bespoke text sanitization needs adversarial Unicode/Markdown tests; response body has no explicit cap; repo config and token require strict trust.
+- RustChunk relevance: Support service pattern only.
+- Decision: adaptable; sanitized GitHub issue intake; backend-only
+- 1.20.1 implications: No client or Forge feature.
+- Follow-up checks: Use robust structured Markdown escaping, cap response bytes, validate repo and protect token.
+- RustChunk implementation mapping: Only with explicit opt-in, separate server permission.
+- Evidence required before adoption: Adversarial text tests, response size and token-handling tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2096. `crates/horizon-telemetry-server/src/history.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2acd10fc4a941b21a6b9b08206cd7459d67d7f5b`
+- Size: 19800 bytes; 562 logical lines
+- Coverage: 1–400; 401–562 (EOF)
+- Purpose: Stores minute live counts and rolls up hourly/daily player/official history.
+- Dependencies / cross-references: SQLite Store, live Count/PLATFORMS and retention configuration.
+- Implementation / logic: Transactional minute insert plus hourly/daily upserts; history queries and peak/average calculations.
+- Findings: u64 casts to i64 unchecked; daily table retained forever and Range::All can grow unbounded; response not capped.
+- RustChunk relevance: Backend analytics only.
+- Decision: rewrite required; telemetry history and rollups; unbounded history
+- 1.20.1 implications: Not multiplayer transport or server connection logic.
+- Follow-up checks: Check numeric conversion, cap response/results and retention, test overflow/future timestamps.
+- RustChunk implementation mapping: Keep separate from game sessions and render loop.
+- Evidence required before adoption: Long-duration DB, overflow, response-size and load tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2097. `crates/horizon-telemetry-server/src/hub.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `eb92cd692e0d8978229a44376b30f26e96469d6f`
+- Size: 8978 bytes; 242 logical lines
+- Coverage: 1–242 (EOF)
+- Purpose: Implements website roadmap votes and keyed address rate limits.
+- Dependencies / cross-references: SQLite hub_votes, App, keyed address hash and JSON parser.
+- Implementation / logic: Checks item/voter shape, stores one vote per item/voter, caps item count at 1000, caches totals.
+- Findings: Voter is client-generated and only shape-checked, not authenticated; IDs can be minted. Missing/non-bool up defaults true; IDs not checked against roadmap catalogue.
+- RustChunk relevance: Website community feature only.
+- Decision: reference; roadmap voting; backend-only
+- 1.20.1 implications: No Minecraft client/game relationship.
+- Follow-up checks: Anti-abuse measures, strict up schema and roadmap membership validation.
+- RustChunk implementation mapping: Do not place hub voting in game client.
+- Evidence required before adoption: Abuse/race, malformed payload and cache tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2098. `crates/horizon-telemetry-server/src/intake.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3e3e3ed19b2e9c668efa4f36790cbc3e52b453eb`
+- Size: 10810 bytes; 283 logical lines
+- Coverage: 1–283 (EOF)
+- Purpose: Validates and queues website bug reports, posts GitHub issues, retries and expires pending reports.
+- Dependencies / cross-references: hub_queue SQLite, report fields, App and github issue builder.
+- Implementation / logic: Caps JSON body/field lengths, cleans content, daily cap, duplicate lookup, retry for seven days.
+- Findings: Immediate handler and background retry can race and file duplicate issues; no atomic claim/lease/idempotency; ambiguous GitHub success can cause retry duplicate.
+- RustChunk relevance: Backend support workflow only.
+- Decision: adaptable; bounded report intake queue; support-service only
+- 1.20.1 implications: No launcher/client functionality; data retention requires consent.
+- Follow-up checks: Add atomic claim/lease and idempotency marker; validate unknown fields and concurrency.
+- RustChunk implementation mapping: Keep support workflow separate and opt-in.
+- Evidence required before adoption: Concurrent duplicate, crash-after-post and expiry/deletion tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2099. `crates/horizon-telemetry-server/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9a102a2207d7e8887935b34d7f226260deb6161e`
+- Size: 30499 bytes; 800 logical lines
+- Coverage: 1–400; 401–800 (EOF)
+- Purpose: Owns telemetry App/config/router, rate limits, batch intake, aggregates, live/history APIs and upkeep.
+- Dependencies / cross-references: axum, telemetry batch/live, Store, export, hub/intake/history and GitHub.
+- Implementation / logic: Loads env config, trusts proxy headers when enabled, rate-limits, decodes compressed batches, stores items and serves telemetry endpoints.
+- Findings: Synchronous SQLite under global Mutex inside async handlers may block Tokio workers and serialize load. TRUST_PROXY trusts X-Real-IP/last XFF when enabled; direct exposure permits spoofing. Env rates/ranges lack full validation; invalid CORS origin falls back to wildcard.
+- RustChunk relevance: Independent host backend architecture only; README isolates it from launcher workspace.
+- Decision: rewrite required; telemetry API server and shared state; standalone service
+- 1.20.1 implications: No Minecraft Java protocol, Forge client or Android launcher proof.
+- Follow-up checks: Move blocking DB operations off async workers or choose async DB; validate config, ingress/proxy, CORS and bound caches/queues.
+- RustChunk implementation mapping: If telemetry ever used, keep opt-in, minimal and isolated from game process.
+- Evidence required before adoption: Load/concurrency, proxy spoofing, config fuzz, privacy/delete and locked build tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+### 2100. `crates/horizon-telemetry-server/src/live.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `456a15bfb8828c9559d1bd0ef4e95318a691013f`
+- Size: 6910 bytes; 202 logical lines
+- Coverage: 1–202 (EOF)
+- Purpose: Tracks anonymous live sessions in memory based on periodic pings.
+- Dependencies / cross-references: Telemetry Ping/Count schema and App upkeep.
+- Implementation / logic: Stores session ID, last-seen, version/platform/LAN, expires stale sessions and enforces a session cap.
+- Findings: Malformed hex session ID silently returns success without storing; expiry can scan whole map when full; data resets on restart by design.
+- RustChunk relevance: Telemetry presence counter only.
+- Decision: adaptable; in-memory telemetry live counter; optional service
+- 1.20.1 implications: Not Minecraft multiplayer, Aternos or game connection protocol.
+- Follow-up checks: Reject malformed IDs, cap version length in shared schema and stress expiry at max sessions.
+- RustChunk implementation mapping: Keep distinct from actual multiplayer session state.
+- Evidence required before adoption: Ping schema, capacity/expiry and restart behavior tests.
+- Completion state: COMPLETE — full source content read serially through EOF; coverage is contiguous with no gaps; exact source SHA and byte size match the pinned recursive tree; embedded tests/examples inspected only, not executed.
+
+## Checkpoint 2076–2100 — complete (25/25)
+
+- Entries 2076–2100 are the next 25 blobs after excluding Index entries 1–2075 from the complete pinned source tree.
+- All 25 files were read one at a time through EOF. Long files were read in contiguous, gap-free chunks no larger than 400 lines. Exact paths, SHAs and byte sizes match the pinned tree.
+- Each new Ledger record contains exactly the 15 required fields. Active Ledger now holds **100 entries (2001–2100)**.
+- The 50-file section **2051–2100 is closed (50/50)**. This consumes the one-time authorization. **STOP at 2100**; entries 2101+ are not authorized.
+- Tests/examples were inspected only, not executed. No application source changed and no runtime/build/device compatibility validation was performed.

@@ -1407,3 +1407,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The post-test pack explicitly says it is authored for Horizon. It is not evidence of third-party Minecraft 1.20.1/Forge compatibility.
 - Tests/examples were inspected only; none executed. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation was performed. No application source changed.
 - Checkpoint **2051–2075 is complete**. Continue immediately through **2076–2100** under the existing one-time authorization; stop at 2100 and request permission before 2101.
+
+
+## Checkpoint 2076–2100 — 2026-11-21
+
+- Completed entries **2076–2100 (25/25)** serially in pinned-tree order. All files were read through EOF; long files were read in contiguous chunks no larger than 400 lines.
+- Exact source SHA and byte size for all 25 entries match the complete pinned tree. The active Ledger now has **100 entries (2001–2100)** with exactly 15 required fields each; global Index has **2,100 sequential unique paths** and the new path/Decision rows align.
+- Findings: the real-pack harness is ignored and relies on external packs; it does not validate Android/MobileGlues. The telemetry server is an independent Rust 1.90 host service, not the client. Static risks include Docker runtime running as root, proxy-header trust, synchronous SQLite under Tokio handlers, unbounded aggregate/export/history work, unchecked counter casts and telemetry report retry/idempotency races.
+- Privacy boundary: documentation describes opt-in telemetry, in-memory IP rate-limit data, retention of raw hardware/report rows and protected export endpoints. This is design/documentation evidence, not proof of deployment. RustChunk must not silently add telemetry.
+- Tests/examples were inspected only; none executed. No build, benchmark, APK, Android, Forge, Minecraft join, Aternos or renderer validation was performed. No application source changed.
+- Section **2051–2100 is closed (50/50)**. The one-time authorization is consumed. **STOP at 2100** and request new explicit permission before 2101.

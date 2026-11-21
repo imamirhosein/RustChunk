@@ -5,7 +5,7 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **75/200**.
+- Current stage: **2001–2200**, progress **100/200**.
 - One-time authorization: **2001–2100** only (two adjacent 50-file sections); 2101–2200 is locked.
 
 ## Stage partition
@@ -13,7 +13,7 @@
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
-| 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — PRE-AUTHORIZED | AUTHORIZED IN ADVANCE — 25/50 |
+| 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — **COMPLETE** | **CLOSED — 50/50** |
 | 2101–2150 | LOCKED | LOCKED | NOT AUTHORIZED |
 | 2151–2200 | LOCKED | LOCKED | NOT AUTHORIZED |
 
@@ -60,3 +60,12 @@
 - Exactly 15 required fields per new Ledger entry; Index paths and Decisions align.
 - Findings center on optional shaderpack behavior: incomplete allocation/output caps, fail-open shader conditions, heuristic GLSL parsing and cross-stage contracts, geometry-emulation assumptions, weak image/texture resource limits, and unvalidated option text substitution. The test fixture identifies itself as Horizon-only.
 - Continue at **2076–2100** under pre-authorization; retain the 25-file checkpoint. Close section 2051–2100 at **50/50** and **STOP at 2100**. Ask before 2101.
+
+
+## Checkpoint 2076–2100 — CLOSED
+
+- Entries 2076–2100 are complete; active Ledger has 100 records (2001–2100), global Index has 2,100 sequential unique paths.
+- All 25 sources were read serially through EOF. Long files were read in consecutive chunks no larger than 400 lines; SHA and exact byte size align with the pinned tree.
+- Each Ledger record has exactly 15 required fields; new Index paths and Decision labels align.
+- The reviewed shader test packs are Horizon-only. Telemetry is a separate opt-in Rust 1.90 backend; it is not part of the Android Minecraft client. Static risks include proxy trust, container privilege, blocking DB operations and unbounded analytics work.
+- The one-time 100-file authorization is consumed. **STOP at 2100** and ask before any file 2101+.

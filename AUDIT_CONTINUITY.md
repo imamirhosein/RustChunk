@@ -497,3 +497,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Key findings: optional Horizon shaderpack pipeline lacks several aggregate resource bounds and fail-closed conditions; texture decoding needs strict memory caps; GLSL stage emulation and translation are token-heuristic and Horizon-ABI-specific; device workgroup limits and option text validation need hardening; test pack is Horizon-only.
 - Tests/examples were inspected only. No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation was performed, and no application code changed.
 - No backup at this checkpoint. Next backup only after 1,000 additional entries (entry 3000) and global verification. `main` and existing backup refs remain untouched.
+
+
+## Verified checkpoint — entries 2076–2100 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries **2076–2100 inclusive (25/25)** were reviewed one file at a time through EOF in exact tree order. Long files were read in contiguous chunks of at most 400 lines. Paths, SHAs and byte sizes match the pinned tree.
+- Active Ledger: **100 entries (2001–2100)**, all with exactly 15 required fields. Index: **2,100 sequential unique paths**; new path/Decision rows align.
+- Section **2051–2100 is CLOSED (50/50)**. The one-time authorization for 2001–2100 is fully consumed. **STOP at 2100**; do not inspect 2101 until new permission.
+- Main findings: Horizon shader fixture packs do not prove client compatibility; telemetry is a separate opt-in host service. Notable static risks: proxy trust, container privilege, blocking SQLite in async handlers, unbounded export/history work and report idempotency races.
+- Tests/examples were inspected only. No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation was performed. No application source changed.
+- No backup at 25/50/100/200-file checkpoints. Next backup only after 1,000 additional completed entries (entry 3000) and global verification. Existing `main` and backups remain untouched.
