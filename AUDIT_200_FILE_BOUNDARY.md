@@ -5,7 +5,7 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **175/200**.
+- Current stage: **2001–2200**, progress **200/200 — CLOSED**.
 - One-time authorizations: **2001–2100** and **2101–2200**. For the second window, preserve 25-file commits but do not stop or request permission at 2150; stop only at 2200.
 
 ## Stage partition
@@ -15,7 +15,7 @@
 | 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
 | 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — **COMPLETE** | **CLOSED — 50/50** |
 | 2101–2150 | 2101–2125 — **COMPLETE** | 2126–2150 — **COMPLETE** | **CLOSED — 50/50** |
-| 2151–2200 | 2151–2175 — **COMPLETE** | 2176–2200 — PRE-AUTHORIZED | IN PROGRESS — 25/50; CONTINUE AT 2176; STOP ONLY AT 2200 |
+| 2151–2200 | 2151–2175 — **COMPLETE** | 2176–2200 — **COMPLETE** | **CLOSED — 50/50; AUTHORIZATION EXHAUSTED AT 2200** |
 
 ## Checkpoint 2001–2025
 
@@ -98,3 +98,14 @@
 - Hugeicons MIT notice from entry 2143 must accompany redistributed icon files. Android vector renderer compatibility is not proven.
 - Active Ledger 175 records, 15 fields each; Index 2,175 sequential unique paths. Current section 2151–2200 is 25/50 complete; final half is pre-authorized.
 - Continue 2176–2200 with no permission request at 2175. **STOP only at 2200.**
+
+
+## Final authorized checkpoint 2176–2200 — COMPLETE (25/25)
+
+- Entries 2176–2200 were fully inspected in raw Git path order; exact source paths, SHAs and sizes match the pinned complete tree.
+- Seven Hugeicons Glass SVGs were completely read. PNG horizon-64 is 64×64 RGBA, 797 bytes; all four chunk CRCs pass, IEND ends at EOF and visual preview was inspected.
+- Pixelarticons MIT notice was fully read (21 lines, Copyright © 2019 Gerrit Halfmann); sixteen Pixelarticons SVGs are completely read and separate from the Hugeicons package.
+- SVGs are self-contained without active/external resources. PNG ownership/license remains unverified. Android SVG conversion/rendering was not tested.
+- Seven later assets (2201–2207, `home.svg` through `package.svg`) were unintentionally fetched during a path-order mistake; they are excluded from Ledger/Index/counts and are not authorized complete files.
+- Ledger **200 records**, Index **2,200 sequential unique paths**; all four 25-file checkpoints in the 2101–2200 window are complete. Stage **200/200 CLOSED**.
+- **STOP at 2200. Authorization exhausted; fresh explicit permission is required before entry 2201.**

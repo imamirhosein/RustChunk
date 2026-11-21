@@ -7,15 +7,15 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2175**.
-- Active 200-file stage: **2001–2200**, progress **175/200**.
-- Completed reporting sections: **2001–2050**, **2051–2100**, **2101–2150** (closed 50/50); current section **2151–2200**, checkpoint 2151–2175 complete and 2176–2200 pending.
-- The user's second one-time authorization covers **2101–2200**. The final checkpoint 2176–2200 is pre-authorized. Keep exact 25-file commits; **do not stop/request permission at 2175; STOP only at 2200** and ask before 2201.
-- Active Ledger has **175 records (2001–2175)** with 15 fields each; Index has **2,175 sequential unique paths**.
-- Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
-- Entries 2126–2142 are fully decoded/parsed binary fonts; 2137–2175 contains fully read UTF-8 font licenses, icon license and SVGs. All these entries are checked against exact pinned-tree SHA/size.
-- No app source changed. Tests/examples remain inspection-only. No build/test/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
-- Backup through 2000 remains `backup/audit-2000-final-2026-11-21`; no incremental backup due at this checkpoint. Next backup after 1,000 further completed entries (3000) and global verification.
+- Completed source entries: **1–2200**.
+- Active 200-file stage: **2001–2200**, progress **200/200 — CLOSED**.
+- Closed reporting sections: **2001–2050**, **2051–2100**, **2101–2150**, and **2151–2200**. The second one-time authorization for 2101–2200 is exhausted.
+- Active Ledger contains **200 records (2001–2200)** with exactly 15 required fields; Index contains **2,200 sequential unique paths**.
+- Pinned upstream remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- The final checkpoint includes seven fully read Hugeicons SVGs, a structurally validated 64×64 RGBA PNG, Pixelarticons' distinct MIT notice and sixteen fully read Pixelarticons SVGs. Keep both icon licenses separate.
+- Path-order correction caused seven files after entry 2200 to be fetched unintentionally. They are excluded from Ledger/Index and not counted complete; do not review or adopt after 2200 without new permission.
+- The Horizon PNG's ownership/redistribution rights remain unverified; do not bundle until confirmed.
+- No application source changed. No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation. Existing backup through 2000 remains `backup/audit-2000-final-2026-11-21`; no backup due at this boundary.
 
 ## Source pin and selection
 
@@ -544,3 +544,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - The set covers common launcher actions/statuses and external-brand mark (Discord). The adjacent Hugeicons MIT notice must accompany redistributed icon files. SVG-to-Android rendering remains unvalidated.
 - Active Ledger has **175 records (2001–2175)**, each with 15 fields; Index has **2,175 sequential unique paths**. No app source changed; no tests/runtime validation performed.
 - Continue at **2176–2200** under the same user authorization. **Do not stop/request permission at 2175; STOP only at 2200** and ask before 2201.
+
+
+## Final authorized checkpoint — entries 2176–2200 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23`.
+- Entries **2176–2200 (25/25)** read fully in raw Git tree order; exact paths, blob SHAs and sizes match.
+- Seven Glass SVGs, Horizon PNG, Pixelarticons MIT notice and sixteen Pixel SVGs were completely inspected. PNG CRCs are valid and preview was reviewed. Pixelarticons and Hugeicons MIT notices are distinct.
+- SVGs contain no active/external content. Android renderer/conversion untested. Horizon PNG ownership/license unresolved.
+- Seven later assets (2201–2207, `home.svg` through `package.svg`) were inadvertently fetched in an earlier ordering mistake; they are excluded from Ledger/Index and completion counts.
+- Ledger 200 records with 15 fields each; Index 2,200 sequential unique paths. No app source change or runtime testing.
+- Authorization 2101–2200 exhausted. Stop before entry 2201 and ask for fresh explicit permission.

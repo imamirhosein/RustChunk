@@ -3,9 +3,9 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **175/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
+- Current progress: **200/200 — CLOSED**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
 - One-time expanded authorizations: entries **2001–2100** and **2101–2200**. The second exception covers the complete 2101–2200 window; keep four 25-file commits, do not stop/request permission at 2150, and stop only at 2200.
-- Checkpoint cadence: exact 25-file atomic commits. Section 2101–2150 is closed (50/50); checkpoint 2151–2175 is now complete, with 2176–2200 remaining under the same authorization. Do not pause at 2175; stop only at 2200.
+- Checkpoint cadence: exact 25-file atomic commits. All four checkpoints in the second one-time authorization (2101–2200) are complete; the authorization is exhausted. Stop before entry 2201 and request fresh permission.
 - Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
 
@@ -3040,3 +3040,440 @@
 - The symbols cover copy, dashboard, delete, Discord, download, earth, favourite, folder, game controller, globe, image, information, link, minus, horizontal/vertical overflow menus, package, edit, play, plus, puzzle, refresh, search, sliders and stop.
 - The adjacent Hugeicons MIT notice (entry 2143) must be retained with copied icon content. Android VectorDrawable compatibility is not established; converted output or a selected SVG renderer needs target-device validation.
 - Ledger now contains **175 entries (2001–2175)** with exactly 15 fields each; Index contains **2,175 sequential unique paths**. No app source changed; no tests/build/device/renderer/game validation was performed.
+
+### 2176. `crates/horizon-theme/icons/glass/tick-02.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `87194e8272c5bd95e23e2d93234b5a1d900afe56`
+- Size: 223 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 223/223 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 tick/check mark glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 223-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2177. `crates/horizon-theme/icons/glass/upload-04.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `57f0842870248f8fea7dbeb120ef62085c0ac9f9`
+- Size: 1,413 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 1,413/1,413 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 upload arrow glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 1,413-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2178. `crates/horizon-theme/icons/glass/user-add-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a8f2e93b862c60519cd46b3fa57d1239ba1492b3`
+- Size: 603 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 603/603 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 add user glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 603-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2179. `crates/horizon-theme/icons/glass/user-multiple-02.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bb6d5da4caecdeef25c116ed6d67b34fcdca19aa`
+- Size: 897 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 897/897 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 multiple users glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 897-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2180. `crates/horizon-theme/icons/glass/user.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12e174f1f835775ffb07b1a1db9ab6a9ab53fe58`
+- Size: 479 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 479/479 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 user profile glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 479-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2181. `crates/horizon-theme/icons/glass/view-off-slash.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ac0b480cf5a48ea4ff7dc84e79099a7ba39b684a`
+- Size: 915 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 915/915 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 visibility off / slash glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 915-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2182. `crates/horizon-theme/icons/glass/view.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `40d166d7c9e2877930848d85bd051c1472c50847`
+- Size: 624 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 624/624 bytes; root, attributes, elements and path data inspected.
+- Purpose: 24×24 view/visibility glyph from the Hugeicons Glass icon set.
+- Dependencies / cross-references: Self-contained SVG; separate Hugeicons MIT notice in crates/horizon-theme/icons/glass/LICENSE-hugeicons.txt (entry 2143).
+- Implementation / logic: 24×24 viewBox and currentColor line-art geometry; complete root attributes, elements and path commands were read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Android rendering/conversion was not tested.
+- RustChunk relevance: Optional launcher/settings UI glyph; the symbol does not implement the represented action.
+- Decision: adaptable; Hugeicons Glass SVG UI icon; preserve the separate Hugeicons MIT notice
+- 1.20.1 implications: No Minecraft/Forge functionality. SVG validity does not guarantee Android VectorDrawable support; validate a converter or SVG renderer on device.
+- Follow-up checks: Test theme tint, scale, stroke, clipping and states on Android; provide parent-control accessibility semantics; retain Hugeicons MIT notice.
+- RustChunk implementation mapping: Keep as an optional, independent UI asset. Put behavior and accessibility in the parent UI component, not the SVG.
+- Evidence required before adoption: Target-device tests at multiple densities/themes, converter output review, accessibility labels and MIT notice in release.
+- Completion state: COMPLETE — full 624-byte SVG read through EOF; pinned SHA/size match; XML/path content and active/external references inspected. No renderer test implied.
+
+### 2183. `crates/horizon-theme/icons/horizon-64.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1add8b2d610b44bd2b16ec3816882154c7d000e2`
+- Size: 797 bytes; PNG binary, line count N/A
+- Coverage: Full binary Base64-decoded: 797/797 bytes; PNG signature and all chunks through IEND inspected, each chunk CRC32 checked, preview inspected.
+- Purpose: 64×64 Horizon-named bitmap branding mark stored at the theme icon root.
+- Dependencies / cross-references: PNG signature/IHDR/bKGD/IDAT/IEND chunks. No dedicated license was found beside this PNG; do not infer coverage from neighboring Glass or Pixel notices.
+- Implementation / logic: 64×64 pixels, 8-bit RGBA, compression/filter 0, non-interlaced; IHDR, bKGD, IDAT (722 bytes), IEND. All four chunk CRC32s valid; IEND ends exactly at byte 797.
+- Findings: Binary structure and CRC integrity are valid; image preview was checked. Ownership and redistribution permission are not established by the adjacent icon notices.
+- RustChunk relevance: Potential launcher branding/splash asset, not an Android adaptive-icon definition or a Minecraft texture.
+- Decision: reference; Horizon 64px bitmap branding asset; verify ownership before redistribution
+- 1.20.1 implications: No Android density variants, adaptive mask or APK packaging behavior are defined; not a Forge resource by itself.
+- Follow-up checks: Confirm ownership and redistribution rights; verify brand intent, transparency/background, scaling and adaptive-icon rendering on Android.
+- RustChunk implementation mapping: Keep separate from third-party icon packs until ownership is verified; do not assign MIT from a neighboring directory.
+- Evidence required before adoption: Written permission or provenance, original design source if available, real-device launcher icon rendering and release packaging review.
+- Completion state: COMPLETE — all 797 bytes decoded; SHA/size, signature, RGBA IHDR, all CRCs and IEND offset verified; preview visually inspected. Legal ownership unresolved.
+
+### 2184. `crates/horizon-theme/icons/pixel/LICENSE-pixelarticons.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4be35e8f27403b5e3e9a4a80072e92d32059c307`
+- Size: 1,072 bytes; 21 logical lines
+- Coverage: Lines 1–21 through EOF; all 1,072/1,072 UTF-8 bytes read.
+- Purpose: MIT License and copyright notice for the Pixelarticons icon family.
+- Dependencies / cross-references: Copyright © 2019 Gerrit Halfmann; associated files in crates/horizon-theme/icons/pixel/ (entries 2185–2200).
+- Implementation / logic: Complete MIT grant for use/copy/modify/merge/publish/distribute/sublicense/sell, conditioned on preserving the copyright and permission text; full warranty/liability disclaimer.
+- Findings: Pixelarticons uses a separate MIT notice and copyright holder from Hugeicons. The Hugeicons/Glass notice must not replace this license.
+- RustChunk relevance: Required compliance artifact if Pixelarticons SVGs are reused.
+- Decision: essential; preserve Pixelarticons MIT copyright and permission notice
+- 1.20.1 implications: License obligation only; no Android/Minecraft runtime behavior.
+- Follow-up checks: Ship full notice with Pixelarticons assets and retain it in derivatives; verify the notice is included in the distribution.
+- RustChunk implementation mapping: Keep Pixelarticons SVGs and this license as a separate package from the Hugeicons set.
+- Evidence required before adoption: Release archive/APK contains Gerrit Halfmann copyright and full MIT text; licensing scope reviewed.
+- Completion state: COMPLETE — all 1,072 bytes and 21 lines read through EOF; exact SHA and size match.
+
+### 2185. `crates/horizon-theme/icons/pixel/archive.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `03033f96dc50dc14678cdad59786d701e0c1cdf4`
+- Size: 224 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 224/224 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 archive box symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 224-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2186. `crates/horizon-theme/icons/pixel/arrow-left.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `96905e6c124ee52fc50d8808486962a9886c37f1`
+- Size: 231 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 231/231 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 left arrow symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 231-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2187. `crates/horizon-theme/icons/pixel/book-open.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b9b134ccc8c60a0803f58f26ed0c9fec3c176037`
+- Size: 254 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 254/254 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 open book symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 254-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2188. `crates/horizon-theme/icons/pixel/box.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `68f58c8ed064149f9582845d50e3c56839e2cc4a`
+- Size: 340 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 340/340 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 box/package symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 340-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2189. `crates/horizon-theme/icons/pixel/bug.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cdc707a443f56b96ee8b48e2ce5d768a1e11ace8`
+- Size: 378 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 378/378 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 bug/issue symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 378-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2190. `crates/horizon-theme/icons/pixel/check.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e8dec6fe85e61d35c55e334f78d304c8e958bc11`
+- Size: 245 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 245/245 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 check mark symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 245-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2191. `crates/horizon-theme/icons/pixel/chevron-down.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `472e5e0d0fc9afe3706f5b794c77271dfe81b768`
+- Size: 232 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 232/232 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 down chevron symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 232-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2192. `crates/horizon-theme/icons/pixel/chevron-right.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ad8a9142cb51ae2b847e886dc93706e8f3873ce3`
+- Size: 232 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 232/232 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 right chevron symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 232-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2193. `crates/horizon-theme/icons/pixel/clock.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e17594f9835759754eb61993f9f9761429d0894c`
+- Size: 266 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 266/266 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 clock symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 266-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2194. `crates/horizon-theme/icons/pixel/close.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6e6d812572053d58dded9df965a29a0378ad7b9a`
+- Size: 343 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 343/343 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 close/cross symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 343-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2195. `crates/horizon-theme/icons/pixel/download.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `122cfbd80e036c7b896e9e7ebaa50a187d25ef65`
+- Size: 263 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 263/263 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 download symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 263-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2196. `crates/horizon-theme/icons/pixel/external-link.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7058bc5b7580aff3c33d6db5c3cfad4f08c3bdd7`
+- Size: 302 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 302/302 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 external link symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 302-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2197. `crates/horizon-theme/icons/pixel/folder.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `40533e4bbdb507008d6f58076460550b8b73c2b8`
+- Size: 189 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 189/189 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 folder symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 189-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2198. `crates/horizon-theme/icons/pixel/gamepad.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9936d5e662dbf1badf647fe226e46db7cbb72c1b`
+- Size: 239 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 239/239 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 gamepad symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 239-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2199. `crates/horizon-theme/icons/pixel/globe.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3b984aa0cce7c8c983bf695df2c68ce4176a8d96`
+- Size: 326 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 326/326 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 globe symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 326-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+### 2200. `crates/horizon-theme/icons/pixel/heart.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7c0ccb9eb4b148ddf1ce5385ec5f438b7bef3f59`
+- Size: 391 bytes; full UTF-8 SVG
+- Coverage: Complete UTF-8 SVG read through EOF: 391/391 bytes; root, all elements and full path data inspected.
+- Purpose: 24×24 heart/favourite symbol from Pixelarticons.
+- Dependencies / cross-references: Self-contained SVG paths; distinct Pixelarticons MIT notice, entry 2184 (Copyright © 2019 Gerrit Halfmann).
+- Implementation / logic: 24×24 viewBox, width/height 24, fill=currentColor and block/pixel-grid path geometry; all XML and path commands read.
+- Findings: No script, foreignObject, iframe, embedded image/use, href/xlink:href or CSS url() reference found. Pixel-grid visual style is distinct from the Glass line-art set.
+- RustChunk relevance: Optional pixel-styled launcher/settings glyph; the icon does not implement the named action.
+- Decision: adaptable; Pixelarticons pixel SVG UI glyph; preserve its distinct MIT notice
+- 1.20.1 implications: No Minecraft/Forge behavior. Directional chevrons/arrows need RTL-aware semantics; Android SVG support remains unvalidated.
+- Follow-up checks: Check crisp rendering at target densities, tint, clipping and RTL/LTR direction; put accessibility text on parent control and keep Pixelarticons MIT notice.
+- RustChunk implementation mapping: Keep Pixel and Glass as separate UI asset packs; behavior, accessibility and mirroring belong in parent UI components.
+- Evidence required before adoption: On-device render tests at multiple densities/themes, RTL/LTR navigation behavior, accessibility and license-notice checks.
+- Completion state: COMPLETE — full 391-byte SVG read through EOF; exact pinned SHA/size match; all XML/path content and active/external references inspected. No renderer test implied.
+
+## Checkpoint 2176–2200 — complete (25/25); second authorization closed
+
+- Entries 2176–2200 match the next 25 blobs in the pinned raw Git tree after Index entry 2175. All paths, blob SHAs and exact byte lengths were checked.
+- Seven Hugeicons Glass SVGs were fully read as UTF-8. The 64×64 Horizon PNG was fully Base64-decoded; PNG signature, IHDR, bKGD, IDAT and IEND sequence, chunk bounds and all four CRC32 values were validated. IEND ends exactly at EOF, and a visual preview was inspected.
+- Pixelarticons' separate MIT notice (Copyright © 2019 Gerrit Halfmann, 1,072 bytes/21 lines) was fully read. Sixteen Pixelarticons SVGs (2185–2200) were completely read and match this distinct license; do not substitute Hugeicons' separate MIT notice from entry 2143.
+- All inspected SVGs are self-contained without scripts, foreignObjects, embedded resources or external URL references. Glass icons use currentColor line art; Pixelarticons use filled pixel-grid currentColor paths. Android SVG rendering/conversion remains untested.
+- No dedicated license for the Horizon PNG was found at the icon root. Ownership/redistribution permission remains unresolved; do not infer coverage from either neighboring icon pack.
+- Path-order correction incident: seven assets after entry 2200 were fetched unintentionally — `home.svg` (2201), `image.svg` (2202), `info-box.svg` (2203), `message.svg` (2204), `monitor.svg` (2205), `notes.svg` (2206) and `package.svg` (2207). They are explicitly excluded from Ledger, Index and all completion counts; they are not authorized completed entries, and no adoption decision is made. Fresh permission is required before further source review.
+- Active Ledger now contains **200 records (2001–2200)**, each with exactly 15 fields. Index contains **2,200 sequential unique paths**. All four authorized 25-file checkpoints in 2101–2200 are closed.
+- No application source changed. No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation was performed.
+- The one-time authorization for **2101–2200 is exhausted**. Stop before entry 2201 and request fresh explicit permission.
