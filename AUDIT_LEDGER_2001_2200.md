@@ -3,9 +3,9 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **150/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
+- Current progress: **175/200**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
 - One-time expanded authorizations: entries **2001–2100** and **2101–2200**. The second exception covers the complete 2101–2200 window; keep four 25-file commits, do not stop/request permission at 2150, and stop only at 2200.
-- Checkpoint cadence: exact 25-file atomic commits. Section 2101–2150 is now closed (50/50); continue 2151–2175 and 2176–2200 without stopping at 2150.
+- Checkpoint cadence: exact 25-file atomic commits. Section 2101–2150 is closed (50/50); checkpoint 2151–2175 is now complete, with 2176–2200 remaining under the same authorization. Do not pause at 2175; stop only at 2200.
 - Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
 
@@ -2607,3 +2607,436 @@
 - Font distribution must retain OFL 1.1 notices; Bricolage includes Cyrillic material attributed to Geist, so both projects' notices must be retained. Hugeicons SVG subset is MIT and requires its copyright/permission notice.
 - SVGs are minimal 24×24 currentColor assets with no active/external resources; Android rendering/conversion remains untested.
 - Active Ledger contains **150 entries (2001–2150)**, every record has exactly 15 fields. No application source changed; no build, APK, device, renderer, Minecraft, Forge, server or Aternos validation was performed.
+
+### 2151. `crates/horizon-theme/icons/glass/copy-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3065e93ca5e9517da19cdd1bfc97c3a435619ebb`
+- Size: 946 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 946/946 bytes.
+- Purpose: 24×24 copy / duplicate sheets icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 946-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2152. `crates/horizon-theme/icons/glass/dashboard-square-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `895f2c209da53bd319729811458decc5de2ca18d`
+- Size: 2,464 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 2,464/2,464 bytes.
+- Purpose: 24×24 four-panel dashboard grid icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 4 path element(s). The path strokes use square line caps, unlike the more usual rounded caps in this icon set.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 2,464-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2153. `crates/horizon-theme/icons/glass/delete-02.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `71424ceaeb19568355a63eca1ad798824be230cd`
+- Size: 928 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 928/928 bytes.
+- Purpose: 24×24 trash/delete bin icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 3 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 928-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2154. `crates/horizon-theme/icons/glass/discord.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6474215be19a80ee0c1238daf416dfe9fc8b39d6`
+- Size: 1,362 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 1,362/1,362 bytes.
+- Purpose: 24×24 Discord brand mark icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, `fill="currentColor"`; width and height are not explicitly set; 1 path element(s). This is a filled brand mark, not an outline icon; it uses fill=currentColor and has no explicit width/height.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 1,362-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2155. `crates/horizon-theme/icons/glass/download-04.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b95aa0fe2a3c61171b9e0018988e34aeb2f47406`
+- Size: 945 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 945/945 bytes.
+- Purpose: 24×24 download arrow and baseline icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 945-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2156. `crates/horizon-theme/icons/glass/earth.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `090bd4be05ad2469f1c523a6236dceb54adc3934`
+- Size: 876 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 876/876 bytes.
+- Purpose: 24×24 earth/globe outline icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 876-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2157. `crates/horizon-theme/icons/glass/favourite.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `593fcc058f696361d4f8a0919163d71a18dc0f4c`
+- Size: 439 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 439/439 bytes.
+- Purpose: 24×24 heart/favourite icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 439-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2158. `crates/horizon-theme/icons/glass/folder-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bb88b40135b4e369b4f2d4dd8cba448d9a3b442d`
+- Size: 818 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 818/818 bytes.
+- Purpose: 24×24 folder icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 818-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2159. `crates/horizon-theme/icons/glass/game-controller-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `658903ffe5bb877f9a762be33466177bdcdaa28f`
+- Size: 930 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 930/930 bytes.
+- Purpose: 24×24 game controller icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 3 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 930-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2160. `crates/horizon-theme/icons/glass/globe-02.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4ca4897259574fb61658054d1b852f776f162c04`
+- Size: 537 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 537/537 bytes.
+- Purpose: 24×24 globe with latitude/longitude lines icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 3 path element(s). Uses a circle element in addition to the path geometry.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 537-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2161. `crates/horizon-theme/icons/glass/image-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b7bcd3fed9329e77b21277d49e762297ff2b6078`
+- Size: 685 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 685/685 bytes.
+- Purpose: 24×24 image/photo frame with sun and landscape icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses a circle element in addition to the path geometry.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 685-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2162. `crates/horizon-theme/icons/glass/information-circle.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7435d9754f9bf8c6a213276eb7fa6b6e6f5108d2`
+- Size: 592 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 592/592 bytes.
+- Purpose: 24×24 information circle icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses a circle element in addition to the path geometry.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 592-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2163. `crates/horizon-theme/icons/glass/link-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `66d4c631a5378f83b77c8b0ce56c47a782414344`
+- Size: 755 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 755/755 bytes.
+- Purpose: 24×24 interlocking link/chain icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 755-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2164. `crates/horizon-theme/icons/glass/minus-sign.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `696fcc75b7ded381fdfdca7474219ae455cd0766`
+- Size: 213 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 213/213 bytes.
+- Purpose: 24×24 minus sign icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 213-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2165. `crates/horizon-theme/icons/glass/more-horizontal.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a944e00b422933674e6e0be8a43e2aacec043893`
+- Size: 794 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 794/794 bytes.
+- Purpose: 24×24 horizontal three-dot overflow menu icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 794-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2166. `crates/horizon-theme/icons/glass/more-vertical.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4b96a030d32383fb6df6e21e1ba82d5b9d6319dd`
+- Size: 779 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 779/779 bytes.
+- Purpose: 24×24 vertical three-dot overflow menu icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 779-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2167. `crates/horizon-theme/icons/glass/package-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e2dcde13aaf13c5258667e523d2b1579652b8e3f`
+- Size: 922 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 922/922 bytes.
+- Purpose: 24×24 package/parcel icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 4 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 922-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2168. `crates/horizon-theme/icons/glass/pencil-edit-02.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `66ba90c10abe50e9f649c177beadb9c56ec3fde1`
+- Size: 938 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 938/938 bytes.
+- Purpose: 24×24 pencil editing a document icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 938-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2169. `crates/horizon-theme/icons/glass/play.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ec5662d2ec40e80236b94535e8610441cea90b0c`
+- Size: 578 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 578/578 bytes.
+- Purpose: 24×24 play symbol icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 578-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2170. `crates/horizon-theme/icons/glass/plus-sign.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9a14b2a3874c91500688d62d4a659412fb6e7372`
+- Size: 218 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 218/218 bytes.
+- Purpose: 24×24 plus sign icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 218-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2171. `crates/horizon-theme/icons/glass/puzzle.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `95ca0ad6bd50a5db8b65d32d364323fdd2002964`
+- Size: 1,180 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 1,180/1,180 bytes.
+- Purpose: 24×24 jigsaw puzzle piece icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 1,180-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2172. `crates/horizon-theme/icons/glass/refresh.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4735e3b43953844fccf51bca4f7cd233f194662c`
+- Size: 378 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 378/378 bytes.
+- Purpose: 24×24 refresh / repeat arrow icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 378-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2173. `crates/horizon-theme/icons/glass/search-01.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0fbae2632467dbed811e5d7ce1200921fb35ee97`
+- Size: 427 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 427/427 bytes.
+- Purpose: 24×24 magnifying glass icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 2 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 427-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2174. `crates/horizon-theme/icons/glass/sliders-horizontal.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `73313ba06e08992a0b9282a49b15a44f4b4b930f`
+- Size: 1,014 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 1,014/1,014 bytes.
+- Purpose: 24×24 horizontal adjustment sliders icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 6 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 1,014-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+### 2175. `crates/horizon-theme/icons/glass/stop.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3a0688e0e3d9af67d23ca4a2b685294b9332c6cb`
+- Size: 603 bytes; 1 logical line
+- Coverage: 1–1 (EOF); full UTF-8 SVG read and inspected, 603/603 bytes.
+- Purpose: 24×24 stop symbol in rounded square icon for the Horizon glass theme.
+- Dependencies / cross-references: Single-file SVG geometry and the adjacent Hugeicons MIT license notice (entry 2143); no referenced external assets.
+- Implementation / logic: SVG root `viewBox="0 0 24 24"`, explicit width/height 24, `fill="none"`, stroke `currentColor`, width 1.6; 1 path element(s). Uses one or more self-contained stroked path elements.
+- Findings: Complete content scan found no script, foreignObject, iframe, image, use, href/xlink:href or CSS url() external resource. XML source is self-contained; rendering/conversion itself was not tested.
+- RustChunk relevance: Potential optional launcher/settings navigation or status glyph; it provides appearance only, not the interaction denoted by its symbol.
+- Decision: adaptable; compact Hugeicons SVG interface icon; preserve MIT attribution
+- 1.20.1 implications: No Minecraft/Forge function. Android VectorDrawable compatibility is not implied by SVG validity; convert through a validated toolchain or use a trusted SVG renderer. Parent controls must supply accessibility semantics.
+- Follow-up checks: Validate output after conversion on target Android, compare currentColor/fill behavior, clipping and scaling at multiple densities, test theme tint, and retain MIT notice.
+- RustChunk implementation mapping: Keep as an optional independent theme asset. Implement all action/state/accessibility behavior in the parent UI, never in the SVG.
+- Evidence required before adoption: On-device visual test for multiple densities/themes, conversion correctness, parent-control accessibility and MIT notice in the distributed package.
+- Completion state: COMPLETE — full 603-byte, one-line SVG read to EOF; exact pinned-tree SHA/size match; all elements/attributes and active/external references inspected. No renderer test claimed.
+
+## Checkpoint 2151–2175 — complete (25/25)
+
+- Entries 2151–2175 are the next 25 unique source blobs after excluding Index entries 1–2150 from the complete pinned tree. Each SVG was read completely as UTF-8 through EOF; all 25 Git blob SHAs and exact byte sizes match the tree.
+- All 25 assets are one-line SVG files in `crates/horizon-theme/icons/glass/`, each with a 24×24 viewBox. Except for the Discord filled brand mark (fill=currentColor and no explicit width/height) and the dashboard icon's square line caps, the group primarily uses no-fill currentColor strokes. Every file is self-contained; no scripts, foreignObject, embedded image/use or external href/url resources were found.
+- The symbols cover copy, dashboard, delete, Discord, download, earth, favourite, folder, game controller, globe, image, information, link, minus, horizontal/vertical overflow menus, package, edit, play, plus, puzzle, refresh, search, sliders and stop.
+- The adjacent Hugeicons MIT notice (entry 2143) must be retained with copied icon content. Android VectorDrawable compatibility is not established; converted output or a selected SVG renderer needs target-device validation.
+- Ledger now contains **175 entries (2001–2175)** with exactly 15 fields each; Index contains **2,175 sequential unique paths**. No app source changed; no tests/build/device/renderer/game validation was performed.

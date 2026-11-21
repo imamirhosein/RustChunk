@@ -7,15 +7,15 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2150**.
-- Active 200-file stage: **2001–2200**, progress **150/200**.
-- Completed reporting sections: **2001–2050**, **2051–2100**, **2101–2150** (all closed 50/50). Checkpoints 2101–2125 and 2126–2150 are complete.
-- The user's second one-time exception authorizes **2101–2200**. Checkpoints 2151–2175 and 2176–2200 remain pre-authorized. Keep exact 25-file commits; **do not stop/request permission at 2150; STOP only at 2200** and ask before 2201.
-- Active Ledger has **150 records (2001–2150)** with exactly 15 fields each; Index has **2,150 sequential unique paths**.
+- Completed source entries: **1–2175**.
+- Active 200-file stage: **2001–2200**, progress **175/200**.
+- Completed reporting sections: **2001–2050**, **2051–2100**, **2101–2150** (closed 50/50); current section **2151–2200**, checkpoint 2151–2175 complete and 2176–2200 pending.
+- The user's second one-time authorization covers **2101–2200**. The final checkpoint 2176–2200 is pre-authorized. Keep exact 25-file commits; **do not stop/request permission at 2175; STOP only at 2200** and ask before 2201.
+- Active Ledger has **175 records (2001–2175)** with 15 fields each; Index has **2,175 sequential unique paths**.
 - Pinned source: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
-- Entries 2126–2142 are fully decoded/parsed binary fonts; 2137–2150 are complete UTF-8 license and SVG assets. Earlier UTF-8-only binary fetch limitation is resolved; no binary file was handled metadata-only.
+- Entries 2126–2142 are fully decoded/parsed binary fonts; 2137–2175 contains fully read UTF-8 font licenses, icon license and SVGs. All these entries are checked against exact pinned-tree SHA/size.
 - No app source changed. Tests/examples remain inspection-only. No build/test/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
-- Backup through 2000 remains `backup/audit-2000-final-2026-11-21`; no incremental backup at this checkpoint. Next backup only after 1,000 further entries (3000) and global verification.
+- Backup through 2000 remains `backup/audit-2000-final-2026-11-21`; no incremental backup due at this checkpoint. Next backup after 1,000 further completed entries (3000) and global verification.
 
 ## Source pin and selection
 
@@ -533,3 +533,14 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Seven SVGs are compact 24×24 currentColor assets with no active/external resources; Android rendering remains unvalidated.
 - Active Ledger 150 records (2001–2150); Index 2,150 sequential unique paths. No app source changed and no tests/runtime validation performed.
 - Section **2101–2150 closed**. Continue 2151–2175 and 2176–2200 without pausing at 2150; **STOP at 2200** and ask before 2201.
+
+
+## Verified checkpoint — entries 2151–2175 — 2026-11-21
+
+- Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries **2151–2175 (25/25)** were read serially and completely through EOF. All are one-line SVGs; exact path, SHA and byte length match the pinned tree.
+- The files are self-contained vector glyphs using a 24×24 viewBox. No active script, embedded images/use, external links or CSS URL references were found. Discord uses filled currentColor without explicit width/height; dashboard paths use square line caps. Other symbols are conventional stroked currentColor paths/circles.
+- The set covers common launcher actions/statuses and external-brand mark (Discord). The adjacent Hugeicons MIT notice must accompany redistributed icon files. SVG-to-Android rendering remains unvalidated.
+- Active Ledger has **175 records (2001–2175)**, each with 15 fields; Index has **2,175 sequential unique paths**. No app source changed; no tests/runtime validation performed.
+- Continue at **2176–2200** under the same user authorization. **Do not stop/request permission at 2175; STOP only at 2200** and ask before 2201.

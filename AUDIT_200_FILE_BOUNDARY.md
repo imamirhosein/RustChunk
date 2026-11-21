@@ -5,7 +5,7 @@
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
 - Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **150/200**.
+- Current stage: **2001–2200**, progress **175/200**.
 - One-time authorizations: **2001–2100** and **2101–2200**. For the second window, preserve 25-file commits but do not stop or request permission at 2150; stop only at 2200.
 
 ## Stage partition
@@ -15,7 +15,7 @@
 | 2001–2050 | 2001–2025 — **COMPLETE** | 2026–2050 — **COMPLETE** | **CLOSED — 50/50** |
 | 2051–2100 | 2051–2075 — **COMPLETE** | 2076–2100 — **COMPLETE** | **CLOSED — 50/50** |
 | 2101–2150 | 2101–2125 — **COMPLETE** | 2126–2150 — **COMPLETE** | **CLOSED — 50/50** |
-| 2151–2200 | 2151–2175 — PRE-AUTHORIZED | 2176–2200 — PRE-AUTHORIZED | PRE-AUTHORIZED — STOP ONLY AT 2200 |
+| 2151–2200 | 2151–2175 — **COMPLETE** | 2176–2200 — PRE-AUTHORIZED | IN PROGRESS — 25/50; CONTINUE AT 2176; STOP ONLY AT 2200 |
 
 ## Checkpoint 2001–2025
 
@@ -88,3 +88,13 @@
 - SVGs are simple 24×24 currentColor vectors, but Android vector renderer remains untested.
 - Ledger 150 records (2001–2150), 15 fields each; Index 2,150 sequential unique paths.
 - Section **2101–2150 CLOSED (50/50)**. Continue 2151–2175 and 2176–2200 under same authorization. **Do not stop at 2150; STOP only at 2200.**
+
+
+## Checkpoint 2151–2175 — COMPLETE (25/25)
+
+- All 25 next SVG source files were read completely and sequentially; exact SHA/size pairs match the pinned tree.
+- Entire set uses one-line UTF-8 SVGs and simple 24×24 vector paths/circles. No script/foreignObject/embedded image/use, href/xlink or CSS URL external resources were found.
+- Discord is the filled currentColor exception without explicit width/height; dashboard uses square line caps. Keep individual rendering attributes intact when converting.
+- Hugeicons MIT notice from entry 2143 must accompany redistributed icon files. Android vector renderer compatibility is not proven.
+- Active Ledger 175 records, 15 fields each; Index 2,175 sequential unique paths. Current section 2151–2200 is 25/50 complete; final half is pre-authorized.
+- Continue 2176–2200 with no permission request at 2175. **STOP only at 2200.**

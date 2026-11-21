@@ -1440,3 +1440,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger has **150 entries (2001–2150)** with exactly 15 fields each; Index has **2,150 sequential unique paths**, and the newly added decisions align.
 - Tests/examples inspected only, not executed. No app source change, build, APK, Android device, renderer, Minecraft, Forge, server or Aternos validation.
 - Section **2101–2150 is closed (50/50)**. Continue 2151–2175 and 2176–2200 under existing one-time authorization. **Do not stop/ask at 2150; stop only at 2200.**
+
+
+## Checkpoint 2151–2175 — 2026-11-21
+
+- Completed entries **2151–2175 (25/25)** in exact pinned-tree order; every file was inspected serially and completely through EOF as UTF-8. Exact blob SHAs and byte lengths match the complete recursive tree.
+- The entire set comprises 25 self-contained one-line SVGs in the Hugeicons glass icon directory. Root/viewBox, dimensions, fill/stroke semantics, all path counts and tags were read; no script, foreignObject, iframe, image/use embedding, href/xlink or CSS URL external reference was present.
+- Visual symbols: copy, four-panel dashboard, delete, Discord filled brand mark, download, earth, favourite, folder, game controller, globe, image, information, chain link, minus, horizontal/vertical overflow, parcel, edit, play, plus, puzzle, refresh, search, adjustment sliders and stop.
+- Two integration variations were noted: Discord uses fill=currentColor and omits explicit width/height; dashboard path caps are square. Do not assume every icon shares identical SVG attributes.
+- The adjacent Hugeicons MIT notice (entry 2143) remains part of the distribution obligation. SVG source inspection does not prove Android VectorDrawable support or renderer output; conversion and device validation are still required.
+- Ledger now has **175 records (2001–2175)**, each with exactly 15 fields; Index has **2,175 sequential unique paths**, new Decisions aligned. No app source changed; no tests/build/APK/device/renderer/Minecraft/Forge/Aternos validation.
+- Checkpoint **2151–2175 is complete**. The user's one-time authorization still covers 2176–2200; continue immediately and **STOP only at 2200**, not at 2175.
