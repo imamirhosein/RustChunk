@@ -7,14 +7,14 @@ Working branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2250**.
-- Completed prior stage: **2001–2200 (200/200)**; active stage: **2201–2400**, progress **50/200**.
+- Completed source entries: **1–2275**.
+- Completed prior stage: **2001–2200 (200/200)**; active stage: **2201–2400**, progress **75/200**.
 - Closed reporting section: **2201–2250 (50/50)**; checkpoints **2201–2225** and **2226–2250** both complete and read-back verified.
-- The user has explicitly authorized the next standard section **2251–2300**. Both checkpoints **2251–2275** and **2276–2300** are covered. Continue without another permission request at 2275; **STOP at 2300** and request permission before 2301.
-- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **250 records (2001–2250)** with exactly 15 fields; Index contains **2,250 sequential unique paths**.
+- The user has explicitly authorized the next standard section **2251–2300**. Checkpoint **2251–2275** is complete and read-back verified; **2276–2300** remains covered by the same authorization. Continue without another permission request at 2275; **STOP at 2300** and request permission before 2301.
+- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **275 records (2001–2275)** with exactly 15 fields; Index contains **2,275 sequential unique paths**.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
 - Entries **2201–2207** were initially fetched before authorization but were then re-fetched, completely inspected, SHA/size matched and registered under the 2201–2250 authorization. They are current completed entries in both Ledger and Index, not exclusions.
-- Entry 2214 remains a custom Horizon star with unresolved separate asset-license provenance. Findings for the thread pool, memory watcher, chunkgen verifier and world fixtures are recorded in entries 2226–2250.
+- Entry 2214 remains a custom Horizon star with unresolved separate asset-license provenance. Findings for the thread pool, memory watcher, chunkgen verifier and world fixture transports are recorded in entries 2226–2275.
 - The verified backup covers entries 1–2000 only. No backup at 2250; next backup only after entry 3000 and global verification.
 - No application source changed. Tests/examples were inspected only, not run; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
@@ -580,3 +580,8 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - The user has explicitly authorized the next standard 50-file section **2251–2300**.
 - Checkpoints **2251–2275** and **2276–2300** are both authorized; complete and verify the first 25-file checkpoint, then continue without asking at 2275.
 - **STOP at 2300**. Do not inspect 2301+ without fresh explicit permission.
+
+
+- Entries 2251–2275 were inspected serially through EOF in deterministic lexical order after the Index boundary; SHA and exact sizes match. Three files over 400 lines were read in contiguous chunks of at most 400 lines.
+- Ledger 275 entries (2001–2275), exactly 15 fields; Index 2,275 sequential unique paths with Decisions aligned.
+- Next checkpoint 2276–2300 is already authorized; proceed without pausing at 2275, then STOP at 2300.

@@ -1503,3 +1503,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
 - The latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`. A full-set check found **zero unindexed source paths lexically before or equal to it**; all **2,718** remaining unindexed blobs are after this boundary.
 - From entry **2251** onward, select the next unindexed paths in deterministic lexical path order strictly after the latest indexed path, excluding the complete Index. Recheck uniqueness, pinned-tree membership, source SHA and byte size before each checkpoint. Preserve stable entry numbering and the 25/50/200 cadence.
+
+
+## Audit checkpoint 2251–2275 — 2026-11-21
+
+- Completed entries **2251–2275 (25/25)** serially in deterministic lexical order strictly after the last indexed path, excluding all 2,250 existing Index paths. The complete pinned recursive tree is untruncated; exact paths, SHA and byte sizes match.
+- Source mix: block properties/support/survival, block push/update, block-state codec, chunk stage/status, terrain bulk access, carvers/carving masks, climbing/collision, combat/blocking rules, component durability/patches and consumable/effect fixtures.
+- These are mock differential-test transports, not shipped runtime features. Important blind spots: fixed registry cardinalities (block support), mock assumptions (always-loaded chunk/no entities in block updates), missing enchantment effects (blocking durability), unbounded/unchecked fixture schemas, empty-array modulo/index panics, unchecked i32/u8 casts, unbounded carving loops and collision parser assumptions.
+- `block_update_fixture.rs` (474), `collision_context_fixture.rs` (450) and `consumable_fixture.rs` (413) were read to EOF in consecutive gap-free chunks each no greater than 400 lines.
+- All 25 Ledger entries contain exactly 15 required fields. Ledger now contains **275 records (2001–2275)**; global Index contains **2,275 sequential unique paths** and matching Decisions.
+- Tests/examples inspected only; none run. No application source changes and no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- The next checkpoint **2276–2300** remains covered by the same explicit authorization. Do not stop/request permission at 2275; **STOP at 2300**.

@@ -135,11 +135,11 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2250**.
-- Active 200-file stage: **2201–2400**, progress **50/200**.
+- Completed source entries: **1–2275**.
+- Active 200-file stage: **2201–2400**, progress **75/200**.
 - Closed reporting section: **2201–2250 (50/50)**; checkpoints **2201–2225** and **2226–2250** are committed and read-back verified.
-- The user has now explicitly authorized the next standard 50-file section: **2251–2300**. Both checkpoints **2251–2275** and **2276–2300** are covered; do not pause at 2275. **STOP at 2300** and require fresh permission before 2301.
-- Active Ledger file: `AUDIT_LEDGER_2001_2200.md` (legacy filename), containing **250 records (2001–2250)** with exactly 15 required fields. Index contains **2,250 sequential unique paths**.
+- The user has explicitly authorized the standard 50-file section **2251–2300**. Checkpoint **2251–2275** is complete and verified; **2276–2300** remains authorized. Do not pause at 2275. **STOP at 2300** and require fresh permission before 2301.
+- Active Ledger file: `AUDIT_LEDGER_2001_2200.md` (legacy filename), containing **275 records (2001–2275)** with exactly 15 required fields. Index contains **2,275 sequential unique paths**.
 - Upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
 - Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification; no incremental backups.
 - The seven assets 2201–2207 were initially fetched before authorization, then re-fetched and fully audited after the 2201–2250 authorization. They are now entries 2201–2207 in both Ledger and Index, with exact SHA/size matches; they are not pending or excluded.
@@ -605,3 +605,13 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
 
 The current latest path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`. A full-set comparison found zero unindexed paths lexically before/equal to this boundary; all 2,718 remaining unindexed blobs are later. For the already-authorized **2251–2300** section, select the next paths in deterministic lexical order strictly after that path, excluding the full Index, then verify exact path, source SHA, size and uniqueness. Keep the standard 25/50/200 protocol.
+
+
+## 26. Checkpoint 2251–2275 — 2026-11-21
+
+- Completed entries **2251–2275 (25/25)** serially through EOF in deterministic lexical order after excluding the full Index. The 25 paths, source SHAs and byte sizes match the complete pinned recursive tree.
+- Ledger `AUDIT_LEDGER_2001_2200.md` now has **275 records (2001–2275)**, each with exactly 15 required fields. Index has **2,275 sequential unique paths** with matching path/Decision rows.
+- Three long fixtures (`block_update_fixture.rs` 474 lines, `collision_context_fixture.rs` 450, `consumable_fixture.rs` 413) were read in contiguous, gap-free chunks no greater than 400 lines.
+- Findings concern mock-world assumptions, trusted corpus inputs, unbounded/unchecked fixture operations, incomplete enchantment paths and synthetic registry constraints. These examples are oracle transports, not production features. No example/test was executed.
+- The second checkpoint **2276–2300** is already covered by the same user authorization. Continue without asking at 2275. **STOP at 2300**, then request new permission before 2301.
+- No app source changed; no tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation. No backup at this checkpoint.

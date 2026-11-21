@@ -7,8 +7,8 @@
 - Entries **1–2000** passed global structural/provenance verification and final backup; entries **2001–2250** are complete.
 - Active 200-file stage: **2201–2400**, progress **50/200**.
 - Reporting section **2201–2250 is CLOSED (50/50)**. Both 25-file checkpoints are committed and read-back verified.
-- The user has explicitly authorized the next section **2251–2300**, including checkpoints **2251–2275** and **2276–2300**.
-- **STOP at 2300** and request fresh permission before entry 2301.
+- The user has explicitly authorized section **2251–2300**. Checkpoint **2251–2275 is COMPLETE (25/25)**; checkpoint **2276–2300 remains AUTHORIZED** under the same grant.
+- Continue through 2276–2300 under the same authorization; **STOP at 2300** and request fresh permission before entry 2301.
 
 ## Stage partition
 
@@ -136,7 +136,7 @@
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
-| 2251–2300 | 2251–2275 — AUTHORIZED | 2276–2300 — AUTHORIZED | AUTHORIZED — 0/50 |
+| 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — AUTHORIZED | IN PROGRESS — 25/50 |
 | 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 | 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 
@@ -154,3 +154,12 @@
 - 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
 - The latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`. A full-set check found **zero unindexed source paths lexically before or equal to it**; all **2,718** remaining unindexed blobs are after this boundary.
 - From entry **2251** onward, select the next unindexed paths in deterministic lexical path order strictly after the latest indexed path, excluding the complete Index. Recheck uniqueness, pinned-tree membership, source SHA and byte size before each checkpoint. Preserve stable entry numbering and the 25/50/200 cadence.
+
+
+## Checkpoint 2251–2275 — COMPLETE (25/25)
+
+- All 25 unique files were inspected serially through EOF in deterministic lexical order after the complete Index; exact source SHAs and byte sizes match the full pinned tree.
+- Long-file coverage: `block_update_fixture.rs` 1–400, 401–474; `collision_context_fixture.rs` 1–400, 401–450; `consumable_fixture.rs` 1–400, 401–413.
+- Ledger 275 entries (2001–2275), exactly 15 fields each; Index 2,275 sequential unique paths and matching decisions.
+- This checkpoint consists of differential mock fixtures for block properties, survival, push/update, collision, chunk stages, carving, climbing, combat/blocking, component patches and consumable/effect behavior. They are not production client code.
+- Next checkpoint **2276–2300** is already authorized. Do not stop/request permission at 2275; **STOP at 2300**. No authorization exists for 2301+.
