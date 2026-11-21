@@ -1,12 +1,12 @@
-# RustChunk Starling Audit Ledger — Entries 2201–2400 (150 of 200 recorded)
+# RustChunk Starling Audit Ledger — Entries 2201–2400 (175 of 200 recorded)
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Entry range currently recorded: **2201–2350 (150 unique source files)**.
-- Active 200-file stage: **2201–2400 (150/200 complete)**.
-- Reporting sections **2201–2250** and **2251–2300** are CLOSED (50/50 each); all four 25-file checkpoints are complete.
-- The user has issued a one-time expanded authorization for **2301–2400** (100 files total). Checkpoint **2301–2325 is COMPLETE**; **2326–2350**, **2351–2375** and **2376–2400** remain covered. Do not stop at 2350; **STOP at 2400** and request permission before 2401.
-- Index order clarification: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows at the time of the original reconciliation: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2350. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,350 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal. Preserve existing entry numbers; future selection is deterministic lexical order after the latest indexed path.
+- Entry range currently recorded: **2201–2375 (175 unique source files)**.
+- Active 200-file stage: **2201–2400 (175/200 complete)**.
+- Reporting sections **2201–2250**, **2251–2300** and **2301–2350** are CLOSED (50/50 each); reporting section **2351–2400** is IN PROGRESS (25/50).
+- The user has issued a one-time expanded authorization for **2301–2400** (100 files total). Checkpoints **2301–2325**, **2326–2350** and **2351–2375 are COMPLETE**; **2376–2400** remains covered. **STOP at 2400** and request permission before 2401.
+- Index order clarification: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,375 stable Index rows at the time of the original reconciliation: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2375. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,375 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal. Preserve existing entry numbers; future selection is deterministic lexical order after the latest indexed path.
 - Checkpoint cadence: exact 25-file atomic commits, grouped into authorized 50-file sections.
 - Every entry contains exactly the 15 required fields from `AUDIT_PROTOCOL.md`. Files over 400 lines must be inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
