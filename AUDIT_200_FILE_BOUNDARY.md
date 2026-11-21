@@ -147,3 +147,10 @@
 - Critical recorded findings: jobs pool can misreport active worker count after spawn failure; memory watcher Once cannot retry after spawn failure; chunkgen benchmark may accept truncated output; fixture-only comparator, recursive placement and numeric-normalization blind spots.
 - No tests/examples executed; no app source changed; no runtime/build/device/game validation.
 - Historical stop condition at this closed boundary: wait for the next explicit authorization. The user has now granted the next section 2251–2300; current state is shown in the table above. **STOP at 2300**, not at 2250.
+
+
+## Index chronology reconciliation — 2026-11-21
+
+- 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
+- The latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`. A full-set check found **zero unindexed source paths lexically before or equal to it**; all **2,718** remaining unindexed blobs are after this boundary.
+- From entry **2251** onward, select the next unindexed paths in deterministic lexical path order strictly after the latest indexed path, excluding the complete Index. Recheck uniqueness, pinned-tree membership, source SHA and byte size before each checkpoint. Preserve stable entry numbering and the 25/50/200 cadence.

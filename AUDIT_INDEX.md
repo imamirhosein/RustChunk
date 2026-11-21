@@ -3,6 +3,8 @@
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
 - Decisions and one-line reasons summarize each ledger entry's Decision field; consult the ledger for evidence, limitations, implementation mapping and follow-up checks.
+> **Stable numbering / source order:** Index numbers preserve the audit's historical sequence; they do not imply that every row from 1–2250 is in raw GitHub recursive-tree API order. 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal. Do not renumber old entries. Future source selection follows deterministic lexical path order strictly after the latest indexed path, excluding the full Index.
+
 ## Part 1 — Entries 1–25
 
 | No. | Source path | Decision | One-line reason |

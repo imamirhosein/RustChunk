@@ -1496,3 +1496,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The old Protocol sections that say STOP at 2100 or 2200 describe dated states at those points. They are now explicitly labeled historical; current state is Section 12 and the new authorization is Section 24.
 - The read-back selection script previously used a flawed numeric pattern and selected only 4 of 25 new entries. The corrected numeric interval selected all 25 entries 2226–2250; all 25 were checked for exactly 15 fields, Ledger/Index decision alignment, source SHA and byte size. The final corrected read-back passed.
 - Current authorization: **2251–2300**, with checkpoints 2251–2275 and 2276–2300. Continue without asking at 2275; stop at 2300.
+
+
+## Index chronology and tree-order reconciliation — 2026-11-21
+
+- 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
+- The latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`. A full-set check found **zero unindexed source paths lexically before or equal to it**; all **2,718** remaining unindexed blobs are after this boundary.
+- From entry **2251** onward, select the next unindexed paths in deterministic lexical path order strictly after the latest indexed path, excluding the complete Index. Recheck uniqueness, pinned-tree membership, source SHA and byte size before each checkpoint. Preserve stable entry numbering and the 25/50/200 cadence.

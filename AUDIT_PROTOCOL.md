@@ -598,3 +598,10 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Preserve the normal two 25-file checkpoints: **2251–2275** and **2276–2300**. Complete the first checkpoint, commit and read back all six audit documents, then continue directly to the second without another permission request.
 - At entry **2300**, close section **2251–2300** and STOP. Do not inspect entry 2301 without fresh explicit permission.
 - This authorization does not change the normal 200/50/25 cadence and does not authorize any later section.
+
+
+## 25. Index chronology and source-tree order reconciliation — 2026-11-21
+
+70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
+
+The current latest path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`. A full-set comparison found zero unindexed paths lexically before/equal to this boundary; all 2,718 remaining unindexed blobs are later. For the already-authorized **2251–2300** section, select the next paths in deterministic lexical order strictly after that path, excluding the full Index, then verify exact path, source SHA, size and uniqueness. Keep the standard 25/50/200 protocol.

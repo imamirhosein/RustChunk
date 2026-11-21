@@ -25,6 +25,9 @@ Working branch: starling-1.20.1-port-audit
 - Inspect only this exact snapshot.
 - Build the recursive source tree and verify it is complete/not truncated.
 - Select paths in deterministic lexical order, excluding every path already in the full Index. Never repeat or renumber a source path.
+
+- Index order reconciliation: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2250. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,250 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
+- Current boundary: latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`; zero unindexed paths are lexically before/equal to it and 2,718 remain after it. For 2251–2300, continue in deterministic lexical order strictly after that path, excluding the full Index.
 - Verify every source SHA and byte size against the pinned tree.
 
 ## Per-file inspection requirements
