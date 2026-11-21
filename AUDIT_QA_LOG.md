@@ -1554,3 +1554,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 Ledger entries contain exactly 15 fields. Active Ledger has **125 records (2201–2325)**; Index has **2,325 sequential unique paths** with matching Decisions.
 - No examples/tests were executed; no RustChunk app source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
 - The user's one-time expanded authorization covers **2301–2400**. Continue with 2326–2350 without asking at 2325; proceed through the remaining two checkpoints; **STOP at 2400**.
+
+
+## Audit checkpoint 2326–2350 — 2026-11-21
+
+- Completed entries **2326–2350 (25/25)** in deterministic lexical path order after the complete Index. The pinned recursive tree is complete (`truncated:false`); all path/SHA/byte-size triplets match.
+- Coverage: item-use lifecycle; Java hash/identity maps; level placement/shape; live attributes/effect notifications; living air/damage/fall/fluid/health/hurt/landing/motion; material condition/extension/stage/surface; movement emission/registry/support; object-open map/set.
+- Important fixture limits: two JavaKey implementations return `Less` for equal identities (unit EffectKey in 2332 and identity comparator in 2329), invalid if distinct equal-identity keys are allowed. Empty sequences panic in living-air/fluid fixtures. Many examples use fixed arrays, trusted corpus JSON/NBT and unchecked casts/indexes; several world adapters replace loaded chunks, entities, connections or packets with constants/no-ops. Material-stage relies on private resource snapshots and unchecked height/section bounds.
+- Long files read to EOF in consecutive ranges <=400 lines: `live_attribute_updates_fixture.rs` 1–400/401–598; `material_condition_fixture.rs` 1–400/401–735; `material_stage_fixture.rs` 1–400/401–800/801–828.
+- All 25 Ledger entries contain exactly 15 fields. Active Ledger has **150 records (2201–2350)**; Index has **2,350 sequential unique paths** and matching Decisions.
+- Tests/examples inspected only; none executed. No application source change; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Section **2301–2350 is CLOSED (50/50)**. The same one-time authorization covers **2351–2400**; continue both 25-file checkpoints without asking at 2375, then **STOP at 2400**.

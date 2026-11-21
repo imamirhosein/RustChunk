@@ -4,9 +4,9 @@
 - Branch: `starling-1.20.1-port-audit`
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries **1–2000** passed global verification and final backup; entries **2001–2325** are complete. Closed Ledger `AUDIT_LEDGER_2001_2200.md` has 200 records; active Ledger `AUDIT_LEDGER_2201_2400.md` has **125 records (2201–2325)**.
-- Active 200-file stage: **2201–2400**, progress **125/200**.
-- Reporting sections 2201–2250 and 2251–2300 are CLOSED; section 2301–2350 is IN PROGRESS (**25/50**); section 2351–2400 is AUTHORIZED.
+- Entries **1–2000** passed global verification and final backup; entries **2001–2350** are complete. Closed Ledger `AUDIT_LEDGER_2001_2200.md` has 200 records; active Ledger `AUDIT_LEDGER_2201_2400.md` has **150 records (2201–2350)**.
+- Active 200-file stage: **2201–2400**, progress **150/200**.
+- Reporting sections 2201–2250 and 2251–2300 are CLOSED; section 2301–2350 is CLOSED (**50/50**); section 2351–2400 remains AUTHORIZED.
 - One-time expanded authorization covers **2301–2400**. Do not pause at 2325, 2350 or 2375; **STOP at 2400** and request fresh permission before 2401.
 
 ## Stage partition
@@ -136,7 +136,7 @@
 |---|---|---|---|
 | 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
 | 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — COMPLETE | CLOSED — 50/50 |
-| 2301–2350 | 2301–2325 — COMPLETE | 2326–2350 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2301–2350 | 2301–2325 — COMPLETE | 2326–2350 — COMPLETE | CLOSED — 50/50 |
 | 2351–2400 | 2351–2375 — AUTHORIZED | 2376–2400 — AUTHORIZED | AUTHORIZED — 0/50 |
 
 ## Checkpoint 2226–2250 — COMPLETE (25/25)
@@ -178,7 +178,7 @@
 - Section 2251–2300 is closed (50/50); stale header status corrected.
 - Decisions 2276–2300 standardized to adaptable; reference in Ledger/Index. Fixture-only limits remain in supporting text.
 - decoration_region_fixture.rs is 303 canonical lines, read in ranges 1–200 and 201–303.
-- User authorization covers 2301–2350, both 25-file checkpoints. Do not pause at 2325; STOP at 2350.
+- Historical authorization snapshot superseded by the later one-time extension through 2400. Current state: 2301–2350 closed; 2351–2400 authorized; stop at 2400.
 
 
 ## Ledger partition correction — 2026-11-21
@@ -186,7 +186,7 @@
 - Entries 2201–2300 had been stored in the prior stage's `AUDIT_LEDGER_2001_2200.md`. The Ledger was split at entry 2201 without changing any entry content or number.
 - Closed Ledger: `AUDIT_LEDGER_2001_2200.md` — 2001–2200 (200/200). Active Ledger: `AUDIT_LEDGER_2201_2400.md` — 2201–2300 (100/200).
 - Index remains 2,300 sequential unique paths. All 300 Ledger records pass exact 15-field and path/Decision alignment checks.
-- Sections 2201–2250 and 2251–2300 are closed; 2301–2350 is authorized. STOP at 2350.
+- Historical authorization snapshot superseded by the later explicit extension through 2400. Current state: 2301–2350 closed; 2351–2400 authorized; stop at 2400.
 
 ## Checkpoint 2301–2325 — COMPLETE (25/25)
 
@@ -194,4 +194,13 @@
 - Long-file coverage: `inventory_pickup_fixture.rs` 1–400 and 401–410; `inventory_use_start_fixture.rs` 1–400 and 401–436.
 - Active Ledger: 125 records (2201–2325), exactly 15 fields each. Index: 2,325 sequential unique paths with matching Decisions.
 - These are synthetic test transports for fluid/food/heightmaps/interaction shapes/inventory/item use, not production game systems. Several trust fixture IDs/arrays, narrow numeric values or use fixed mock inventories. Enchantment durability changes are not covered by the durability fixture.
-- The one-time expanded authorization covers **2301–2400**. Continue 2326–2350 without pausing at 2325; then 2351–2375 and 2376–2400. **STOP at 2400**; no authorization exists for 2401+.
+- The one-time expanded authorization covers **2301–2400**. Section 2301–2350 is now closed; continue 2351–2375 and 2376–2400 without pausing at 2375. **STOP at 2400**; no authorization exists for 2401+.
+
+
+## Checkpoint 2326–2350 — COMPLETE (25/25)
+
+- All 25 files were inspected individually through EOF in deterministic lexical order after the full Index. Exact paths, SHAs and byte sizes match the complete pinned tree.
+- Long-file coverage: `live_attribute_updates_fixture.rs` 1–400/401–598; `material_condition_fixture.rs` 1–400/401–735; `material_stage_fixture.rs` 1–400/401–800/801–828.
+- Active Ledger: 150 records (2201–2350), exactly 15 fields each. Index: 2,350 sequential unique paths with matching Decisions.
+- These are mock/differential fixtures for item, Java maps, level, living entity, material stage, movement and object-map behavior. The invalid equal-identity comparator, empty-sequence panic paths, unchecked indexes/casts and synthetic registry/world assumptions are recorded in Ledger/QA.
+- Section **2301–2350 is CLOSED (50/50)**. The user's one-time authorization remains active for **2351–2400**, covering two 25-file checkpoints. Do not pause at 2375; **STOP at 2400**. No authorization exists for 2401+.

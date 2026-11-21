@@ -137,12 +137,12 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2325**.
-- Active 200-file stage: **2201–2400**, progress **125/200**.
-- Sections **2201–2250** and **2251–2300** are closed; section **2301–2350** is in progress (**25/50**); section **2351–2400** remains authorized.
-- The user's one-time expanded authorization covers **2301–2400**. Checkpoint **2301–2325** is complete; continue through 2326–2350, 2351–2375 and 2376–2400 without permission pauses at 2325/2350/2375; **STOP at 2400** and request fresh permission before 2401.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Active Ledger `AUDIT_LEDGER_2201_2400.md`: **125 records (2201–2325)** with exactly 15 fields per entry. Index: **2,325 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`). Future selection remains deterministic lexical path order after the latest indexed path, excluding all Index paths; historical IDs remain stable.
+- Completed source entries: **1–2350**.
+- Active 200-file stage: **2201–2400**, progress **150/200**.
+- Sections **2201–2250**, **2251–2300** and **2301–2350** are closed (50/50 each); section **2351–2400** remains authorized.
+- The user's one-time expanded authorization covers **2301–2400**. Checkpoints **2301–2325** and **2326–2350** are complete; continue through **2351–2375** and **2376–2400** without a permission pause at 2375; **STOP at 2400** and request fresh permission before 2401.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Active Ledger `AUDIT_LEDGER_2201_2400.md`: **150 records (2201–2350)** with exactly 15 fields each. Index: **2,350 sequential unique paths**.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`). Future selection is deterministic lexical order after the latest indexed path, excluding all Index paths; historical IDs remain stable.
 - Entries 1–2000 have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification.
 - Tests/examples inspected only; none executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source change.
 
@@ -645,3 +645,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - All 25 files were read through EOF; 2313 (410 lines) and 2316 (436 lines) were read in contiguous chunks no larger than 400 lines. Source SHAs and sizes match the complete pinned tree.
 - These files are test/fixture transports for fluid, food, heightmaps, interaction shapes, inventory and item use; they are not shipped runtime implementations. Tests/examples were inspected, not executed.
 - No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+
+
+## 32. Checkpoint 2326–2350 — 2026-11-21
+
+- Entries **2326–2350 (25/25)** inspected individually through EOF in deterministic lexical path order after the full Index; source paths, SHAs and byte sizes match the complete pinned tree.
+- Active Ledger `AUDIT_LEDGER_2201_2400.md` has **150 records (2201–2350)** with exactly 15 required fields; Index has **2,350 sequential unique paths** and matching Decisions.
+- Long files: `live_attribute_updates_fixture.rs` 1–400/401–598; `material_condition_fixture.rs` 1–400/401–735; `material_stage_fixture.rs` 1–400/401–800/801–828.
+- These are synthetic fixtures. Important limitations include invalid equal-identity JavaKey comparison, empty-sequence panic paths, fixed mock registries/worlds, trusted indexes/casts and private material-stage resource snapshots. No example or test was executed.
+- Reporting section **2301–2350 is CLOSED (50/50)**. The user's one-time authorization still covers **2351–2400**. Continue 2351–2375 and 2376–2400 without another permission request at 2375; **STOP at 2400**.
+- No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
