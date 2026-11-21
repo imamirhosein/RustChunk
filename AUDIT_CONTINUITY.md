@@ -6,15 +6,15 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2575**.
-- Active 200-file stage 2401–2600: **175/200**.
-- Sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED (50/50 each); checkpoint 2551–2575 is complete.
+- Completed entries: **1–2600**.
+- Active 200-file stage 2401–2600: **200/200**.
+- All four 50-file sections from 2401–2600 are CLOSED (50/50 each).
 - The user has explicitly pre-authorized **2551–2600**, including both checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575. **STOP at 2600**; 2601+ requires fresh authorization.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **175 records (2401–2575)**, exactly 15 fields each. Index: **2,575 sequential unique paths**, with paths and Decisions aligned.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **200 records (2401–2600)**, exactly 15 fields each. Index: **2,600 sequential unique paths**, with paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving upstream.
-- Next entry: **2576**. Recompute the next 25 lexical unindexed paths and provenance before inspection; read one source file at a time.
+- All entries through **2600** have been inspected. Stop source inspection and perform independent full-stage QA across 2401–2600.
 - After entry 2600, run the separately requested QA pass across all entries **2401–2600**: duplicates, gaps, Ledger/Index alignment, 15-field counts, pinned-tree path/SHA/size, ordering and file-boundary correctness. Only then mark the 200-file stage closed.
-- Backup covers 1–2000 only. No backup at 2575; next backup after 3000 and global verification.
+- Backup covers 1–2000 only. No backup at 2600; next backup after 3000 and global verification.
 - No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -706,3 +706,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Long-file reads: `loot.rs` 1–2298 in chunks of at most 400 lines; `object_open_map.rs` 1–400/401–412; `piston_push.rs` 1–400/401–483.
 - User pre-authorized 2576–2600. Continue without asking again; stop at 2600, then run independent QA across all 200 entries 2401–2600.
 - Tests/examples not executed. No product source changes or runtime validation.
+
+
+## Latest checkpoint — 2576–2600 — 2026-11-21
+
+- Entries 2576–2600 complete individually through EOF; pinned path/SHA/byte-size checks pass.
+- Ledger: 200 entries, 15 fields each. Index: 2,600 sequential unique paths.
+- All four 50-file sections are closed. Stop source inspection at 2600.
+- Perform independent second-pass QA across all 200 entries 2401–2600 before final acceptance.
+- Tests/examples not executed; no application source changes or runtime validation.

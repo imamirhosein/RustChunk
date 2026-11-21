@@ -137,12 +137,12 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
-- Completed entries **1–2575**.
-- Active stage 2401–2600: **175/200**. Reporting sections 2401–2450, 2451–2500 and 2501–2550 are closed (50/50 each).
+- Completed entries **1–2600**.
+- Active stage 2401–2600: **200/200**. Reporting sections 2401–2450, 2451–2500 and 2501–2550 are closed (50/50 each).
 - The user has explicitly pre-authorized the remaining section **2551–2600**, including checkpoints **2551–2575** and **2576–2600**. Continue through 2600 without requesting another grant at 2575 or an intermediate point. **STOP at 2600**; 2601+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **175 records (2401–2575)**, exactly 15 fields each. Index: **2,575 sequential unique paths** with matching paths and Decisions.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **200 records (2401–2600)**, exactly 15 fields each. Index: **2,600 sequential unique paths** with matching paths and Decisions.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable commit only.
-- Next entry: **2576**. Recompute the next 25 lexical unindexed paths and verify provenance before inspection.
+- Source inspection is complete through **2600**. Stop here and perform the independent full-stage QA across 2401–2600.
 - After entry 2600, perform the requested independent structural/provenance QA across all 200 entries 2401–2600 before closing the stage.
 - Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
@@ -761,3 +761,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Ledger: 175 records with exactly 15 fields each. Index: 2,575 sequential unique paths with matching Decisions.
 - Long-file coverage is contiguous and gap-free: `loot.rs` 1–2298 (chunks <=400); `object_open_map.rs` 1–412; `piston_push.rs` 1–483.
 - Continue 2576–2600 under the user's advance authorization; stop at 2600 and then perform independent global QA across 2401–2600.
+
+
+## 45. Checkpoint 2576–2600 — COMPLETE — 2026-11-21
+
+- Entries 2576–2600 were inspected individually through EOF at the pinned source; exact path, SHA and byte size match.
+- Ledger: 200 entries (2401–2600), exactly 15 fields each. Index: 2,600 sequential unique paths with matching Decisions.
+- All four 50-file sections are complete.
+- Stop source inspection at 2600 and perform the independent second-pass structural/provenance QA across every entry 2401–2600 before final acceptance.
+- No tests/examples executed. No application code changes or build/runtime/device/Forge/Aternos validation.

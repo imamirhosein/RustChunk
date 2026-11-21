@@ -1682,3 +1682,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Main follow-ups: 1.20.1 rewrites for modern loot/item-component schemas and registry IDs; differential movement/hurt/fall/health/statistics callback order; fastutil cursor mutation parity; piston caller/collision guards; keep native function-pointer hooks out of Forge mod loading.
 - Tests/examples were read only and not executed. No RustChunk application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
 - User pre-authorization remains active for **2576–2600**. Continue without another permission request; stop exactly at **2600**, then perform independent full-stage QA over entries 2401–2600.
+
+
+## Audit checkpoint 2576–2600 — 2026-11-21 — COMPLETE
+
+- Entries 2576–2600 were inspected individually through EOF against pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; all 25 paths, blob SHAs and byte sizes match the untruncated source tree.
+- All files in this checkpoint were below 400 logical lines and were read individually through EOF.
+- Ledger contains **200 records (2401–2600)**, each with exactly 15 fields. Index contains **2,600 sequential unique paths**, including all 25 new path/Decision rows.
+- Main follow-ups: 1.20.1 rewrites for modern inventory/effect/loot schemas; exact combat and health callback order; registry/tag snapshot regeneration; SNBT/Java float-format oracle; synced-data dirty and observer order; interpolation tick parity; retrogen mutation safety; teleport RNG/hook order; saved-tick NBT compatibility.
+- Tests/examples were inspected only; none executed. No RustChunk application source changed. No build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- Advance authorization for 2551–2600 is complete. Stop at 2600 and perform independent second QA across all 200 entries 2401–2600 before final acceptance.

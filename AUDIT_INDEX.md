@@ -1,4 +1,4 @@
-- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **175 records (2401–2575)**. Stage 2401–2600 is 175/200; checkpoint 2551–2575 is complete; sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED. Entries 2576–2600 remain **pre-authorized by the user**. Continue through 2600 and **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **200 records (2401–2600)**. Stage 2401–2600 is **200/200**; all four 50-file sections are CLOSED. Run independent full-stage QA across 2401–2600, then **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -3000,6 +3000,31 @@
 | 2573 | `crates/horizon-world/src/player_equipment.rs` | adaptable; reference | Player hand/equipment slot access and equip callback dispatch. |
 | 2574 | `crates/horizon-world/src/player_food.rs` | adaptable; reference | Player-specific hunger guards, exhaustion and direct-versus-virtual abilities. |
 | 2575 | `crates/horizon-world/src/player_health.rs` | adaptable; version-specific; reference | Player-specific health/absorption bridge to attributes and synchronized floats. |
+| 2576 | `crates/horizon-world/src/player_hurt.rs` | Rebuild 1.20.1 Player.hurtServer, difficulty and server PvP rules; verify Forge events. | Player hurt, difficulty scaling and PvP gates. |
+| 2577 | `crates/horizon-world/src/player_inventory.rs` | Rebuild 1.20.1 inventory/equipment layout and pre-component ItemStack; exclude Body/Saddle. | Player inventory slots, selected hotbar and shared equipment/stack references. |
+| 2578 | `crates/horizon-world/src/player_travel.rs` | Rebuild 1.20.1 Player.travel and swimming; check Forge overrides. | Player swimming and ability-flight adjustment around living travel. |
+| 2579 | `crates/horizon-world/src/powder_snow_collision.rs` | Verify 1.20.1 PowderSnowBlock/CollisionContext and tag semantics. | Context-dependent powder-snow collision shape and entity walkability. |
+| 2580 | `crates/horizon-world/src/registry_collision_scan.rs` | Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks. | Registry-bound collision scanning over resident chunks. |
+| 2581 | `crates/horizon-world/src/registry_fall_ray.rs` | Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown. | Registry-bound fall-reset ray behavior for reset blocks, portals and water. |
+| 2582 | `crates/horizon-world/src/registry_fluid.rs` | Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids. | Registry fluid contents, flow obstruction, ice membership and entity immersion. |
+| 2583 | `crates/horizon-world/src/registry/facts.rs` | Create a new 1.20.1 facts schema/data corpus; do not use 26.3 facts file. | Streaming deserializer for compact registry facts and shared state-property strings. |
+| 2584 | `crates/horizon-world/src/registry/json.rs` | Regenerate 1.20.1 property kinds and confirm target compact/full codec semantics. | Compact/full block-state JSON codec over a registry. |
+| 2585 | `crates/horizon-world/src/registry/snapshot.rs` | Version/hash-bind cache to 1.20.1 plus Forge and generated registry digest. | Compact registry snapshot format for states, shared strings, flags and lookup tables. |
+| 2586 | `crates/horizon-world/src/retrogen.rs` | Rebuild 1.20.1 BelowZeroRetrogen, chunk statuses and dimension heights. | Below-zero retrogen metadata, bedrock masks, terrain transforms and biome resolution. |
+| 2587 | `crates/horizon-world/src/server_player_combat.rs` | Rebuild 1.20.1 ServerPlayer damage and Forge armor/damage event flow; enforce immutable schema. | Composed server-player hurt pipeline with synchronized health, armor and world services. |
+| 2588 | `crates/horizon-world/src/server_player_damage.rs` | Use 1.20.1 attribute set, damage reduction, exhaustion and Forge events. | Server-player inner damage bridge to armor, mitigation, health/absorption, food and stats. |
+| 2589 | `crates/horizon-world/src/simple_container.rs` | Use 1.20.1 NBT ItemStack matching and Forge container hooks; no data components. | Variable-size SimpleContainer storage, stack transfer and change callbacks. |
+| 2590 | `crates/horizon-world/src/snbt_text.rs` | Rebuild exact 1.20.1 SNBT StringTagVisitor and Java numeric conversion. | SNBT tag stringification and Java-like float/double formatting. |
+| 2591 | `crates/horizon-world/src/status_effect.rs` | Rebuild 1.20.1 MobEffectInstance fields, hidden chain and Forge effect hooks. | Shared status effects, hidden chains, ticking and client blend interpolation. |
+| 2592 | `crates/horizon-world/src/stepped_interpolation.rs` | Rebuild 1.20.1 entity update intervals and movement packet semantics. | Client interpolation of remote living entities along stepped server position/rotation paths. |
+| 2593 | `crates/horizon-world/src/stored_consume.rs` | Rebuild 1.20.1 consumable/effect add-remove and sound semantics; use target random streams. | Adapter wiring consume effects to shared active-effect storage. |
+| 2594 | `crates/horizon-world/src/stored_effect_attributes.rs` | Regenerate 1.20.1 effect modifiers, UUIDs and operations; Forge custom attributes. | Adapter for effect attribute modifier dispatch on captured attribute map instances. |
+| 2595 | `crates/horizon-world/src/suffocation.rs` | Recreate 1.20.1 suffocation rules/tags and piston/shulker behavior. | Registry-driven suffocation rules for full collision, piston and shulker blocks. |
+| 2596 | `crates/horizon-world/src/swimming.rs` | Rebuild 1.20.1 swimming and fluid jump threshold; confirm Forge abilities overrides. | Entity swimming transitions, player flying guard and fluid jump threshold. |
+| 2597 | `crates/horizon-world/src/synced_floats.rs` | Use 1.20.1 serializer registry and generated field IDs. | Float-specific aliases for generic synchronized values. |
+| 2598 | `crates/horizon-world/src/synced_values.rs` | Rebuild 1.20.1 SynchedEntityData serializers, IDs and packet dirty behavior. | Generic synchronized values, dirty flags and observer callback semantics. |
+| 2599 | `crates/horizon-world/src/teleport_consume.rs` | Rebuild 1.20.1 chorus fruit/teleport and Forge event ordering; gate modern extras. | Random teleport consumable candidate generation, hook veto/mutation and success effects. |
+| 2600 | `crates/horizon-world/src/tick_data.rs` | Validate 1.20.1 ChunkSerializer saved tick schema and priority mapping. | NBT codec for saved scheduled block/fluid ticks. |
 
 
 ## Ledger/Index correction — 2026-11-21

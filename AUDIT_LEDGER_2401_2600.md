@@ -2,11 +2,11 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active stage: **2401–2600**; completed entries **2401–2575 (175/200)**.
-- Latest checkpoints **2526–2550** and **2551–2575** are complete and recorded below; active stage progress is **175/200**.
-- The user has explicitly pre-authorized **2551–2600**. Checkpoint 2551–2575 is complete; continue with 2576–2600 without another permission request. **STOP at 2600**.
+- Active stage: **2401–2600**; completed entries **2401–2600 (200/200)**.
+- All four 50-file sections from 2401–2600 are complete and recorded below; active stage progress is **200/200**.
+- The user's advance authorization has been completed through **2600**. **STOP at 2600**; finish independent full-stage QA across 2401–2600 before closing this stage.
 - Exact source is gitlink `upstream/starling` at `5432370d573642041585c69b40fb045b27133488`; do not follow the moving branch.
-- New entries are selected in deterministic lexical path order after excluding all 2,550 Index paths; pinned recursive tree is complete and untruncated.
+- New entries are selected in deterministic lexical path order after excluding all 2,575 Index paths; pinned recursive tree is complete and untruncated.
 - Every entry has exactly the 15 required fields; source path, blob SHA and byte size are checked against the pinned tree.
 - Tests/examples inspected only; none executed. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
 
@@ -3166,3 +3166,428 @@
 - RustChunk implementation mapping: Implement typed PlayerHealthWorld over generated 1.20.1 schema and attribute store.
 - Evidence required before adoption: 1.20.1 Player/SynchedEntityData/attribute sources, exact IDs and callback-rebinding tests.
 - Completion state: COMPLETE — 157 logical lines through EOF; pinned SHA and 5950 byte size match; inspected, not modified; tests not executed.
+
+### 2576. `crates/horizon-world/src/player_hurt.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bdaa8992d30ecd7192beae1d8b27234685cb1191`
+- Size: 3144 bytes
+- Coverage: Complete through EOF: 108 logical lines; full file; no gaps.
+- Purpose: Player hurt, difficulty scaling and PvP gates.
+- Dependencies / cross-references: PlayerHurtWorld; HurtWorld/HurtState; difficulty; causing player/arrow owner.
+- Implementation / logic: Checks invulnerability/death, no-action time, shoulder entities, difficulty damage and delegates to living hurt; server wrapper applies PvP restrictions.
+- Findings: Nested path can re-query invulnerability/difficulty; callback order, NaN/min and owner checks are observable.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Rebuild 1.20.1 Player.hurtServer, difficulty and server PvP rules; verify Forge events.
+- 1.20.1 implications: Compare all difficulties, bypasses, arrow owners and repeated gate calls.
+- Follow-up checks: Player-only gate preceding shared RustChunk damage pipeline.
+- RustChunk implementation mapping: Mapped 1.20.1 Player/ServerPlayer sources and Forge damage traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 108 logical lines through EOF; exact pinned SHA and 3144 byte size match; inspected, not modified; tests not executed.
+
+### 2577. `crates/horizon-world/src/player_inventory.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `189662aa504c07bba6791d25ab9315e92fafb1d2`
+- Size: 11475 bytes
+- Coverage: Complete through EOF: 351 logical lines; full file; no gaps.
+- Purpose: Player inventory slots, selected hotbar and shared equipment/stack references.
+- Dependencies / cross-references: ItemStacks/StackRef; EntityEquipment; EquipmentSlot; InventoryRules.
+- Implementation / logic: Maps 36 main slots and equipment, handles get/set/remove, search, pickup/hotbar, alias-aware removal and replacement.
+- Findings: Body/Saddle slots are newer than 1.20.1; main hand aliases selected slot. Invalid indices have asymmetric no-op/empty/error behavior; pick_slot mutates before validation; Map.of equipment order is runtime-sensitive.
+- RustChunk relevance: rewrite required; version-specific; reference
+- Decision: Rebuild 1.20.1 inventory/equipment layout and pre-component ItemStack; exclude Body/Saddle.
+- 1.20.1 implications: All slot mappings, invalid indexes, aliases, hotbar, remove_reference order and failure-after-mutation.
+- Follow-up checks: Generated 1.20.1 slot map plus Rust-owned stack handles and menu adapter.
+- RustChunk implementation mapping: 1.20.1 inventory sources, Forge hooks and Java/Rust alias traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 351 logical lines through EOF; exact pinned SHA and 11475 byte size match; inspected, not modified; tests not executed.
+
+### 2578. `crates/horizon-world/src/player_travel.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `31fa31fd815d71d5b10d2d095cd151a54d56c1f0`
+- Size: 2661 bytes
+- Coverage: Complete through EOF: 71 logical lines; full file; no gaps.
+- Purpose: Player swimming and ability-flight adjustment around living travel.
+- Dependencies / cross-references: PlayerTravelWorld; Vec3/BlockPos; passenger, fluid, swimming and direct/virtual ability queries.
+- Implementation / logic: Passenger delegates immediately; swimming blends vertical velocity by look angle; virtual flight wraps living travel and damps Y; flying speed uses direct ability state.
+- Findings: Direct flying field differs from virtual getAbilities query; exact thresholds, floor position and callback order matter.
+- RustChunk relevance: adaptable; reference
+- Decision: Rebuild 1.20.1 Player.travel and swimming; check Forge overrides.
+- 1.20.1 implications: Passenger branch, -0.2 look threshold, .085/.06 factors, Y damping and direct/virtual flight.
+- Follow-up checks: Player travel layer above shared living-physics.
+- RustChunk implementation mapping: Java 1.20.1 Player/LivingEntity sources and fluid-boundary traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 71 logical lines through EOF; exact pinned SHA and 2661 byte size match; inspected, not modified; tests not executed.
+
+### 2579. `crates/horizon-world/src/powder_snow_collision.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f9098e6f8f736d8a65ade11719cc309bff1aea40`
+- Size: 2419 bytes
+- Coverage: Complete through EOF: 74 logical lines; full file; no gaps.
+- Purpose: Context-dependent powder-snow collision shape and entity walkability.
+- Dependencies / cross-references: CollisionContext; EntityIdentity; PowderSnowWorld; VoxelShape.
+- Implementation / logic: Placement/no entity yields empty; fall distance >2.5 returns .9-high shape; falling block full collision; otherwise boots/tag/above/descending decide.
+- Findings: Exact 2.5 threshold and context order matter; leather boots queried only for living entities; cached shape.
+- RustChunk relevance: adaptable; reference
+- Decision: Verify 1.20.1 PowderSnowBlock/CollisionContext and tag semantics.
+- 1.20.1 implications: Threshold edges, placement, falling blocks, boots, walkability tag and descending.
+- Follow-up checks: Dynamic collision adapter using generated 1.20.1 tags.
+- RustChunk implementation mapping: Java 1.20.1 powder snow sources and shape corpus.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 74 logical lines through EOF; exact pinned SHA and 2419 byte size match; inspected, not modified; tests not executed.
+
+### 2580. `crates/horizon-world/src/registry_collision_scan.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ebc70a2e2300946b350b67dee6a28ddadac8b2ca`
+- Size: 5600 bytes
+- Coverage: Complete through EOF: 161 logical lines; full file; no gaps.
+- Purpose: Registry-bound collision scanning over resident chunks.
+- Dependencies / cross-references: BlockCollisionWorld; SuffocationRegistry; LiquidCollisionWorld; PowderSnowWorld; FluidOccupancyWorld.
+- Implementation / logic: Validates canonical cached shapes; adapts chunk handles/state IDs and delegates block, dynamic shape, entity, border and fluid queries.
+- Findings: Chunk handle lifetime and registry identity are invariants; chunk-local suffocation world differs from global contextual world.
+- RustChunk relevance: adaptable; reference
+- Decision: Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks.
+- 1.20.1 implications: Unloaded chunks, stale handles, registry mismatch, provider errors and query-context separation.
+- Follow-up checks: Version-bound adapter over RustChunk chunk cache.
+- RustChunk implementation mapping: 1.20.1 registry, collision context, block-entity and handle-lifetime tests.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 161 logical lines through EOF; exact pinned SHA and 5600 byte size match; inspected, not modified; tests not executed.
+
+### 2581. `crates/horizon-world/src/registry_fall_ray.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f78c4dfe6a4c68b91fc3fa421a6a4c8b12bfb996`
+- Size: 7600 bytes
+- Coverage: Complete through EOF: 216 logical lines; full file; no gaps.
+- Purpose: Registry-bound fall-reset ray behavior for reset blocks, portals and water.
+- Dependencies / cross-references: InteractionShapes; BlockRegistry; FluidState/FluidShapeCache; world ray and entity/player services.
+- Implementation / logic: Snapshots reset tags, portal IDs, per-state fluids and water mask; validates ray mode/state and shares fluid-shape cache.
+- Findings: Tag snapshots need rebuild after reload; portal set explicit; cache's first query is retained; camera support query intentionally errors here.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown.
+- 1.20.1 implications: Tag reload, invalid IDs, each portal, server/player gates, ray limits and fluid cache.
+- Follow-up checks: Immutable registry-bound ray adapter with shared shape cache.
+- RustChunk implementation mapping: 1.20.1 ray/portal sources, tags and Java-Rust traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 216 logical lines through EOF; exact pinned SHA and 7600 byte size match; inspected, not modified; tests not executed.
+
+### 2582. `crates/horizon-world/src/registry_fluid.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a122a89785f3eca5bda93436de020bbd0a914b1c`
+- Size: 7936 bytes
+- Coverage: Complete through EOF: 209 logical lines; full file; no gaps.
+- Purpose: Registry fluid contents, flow obstruction, ice membership and entity immersion.
+- Dependencies / cross-references: BlockRegistry; BlockSupportRegistry; FluidState; flow/height/immersion traits; chunk sections.
+- Implementation / logic: Builds per-state fluid/flow/ice data; verifies registry identity; exposes fluid height, flow/sturdy-face and entity immersion.
+- Findings: Block-state and fluid-cell lookups are separate; ice is class/tag membership, not suffix; bindings stale after tag reload.
+- RustChunk relevance: adaptable; reference
+- Decision: Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids.
+- 1.20.1 implications: Registry mismatch, tag reload, fluid levels, ice types, sturdy faces, unloaded chunks.
+- Follow-up checks: Versioned fluid snapshot plus chunk immersion service.
+- RustChunk implementation mapping: 1.20.1 fluid registry/tag sources and Forge fluid tests.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 209 logical lines through EOF; exact pinned SHA and 7936 byte size match; inspected, not modified; tests not executed.
+
+### 2583. `crates/horizon-world/src/registry/facts.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c14e8d298cf80671f9084ef414b44995cd4c7679`
+- Size: 9815 bytes
+- Coverage: Complete through EOF: 237 logical lines; full file; no gaps.
+- Purpose: Streaming deserializer for compact registry facts and shared state-property strings.
+- Dependencies / cross-references: Serde visitors; BlockState/BlockProperties; thread-local SharedStrings.
+- Implementation / logic: Reads fixed state-row columns, accepts string or object state forms, interns properties and ignores extra fields.
+- Findings: Thread-local cleanup occurs only on normal return; panic may leave shared pool active. Test silently skips if 26.3 facts file missing; schema is not 1.20.1.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Create a new 1.20.1 facts schema/data corpus; do not use 26.3 facts file.
+- 1.20.1 implications: Malformed/short rows, duplicate keys, panic cleanup, thread-local reuse and full registry parity.
+- Follow-up checks: Versioned parser with RAII cleanup/interning.
+- RustChunk implementation mapping: 1.20.1 registry export, parser fuzzing and startup/memory profile.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 237 logical lines through EOF; exact pinned SHA and 9815 byte size match; inspected, not modified; tests not executed.
+
+### 2584. `crates/horizon-world/src/registry/json.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `21bbba56213e42f034f06d25419a719db1ed7b68`
+- Size: 4123 bytes
+- Coverage: Complete through EOF: 106 logical lines; full file; no gaps.
+- Purpose: Compact/full block-state JSON codec over a registry.
+- Dependencies / cross-references: BlockRegistry/BlockStateId; integer-property set; Serde JSON; Java integer parser.
+- Implementation / logic: Decodes compact strings or full objects, starts at default state, applies valid properties with rollback and encodes compact/full states.
+- Findings: Invalid/missing property values are silently ignored; integer-property set and registry are external version-bound inputs.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Regenerate 1.20.1 property kinds and confirm target compact/full codec semantics.
+- 1.20.1 implications: Namespace normalization, invalid int, bad combinations, missing fields and round-trip of every state.
+- Follow-up checks: Separate versioned JSON codec backed by generated block registry.
+- RustChunk implementation mapping: Java 1.20.1 BlockState codecs and fixtures.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 106 logical lines through EOF; exact pinned SHA and 4123 byte size match; inspected, not modified; tests not executed.
+
+### 2585. `crates/horizon-world/src/registry/snapshot.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fa1c806c0857649e595476327a9aaa60439efc45`
+- Size: 9193 bytes
+- Coverage: Complete through EOF: 265 logical lines; full file; no gaps.
+- Purpose: Compact registry snapshot format for states, shared strings, flags and lookup tables.
+- Dependencies / cross-references: BlockRegistry; SharedStrings; serde wire structs; hash IDs/collision maps/defaults.
+- Implementation / logic: Captures deduplicated string table, states, flags, hashed IDs, collisions and defaults; restore validates IDs, flags, indexes and mappings.
+- Findings: Restore checks many invariants, but capture assumes lengths match. Snapshot hash tables/schema depend on exact registry build.
+- RustChunk relevance: adaptable; reference
+- Decision: Version/hash-bind cache to 1.20.1 plus Forge and generated registry digest.
+- 1.20.1 implications: Corrupt IDs/defaults, missing states, duplicate hashes, flag bits and capture length mismatch.
+- Follow-up checks: Immutable version-keyed registry cache with validated writer and reader.
+- RustChunk implementation mapping: 1.20.1 registry digest, cache header and corruption/fuzz fixtures.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 265 logical lines through EOF; exact pinned SHA and 9193 byte size match; inspected, not modified; tests not executed.
+
+### 2586. `crates/horizon-world/src/retrogen.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2f048f48ed4c14d68de97be26d375eee7a241dbe`
+- Size: 6388 bytes
+- Coverage: Complete through EOF: 177 logical lines; full file; no gaps.
+- Purpose: Below-zero retrogen metadata, bedrock masks, terrain transforms and biome resolution.
+- Dependencies / cross-references: ChunkStatus/NBT; TerrainChunk; bedrock/deepslate/air registry states; biome resolver.
+- Implementation / logic: Loads target status and mask; converts bottom bedrock, clears masked columns and selects newly sampled biome or old biome during upgrades.
+- Findings: Lenient multiple NBT mask encodings and no explicit 4-word cap; malformed optional mask is absent. Terrain writes can partially apply; scheduling belongs to caller.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Rebuild 1.20.1 BelowZeroRetrogen, chunk statuses and dimension heights.
+- 1.20.1 implications: Mask bits, NBT leniency, vertical bounds, write failure and biome query order.
+- Follow-up checks: Separate metadata, pure mask, transactional transform and scheduler.
+- RustChunk implementation mapping: Java 1.20.1 retrogen/chunk-status sources and overworld fixtures.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 177 logical lines through EOF; exact pinned SHA and 6388 byte size match; inspected, not modified; tests not executed.
+
+### 2587. `crates/horizon-world/src/server_player_combat.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `52c6983ab0d03a7bb107aead1cfad3f7741ac78d`
+- Size: 12346 bytes
+- Coverage: Complete through EOF: 323 logical lines; full file; no gaps.
+- Purpose: Composed server-player hurt pipeline with synchronized health, armor and world services.
+- Dependencies / cross-references: ServerDamageEnvironment; ServerPlayerHurtWorld; ImmunityWorld; HealthAttributes; SyncedFloats/FoodData.
+- Implementation / logic: Validates player schema then forwards outer hurt gates, death checks, damage events and inner damage adapter.
+- Findings: Nested dispatch repeats invulnerability queries. `expect` assumes schema immutable after validation; mutation/rebind could panic.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Rebuild 1.20.1 ServerPlayer damage and Forge armor/damage event flow; enforce immutable schema.
+- 1.20.1 implications: Check gate counts/order, health/dead branch, armor break recompute, nested callbacks and schema changes.
+- Follow-up checks: Coherent authoritative player-state borrow and typed event adapter.
+- RustChunk implementation mapping: 1.20.1 ServerPlayer/LivingEntity sources and Forge event traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 323 logical lines through EOF; exact pinned SHA and 12346 byte size match; inspected, not modified; tests not executed.
+
+### 2588. `crates/horizon-world/src/server_player_damage.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6b3ff60881a3dc3a863de39e1dd5d13fa7e1b0c7`
+- Size: 10878 bytes
+- Coverage: Complete through EOF: 285 logical lines; full file; no gaps.
+- Purpose: Server-player inner damage bridge to armor, mitigation, health/absorption, food and stats.
+- Dependencies / cross-references: HealthAttributes; ArmorWorld; DamageReductionWorld; DamageWorld; PlayerAttributeHealth; SyncedFloats; FoodData.
+- Implementation / logic: Resolves armor/toughness/health at construction and applies reduction/damage with host callbacks for armor, resistance, stats, exhaustion and events.
+- Findings: Equipment damage can change attributes before queries; health binding uses expect on immutable-schema assumption; errors may leave partial state.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Use 1.20.1 attribute set, damage reduction, exhaustion and Forge events.
+- 1.20.1 implications: Armor break ordering, resistance, attacker stats, immunity, food/event failure and schema rebinding.
+- Follow-up checks: Validated per-player schema and error-returning host interfaces.
+- RustChunk implementation mapping: 1.20.1 combat sources, attribute registry and event traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 285 logical lines through EOF; exact pinned SHA and 10878 byte size match; inspected, not modified; tests not executed.
+
+### 2589. `crates/horizon-world/src/simple_container.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b0e4a7ba0429eb7782c24ea94251ef9b43f31152`
+- Size: 7522 bytes
+- Coverage: Complete through EOF: 220 logical lines; full file; no gaps.
+- Purpose: Variable-size SimpleContainer storage, stack transfer and change callbacks.
+- Dependencies / cross-references: ItemStacks/StackRef; Prototype; ContainerHooks; stack equality/limits.
+- Implementation / logic: Implements slot access, add/merge, set/remove/remove_type, clear and remove-all using component-aware item matching.
+- Findings: Callback failures can follow mutations; operations aren't transactional. Aliases retained by from_items; component model is post-1.20.5.
+- RustChunk relevance: rewrite required; version-specific; reference
+- Decision: Use 1.20.1 NBT ItemStack matching and Forge container hooks; no data components.
+- 1.20.1 implications: Partial failures, dynamic limits, aliases, reverse removal and bad indexes.
+- Follow-up checks: RustChunk container service with explicit transaction model and legacy item tags.
+- RustChunk implementation mapping: Java 1.20.1 SimpleContainer/ItemStack and Forge slot callbacks.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 220 logical lines through EOF; exact pinned SHA and 7522 byte size match; inspected, not modified; tests not executed.
+
+### 2590. `crates/horizon-world/src/snbt_text.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `16cbc90f4d61c1bb5cca61de239ce1b30c842030`
+- Size: 5337 bytes
+- Coverage: Complete through EOF: 177 logical lines; full file; no gaps.
+- Purpose: SNBT tag stringification and Java-like float/double formatting.
+- Dependencies / cross-references: NBT Tag/JavaString; numeric formatter; escaping; compound maps.
+- Implementation / logic: Serializes all tag kinds and arrays, escapes strings/control chars and formats floats in plain/scientific ranges.
+- Findings: Rust float formatting may differ from Java shortest representation/exponents; compound keys are sorted, requiring 1.20.1 visitor-order proof; Unicode/quotes need oracle tests.
+- RustChunk relevance: adaptable; exact-compatibility required
+- Decision: Rebuild exact 1.20.1 SNBT StringTagVisitor and Java numeric conversion.
+- 1.20.1 implications: Bit corpus, exponent boundaries, NaN/infinity/signed zero, quotes, controls, Unicode and compound ordering.
+- Follow-up checks: Java-oracle-tested SNBT codec for RustChunk serialization/hashes.
+- RustChunk implementation mapping: Java 1.20.1 StringTagVisitor and Float/Double.toString corpus.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 177 logical lines through EOF; exact pinned SHA and 5337 byte size match; inspected, not modified; tests not executed.
+
+### 2591. `crates/horizon-world/src/status_effect.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bd049587479916f3a13d124bc20a8850661f50f1`
+- Size: 10276 bytes
+- Coverage: Complete through EOF: 309 logical lines; full file; no gaps.
+- Purpose: Shared status effects, hidden chains, ticking and client blend interpolation.
+- Dependencies / cross-references: EffectInstance Rc/RefCell; TickWorld; BlendWorld; effect callbacks.
+- Implementation / logic: Clone retains identity; copy drops hidden/blend; updates amplifier/duration/visibility, ticks hidden effects, downgrades expired effect and blends factor.
+- Findings: Reentrancy and aliasing observable; differing effect holders don't block update; duration and blend floating-point behavior need parity.
+- RustChunk relevance: adaptable; reference
+- Decision: Rebuild 1.20.1 MobEffectInstance fields, hidden chain and Forge effect hooks.
+- 1.20.1 implications: Shared/copy semantics, hidden downgrade, infinite durations, order and NaN blend.
+- Follow-up checks: Separate Rust effect instance identity from active-effect storage.
+- RustChunk implementation mapping: Java 1.20.1 MobEffectInstance and tick oracle.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 309 logical lines through EOF; exact pinned SHA and 10276 byte size match; inspected, not modified; tests not executed.
+
+### 2592. `crates/horizon-world/src/stepped_interpolation.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a7157d90a9cf5e7a08ae3d7123553745218d4e3c`
+- Size: 11303 bytes
+- Coverage: Complete through EOF: 341 logical lines; full file; no gaps.
+- Purpose: Client interpolation of remote living entities along stepped server position/rotation paths.
+- Dependencies / cross-references: VecDeque; PosRot; per-entity update interval; tick speed and trig/lerp math.
+- Implementation / logic: Queues linear/stepped segments and ticks, interpolates pos/yaw/pitch, accelerates backlog and snaps zero-interval entities.
+- Findings: Position equality uses f64 bits, yaw equality normal float; angle wrapping and accumulated tick sum matter; i32 step sum may overflow.
+- RustChunk relevance: adaptable; reference
+- Decision: Rebuild 1.20.1 entity update intervals and movement packet semantics.
+- 1.20.1 implications: Packet sequences, -0 positions, yaw wrap, overflow and backlog speed.
+- Follow-up checks: Client-only smoothing separated from authoritative entity simulation.
+- RustChunk implementation mapping: 1.20.1 entity intervals, packet sources and tick-by-tick oracle.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 341 logical lines through EOF; exact pinned SHA and 11303 byte size match; inspected, not modified; tests not executed.
+
+### 2593. `crates/horizon-world/src/stored_consume.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `19d168a61e0dda180a94c201665bce5fcfcf8b24`
+- Size: 3072 bytes
+- Coverage: Complete through EOF: 83 logical lines; full file; no gaps.
+- Purpose: Adapter wiring consume effects to shared active-effect storage.
+- Dependencies / cross-references: ActiveEffects/EffectHooks; EffectWorld; JavaKey; RandomSource; sound and position callbacks.
+- Implementation / logic: Routes RNG streams, add/remove/remove-all, effect-set, block position and sound through the live effect store/world hooks.
+- Findings: Callbacks can reenter and mutate live storage; random handles preserve stream identity; failures can leave partial changes.
+- RustChunk relevance: adaptable; reference
+- Decision: Rebuild 1.20.1 consumable/effect add-remove and sound semantics; use target random streams.
+- 1.20.1 implications: Reentrant mutation, RNG lifetime, removal iteration and sound failures.
+- Follow-up checks: RustChunk active effect store plus explicit world callback layer.
+- RustChunk implementation mapping: 1.20.1 effect/consumable Java source and mutation traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 83 logical lines through EOF; exact pinned SHA and 3072 byte size match; inspected, not modified; tests not executed.
+
+### 2594. `crates/horizon-world/src/stored_effect_attributes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ac8338c94ac6c281e2172937d11de5fd9f9fda8e`
+- Size: 3242 bytes
+- Coverage: Complete through EOF: 95 logical lines; full file; no gaps.
+- Purpose: Adapter for effect attribute modifier dispatch on captured attribute map instances.
+- Dependencies / cross-references: AttributeMap; Definitions; ModifierWorld; AttributeAccess; ObjectKey handles.
+- Implementation / logic: Creates/looks up instances and routes permanent modifier add/remove through one captured mutable map.
+- Findings: Supplier gets live map including pending queues before insertion; instance operations continue after membership changes, so reentrancy matters.
+- RustChunk relevance: adaptable; reference
+- Decision: Regenerate 1.20.1 effect modifiers, UUIDs and operations; Forge custom attributes.
+- 1.20.1 implications: Creation timing, pending queues, deletion/reinsert and callback errors.
+- Follow-up checks: Typed handle-based attribute adapter with explicit pending-update behavior.
+- RustChunk implementation mapping: 1.20.1 MobEffect modifier map and Forge attributes tests.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 95 logical lines through EOF; exact pinned SHA and 3242 byte size match; inspected, not modified; tests not executed.
+
+### 2595. `crates/horizon-world/src/suffocation.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bb5fa9b71b8fd7519a546063c0df0507b7e67375`
+- Size: 4617 bytes
+- Coverage: Complete through EOF: 120 logical lines; full file; no gaps.
+- Purpose: Registry-driven suffocation rules for full collision, piston and shulker blocks.
+- Dependencies / cross-references: BlockCollisionRegistry; DynamicCollisionWorld; state IDs and causes_suffocation tag.
+- Implementation / logic: Precomputes constant/dynamic/shulker rules and caches full-cube decisions by canonical shape identity.
+- Findings: Requires definition per state and rebuild after tag reload; unknown shulker state defaults suffocating; extended piston property parsed exactly.
+- RustChunk relevance: adaptable; reference
+- Decision: Recreate 1.20.1 suffocation rules/tags and piston/shulker behavior.
+- 1.20.1 implications: All blocks, partial shapes, block entities, shulker unknown state and tag reload.
+- Follow-up checks: Versioned immutable suffocation rules attached to collision registry.
+- RustChunk implementation mapping: 1.20.1 suffocation sources, tags and shape traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 120 logical lines through EOF; exact pinned SHA and 4617 byte size match; inspected, not modified; tests not executed.
+
+### 2596. `crates/horizon-world/src/swimming.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `107ca14f0a788e909c15379667b2217ab3518ac1`
+- Size: 1952 bytes
+- Coverage: Complete through EOF: 50 logical lines; full file; no gaps.
+- Purpose: Entity swimming transitions, player flying guard and fluid jump threshold.
+- Dependencies / cross-references: SwimmingWorld; PlayerSwimmingWorld; water/passenger/sprint queries; direct ability field.
+- Implementation / logic: Computes underwater/shallow checks, updates swimming from sprint/water/passenger state and forces flying players out of swimming.
+- Findings: Direct abilities field is used, not virtual getAbilities; query order and captured block position can affect modded subclasses.
+- RustChunk relevance: adaptable; reference
+- Decision: Rebuild 1.20.1 swimming and fluid jump threshold; confirm Forge abilities overrides.
+- 1.20.1 implications: Passenger and water paths, eye-in-water query order and eye-height at 0.4.
+- Follow-up checks: Entity tick state transition with direct/virtual access kept distinct.
+- RustChunk implementation mapping: Java 1.20.1 Entity/Player swimming source and query traces.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 50 logical lines through EOF; exact pinned SHA and 1952 byte size match; inspected, not modified; tests not executed.
+
+### 2597. `crates/horizon-world/src/synced_floats.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `54aa541c9d5887a4619e2026826c7a5b9b28ab3b`
+- Size: 371 bytes
+- Coverage: Complete through EOF: 6 logical lines; full file; no gaps.
+- Purpose: Float-specific aliases for generic synchronized values.
+- Dependencies / cross-references: synced_values DataError/Observer/DataValue/SyncedValues.
+- Implementation / logic: Re-exports float storage/error/observer aliases; contains no independent synchronization logic.
+- Findings: Full entity schemas, heterogeneous serializers and packets live elsewhere; alias does not establish wire parity.
+- RustChunk relevance: adaptable; reference
+- Decision: Use 1.20.1 serializer registry and generated field IDs.
+- 1.20.1 implications: Verify Java Float equality and all synced f32 field codecs.
+- Follow-up checks: Internal convenience alias over typed RustChunk synced-data layer.
+- RustChunk implementation mapping: 1.20.1 EntityDataSerializers and packet schema.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 6 logical lines through EOF; exact pinned SHA and 371 byte size match; inspected, not modified; tests not executed.
+
+### 2598. `crates/horizon-world/src/synced_values.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `28ae91a5d359123779949d145cf049163235d522`
+- Size: 5142 bytes
+- Coverage: Complete through EOF: 167 logical lines; full file; no gaps.
+- Purpose: Generic synchronized values, dirty flags and observer callback semantics.
+- Dependencies / cross-references: DataValue; Observer; SyncedValue; f32/u8/bool equality implementations.
+- Implementation / logic: Maintains ID-sorted fields, validates IDs, handles set/assign, emits dirty values and non-default values.
+- Findings: f32 equality treats NaNs equal but distinguishes signed zero; set writes before observer and marks dirty after; assign always notifies and doesn't alter dirty flags.
+- RustChunk relevance: adaptable; reference
+- Decision: Rebuild 1.20.1 SynchedEntityData serializers, IDs and packet dirty behavior.
+- 1.20.1 implications: Duplicate/reserved IDs, NaN/-0, force set, observer failures/reentry, assign and take_dirty order.
+- Follow-up checks: Schema-generated typed synced data with dirty packet queue.
+- RustChunk implementation mapping: 1.20.1 SynchedEntityData/DataItem and packet differential tests.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 167 logical lines through EOF; exact pinned SHA and 5142 byte size match; inspected, not modified; tests not executed.
+
+### 2599. `crates/horizon-world/src/teleport_consume.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c8bbe7711c81076e665677f314976e584bc15d0e`
+- Size: 9163 bytes
+- Coverage: Complete through EOF: 247 logical lines; full file; no gaps.
+- Purpose: Random teleport consumable candidate generation, hook veto/mutation and success effects.
+- Dependencies / cross-references: RandomSource; dimension bounds; passenger; teleport event/sound; particles and resets.
+- Implementation / logic: Draws up to 16 x/y/z candidates, clamps Y, stops riding, invokes mod hook and teleport; success dispatches event/sound/particles and resets fall/impulse.
+- Findings: Minimum Y queried twice; hook occurs after stop-riding and can mutate/veto candidate; random draw order and packed offsets observable. Some modern hooks/resets may not exist in 1.20.1.
+- RustChunk relevance: adaptable; version-specific; reference
+- Decision: Rebuild 1.20.1 chorus fruit/teleport and Forge event ordering; gate modern extras.
+- 1.20.1 implications: 16 failures, random sequence, dimension bounds, hook veto/mutation, sound and particle offsets.
+- Follow-up checks: Separate candidate RNG, host teleport and Forge event adapter.
+- RustChunk implementation mapping: Java 1.20.1 ChorusFruitItem/Entity sources, seed traces and Forge events.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 247 logical lines through EOF; exact pinned SHA and 9163 byte size match; inspected, not modified; tests not executed.
+
+### 2600. `crates/horizon-world/src/tick_data.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e316f7a79ae7fe1618601a4d1037bc3e851b878a`
+- Size: 2863 bytes
+- Coverage: Complete through EOF: 81 logical lines; full file; no gaps.
+- Purpose: NBT codec for saved scheduled block/fluid ticks.
+- Dependencies / cross-references: NBT Tag; SavedTick; TickPriority; TickTypeId resolver.
+- Implementation / logic: Reads/writes tick compounds and resolves type IDs; integer conversion accepts numeric NBT types with narrowing.
+- Findings: Numeric cast parity, unknown types, malformed values and registry identity matter; scheduling algorithm remains external.
+- RustChunk relevance: adaptable; reference
+- Decision: Validate 1.20.1 ChunkSerializer saved tick schema and priority mapping.
+- 1.20.1 implications: Numeric types, overflow, NaN/infinity, unknown IDs, malformed lists and round-trip.
+- Follow-up checks: Version-bound save codec separate from live tick scheduling.
+- RustChunk implementation mapping: Java 1.20.1 SavedTick/ChunkSerializer and NBT fixtures.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 81 logical lines through EOF; exact pinned SHA and 2863 byte size match; inspected, not modified; tests not executed.
