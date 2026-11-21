@@ -2,9 +2,9 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: **200/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 200 records.
-- All four sections 2401–2600 CLOSED (50/50 each).
+- Entries 1–2000 globally verified/backed up; entries 2001–2650 inspected and committed; active 200-file stage is **2601–2800 (50/200)**.
+- Section **2601–2650 is closed (50/50)**. The user’s one-time exceptional grant covers **2601–2700**; section 2651–2700 is pre-authorized.
+
 - Independent full-stage QA passed after correcting the active 2401–2600 range to strict raw lexical path order. No missing/duplicate paths, schema errors, Ledger/Index mismatches or source provenance errors remain. **STOP at 2600**; 2601+ requires fresh permission.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
 
@@ -319,15 +319,16 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Stage closed at 200/200. Stop at 2600; fresh authorization is required for 2601+.
 
 
-## Active stage 2601–2800 — one-time authorization through 2700
+## Active stage 2601–2800 — first 50-file section complete
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 2601–2650 | 2601–2625 — **COMPLETE** | 2626–2650 — **AUTHORIZED** | OPEN — 25/50 |
+| 2601–2650 | 2601–2625 — **COMPLETE** | 2626–2650 — **COMPLETE** | **CLOSED — 50/50** |
 | 2651–2700 | 2651–2675 — **AUTHORIZED** | 2676–2700 — **AUTHORIZED** | PRE-AUTHORIZED — 0/50 |
-| 2701–2750 | 2701–2725 — NOT AUTHORIZED | 2726–2750 — NOT AUTHORIZED | STOP after 2700 |
+| 2701–2750 | 2701–2725 — NOT AUTHORIZED | 2726–2750 — NOT AUTHORIZED | **STOP after 2700** |
 
-- Standard 200 / 50 / 25 protocol is unchanged. This one-time exception covers 100 files: two 50-file sections and four 25-file commits.
-- Checkpoint 2601–2625 is complete. Continue to 2650 under the same grant; at 2650 report and continue to 2700 without requesting another grant. **STOP at 2700**.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: 25 records. Index: 2,625 sequential unique paths. No backup is due before 3000 and global verification.
+- Standard 200 / 50 / 25 protocol is unchanged. The one-time exception covers exactly 100 files: two 50-file sections and four 25-file commits.
+- Section 2601–2650 is complete and verified. Both checkpoints and the six-document update were committed atomically.
+- Continue with 2651–2675 and 2676–2700 under the existing explicit grant; report at 2700 and **STOP**.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: 50 records. Index: 2,650 sequential unique paths. No backup is due before 3000/global verification.
 - No source changes; tests/examples not executed; no build or runtime validation.

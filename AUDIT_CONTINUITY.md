@@ -6,14 +6,14 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2625**.
-- Active 200-file stage: **2601–2800**, currently **25/200**.
-- Active 50-file section: **2601–2650**, currently **25/50**; checkpoint **2601–2625** is complete and committed.
-- One-time exceptional authorization covers **2601–2700**: sections **2601–2650** and **2651–2700**, each with two 25-file checkpoints. Continue through 2650 and then 2700 without asking at the intermediate boundary. **STOP at 2700**; 2701+ is not authorized.
-- New Ledger `AUDIT_LEDGER_2601_2800.md`: **25 records (2601–2625)**, exactly 15 fields each. Index: **2,625 sequential unique paths**, with new paths and Decisions aligned.
+- Completed entries: **1–2650**.
+- Active 200-file stage: **2601–2800**, currently **50/200**.
+- Section **2601–2650** is complete (50/50); checkpoints **2601–2625** and **2626–2650** are committed and read-back verified.
+- Next section **2651–2700** is covered by the same one-time exceptional authorization. Complete checkpoints **2651–2675** and **2676–2700** with normal 25-file commits. Report at 2700 and **STOP**; 2701+ is not authorized.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **50 records (2601–2650)**, exactly 15 fields each. Index: **2,650 sequential unique paths**, with new paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving upstream.
-- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 indexed paths. The 100th authorized path is entry 2700; entry 2701 is outside the grant.
-- Backup covers 1–2000 only. No backup at 2625; next backup after 3000 and global verification.
+- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entry 2700 is the 100th authorized path; entry 2701 is outside the grant.
+- Backup covers 1–2000 only. No backup at 2650; next backup after 3000 and global verification.
 - Tests/examples were inspected only; none executed. No application source changes, build, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -732,3 +732,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - New Ledger: 25 records with exactly 15 fields each. Index: 2,625 sequential unique paths and matching Decisions.
 - The one-time grant remains active for 2626–2650 and 2651–2700. Keep ordinary 25-file commits and 50-file reporting boundaries. At 2650 continue under the same grant; stop exactly at 2700.
 - Tests/examples not executed. No product source change or build/runtime/device/Forge/Aternos validation.
+
+
+## Latest verified checkpoint — 2626–2650 — 2026-11-21
+
+- All 25 source files inspected individually through EOF at the pinned Starling snapshot; paths, SHAs and byte sizes checked against the untruncated tree.
+- Long-file coverage was contiguous: `cave.rs` 1–400/401–700; `density.rs` 1–400/401–578; `decoration_order.rs` 1–400/401–420; `dripstone.rs` 1–400/401–800; `feature_graph.rs` 1–400/401–800/801–1106; `feature_region.rs` 1–400/401–683.
+- Ledger and Index now cover 1–2650; active Ledger has 50 records, each with exactly 15 fields.
+- Exceptional grant remains active for 2651–2700. Stop exactly at 2700; 2701+ requires a fresh explicit grant.
+- Tests/examples not executed; no source changes or build/runtime/device/Forge/Aternos validation.

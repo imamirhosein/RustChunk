@@ -1714,3 +1714,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - New stage Ledger: 25 records (2601–2625), each with exactly 15 required fields. Index: 2,625 sequential unique paths; all new paths and Decisions align with the Ledger.
 - Main compatibility risks include modern 26.3 noise/aquifer schemas, biome/registry identities, legacy chunk blending, feature placement/RNG order, collision/raycast callbacks and Forge 47 integration.
 - Tests/examples were inspected only; none were executed. No RustChunk application source changed. No build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed. No backup is due at this checkpoint.
+
+
+## Audit checkpoint 2626–2650 — 2026-11-21 — COMPLETE
+
+- Entries 2626–2650 were individually inspected through EOF against the pinned Starling commit; all 25 paths and SHAs match the complete untruncated tree and byte sizes were checked.
+- Long-file coverage was contiguous and gap-free: `cave.rs` 1–400/401–700; `density.rs` 1–400/401–578; `decoration_order.rs` 1–400/401–420; `dripstone.rs` 1–400/401–800; `feature_graph.rs` 1–400/401–800/801–1106; `feature_region.rs` 1–400/401–683.
+- The pinned-tree SHA for `feature_catalog.rs` was corrected from the preliminary candidate transcription; the authoritative SHA recorded in the Ledger is `4db25111464b60cde7c5b264447e1359d08f0ffd`.
+- Ledger now contains 50 records (2601–2650); every entry has exactly 15 required fields. Index has 2,650 sequential unique paths; entries 2626–2650 are path/Decision-aligned and strictly ordered.
+- Compatibility risks: carver/density codecs and RNG, climate index tie semantics, decoration scheduler ordering, feature catalogue versions, End structure side effects and WorldGenRegion/ProtoChunk writes/ticks.
+- Embedded tests/examples inspected only, none executed. No RustChunk source code changed; no build, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation. No backup due at this checkpoint.
