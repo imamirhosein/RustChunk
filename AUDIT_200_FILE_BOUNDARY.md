@@ -1,12 +1,12 @@
 # RustChunk — 200-File Audit Boundary Register
 
-- Repository: `imamirhosein/RustChunk`
-- Branch: `starling-1.20.1-port-audit`
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
-- Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries through 2000 passed global structural/provenance verification and final backup; entries 2001–2050 are now complete.
-- Current stage: **2001–2200**, progress **200/200 — CLOSED**.
-- One-time authorizations: **2001–2100** and **2101–2200**. For the second window, preserve 25-file commits but do not stop or request permission at 2150; stop only at 2200.
+- Repository: imamirhosein/RustChunk
+- Branch: starling-1.20.1-port-audit
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Pinned recursive tree: aa193ad1daa40ab307340c4a61dc6b0176bd0e23 (truncated:false)
+- Entries 1–2000 passed global structural/provenance verification and final backup; entries 2001–2200 are closed.
+- Current 200-file stage: 2201–2400, progress 25/200.
+- Current authorized section: 2201–2250, progress 25/50. Checkpoint 2201–2225 is complete; 2226–2250 is already authorized. STOP at 2250, not at 2225.
 
 ## Stage partition
 
@@ -109,3 +109,21 @@
 - Seven later assets (2201–2207, `home.svg` through `package.svg`) were unintentionally fetched during a path-order mistake; they are excluded from Ledger/Index/counts and are not authorized complete files.
 - Ledger **200 records**, Index **2,200 sequential unique paths**; all four 25-file checkpoints in the 2101–2200 window are complete. Stage **200/200 CLOSED**.
 - **STOP at 2200. Authorization exhausted; fresh explicit permission is required before entry 2201.**
+
+
+## Current stage partition — 2201–2400
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2251–2300 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+
+## Checkpoint 2201–2225 — COMPLETE (25/25)
+
+- All 25 new paths are unique against the prior 2,200 Index entries; source SHA and exact byte size match the complete pinned tree.
+- Every file was inspected one at a time through EOF. lib.rs was read in three consecutive chunks (1–400, 401–800, 801–877).
+- Ledger: 225 records in 2001–2225; exactly 15 fields each. Index: 2,225 sequential unique paths; decisions align.
+- The seven previously fetched assets 2201–2207 were re-fetched and reviewed within this explicit authorization; they are now included as complete entries.
+- Continue immediately at 2226 under the same authorization. Preserve the next exact 25-file checkpoint, then STOP at 2250. No authorization exists for 2251+.

@@ -3477,3 +3477,463 @@
 - Active Ledger now contains **200 records (2001–2200)**, each with exactly 15 fields. Index contains **2,200 sequential unique paths**. All four authorized 25-file checkpoints in 2101–2200 are closed.
 - No application source changed. No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation was performed.
 - The one-time authorization for **2101–2200 is exhausted**. Stop before entry 2201 and request fresh explicit permission.
+
+### 2201. `crates/horizon-theme/icons/pixel/home.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f71cb8c00dc23d618ae4a06ade4c7457a9aa73ff`
+- Size: 284 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 284 bytes; no omitted ranges.
+- Purpose: Pixelarticons home glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 filled pixel-grid house/home symbol. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: One path using currentColor; static vector only, not a navigation action.
+- RustChunk relevance: Optional launcher home/navigation marker; no route or action is included.
+- Decision: adaptable; Pixelarticons home glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2202. `crates/horizon-theme/icons/pixel/image.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cf28927704fc5b76583b3fad7ec95cc21ba9ddc7`
+- Size: 350 bytes
+- Coverage: Complete read through EOF: 4 logical lines; exact pinned-tree size 350 bytes; no omitted ranges.
+- Purpose: Pixelarticons image glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 picture/frame symbol composed of two path elements. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Two static paths; no script, embedded image, link or external resource found.
+- RustChunk relevance: Optional media/image UI marker; it is not an image decoder or gallery.
+- Decision: adaptable; Pixelarticons image glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 4 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2203. `crates/horizon-theme/icons/pixel/info-box.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `04128032b7f76dd9b0e4b54e810185bc107f1b52`
+- Size: 203 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 203 bytes; no omitted ranges.
+- Purpose: Pixelarticons information glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 information mark inside a square frame. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: One compact currentColor path; no executable or external reference.
+- RustChunk relevance: Optional information marker; accessible text must be supplied by the control.
+- Decision: adaptable; Pixelarticons information glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2204. `crates/horizon-theme/icons/pixel/message.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c5dc11a7ea529cc5fb485c68b3a7a5d34cd96b4a`
+- Size: 190 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 190 bytes; no omitted ranges.
+- Purpose: Pixelarticons message glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 rectangular message/chat silhouette. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: One currentColor path; no external reference or message behavior.
+- RustChunk relevance: Optional messaging marker; it does not implement chat or networking.
+- Decision: adaptable; Pixelarticons message glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2205. `crates/horizon-theme/icons/pixel/monitor.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `52edf4d4f7fabdd70c939b4959ad87accbd601d3`
+- Size: 203 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 203 bytes; no omitted ranges.
+- Purpose: Pixelarticons monitor glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 desktop monitor and stand, expressed as filled pixel rectangles. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static path geometry; no executable or external resource.
+- RustChunk relevance: Optional monitor/system marker; it has no device-monitoring behavior.
+- Decision: adaptable; Pixelarticons monitor glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2206. `crates/horizon-theme/icons/pixel/notes.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `beb8d97e5bfb8e3aff02f7e3f262de5c540fbdc0`
+- Size: 292 bytes
+- Coverage: Complete read through EOF: 4 logical lines; exact pinned-tree size 292 bytes; no omitted ranges.
+- Purpose: Pixelarticons notes glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 stacked-note/document silhouette composed of two paths. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static currentColor paths; no document storage or external resource.
+- RustChunk relevance: Optional notes/document marker; it does not store note content.
+- Decision: adaptable; Pixelarticons notes glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 4 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2207. `crates/horizon-theme/icons/pixel/package.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cc6ce07881dd864f8065011ce4956fa0d1cdfa63`
+- Size: 350 bytes
+- Coverage: Complete read through EOF: 4 logical lines; exact pinned-tree size 350 bytes; no omitted ranges.
+- Purpose: Pixelarticons package glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 parcel/package symbol made from two paths. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static vector only; no package-management action or external content.
+- RustChunk relevance: Optional package marker; it does not manage mods/packages.
+- Decision: adaptable; Pixelarticons package glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 4 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2208. `crates/horizon-theme/icons/pixel/play.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `02e3c17aacfe058e1e8d80ddccddddc9baaad026`
+- Size: 228 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 228 bytes; no omitted ranges.
+- Purpose: Pixelarticons play glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 pixelated play/forward symbol in one path. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: CurrentColor path only; does not launch or control a process.
+- RustChunk relevance: Optional play marker; it does not launch Minecraft.
+- Decision: adaptable; Pixelarticons play glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2209. `crates/horizon-theme/icons/pixel/plus.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cd35642b9777064cc785293044acf544160876bd`
+- Size: 161 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 161 bytes; no omitted ranges.
+- Purpose: Pixelarticons plus glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 plus/add symbol using one path. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static path; no action, state or external dependency.
+- RustChunk relevance: Optional add/create marker; action semantics belong to its parent.
+- Decision: adaptable; Pixelarticons plus glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2210. `crates/horizon-theme/icons/pixel/reload.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3458d03f04ce3f7d72a3f903164ca8bc50d03a7a`
+- Size: 283 bytes
+- Coverage: Complete read through EOF: 5 logical lines; exact pinned-tree size 283 bytes; no omitted ranges.
+- Purpose: Pixelarticons reload glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 two-arrow refresh/reload symbol built from three paths. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static vector with currentColor; no network or retry behavior.
+- RustChunk relevance: Optional refresh marker; it does not perform retries or downloads.
+- Decision: adaptable; Pixelarticons reload glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 5 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2211. `crates/horizon-theme/icons/pixel/search.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7dce1b5ea59a0873d84d232040c590f5e91c241e`
+- Size: 291 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 291 bytes; no omitted ranges.
+- Purpose: Pixelarticons search glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 pixel-grid magnifying/search symbol. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Single currentColor path; no input or search logic.
+- RustChunk relevance: Optional search marker; no search logic is embedded.
+- Decision: adaptable; Pixelarticons search glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2212. `crates/horizon-theme/icons/pixel/server.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7979820e718a2dd80c7d0b607527778ddca1866a`
+- Size: 211 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 211 bytes; no omitted ranges.
+- Purpose: Pixelarticons server glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 rack/server symbol in one path. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Only a static symbol; no endpoint or multiplayer behavior.
+- RustChunk relevance: Optional server marker; it does not connect to a server.
+- Decision: adaptable; Pixelarticons server glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2213. `crates/horizon-theme/icons/pixel/sliders.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c2b4912d02da6e0fac80e2e579d0cb54daaaabcc`
+- Size: 215 bytes
+- Coverage: Complete read through EOF: 1 logical lines; exact pinned-tree size 215 bytes; no omitted ranges.
+- Purpose: Pixelarticons sliders glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 adjustment/sliders symbol in a single-line SVG. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Root declares viewBox and currentColor but omits explicit width and height; parent sizing is required.
+- RustChunk relevance: Optional settings/filter marker; it does not expose actual sliders.
+- Decision: adaptable; Pixelarticons sliders glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse and render at Android target densities; test intrinsic sizing despite missing width/height, tint and accessibility label; retain Pixelarticons notice.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 1 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2214. `crates/horizon-theme/icons/pixel/star.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a27348730abbb18aad455dbbe35ca66a2ad1c024`
+- Size: 318 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 318 bytes; no omitted ranges.
+- Purpose: Custom Horizon star/rating glyph
+- Dependencies / cross-references: Icon registry in crates/horizon-theme/src/lib.rs (entry 2220); code comment distinguishes this custom star from Pixelarticons.
+- Implementation / logic: 24×24 star silhouette made of pixel-like horizontal bands. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: The crate registry labels this as not Pixelarticons and says it was drawn for Horizon ratings. Do not apply the neighboring Pixelarticons notice automatically; standalone asset licensing remains unverified.
+- RustChunk relevance: Optional rating visual; custom asset provenance/licensing must be resolved first.
+- Decision: undetermined; custom Horizon star glyph; verify its project-level asset license
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Confirm project-level rights for this custom star; test Android rendering, tint/density and accessible rating semantics.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Documented asset provenance/permission, Android rendering screenshots/tests, tint, density and accessibility checks.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2215. `crates/horizon-theme/icons/pixel/terminal.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e000cd10416e3379de9a1e9f4a912e3e09e86111`
+- Size: 212 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 212 bytes; no omitted ranges.
+- Purpose: Pixelarticons terminal glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 terminal/window symbol with a pixel prompt mark. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static currentColor path only; no terminal execution behavior.
+- RustChunk relevance: Optional terminal marker; it does not provide a command console.
+- Decision: adaptable; Pixelarticons terminal glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2216. `crates/horizon-theme/icons/pixel/trash.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f67fe4eca7226dfb18b385315d544b0ba3937eda`
+- Size: 209 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 209 bytes; no omitted ranges.
+- Purpose: Pixelarticons trash glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 waste-bin/delete symbol in one path. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static path; second line begins at column zero but is still valid XML. No external reference.
+- RustChunk relevance: Optional delete marker; confirmation and destructive behavior belong to the parent.
+- Decision: adaptable; Pixelarticons trash glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2217. `crates/horizon-theme/icons/pixel/user.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `13773d116bfe1d91c18172808d8f30e776f711ba`
+- Size: 233 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 233 bytes; no omitted ranges.
+- Purpose: Pixelarticons user glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 person/profile symbol using one currentColor path. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: No account or identity data; static vector only.
+- RustChunk relevance: Optional profile marker; it contains no account data.
+- Decision: adaptable; Pixelarticons user glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2218. `crates/horizon-theme/icons/pixel/zap.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `93ab75cbf6719f24c30d3f3965c9093d6287db9d`
+- Size: 280 bytes
+- Coverage: Complete read through EOF: 3 logical lines; exact pinned-tree size 280 bytes; no omitted ranges.
+- Purpose: Pixelarticons zap/lightning glyph
+- Dependencies / cross-references: Pixelarticons MIT notice at entry 2184; icon registry in crates/horizon-theme/src/lib.rs (entry 2220).
+- Implementation / logic: 24×24 angular lightning/energy symbol in one path. Root viewBox is 0 0 24 24 and fill is currentColor.
+- Findings: Static geometry only; no performance or power behavior.
+- RustChunk relevance: Optional speed/status marker; it does not prove performance.
+- Decision: adaptable; Pixelarticons zap glyph; retain its separate MIT notice
+- 1.20.1 implications: No Minecraft 1.20.1 or Forge 47.x protocol/rendering behavior; launcher UI asset only.
+- Follow-up checks: Parse/render on Android at supported densities and themes; verify tint/clipping and parent accessibility label; retain Pixelarticons MIT notice where applicable.
+- RustChunk implementation mapping: Keep in a separately attributed launcher UI icon pack; bind action, focus, hit-target, state and accessibility to parent UI controls.
+- Evidence required before adoption: Verified distributed MIT notice where applicable, Android SVG parse/render tests at multiple densities, tint/clipping and accessibility evidence.
+- Completion state: COMPLETE — all 3 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2219. `crates/horizon-theme/src/glass.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2b95c14ffadd9926ca1dd659fb589491a7aaec92`
+- Size: 10102 bytes
+- Coverage: Complete read through EOF: 280 logical lines; exact pinned-tree size 10102 bytes; no omitted ranges.
+- Purpose: Glass appearance palette and colour-mixing utilities
+- Dependencies / cross-references: Used by theme token generation in crates/horizon-theme/src/lib.rs (entry 2220) and tokens.css (entry 2222).
+- Implementation / logic: Exports accent/tint/blur and semantic colours, radii/ink/fill constants, Glass::new, CSS token generation, sRGB↔OKLab and luminance helpers.
+- Findings: Glass::new accepts unvalidated tint/blur/accent values; invalid or non-finite values can yield invalid CSS or colour math. on_accent uses a luminance >0.4 heuristic, not a general contrast guarantee. Chrome reference tests are present but unrun.
+- RustChunk relevance: Launcher appearance-token reference, not Minecraft rendering or block-state logic.
+- Decision: adaptable; palette and OKLab helpers only; validate public numeric inputs
+- 1.20.1 implications: No block, item, registry, packet or Forge behavior. Keep launcher/web theme tokens separate from Minecraft's game UI and renderer.
+- Follow-up checks: Validate finite tint/blur and 24-bit accent inputs; sweep contrast over many accents; compare CSS output with browser reference.
+- RustChunk implementation mapping: Port only a validated palette/mixing module if RustChunk adopts a glass launcher look; do not copy the entire Horizon design system.
+- Evidence required before adoption: CSS Color 4/browser comparison, finite-input/property tests and measured contrast evidence.
+- Completion state: COMPLETE — all 280 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2220. `crates/horizon-theme/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f15bf05143e85bbcb0b57a2a6e64af08cc02855c`
+- Size: 29673 bytes
+- Coverage: Complete read to EOF in contiguous, gap-free ranges 1–400, 401–800 and 801–877; 877 logical lines; pinned-tree size 29,673 bytes.
+- Purpose: Central Horizon theme crate: fonts, icons, typographic/layout tokens, palettes, motion and CSS output
+- Dependencies / cross-references: Includes bundled fonts/icons; declares glass/night submodules; generates the CSS artifact in entry 2222.
+- Implementation / logic: Exports font/icon byte registries, Web/Step/Motion/Palette/Blocks types, light/dark palettes, contrast/easing functions and css() generator; includes tests for contrast, icons, bezier and CSS.
+- Findings: 877 lines read in 1–400, 401–800 and 801–877. Public float-bearing values and bezier() have no finite/range validation; bisection assumes a valid monotone cubic-bezier x curve. Icon tests only search for viewBox/currentColor substrings rather than parse SVG. CSS-regeneration and WCAG tests exist but were not run. Previously reviewed fonts do not establish Persian/Arabic shaping coverage.
+- RustChunk relevance: Strong reference for typed UI tokens and asset registries; launcher/web theme is separate from the Minecraft game UI.
+- Decision: adaptable; port selected token/registry patterns only; keep game semantics separate
+- 1.20.1 implications: No block, item, registry, packet or Forge behavior. Keep launcher/web theme tokens separate from Minecraft's game UI and renderer.
+- Follow-up checks: Test non-finite/range input rejection, SVG parsing, font fallback/shaping, WCAG contrast, bezier behavior and byte-for-byte CSS regeneration.
+- RustChunk implementation mapping: Build RustChunk-owned typed UI tokens and asset registry; reuse only selected neutral patterns after font/platform review.
+- Evidence required before adoption: Unit/property tests, parser-based SVG validation, exact CSS regeneration, font licensing/fallback and target UI tests.
+- Completion state: COMPLETE — all 877 logical lines read through EOF in three consecutive ranges; source SHA and exact pinned-tree byte size match. Tests/builds not run.
+
+
+### 2221. `crates/horizon-theme/src/night.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3cffde013d9248b8d3bd3cc3992e045acac26863`
+- Size: 10113 bytes
+- Coverage: Complete read through EOF: 270 logical lines; exact pinned-tree size 10113 bytes; no omitted ranges.
+- Purpose: Night/dawn launcher appearance and alpha compositing
+- Dependencies / cross-references: Referenced by crates/horizon-theme/src/lib.rs (entry 2220); Night::blocks() supplies the Blocks conversion.
+- Implementation / logic: Defines Night palettes, six sky stops, card/stroke alpha, over(), conversion to Blocks and CSS variables; includes sky contrast tests.
+- Findings: Public over() does not clamp/validate alpha; public Night fields can carry invalid alpha values, producing extrapolated colours or invalid CSS. Source documentation explicitly says game menus do not use this look. Tests unrun.
+- RustChunk relevance: Optional launcher visual theme; not a Minecraft world-sky or game-menu renderer.
+- Decision: adaptable; launcher-only theme; validate alpha and keep game-menu separation
+- 1.20.1 implications: No block, item, registry, packet or Forge behavior. Keep launcher/web theme tokens separate from Minecraft's game UI and renderer.
+- Follow-up checks: Clamp/validate alpha to 0..1; test invalid/non-finite values and compositing/contrast on target displays.
+- RustChunk implementation mapping: Optional launcher theme only; never wire its six bands to Minecraft world sky, biome or lighting state.
+- Evidence required before adoption: Alpha property tests including invalid inputs, contrast over all sky stops and target-device rendering evidence.
+- Completion state: COMPLETE — all 270 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2222. `crates/horizon-theme/tokens.css`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `678c47409daf879df5d2027a943e8795dfe3ec16`
+- Size: 7780 bytes
+- Coverage: Complete read through EOF: 281 logical lines; exact pinned-tree size 7780 bytes; no omitted ranges.
+- Purpose: Generated CSS custom properties for Horizon theme tokens
+- Dependencies / cross-references: Generated from crates/horizon-theme/src/lib.rs (entry 2220); comments say do not edit by hand.
+- Implementation / logic: Contains light defaults, dark media/attribute overrides, palette/night/glass variables, fonts, type scale, spacing, radii and motion tokens.
+- Findings: File identifies itself as generated from the Rust crate and says do not edit. Repeated dark values under media and explicit data-theme selectors are intentional. Regeneration consistency test exists in lib.rs but was not run.
+- RustChunk relevance: Web launcher shell reference only; no Minecraft client behavior.
+- Decision: adaptable; generated CSS artifact; Rust constants remain authoritative
+- 1.20.1 implications: No block, item, registry, packet or Forge behavior. Keep launcher/web theme tokens separate from Minecraft's game UI and renderer.
+- Follow-up checks: Regenerate from Rust source and compare byte-for-byte; parse CSS and test media, light, dark and explicit-theme selection.
+- RustChunk implementation mapping: Generate web-only CSS from RustChunk token source; native client theme data should remain in Rust/platform UI.
+- Evidence required before adoption: Reproducible regeneration, CSS parse/build checks and light/dark/explicit-theme browser snapshots.
+- Completion state: COMPLETE — all 281 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2223. `crates/horizon-threads/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `346b1c0b9a171f979d52fac0ac8776cbb2ba54b8`
+- Size: 1019 bytes
+- Coverage: Complete read through EOF: 24 logical lines; exact pinned-tree size 1019 bytes; no omitted ranges.
+- Purpose: Build manifest for Horizon thread/allocator support crate
+- Dependencies / cross-references: Workspace edition/license/lint settings; mimalloc, libmimalloc-sys, libc and windows-sys.
+- Implementation / logic: Declares Rust 1.85, mimalloc/libmimalloc-sys with extended features, libc for Apple/Linux/Android, windows-sys with selected Win32 APIs and optional alloc-census.
+- Findings: Allocator/native dependencies are unconditional while OS APIs are target-gated. Android grouping does not prove NDK/ABI compatibility; mimalloc dependency unification and duplicate native-link behavior need checking.
+- RustChunk relevance: Possible reference for platform-separated support crates; allocator choices are unproven for RustChunk and target Android.
+- Decision: adaptable; manifest layout only; resolve dependencies per target
+- 1.20.1 implications: Cargo metadata is not evidence of Android ABI/NDK success or Minecraft/Forge compatibility; validate each target independently.
+- Follow-up checks: Resolve Cargo graph and native links per Android ARM64/Windows/Linux; verify NDK and Rust 1.85 workspace compatibility.
+- RustChunk implementation mapping: Use target-specific crates/features; keep diagnostic allocator support out of release builds until validated.
+- Evidence required before adoption: Per-target Cargo resolution, NDK builds and link map proving one compatible allocator/native library.
+- Completion state: COMPLETE — all 24 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2224. `crates/horizon-threads/src/boot_paint.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7effa72209cec2182d781c1eb1592091512a2577`
+- Size: 7646 bytes
+- Coverage: Complete read through EOF: 195 logical lines; exact pinned-tree size 7646 bytes; no omitted ranges.
+- Purpose: Windows GDI boot splash before the wgpu renderer's first frame
+- Dependencies / cross-references: windows-sys Win32 GDI/window APIs; caller-supplied Geist font bytes; wgpu first-frame boot transition.
+- Implementation / logic: Registers in-memory fonts once, obtains window DC, paints black, centers wordmark/tagline and wraps recent console lines in a 24-row area.
+- Findings: Windows GDI only. AddFontMemResourceEx handles/results and GetClientRect/FillRect/DrawTextW/CreateFontW failures are mostly ignored. Font byte lifetime is documented but not enforced by slice signature; log strings have no byte cap and are converted to UTF-16 on each paint. No build/paint test run.
+- RustChunk relevance: Boot-placeholder sequencing is useful; this backend cannot run on Android/Linux and needs replacement.
+- Decision: rewrite required; keep only boot sequencing idea; replace GDI and harden resource/error handling
+- 1.20.1 implications: Directly incompatible with Android/Linux because it depends on Win32/GDI; a separate platform backend is required.
+- Follow-up checks: Build/test on Windows; validate API results, font lifetime, GDI handle cleanup, log caps and paint/present concurrency; build separate Android backend.
+- RustChunk implementation mapping: Retain boot sequencing concept; implement through Android Surface/native renderer or a platform-neutral interface, not GDI.
+- Evidence required before adoption: Windows build and GDI resource/lifetime tests plus separate Android boot-frame/device evidence.
+- Completion state: COMPLETE — all 195 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+### 2225. `crates/horizon-threads/src/heap_census.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7fca6225a60ae6d1b775e2f0b603a60b98336e74`
+- Size: 10071 bytes
+- Coverage: Complete read through EOF: 269 logical lines; exact pinned-tree size 10071 bytes; no omitted ranges.
+- Purpose: Feature-oriented allocator wrapper attributing live heap bytes to startup steps and threads
+- Dependencies / cross-references: std::alloc GlobalAlloc, mimalloc, TLS and atomics; optional alloc-census diagnostic workflow.
+- Implementation / logic: Implements mimalloc-backed GlobalAlloc with an alignment-aware header, tag IDs, TLS step/thread tags, atomic counters, census aggregation and realloc/free tests.
+- Findings: Tag is automatically Send although Drop restores thread-local STEP, so cross-thread guard movement can restore the wrong TLS state. layout.size()+header and new_size+header use unchecked arithmetic. census() allocates Vec storage and can perturb its own readings when this allocator is active. Thread naming supports Apple/Linux but not Android, which falls back to unnamed thread. Registry has 512 slots; overflow is folded into untagged. No tests/allocator execution run.
+- RustChunk relevance: Profiling reference only; unsafe global allocator requires an independent soundness review before any use.
+- Decision: rewrite required; diagnostic-only concept; fix guard mobility, checked sizes, Android tags and self-measurement
+- 1.20.1 implications: Allocator instrumentation is below the Minecraft protocol layer and does not implement Forge mod loading or game memory semantics.
+- Follow-up checks: Make Tag !Send or bind it to originating thread; checked_add both allocation sizes; exclude census's own allocations; add Android pthread_getname_np; stress allocator invariants with safety tooling.
+- RustChunk implementation mapping: If needed, isolate behind a diagnostic-only feature; never replace release allocator without separate soundness review.
+- Evidence required before adoption: Allocator soundness review, cross-thread guard/overflow/failure tests, platform thread-name tests and non-perturbing census validation.
+- Completion state: COMPLETE — all 269 logical lines read through EOF; source SHA and exact pinned-tree byte size match. No runtime/build test implied.
+
+
+## Checkpoint 2201–2225 — complete (25/25)
+
+- Entries 2201–2225 were read one at a time through EOF. Exact paths, blob SHAs and byte sizes match the complete pinned tree.
+- The 18 pixel SVGs are static currentColor vectors. Pixelarticons' distinct MIT notice is entry 2184; star.svg is explicitly custom Horizon artwork and its independent asset rights remain unresolved.
+- Theme code provides Glass/OKLab, Night/Dawn, palettes, font/icon registries, motion and CSS generation. Public floating-point inputs are not range-checked; tests were inspected only.
+- The Windows GDI boot painter is not portable to Android. The heap census has unsafe allocator/guard and measurement issues that require a separate soundness review.
+- The previously fetched 2201–2207 assets were re-fetched and inspected under the new authorization; they are now valid completed entries.
+- Active Ledger: 225 records (2001–2225), exactly 15 fields each. Index: 2,225 sequential unique paths. No app source changed; no tests/builds/APK/device/Forge/server/Aternos/renderer validation.
+- Continue at 2226–2250 under the same authorization; preserve 25-file checkpoints and STOP at 2250.

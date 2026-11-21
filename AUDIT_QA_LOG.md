@@ -1464,3 +1464,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger has **200 entries (2001–2200)**, each with exactly 15 fields. Index has **2,200 sequential unique paths** and decisions align. All four 25-file checkpoints in 2101–2200 are complete.
 - No application source changed; no tests/builds/APKs/benchmarks/target-device/renderer/Minecraft/Forge/server/Aternos validation.
 - The user's one-time authorization **2101–2200 is exhausted**. Stop before 2201 and request fresh explicit permission.
+
+
+## Audit checkpoint 2201–2225 — 2026-11-21
+
+- Completed entries **2201–2225 (25/25)** in deterministic lexical path order after excluding all existing Index paths. Each was read individually through EOF; exact source SHA and byte size match the complete pinned recursive tree.
+- Entries 2201–2218 are 18 static Pixelarticons-style SVG glyphs; the distinct MIT notice remains entry 2184. Entry 2214 (star.svg) is explicitly marked in the crate registry as custom Horizon artwork, not Pixelarticons; its asset-license provenance remains unresolved.
+- Entries 2219–2222 cover Glass/OKLab, the central UI token/asset registry, Night/Dawn and generated CSS. Public float parameters need validation; embedded tests were not executed.
+- Entry 2223 is a platform dependency manifest. Entry 2224 is a Windows-only GDI boot painter; Entry 2225 is an unsafe profiling allocator with cross-thread guard, checked-arithmetic, Android thread-name and self-measurement concerns.
+- The seven previously fetched out-of-range assets 2201–2207 have now been re-fetched and reviewed as part of the newly authorized 2201–2250 range. They are counted only now.
+- All 25 Ledger entries contain the exact 15 required fields; the global Index has 2,225 sequential unique paths and the new Ledger has 225 records (2001–2225). No application source changed.
+- No tests/examples were executed; no build, benchmark, APK, Android device, renderer, Minecraft, Forge, multiplayer server or Aternos validation was performed.
+- The 200-file stage **2201–2400** is 25/200 complete. Current 50-file section **2201–2250** is 25/50 complete; checkpoint **2226–2250** remains authorized. Continue without asking at 2225 and **STOP at 2250**.
