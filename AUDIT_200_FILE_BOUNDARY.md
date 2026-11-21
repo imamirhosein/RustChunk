@@ -4,7 +4,7 @@
 - Branch: starling-1.20.1-port-audit
 - Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Pinned recursive tree: aa193ad1daa40ab307340c4a61dc6b0176bd0e23 (truncated:false)
-- Entries 1–2000 passed global verification and final backup; entries 2001–2300 are complete.
+- Entries 1–2000 passed global verification and final backup; entries 2001–2300 are complete. Closed Ledger `AUDIT_LEDGER_2001_2200.md` holds entries 2001–2200 (200 records); active Ledger `AUDIT_LEDGER_2201_2400.md` holds entries 2201–2300 (100 records).
 - Active 200-file stage: 2201–2400, progress 100/200.
 - Reporting sections 2201–2250 and 2251–2300 are CLOSED (50/50); all four 25-file checkpoints are complete.
 - User authorization covers 2301–2350; checkpoints 2301–2325 and 2326–2350 are authorized. Do not pause at 2325; STOP at 2350 and require fresh permission before 2351.
@@ -167,7 +167,7 @@
 ## Checkpoint 2276–2300 — COMPLETE (25/25)
 
 - Each source was inspected individually through EOF; long files were read in consecutive, gap-free chunks no larger than 400 lines. Source paths, SHAs and sizes match the pinned recursive tree.
-- Ledger contains 300 records (2001–2300), each with exactly 15 fields; Index contains 2,300 sequential unique paths with matching Decisions.
+- The closed Ledger `AUDIT_LEDGER_2001_2200.md` contains 200 records (2001–2200); the active Ledger `AUDIT_LEDGER_2201_2400.md` contains 100 records (2201–2300). All 300 records have exactly 15 fields; Index contains 2,300 sequential unique paths with matching Decisions.
 - Section 2251–2300 is closed (50/50); active 200-file stage 2201–2400 is 100/200 complete.
 - Tests/examples inspected only; none executed. No app source changes or runtime/build/device/game validation.
 - **STOP at 2300**. No authorization exists for 2301+ until the user explicitly grants it.
@@ -179,3 +179,11 @@
 - Decisions 2276–2300 standardized to adaptable; reference in Ledger/Index. Fixture-only limits remain in supporting text.
 - decoration_region_fixture.rs is 303 canonical lines, read in ranges 1–200 and 201–303.
 - User authorization covers 2301–2350, both 25-file checkpoints. Do not pause at 2325; STOP at 2350.
+
+
+## Ledger partition correction — 2026-11-21
+
+- Entries 2201–2300 had been stored in the prior stage's `AUDIT_LEDGER_2001_2200.md`. The Ledger was split at entry 2201 without changing any entry content or number.
+- Closed Ledger: `AUDIT_LEDGER_2001_2200.md` — 2001–2200 (200/200). Active Ledger: `AUDIT_LEDGER_2201_2400.md` — 2201–2300 (100/200).
+- Index remains 2,300 sequential unique paths. All 300 Ledger records pass exact 15-field and path/Decision alignment checks.
+- Sections 2201–2250 and 2251–2300 are closed; 2301–2350 is authorized. STOP at 2350.

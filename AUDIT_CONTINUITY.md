@@ -10,7 +10,7 @@ Working branch: starling-1.20.1-port-audit
 - Active 200-file stage: 2201–2400, progress 100/200.
 - Reporting sections 2201–2250 and 2251–2300 are closed (50/50); all four 25-file checkpoints are complete and read-back verified.
 - User authorization covers the next section 2301–2350, including 2301–2325 and 2326–2350. Continue without another permission request at 2325; STOP at 2350 and request permission before 2351.
-- Active Ledger AUDIT_LEDGER_2001_2200.md contains 300 records (2001–2300), exactly 15 fields each; Index contains 2,300 sequential unique paths.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md` contains 200 records (2001–2200); active Ledger `AUDIT_LEDGER_2201_2400.md` contains 100 records (2201–2300). Every entry has exactly 15 fields; Index contains 2,300 sequential unique paths.
 - Pinned upstream starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 is complete (truncated:false).
 - Historical Index numbering remains stable; future selection is deterministic lexical order after the latest indexed path. Entries 2201–2207 were re-fetched and audited after authorization.
 - Decisions 2276–2300 are normalized to adaptable; reference. Entry 2280 decoration_region_fixture.rs is 303 lines, fully re-read in ranges 1–200 and 201–303.
@@ -590,3 +590,11 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Entries 2251–2300 are complete: both 25-file checkpoints are committed and read back. Ledger has 300 records (2001–2300), exactly 15 fields each; Index has 2,300 sequential unique paths.
 - Section 2251–2300 is closed (50/50); authorization exhausted. Stop before 2301 and request fresh permission.
 - No app source changed; no tests run or runtime/build/device/game validation.
+
+
+## Ledger partition correction — 2026-11-21
+
+- The physical Ledger boundary was corrected: entries 2201–2300 were previously appended to `AUDIT_LEDGER_2001_2200.md` despite belonging to the separate 200-file stage 2201–2400.
+- The closed Ledger now holds only entries 2001–2200 (200 records). New `AUDIT_LEDGER_2201_2400.md` holds entries 2201–2300 (100 records); it is the active Ledger for stage 2201–2400.
+- Entry content, numbering, paths, Decisions and source provenance were preserved. Index numbering remains 1–2300. Historical notes describing the pre-correction combined Ledger remain historical snapshots.
+- Current resume state remains 1–2300 complete; 2301–2350 is authorized, and the stop boundary is 2350.

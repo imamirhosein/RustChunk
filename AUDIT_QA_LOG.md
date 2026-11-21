@@ -1534,3 +1534,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - decoration_region_fixture.rs is 303 canonical lines and was re-read in contiguous ranges 1–200 and 201–303; the previous 493-line estimate is corrected.
 - Section 2251–2300 is closed (50/50). The user has authorized 2301–2350; both checkpoints 2301–2325 and 2326–2350 are covered. Do not pause at 2325. STOP at 2350 and request permission before 2351.
 - All 2,300 Index paths remain sequential/unique; entries 2276–2300 paths, source SHAs and sizes match the pinned tree. No tests/examples executed; no application source changed.
+
+
+## Corrective review — split the 2001–2200 and 2201–2400 Ledgers — 2026-11-21
+
+- A document-boundary error was found: the closed `AUDIT_LEDGER_2001_2200.md` physically contained entries 2001–2300 (300 records), so entries 2201–2300 had been appended to the prior stage's Ledger.
+- Split the file at the exact `### 2201.` boundary. `AUDIT_LEDGER_2001_2200.md` now contains only entries 2001–2200 (200 records); the new `AUDIT_LEDGER_2201_2400.md` contains entries 2201–2300 (100 records) for the active 2201–2400 stage.
+- All 300 existing entry blocks were transferred without changing entry numbers, source paths, source SHAs, byte sizes, coverage, findings or Decision values. No Index rows were renumbered or rewritten.
+- Structural read-back checks: 200 + 100 records; sequential ranges with no gaps; all 300 records have the 15 required fields exactly once; 300 unique source paths; every Ledger path and primary Decision aligns with the matching Index row.
+- Global Index remains 2,300 sequential unique paths. Reporting sections 2201–2250 and 2251–2300 remain closed; user authorization for 2301–2350 remains active, with STOP at 2350.
+- Historical QA notes reporting 300 records in the old Ledger describe the pre-correction physical layout and are retained as historical snapshots. No upstream source or RustChunk application code changed. Tests/examples were not run; no build, APK, device, Minecraft, Forge, server or Aternos validation was performed.

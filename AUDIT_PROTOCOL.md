@@ -74,6 +74,8 @@ For every entry:
 
 ## 7. Six-document checkpoint transaction
 
+- The applicable Ledger is named for its own 200-file stage (`AUDIT_LEDGER_<first>_<last>.md`). Never append entries from a new stage to a previously closed stage's Ledger. If a historical cross-stage append is discovered, split at the exact entry boundary without renumbering or altering entry evidence, then verify the new partition against the Index.
+
 At the end of every exact 25-file checkpoint, update these six documents together:
 1. The applicable `AUDIT_LEDGER_<first>_<last>.md`.
 2. `AUDIT_INDEX.md`.
@@ -139,7 +141,7 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Active 200-file stage: 2201–2400, progress 100/200.
 - Reporting sections 2201–2250 and 2251–2300 are closed (50/50); all four 25-file checkpoints are committed and read-back verified.
 - User authorization covers 2301–2350, including checkpoints 2301–2325 and 2326–2350. Do not pause at 2325. STOP at 2350 and request fresh permission before 2351.
-- Active Ledger AUDIT_LEDGER_2001_2200.md contains 300 records (2001–2300), exactly 15 fields each; Index contains 2,300 sequential unique paths.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md` contains 200 records (2001–2200); active Ledger `AUDIT_LEDGER_2201_2400.md` contains 100 records (2201–2300). Every entry has exactly 15 fields; Index contains 2,300 sequential unique paths.
 - Upstream starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 is complete. Future source selection is lexical after latest indexed path; historical IDs remain stable.
 - Decisions 2276–2300 are normalized to adaptable; reference. Fixture-only/no-runtime status remains in Findings/Relevance. Entry 2280 is 303 logical lines.
 - Entries 1–2000 have final backup backup/audit-2000-final-2026-11-21. Next backup only after entry 3000 and global verification.
@@ -626,3 +628,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Decisions 2276–2300 are normalized to the approved primary+qualifier pair adaptable; reference. Reference alone is not a primary Decision; fixture-only/no-shipment limits remain in supporting text.
 - decoration_region_fixture.rs has 303 canonical lines, re-read in ranges 1–200 and 201–303.
 - User authorization covers 2301–2350, including both 25-file checkpoints. Continue without pausing at 2325; STOP at 2350 and request permission before 2351.
+
+
+## 29. Ledger partition correction — 2026-11-21
+
+- The prior `AUDIT_LEDGER_2001_2200.md` physically contained entries 2001–2300. Entries 2201–2300 belong to the separate 200-file stage 2201–2400 and have been moved, unchanged, into `AUDIT_LEDGER_2201_2400.md`.
+- Current partition: `AUDIT_LEDGER_2001_2200.md` = entries 2001–2200 (200 records, closed); `AUDIT_LEDGER_2201_2400.md` = entries 2201–2300 (100 records, active).
+- The 300 entry numbers, source paths, Decisions, SHA/size/coverage evidence and Index rows are unchanged. All 300 records pass the 15-field and Ledger/Index alignment checks.
+- Earlier QA/Continuity/Protocol statements that the old Ledger held 225, 275 or 300 records are historical snapshots of the pre-correction layout, not the current file partition.
+- Current authorization remains 2301–2350; do not pause at 2325 and STOP at 2350.
