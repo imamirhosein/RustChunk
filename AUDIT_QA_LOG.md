@@ -1655,3 +1655,9 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Post-commit read-back of the initial checkpoint registration caught an omission: the Index had 2,550 rows but the Ledger still ended at 2525. The first registration was therefore not accepted as complete.
 - The 25 full Ledger records were then generated from the serially re-read sources, with exactly 15 fields per record, contiguous line coverage, pinned source SHA and size. Pre-commit validation of the corrected Ledger content found **150 records (2401–2550)** and no missing/duplicate required fields. The 25 new Index rows match the same source paths and Decisions.
 - A corrective commit updates the same six audit documents together. Its read-back is the final acceptance gate; until it passes, this checkpoint remains unaccepted.
+
+
+## Final alignment correction — 2526–2550 — 2026-11-21
+
+- The corrected Ledger read-back passed its 150-record/15-field structural check and the Index passed 2,550 sequential unique-number/path checks. One wording-only Decision mismatch was found at entry 2536; Index text is corrected to exactly match the Ledger.
+- Repeat the full Ledger/Index path-and-Decision comparison and 150-entry pinned-tree SHA/byte-size validation after this small documentation correction before accepting the boundary.

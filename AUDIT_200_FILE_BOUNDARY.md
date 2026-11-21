@@ -281,3 +281,17 @@
 - The first commit's post-commit check found the 25 new Index rows without their Ledger records. That commit was not accepted as completion.
 - The corrective atomic six-document commit supplies the missing 25 full Ledger entries. The boundary is accepted only after reading back all six documents from the corrective commit and verifying 150 Ledger records, 2,550 unique sequential Index rows and all 25 path/Decision links.
 - Stop remains exactly at 2550; 2551–2600 awaits a separate explicit grant.
+
+
+## Authoritative current register — 2026-11-21
+
+This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same stage.
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
+| 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
+| 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — COMPLETE | CLOSED — 50/50 |
+| 2551–2600 | 2551–2575 — NOT AUTHORIZED | 2576–2600 — NOT AUTHORIZED | WAIT FOR SEPARATE EXPLICIT GRANT |
+
+**Stop at 2550.** Do not read, index or register 2551+ until a separate explicit grant is received. After the separately authorized 2551–2600 work completes, run the requested global QA across 2401–2600.

@@ -685,3 +685,9 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - The first commit's read-back showed that 25 Index rows had been added but their Ledger entries were missing. The checkpoint was not considered complete at that point.
 - A corrective six-document commit now adds the full 25 Ledger records and retains the matching 2,550 Index rows. The final checkpoint state is accepted only after all six documents are fetched from the corrective commit and their structure, path/Decision alignment and pinned source provenance are verified.
 - User's active stop boundary remains 2550. No 2551+ source is authorized yet.
+
+
+## Final register alignment correction — 2526–2550 — 2026-11-21
+
+- Corrected read-back confirmed 150 Ledger records and 2,550 sequential unique Index rows with exactly 15 fields per Ledger record. One Decision wording mismatch at 2536 was found and normalized in the Index.
+- Re-run full 2401–2550 path/Decision and pinned-tree SHA/size verification after the alignment correction. The stop remains 2550; wait for separate authorization before 2551.

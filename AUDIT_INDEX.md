@@ -2961,7 +2961,7 @@
 | 2533 | `crates/horizon-world/src/level/redstone/experimental.rs` | reference; experimental-feature-gated; do not enable by default | Keep experimental redstone separate and disabled unless the 1.20.1 feature gate is proven. |
 | 2534 | `crates/horizon-world/src/level/removal.rs` | adaptable; reference; block-entity-and-drop integration required | Removal side effects need host-owned loot, inventory, item and XP entity handling. |
 | 2535 | `crates/horizon-world/src/level/sculk.rs` | adaptable; reference; version-and-RNG parity required | Sculk charge/cursor mechanics are reusable after 1.20.1 tag and RNG parity. |
-| 2536 | `crates/horizon-world/src/level/shapes.rs` | adaptable; reference; version-specific class-dispatch required | Update-shape dispatcher requires target-version class tables and preserved order. |
+| 2536 | `crates/horizon-world/src/level/shapes.rs` | adaptable; reference; target-version class-dispatch required | Update-shape dispatcher requires target-version class tables and preserved order. |
 | 2537 | `crates/horizon-world/src/level/shelf.rs` | not applicable to 1.20.1; do not ship | Shelf behavior is absent from vanilla 1.20.1; exclude from the target core. |
 | 2538 | `crates/horizon-world/src/level/signals.rs` | adaptable; reference; redstone-host-contract required | Small but order-sensitive bridge for analog/redstone output notifications. |
 | 2539 | `crates/horizon-world/src/level/speleothem.rs` | adaptable; reference; fluid-RNG-and-entity integration required | Dripstone rules fit the target era but random, fluid and entity effects need parity. |
@@ -2983,3 +2983,7 @@
 - The first checkpoint registration read-back exposed a material mismatch: Index had advanced to 2,550 while Ledger still contained only 2401–2525. The 25 new Index rows were present but the 25 corresponding Ledger records had not been appended.
 - This was corrected before declaring the checkpoint complete. The corrective atomic six-document commit includes all 25 Ledger entries 2526–2550; the intended final structural state is 150 Ledger records and 2,550 sequential Index rows with matching paths/Decisions.
 - This correction note is retained as an audit trail; the first registration must not be treated as the final completed checkpoint.
+
+## Decision-alignment correction — 2026-11-21
+
+- Post-correction read-back found one remaining Index wording mismatch at 2536: the Index said `version-specific class-dispatch required`, while the Ledger's Decision was `target-version class-dispatch required`. The Index row has been normalized to the Ledger's exact Decision wording. No path or numbering changed.
