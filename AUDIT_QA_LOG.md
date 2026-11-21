@@ -1661,3 +1661,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 - The corrected Ledger read-back passed its 150-record/15-field structural check and the Index passed 2,550 sequential unique-number/path checks. One wording-only Decision mismatch was found at entry 2536; Index text is corrected to exactly match the Ledger.
 - Repeat the full Ledger/Index path-and-Decision comparison and 150-entry pinned-tree SHA/byte-size validation after this small documentation correction before accepting the boundary.
+
+
+## Post-alignment structural and provenance verification — 2526–2550 — 2026-11-21
+
+- Re-fetched and checked the audit records against pinned Starling commit `5432370d573642041585c69b40fb045b27133488`. The recursive source tree contains 5,749 entries / 4,968 blobs and is not truncated.
+- Ledger `AUDIT_LEDGER_2401_2600.md`: exactly 150 records (2401–2550); all 15 required fields occur exactly once in every record.
+- Index: exactly 2,550 rows numbered sequentially 1–2550, with 2,550 unique paths. Entries 2401–2550 match the Ledger by number, source path and Decision.
+- All 150 Ledger source paths for 2401–2550 exist as blobs in the pinned tree; every recorded blob SHA and byte size matches the pinned tree metadata.
+- Result: checkpoint 2526–2550 is accepted as registered and provenance-aligned. This is not the final 200-entry QA; independent global verification across 2401–2600 remains due after entry 2600.
+- The user has now explicitly pre-authorized 2551–2600, including both checkpoints 2551–2575 and 2576–2600. Continue without a permission request at 2575; stop at 2600.
+- Tests/examples inspected only; none executed. No RustChunk application source changed, and no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.

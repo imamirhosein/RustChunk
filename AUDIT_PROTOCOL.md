@@ -111,11 +111,11 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - For a long source file, read its ranges sequentially in order, each no larger than 400 logical lines. Do not interleave multiple files or leave a file unfinished while switching to another.
 - Keep each tool operation and work unit small and bounded. Avoid large multi-action runs that leave the user watching one unchanged response for a long time.
 - After each completed unit, preserve the exact state needed to resume. A 25-file checkpoint is still committed as one transaction after its 25 files are individually completed; do not create partial or unverified checkpoint claims.
-- When a task is taking long enough that the user may reasonably think it is stuck, provide a brief status update identifying only the current item. Do not send repetitive progress narration or filler.
-- User-facing reports must be **very short**. Normally include only: completed range/status, whether its required verification succeeded or what blocked it, and the exact next point or required user authorization.
-- Do not volunteer file-by-file summaries, architecture explanations, descriptions of which file reads which other file, implementation plans, or lists of internal changes. Provide those details only when the user asks.
+- Progress updates must be minimal and sent only at meaningful state changes or when blocked. State only the current range and the next range, for example: “Now at 2551–2575. Next: 2576–2600.”
+- User-facing reports must be extremely short: current/completed range, verification result or blocker, and the next range/stop boundary only.
+- Do not describe which source file is currently being inspected, what it contains, per-file findings, internal steps or detailed plans unless the user explicitly asks.
 - Keep detailed evidence in the Ledger/QA/Continuity records, not in long chat reports. Do not repeat information already recorded in the prior report.
-- At a 25-file checkpoint, a compact confirmation is sufficient. At a 50-file boundary, give one concise report and STOP for explicit authorization. Never continue across the 50-file boundary on implied permission.
+- At a 25-file checkpoint, use a one-line status and continue when the next checkpoint is already authorized. At a 50-file boundary, report and stop unless the latest explicit user authorization already covers the next section. Never rely on implied permission.
 - If interrupted or moved to another chat, resume from the latest verified Git commit and Continuity record. Do not restart a completed range or guess what was done.
 
 ## 10. QA scope and claim discipline
@@ -137,12 +137,13 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
-- Completed entries **1–2500**.
-- Active stage 2401–2600: **100/200**. Reporting sections 2401–2450 and 2451–2500 are both closed (50/50 each).
-- One-time exceptional authorization **2401–2500 is EXHAUSTED**. **STOP at 2500**; no authorization for 2501+ until fresh explicit user permission.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 100 records, exactly 15 fields. Index: 2,500 unique sequential paths and aligned Decisions.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use immutable commit only.
-- Next lexical unindexed entry 2501 is NOT AUTHORIZED.
+- Completed entries **1–2550**.
+- Active stage 2401–2600: **150/200**. Reporting sections 2401–2450, 2451–2500 and 2501–2550 are closed (50/50 each).
+- The user has explicitly pre-authorized the remaining section **2551–2600**, including checkpoints **2551–2575** and **2576–2600**. Continue through 2600 without requesting another grant at 2575 or an intermediate point. **STOP at 2600**; 2601+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **150 records (2401–2550)**, exactly 15 fields each. Index: **2,550 sequential unique paths** with matching paths and Decisions.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable commit only.
+- Next entry: **2551**. Recompute the next 25 lexical unindexed paths and verify provenance before inspection.
+- After entry 2600, perform the requested independent structural/provenance QA across all 200 entries 2401–2600 before closing the stage.
 - Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -742,4 +743,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 - An Index increase alone does not constitute a completed source audit. Every newly indexed file must have one complete Ledger record with all 15 required fields, exact pinned SHA/size and EOF coverage.
 - If post-commit read-back finds an Index/Ledger count or path mismatch, do not report the checkpoint complete. Correct all six audit documents in one atomic follow-up commit and repeat the complete read-back/structural check before accepting the boundary.
-- This rule applies to checkpoint 2526–2550 and all later checkpoints. The stop boundary and authorization limits remain those in section 41.
+- This rule applies to checkpoint 2526–2550 and all later checkpoints. Section 41 is a historical stop-state; the latest authorization in Section 43 and authoritative state in Section 12 govern current permission and stop boundaries.
+
+
+## 43. Advance authorization and concise progress reporting — 2026-11-21
+
+- After the completed stop at entry **2550**, the user explicitly pre-authorized the full next 50-file section **2551–2600**. This supersedes the separate-grant requirement in Section 41 for this section only.
+- Complete checkpoints **2551–2575** and **2576–2600** under this grant. Do not request permission at 2575 or any intermediate point. **STOP at 2600**; entry 2601+ requires a new explicit grant.
+- After 2600, perform the independent structural/provenance QA across all 200 entries 2401–2600 before closing the stage.
+- Progress messages must stay minimal: state only where work is now and what range comes next. Do not describe the current file, its contents, or file-by-file findings unless asked.
+- This communication preference applies across future RustChunk audit chats and must be preserved in Continuity.

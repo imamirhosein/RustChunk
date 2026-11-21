@@ -6,15 +6,15 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2525**.
-- Active 200-file stage 2401–2600: **125/200**.
-- Sections 2401–2450 and 2451–2500 are CLOSED (50/50 each); section 2501–2550 is **25/50** (checkpoint 2501–2525 complete).
-- The user explicitly authorized completion through **2600**. Continue 2526–2550, report at 2550, then continue 2551–2575 and 2576–2600 under the same grant. **STOP at 2600**; 2601+ has no authorization.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **125 records (2401–2525)**, exactly 15 fields each. Index: **2,525 sequential unique paths**, with path/Decision alignment.
+- Completed entries: **1–2550**.
+- Active 200-file stage 2401–2600: **150/200**.
+- Sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED (50/50 each).
+- The user has explicitly pre-authorized **2551–2600**, including both checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575. **STOP at 2600**; 2601+ requires fresh authorization.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **150 records (2401–2550)**, exactly 15 fields each. Index: **2,550 sequential unique paths**, with paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving upstream.
-- Next source: **2526**, next lexical unindexed path after excluding the full 2,525-entry Index. Recompute the next 25 paths and provenance before inspection; one source file at a time.
+- Next entry: **2551**. Recompute the next 25 lexical unindexed paths and provenance before inspection; read one source file at a time.
 - After entry 2600, run the separately requested QA pass across all entries **2401–2600**: duplicates, gaps, Ledger/Index alignment, 15-field counts, pinned-tree path/SHA/size, ordering and file-boundary correctness. Only then mark the 200-file stage closed.
-- Backup covers 1–2000 only. No backup at 2525; next backup after 3000 and global verification.
+- Backup covers 1–2000 only. No backup at 2550; next backup after 3000 and global verification.
 - No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -39,16 +39,17 @@ Branch: starling-1.20.1-port-audit
 - Decision primary labels: essential, adaptable, rewrite required, integrate, unnecessary, undetermined. Qualifiers: reference, version-specific, optional/future.
 - Separate observed facts, interpretation, suspected defects and proposed target-version work. Do not claim a suspected defect is reproduced without evidence.
 
-## Five-document checkpoint persistence
+## Six-document checkpoint persistence
 
 At every 25-file checkpoint, update together:
 1. The applicable Ledger.
 2. AUDIT_INDEX.md.
 3. AUDIT_QA_LOG.md.
 4. AUDIT_CONTINUITY.md.
-5. AUDIT_PROTOCOL.md when state/rules need synchronization; keep it consistent with Continuity.
+5. AUDIT_PROTOCOL.md whenever current state or a governing rule needs synchronization.
+6. AUDIT_200_FILE_BOUNDARY.md while the 200-file stage is active.
 
-Validate sequential numbering, global path uniqueness, all 15 fields, pinned SHA/byte size, complete EOF coverage, Index/Ledger alignment and correct resume state. Commit the five documents together in one commit. Re-fetch all five from GitHub and verify saved contents/blob SHAs before calling the checkpoint complete.
+Validate sequential numbering, global path uniqueness, all 15 fields, pinned SHA/byte size, complete EOF coverage, Index/Ledger alignment and correct resume state. Commit all six documents together in one commit. Re-fetch all six from GitHub and verify saved contents/blob SHAs before calling the checkpoint complete.
 
 Before each new chat continuation, re-fetch the latest branch head and read this file plus the latest audit documents. If context is uncertain, stop and reconcile rather than guessing.
 
@@ -691,3 +692,8 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 
 - Corrected read-back confirmed 150 Ledger records and 2,550 sequential unique Index rows with exactly 15 fields per Ledger record. One Decision wording mismatch at 2536 was found and normalized in the Index.
 - Re-run full 2401–2550 path/Decision and pinned-tree SHA/size verification after the alignment correction. The stop remains 2550; wait for separate authorization before 2551.
+
+
+## Communication preference — 2026-11-21
+
+Keep progress updates extremely short. Report only the current range and the next range (for example, “Now at 2551–2575. Next: 2576–2600.”). Do not describe which source file is being reviewed or what it contains unless the user asks.

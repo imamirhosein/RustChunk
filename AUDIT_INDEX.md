@@ -1,5 +1,4 @@
-- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **150 records (2401–2550)**. Stage 2401–2600 is 150/200; sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED. Entries 2551–2600 await a separate explicit grant. **STOP at 2550**. Backup remains `backup/audit-2000-final-2026-11-21`.
-- Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md).
+- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed; active `AUDIT_LEDGER_2401_2600.md` has **150 records (2401–2550)**. Stage 2401–2600 is 150/200; sections 2401–2450, 2451–2500 and 2501–2550 are CLOSED. Entries 2551–2600 are **pre-authorized by the user**. Continue through 2600 and **STOP at 2600**. Backup remains `backup/audit-2000-final-2026-11-21`.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`

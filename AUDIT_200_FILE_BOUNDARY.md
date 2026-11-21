@@ -3,9 +3,9 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: **125/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 125 records.
-- Sections 2401–2450 and 2451–2500 CLOSED (50/50 each); section 2501–2550 progress 25/50. User explicitly authorized the remaining 2501–2600.
-- Report at 2550; continue under the same grant through 2600. **STOP at 2600**; 2601+ requires fresh permission.
+- Current stage 2401–2600: **150/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 150 records.
+- Sections 2401–2450, 2451–2500 and 2501–2550 CLOSED (50/50 each).
+- The user has explicitly pre-authorized 2551–2600, including checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575. **STOP at 2600**; 2601+ requires fresh permission.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
@@ -269,10 +269,10 @@
 |---|---|---|---|
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
 | 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
-| 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — AUTHORIZED | OPEN — 25/50 |
-| 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | AUTHORIZED UNDER SAME EXPLICIT GRANT |
+| 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — COMPLETE | CLOSED — 50/50 |
+| 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | PRE-AUTHORIZED BY USER — 2026-11-21 |
 
-- This historical authorization note is superseded by the current boundary section below. The active grant ends at 2550; a separate explicit grant is required for 2551–2600.
+- The earlier 2550 stop note below records the prior boundary decision. It is superseded by the user's later explicit advance authorization for 2551–2600.
 - After the separately authorized 2551–2600 section is complete, perform independent structural/provenance QA across all 200 Ledger entries 2401–2600.
 
 
@@ -280,7 +280,7 @@
 
 - The first commit's post-commit check found the 25 new Index rows without their Ledger records. That commit was not accepted as completion.
 - The corrective atomic six-document commit supplies the missing 25 full Ledger entries. The boundary is accepted only after reading back all six documents from the corrective commit and verifying 150 Ledger records, 2,550 unique sequential Index rows and all 25 path/Decision links.
-- Stop remains exactly at 2550; 2551–2600 awaits a separate explicit grant.
+- At the time of this correction, work stopped at 2550 pending a separate grant. The later advance authorization for 2551–2600 is recorded in the current register below.
 
 
 ## Authoritative current register — 2026-11-21
@@ -292,6 +292,6 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 | 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
 | 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
 | 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — COMPLETE | CLOSED — 50/50 |
-| 2551–2600 | 2551–2575 — NOT AUTHORIZED | 2576–2600 — NOT AUTHORIZED | WAIT FOR SEPARATE EXPLICIT GRANT |
+| 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | PRE-AUTHORIZED BY USER — 2026-11-21 |
 
-**Stop at 2550.** Do not read, index or register 2551+ until a separate explicit grant is received. After the separately authorized 2551–2600 work completes, run the requested global QA across 2401–2600.
+**Continue through 2600 under the user's advance grant. Stop at 2600.** After both checkpoints are complete, run the requested global QA across 2401–2600.

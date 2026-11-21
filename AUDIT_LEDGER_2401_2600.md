@@ -3,10 +3,10 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Active stage: **2401–2600**; completed entries **2401–2550 (150/200)**.
-- Latest checkpoint **2501–2525 (25/200)** is complete and recorded below.
-- The user authorized entries **2501–2550**. A separate explicit grant is required for **2551–2600**. Report and **STOP at 2550**.
+- Latest checkpoint **2526–2550** is complete and recorded below; active stage progress is **150/200**.
+- The user has explicitly pre-authorized **2551–2600**, covering checkpoints 2551–2575 and 2576–2600. Continue without another permission request at 2575; **STOP at 2600**.
 - Exact source is gitlink `upstream/starling` at `5432370d573642041585c69b40fb045b27133488`; do not follow the moving branch.
-- New entries are selected in deterministic lexical path order after excluding all 2,500 Index paths; pinned recursive tree is complete and untruncated.
+- New entries are selected in deterministic lexical path order after excluding all 2,550 Index paths; pinned recursive tree is complete and untruncated.
 - Every entry has exactly the 15 required fields; source path, blob SHA and byte size are checked against the pinned tree.
 - Tests/examples inspected only; none executed. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
 
