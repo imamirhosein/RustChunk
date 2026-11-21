@@ -1588,3 +1588,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 Ledger entries have exactly 15 fields. Ledger now contains **200 records (2201–2400)**; Index has **2,400 sequential unique paths**, no duplicates and matching path/Decision rows.
 - Examples/tests inspected only, none executed. No RustChunk source change; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer, server or Aternos validation.
 - Exceptional authorization exhausted. Section **2351–2400** and stage **2201–2400** are closed (50/50 and 200/200 respectively). **STOP at 2400**; 2401+ requires fresh explicit permission.
+
+
+## Audit checkpoint 2401–2425 — 2026-11-21
+
+- Completed 2401–2425 (25/25) in lexical order after excluding 2,400 Index paths; pinned tree complete; SHAs/sizes match.
+- Long-file coverage: attachments.rs 1–400/401–695; live.rs 1–400/401–416; worldgen_parity.rs 1–200/201–400/401–600/601–800/801–915; block_landing.rs 1–400/401–464.
+- Findings: trusted selectors; partial callback mutation; live attribute clone/identity assumptions; empty ResourceLocation path; unchecked CLI args; collision relies on may_reach_out; piston errors swallowed; missing block-entity coordinates default zero; strict registry assumptions.
+- Active Ledger 2401–2600: 25 records, 15 fields. Index: 2,425 unique sequential paths, aligned Decisions.
+- Tests/examples inspected only, none run. No source changes or build/APK/device/runtime validation.
+- One-time authorization 2401–2500 active. Continue 2426–2450; report at 2450, continue to 2500, STOP there. No backup at 2425.

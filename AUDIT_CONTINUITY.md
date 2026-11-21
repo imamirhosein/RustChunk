@@ -2,19 +2,19 @@
 
 Last reconciled: 2026-11-21
 Repository: imamirhosein/RustChunk
-Working branch: starling-1.20.1-port-audit
+Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed source entries: **1–2400**.
-- Active 200-file stage **2201–2400 is CLOSED (200/200)**.
-- Reporting sections **2201–2250**, **2251–2300**, **2301–2350** and **2351–2400** are all CLOSED (50/50 each).
-- The one-time expanded authorization **2301–2400 is exhausted**. **STOP before entry 2401**; obtain fresh explicit permission before inspecting or registering any later file.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200); closed Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)**, exactly 15 fields each. Index: **2,400 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). Historical Index numbering remains stable; 70 early raw-tree-order divergences are documented, with no new divergence after entry 2033 through 2400. Do not renumber.
-- Future selection must exclude all Index paths and current in-flight paths before choosing the next lexical unindexed source paths; this avoids repeating pending checkpoints.
-- Existing final backup covers entries 1–2000 only. No backup at 2400; next backup after entry 3000 and global verification.
-- No application source changed. Tests/examples inspected only, not executed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed entries: **1–2425**.
+- Active 200-file stage: **2401–2600**, progress **25/200**.
+- Active 50-file section: **2401–2450**, progress **25/50**; 2426–2450 authorized.
+- User renewed one-time authorization **2401–2500 (100 files)**. Keep 25-file commits and 50-file reports. At 2450 report; continue 2451–2475 and 2476–2500 under same grant. **STOP at 2500**; 2501+ needs fresh permission.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 25 entries, exactly 15 fields. Previous ledgers 2001–2200 and 2201–2400 closed. Index: 2,425 unique sequential paths.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at gitlink `upstream/starling`. Tracking branch `starling` moved; never use moving HEAD.
+- Next file: **2426**, next lexical unindexed path. Verify next 25 paths/SHAs/sizes and duplicates before reading.
+- Backup covers 1–2000 only. No backup at 2425; next after 3000 and global verification.
+- No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -625,3 +625,11 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Ledger contains 200 records (2201–2400), exactly 15 fields each; Index has 2,400 sequential unique paths with path/Decision alignment.
 - `use_flag_fixture.rs` was absent and excluded; actual 2398 path `use_flag_reaction_fixture.rs` was verified and recorded.
 - Both exceptional authorizations are exhausted. **STOP at 2400**; obtain fresh permission before 2401. No new backup at this boundary.
+
+
+## Latest verified checkpoint — 2401–2425 — 2026-11-21
+
+- All 25 files read through EOF; long-file ranges: attachments.rs 1–400/401–695; live.rs 1–400/401–416; worldgen_parity.rs 1–200/201–400/401–600/601–800/801–915; block_landing.rs 1–400/401–464.
+- Ledger 25 records with 15 fields; Index 2,425 unique sequential paths.
+- Key flags: swallowed piston binding errors, empty modifier path, unchecked CLI selectors, callback partial mutation and coordinate defaults.
+- Next 2426–2450 under current authorization; report at 2450 and continue to 2500; stop there.

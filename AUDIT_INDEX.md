@@ -1,4 +1,5 @@
-- Source ledgers: entries 1–400 through 1801–2000 remain in their linked ledgers; `AUDIT_LEDGER_2001_2200.md` contains **200 records (2001–2200, closed)**; `AUDIT_LEDGER_2201_2400.md` contains **200 records (2201–2400, closed)**. Stage 2201–2400 is **200/200** complete. Reporting sections 2201–2250, 2251–2300, 2301–2350 and 2351–2400 are closed (50/50 each). Both exceptional authorizations are exhausted; **STOP at 2400** and request permission before 2401. Verified 1–2000 backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: 1–2000 in prior ledgers; `AUDIT_LEDGER_2001_2200.md` and `AUDIT_LEDGER_2201_2400.md` closed (200 records each); active `AUDIT_LEDGER_2401_2600.md` has **25 records (2401–2425)**. Stage 2401–2600 is 25/200; one-time authorization 2401–2500 active. Section 2401–2450 is 25/50; 2426–2450 pre-authorized. **STOP at 2500**; 2501+ needs fresh permission. Backup remains `backup/audit-2000-final-2026-11-21`.
+- Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md).
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
@@ -2820,3 +2821,29 @@
 | 2398 | `crates/horizon-world/examples/probe/use_flag_reaction_fixture.rs` | adaptable; reference | Fixed item/slot/flag layout and operation/index values are trusted; numeric selectors narrow to small integer types. Not the full 1.20.1 item-use packet/sync lifecycle. |
 | 2399 | `crates/horizon-world/examples/probe/use_remainder_fixture.rs` | adaptable; reference | Item/template/slot indexes and counts are trusted; fixed mock inventory capacity/callbacks do not model complete player inventory or Forge capabilities. |
 | 2400 | `crates/horizon-world/examples/probe/value_provider_fixture.rs` | adaptable; reference | Provider IDs/names, sample count and state references are fixture-controlled; unknown providers or empty state lists can fail. Catalogue is not complete target-version registry. |
+
+| 2401 | `crates/horizon-world/examples/probe/view_direction_fixture.rs` | adaptable; reference | JSON modes/vectors are unwrapped; malformed hex, short vectors or unknown modes panic. No camera/Android input integration. |
+| 2402 | `crates/horizon-world/examples/probe/water_splash_fixture.rs` | adaptable; reference | Passenger/mutation fields are trusted; unknown passenger panics. Fixed mock entity model and hard-coded budget/RNG checks. |
+| 2403 | `crates/horizon-world/examples/probe/world_border_fixture.rs` | adaptable; reference | Operation arrays unwrapped; limit narrows i64 to i32; fixed defaults, not packet/timing integration. |
+| 2404 | `crates/horizon-world/examples/probe/world_fixture.rs` | adaptable; reference | Filename-derived count trusted (zero causes modulo panic); IDs narrow to u32; assumes fixed state naming/layout. |
+| 2405 | `crates/horizon-world/examples/probe/world_ray_fixture.rs` | adaptable; reference | Mode indexes fixed arrays unchecked; unknown cells default to state zero; mock flags do not represent live chunks/entities. |
+| 2406 | `crates/horizon-world/examples/probe/worldgen_random_fixture.rs` | adaptable; reference | Inputs narrow i64 to i32/u16; unknown ops/layers panic; selected paths only. |
+| 2407 | `crates/horizon-world/examples/structure_blocks.rs` | adaptable; reference | Registry intentionally leaked for process lifetime; cx±1/cz±1 can overflow at i32 edges; external resource bundle required. |
+| 2408 | `crates/horizon-world/src/active_effect_tick.rs` | adaptable; reference | Server unwraps current effect after cursor advancement; callback mutation/cursor invalidation needs parity. Client RNG bounds unwrap. |
+| 2409 | `crates/horizon-world/src/active_effects.rs` | adaptable; reference | Some mutations precede callbacks; callback errors do not roll back. Public direct map mutations bypass lifecycle hooks. |
+| 2410 | `crates/horizon-world/src/attachments.rs` | adaptable; reference | 695 lines read 1–400/401–695. apply_sync defers codec validation until read; identity is namespace/name without serialized type ID. |
+| 2411 | `crates/horizon-world/src/attribute_health.rs` | adaptable; reference | Base LivingEntity absorption only; Player synchronized absorption and virtual dispatch excluded; missing attributes returns None. |
+| 2412 | `crates/horizon-world/src/attribute_map.rs` | adaptable; reference | Callback failures preserve queued updates and may leave partial state; None keys pass to suppliers; reentrancy matters. |
+| 2413 | `crates/horizon-world/src/attribute_updates.rs` | adaptable; reference | Waypoint path preserves hook order; max values cast f64 to f32 before comparison. |
+| 2414 | `crates/horizon-world/src/attributes/entity.rs` | adaptable; reference | DataVersion checked but entity IDs not canonicalized; AttributeId indexes assume catalog-origin IDs. |
+| 2415 | `crates/horizon-world/src/attributes/live.rs` | adaptable; reference | 416 lines read 1–400/401–416. Clones copy owner and allocator state; divergent mutation can create colliding logical handles. |
+| 2416 | `crates/horizon-world/src/attributes/mod.rs` | adaptable; reference | Modifier::new accepts empty path; add_or_update_transient retains old operation bucket. Verify Java parity. |
+| 2417 | `crates/horizon-world/src/attributes/operation_map.rs` | adaptable; reference | Capacity uses f64 ceil/next_power_of_two; extreme lengths may overflow but allocation constrains them. Slot order is compatibility-critical. |
+| 2418 | `crates/horizon-world/src/bin/worldgen_parity.rs` | adaptable; reference | 915 lines read 1–200/201–400/401–600/601–800/801–915. CLI indexes args/bundle keys without full arity/range validation (e.g. settings_create). |
+| 2419 | `crates/horizon-world/src/block_collision_scan.rs` | adaptable; reference | Wrapping arithmetic intentional; budget counts skipped cursor cells. Correctness relies on may_reach_out never false-negative. |
+| 2420 | `crates/horizon-world/src/block_collision.rs` | adaptable; reference | PistonBlockBindings errors discarded with .ok(), conflating invalid metadata with no pistons. |
+| 2421 | `crates/horizon-world/src/block_entities.rs` | adaptable; reference | Missing/wrong-type coordinates default to zero; Long narrows to i32; pending_mut can alter coordinates without rekeying. |
+| 2422 | `crates/horizon-world/src/block_entity_push.rs` | adaptable; reference | Selection uses added-shape bounds; entity boxes re-read before each teleport; depends on stable handles/query order. |
+| 2423 | `crates/horizon-world/src/block_landing.rs` | adaptable; reference | 464 lines read 1–400/401–464. Farmland RNG draw precedes entity gating; hook contracts control event order; definitions strict for all block names. |
+| 2424 | `crates/horizon-world/src/block_placement.rs` | adaptable; reference | State IDs checked; relative coords wrap i32 by design; assumes complete pale-moss registry. |
+| 2425 | `crates/horizon-world/src/block_properties.rs` | adaptable; reference | Every state needs definitions and occlusion shape; face mask assumes Direction discriminants fit u8. |

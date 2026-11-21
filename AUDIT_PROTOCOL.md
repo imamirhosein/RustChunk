@@ -136,15 +136,14 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 
 ## 12. Current authoritative resume state (2026-11-21)
 
-- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2400**.
-- Active 200-file stage **2201–2400 is CLOSED (200/200)**.
-- Reporting sections **2201–2250**, **2251–2300**, **2301–2350** and **2351–2400** are all CLOSED (50/50 each); both exceptional authorizations have been consumed.
-- **STOP before entry 2401.** No later source may be inspected or registered until the user gives fresh explicit permission.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Closed Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)**, each with exactly 15 required fields. Index: **2,400 sequential unique paths**, with Ledger/Index path and Decision alignment.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`). Historical Index IDs remain stable; 70 early raw-tree-order divergences are documented, with none after entry 2033 through 2400. Future selection excludes all indexed and in-flight paths before choosing the next lexical unindexed paths.
-- Existing final backup covers entries 1–2000: `backup/audit-2000-final-2026-11-21`. No backup at 2400; next backup only after entry 3000 and global verification.
-- Tests/examples were inspected only; none executed. No build, benchmark, APK, Android device, renderer, Minecraft, Forge, server or Aternos validation. No application source changes.
+- Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify `main` or backup refs.
+- Completed entries **1–2425**.
+- Active stage **2401–2600**, progress 25/200; active section **2401–2450**, progress 25/50. Checkpoint 2426–2450 authorized.
+- User renewed one-time expanded authorization **2401–2500 (100 files)**. Keep 25-file atomic checkpoints and 50-file reports. Report at 2450, continue to 2500, then **STOP**. No authorization for 2501+.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 25 records, exactly 15 fields. Previous Ledger 2201–2400 closed. Index: 2,425 unique sequential paths and aligned Decisions.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; tracking branch moved, use immutable commit only.
+- Next lexical unindexed entry 2426. Exclude indexed/in-flight paths.
+- Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -675,3 +674,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Entry 2398 is `use_flag_reaction_fixture.rs`; candidate `use_flag_fixture.rs` is not present in the pinned tree and was excluded. No nonexistent path was indexed.
 - Final 25 files were read through EOF. Long sources were inspected in consecutive, gap-free ranges <=400 lines. Source paths/SHAs/sizes match the complete pinned tree.
 - Tests/examples inspected only. No application source changes or runtime/build/Android/Minecraft/Forge/Aternos validation. Existing final backup remains 1–2000; no new backup at 2400.
+
+
+## 35. Renewed one-time authorization — 2401–2500 — 2026-11-21
+
+- User renewed exceptional window **2401–2500 (100 files), one time only**. Normal 200/50/25 cadence unchanged.
+- Checkpoint 2401–2425 complete. 2426–2450 authorized. Report at 2450, then continue 2451–2475 and 2476–2500 without intermediate permission.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md` has 25 records; Index 2,425 unique paths. Exactly 15 fields per entry; path/SHA/size/Decision aligned.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` via `upstream/starling`; never follow moving branch.
+- **STOP at 2500** and require fresh permission before 2501+.
+- No app source changes or tests/build/runtime validation. No backup at 2425; next after 3000/global verification.

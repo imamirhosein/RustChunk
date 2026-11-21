@@ -1,13 +1,11 @@
 # RustChunk — 200-File Audit Boundary Register
 
-- Repository: `imamirhosein/RustChunk`
-- Branch: `starling-1.20.1-port-audit`
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
-- Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries **1–2000** have prior global verification and final backup; entries **2001–2400** are complete.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records; closed Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)**, each with 15 fields.
-- Active 200-file stage **2201–2400: COMPLETE (200/200)**. All four 50-file reporting sections and all eight 25-file checkpoints are closed.
-- Both exceptional authorizations are exhausted. **STOP at 2400; require fresh explicit permission before 2401.**
+- Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
+- Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
+- Entries 1–2000 globally verified/backed up; 2001–2400 closed.
+- Current stage 2401–2600: 25/200; active Ledger `AUDIT_LEDGER_2401_2600.md` has 25 records.
+- One-time authorization 2401–2500 only. Section 2401–2450 is 25/50; 2426–2450 authorized. Section 2451–2500 also covered. **STOP at 2500; 2501+ needs fresh permission.**
+- Keep 25-file commits, 50-file reports, max 400-line chunks. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
 
@@ -130,14 +128,14 @@
 - Continue immediately at 2226 under the same authorization. Preserve the next exact 25-file checkpoint, then STOP at 2250. No authorization exists for 2251+.
 
 
-## Current stage partition — 2201–2400
+## Current stage partition — 2401–2600
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
-| 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — COMPLETE | CLOSED — 50/50 |
-| 2301–2350 | 2301–2325 — COMPLETE | 2326–2350 — COMPLETE | CLOSED — 50/50 |
-| 2351–2400 | 2351–2375 — COMPLETE | 2376–2400 — COMPLETE | CLOSED — 50/50 |
+| 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2451–2500 | 2451–2475 — AUTHORIZED | 2476–2500 — AUTHORIZED | PRE-AUTHORIZED BY ONE-TIME 100-FILE GRANT |
+| 2501–2550 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
+| 2551–2600 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
 
 ## Checkpoint 2226–2250 — COMPLETE (25/25)
 
@@ -224,3 +222,12 @@
 - `use_flag_fixture.rs` was not in the pinned tree and was excluded; actual 2398 is `use_flag_reaction_fixture.rs`.
 - The one-time authorization through 2400 is exhausted. **STOP before 2401**; no authorization exists for later paths.
 - No tests/examples executed, no application source changed, and no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation. No new backup at this boundary.
+
+
+## Checkpoint 2401–2425 — COMPLETE (25/25)
+
+- All 25 files inspected through EOF in lexical order after excluding Index 1–2400; SHAs/sizes match pinned tree.
+- Long-file ranges <=400: attachments.rs 1–400/401–695; live.rs 1–400/401–416; worldgen_parity.rs 1–200/201–400/401–600/601–800/801–915; block_landing.rs 1–400/401–464.
+- Active Ledger 25 records, 15 fields; Index 2,425 sequential unique paths.
+- 2401–2500 exception active; 2426–2450 authorized. Report at 2450, continue to 2500, then stop.
+- No source changes, tests or build/runtime validation; no backup at 2425.
