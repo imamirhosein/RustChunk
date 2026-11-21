@@ -6,14 +6,15 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2500**.
-- Active 200-file stage 2401–2600: **100/200**.
-- Sections 2401–2450 and 2451–2500 are CLOSED (50/50 each).
-- One-time authorization **2401–2500 is EXHAUSTED**. **STOP at 2500**; no file 2501+ may be read or registered until fresh explicit permission.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 100 records (2401–2500), exactly 15 fields. Previous ledgers 2001–2200 and 2201–2400 closed. Index: **2,500 unique sequential paths**.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving branch.
-- Next candidate: **2501**, but NOT AUTHORIZED. After fresh permission, recompute next unindexed lexical paths and exclude in-flight files.
-- Backup covers 1–2000 only. No backup at 2500; next after 3000 and global verification.
+- Completed entries: **1–2525**.
+- Active 200-file stage 2401–2600: **125/200**.
+- Sections 2401–2450 and 2451–2500 are CLOSED (50/50 each); section 2501–2550 is **25/50** (checkpoint 2501–2525 complete).
+- The user explicitly authorized completion through **2600**. Continue 2526–2550, report at 2550, then continue 2551–2575 and 2576–2600 under the same grant. **STOP at 2600**; 2601+ has no authorization.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: **125 records (2401–2525)**, exactly 15 fields each. Index: **2,525 sequential unique paths**, with path/Decision alignment.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; never use moving upstream.
+- Next source: **2526**, next lexical unindexed path after excluding the full 2,525-entry Index. Recompute the next 25 paths and provenance before inspection; one source file at a time.
+- After entry 2600, run the separately requested QA pass across all entries **2401–2600**: duplicates, gaps, Ledger/Index alignment, 15-field counts, pinned-tree path/SHA/size, ordering and file-boundary correctness. Only then mark the 200-file stage closed.
+- Backup covers 1–2000 only. No backup at 2525; next backup after 3000 and global verification.
 - No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -657,3 +658,13 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Ledger 100 records; Index 2,500 unique sequential paths; exactly 15 fields per entry.
 - Key flags: unchecked FluidState amount, partial inventory pickup false result, fractional stack-size truncation, durability Damage default assumption.
 - **STOP at 2500**; exceptional authorization is exhausted. Request fresh permission before 2501.
+
+
+## Latest verified checkpoint — 2501–2525 — 2026-11-21
+
+- All 25 files inspected individually through EOF, in lexical order after excluding the 2,500 existing Index paths. SHA and byte sizes match the complete pinned source tree.
+- Long-file ranges: java_hash_map.rs 1–400/401–791; bonemeal.rs 1–400/401–800/801–1200/1201–1256; data.rs 1–400/401–800/801–1200/1201–1222; data/cache.rs 1–400/401–800/801–1166; fluids.rs 1–400/401–800/801–833; growth.rs 1–400/401–462; growth_tests.rs 1–400/401–792; hooks.rs 1–400/401–749; interact.rs 1–400/401–800/801–1037; mod.rs 1–400/401–800/801–1200/1201–1266.
+- Active Ledger 125 entries with exactly 15 fields; Index 2,525 sequential unique paths and matching Decisions.
+- User grant covers 2501–2600. Next checkpoint 2526–2550 is authorized; report at 2550, then continue to 2600 and STOP.
+- Independent structural/provenance QA of entries 2401–2500 passed; full-stage 2401–2600 QA is due only after entry 2600.
+- Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation or backup at 2525.

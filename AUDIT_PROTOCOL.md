@@ -711,3 +711,19 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - **STOP at entry 2500**. No file 2501 or later may be inspected or registered until fresh explicit authorization.
 - Findings to validate before porting: FluidState amount range, inventory pickup return after partial merge, integer codec for stack size, default Damage component semantics.
 - No source code changes, tests/build/runtime validation or backup at 2500. Next backup after 3000 and global verification.
+
+
+## 39. Renewed explicit authorization — remaining entries 2501–2600 — 2026-11-21
+
+- The user explicitly authorized completion of the active 200-file stage **2401–2600**, renewing the exceptional window for its remaining 100 files **2501–2600**. This one-time authorization covers both 50-file sections 2501–2550 and 2551–2600; do not request another permission at 2550.
+- Normal cadence remains unchanged: exactly 25 files per atomic six-document commit, report at each 50-file boundary, files over 400 logical lines in consecutive gap-free chunks no larger than 400 lines, and one source file read at a time.
+- Complete 2526–2550, report at 2550, continue 2551–2575 and 2576–2600 under this same explicit grant. **STOP at 2600**; 2601+ requires fresh permission.
+- No source files may be modified as part of this audit. Findings and corrections to audit documents are allowed. Examples/tests are read only and not executed absent separate permission.
+
+## 40. Checkpoint 2501–2525 — COMPLETE — 2026-11-21
+
+- 25 files inspected individually through EOF; pinned path/SHA/byte size match verified. Index now 2,525 sequential unique paths; active Ledger has 125 records, each exactly 15 fields.
+- Long-file ranges recorded in the Ledger and Continuity; all are contiguous and <=400 logical lines.
+- Important follow-ups: mutable shared EMPTY stack, Stack count boundary behavior, Java HashMap capacity parity, symlink traversal, permissive JSON/resource defaults, BucketContent::Empty mapped to lava, cache pre-read size bounds and metadata-only fingerprints, swallowed placement failures, modern class/feature data and LevelAccess default hazards.
+- Continue 2526–2550 under the same grant, report at 2550, then continue 2551–2600. **STOP at 2600**. After that perform the explicitly requested QA pass over all 200 records 2401–2600 before closing the stage.
+- Tests/examples inspected only. No source changed, no tests/build/runtime/device/Forge/Aternos validation and no backup at 2525.

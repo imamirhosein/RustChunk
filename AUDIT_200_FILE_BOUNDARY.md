@@ -3,9 +3,10 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: **100/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 100 records.
-- Sections 2401–2450 and 2451–2500 CLOSED (50/50 each). One-time 100-file authorization 2401–2500 EXHAUSTED. **STOP at 2500; 2501+ needs fresh permission.**
-- Keep 25-file commits, 50-file reports, max 400-line chunks. No source changes; next backup after 3000/global verification.
+- Current stage 2401–2600: **125/200**; active Ledger `AUDIT_LEDGER_2401_2600.md` has 125 records.
+- Sections 2401–2450 and 2451–2500 CLOSED (50/50 each); section 2501–2550 progress 25/50. User explicitly authorized the remaining 2501–2600.
+- Report at 2550; continue under the same grant through 2600. **STOP at 2600**; 2601+ requires fresh permission.
+- Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
 
@@ -258,3 +259,16 @@
 - Active Ledger 100 entries with 15 fields; Index 2,500 sequential unique paths.
 - One-time authorization 2401–2500 fully exhausted. STOP at 2500; 2501+ requires fresh permission.
 - No source changes, tests/build/runtime validation or backup at 2500.
+
+
+## Stage 2401–2600 — authorization and section register
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
+| 2451–2500 | 2451–2475 — COMPLETE | 2476–2500 — COMPLETE | CLOSED — 50/50 |
+| 2501–2550 | 2501–2525 — COMPLETE | 2526–2550 — AUTHORIZED | OPEN — 25/50 |
+| 2551–2600 | 2551–2575 — AUTHORIZED | 2576–2600 — AUTHORIZED | AUTHORIZED UNDER SAME EXPLICIT GRANT |
+
+- User explicitly extended the active stage's remaining authorization through 2600. No permission request is needed at the 2550 boundary; report there and continue. **STOP at 2600**.
+- After 2600, perform independent structural/provenance QA across all 200 Ledger entries 2401–2600 before closing the stage.

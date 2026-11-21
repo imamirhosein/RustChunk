@@ -1626,3 +1626,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings: public FluidState::new accepts out-of-range amount used as direct shape-cache index; inventory_pickup can return false after partial merge; item_defaults truncates fractional max_stack_size; item_durability may require explicit Damage component contrary to vanilla default semantics.
 - Active Ledger has 100 records, each 15 fields; Index 2,500 unique sequential paths. Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation.
 - One-time authorization 2401–2500 fully exhausted. STOP at 2500; 2501+ requires fresh explicit permission. No backup at 2500.
+
+
+## Audit checkpoint 2501–2525 — 2026-11-21
+
+- Completed 2501–2525 (25/25) individually through EOF; all 25 source paths, blob SHAs and byte sizes match the complete pinned recursive tree.
+- Long-file coverage: java_hash_map.rs 1–400/401–791; bonemeal.rs 1–400/401–800/801–1200/1201–1256; data.rs 1–400/401–800/801–1200/1201–1222; data/cache.rs 1–400/401–800/801–1166; fluids.rs 1–400/401–800/801–833; growth.rs 1–400/401–462; growth_tests.rs 1–400/401–792; hooks.rs 1–400/401–749; interact.rs 1–400/401–800/801–1037; mod.rs 1–400/401–800/801–1200/1201–1266.
+- Key issues recorded for later target-version validation: mutable shared empty stack handle; integer boundary behavior; Java HashMap copy sizing; symlink traversal; permissive JSON/resource defaults; invalid Empty bucket content mapped to lava; cache size checked after read and metadata-only fingerprints; swallowed placement/partial-failure signals; LevelAccess permissive defaults; newer-than-1.20.1 registry/classes/features.
+- The earlier 2401–2500 stage passed a separate structural check: 100 Ledger records, 15 fields each, Index/Decision alignment, no repeated paths/numbers, and all source SHA/size values match the pinned tree.
+- Active Ledger now contains 125 entries; Index contains 2,525 unique sequential paths. The requested independent cross-check of the complete 200-file stage 2401–2600 remains pending until entry 2600.
+- Tests/examples inspected only, none executed. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No backup at 2525.
+- The user explicitly extended authorization through 2600. Continue 2526–2550 without another request; report at 2550 and STOP at 2600.
