@@ -37,7 +37,7 @@
 ### 1. `README.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `3cd9d680757217774270f477ecbfc9c80563e39f`
-- Size: 145 lines; 17,521 characters; full file fetched and read.
+- Size: 145 lines; 17,532 bytes; 17,521 characters; full file fetched and read.
 - Coverage: lines 1–145, complete. No chunks omitted.
 - Purpose: project overview, legal boundary, Android capabilities/status, mod formats, build prerequisites and workflow, Minecraft resource preparation, contribution/licensing information, and supported-device claims.
 - **Architecture evidence stated by the README:**
@@ -62,7 +62,7 @@
 ### 2. `LICENSE`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `e959a076e9fa4b8c1fcf990b2253a935da5bb5f4`
-- Size: 21 lines; full file fetched and read.
+- Size: 21 lines; 1,099 bytes; full file fetched and read.
 - Coverage: complete; no chunks omitted.
 - Purpose: standard MIT license text. It attributes the copyright to Ludovic Marie and Horizon contributors (2026), grants broad rights to use, modify, distribute, sublicense, and sell the licensed software, requires retaining the notice, and disclaims warranties and liability.
 - Dependencies / cross-references: this file is the repository's top-level license declaration. It does not enumerate third-party dependency licenses or independently grant rights to Minecraft/Mojang assets. The README explicitly limits MIT coverage to original project work; `THIRD_PARTY_NOTICES.md` is the next source for component-specific attribution.
@@ -82,7 +82,7 @@
 ### 3. `THIRD_PARTY_NOTICES.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `825d4bb50daf691d9049b3d4cfdbc62dbc285ec2`
-- Size: 299 lines; 20,016 characters; full file fetched and read.
+- Size: 299 lines; 20,017 bytes; 20,016 characters; full file fetched and read.
 - Coverage: lines 1–299, complete.
 - Purpose: detailed attribution and license inventory for third-party code, ports, assets, fonts, icons, fetched runtimes, and Horizon Android adaptations.
 - **Components and material disclosures found:**
@@ -111,7 +111,7 @@
 ### 4. `CONTRIBUTING.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `b326f21b72a3fb5e6d10601b1ec0697070400c5d`
-- Size: 48 lines; 5,087 characters; full file fetched and read.
+- Size: 48 lines; 5,087 bytes; 5,087 characters; full file fetched and read.
 - Coverage: complete; no chunks omitted.
 - Purpose: defines the boundary between changes for Horizon (shared game logic) and Starling (Android-specific app/integration), developer setup, device-testing expectations, source/license policy, PR checks, and public-tree hygiene.
 - **Key architecture/process rules:**
@@ -136,7 +136,7 @@
 ### 5. `Cargo.toml`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `fb4a4a7d703c8ed35973c1690382d7ea2059d0eb`
-- Size: 121 lines; 4,893 characters; full file fetched and read.
+- Size: 121 lines; 4,893 bytes; 4,893 characters; full file fetched and read.
 - Coverage: complete workspace manifest; no chunks omitted.
 - Purpose: defines a large Rust workspace, shared package metadata, Clippy lint allowances, four local crates.io patches, and development/release/iteration build profiles.
 - **Workspace structure observed:**
@@ -163,7 +163,7 @@
 ### 6. `Cargo.lock`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `5f5a3e785ef55cb1e4ae408b7d4a2a1368e07754`
-- Size: 5,510 newline-terminated lines (5,511 entries when splitting on the final newline); 132,369 characters; 541 package records; 498 crates.io registry package source entries; no Git-source package entries; lock format version 4.
+- Size: 5,510 newline-terminated lines (5,511 entries when splitting on the final newline); 132,369 bytes; 132,369 characters; 541 package records; 498 crates.io registry package source entries; no Git-source package entries; lock format version 4.
 - Coverage: fetched and read sequentially in consecutive chunks: 1–400, 401–800, 801–1,200, 1,201–1,600, 1,601–2,000, 2,001–2,400, 2,401–2,800, 2,801–3,200, 3,201–3,600, 3,601–4,000, 4,001–4,400, 4,401–4,800, 4,801–5,200, and 5,201–5,510. The file ends with a newline. No intended ranges skipped.
 - Purpose: Cargo's generated lockfile pins the exact resolved Rust dependency versions and checksums, plus the workspace package dependency edges. It is not intended for manual editing.
 - **Project packages / dependency topology:** the file records Starling/Horizon packages including the Android NativeActivity crate, core/client/client-lib/client-core/client-input/client-render, world/protocol/items, rendering/shaders/OptiFine compatibility, account, asset preparation/catalog, mods, friends/relay, server and related tools. The locked workspace edges confirm that `horizon-client` and `horizon-client-lib` sit over a broad shared Rust game/client stack, while Android crate `horizon-android` depends on `horizon-client`, JNI 0.21.1 and winit.
@@ -186,7 +186,7 @@
 ### 7. `.gitignore`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `29d00d0368c76edd3115dbca57ce0901e55860a9`
-- Size: 42 lines; 760 characters; full file fetched and read.
+- Size: 42 lines; 760 bytes; 760 characters; full file fetched and read.
 - Coverage: complete.
 - Purpose: excludes build output and caches (`.local/`, `target/`, Python caches/venvs); downloaded/decompiled game material and private profiling files (`*.jar`, `*.class`, JFR/heap profiles, decompiled folders, Minecraft/assets/run/logs/dist); runtime-generated game data (options, debug profiles, servers.dat, touch layout, resource packs, mod data, saves/backups/screenshots/crash reports); and release exporter output.
 - **Cross references:** aligns with README/CONTRIBUTING claims that game files and prepared resources stay local and must not be committed; ignores the `.local` resource-preparation cache and `exporters` release-only bundle.
@@ -207,7 +207,7 @@
 ### 8. `.github/workflows/android.yml`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: `3638a951d8489e040d9a37d22dab86526a6bf4e8`
-- Size: 191 lines; 9,829 characters; full workflow fetched and read.
+- Size: 191 lines; 9,829 bytes; 9,829 characters; full workflow fetched and read.
 - Coverage: complete, including both APK and release jobs.
 - Purpose: GitHub Actions pipeline that builds four Android ABIs, produces preview/release APK artifacts and native symbol artifacts, and publishes a tagged release after all matrix builds succeed.
 - **Triggers / targets:** pushes to `android`, `starling`, or `integration`; pull requests opened/synchronized/reopened; manual dispatch with `keep_symbols`, `release_key`, and optional native-mod IDs. Matrix covers ARM64, ARMv7, x86 and x86_64 Android targets.
@@ -231,7 +231,7 @@
 ### 9. `packaging/android/build_apk.py`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 3c215d5875d364e215ade3eeafbe55bd81238ab9
-- Size: 380 lines; 17,919 characters; full file fetched and read.
+- Size: 380 lines; 17,919 bytes; 17,919 characters; full file fetched and read.
 - Coverage: lines 1–380, complete in one fetch (under the 400-line threshold).
 - Purpose: main Python APK build/packaging orchestrator. It compiles the Rust Android NativeActivity library, builds small native Java/Javac launcher executables, prepares runtime assets, compiles Java Activities to DEX, links Android resources, assembles and aligns the APK, signs/verifies it, and optionally zips or installs it.
 - **Important build configuration:** application ID io.github.juanluci.starling; release name/version 0.8.0/code 13; dev and preview use distinct application-ID suffixes and labels; min SDK 26, target SDK 35, compile platform 36, build-tools 35.0.0, NDK 28.2.13676358, Java major 25. Four ABI mappings cover ARM64, ARMv7, x86 and x86_64.
@@ -268,7 +268,7 @@
 ### 10. `packaging/lowbudget/make.py`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: f226619fcac0e0d1d61e75273d29e0f5772bc36d
-- Size: 256 lines; 12,852 characters; full file fetched and read.
+- Size: 256 lines; 12,852 bytes; 12,852 characters; full file fetched and read.
 - Coverage: complete in one fetch.
 - Purpose: generates Starling's temporary low-budget setup resource pack with Pillow. It supplies the app's setup/menu appearance before the user's own game files and resources are prepared.
 - **Generated assets and mechanics:**
@@ -294,7 +294,7 @@
 ### 11. `research-lock.json`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 719c266401fe962746965fb33c07abbb91f8a656
-- Size: 69 lines; complete JSON document fetched and read.
+- Size: 69 lines; 3,244 bytes; complete JSON document fetched and read.
 - Coverage: complete; no ranges omitted.
 - Purpose: machine-readable pin set for the exact Minecraft research/preparation inputs and supporting analysis tools/runtime artifacts.
 - **Pinned data:**
@@ -320,7 +320,7 @@
 ### 12. `roadmap/starling.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: a3742a8f994dd266355428b1621747f642d36e76
-- Size: 187 lines; 12,976 characters; full file fetched and read.
+- Size: 187 lines; 12,976 bytes; 12,976 characters; full file fetched and read.
 - Coverage: complete in one fetch.
 - Purpose: product roadmap with Now/Next/Later priorities and technical status notes, explicitly separating Starling Android work from Horizon's shared-game roadmap.
 - **Capabilities described as done or substantially done:** phone-side download/preparation from Mojang's 26.3 files with fetched OpenJDK 25 and compiled exporters; keyboard/IME bridge; release update prompt; Bedrock touch controls fetched by pinned revision/hash; save-on-background and recovery/log handling; offline identity/skins; shader-pack translation and phone-specific shader work; plugin server dialogs, resource packs, custom armour/models/chat actions/movement modes; phone-aware settings.
@@ -343,7 +343,7 @@
 ### 13. `docs/horizon-parity.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 4783c14f65966eb407b51f89cea5c847c9758bf7
-- Size: 38 lines; 5,249 characters; full file fetched and read.
+- Size: 38 lines; 5,249 bytes; 5,249 characters; full file fetched and read.
 - Coverage: complete.
 - Purpose: describes Horizon's own Java-vanilla parity audit as of the revision Starling uses. It explicitly says the audit is measured by desktop harnesses, not Android, and that 100% means only 100% of the behavior currently compared by those harnesses.
 - **Audit details stated:** subsystem scores are 0/0.25/0.5/0.75/1, with 1 meaning complete and verified against vanilla by differential tests. The page says it was last audited 2026-10-13; 281 harnesses pass on Linux, and the Mac mini runs them too. Categories include input/game loop, assets/resources, protocol/multiplayer, chunk storage/palettes, meshing, rendering, lighting, world generation, saves/region files, entities/physics, interaction/inventory, UI/chat, audio, and block ticking/behaviors. Large scenario counts are documented for many subsystems.
@@ -364,7 +364,7 @@
 ### 14. `docs/android-armv7.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 17cfb5fe88d6dceff4a5df1a73ba83f17ef06aa4
-- Size: 110 lines; 6,621 characters; full file fetched and read.
+- Size: 110 lines; 6,621 bytes; 6,621 characters; full file fetched and read.
 - Coverage: complete.
 - Purpose: documents ABI/build limitations, GPU fallbacks, ARM32 memory constraints, resource preparation, updater selection and native-mod ABI restrictions.
 - **ABI/build findings:** ARM64, ARMv7, x86 and x86_64 are separate APK builds; release waits for all four. Android x86 has no supplied Android Java 25 runtime and therefore imports prepared .starling resources; x86/x86_64 are not physically tested. ARMv7 requires Android 8+ and uses a 32-bit launcher/runtime. The docs emphasize that CPU ABI support does not guarantee GPU-driver compatibility.
@@ -387,7 +387,7 @@
 ### 15. `docs/android-controls.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: bde1e376a8910d910a93566c492fca1413f5eaec
-- Size: 78 lines; 4,554 characters; full file fetched and read.
+- Size: 78 lines; 4,558 bytes; 4,554 characters; full file fetched and read.
 - Coverage: complete in one fetch.
 - Purpose: documents Starling's Android integration of Horizon Android's touch-control engine and visual layout editor, plus keyboard, pointer, physical input and IME behavior.
 - **Control features:** MCPE and GoyControl layouts/presets; move/resize controls; independent dimensions, colors, borders, shapes, labels and event bindings; undo/redo, visibility and save confirmation; joystick/aim/sensitivity/gyro/pointer/button/inventory options. GoyControl supports static/pass-through/swipe/hold/toggle controls and up to three simultaneous events; MCPE has joystick/crosshair, joystick/tap and D-pad schemes.
@@ -411,7 +411,7 @@
 ### 16. `docs/android-accounts.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 253bcebee21e4962b4f317f6a6d1c61d5078e9b9
-- Size: 75 lines; 4,481 characters; full file fetched and read.
+- Size: 75 lines; 4,483 bytes; 4,481 characters; full file fetched and read.
 - Coverage: complete in one fetch.
 - Purpose: documents Android account/profile selection, Microsoft device-code authorization, Ely.by credentials/2FA, offline profiles, secure token storage, profile-specific skins and first-run account setup.
 - **Provider semantics:** Microsoft device-code flow requires Java entitlement for authenticated play; Ely.by supports username/email, password and optional 2FA but authenticates only to Ely.by-configured servers and does not confer Microsoft ownership; offline names are 1–16 ASCII letters/digits/underscores and work only where offline players are allowed. Profile switching is persisted; failed or cancelled auth should not replace a later selection.
@@ -434,7 +434,7 @@
 ### 17. `docs/android-diagnostics.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: f4d250d2449634f2f6ef8125ebdc2a6a4b021365
-- Size: 96 lines; 5,780 characters; full file fetched and read.
+- Size: 96 lines; 5,782 bytes; 5,780 characters; full file fetched and read.
 - Coverage: complete in one fetch.
 - Purpose: documents local performance/crash diagnostics, safe explicit export/share, startup recovery UI, Android exit history, symbol matching, bounded storage and transactional resource installation.
 - **Performance recording:** opt-in one-second summaries of frame/CPU/GPU durations, phases, slow frames, worker stages, memory, thermal state, streaming queues, rendering counters and GPU adapter. Detailed GPU pass profiling reports p50/p95/p99/max from a rolling 15-sample window; timestamps/readback are asynchronous and unavailable data is not treated as zero.
@@ -459,7 +459,7 @@
 ### 18. `docs/native-mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 8236ea99847bdfb5d4f64679565e8d96e7527440
-- Size: 3,048 lines; 328,314 characters; full-file verification confirms the same SHA and final newline.
+- Size: 3,048 lines; 328,421 bytes; 328,314 characters; full-file verification confirms the same SHA and final newline.
 - Coverage: Complete: 1–400; 401–800; 801–850; 851–900; 901–950; 951–1,000; 1,001–1,050; 1,051–1,100; 1,101–1,150; 1,151–1,200; 1,201–1,250; 1,251–1,300; 1,301–1,350; 1,351–1,400; 1,401–1,450; 1,451–1,500; 1,501–1,550; 1,551–1,600; 1,601–1,650; 1,651–1,700; 1,701–1,750; 1,751–1,800; 1,801–1,850; 1,851–1,900; 1,901–1,950; 1,951–2,000; 2,001–2,050; 2,051–2,100; 2,101–2,150; 2,151–2,200; 2,201–2,250; 2,251–2,300; 2,301–2,350; 2,351–2,400; 2,401–2,450; 2,451–2,500; 2,501–2,550; 2,551–2,600; 2,601–2,650; 2,651–2,700; 2,701–2,750; 2,751–2,800; 2,801–2,850; 2,851–2,900; 2,901–2,950; 2,951–3,000; 3,001–3,048. All consecutive source windows are at most 400 lines; complete-file SHA and final newline were verified.
 - Purpose: extensive technical manual for Starling/Horizon native Rust mods: supported packaging formats, manifest compatibility, Rust mixin injection, generated hook API, trait-based API, build/install lifecycle, trust model, dedicated-server output, mod networking, data/content integration, rendering hooks, gameplay events and server helpers.
 - Mod formats and compatibility:
@@ -500,7 +500,7 @@
 ### 19. `docs/starling-native-mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: d84abf4d4497bea2c4ef343287825256bce16477
-- Size: 120 lines; 9,246 characters; full file fetched and read in one request; final newline present.
+- Size: 120 lines; 9,246 bytes; 9,246 characters; full file fetched and read in one request; final newline present.
 - Coverage: lines 1–120, complete.
 - Purpose: documents how Starling enables Horizon native Rust mods on Android despite not compiling the Rust game on the phone. It describes remote compilation, verified library download, runtime library substitution, Android permission handling, service-side build isolation, GitHub runner mode, and alternate build-server trust.
 - Android build lifecycle:
@@ -537,7 +537,7 @@
 ### 20. `docs/mods.md`
 - Source repository/ref: `starling-client/starling` / `starling`.
 - Source SHA: 6b6c04640da7292c3a4a60217347d5acd487ebd1
-- Size: 492 logical lines; 30,867 characters; fetched and read in consecutive source ranges 1–400 and 401–492.
+- Size: 492 logical lines; 30,871 bytes; 30,867 characters; fetched and read in consecutive source ranges 1–400 and 401–492.
 - Coverage: lines 1–400; 401–492, complete; both source ranges returned the same pinned blob SHA `6b6c04640da7292c3a4a60217347d5acd487ebd1`.
 - Purpose: describes Horizon's mod model, supported mod types, enabling/loading, content mod authoring and schema, multiplayer compatibility checks, native code mods, registry publishing and artifact integrity.
 - Two distinct mod systems:
@@ -2309,7 +2309,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 96. `crates/horizon-client/src/bedrock_touch.rs`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 77d85e24594dca8f276ddf1028983d0992478930.
-- Size: 376 lines; complete file fetched.
+- Size: 376 lines; 16,795 bytes; complete file fetched.
 - Coverage: lines 1–376, complete.
 - Purpose: Fetches touch-control sprite assets from Mojang's Bedrock sample repository and converts selected assets into Starling sprites for displaying touch buttons.
 - Implementation / logic: The embedded `assets/bedrock-touch.json` manifest specifies the repository/revision, file list, Git blob SHA-1 values, and license file. `present` checks a marker containing the revision and all generated glyph names to decide whether the assets are ready. Fetching occurs only when assets are missing and `resources/assets/minecraft` exists. An HTTP agent with 15-second connect and 30-second read timeouts downloads files from `raw.githubusercontent.com` at the pinned revision; each SHA-1 is compared using Git blob format, i.e. the hash of `"blob <length>\0" + bytes`. Plate/plate_pressed images are decoded and their icon regions converted to grayscale; Starling glyphs are stamped as bitmaps onto the plate and pressed-plate images and encoded as RGBA PNGs. The license file is stored beside the assets, and the marker is written last. `fetch_logged` logs errors and treats network failure as non-fatal.
@@ -2326,7 +2326,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 97. `crates/horizon-client/src/osk.rs`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: b494059445a3b6ae5db6afcd1e159d6cf226899d.
-- Size: 417 lines; complete source fetched in consecutive ranges 1–400 and 401–417.
+- Size: 417 lines; 12,754 bytes; complete source fetched in consecutive ranges 1–400 and 401–417.
 - Coverage: lines 1–400; 401–417, complete; both ranges were fetched consecutively.
 - Purpose: Horizon virtual keyboard for controller-based focus navigation, with simple output for typing into the active text field.
 - Implementation / logic: Two fixed layouts, LETTERS and SYMBOLS, each have five rows and a total width of 10 key units. Keyboard state includes row/column, symbol mode, one-shot shift, and caps lock. The D-pad wraps horizontally and, when moving vertically, selects the key with the nearest horizontal center. Pressing Char, Space, Backspace, or Done produces Output::Text/Backspace/Enter; Shift and Layer only change keyboard state. Gamepad mappings are South=press, West=backspace, North=space, Start=enter, East=close, LeftStick/LeftTrigger=shift, and bumpers=symbol layer. Rendering uses its own UI theme and draws focused/lit keys and controller glyph-style hints.
@@ -2343,7 +2343,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 98. `crates/horizon-client/src/android_control_keyboard.rs`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 6c8ae28734715a89fd3af69c5f77a2c7afb579ac.
-- Size: 451 lines; complete source fetched in consecutive ranges 1–400 and 401–451.
+- Size: 451 lines; 14,019 bytes; complete source fetched in consecutive ranges 1–400 and 401–451.
 - Coverage: lines 1–400; 401–451, complete; both ranges were fetched consecutively.
 - Purpose: Android control-editor variant of the controller on-screen keyboard, with touch hit-testing and hardware KeyCode output for editors that accept key bindings.
 - Implementation / logic: The file header states that the code is an MIT adaptation from Horizon Android and that `THIRD_PARTY_NOTICES.md` and `LICENSE` must be reviewed. The fixed LETTERS/SYMBOLS layout resembles the OSK and has five rows of 10 units. Keyboard state tracks focus row/column, shift, caps, and symbol mode. D-pad movement wraps; presses produce characters, Backspace, Enter, and mode changes. Unlike `osk.rs`, Output includes `Key(KeyCode)` in addition to Text/Backspace/Enter/Close. Controller mappings include South/West/North/Start/East, shift, layer, and D-pad. `touch(width,height,at_top,p)` hit-tests key cells using the same draw geometry and fixed 554×268 dimensions, then performs the press. Rendering uses `android_control_theme` and displays controller-button hints.
@@ -2360,7 +2360,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 99. `crates/horizon-client/src/android_control_text.rs`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 47fdcbe32fa87df752346b5bb7dc3cb42306edd1.
-- Size: 79 lines; complete file fetched.
+- Size: 79 lines; 2,636 bytes; complete file fetched.
 - Coverage: lines 1–79, complete.
 - Purpose: Shortens catalog descriptions to fit a specified UI width, accounting for ellipsis and kerning.
 - Implementation / logic: `fit` traverses `char_indices` in one pass and computes `advance(previous,current)` for the text glyphs. At each position it precomputes the ellipsis width using kerning from the last glyph; it records the last UTF-8 byte index where `prefix + "..."` fits within the requested width. If the whole text fits, it returns it unchanged; otherwise it returns the substring up to the best character boundary plus an ellipsis, or an empty string. Complexity is linear, and the `advance` callback is invoked exactly four times per character.
@@ -2377,7 +2377,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 ### 100. `crates/horizon-client/src/net.rs`
 - Source repository/ref: starling-client/starling / starling.
 - Source SHA: 9406989b095c1c4b42f480aada781e5833a0a807.
-- Size: 1,766 lines; complete source fetched in five consecutive ranges: 1–400, 401–800, 801–1,200, 1,201–1,600 and 1,601–1,766.
+- Size: 1,766 lines; 69,794 bytes; complete source fetched in five consecutive ranges: 1–400, 401–800, 801–1,200, 1,201–1,600 and 1,601–1,766.
 - Coverage: lines 1–400; 401–800; 801–1200; 1201–1600; 1601–1766, complete; all five ranges were fetched consecutively.
 - Purpose: Main multiplayer-session layer: connection thread, handshake/login, RSA/AES encryption, compression, configuration/registry synchronization, play-packet forwarding, keep-alive, ping/status, transfer/cookies, and disconnect-reason classification.
 - Implementation / logic: `Session` starts a dedicated network thread and sends events to the game thread through a channel. A Mutex-protected packet writer remains available to the game thread, while the Configuration state prevents play packets from being sent during reconfiguration. Connections can use a TCP server, an integrated-server memory Pipe, a LAN-selected endpoint, a friend-invite tunnel, or a transfer after server handoff. The client first sends a handshake with the protocol version and LOGIN/TRANSFER intent, then Hello with the profile UUID/name. If the server requests encryption, the RSA public key is parsed from DER, a shared secret is generated, the online-mode session hash is sent to the session service, and the secret/challenge are then RSA-encrypted; AES encryption begins after the response. The compression threshold is applied during login. After LoginFinished, LoginAcknowledged is sent and Configuration begins: ClientInformation, `minecraft:brand`, known-pack response, registries/tags/features, resource packs, code-of-conduct, dialogs, server links, and cookies are processed, followed by FinishConfiguration and a Joined event. During Play, KeepAlive is answered immediately on the network thread, but Ping is sent to the game thread so Pong does not overtake prior updates/teleport acknowledgements. ConnectionStartConfiguration emits a reconfiguration event, sends an acknowledgement, and gates play traffic. A disconnect event includes the reason text/key and a `from_server` flag for auto-reconnect decisions. Status ping and pre-1.7 legacy ping are also provided.

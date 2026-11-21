@@ -72,14 +72,15 @@ For every entry:
 - Separate observed source behavior from interpretation, suspected defects, target-version implications and proposed RustChunk design. Do not claim a suspected issue was reproduced unless it was.
 - Primary Decision vocabulary: **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, **undetermined**. Secondary qualifiers may include **reference**, **version-specific**, **optional/future**. Qualifiers do not replace a primary decision. Index decisions must agree with the Ledger.
 
-## 7. Five-document checkpoint transaction
+## 7. Six-document checkpoint transaction
 
-At the end of every exact 25-file checkpoint, update these five documents together:
+At the end of every exact 25-file checkpoint, update these six documents together:
 1. The applicable `AUDIT_LEDGER_<first>_<last>.md`.
 2. `AUDIT_INDEX.md`.
 3. `AUDIT_QA_LOG.md`.
 4. `AUDIT_CONTINUITY.md`.
 5. `AUDIT_PROTOCOL.md`, whenever current state or a governing rule needs synchronization; keep it consistent with Continuity.
+6. `AUDIT_200_FILE_BOUNDARY.md`, while a 200-file stage is active; it is part of the same atomic six-document checkpoint transaction.
 
 Before committing, verify:
 - Exactly 25 new sequential entry numbers were added.
@@ -91,7 +92,7 @@ Before committing, verify:
 - The Index is globally sequential and contains no repeated paths.
 - Active Ledger entry count and Continuity resume state are correct.
 
-Commit the five-document checkpoint as one Git commit. Re-fetch all five documents from GitHub and verify their saved contents/blob SHAs and expected state. Do not call a checkpoint durable until read-back succeeds.
+Commit the six-document checkpoint as one Git commit. Re-fetch all five documents from GitHub and verify their saved contents/blob SHAs and expected state. Do not call a checkpoint durable until read-back succeeds.
 
 ## 8. Reporting and cross-chat continuity
 
@@ -118,7 +119,7 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 ## 10. QA scope and claim discipline
 
 - QA of existing entries is separate from new source-audit checkpoints. QA must not silently create, renumber or duplicate source entries.
-- Structural QA checks sequential numbering, global path uniqueness, exact 15-field counts, source SHA/byte-size matches, canonical line counts, EOF coverage, Ledger/Index alignment and five-document consistency.
+- Structural QA checks sequential numbering, global path uniqueness, exact 15-field counts, source SHA/byte-size matches, canonical line counts, EOF coverage, Ledger/Index alignment and six-document consistency.
 - Structural/provenance QA is not automatically a fresh exhaustive semantic re-audit. State the actual scope.
 - Never claim a Rust build, unit test, benchmark, APK build, Forge launch, Android-device test, Minecraft multiplayer join, LAN host, UPnP or relay validation unless actually executed. Record unrun checks as pending.
 - Preserve security findings. Do not treat Starling/Horizon native-mod build and app-library replacement mechanisms as ordinary Forge mod loading or adopt them without a separate security design and review.
@@ -126,29 +127,24 @@ Commit the five-document checkpoint as one Git commit. Re-fetch all five documen
 ## 11. Backup policy
 
 - Create a new backup only after each additional **1,000 newly completed audit entries** have been committed and globally verified.
-- The audit currently has entries 1–1350. The next backup is due only after entries **1001–2000** are complete and the entire 1–2000 audit passes global validation.
+- Entries **1–2000** have passed global verification on 2026-11-21. The single final backup branch is `backup/audit-2000-final-2026-11-21`; no incremental backups were created.
 - Do not create backups at 200-entry stage boundaries, 100-entry points, 50-file reporting boundaries or 25-file checkpoints.
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-20)
-
-This section is the current resume authority and supersedes the older stage/authorization snapshots retained elsewhere in this document as historical records.
+## 12. Current authoritative resume state (2026-11-21)
 
 - Repository: `imamirhosein/RustChunk`.
 - Working branch: `starling-1.20.1-port-audit`.
-- Completed entries: **1–1800**.
-- Closed 200-file stages: **1–1000**, **1001–1200**, **1201–1400**, and **1401–1600**.
-- Active 200-file stage: **1601–1800**, **200/200 complete and closed**.
-- Closed reporting sections in the active stage: **1601–1650**, **1651–1700**, **1701–1750** and **1751–1800**; both 25-file checkpoints in section 1751–1800 are complete, committed and read-back verified.
-- Current authorization state: **STOP at 1800**. The next section, **1801–1850**, is not authorized. Wait for explicit user authorization before inspecting entry 1801 or later.
-- Active Ledger: `AUDIT_LEDGER_1601_1800.md`, with **200 entries** (1601–1800), each containing exactly 15 required fields.
-- Index: **1,800 sequential entries and 1,800 unique paths**.
-- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`.
-- Preserve the exact 200 / 50 / 25 cadence, serial review, complete EOF coverage and maximum 400-line chunks. At every 25-file checkpoint, commit and read back the required audit documents; stop for user authorization at each 50-file boundary.
-- Existing backup refs remain untouched: `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19`.
-- `main` remains untouched. No tests, builds, benchmarks, APK builds, device checks, Forge launches or server validation were performed.
-- The next backup is due only after entries **1001–2000** are complete and the full 1–2000 audit passes global verification.
+- Completed source-audit entries: **1–2000**.
+- Closed 200-file stages: **1–1000**, **1001–1200**, **1201–1400**, **1401–1600**, and **1801–2000**; all reporting sections in stage 1801–2000 are closed.
+- Active source-audit stage: **none**. The latest stage 1801–2000 is **200/200 complete**, with sections 1801–1850, 1851–1900, 1901–1950 and 1951–2000 closed.
+- Index: **2,000 sequential entries and 2,000 unique paths**.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Global verification of entries **1–2000 PASSED** on 2026-11-21. See the final Global QA section and Continuity closeout.
+- Final backup branch: `backup/audit-2000-final-2026-11-21`. Existing `main` and 1,000-entry backups remain unchanged.
+- **STOP at 2000.** Do not inspect entry 2001+ until a new explicit user authorization is received.
+- No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validations were performed; this audit remains a source/document review, not runtime compatibility proof.
 
 ## 13. Historical corrections preserved
 
@@ -373,7 +369,7 @@ This section is the current resume authority and supersedes the older stage/auth
 
 ## 13. Authoritative stage 1801–2000 register and checkpoint artifacts — 2026-11-20
 
-This section supersedes older stage-specific Ledger names and the five-document list for the current 1801–2000 stage only; historical checkpoint records remain unchanged.
+This section supersedes older stage-specific Ledger names and the six-document list for the current 1801–2000 stage only; historical checkpoint records remain unchanged.
 
 - Active Ledger: `AUDIT_LEDGER_1801_2000.md`; do not append new-stage records to the closed `AUDIT_LEDGER_1601_1800.md`.
 - The explicit 200-file boundary/progress artifact is `AUDIT_200_FILE_BOUNDARY.md`. It records all four 50-file sections, all eight 25-file checkpoints, authorization state, completion state and stop boundary.
@@ -449,7 +445,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Embedded tests/examples inspected only; none executed. No build/device/Forge/server/renderer claims. No application source code changes.
 
 
-## 22. Final checkpoint 1976–2000 — 2026-11-20
+## 22. Final checkpoint 1976–2000 — 2026-11-20 (historical stop state; superseded by section 23)
 
 - Entries 1976–2000 are complete as the second 25-file checkpoint of section 1951–2000.
 - They are exactly the next 25 blobs after excluding Index entries 1–1975 from the complete pinned tree. Each file was inspected sequentially through EOF; files >400 lines were read in contiguous, gap-free chunks <=400 lines.
@@ -458,3 +454,13 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Section **1951–2000 is CLOSED (50/50)**. Stage **1801–2000 is COMPLETE (200/200)**. All prior 50-file sections are also closed.
 - **STOP at 2000.** Do not start global verification of all entries 1–2000 until the user explicitly authorizes that phase. After global verification passes, request/obtain permission as needed for the final backup; no incremental backups.
 - Embedded tests/examples inspected only; none executed. No build/APK/device/Forge/server/Aternos/renderer validation; no application source changes.
+
+
+## 23. Global verification and final backup — 2026-11-21
+
+- Global structural/provenance QA passed for entries **1–2000**: 2,000 sequential Ledger entries and Index rows; 2,000 unique paths; exact 15-field sets; Ledger/Index path and decision agreement; all source paths, SHAs and byte sizes match the complete pinned Starling tree.
+- Documentation corrections: added missing exact byte sizes to entries 1–20 and 96–100; made the existing Index Decision classifications explicit in 97 Ledger Decision fields across entries 1201–1800, preserving the original explanations.
+- Corrected the governing checkpoint documentation to state the six-document transaction (including the active-stage Boundary register) and synchronized the authoritative current state to 1–2000.
+- Final backup branch: `backup/audit-2000-final-2026-11-21`, pointing to the post-verification audit commit. Verify the branch ref and read back its audit documents before reporting completion.
+- This verification is structural, metadata, provenance and cross-document QA; it is not a fresh semantic source re-review or runtime compatibility evidence. No tests/builds/benchmarks/APK/device/Forge/server/Aternos/renderer checks were performed.
+- No application source changed. `main` and both earlier 1,000-entry backup refs remain unchanged. **STOP at 2000**; a new source range requires fresh explicit user authorization.

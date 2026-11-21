@@ -3,8 +3,8 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Entry range: 1801–2000 (200 unique source files; one shared Ledger for this stage).
-- Current progress: entries 1801–2000 complete (200/200); sections 1801–1850, 1851–1900, 1901–1950 and 1951–2000 are closed (50/50 each). Global verification of entries 1–2000 and final backup are pending explicit user authorization.
-- Reporting rule: section 1951–2000 is complete; STOP at 2000 and wait for explicit permission before global verification of entries 1–2000, followed by the final backup.
+- Current progress: entries 1801–2000 complete (200/200); sections 1801–1850, 1851–1900, 1901–1950 and 1951–2000 are closed (50/50 each). Global verification of entries 1–2000 passed on 2026-11-21; final backup created at `backup/audit-2000-final-2026-11-21`.
+- Reporting rule: section 1951–2000 and stage 1801–2000 are closed; global verification passed. STOP at 2000; do not inspect entry 2001+ until separately authorized.
 - Each entry contains the 15 required fields defined in AUDIT_PROTOCOL.md. Purpose is separate from dependencies, implementation, findings, relevance, decision, implications, follow-up, mapping and evidence.
 - Long files are read in consecutive, gap-free ranges of at most 400 logical lines through EOF. Source SHA and byte size are checked against the pinned recursive tree.
 - Embedded tests/examples are inspected only; they are not executed.

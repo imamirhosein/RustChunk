@@ -3150,7 +3150,7 @@
 - Implementation / logic: Constructs controlled local test connections and exercises message exchange/error paths for automated tests.
 - Findings: This is test infrastructure, not production networking or a Forge loader component.
 - RustChunk relevance: Optional test-only reference; do not include in the runtime APK unless a RustChunk test target needs it.
-- Decision: optional; test only; no runtime
+- Decision: **undetermined; optional; test only; no runtime** — optional; test only; no runtime
 - 1.20.1 implications: No Minecraft-version feature itself; packet schemas exercised by the harness remain version-specific.
 - Follow-up checks: Reuse only after adapting test fixtures to the 1.20.1 protocol and isolating test-only dependencies.
 - RustChunk implementation mapping: No production mapping; test harness under RustChunk integration tests.
@@ -3235,7 +3235,7 @@
 - Implementation / logic: Tracks the selected profile's skin, loads model/texture asynchronously, supports title-screen drag preview and account/provider upload actions.
 - Findings: Account upload paths assume Starling account integrations; offline profiles cannot use Microsoft upload without credentials.
 - RustChunk relevance: Optional feature; local skin loading/preview can be adapted, but account upload must be disabled or provider-gated for offline use.
-- Decision: optional; adapt; offline profile
+- Decision: **undetermined; optional; adapt; offline profile** — optional; adapt; offline profile
 - 1.20.1 implications: 1.20.1 skin model/texture formats and authentication/session profile APIs must be respected.
 - Follow-up checks: Test offline/default skins, profile switching, slim/classic models, atlas reload and unavailable network providers.
 - RustChunk implementation mapping: Map local skin selection to RustChunk profile storage; isolate account upload behind an authenticated provider.
@@ -3269,7 +3269,7 @@
 - Implementation / logic: Supports focus and pointer modes, D-pad/stick navigation, sliders/tabs, synthetic clicks, scroll/retry, keyboard focus, text entry and cursor drawing.
 - Findings: Controller UI is optional and deeply coupled to Starling's screen/widget event system.
 - RustChunk relevance: Optional input feature; useful only if RustChunk explicitly adds gamepad navigation.
-- Decision: optional; controller feature
+- Decision: **undetermined; optional; controller feature** — optional; controller feature
 - 1.20.1 implications: 1.20.1 screen/widget targets and Android IME behavior differ; source also assumes current Starling UI components.
 - Follow-up checks: Test focus across screen transitions, list scrolling, slider changes, keyboard dismissal, touch/mouse handoff and Android navigation.
 - RustChunk implementation mapping: No baseline mapping; optional controller UI subsystem.
@@ -3286,7 +3286,7 @@
 - Implementation / logic: Merges hardware, injected and touch state; handles button edges/tick-safe releases, action bindings, movement/look, vibration and command injection.
 - Findings: Controller support is optional and platform-specific; not required for keyboard/touch gameplay.
 - RustChunk relevance: Optional feature; do not prioritize ahead of 1.20.1 core gameplay and Android touch controls.
-- Decision: optional; controller feature
+- Decision: **undetermined; optional; controller feature** — optional; controller feature
 - 1.20.1 implications: Gamepad action names and movement/ability behavior need the 1.20.1 control mapping.
 - Follow-up checks: Test simultaneous touch/controller sources, short taps, focus loss, remapping and tick-boundary releases.
 - RustChunk implementation mapping: Optional RustChunk input backend behind a feature flag.
@@ -3303,7 +3303,7 @@
 - Implementation / logic: Tracks seen Android device IDs and vendor styles, reads the active controller and sends clamped vibration through the Android bridge.
 - Findings: Android-specific Starling glue; not usable outside Android and not needed for touch controls.
 - RustChunk relevance: Optional Android gamepad enhancement only.
-- Decision: optional; Android controller feature
+- Decision: **undetermined; optional; Android controller feature** — optional; Android controller feature
 - 1.20.1 implications: Android input APIs and activity bridge must be matched to RustChunk's own JNI/Kotlin layer.
 - Follow-up checks: Test device reconnect, multiple controllers, unknown vendors and vibration support/failure.
 - RustChunk implementation mapping: Optional RustChunk Android controller bridge.
@@ -3320,7 +3320,7 @@
 - Implementation / logic: Discovers devices, maps buttons/axes, tracks active pad, routes split-screen events and controls DualSense triggers/lightbar/haptics plus generic rumble.
 - Findings: Desktop-specific dependencies and HID output are not part of the Android client path.
 - RustChunk relevance: Optional desktop-only feature; exclude from Android baseline and avoid importing desktop HID dependencies.
-- Decision: optional; desktop only
+- Decision: **undetermined; optional; desktop only** — optional; desktop only
 - 1.20.1 implications: Not relevant to 1.20.1 Forge compatibility; platform-specific controller behavior only.
 - Follow-up checks: Check Cargo feature gating and ensure Android builds never pull desktop gilrs/HID code.
 - RustChunk implementation mapping: No Android baseline mapping; keep behind desktop-only feature flags if ever ported.
@@ -3388,7 +3388,7 @@
 - Implementation / logic: Samples CPU/system and GPU allocation metrics, reports chunks/meshing/draw calls and exposes overlay modes and JSON status.
 - Findings: Useful diagnostics, but GPU allocator reporting walks allocations and is throttled to once per second.
 - RustChunk relevance: Optional diagnostic feature; not required for compatibility or game correctness.
-- Decision: optional; diagnostics
+- Decision: **undetermined; optional; diagnostics** — optional; diagnostics
 - 1.20.1 implications: Renderer/backend metric APIs are Starling-specific and Android GPU counters may be unavailable.
 - Follow-up checks: Keep sampling low-overhead; test absent GPU reports, thermal/throttling fields and memory cost on Android.
 - RustChunk implementation mapping: Optional RustChunk diagnostics module.

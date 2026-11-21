@@ -30,9 +30,15 @@
 - Embedded tests/examples inspected only; none executed. No build, benchmark, APK, device, Forge launch, server join, Aternos or renderer validation. No application/game source changed.
 - No incremental backup created.
 
-## Next action — permission required
+## Global verification and final backup — 2026-11-21
 
-Perform **global verification of all entries 1–2000**: reconcile all Ledgers/Index, check sequential uniqueness and exactly 15 fields per audited entry, compare every recorded path/SHA/size with the complete pinned recursive tree, and verify cross-document closure/commit state. **Only if that global verification passes**, create the final backup. Wait for the user's explicit permission before starting this phase.
+- Global verification of entries **1–2000 PASSED**.
+- Reconciled all nine Ledgers and the 2,000-row Index: sequential numbering, unique paths, exact 15 required fields, matching paths/decisions, source SHA and byte-size alignment with the pinned recursive tree.
+- Corrected 25 missing byte-size fields (entries 1–20 and 96–100) and normalized 97 Ledger Decision fields (entries within 1201–1800) to the already-recorded Index classifications while preserving their explanations.
+- All four 50-file sections in 1801–2000 are closed; no further entries in this stage remain.
+- Final backup branch: `backup/audit-2000-final-2026-11-21`; it is created from the verified audit commit and must be read back against the working branch.
+- No app/game source changes; no tests/build/benchmark/APK/device/Forge/server/Aternos/renderer validation.
+- **STOP at 2000.** Any entry 2001+ requires fresh explicit user authorization.
 
 ## Rules
 

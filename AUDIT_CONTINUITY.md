@@ -460,3 +460,15 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - The `horizon-server` subsystem audited in this final segment is dedicated-server management for Minecraft Java 26.3, not the RustChunk Android Minecraft client. No Forge 1.20.1/Aternos/client support was demonstrated.
 - Tests/examples inspected only; none executed. No build, benchmark, APK, Android, Forge, server join, Aternos or renderer validation. No application source was modified.
 - **STOP at 2000.** Wait for explicit permission to perform global verification of entries 1–2000. Create the final backup only after that verification passes; no incremental backup was created.
+
+
+## Global verification and final backup — 2026-11-21
+
+- Working branch: `starling-1.20.1-port-audit`; completed audit coverage: **1–2000**.
+- Reconciled all nine source Ledgers with the 2,000-row Index: sequential numbering, unique paths, path equality, exact required-field counts, Index/Ledger decision alignment, and pinned-source provenance all passed after documentation-only corrections.
+- Pinned Starling snapshot remains `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`, recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). All 2,000 source SHAs and byte sizes match that tree.
+- Corrections: exact byte sizes added to 25 legacy Size fields (entries 1–20 and 96–100); 97 Ledger Decision fields across 1201–1800 were aligned to the existing Index classifications while retaining their explanatory text. Protocol checkpoint transaction wording and the current state were synchronized.
+- Stage 1801–2000 is complete and all four 50-file sections are closed. Global verification passed. Final backup branch: `backup/audit-2000-final-2026-11-21`.
+- `main`, `backup/audit-1000-unique-2026-11-18` and `backup/audit-1000-final-2026-11-19` remain unchanged. No application source was modified.
+- Scope limit: structural/provenance/metadata/cross-document QA only; not a fresh semantic re-review, and no tests/build/benchmark/APK/device/Forge/server/Aternos/renderer validation was performed.
+- **STOP at 2000.** No entry 2001+ is authorized; obtain a new explicit user instruction before starting another source section.

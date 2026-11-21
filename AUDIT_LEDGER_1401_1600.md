@@ -189,7 +189,7 @@
 - Implementation / logic: Replays LAN guest movement on host to compare prediction and anti-cheat state. The implementation translates this state into client-side behavior, UI or packet-driven updates.
 - Findings: The behavior/data contracts are version-sensitive; later-version APIs or species must not be assumed present in 1.20.1.
 - RustChunk relevance: Not needed for ordinary external-server client baseline; future optional reference only.
-- Decision: optional; reference; LAN host
+- Decision: **undetermined; optional; reference; LAN host** — optional; reference; LAN host
 - 1.20.1 implications: Exclude from standalone client; future hosting must use Forge-authoritative 1.20.1 movement.
 - Follow-up checks: Compare this behavior against exact 1.20.1 source, packet/data fixtures and deterministic regression cases.
 - RustChunk implementation mapping: No baseline mapping; optional isolated future subsystem only.
@@ -291,7 +291,7 @@
 - Implementation / logic: Chooses OptiFine-style random mob textures from environment and persistent seed. The implementation translates this state into client-side behavior, UI or packet-driven updates.
 - Findings: The behavior/data contracts are version-sensitive; later-version APIs or species must not be assumed present in 1.20.1.
 - RustChunk relevance: Relevant to faithful 1.20.1 client behavior; server authority must remain intact.
-- Decision: optional; reference; OptiFine compatibility
+- Decision: **undetermined; optional; reference; OptiFine compatibility** — optional; reference; OptiFine compatibility
 - 1.20.1 implications: Add only for explicitly selected 1.20.1 OptiFine/ETF format; isolate from authoritative mob logic.
 - Follow-up checks: Compare this behavior against exact 1.20.1 source, packet/data fixtures and deterministic regression cases.
 - RustChunk implementation mapping: RustChunk 1.20.1 client/game subsystem matching the file purpose.
@@ -393,7 +393,7 @@
 - Implementation / logic: Client-side particles and local knockback for selected remote mob events. The implementation translates this state into client-side behavior, UI or packet-driven updates.
 - Findings: The behavior/data contracts are version-sensitive; later-version APIs or species must not be assumed present in 1.20.1.
 - RustChunk relevance: Relevant to faithful 1.20.1 client behavior; server authority must remain intact.
-- Decision: optional; adapt; entity effects
+- Decision: **undetermined; optional; adapt; entity effects** — optional; adapt; entity effects
 - 1.20.1 implications: Implement only event handlers present in 1.20.1; keep authoritative motion/damage server-side.
 - Follow-up checks: Compare this behavior against exact 1.20.1 source, packet/data fixtures and deterministic regression cases.
 - RustChunk implementation mapping: RustChunk 1.20.1 client/game subsystem matching the file purpose.
@@ -512,7 +512,7 @@
 - Implementation / logic: Parses authorized control commands and applies test-only changes or toggles used to compare rendering paths and collect visual/debug results.
 - Findings: Developer instrumentation, not normal user gameplay. A remotely reachable control socket would require strict access control.
 - RustChunk relevance: Optional debugging aid; no baseline client requirement.
-- Decision: optional; developer diagnostics only
+- Decision: **undetermined; optional; developer diagnostics only** — optional; developer diagnostics only
 - 1.20.1 implications: Keep out of release builds unless explicitly gated; ensure any control socket is loopback-only or authenticated and cannot be reached by untrusted servers.
 - Follow-up checks: Check build flags, socket bind address, command authorization, destructive command confirmation and release APK exclusion.
 - RustChunk implementation mapping: Optional RustChunk developer diagnostics/control interface.
@@ -546,7 +546,7 @@
 - Implementation / logic: Captures timeline records, packages replay/diagnostic data, supports a restricted replay command set and filters personal/server/world details before export.
 - Findings: Valuable reliability tooling. The allowed-command list, export sanitization and archive limits are security boundaries and must be retained or strengthened; embedded tests inspected, not run.
 - RustChunk relevance: Optional diagnostic subsystem with high value for diagnosing chunk stalls, crashes and state divergence.
-- Decision: optional; reference; diagnostics
+- Decision: **undetermined; optional; reference; diagnostics** — optional; reference; diagnostics
 - 1.20.1 implications: Design a RustChunk-specific format; preserve allowlisted commands, path/symlink safety, bounded archive extraction, secret scrubbing and user consent before sharing.
 - Follow-up checks: Threat-test malicious archives, oversized files, path traversal, symlink entries, credentials/tokens, server addresses and determinism across 1.20.1 replay.
 - RustChunk implementation mapping: Optional RustChunk replay/diagnostics recorder and secure export pipeline.
@@ -580,7 +580,7 @@
 - Implementation / logic: Lists world metadata and server entries; requires title screen for rename/delete/backup; requires an explicit --confirm for irreversible deletion; runs long backup work off the game thread.
 - Findings: Powerful local administrative commands, not normal game UI. Deletion confirmation and socket exposure are security-sensitive.
 - RustChunk relevance: Optional developer/admin utility; not required for playing on external servers.
-- Decision: optional; developer diagnostics only
+- Decision: **undetermined; optional; developer diagnostics only** — optional; developer diagnostics only
 - 1.20.1 implications: Keep outside standard release functionality unless authenticated and explicit; preserve deletion confirmation and perform backup work off the render/game thread.
 - Follow-up checks: Check socket authentication/reachability, world path validation, confirmation semantics, backup ZIP safety and concurrent save handling.
 - RustChunk implementation mapping: Optional RustChunk local world-management diagnostics interface.
@@ -750,7 +750,7 @@
 - Implementation / logic: Moves players into destination levels, waits for surrounding chunks, resolves portal/gateway/respawn exits, transports rideable vehicles and sends dimension/teleport notifications.
 - Findings: This is primarily an integrated/LAN server implementation, not the external remote-client teleport packet handler. It includes Starling native-mod callbacks.
 - RustChunk relevance: Not required for a client that only connects to Aternos, but a useful future reference if RustChunk hosts local worlds or needs portal simulation.
-- Decision: optional; reference; LAN host
+- Decision: **undetermined; optional; reference; LAN host** — optional; reference; LAN host
 - 1.20.1 implications: Keep out of the standalone external-server client baseline; if local hosting is built, reimplement 1.20.1 server-side portal/respawn rules and keep server authority.
 - Follow-up checks: Compare 1.20.1 dimension-change order, Nether coordinate scaling, End/gateway destinations, vehicle passengers, chunk readiness and respawn search.
 - RustChunk implementation mapping: No baseline mapping; possible RustChunk integrated-server travel and respawn subsystem.
@@ -767,7 +767,7 @@
 - Implementation / logic: Models setup phases, polls sign-in/download/preparation, renders progress and confirmation screens, handles Android storage permissions/import and retries failures.
 - Findings: Launcher-specific onboarding, not Minecraft 1.20.1 game protocol. Offline profile flow does not create signed chat identity for servers requiring secure profiles.
 - RustChunk relevance: Useful launcher feature for Android, but should be independently designed around RustChunk packaging, storage and account policy.
-- Decision: optional; adapt; Android launcher
+- Decision: **undetermined; optional; adapt; Android launcher** — optional; adapt; Android launcher
 - 1.20.1 implications: Implement a RustChunk-specific onboarding flow; preserve clear offline limitations, secure credential handling and Android scoped-storage behavior. Do not assume Java/asset installation flow transfers unchanged.
 - Follow-up checks: Validate Microsoft device-code flow, offline profile limits, Android 13 storage/import, interrupted downloads, Java compatibility and user-visible recovery.
 - RustChunk implementation mapping: RustChunk Android setup state machine and account/resource preparation UI.
@@ -784,7 +784,7 @@
 - Implementation / logic: Handles field limits, focus generations, text replacement, password/OTP concealment, copy/cut restrictions for secrets and login/offline profile submission.
 - Findings: Security-sensitive credential entry. Generation checks prevent stale IME updates from changing another field; password copy/cut is blocked, and sensitive buffers should not be logged.
 - RustChunk relevance: Useful for an Android launcher, but requires independent provider and credential handling.
-- Decision: optional; adapt; Android launcher
+- Decision: **undetermined; optional; adapt; Android launcher** — optional; adapt; Android launcher
 - 1.20.1 implications: Retain stale-IME protection and secret handling if reimplemented; use secure storage/provider APIs appropriate to RustChunk and avoid plaintext persistence/logging.
 - Follow-up checks: Test stale IME generations, Unicode/cursor limits, password masking, paste/copy/cut, OTP, field clearing and authentication failure.
 - RustChunk implementation mapping: RustChunk Android account form and safe text-input bridge.
@@ -801,7 +801,7 @@
 - Implementation / logic: Tracks cast, waiting, fish approach, bite and catch/miss phases; draws water, bobber, fish and ripples and synthesizes short sound samples.
 - Findings: Purely optional presentation feature, not Minecraft fishing simulation or server gameplay.
 - RustChunk relevance: Cosmetic onboarding polish; no requirement for launching or connecting to servers.
-- Decision: optional; future polish
+- Decision: **undetermined; optional; future polish** — optional; future polish
 - 1.20.1 implications: Do not mix this with in-game fishing mechanics; only port as an isolated setup UI component if it does not delay core launcher work.
 - Follow-up checks: No baseline task; verify touch handling, audio lifecycle, frame pacing and accessibility only if retained.
 - RustChunk implementation mapping: Optional RustChunk setup mini-game module.
@@ -818,7 +818,7 @@
 - Implementation / logic: Selects active pack/profile, calculates mobile Auto limits, translates pack properties/macros, builds IDs/uniforms and submits shader compilation asynchronously; disables failed/heavy packs safely.
 - Findings: High relevance to GPU cost and mobile stability. Shader-pack formats and APIs are not necessarily compatible with 1.20.1 OptiFine/Iris versions; parsing untrusted packs should be isolated from crashes.
 - RustChunk relevance: Optional renderer extension, potentially useful for visual features but not a prerequisite for Forge server connection.
-- Decision: optional; reference; Android graphics
+- Decision: **undetermined; optional; reference; Android graphics** — optional; reference; Android graphics
 - 1.20.1 implications: Target a clearly specified 1.20.1 shader format/version; keep the Android Auto profile, bounded resolution/shadow budgets and crash/device-loss fallback as design references, not direct API reuse.
 - Follow-up checks: Test pack parsing, invalid/hostile shaders, per-dimension reload, option persistence, device loss, GPU time/memory, Mali-G52 compatibility and fallback without world crash.
 - RustChunk implementation mapping: Optional RustChunk shader-pack loader, renderer uniform adapter and Android adaptive quality controller.
@@ -1805,7 +1805,7 @@
 - Implementation / logic: Compares world-required content with installed content and records/executes a restart before world loading.
 - Findings: This native content lifecycle is not Forge mod discovery, classpath, transformers, dependency resolution or event-bus startup.
 - RustChunk relevance: Only generic per-world modset metadata is an architectural reference.
-- Decision: reference; rewrite required; not Forge
+- Decision: **undetermined; reference; rewrite required; not Forge** — reference; rewrite required; not Forge
 - 1.20.1 implications: Do not treat this as a Forge loader. Build a real Forge 1.20.1 Java runtime/classpath/discovery/transformer/lifecycle integration.
 - Follow-up checks: Test manifest integrity, mismatches, interrupted restart, rollback and missing dependencies; verify actual Forge loader separately.
 - RustChunk implementation mapping: Per-world modset metadata only, isolated from Forge bootstrap.
@@ -2247,7 +2247,7 @@
 - Implementation / logic: Loads animation expressions and keyframes, evaluates variable bindings and animation curves, then applies transformations to named model parts during rendering.
 - Findings: Custom entity model animation is optional resource-pack compatibility, not vanilla 1.20.1 simulation or Forge support; slot use/global variables/frame lifetime require auditing.
 - RustChunk relevance: Potential future client-rendering feature for custom resource packs; not a first multiplayer milestone.
-- Decision: reference; optional/future; rewrite required
+- Decision: **undetermined; reference; optional/future; rewrite required** — reference; optional/future; rewrite required
 - 1.20.1 implications: Do not port wholesale into the game core; if CEM support is selected, implement the target OptiFine/CEM expression subset and connect it through an isolated resource-pack renderer interface.
 - Follow-up checks: Test expression parsing, variable scope/reset, animation start/stop, part lookup, invalid resources, concurrent entities, frame-time cost and resource reload cleanup.
 - RustChunk implementation mapping: Optional RustChunk CEM animation interpreter and renderer adapter, isolated from simulation.
@@ -2264,7 +2264,7 @@
 - Implementation / logic: Discovers and parses custom model definitions, maps entity identifiers to replacement models/layers and chooses fallback/attachment paths when assets are missing or reload.
 - Findings: CEM compatibility is an optional client rendering feature; this implementation depends on its own model/asset pipeline and does not imply Forge mod rendering compatibility.
 - RustChunk relevance: Potential future resource-pack feature; should not delay baseline 1.20.1 gameplay/server support.
-- Decision: reference; optional/future; rewrite required
+- Decision: **undetermined; reference; optional/future; rewrite required** — reference; optional/future; rewrite required
 - 1.20.1 implications: Keep CEM loading isolated from target entity simulation; if adopted, target the desired OptiFine CEM subset and preserve secure resource-pack path validation and reload behavior.
 - Follow-up checks: Test namespace/path traversal, malformed JSON, missing textures, replacement precedence, layer attachment, pack priority, reload/unload and GPU memory on Android.
 - RustChunk implementation mapping: Optional RustChunk CEM resource resolver and custom model registry.
@@ -2451,7 +2451,7 @@
 - Implementation / logic: Tests dragon wing/head intersections, applies knockback and damage with recent-attacker suppression and team-aware protection.
 - Findings: Ender Dragon contacts are vanilla gameplay, but this file explicitly documents parity comparison against Java 26.3 rather than the target 1.20.1 release.
 - RustChunk relevance: Potential reference for boss/mob collision; unsafe to claim target parity without version-matched evidence.
-- Decision: reference; version-specific; verification required
+- Decision: **undetermined; reference; version-specific; verification required** — reference; version-specific; verification required
 - 1.20.1 implications: Rebuild/verify contact geometry and damage against Minecraft 1.20.1 EnderDragon/PartEntity semantics; do not carry later parity assumptions as proven.
 - Follow-up checks: Test flying vs perched, both wings, head contacts, team rules, hurt cooldown, dragon recently hurt and multi-mob collision order.
 - RustChunk implementation mapping: RustChunk 1.20.1 Ender Dragon part-contact handler and entity collision integration.
@@ -2689,7 +2689,7 @@
 - Implementation / logic: Implements Happy Ghast variants, harness/rider movement, flight controls, healing and lead attachment handling.
 - Findings: Happy Ghast/Ghastling and their harness/ride systems are absent from the 1.20.1 baseline.
 - RustChunk relevance: No direct 1.20.1 gameplay adoption; only generic flight-control ideas may be studied separately.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude the complete species and entity-specific state from the 1.20.1 build.
 - Follow-up checks: Confirm target registry has no Happy Ghast/Ghastling, harness item or related entity/packet identifiers.
 - RustChunk implementation mapping: No 1.20.1 implementation mapping; optional later-version research only.
@@ -2774,7 +2774,7 @@
 - Implementation / logic: Parses per-bone keyframes and samples channels into pose transforms; supports applying animation/walk state.
 - Findings: Generic engine is not itself a gameplay feature; data/assets must be confirmed against 1.20.1 resource packs and model definitions.
 - RustChunk relevance: Potential optional client-side resource-pack/model animation capability.
-- Decision: reference; optional client feature
+- Decision: **undetermined; reference; optional client feature** — reference; optional client feature
 - 1.20.1 implications: Keep as a separate optional rendering feature only after verifying target JSON schema, assets and Android CPU/GPU cost.
 - Follow-up checks: Check keyframe time units, interpolation edge cases, bone mapping, animation blending and memory allocation on Android.
 - RustChunk implementation mapping: RustChunk optional client animation module; keep outside mob simulation/protocol compatibility.
@@ -2859,7 +2859,7 @@
 - Implementation / logic: Implements timed Brain memories, nearest-living/player sensors, attack targeting, activities, weighted RunOne behavior and species-specific fight/idle packages.
 - Findings: This file is exclusively Breeze/Creaking AI, both post-1.20.1. Generic memory/behavior abstractions are not evidence for replacing 1.20.1 Goal/TargetSelector behavior.
 - RustChunk relevance: No baseline species adoption; generic memory framework may inform a future separate architecture study.
-- Decision: exclude; post-1.20.1; architecture reference only
+- Decision: **unnecessary; post-1.20.1; architecture reference only** — exclude; post-1.20.1; architecture reference only
 - 1.20.1 implications: Exclude Breeze/Creaking and their species logic from 1.20.1; retain goal-based AI for target-era mobs and evaluate generic abstractions independently.
 - Follow-up checks: Confirm 1.20.1 species and brain provider registries; compare any reusable memory semantics against target Java source before design adoption.
 - RustChunk implementation mapping: No 1.20.1 species mapping; optional future AI architecture note only.
@@ -2876,7 +2876,7 @@
 - Implementation / logic: Implements swim/rider travel, dash cooldown, anger/charge targets, breath effect, variants, saddle armor, animation and saved fields.
 - Findings: Nautilus and Zombie Nautilus plus their rider/breath/equipment systems are absent from 1.20.1.
 - RustChunk relevance: No direct target-era gameplay adoption.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude species, item/effect IDs, rider packets and state from the 1.20.1 baseline.
 - Follow-up checks: Confirm absence from 1.20.1 entity/item/effect registries and protocol before filtering all references.
 - RustChunk implementation mapping: No 1.20.1 implementation mapping; later-version research only.
@@ -3063,7 +3063,7 @@
 - Implementation / logic: Loads random-texture definitions and conditions, resolves candidate variants and selects a matching texture for an entity/render state.
 - Findings: Optional resource-pack compatibility, not vanilla mob simulation; rule formats and condition sets are external compatibility contracts.
 - RustChunk relevance: Potential visual feature, but CPU and memory cost must be bounded on Android.
-- Decision: reference; optional client feature
+- Decision: **undetermined; reference; optional client feature** — reference; optional client feature
 - 1.20.1 implications: Keep outside the initial 1.20.1 gameplay/protocol core; implement only an explicitly scoped optional OptiFine/ETF subset.
 - Follow-up checks: Verify rule precedence, random group choice, fallback, reload invalidation, variant/biome predicates and cache memory.
 - RustChunk implementation mapping: RustChunk optional entity-texture compatibility service feeding the versioned renderer.
@@ -3131,7 +3131,7 @@
 - Implementation / logic: Partitions mob bounds into fixed 4-block cells and returns nearby candidates; falls back to broader scanning for unbounded queries.
 - Findings: Internal acceleration structure, not vanilla semantics. Correctness depends on no missed boundary-crossing boxes and deterministic candidate order.
 - RustChunk relevance: Potential CPU optimization for collision and nearby-entity queries; no gain has been measured.
-- Decision: reference; performance candidate; parity required
+- Decision: **undetermined; reference; performance candidate; parity required** — reference; performance candidate; parity required
 - 1.20.1 implications: Evaluate only behind parity tests against exhaustive 1.20.1 entity queries; never alter collision results.
 - Follow-up checks: Test negative coordinates, cell edges, large entities, movement, removal, duplicates and ordering; benchmark density distributions on Android.
 - RustChunk implementation mapping: RustChunk optional entity spatial index used by collision/AI query adapters after exact results are proven.
@@ -3165,7 +3165,7 @@
 - Implementation / logic: Flattens/caches model geometry, derives pose/draw jobs, reuses matching work and sends eligible models through GPU while falling back for unsupported geometry.
 - Findings: Potentially useful architecture, but asset/test expectations target newer resources; no CPU/GPU parity test, build or Android benchmark has run.
 - RustChunk relevance: Relevant to mobile FPS goals, but must be optional and guarded by capability checks; benefit is unproven.
-- Decision: reference; optional client feature; performance candidate
+- Decision: **undetermined; reference; optional client feature; performance candidate** — reference; optional client feature; performance candidate
 - 1.20.1 implications: Port only after 1.20.1 model parity; keep CPU fallback, bounded caches and invalidation on reload/device loss.
 - Follow-up checks: Measure frame time, allocations, buffer uploads, cache hit/miss, shader compatibility and visual equivalence on target Android GPU and fallback paths.
 - RustChunk implementation mapping: RustChunk optional GPU entity-skinning backend integrated with the 1.20.1 renderer and CPU fallback.
@@ -3267,7 +3267,7 @@
 - Implementation / logic: Implements spear charge/approach/attack behavior and zombie/piglin tactics, including dismount/push and kinetic damage.
 - Findings: Spear and KineticWeapon behavior are absent from the Minecraft 1.20.1 baseline; associated DamageKind and task branches are later additions.
 - RustChunk relevance: No direct target-era gameplay adoption; retain only if a later-version roadmap explicitly adds this item.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude the module and all Spear item/damage/task identifiers from the 1.20.1 build.
 - Follow-up checks: Confirm 1.20.1 item, damage-type and entity-goal registries contain no Spear/Kinetic Weapon dependency.
 - RustChunk implementation mapping: No 1.20.1 mapping; do not create a placeholder item or protocol identifier.
@@ -3318,7 +3318,7 @@
 - Implementation / logic: Implements archetype selection, swallowing/storing blocks or items, physical response variants, ignition/fuse, explosion and specialized state/animation.
 - Findings: Sulfur Cube and its archetypes are later-version content and absent from the 1.20.1 entity/item/block registries.
 - RustChunk relevance: No direct 1.20.1 gameplay use; broad kinetic-mob ideas do not establish vanilla compatibility.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude the species, archetype tags, item IDs, damage immunity and explosion logic from the 1.20.1 build.
 - Follow-up checks: Verify 1.20.1 EntityType/item/block registries contain no Sulfur Cube or archetype dependencies.
 - RustChunk implementation mapping: No 1.20.1 implementation mapping; optional later-version research only.
@@ -3386,7 +3386,7 @@
 - Implementation / logic: Searches chest block entities, chooses source/destination, queues behind another golem, opens/interacts for a fixed duration, moves up to 16 items and records visited/unreachable positions.
 - Findings: Copper Golem and copper chest transport were introduced after 1.20.1; this module relies on later Brain tasks, blocks and item/container state.
 - RustChunk relevance: No direct 1.20.1 functionality; do not use copper-chest interactions as a generic vanilla container layer.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude this module, transport memories, copper-chest tags and related block/event IDs from the 1.20.1 baseline.
 - Follow-up checks: Confirm 1.20.1 registries contain no Copper Golem or copper chest; keep ordinary chest/container code separately versioned.
 - RustChunk implementation mapping: No 1.20.1 implementation mapping; future-version research only.
@@ -3403,7 +3403,7 @@
 - Implementation / logic: Loads/saves normal and ominous configs, detects players, converts Bad Omen, spawns configured waves, tracks mobs, ejects per-player rewards and runs cooldown/item-spawner events.
 - Findings: Trial Spawners, Trial Omen and Trial Chambers are 1.21 content and absent from 1.20.1; ordinary Monster Spawner in spawner.rs is a separate feature.
 - RustChunk relevance: No direct 1.20.1 gameplay adoption.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude TrialSpawner block/entity/state, Trial Omen and trial-specific packet, loot/config and resource identifiers from 1.20.1.
 - Follow-up checks: Confirm absence of trial_spawner block entity/state, effects, loot tables and registries in 1.20.1; retain vanilla Mob Spawner independently.
 - RustChunk implementation mapping: No 1.20.1 mapping; do not alias TrialSpawner to ordinary Monster Spawner.

@@ -1355,3 +1355,23 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Embedded tests/examples were inspected only; none were run. No build, benchmark, APK, Android device, Forge launch, Minecraft join, Aternos or renderer validation was performed. No application/game source code changed; audit documents only.
 - All sections in stage 1801–2000 are closed: 1801–1850, 1851–1900, 1901–1950 and 1951–2000 (50/50 each).
 - **STOP at entry 2000.** Do not begin global verification of entries 1–2000 or create the final backup until the user explicitly authorizes the next phase. No incremental backup was made.
+
+
+## Global QA 1–2000 — 2026-11-21
+
+### Scope and results
+
+- Re-read all nine source Ledgers and the complete Index from `starling-1.20.1-port-audit`. Confirmed exactly 2,000 Ledger records and 2,000 Index rows, numbered 1–2,000 without gaps; all 2,000 source paths are unique in each document and match by entry number.
+- Verified all 2,000 paths exist in the pinned Starling recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`; 5,749 tree entries). All 2,000 recorded source SHAs match the exact pinned tree blob SHAs.
+- Verified every one of the 15 required fields occurs exactly once in every record (30,000 required-field checks; zero missing or duplicate required fields).
+- Compared all 2,000 Index classifications against their Ledger decisions. Corrected 97 Decision fields across entries 1201–1800 by making the already-recorded Index classification explicit at the start of the Ledger field while preserving the original explanatory text. Existing Global QA for entries 1–1000 remains the authority for the earlier prose-based decision summaries; entries 1001–1200 and 1801–2000 already had matching classification prefixes.
+- Compared every Size byte count with the pinned tree. Added the exact tree byte sizes to the 25 legacy entries that had only character counts or descriptive Size text (entries 1–20 and 96–100). After correction, all 2,000 Size byte counts match the pinned tree.
+- Confirmed all four 50-file sections in stage 1801–2000 are closed (1801–1850, 1851–1900, 1901–1950 and 1951–2000). QA Log, Continuity, Protocol and Boundary state were reconciled to the final 1–2000 closeout.
+- Confirmed the working branch head before this QA correction was `c82d50f9457f85856b15d8c36cc6bbe8c81fb982`; no application/game source was changed. The global verification changed audit documentation only.
+
+### Limits and backup
+
+- This is a structural, provenance, metadata and cross-document verification of the 1–2000 audit. It is not a fresh semantic re-review of all 2,000 upstream implementations.
+- Earlier source review and checkpoint records document full-file/EOF inspection and contiguous <=400-line chunks for long files. This global pass did not fetch every upstream file again solely to recalculate line counts.
+- No tests, examples, builds, benchmarks, APKs, Android-device tests, Minecraft launches, Forge 1.20.1 client runs, server joins, Aternos sessions or renderer validations were executed.
+- The final backup branch is `backup/audit-2000-final-2026-11-21`; it is created only after this verification commit and is read back against the verified working branch. Existing `main` and 1,000-entry backup refs remain read-only.

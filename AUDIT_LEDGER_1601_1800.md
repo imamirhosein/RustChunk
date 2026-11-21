@@ -19,7 +19,7 @@
 - Implementation / logic: Turtle state, water/sand tags, navigation, breeding, block placement and RNG.
 - Findings: Registers land/water goals; selects home/travel positions; handles eggs, breeding and swimming travel.
 - RustChunk relevance: Target-era behavior, but travel's loaded-chunk checks need 1.20.1 parity.
-- Decision: Useful vanilla mob and aquatic movement reference.
+- Decision: **adaptable; version-specific** — Useful vanilla mob and aquatic movement reference.
 - 1.20.1 implications: Rebuild target goal timing, tags, egg placement and chunk checks for 1.20.1.
 - Follow-up checks: Home radius, beach selection, egg counts, navigation, chunk edges and RNG.
 - RustChunk implementation mapping: RustChunk 1.20.1 turtle AI and egg-placement adapter.
@@ -36,7 +36,7 @@
 - Implementation / logic: Goals/targets, legacy equipment/NBT, damage, conversion, weather/light, projectiles and RNG.
 - Findings: Registers species combat/avoidance, ranged attacks, conversion, sunlight and anger/equipment behavior.
 - RustChunk relevance: Newer SpearUse/Parched branches and modern item/damage assumptions must be excluded; target classes need exact parity.
-- Decision: Broad vanilla hostile mob reference.
+- Decision: **rewrite required; version-specific** — Broad vanilla hostile mob reference.
 - 1.20.1 implications: Rebuild target-era selectors, item NBT, damage and conversions; exclude SpearUse/Parched.
 - Follow-up checks: Species goals, sunlight, drowned conversion, reinforcement, anger, ranged intervals, equipment and spawn RNG.
 - RustChunk implementation mapping: RustChunk undead species/hostile AI and conversion service.
@@ -53,7 +53,7 @@
 - Implementation / logic: Evoker owner/target, custom movement, phasing/collision, attack goals and timer.
 - Findings: Registers goals, steers through blocks and handles charge, attack and lifetime.
 - RustChunk relevance: Vex exists in 1.20.1; no-physics behavior differs from generic flying navigation.
-- Decision: Useful hostile summon and special movement reference.
+- Decision: **adaptable; version-specific** — Useful hostile summon and special movement reference.
 - 1.20.1 implications: Rebuild phasing, target handoff and owner/lifetime rules for 1.20.1.
 - Follow-up checks: Phasing boundaries, entity collision, charge, damage and owner death.
 - RustChunk implementation mapping: RustChunk Vex AI and dedicated phasing movement.
@@ -70,7 +70,7 @@
 - Implementation / logic: POI tickets, schedules, villager Brain, legacy items/NBT, trades, gossip, raids and breeding.
 - Findings: Stores/updates profession, work/sleep/home, inventory, food sharing and gossip interactions.
 - RustChunk relevance: POI/schedule and serialization are target-version sensitive; modern trade/inventory formats cannot be assumed.
-- Decision: High-value village, trade and persistence reference.
+- Decision: **rewrite required; core reference; version-specific** — High-value village, trade and persistence reference.
 - 1.20.1 implications: Rebuild with 1.20.1 POI, schedules, legacy ItemStack/NBT; use villager_brain for AI.
 - Follow-up checks: Profession/job-site, POI tickets, gossip, food thresholds, schedule, restock and save/reload.
 - RustChunk implementation mapping: RustChunk villager state, POI, inventory/trade services.
@@ -87,7 +87,7 @@
 - Implementation / logic: Brain TTLs, POI tickets, pathfinding, tags, professions, schedules, raids, gossip and RNG.
 - Findings: Implements sensors/memories, activities, weighted behaviors, work/trade/farm, sleep/home and raid response.
 - RustChunk relevance: Relevant Brain architecture, but provider order, POI/activity timing and RNG in 26.3 must be rebuilt from target source.
-- Decision: Central villager AI and reusable memory scheduling reference.
+- Decision: **rewrite required; core reference; version-specific** — Central villager AI and reusable memory scheduling reference.
 - 1.20.1 implications: Rebuild 1.20.1 Brain providers, sensors, TTLs, activities, behavior order and POI keys.
 - Follow-up checks: Sensor cadence/order, memory expiry, activity priority, POI tickets, schedules, raid and RNG.
 - RustChunk implementation mapping: RustChunk villager Brain/memory/sensor/behavior engine.
@@ -104,7 +104,7 @@
 - Implementation / logic: Prepared resource packs, crop/block registry, tags, villager farming and test-world fixtures.
 - Findings: Defines farming scenarios for crop age, harvest/replant and data/tag-driven seed choices.
 - RustChunk relevance: Some cases ignored or need 26.3 resources; read only, not executed; no 1.20.1 proof.
-- Decision: Checklist of farming edge cases, not implementation.
+- Decision: **undetermined; reference; tests only; version-specific** — Checklist of farming edge cases, not implementation.
 - 1.20.1 implications: Use as test-design guide; build new 1.20.1 fixtures and expected values.
 - Follow-up checks: Crop age, harvest/replant, seed availability, mod tags and authoritative block changes.
 - RustChunk implementation mapping: RustChunk 1.20.1 farming integration tests.
@@ -121,7 +121,7 @@
 - Implementation / logic: PNG metadata, texture resources, profession/biome textures and model head layers.
 - Findings: Reads texture metadata and sets headwear visibility to none/partial/full.
 - RustChunk relevance: Optional client feature; ignored tests use newer prepared assets; no gameplay effect.
-- Decision: Small optional render feature.
+- Decision: **undetermined; reference; optional client rendering; version-specific** — Small optional render feature.
 - 1.20.1 implications: Consider only after 1.20.1 texture/model/resource-pack parity.
 - Follow-up checks: PNG metadata format, profession textures, visibility rules and fallback.
 - RustChunk implementation mapping: Optional villager headwear render adapter.
@@ -138,7 +138,7 @@
 - Implementation / logic: Warden Brain, sculk/vibration registry, target visibility, damage/effects, sounds and movement.
 - Findings: Handles state, anger/targets, vibration/hurt/push reactions, attacks and animations.
 - RustChunk relevance: Target-era mob; event IDs, tags and effect cadence need 1.20.1 parity.
-- Decision: Important hostile/sculk reference.
+- Decision: **adaptable; version-specific** — Important hostile/sculk reference.
 - 1.20.1 implications: Keep target-era behavior after matching event IDs, listeners, anger and damage semantics.
 - Follow-up checks: Vibration occlusion/range, anger, target priority, sniff/roar, sonic boom and Darkness timing.
 - RustChunk implementation mapping: RustChunk Warden state/AI and sculk event adapter.
@@ -155,7 +155,7 @@
 - Implementation / logic: Warden state, scan cadence, memory TTLs, vibration disturbances, pathfinding, attacks and RNG.
 - Findings: Builds Brain provider/activity packages and ticks sensor/memory/behavior routines.
 - RustChunk relevance: Provider order, TTLs, behavior priorities and RNG need exact 1.20.1 source verification.
-- Decision: Core Warden Brain reference and possible reusable memory scheduling.
+- Decision: **rewrite required; core reference; version-specific** — Core Warden Brain reference and possible reusable memory scheduling.
 - 1.20.1 implications: Rebuild target-era memory keys, sensors, activity packages and timing; keep separate from generic goals.
 - Follow-up checks: Sensor delays, disturbance/anger, sniff/roar/dig duration, behavior order and RNG.
 - RustChunk implementation mapping: RustChunk Warden Brain module on versioned memory/sensor engine.
@@ -172,7 +172,7 @@
 - Implementation / logic: Potion/effect registry, targets/visibility, projectile physics, damage, raiders and RNG.
 - Findings: Chooses beneficial potions, selects splash-potion types and throws on goal/cooldown schedule.
 - RustChunk relevance: Target-era but potion registry, cooldown and projectile RNG need 1.20.1 parity.
-- Decision: Useful hostile ranged/potion AI.
+- Decision: **adaptable; version-specific** — Useful hostile ranged/potion AI.
 - 1.20.1 implications: Adapt with target potion registry, legacy item data, target predicates and RNG.
 - Follow-up checks: Potion choice, drinking delay, trajectory, raider support and effect duration.
 - RustChunk implementation mapping: RustChunk Witch AI and splash projectile adapter.
@@ -189,7 +189,7 @@
 - Implementation / logic: Wither timers, targets, skull physics, damage tags, block resistance/destruction and RNG.
 - Findings: Implements spawn charge/explosion, head attacks, skull variants, block damage and server/client state.
 - RustChunk relevance: Target-era boss, but damage tags, block list, difficulty and event behavior need 1.20.1 parity.
-- Decision: High-value boss reference; authoritative state remains server/local host.
+- Decision: **adaptable; version-specific; boss simulation** — High-value boss reference; authoritative state remains server/local host.
 - 1.20.1 implications: Adapt exact target registries, damage, blocks and projectile physics.
 - Follow-up checks: Charge, radius, head cadence, skull damage, block rules, arrow immunity and regeneration.
 - RustChunk implementation mapping: RustChunk Wither state machine, projectile and block-damage adapters.
@@ -206,7 +206,7 @@
 - Implementation / logic: World/chunk state, block facts, collisions, entity bounds/index, sky/light/biome/fluid and targets.
 - Findings: Provides line-of-sight, collision/clip, environmental, target and nearby-grid queries with fallback.
 - RustChunk relevance: Ray flags, unloaded chunks, collision context and nearby iteration order need 1.20.1 parity.
-- Decision: Foundational for all local mob AI; query cost matters.
+- Decision: **rewrite required; core reference; version-specific** — Foundational for all local mob AI; query cost matters.
 - 1.20.1 implications: Rebuild over RustChunk's 1.20.1 world model; preserve query semantics before optimizing.
 - Follow-up checks: Ray modes, bounds/order, height/border, chunk loading, sky/light/biome and fallback.
 - RustChunk implementation mapping: RustChunk MobWorld query interface over chunk/collision services.
@@ -223,7 +223,7 @@
 - Implementation / logic: Effects, cure interaction, tags, entity conversion, gossip, NBT and world time.
 - Findings: Ticks cure state, applies tagged-block speedups and preserves fields for conversion.
 - RustChunk relevance: Actual entity replacement occurs outside this module; target NBT and RNG must be confirmed.
-- Decision: Useful survival mechanic and persistence reference.
+- Decision: **adaptable; version-specific** — Useful survival mechanic and persistence reference.
 - 1.20.1 implications: Adapt state into 1.20.1 conversion transaction and NBT.
 - Follow-up checks: Cure duration/conditions, iron bars/beds, effects, gossip and conversion equipment/attributes.
 - RustChunk implementation mapping: RustChunk ZombieVillager cure state and conversion adapter.
@@ -240,7 +240,7 @@
 - Implementation / logic: Starling native runtime, Host, Rust mod ABI, world/entity/item/menu and process lifecycle.
 - Findings: Defines native mod contracts and dispatches lifecycle/client/server hooks through Starling runtime.
 - RustChunk relevance: Not Forge ModLoader/FML/event bus/ModLauncher; tightly coupled to Starling types.
-- Decision: Architecture reference for separate Rust-native extension API, not Java Forge.
+- Decision: **undetermined; reference; not Forge; architecture only** — Architecture reference for separate Rust-native extension API, not Java Forge.
 - 1.20.1 implications: Keep separate from required Forge 1.20.1 path.
 - Follow-up checks: Map lifecycle/handle ideas against Forge 47.x; inspect threading, cancellation and isolation.
 - RustChunk implementation mapping: Optional RustChunk native extension API isolated from Forge.
@@ -257,7 +257,7 @@
 - Implementation / logic: Hook schema/version, NativeClientHooks, component/item/data APIs, entities, menus, registries and rendering.
 - Findings: Declares hook contracts/dispatch glue for lifecycle, world, item/component, block, entity, menu, recipe, render and client events.
 - RustChunk relevance: Contains modern Component/DataMap/ItemContainer and Starling types; not Forge event compatibility.
-- Decision: Catalogue of extension points; direct copy binds RustChunk to another engine.
+- Decision: **undetermined; reference; not Forge; generated native API** — Catalogue of extension points; direct copy binds RustChunk to another engine.
 - 1.20.1 implications: Use architecture only; design separate RustChunk/Forge bridge around 1.20.1 events/registries.
 - Follow-up checks: Classify hooks against Forge 47.x; audit threading, cancellation, errors and isolation.
 - RustChunk implementation mapping: Optional versioned native hook schema, separate from ForgeModLoader.
@@ -274,7 +274,7 @@
 - Implementation / logic: Generated API, Host handles, Starling registry/items, world, UI/menu and renderer.
 - Findings: Maps native calls to Host operations and marshals Starling data to runtime.
 - RustChunk relevance: Uses Starling-native types; does not load/execute Forge Java mods.
-- Decision: Architecture reference for extension-host boundaries only.
+- Decision: **undetermined; reference; not Forge; architecture only** — Architecture reference for extension-host boundaries only.
 - 1.20.1 implications: Do not use as Forge layer; isolate optional native Host.
 - Follow-up checks: Review ownership/lifetimes, thread affinity, reentrancy, permissions and versioned handles.
 - RustChunk implementation mapping: Optional RustChunk Host over scoped world/entity/item handles.
@@ -291,7 +291,7 @@
 - Implementation / logic: Manifests, assets/resources, registry IDs, block/item states, NBT, tags, biome/structure and overlay cache.
 - Findings: Clones templates, applies state/item additions, rewrites registry/tag data, merges selected worldgen, caches collision NBT and links/copies overlay.
 - RustChunk relevance: Starling/Horizon, not full ModLauncher/FML/Java execution or all Forge serializers; partial readers do not prove complete Forge.
-- Decision: Offline data-overlay reference only; insufficient alone for Forge support.
+- Decision: **rewrite required; partial Forge data overlay; version-specific** — Offline data-overlay reference only; insufficient alone for Forge support.
 - 1.20.1 implications: Rebuild 1.20.1 registries/NBT/blockstates/resources; use as pipeline reference, not Forge loading.
 - Follow-up checks: Overlay precedence, registry stability, state expansion, tag merge, biome modifiers, structures, serializers and cache/memory.
 - RustChunk implementation mapping: RustChunk data staging plus separate Forge loader/registry service.
@@ -308,7 +308,7 @@
 - Implementation / logic: Modifier paths, biome/placed-feature registries, tags, selectors and generation order.
 - Findings: Parses selectors, resolves holders by ID/tag/any/or/and/not, adds/removes features per step.
 - RustChunk relevance: Skips spawn/carver and unknown/custom serializers; modern snapshot not proof of Forge 47.x 1.20.1.
-- Decision: Useful clue for biome modifier support, incomplete.
+- Decision: **undetermined; reference; partial Forge/NeoForge format support; version-specific** — Useful clue for biome modifier support, incomplete.
 - 1.20.1 implications: Reimplement from Forge 47.x 1.20.1 codecs/registries and support required serializers.
 - Follow-up checks: Modifier types/order, holder/tag resolution, missing IDs, paths and custom serializers.
 - RustChunk implementation mapping: RustChunk Forge biome modifier parser/ordered feature patcher.
@@ -325,7 +325,7 @@
 - Implementation / logic: Prepared 26.3 packs, registry/tag/worldgen schema, manifests, NBT/collision and overlay filesystem.
 - Findings: Defines cases for block/item states, IDs, tags, biome modifiers, structures, VoxelShapes, declarations, signs and cache semantics.
 - RustChunk relevance: Some tests ignored or need 26.3 resources; inspected only, not run; no 1.20.1/Forge proof.
-- Decision: Checklist for replacement data overlay tests, not implementation.
+- Decision: **undetermined; reference; tests only; version-specific** — Checklist for replacement data overlay tests, not implementation.
 - 1.20.1 implications: Port selected cases using 1.20.1 Forge fixtures and add custom serializer/actual Forge-load tests.
 - Follow-up checks: Registry determinism, overlay precedence, tag replacement, modifier order, structures, collision, NBT and cache.
 - RustChunk implementation mapping: RustChunk 1.20.1 Forge/data regression suite.
@@ -342,7 +342,7 @@
 - Implementation / logic: AABB/collision, block/fluid facts, attributes/effects, health/hunger, entities, world/chunks and network synchronization.
 - Findings: Defines PlayerMotion/MotionWorld and coordinates movement, jumps, collision, fluid/environment, fall, Elytra, spectator, sprint and events.
 - RustChunk relevance: Newer restitution/bounciness/air-drag and 26.3 assumptions; some vehicle/current domain incomplete.
-- Decision: Core correctness/performance hotspot; no FPS/performance claim measured.
+- Decision: **rewrite required; core reference; version-specific** — Core correctness/performance hotspot; no FPS/performance claim measured.
 - 1.20.1 implications: Rebuild from 1.20.1 LocalPlayer/Player/LivingEntity; isolate later physics and add prediction only after parity.
 - Follow-up checks: Input/acceleration, sprint, jump, step/collision, fall, fluid, Elytra/vehicles, spectator, friction/gravity, effects and reconciliation.
 - RustChunk implementation mapping: RustChunk 1.20.1 movement kernel split into input, living physics, fluid, collision, effects and network services.
@@ -359,7 +359,7 @@
 - Implementation / logic: Player effects/attributes, damage types, fluid states/tags, breath events, collision and RNG.
 - Findings: Applies fire timers/damage, air/drowning, lava/void/wall hazards, fire contact, liquid jump and bubble push.
 - RustChunk relevance: Contains Nautilus breathing and native hooks plus modern registry assumptions; Nautilus is later-version.
-- Decision: Useful environment/authoritative damage decomposition.
+- Decision: **rewrite required; version-specific** — Useful environment/authoritative damage decomposition.
 - 1.20.1 implications: Rebuild 1.20.1 fire/drowning/lava; remove Nautilus breathing/native hook semantics unless separately supported.
 - Follow-up checks: Air/Respiration, drowning, fire intervals, lava fall rules, bubble push, void and fluid jump.
 - RustChunk implementation mapping: RustChunk 1.20.1 environment and bubble-column services.
@@ -376,7 +376,7 @@
 - Implementation / logic: Fluid states/tags/heights/shapes, flow rules, block facts, collision, chunks, boats and movement.
 - Findings: Precomputes fluid facts; tracks immersion/first tick; updates currents, caches shapes, emits splash/bubble events.
 - RustChunk relevance: Modern breath/boat assumptions (Nautilus) and custom section strategy require target rebuild.
-- Decision: Core physics reference; cache idea may inform mobile optimization but unprofiled.
+- Decision: **rewrite required; core reference; version-specific** — Core physics reference; cache idea may inform mobile optimization but unprofiled.
 - 1.20.1 implications: Reimplement 1.20.1 FluidState/FluidTags/Entity.updateFluidInteraction; filter later extensions.
 - Follow-up checks: Waterlogged flow, surface, eye immersion, boat passenger, bubble, first tick, splash RNG and cache memory.
 - RustChunk implementation mapping: RustChunk 1.20.1 fluid subsystem with bounded shape cache.
@@ -393,7 +393,7 @@
 - Implementation / logic: servers.dat, status/legacy ping, LAN scanner, friend/relay, UI and filesystem.
 - Findings: Loads/saves servers, pings, displays MOTD/players/favicon and handles list/edit/direct/friend/disconnected screens.
 - RustChunk relevance: UI reusable; ping and friend/relay are Starling/Horizon-specific, not vanilla Forge.
-- Decision: Useful server-list/LAN/status reference.
+- Decision: **rewrite required; client UI; protocol-specific** — Useful server-list/LAN/status reference.
 - 1.20.1 implications: Rebuild ping/join path for 1.20.1 protocol/Forge handshake; port UI/LAN separately.
 - Follow-up checks: servers.dat, status protocol, LAN, favicon, relay security, reconnect and thread cancellation.
 - RustChunk implementation mapping: RustChunk server list/editor, 1.20.1 status adapter and LAN discovery.
@@ -410,7 +410,7 @@
 - Implementation / logic: Sound registry/pools, biome/dimension attributes, options, sound engine, RNG and JSON resources.
 - Findings: Loads environment music tables; selects menu/game/end/creative/underwater music; schedules/fades playback and layers.
 - RustChunk relevance: Modern audio attributes/native layers may differ from 1.20.1.
-- Decision: Optional client feature; music concepts reusable.
+- Decision: **adaptable; version-specific; optional client feature** — Optional client feature; music concepts reusable.
 - 1.20.1 implications: Adapt baseline event/pool behavior to 1.20.1; isolate native layers/modern attributes.
 - Follow-up checks: Music constants/delay/replace, biome precedence, fades, event paths and RNG.
 - RustChunk implementation mapping: RustChunk optional 1.20.1 music manager.
@@ -427,7 +427,7 @@
 - Implementation / logic: NativeClientHooks ABI, Rust ItemStack, JSON ingredient and OnceLock.
 - Findings: Installs fixed function pointers once and dispatches callbacks.
 - RustChunk relevance: Starling bridge, not Forge event bus/FML; direct calls, first install wins, no visible panic isolation.
-- Decision: Minimal native extension-hook design reference only.
+- Decision: **undetermined; reference; not Forge; architecture only** — Minimal native extension-hook design reference only.
 - 1.20.1 implications: Do not use for Forge integration; separate Rust API needs versioning/isolation/permissions.
 - Follow-up checks: Install ordering/duplicates, panics/reentrancy, thread affinity, cancellation, ABI/lifetimes.
 - RustChunk implementation mapping: Optional RustChunk native hooks separate from Forge.
@@ -444,7 +444,7 @@
 - Implementation / logic: Documents milestones and separates native Rust extensions from later Java/Forge ambitions.
 - Findings: Planning material, not implementation; native mods and Java Forge mods are distinct targets.
 - RustChunk relevance: Roadmap helps prevent scope confusion, especially around Forge.
-- Decision: reference; project planning only
+- Decision: **undetermined; reference; project planning only** — reference; project planning only
 - 1.20.1 implications: Do not infer Forge/FML compatibility or completion from roadmap wording.
 - Follow-up checks: Compare claims against code, manifests, builds and tests.
 - RustChunk implementation mapping: RustChunk milestone/architecture decision records.
@@ -461,7 +461,7 @@
 - Implementation / logic: Records sync context and commands/notes for coordinating changes.
 - Findings: Operational notes can become stale; not authoritative product behavior or build record.
 - RustChunk relevance: Useful only for audit handoff continuity.
-- Decision: reference; workflow notes only
+- Decision: **undetermined; reference; workflow notes only** — reference; workflow notes only
 - 1.20.1 implications: Confirm current repository/branch before reusing any instruction.
 - Follow-up checks: Check referenced commits and paths against current Git state.
 - RustChunk implementation mapping: RustChunk audit handoff notes.
@@ -478,7 +478,7 @@
 - Implementation / logic: Exports native_data! include_bytes macro and resolves native-data/<mod id> beside executable.
 - Findings: Starling native Rust-mod packaging, not Forge mods directory, Java classloading or resource loader.
 - RustChunk relevance: Potential optional Rust-native extension packaging pattern.
-- Decision: reference; native Rust extension data only; not Forge
+- Decision: **undetermined; reference; native Rust extension data only; not Forge** — reference; native Rust extension data only; not Forge
 - 1.20.1 implications: Do not present as Forge support; define separate versioned RustChunk native extension format if needed.
 - Follow-up checks: Verify path traversal, mod ID validation, APK packaging and Android executable/data paths.
 - RustChunk implementation mapping: Optional RustChunk native-data packaging isolated from Forge/Java mods.
@@ -529,7 +529,7 @@
 - Implementation / logic: Draws explanation and Download/Quit actions with shared layout/hit-testing.
 - Findings: Horizon-specific launcher UX, not a Minecraft screen; URL/branding are product-specific.
 - RustChunk relevance: Useful startup failure UX pattern.
-- Decision: reference; launcher startup UX
+- Decision: **undetermined; reference; launcher startup UX** — reference; launcher startup UX
 - 1.20.1 implications: Adapt only if RustChunk has a launcher; do not reuse Horizon branding/URL.
 - Follow-up checks: Test small screens, localization, touch targets and missing resources.
 - RustChunk implementation mapping: RustChunk pre-client startup guard screen.
@@ -546,7 +546,7 @@
 - Implementation / logic: Classifies old/customized worlds and exposes compatibility decisions.
 - Findings: Upgrade semantics target 26.3 layout; not equivalent to 1.20.1 compatibility.
 - RustChunk relevance: Useful for safe world-open warnings.
-- Decision: reference; world compatibility
+- Decision: **undetermined; reference; world compatibility** — reference; world compatibility
 - 1.20.1 implications: Rebuild checks around 1.20.1 DataVersion and supported DataFixers.
 - Follow-up checks: Test 1.20.1 worlds, old versions, custom dimensions and backup/rollback.
 - RustChunk implementation mapping: RustChunk world compatibility summary and guarded migration.
@@ -580,7 +580,7 @@
 - Implementation / logic: Builds labels/graphs and renders recent measurements.
 - Findings: Overlay displays data; it does not improve FPS or prove bottleneck cause.
 - RustChunk relevance: Useful for diagnosing frame-time spikes.
-- Decision: reference; optional diagnostics
+- Decision: **undetermined; reference; optional diagnostics** — reference; optional diagnostics
 - 1.20.1 implications: Port only after defining stable metrics and low overhead.
 - Follow-up checks: Verify units, sample window, dropped samples, GPU timing and overlay overhead.
 - RustChunk implementation mapping: RustChunk optional performance HUD.
@@ -597,7 +597,7 @@
 - Implementation / logic: Collects performance samples and exposes rolling statistics/spike-oriented values.
 - Findings: Instrumentation identifies stalls only with trustworthy clocks/providers; no measured gain is claimed.
 - RustChunk relevance: High relevance to the user's progressive FPS decline.
-- Decision: reference; performance diagnostics
+- Decision: **undetermined; reference; performance diagnostics** — reference; performance diagnostics
 - 1.20.1 implications: Adapt to Android graphics capabilities; never block render thread on GPU queries.
 - Follow-up checks: Check ring bounds, monotonic clock, percentiles, GPU query stalls and queue correlation.
 - RustChunk implementation mapping: RustChunk low-overhead telemetry/frame-time recorder.
@@ -682,7 +682,7 @@
 - Implementation / logic: Schedules pre-generation work and reports completion/progress.
 - Findings: Can saturate CPU, memory and disk I/O and worsen interactive frame pacing.
 - RustChunk relevance: Optional offline utility only.
-- Decision: reference; optional offline utility
+- Decision: **undetermined; reference; optional offline utility** — reference; optional offline utility
 - 1.20.1 implications: Throttle/pause during active play; enforce Android budgets.
 - Follow-up checks: Verify cancellation, worker cap, disk backpressure and autosave interaction.
 - RustChunk implementation mapping: RustChunk offline pregen service with mobile budget.
@@ -716,7 +716,7 @@
 - Implementation / logic: Displays preparation progress and routes user actions.
 - Findings: Must not claim completion before file verification.
 - RustChunk relevance: Launcher UX reference.
-- Decision: reference; install UI
+- Decision: **undetermined; reference; install UI** — reference; install UI
 - 1.20.1 implications: Adapt with truthful progress and cancellable jobs.
 - Follow-up checks: Test cancellation, retry, errors, missing network and slow storage.
 - RustChunk implementation mapping: RustChunk install progress screen/state adapter.
@@ -767,7 +767,7 @@
 - Implementation / logic: Detects pressure and applies staged reductions including far-terrain disable and render-distance decrease.
 - Findings: Relevant to mobile stability; thresholds/cadence/recovery require device validation.
 - RustChunk relevance: High-value mobile performance reference.
-- Decision: reference; mobile memory governor
+- Decision: **undetermined; reference; mobile memory governor** — reference; mobile memory governor
 - 1.20.1 implications: Adapt conservatively, keep hysteresis and preserve gameplay chunk priority.
 - Follow-up checks: Verify signal, cadence, thresholds, recovery and no oscillation on 6 GB device.
 - RustChunk implementation mapping: RustChunk mobile memory governor for LOD/render budget.
@@ -818,7 +818,7 @@
 - Implementation / logic: Builds draw-state calls for tabs/buttons/search/overlay/ghost slots.
 - Findings: Geometry/assets and modern overlay data are version-specific.
 - RustChunk relevance: Optional client UI reference.
-- Decision: reference; optional client UI
+- Decision: **undetermined; reference; optional client UI** — reference; optional client UI
 - 1.20.1 implications: Rebuild target 1.20.1 geometry/assets and touch-friendly controls.
 - Follow-up checks: Verify GUI scale, narrow screens, search cursor, ghost slots and item cycling.
 - RustChunk implementation mapping: RustChunk optional recipe-book UI over 1.20.1 state.
@@ -852,7 +852,7 @@
 - Implementation / logic: Reads legacy JSON, validates actual gateway blocks, merges exits and removes legacy file only after durable write.
 - Findings: Horizon-specific migration; modern NBT keys/layout require target mapping.
 - RustChunk relevance: Optional migration transaction pattern.
-- Decision: reference; optional legacy migration
+- Decision: **undetermined; reference; optional legacy migration** — reference; optional legacy migration
 - 1.20.1 implications: Reuse only validation/durability principle; implement dedicated 1.20.1 migration if old RustChunk saves exist.
 - Follow-up checks: Verify malformed JSON retention, write failure, stale block entities and idempotency.
 - RustChunk implementation mapping: RustChunk optional versioned world migration helper.
@@ -886,7 +886,7 @@
 - Implementation / logic: Exercises command parsing and representative command outcomes, including invalid and edge-case arguments.
 - Findings: Test fixtures are tied to the newer command API represented by the paired source; expected strings and syntax need 1.20.1 translation.
 - RustChunk relevance: Useful as a test-case inventory, not a runtime module.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Do not port as executable code; translate only applicable cases into RustChunk 1.20.1 command tests.
 - Follow-up checks: Reconcile every command and expected parse/error result with the 1.20.1 command tree.
 - RustChunk implementation mapping: RustChunk scoreboard command integration tests.
@@ -903,7 +903,7 @@
 - Implementation / logic: Provides pure coordinate/rectangle helpers used by screen rendering and hit-testing.
 - Findings: Layout values are not gameplay behavior; exact dimensions depend on target-version widgets, font metrics and mobile viewport constraints.
 - RustChunk relevance: Useful optional UI reference, especially for deterministic layout and hit-test consistency.
-- Decision: reference; optional client UI
+- Decision: **undetermined; reference; optional client UI** — reference; optional client UI
 - 1.20.1 implications: Recreate only the geometry needed by RustChunk screens; validate against 1.20.1 widget layouts and Android aspect ratios.
 - Follow-up checks: Check rounding, odd/even viewport sizes, GUI scale, clipping and pointer/touch hitboxes.
 - RustChunk implementation mapping: RustChunk shared UI layout helpers, isolated from simulation and networking.
@@ -920,7 +920,7 @@
 - Implementation / logic: Collects narratable widgets, composes screen and control descriptions, orders announcements and exposes current/urgent narration state.
 - Findings: The source includes newer screen IDs/widgets and localization keys; narration behavior is client-only and not required for Forge protocol compatibility.
 - RustChunk relevance: Useful accessibility design reference; can be implemented independently of gameplay and renderer.
-- Decision: reference; optional accessibility UI
+- Decision: **undetermined; reference; optional accessibility UI** — reference; optional accessibility UI
 - 1.20.1 implications: Port target-era narration semantics selectively and keep narration disabled/low-cost when unused; do not import modern widget IDs blindly.
 - Follow-up checks: Verify 1.20.1 narration keys, focus order, list row announcements, screen transitions and text component flattening.
 - RustChunk implementation mapping: RustChunk optional accessibility/narrator module and shared widget narration metadata.
@@ -988,7 +988,7 @@
 - Implementation / logic: Defines material-specific spear parameters, speed/time conditions, reach collision and eased hand/item animation matrices.
 - Findings: Wooden/stone/copper/iron/golden/diamond/netherite spear items and kinetic weapon behavior are not in the 1.20.1 baseline.
 - RustChunk relevance: No direct gameplay adoption; generic animation/easing math is only a separate rendering reference.
-- Decision: exclude; post-1.20.1
+- Decision: **unnecessary; post-1.20.1** — exclude; post-1.20.1
 - 1.20.1 implications: Exclude spear items, attack types, sounds, packet and animation state from 1.20.1.
 - Follow-up checks: Confirm target item/entity/packet registries contain no spear/kinetic-weapon identifiers.
 - RustChunk implementation mapping: No 1.20.1 gameplay mapping; optional future-version research only.
@@ -1039,7 +1039,7 @@
 - Implementation / logic: Selects newer APK by process ABI, merges native builds across repositories, validates HTTPS build server host and parses asset names/digests.
 - Findings: Entire module is project/release infrastructure, not Minecraft 1.20.1 client or server behavior; release repositories and asset naming are Starling-specific.
 - RustChunk relevance: Not a game engine port target; ideas around strict URL/ABI validation may inform launcher code separately.
-- Decision: exclude; Starling-specific launcher/release integration
+- Decision: **unnecessary; Starling-specific launcher/release integration** — exclude; Starling-specific launcher/release integration
 - 1.20.1 implications: Exclude from Minecraft simulation/protocol port; reimplement only if RustChunk needs its own update/native-mod service.
 - Follow-up checks: Verify RustChunk distribution/update architecture independently; never inherit Starling repo URLs or release identity.
 - RustChunk implementation mapping: No Minecraft gameplay mapping; optional RustChunk launcher update module if explicitly required.
@@ -1073,7 +1073,7 @@
 - Implementation / logic: Formats performance samples into colored lines and JSON `horizon-ctl perf` output, then draws a compact top-left panel.
 - Findings: Starling/Horizon diagnostics, not vanilla Minecraft behavior; some telemetry unavailable on Android GPU backends and values can be absent.
 - RustChunk relevance: Directly relevant to RustChunk's mobile FPS and memory diagnosis, but optional instrumentation.
-- Decision: reference; optional mobile diagnostics
+- Decision: **undetermined; reference; optional mobile diagnostics** — reference; optional mobile diagnostics
 - 1.20.1 implications: Port as opt-in diagnostics with low-frequency sampling and no per-frame allocations; clearly label unavailable metrics and avoid expensive telemetry polling.
 - Follow-up checks: Verify measurement definitions, 1% low window, CPU/GPU timing source, thermal API support, memory units and overlay overhead.
 - RustChunk implementation mapping: RustChunk optional performance HUD and diagnostic JSON endpoint, gated behind settings.
@@ -1090,7 +1090,7 @@
 - Implementation / logic: Reads address=mode lines, looks up a normalized address and rewrites the file when a server's stick mode changes.
 - Findings: Custom Starling input preference; not a vanilla 1.20.1 protocol or gameplay feature.
 - RustChunk relevance: Useful small mobile UX pattern for server-specific control preferences.
-- Decision: reference; Starling-specific mobile input preference
+- Decision: **undetermined; reference; Starling-specific mobile input preference** — reference; Starling-specific mobile input preference
 - 1.20.1 implications: Adapt only if RustChunk offers per-server stick modes; use atomic file writes and robust parsing rather than direct overwrite.
 - Follow-up checks: Verify address normalization, duplicate entries, malformed lines, write failure handling and server identity/port semantics.
 - RustChunk implementation mapping: RustChunk optional per-server controller preference store.
@@ -1107,7 +1107,7 @@
 - Implementation / logic: Loads named timers from NBT, creates/restarts/removes them, reports elapsed seconds and saves accumulated elapsed time.
 - Findings: A custom stopwatch feature rather than core vanilla 1.20.1 gameplay; monotonic clock resets across process restart and stored elapsed time is resumed from current process time.
 - RustChunk relevance: Optional utility only; not required for Forge/mod compatibility.
-- Decision: reference; optional command utility
+- Decision: **undetermined; reference; optional command utility** — reference; optional command utility
 - 1.20.1 implications: Exclude from core port unless RustChunk intentionally supports a stopwatch command; if adopted, preserve monotonic-time semantics and atomic save behavior.
 - Follow-up checks: Check clock semantics, negative/corrupt NBT entries, dirty-save lifecycle and command integration.
 - RustChunk implementation mapping: RustChunk optional stopwatch command/state service.
@@ -1209,7 +1209,7 @@
 - Implementation / logic: Implements profile list/add/remove, offline profile creation, Microsoft device code and Ely login forms, password masking, status/progress and game-file actions.
 - Findings: This is Starling's own authentication/profile system, not vanilla 1.20.1 game behavior; account endpoints and offline profile model must not be treated as Mojang/Microsoft protocol compatibility.
 - RustChunk relevance: No direct game engine adoption; account UI can be considered only if RustChunk intentionally needs the same account providers.
-- Decision: exclude; Starling-specific account/auth UI
+- Decision: **unnecessary; Starling-specific account/auth UI** — exclude; Starling-specific account/auth UI
 - 1.20.1 implications: Exclude from Minecraft client simulation and do not adopt credential/auth flows without a separate security design and provider review.
 - Follow-up checks: Verify RustChunk's chosen account/session architecture independently; review secret handling, token storage, clipboard and password/OTP lifecycle if any auth UI is built.
 - RustChunk implementation mapping: No 1.20.1 gameplay mapping; optional independent launcher account module only.
@@ -1311,7 +1311,7 @@
 - Implementation / logic: Builds onboarding panels and action routing.
 - Findings: Branding and service actions are not vanilla 1.20.1.
 - RustChunk relevance: Optional UX reference only.
-- Decision: exclude; Starling-specific UI
+- Decision: **unnecessary; Starling-specific UI** — exclude; Starling-specific UI
 - 1.20.1 implications: Exclude from core; recreate only RustChunk-specific setup help.
 - Follow-up checks: Review external links, permissions and preference persistence.
 - RustChunk implementation mapping: Optional RustChunk first-run guide.
@@ -1328,7 +1328,7 @@
 - Implementation / logic: Exercises screen state/actions and save workflows; no production logic.
 - Findings: Fixtures follow newer APIs; translate only 1.20.1 cases.
 - RustChunk relevance: Regression-test inventory.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Do not port as runtime; translate target-relevant cases.
 - Follow-up checks: Map tests to 1.20.1 behavior; retain save safety cases.
 - RustChunk implementation mapping: RustChunk title/world UI tests.
@@ -1379,7 +1379,7 @@
 - Implementation / logic: Implements cached glyph/corner masks, atlas allocation, text and boot log rendering.
 - Findings: Custom launcher design system, not vanilla screens.
 - RustChunk relevance: Optional UI reference only.
-- Decision: exclude; Horizon/Starling-specific UI
+- Decision: **unnecessary; Horizon/Starling-specific UI** — exclude; Horizon/Starling-specific UI
 - 1.20.1 implications: Do not transplant into vanilla screen renderer.
 - Follow-up checks: Atlas invalidation, overflow, thread-local cache, font license and Android memory.
 - RustChunk implementation mapping: Optional RustChunk launcher UI layer.
@@ -1413,7 +1413,7 @@
 - Implementation / logic: Builds 8x8 speculative batches on idle threads and refines distant detail without saving speculative chunks.
 - Findings: Horizon-only rendering pipeline; must not mutate gameplay state; cache/thread settings may be heavy on Android.
 - RustChunk relevance: High-value far-chunk concept, not proven performance.
-- Decision: reference; far-render optimization
+- Decision: **undetermined; reference; far-render optimization** — reference; far-render optimization
 - 1.20.1 implications: Isolate far rendering from authoritative chunks; profile adaptive threads/cache.
 - Follow-up checks: Cancellation, halos, deterministic features, cache eviction and memory caps.
 - RustChunk implementation mapping: RustChunk isolated far-detail worker.
@@ -1430,7 +1430,7 @@
 - Implementation / logic: Caches origins and paints merged cone spans into far columns.
 - Findings: Visual approximation only; never changes generated chunks.
 - RustChunk relevance: Optional End far-render reference.
-- Decision: reference; optional LOD
+- Decision: **undetermined; reference; optional LOD** — reference; optional LOD
 - 1.20.1 implications: Keep visual-only; verify 1.20.1 feature RNG.
 - Follow-up checks: Origins, radius/shrink draws, negative coordinates and overlap.
 - RustChunk implementation mapping: RustChunk End-island LOD overlay.
@@ -1447,7 +1447,7 @@
 - Implementation / logic: Traverses recognized features and paints canopy/trunk/chorus spans.
 - Findings: Mean probabilities do not reproduce exact RNG or arbitrary modded features.
 - RustChunk relevance: Visual approximation only.
-- Decision: reference; optional LOD
+- Decision: **undetermined; reference; optional LOD** — reference; optional LOD
 - 1.20.1 implications: Keep outside gameplay; restrict to target codecs.
 - Follow-up checks: Placement modifiers, provider schema, hash and density.
 - RustChunk implementation mapping: RustChunk optional vegetation LOD.
@@ -1515,7 +1515,7 @@
 - Implementation / logic: Exercises invalid/duplicate IDs, malformed NBT, oversize data and component filtering.
 - Findings: Horizon extension, not vanilla 1.20.1.
 - RustChunk relevance: Security test inventory.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Do not port runtime; translate invariants if custom components added.
 - Follow-up checks: Forge capability/data component design, quotas and recursion limits.
 - RustChunk implementation mapping: RustChunk custom component security tests.
@@ -1532,7 +1532,7 @@
 - Implementation / logic: Sends first custom ID and checks unsupported error.
 - Findings: Horizon wire extension only.
 - RustChunk relevance: Negative protocol test concept.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Do not port unchanged; define Forge protocol policy.
 - Follow-up checks: 1.20.1 unknown component handling.
 - RustChunk implementation mapping: RustChunk protocol negative test.
@@ -1549,7 +1549,7 @@
 - Implementation / logic: Round-trips custom values and tests permission gating/hash identity.
 - Findings: Not stock 1.20.1 protocol without negotiated extension.
 - RustChunk relevance: Optional protocol test matrix.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Keep out of baseline absent explicit extension handshake.
 - Follow-up checks: Wire compatibility, nested bounds and Forge interoperability.
 - RustChunk implementation mapping: RustChunk optional custom protocol tests.
@@ -1566,7 +1566,7 @@
 - Implementation / logic: Builds pack biome and checks registry order/data and color reload.
 - Findings: Horizon packet shape differs from 1.20.1.
 - RustChunk relevance: Useful sync regression design.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Translate to Forge 1.20.1 registry sync tests.
 - Follow-up checks: Biome IDs, datapack reload and color behavior.
 - RustChunk implementation mapping: RustChunk Forge biome sync tests.
@@ -1583,7 +1583,7 @@
 - Implementation / logic: Runs synthetic forced chunk and checks loaded/light/feature/terrain rings.
 - Findings: Horizon statuses are custom; assertions need target mapping.
 - RustChunk relevance: Useful ticket regression cases.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Translate to 1.20.1 ChunkMap/DistanceManager.
 - Follow-up checks: Ticket level, ring distance, status and light.
 - RustChunk implementation mapping: RustChunk forced ticket tests.
@@ -1600,7 +1600,7 @@
 - Implementation / logic: Simulates sessions and compares generated/saved/restored chunks.
 - Findings: Horizon save architecture; target semantics need mapping.
 - RustChunk relevance: High-value chunk correctness test inventory.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Translate invariants to RustChunk 1.20.1 persistence.
 - Follow-up checks: Proto decoration, neighbor writes, IDs, ticks, loot and save/load order.
 - RustChunk implementation mapping: RustChunk worldgen persistence tests.
@@ -1617,7 +1617,7 @@
 - Implementation / logic: Drives bots against server and validates login, chunk packets, interactions, recipe sync, movement order and respawn.
 - Findings: Packet IDs/version belong to newer pinned build; not Aternos/1.20.1 proof.
 - RustChunk relevance: Very useful end-to-end test inventory.
-- Decision: reference; tests only; protocol integration
+- Decision: **undetermined; reference; tests only; protocol integration** — reference; tests only; protocol integration
 - 1.20.1 implications: Rebuild tests against Forge 1.20.1 protocol; do not copy packet bytes.
 - Follow-up checks: Handshake/config, offline login, chunk/light, recipes, movement and player-loaded semantics.
 - RustChunk implementation mapping: RustChunk LAN/protocol integration bots.
@@ -1634,7 +1634,7 @@
 - Implementation / logic: Spawns binary and checks output and filesystem effects.
 - Findings: Starling launcher-specific contract.
 - RustChunk relevance: Useful launcher test idea.
-- Decision: reference; tests only
+- Decision: **undetermined; reference; tests only** — reference; tests only
 - 1.20.1 implications: Translate to RustChunk CLI contract.
 - Follow-up checks: Paths with spaces, exit codes, crash report and side effects.
 - RustChunk implementation mapping: RustChunk CLI tests.
@@ -1651,7 +1651,7 @@
 - Implementation / logic: Implements sample Hooks and checks mutable writeback.
 - Findings: Horizon API, not Forge lifecycle.
 - RustChunk relevance: Behavior checklist only.
-- Decision: reference; tests only; mod API
+- Decision: **undetermined; reference; tests only; mod API** — reference; tests only; mod API
 - 1.20.1 implications: Map to Forge event bus/input hooks.
 - Follow-up checks: Event order, cancellation and supported recipe categories.
 - RustChunk implementation mapping: RustChunk Forge adapter tests.
@@ -1668,7 +1668,7 @@
 - Implementation / logic: Moves render center and compares mesh output after light changes.
 - Findings: Horizon renderer fixtures; invariants broadly apply.
 - RustChunk relevance: Directly relevant to far-chunk void issue.
-- Decision: reference; tests only; core renderer regression
+- Decision: **undetermined; reference; tests only; core renderer regression** — reference; tests only; core renderer regression
 - 1.20.1 implications: Translate to RustChunk loaded-column mesh request and light invalidation tests.
 - Follow-up checks: Range transitions, queue retention, neighbor relight and stale mesh.
 - RustChunk implementation mapping: RustChunk chunk visibility/meshing tests.
@@ -1685,7 +1685,7 @@
 - Implementation / logic: Builds tall spire and checks sky/block light and mesh consistency.
 - Findings: Not default 1.20.1 height but relevant to modded dimensions.
 - RustChunk relevance: Useful variable-height robustness tests.
-- Decision: reference; tests only; height rendering
+- Decision: **undetermined; reference; tests only; height rendering** — reference; tests only; height rendering
 - 1.20.1 implications: Translate for Forge dimension height ranges.
 - Follow-up checks: MinY/height, section count, light arrays and allocation bounds.
 - RustChunk implementation mapping: RustChunk variable-height tests.
@@ -1702,7 +1702,7 @@
 - Implementation / logic: Expands palette width and verifies section pack/unpack.
 - Findings: Registry scale varies; must match 1.20.1/Forge.
 - RustChunk relevance: Relevant to large modpacks.
-- Decision: reference; tests only; registry scale
+- Decision: **undetermined; reference; tests only; registry scale** — reference; tests only; registry scale
 - 1.20.1 implications: Translate to RustChunk palette thresholds/serialization.
 - Follow-up checks: Global/local palette transition and save/load.
 - RustChunk implementation mapping: RustChunk palette tests.
