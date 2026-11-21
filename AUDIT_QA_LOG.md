@@ -1576,3 +1576,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 new Ledger records have exactly 15 required fields. Active Ledger: **175 records (2201–2375)**; global Index: **2,375 sequential unique paths**, matching path/Decision rows.
 - Examples/tests inspected only, none executed. No application source changes; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 - The one-time authorization through **2400** remains active. Range 2351–2400 is in progress (25/50); continue 2376–2400 without asking, then **STOP at 2400**.
+
+
+## Audit checkpoint 2376–2400 — 2026-11-21
+
+- Completed entries **2376–2400 (25/25)** after the complete Index boundary. The pinned recursive tree is complete (`truncated:false`); all 25 paths, blob SHAs and byte sizes match.
+- Coverage: state/status providers and effects, stepped interpolation, stored consume/effect attributes/notifications, structure density/pieces/start NBT, suffocation, support helpers, swimming, synced byte/float state, teleport consume, terrain/tick/tree features, use flags/remainders and value providers.
+- Key fixture limitations: comparator tie-break returns Less for equal stored keys; effect-notification networking is stubbed; helper numeric casts/position indexing are unchecked; swimming uses a fixed position/bitmask; tick fixture asserts exactly 251 records; terrain/tree use private registries and fixed synthetic dimensions; provider/use fixtures trust small catalogues and indexes.
+- Long files read through EOF in contiguous chunks <=400: `state_provider_fixture.rs` 1–400/401–530; `stored_consume_fixture.rs` 1–400/401–407; `stored_effect_attributes_fixture.rs` 1–400/401–483; `tree_feature_fixture.rs` 1–400/401–672.
+- The nonexistent candidate `use_flag_fixture.rs` was excluded; actual source path `use_flag_reaction_fixture.rs` is recorded at 2398.
+- All 25 Ledger entries have exactly 15 fields. Ledger now contains **200 records (2201–2400)**; Index has **2,400 sequential unique paths**, no duplicates and matching path/Decision rows.
+- Examples/tests inspected only, none executed. No RustChunk source change; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer, server or Aternos validation.
+- Exceptional authorization exhausted. Section **2351–2400** and stage **2201–2400** are closed (50/50 and 200/200 respectively). **STOP at 2400**; 2401+ requires fresh explicit permission.

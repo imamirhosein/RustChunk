@@ -137,14 +137,14 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-21)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2375**.
-- Active 200-file stage: **2201–2400**, progress **175/200**.
-- Sections **2201–2250**, **2251–2300** and **2301–2350** are closed (50/50 each); section **2351–2400** is in progress (25/50).
-- The user's one-time expanded authorization covers **2301–2400**. Checkpoints through **2351–2375** are complete; **2376–2400** remains authorized. Continue without pausing; **STOP at 2400** and request fresh permission before 2401.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Active Ledger `AUDIT_LEDGER_2201_2400.md`: **175 records (2201–2375)** with exactly 15 fields each. Index: **2,375 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete. Future selection excludes all Index paths plus any current in-flight checkpoint paths; select the next lexical paths after the pending boundary to avoid duplicates.
-- Entries 1–2000 have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification.
-- Tests/examples inspected only; none run. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source change.
+- Completed source entries: **1–2400**.
+- Active 200-file stage **2201–2400 is CLOSED (200/200)**.
+- Reporting sections **2201–2250**, **2251–2300**, **2301–2350** and **2351–2400** are all CLOSED (50/50 each); both exceptional authorizations have been consumed.
+- **STOP before entry 2401.** No later source may be inspected or registered until the user gives fresh explicit permission.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200). Closed Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)**, each with exactly 15 required fields. Index: **2,400 sequential unique paths**, with Ledger/Index path and Decision alignment.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`). Historical Index IDs remain stable; 70 early raw-tree-order divergences are documented, with none after entry 2033 through 2400. Future selection excludes all indexed and in-flight paths before choosing the next lexical unindexed paths.
+- Existing final backup covers entries 1–2000: `backup/audit-2000-final-2026-11-21`. No backup at 2400; next backup only after entry 3000 and global verification.
+- Tests/examples were inspected only; none executed. No build, benchmark, APK, Android device, renderer, Minecraft, Forge, server or Aternos validation. No application source changes.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -665,3 +665,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Important limitations: mock player/server/network adapters; fixed arrays and trusted indexes; unavailable heightmap paths in replace/scattered-ore mocks; PlayerFood unwraps stored-path callback errors; PlayerTravel hardcodes a fluid query; ServerPlayerDamage leaves armor modifier unchanged; SimpleBlock uses a hard-coded world-height context/private registry bundle.
 - The one-time authorization still covers **2376–2400**. Do not ask for permission before this final checkpoint; **STOP at 2400**.
 - No tests/examples executed, no application source changed and no runtime/build/device/Minecraft/Forge/Aternos validation.
+
+
+## 34. Closed stage and exhausted authorization — entries 2201–2400 — 2026-11-21
+
+- Active 200-file stage **2201–2400 is COMPLETE (200/200)**. All four reporting sections are closed: 2201–2250, 2251–2300, 2301–2350 and 2351–2400; each contains two completed 25-file checkpoints.
+- The exceptional authorization **2301–2400** is fully consumed. **STOP at entry 2400**; no permission exists for 2401 or later until the user explicitly authorizes another section.
+- Active-stage Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)** with exactly 15 fields each. Index: **2,400 sequential unique paths** and aligned path/Decision rows.
+- Entry 2398 is `use_flag_reaction_fixture.rs`; candidate `use_flag_fixture.rs` is not present in the pinned tree and was excluded. No nonexistent path was indexed.
+- Final 25 files were read through EOF. Long sources were inspected in consecutive, gap-free ranges <=400 lines. Source paths/SHAs/sizes match the complete pinned tree.
+- Tests/examples inspected only. No application source changes or runtime/build/Android/Minecraft/Forge/Aternos validation. Existing final backup remains 1–2000; no new backup at 2400.

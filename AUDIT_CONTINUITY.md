@@ -6,15 +6,15 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed source entries: **1–2375**.
-- Active 200-file stage: **2201–2400**, progress **175/200**.
-- Reporting sections 2201–2250, 2251–2300 and 2301–2350 are CLOSED (50/50); section 2351–2400 is IN PROGRESS (**25/50**).
-- The user's one-time expanded authorization covers **2301–2400**. Checkpoints through **2351–2375** are complete; **2376–2400** remains authorized. Do not ask again; **STOP at 2400** and request permission before 2401.
-- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200); active Ledger `AUDIT_LEDGER_2201_2400.md`: **175 records (2201–2375)**, exactly 15 fields each. Index contains **2,375 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). Future selection must exclude both Index paths and any already completed current-but-not-yet-committed paths before selecting the next lexical path. This avoids repeating an in-flight checkpoint.
-- Historical Index IDs remain stable; 70 early raw-tree-order divergences are documented; no new raw-tree divergence from 2034–2375. Do not renumber.
-- Existing backup covers entries 1–2000 only. No backup at 2375; next backup after entry 3000 and global verification.
-- No app source changed. Tests/examples inspected only; none executed. No build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed source entries: **1–2400**.
+- Active 200-file stage **2201–2400 is CLOSED (200/200)**.
+- Reporting sections **2201–2250**, **2251–2300**, **2301–2350** and **2351–2400** are all CLOSED (50/50 each).
+- The one-time expanded authorization **2301–2400 is exhausted**. **STOP before entry 2401**; obtain fresh explicit permission before inspecting or registering any later file.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records (2001–2200); closed Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)**, exactly 15 fields each. Index: **2,400 sequential unique paths**.
+- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). Historical Index numbering remains stable; 70 early raw-tree-order divergences are documented, with no new divergence after entry 2033 through 2400. Do not renumber.
+- Future selection must exclude all Index paths and current in-flight paths before choosing the next lexical unindexed source paths; this avoids repeating pending checkpoints.
+- Existing final backup covers entries 1–2000 only. No backup at 2400; next backup after entry 3000 and global verification.
+- No application source changed. Tests/examples inspected only, not executed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -617,3 +617,11 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Entries 2351–2375 (25/25) inspected through EOF. Four long files (2362, 2363, 2371 and 2373) were read in contiguous chunks <=400 lines. SHA/size match pinned tree.
 - Active Ledger: 175 records (2201–2375), exactly 15 fields; Index: 2,375 sequential unique paths with Decisions aligned.
 - 2376–2400 remains covered by the one-time authorization. It was re-derived with the in-flight 2351–2375 paths excluded; no overlap. STOP at 2400.
+
+
+## Latest verified checkpoint — 2376–2400 — 2026-11-21
+
+- Entries 2376–2400 (25/25) were inspected individually through EOF; 2376 (530), 2380 (407), 2381 (483) and 2397 (672) were read in contiguous chunks no larger than 400 lines. Source SHAs/sizes match the pinned tree.
+- Ledger contains 200 records (2201–2400), exactly 15 fields each; Index has 2,400 sequential unique paths with path/Decision alignment.
+- `use_flag_fixture.rs` was absent and excluded; actual 2398 path `use_flag_reaction_fixture.rs` was verified and recorded.
+- Both exceptional authorizations are exhausted. **STOP at 2400**; obtain fresh permission before 2401. No new backup at this boundary.

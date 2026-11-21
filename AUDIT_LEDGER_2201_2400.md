@@ -1,15 +1,16 @@
-# RustChunk Starling Audit Ledger — Entries 2201–2400 (175 of 200 recorded)
+# RustChunk Starling Audit Ledger — Entries 2201–2400 (200 of 200 recorded)
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Entry range currently recorded: **2201–2375 (175 unique source files)**.
-- Active 200-file stage: **2201–2400 (175/200 complete)**.
-- Reporting sections **2201–2250**, **2251–2300** and **2301–2350** are CLOSED (50/50 each); reporting section **2351–2400** is IN PROGRESS (25/50).
-- The user has issued a one-time expanded authorization for **2301–2400** (100 files total). Checkpoints **2301–2325**, **2326–2350** and **2351–2375 are COMPLETE**; **2376–2400** remains covered. **STOP at 2400** and request permission before 2401.
-- Index order clarification: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,375 stable Index rows at the time of the original reconciliation: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2375. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,375 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal. Preserve existing entry numbers; future selection is deterministic lexical order after the latest indexed path.
-- Checkpoint cadence: exact 25-file atomic commits, grouped into authorized 50-file sections.
-- Every entry contains exactly the 15 required fields from `AUDIT_PROTOCOL.md`. Files over 400 lines must be inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
-- Embedded tests/examples are inspected only; they are not executed.
+- Entry range recorded: **2201–2400 (200 unique source files)**.
+- Active 200-file stage: **2201–2400 (200/200 complete and closed)**.
+- Reporting sections **2201–2250**, **2251–2300**, **2301–2350** and **2351–2400** are CLOSED (50/50 each).
+- Both one-time expanded authorizations (2001–2100 historically, and 2301–2400 in the current stage) are exhausted. **STOP at entry 2400**; 2401+ requires fresh explicit authorization.
+- Index chronology: 70 historical adjacent divergences relative to raw GitHub recursive-tree response order among 2,400 stable Index rows (69 in entries 1–2000; one at 2033); none from 2034 through 2400. This is historical numbering, not missing/duplicate paths. All 2,400 paths are unique and present. Do not renumber or describe the full Index as literal raw-tree order.
+- Checkpoint cadence: 25-file commits grouped into 50-file sections; one-time expanded authorization does not permanently change the standard cadence.
+- Every Ledger record contains exactly 15 required fields. Files over 400 lines are read to EOF in consecutive, gap-free ranges of at most 400 lines.
+- Tests/examples are inspected only, not executed unless separately authorized. No application source changes, builds, benchmarks, APK/device/renderer/Minecraft/Forge/server/Aternos validation are implied.
+- Backup policy: existing final backup covers entries 1–2000. No backup at 2400; next backup after entry 3000 and global verification.
 
 ### 2201. `crates/horizon-theme/icons/pixel/home.svg`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3236,3 +3237,464 @@
 - Active Ledger contains **175 records (2201–2375)** with exactly 15 fields per entry. Index contains **2,375 sequential unique paths** with matching path/Decision rows.
 - No examples/tests were executed; no application source changed; no build, benchmark, APK, Android device, renderer, Minecraft, Forge, multiplayer server or Aternos validation.
 - The one-time authorization covers **2301–2400**. The 50-file section **2351–2400** is now 25/50 complete; the remaining checkpoint **2376–2400** is authorized. **STOP at 2400** and request fresh permission before 2401.
+
+### 2376. `crates/horizon-world/examples/probe/state_provider_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6164e5d6c981c60822d01164ed3b8a669032804e`
+- Size: 20219 bytes
+- Coverage: 530 lines in contiguous ranges 1–400 and 401–530; exact pinned-tree size 20,219 bytes.
+- Purpose: StateProvider decoding, state selection, survival/support and deterministic world-query fixture
+- Dependencies / cross-references: horizon-world state-provider/status-effect/structure/feature modules; registry/NBT/tag resources, core random and geometry.
+- Implementation / logic: Loads block/fluid/biome registries and tags from fixture NBT; exercises provider decoding, state selection, survival/support and random/query callbacks.
+- Findings: 530 lines read in 1–400 and 401–530. Registry facts are private-snapshot dependent; provider/operation IDs and state arrays are trusted or directly indexed. Missing registry/tag entries can fail via unwrap/expect; mock callbacks do not prove real chunk/world behavior.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate provider schemas, registry completeness, state bounds and empty arrays; compare codecs, survival/support decisions and RNG draw order with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 530 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 20219-byte size match. Example/helper inspected, not executed.
+
+
+### 2377. `crates/horizon-world/examples/probe/status_effect_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c1307dd3ae3e81e06a594aa50cd3f568bef7638a`
+- Size: 4871 bytes
+- Coverage: Complete read through EOF: 149 logical lines; exact pinned-tree size 4871 bytes; no omitted ranges.
+- Purpose: Status-effect definition, instance and hidden-effect behavior fixture
+- Dependencies / cross-references: horizon-world state-provider/status-effect/structure/feature modules; registry/NBT/tag resources, core random and geometry.
+- Implementation / logic: Builds effect definitions/instances and exercises duration, amplifier, visibility, ambient/icon flags, hidden effects and metadata through a synthetic catalog.
+- Findings: Effect/catalog indexes and integer conversions are trusted; fixed samples do not represent the complete 1.20.1 effect registry. Malformed ids or numbers may panic or narrow unexpectedly.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate unknown effect ids, negative/extreme durations and amplifier bounds; compare hidden-chain, visibility and metadata with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 149 logical lines read through EOF; exact pinned-tree SHA and 4871-byte size match. Example/helper inspected, not executed.
+
+
+### 2378. `crates/horizon-world/examples/probe/status_tick_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `23492971c25456fddbf6c4053d220c81553ca7c1`
+- Size: 6752 bytes
+- Coverage: Complete read through EOF: 221 logical lines; exact pinned-tree size 6752 bytes; no omitted ranges.
+- Purpose: Status-effect ticking, expiration, particles and callback-order fixture
+- Dependencies / cross-references: horizon-world state-provider/status-effect/structure/feature modules; registry/NBT/tag resources, core random and geometry.
+- Implementation / logic: Runs effect tick/expire paths with deterministic random and mock entity/world callbacks; captures effect updates, particles, sounds and state transitions.
+- Findings: Effect and callback selectors are trusted/direct-indexed; counts/durations narrow to fixed integer widths. Mock callbacks do not model real entity ticking, packet delivery or concurrent effect mutation.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Test zero/negative/long durations, hidden effects, particle visibility and callback failure/mutation order against Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 221 logical lines read through EOF; exact pinned-tree SHA and 6752-byte size match. Example/helper inspected, not executed.
+
+
+### 2379. `crates/horizon-world/examples/probe/stepped_interpolation_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `568e5ded8362bcb760bf9d6b6efbff78e2160c61`
+- Size: 3574 bytes
+- Coverage: Complete read through EOF: 93 logical lines; exact pinned-tree size 3574 bytes; no omitted ranges.
+- Purpose: Stepped interpolation and numeric progress parser fixture
+- Dependencies / cross-references: horizon-world state-provider/status-effect/structure/feature modules; registry/NBT/tag resources, core random and geometry.
+- Implementation / logic: Parses line-oriented interpolation inputs and compares stepped progress/value calculations across supplied start/end/step parameters.
+- Findings: Whitespace parser relies on fixed token counts/order and numeric parsing; malformed or extra tokens are not handled as a general input format. Boundary and non-finite values are corpus-controlled.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Add malformed/extra-token, zero/negative-step, reversed-bound and non-finite cases; compare rounding/step boundaries with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 93 logical lines read through EOF; exact pinned-tree SHA and 3574-byte size match. Example/helper inspected, not executed.
+
+
+### 2380. `crates/horizon-world/examples/probe/stored_consume_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8f8f6046a5835271594e5fa3ef0c7c52b49948fa`
+- Size: 13728 bytes
+- Coverage: 407 lines in ranges 1–400 and 401–407; exact pinned-tree size 13,728 bytes.
+- Purpose: Stored consume-effect application and stack/effect mutation fixture
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Builds stored-consume definitions and mock item/effect state; replays consume operations and captures item remainder, effects, callbacks and deterministic random decisions.
+- Findings: 407 lines read in 1–400 and 401–407. Key ordering uses a JavaKey tie-breaker that returns Less for equal identity; operation/item/effect indexes and random selectors are trusted and may panic. Not a complete inventory/server consumption path.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Make equal-identity ordering consistent; validate empty/out-of-range arrays; test consume success/failure, remainder, effects and RNG order against Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 407 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 13728-byte size match. Example/helper inspected, not executed.
+
+
+### 2381. `crates/horizon-world/examples/probe/stored_effect_attributes_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `10ae7bf63af5d3f20fccf27ae7759ee424935562`
+- Size: 15256 bytes
+- Coverage: 483 lines in ranges 1–400 and 401–483; exact pinned-tree size 15,256 bytes.
+- Purpose: Stored status-effect attribute modifiers and instance lifecycle fixture
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Combines status-effect definitions with stored attribute maps, supplier instances, modifier add/remove, dirty updates and callback failures/mutation.
+- Findings: 483 lines read in 1–400 and 401–483. Instance hashes/template/operation indexes and vector references are trusted; i64→i32 narrowing can wrap. Test corpus controls identity/hash arrangements rather than arbitrary duplicate-key populations.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate hash-vector length, ids, numeric ranges and duplicate identity; compare modifier add/remove, instance reuse and update ordering with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 483 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 15256-byte size match. Example/helper inspected, not executed.
+
+
+### 2382. `crates/horizon-world/examples/probe/stored_effect_notifications_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9dccc7cf81bc08d9ed8e99f931f550ed7a160770`
+- Size: 13573 bytes
+- Coverage: Complete read through EOF: 357 logical lines; exact pinned-tree size 13573 bytes; no omitted ranges.
+- Purpose: Stored-effect attribute notifications and active-effect callback integration fixture
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Connects ActiveEffects hooks to effect-added/updated/removed notifications, updates stored modifiers and captures callback/event order.
+- Findings: EffectKey comparator always returns Less, including equal keys; invalid if key space expands beyond one logical key. Passengers are empty, server-player is false, connection is a no-op and send_packet discards packets; network notifications are not covered. JSON arrays/hashes/operation ids are trusted.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Use comparator consistent with equality; add server-player/passenger/connection/packet cases, duplicate effect keys and malformed indexes; compare notification ordering with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 357 logical lines read through EOF; exact pinned-tree SHA and 13573-byte size match. Example/helper inspected, not executed.
+
+
+### 2383. `crates/horizon-world/examples/probe/structure_density_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2159bc566f349282d95172d6084390d11bc2df67`
+- Size: 3216 bytes
+- Coverage: Complete read through EOF: 97 logical lines; exact pinned-tree size 3216 bytes; no omitted ranges.
+- Purpose: Structure density and Beardifier contribution fixture
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Builds synthetic structure-piece bounding boxes and evaluates Beardifier/structure density at supplied positions.
+- Findings: Bounding-box coordinates, structure references and numeric inputs are trusted; only a small fixture structure set is loaded. Not the complete 1.20.1 structure registry/generation settings.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Test overlapping/negative/out-of-range boxes and multiple references; compare density contributions and block-position boundaries with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 97 logical lines read through EOF; exact pinned-tree SHA and 3216-byte size match. Example/helper inspected, not executed.
+
+
+### 2384. `crates/horizon-world/examples/probe/structure_pieces.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3b1415da57e43400b04dbc1f51df5e284b49c8ba`
+- Size: 4012 bytes
+- Coverage: Complete read through EOF: 103 logical lines; exact pinned-tree size 4012 bytes; no omitted ranges.
+- Purpose: Structure-piece metadata and bounding-box inspection utility
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Reads supplied structure-piece/NBT snapshot and emits piece types, positions, bounding boxes and metadata.
+- Findings: Output depends on exact input NBT and available piece decoders; unknown/invalid tags follow limited parser assumptions. Not a structure placement engine.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Run against canonical 1.20.1 structure NBT; test unknown piece ids, negative coordinates and bounding-box serialization.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 103 logical lines read through EOF; exact pinned-tree SHA and 4012-byte size match. Example/helper inspected, not executed.
+
+
+### 2385. `crates/horizon-world/examples/probe/structure_start_nbt.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `daea17314d984e99e663cc08f55bb49f7e1c4672`
+- Size: 3172 bytes
+- Coverage: Complete read through EOF: 74 logical lines; exact pinned-tree size 3172 bytes; no omitted ranges.
+- Purpose: Structure-start NBT decode/encode and piece collection utility
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Loads a structure-start compound, inspects start metadata/piece entries and emits a normalized round-trip representation.
+- Findings: Expects fixture NBT keys and supported piece encodings; missing/wrong-type tags rely on parser errors and corpus assumptions. Does not validate world-level references or scheduling.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Compare real 1.20.1 StructureStart NBT, children/pieces, bounding boxes, references and unknown-tag handling with Java.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 74 logical lines read through EOF; exact pinned-tree SHA and 3172-byte size match. Example/helper inspected, not executed.
+
+
+### 2386. `crates/horizon-world/examples/probe/suffocation_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3e1683394b2b2413b91253ec5a7ea3fb67b93258`
+- Size: 5332 bytes
+- Coverage: Complete read through EOF: 144 logical lines; exact pinned-tree size 5332 bytes; no omitted ranges.
+- Purpose: Block suffocation predicates and registry-backed collision-shape fixture
+- Dependencies / cross-references: horizon-world stored-consume/effect-attributes/effect-notifications, structure density/pieces/start and suffocation/collision registries; core JavaKey and NBT.
+- Implementation / logic: Loads block registry/collision caches and tests suffocation behavior with state/shape queries and mock world context.
+- Findings: State ids, position selectors and registry/NBT inputs are trusted or directly indexed. Uses a private registry/collision snapshot; does not model live chunk loading or dynamic block-entity shapes comprehensively.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate unknown states and malformed caches; compare fullBlock/faces, camera/entity context and dynamic-shape cases with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 144 logical lines read through EOF; exact pinned-tree SHA and 5332-byte size match. Example/helper inspected, not executed.
+
+
+### 2387. `crates/horizon-world/examples/probe/support/common.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `17c453363f92a0efad2d5afea473d3634d19b044`
+- Size: 1400 bytes
+- Coverage: Complete read through EOF: 49 logical lines; exact pinned-tree size 1400 bytes; no omitted ranges.
+- Purpose: Shared JSON/bit/position conversion helpers for world fixtures
+- Dependencies / cross-references: Shared probe/support helpers used by decoration, placement, shape, collision and worldgen fixtures; private block facts/tags/NBT.
+- Implementation / logic: Provides number/bit parsing, coordinate conversion and common error/serialization helpers reused by support fixtures.
+- Findings: i64→i32 casts can narrow/wrap; position conversion indexes the first three array elements without length check; unsupported JSON forms panic. Numeric normalization through f64 can lose integer precision above 2^53.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Use checked coordinate conversions and schema validation; preserve integer-vs-float JSON types; reject malformed positions without panic.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 49 logical lines read through EOF; exact pinned-tree SHA and 1400-byte size match. Example/helper inspected, not executed.
+
+
+### 2388. `crates/horizon-world/examples/probe/support/decoration_storage.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `43afdc1fca4d8449c70041824abdf1ca0885e68b`
+- Size: 3274 bytes
+- Coverage: Complete read through EOF: 101 logical lines; exact pinned-tree size 3274 bytes; no omitted ranges.
+- Purpose: Decoration registry, block tags and block-state fixture loader
+- Dependencies / cross-references: Shared probe/support helpers used by decoration, placement, shape, collision and worldgen fixtures; private block facts/tags/NBT.
+- Implementation / logic: Loads facts-server registry/NBT and tags, constructs block properties and supplies shared decoration/feature fixture data.
+- Findings: Depends on private facts-server.json/tags snapshots; required tags/state records unwrap/assert and state ids are trusted. Corpus-specific, not a reusable versioned resource loader.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Pin/hash the 1.20.1 registry bundle; validate missing/unknown tags/states and inconsistent/empty registries.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 101 logical lines read through EOF; exact pinned-tree SHA and 3274-byte size match. Example/helper inspected, not executed.
+
+
+### 2389. `crates/horizon-world/examples/probe/support/placement_queries.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `eacb36cd6c1843ea9e7f7c83c58fda6d7d03f273`
+- Size: 5436 bytes
+- Coverage: Complete read through EOF: 149 logical lines; exact pinned-tree size 5436 bytes; no omitted ranges.
+- Purpose: Synthetic placement-context and world-query implementation for feature fixtures
+- Dependencies / cross-references: Shared probe/support helpers used by decoration, placement, shape, collision and worldgen fixtures; private block facts/tags/NBT.
+- Implementation / logic: Implements scripted placement queries, trace capture, injected failures and test mutations for placement/worldgen fixtures.
+- Findings: Coordinates use narrowing conversions; query modes/array selectors are corpus-controlled. Some coordinate updates use wrapping arithmetic and dimensions/defaults are fixed, not a real world implementation.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Add checked coordinate, world-border and unloaded-chunk cases; compare query order/context with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 149 logical lines read through EOF; exact pinned-tree SHA and 5436-byte size match. Example/helper inspected, not executed.
+
+
+### 2390. `crates/horizon-world/examples/probe/support/shapes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `eed5f436dfbfaa072e70a9471474223de461696f`
+- Size: 2250 bytes
+- Coverage: Complete read through EOF: 85 logical lines; exact pinned-tree size 2250 bytes; no omitted ranges.
+- Purpose: Voxel-shape and AABB fixture serialization helper
+- Dependencies / cross-references: Shared probe/support helpers used by decoration, placement, shape, collision and worldgen fixtures; private block facts/tags/NBT.
+- Implementation / logic: Converts shape boxes and geometric values to deterministic text/bit representations used by collision/suffocation fixtures.
+- Findings: Serialization is limited to fixture output; does not validate collision geometry, canonical shape identity or Android/GPU rendering.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Add malformed/non-finite bounds and empty/degenerate shapes; compare serialized boxes with Java 1.20.1 shape oracle.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 85 logical lines read through EOF; exact pinned-tree SHA and 2250-byte size match. Example/helper inspected, not executed.
+
+
+### 2391. `crates/horizon-world/examples/probe/swimming_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b31c3a109fb48d4fc46b3c8c933d449fc44e879a`
+- Size: 4298 bytes
+- Coverage: Complete read through EOF: 128 logical lines; exact pinned-tree size 4298 bytes; no omitted ranges.
+- Purpose: Swimming eligibility and water-mask behavior fixture
+- Dependencies / cross-references: horizon-world swimming, synced-byte/float, item-consume and teleport-consume APIs; fixed mock world callbacks and core random.
+- Implementation / logic: Exercises swimming predicate logic with entity flags, fluid state, water-mask checks and deterministic mock callbacks.
+- Findings: Fluid selector feeds a bit shift/mask without full range validation; mock uses a fixed position rather than sampling live world. Narrow predicate test, not movement/fluid simulation.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate fluid-index bounds and water-mask bits; compare swimming rules/environmental edges with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 128 logical lines read through EOF; exact pinned-tree SHA and 4298-byte size match. Example/helper inspected, not executed.
+
+
+### 2392. `crates/horizon-world/examples/probe/synced_bytes_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b6932a4fe330f6a36fa533f4e5b37f2be206711b`
+- Size: 6536 bytes
+- Coverage: Complete read through EOF: 188 logical lines; exact pinned-tree size 6536 bytes; no omitted ranges.
+- Purpose: Synced byte data, dirty-mask and observer mutation fixture
+- Dependencies / cross-references: horizon-world swimming, synced-byte/float, item-consume and teleport-consume APIs; fixed mock world callbacks and core random.
+- Implementation / logic: Exercises synced byte fields, set/assign/take-dirty and callback re-entry/mutation, recording dirty flags and state snapshots.
+- Findings: IDs and masks narrow to u8; field selectors and callback operation arrays are trusted. Nested observers can mutate/clear dirty state; outcome depends on re-entry order.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Test ids beyond 255, invalid fields and nested take-dirty/set order; compare server/client sync semantics with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 188 logical lines read through EOF; exact pinned-tree SHA and 6536-byte size match. Example/helper inspected, not executed.
+
+
+### 2393. `crates/horizon-world/examples/probe/synced_floats_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7f649c18bc61b681df2cafc5ee719b34a85ceb86`
+- Size: 5481 bytes
+- Coverage: Complete read through EOF: 155 logical lines; exact pinned-tree size 5481 bytes; no omitted ranges.
+- Purpose: Synced float state, dirty tracking and callback failure fixture
+- Dependencies / cross-references: horizon-world swimming, synced-byte/float, item-consume and teleport-consume APIs; fixed mock world callbacks and core random.
+- Implementation / logic: Exercises float fields, assignment, dirty tracking and callbacks with exact float-bit serialization.
+- Findings: ID casts and field selectors are unchecked; float inputs may be NaN/infinite/negative and callbacks are synthetic. No network packet serializer is validated.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Add NaN/infinity/negative-zero and out-of-range fields; compare bit equality, dirty transitions and packet packing with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 155 logical lines read through EOF; exact pinned-tree SHA and 5481-byte size match. Example/helper inspected, not executed.
+
+
+### 2394. `crates/horizon-world/examples/probe/teleport_consume_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `595fa385586477c0fc2d8e0e97f4876d44503149`
+- Size: 6783 bytes
+- Coverage: Complete read through EOF: 230 logical lines; exact pinned-tree size 6783 bytes; no omitted ranges.
+- Purpose: Teleport-triggered item consumption and remainder callback fixture
+- Dependencies / cross-references: horizon-world swimming, synced-byte/float, item-consume and teleport-consume APIs; fixed mock world callbacks and core random.
+- Implementation / logic: Combines teleport-consume rules, item stacks, random decisions and mutation/failure hooks; traces consumption and stack/remainder changes.
+- Findings: Random-source selectors index a fixed two-element array; item/count/position values are trusted/narrowed. Reset may re-read config; no actual teleport event/server packet is delivered.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate random/item selectors; compare teleport success/failure, consume chance, remainder and RNG order with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 230 logical lines read through EOF; exact pinned-tree SHA and 6783-byte size match. Example/helper inspected, not executed.
+
+
+### 2395. `crates/horizon-world/examples/probe/terrain_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `506273a100015b02a0065ced90d68eff0a417d1c`
+- Size: 9695 bytes
+- Coverage: Complete read through EOF: 293 logical lines; exact pinned-tree size 9695 bytes; no omitted ranges.
+- Purpose: Terrain chunk generation, density routing, aquifer, section, heightmap and region serialization fixture
+- Dependencies / cross-references: horizon-world TerrainChunk, density router, aquifer, heightmap, region writer, tree/ore feature and state-provider registries; core NBT/random.
+- Implementation / logic: Builds TerrainChunk from supplied dimensions, applies density/router and aquifer operations, records blocks/heightmaps/postprocessing and exercises region writer/readback.
+- Findings: Dimension/min/height/state indexes and repeat counts are fixture inputs; invalid height/section alignment can produce incorrect allocations/iteration. Density/router/registries come from synthetic resource bundle, not canonical 1.20.1 resources.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate section-aligned dimensions and bounds; compare seeded blocks, heightmaps, aquifer output and region bytes with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 293 logical lines read through EOF; exact pinned-tree SHA and 9695-byte size match. Example/helper inspected, not executed.
+
+
+### 2396. `crates/horizon-world/examples/probe/tick_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9e31fa5b68a1b969781d2be3a2a6493a21e658f9`
+- Size: 2641 bytes
+- Coverage: Complete read through EOF: 67 logical lines; exact pinned-tree size 2641 bytes; no omitted ranges.
+- Purpose: Saved block/fluid tick NBT decoding, repacking and region round-trip utility
+- Dependencies / cross-references: horizon-world TerrainChunk, density router, aquifer, heightmap, region writer, tree/ore feature and state-provider registries; core NBT/random.
+- Implementation / logic: Loads saved tick records, resolves block/fluid ids, modifies/re-encodes and reads the resulting region back.
+- Findings: Corpus-specific assertion expects exactly 251 ticks; input id casts to u32 and required NBT fields are trusted. Not a general region/tick corruption validator.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Test variable tick counts, unknown ids, invalid tag types and mixed block/fluid records against Java 1.20.1 chunk NBT.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 67 logical lines read through EOF; exact pinned-tree SHA and 2641-byte size match. Example/helper inspected, not executed.
+
+
+### 2397. `crates/horizon-world/examples/probe/tree_feature_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3222254bd7a1e87e1d85524aebaf23ba1745bcb8`
+- Size: 24000 bytes
+- Coverage: 672 lines in ranges 1–400 and 401–672; exact pinned-tree size 24,000 bytes.
+- Purpose: Integrated tree/fallen-tree/ore feature generation and layered terrain fixture
+- Dependencies / cross-references: horizon-world TerrainChunk, density router, aquifer, heightmap, region writer, tree/ore feature and state-provider registries; core NBT/random.
+- Implementation / logic: Loads block/tag/feature/state-provider registries, constructs layered Terrain and exercises tree, fallen-tree and ore placement with survival/support/collision queries and deterministic random.
+- Findings: 672 lines read in 1–400 and 401–672. Terrain uses fixed test world/height and private registry/tag snapshots; state/property/feature indexes and JSON inputs are trusted. Does not establish production chunk loading, Forge feature injection or biome/worldgen parity.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Validate world height, layer bounds, state ids and missing registries; compare seeded tree/ore placement, trunk/leaf survival and RNG order with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 672 logical lines read through EOF in consecutive ranges no larger than 400 lines; exact pinned-tree SHA and 24000-byte size match. Example/helper inspected, not executed.
+
+
+### 2398. `crates/horizon-world/examples/probe/use_flag_reaction_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6c7c7fb97acfe1cf33c4d71e008a8802a4dc96de`
+- Size: 11947 bytes
+- Coverage: Complete read through EOF: 369 logical lines; exact pinned-tree size 11947 bytes; no omitted ranges.
+- Purpose: Item-use flag reaction, stack mutation and callback fixture
+- Dependencies / cross-references: horizon-world item-use flags/remainder and value-provider/state-provider APIs; fixed fixture catalogues and deterministic random.
+- Implementation / logic: Exercises use-flag assignment/reaction, item stack state, callback ordering, dirty/sync flags and failure/mutation with a fixed test inventory.
+- Findings: Fixed item/slot/flag layout and operation/index values are trusted; numeric selectors narrow to small integer types. Not the full 1.20.1 item-use packet/sync lifecycle.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Test unknown flags, invalid item slots, callback failure/re-entry; compare exact flag changes and sync order with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 369 logical lines read through EOF; exact pinned-tree SHA and 11947-byte size match. Example/helper inspected, not executed.
+
+
+### 2399. `crates/horizon-world/examples/probe/use_remainder_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `534abb1670ca994c5089e78c2155070eb9560c53`
+- Size: 10369 bytes
+- Coverage: Complete read through EOF: 277 logical lines; exact pinned-tree size 10369 bytes; no omitted ranges.
+- Purpose: Item-use remainder and stack replacement fixture
+- Dependencies / cross-references: horizon-world item-use flags/remainder and value-provider/state-provider APIs; fixed fixture catalogues and deterministic random.
+- Implementation / logic: Models item-use completion, consumed stack, remainder templates, inventory placement and callback mutations/errors.
+- Findings: Item/template/slot indexes and counts are trusted; fixed mock inventory capacity/callbacks do not model complete player inventory or Forge capabilities.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Test full inventory, creative mode, merge/overflow, empty remainder and callback errors; compare remainder placement/stack shrink with Java 1.20.1.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 277 logical lines read through EOF; exact pinned-tree SHA and 10369-byte size match. Example/helper inspected, not executed.
+
+
+### 2400. `crates/horizon-world/examples/probe/value_provider_fixture.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9cb895e1c5e53c97438c96fff1e3afb2e6eb212b`
+- Size: 2529 bytes
+- Coverage: Complete read through EOF: 68 logical lines; exact pinned-tree size 2529 bytes; no omitted ranges.
+- Purpose: Worldgen state-provider decoding, sampling and RNG fixture
+- Dependencies / cross-references: horizon-world item-use flags/remainder and value-provider/state-provider APIs; fixed fixture catalogues and deterministic random.
+- Implementation / logic: Loads a small provider catalogue, decodes values, samples block states with Legacy/Xoroshiro random and emits resulting states/next RNG values.
+- Findings: Provider IDs/names, sample count and state references are fixture-controlled; unknown providers or empty state lists can fail. Catalogue is not complete target-version registry.
+- RustChunk relevance: Reference/test fixture only for reconstructing Minecraft Java 1.20.1 semantics; not production client/game code.
+- Decision: adaptable; reference
+- 1.20.1 implications: These examples/resource snapshots do not establish complete vanilla 1.20.1 registry, NBT, chunk, packet or Forge 47.x parity; they provide scenario coverage only. No Aternos compatibility claim follows.
+- Follow-up checks: Use complete version-hashed 1.20.1 provider registries; validate unknown providers/empty lists; compare distributions and RNG consumption with Java.
+- RustChunk implementation mapping: Keep under developer tests/tools outside Android release dependencies. Rebuild with RustChunk-owned version-pinned types and canonical Java 1.20.1 oracle data; do not ship mock worlds, private snapshots or fixture-only shortcuts.
+- Evidence required before adoption: Version-hashed Java 1.20.1 registry/NBT inputs, positive/negative/malformed corpus, executed differential outputs, Android runtime evidence and separate Forge 47.x integration tests.
+- Completion state: COMPLETE — 68 logical lines read through EOF; exact pinned-tree SHA and 2529-byte size match. Example/helper inspected, not executed.
+
+
+## Checkpoint 2376–2400 — COMPLETE (25/25); 200-file stage 2201–2400 CLOSED
+
+- Entries 2376–2400 were inspected individually through EOF in deterministic lexical path order after excluding the full Index. All paths, source SHAs and exact byte sizes match the complete pinned recursive tree.
+- Coverage: state/status providers and effects, stepped interpolation, stored consume/effect attributes/notifications, structure density/pieces/start NBT, suffocation, support helpers, swimming, synced bytes/floats, teleport-consume, terrain/tick/tree features, use flags/remainders and value providers.
+- These are synthetic fixtures/utilities, not production Minecraft systems. Notable limitations: equal-key Java comparator returns Less in stored-consume/effect-notification paths; stored-effect notifications stub passengers/server-player/connection/packet sending; helper casts and position indexes are unchecked; swimming uses a fixed position and unvalidated fluid-mask shift; tick fixture asserts exactly 251 saved ticks; terrain/tree fixtures use private registries and fixed synthetic world limits; use/value providers rely on small fixture catalogues/trusted indexes.
+- Long-file coverage: `state_provider_fixture.rs` 1–400/401–530; `stored_consume_fixture.rs` 1–400/401–407; `stored_effect_attributes_fixture.rs` 1–400/401–483; `tree_feature_fixture.rs` 1–400/401–672.
+- The preliminary candidate `use_flag_fixture.rs` did not exist in the pinned tree and was not counted; actual entry 2398 is `use_flag_reaction_fixture.rs`, verified and read through EOF.
+- Active Ledger contains **200 records (2201–2400)** with exactly 15 fields. Index contains **2,400 sequential unique paths** with matching path/Decision rows.
+- No examples/tests were executed; no RustChunk source code changed; no build, benchmark, APK, Android device, renderer, Minecraft, Forge, server or Aternos validation.
+- The one-time authorization through 2400 is exhausted. All four 50-file sections in stage 2201–2400 are closed. **STOP before entry 2401** and request fresh explicit permission.

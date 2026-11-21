@@ -4,10 +4,10 @@
 - Branch: `starling-1.20.1-port-audit`
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries **1–2000** passed global verification and final backup; entries **2001–2375** are complete. Closed Ledger `AUDIT_LEDGER_2001_2200.md` has 200 records; active Ledger `AUDIT_LEDGER_2201_2400.md` has **175 records (2201–2375)**.
-- Active 200-file stage: **2201–2400**, progress **175/200**.
-- Reporting sections 2201–2250 and 2251–2300 are CLOSED; section 2301–2350 is CLOSED (**50/50**); section 2351–2400 remains AUTHORIZED.
-- One-time expanded authorization covers **2301–2400**. Do not pause at 2325, 2350 or 2375; **STOP at 2400** and request fresh permission before 2401.
+- Entries **1–2000** have prior global verification and final backup; entries **2001–2400** are complete.
+- Closed Ledger `AUDIT_LEDGER_2001_2200.md`: 200 records; closed Ledger `AUDIT_LEDGER_2201_2400.md`: **200 records (2201–2400)**, each with 15 fields.
+- Active 200-file stage **2201–2400: COMPLETE (200/200)**. All four 50-file reporting sections and all eight 25-file checkpoints are closed.
+- Both exceptional authorizations are exhausted. **STOP at 2400; require fresh explicit permission before 2401.**
 
 ## Stage partition
 
@@ -137,7 +137,7 @@
 | 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
 | 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — COMPLETE | CLOSED — 50/50 |
 | 2301–2350 | 2301–2325 — COMPLETE | 2326–2350 — COMPLETE | CLOSED — 50/50 |
-| 2351–2400 | 2351–2375 — COMPLETE | 2376–2400 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2351–2400 | 2351–2375 — COMPLETE | 2376–2400 — COMPLETE | CLOSED — 50/50 |
 
 ## Checkpoint 2226–2250 — COMPLETE (25/25)
 
@@ -213,3 +213,14 @@
 - Active Ledger: 175 records (2201–2375), exactly 15 fields each. Index: 2,375 sequential unique paths and matching Decisions.
 - Fixtures are synthetic reference transports for piston/player/portal/registry/placement/simple-block/container behavior. Their fixed mocks, trusted input indexes, unavailable height branches and no-op/panic adapters are documented in Ledger/QA; they do not prove full vanilla 1.20.1 or Forge runtime behavior.
 - The one-time authorization covers the remaining checkpoint **2376–2400**. It was re-derived after explicitly excluding the 25 in-flight paths; no overlap with 2351–2375. Complete it and **STOP at 2400**. No authorization exists for 2401+.
+
+
+## Checkpoint 2376–2400 — COMPLETE (25/25); stage 2201–2400 CLOSED
+
+- All 25 source files were inspected individually through EOF in deterministic lexical path order after the full Index. Paths, SHAs and exact byte sizes match the complete pinned tree.
+- Long-file coverage: `state_provider_fixture.rs` 1–400/401–530; `stored_consume_fixture.rs` 1–400/401–407; `stored_effect_attributes_fixture.rs` 1–400/401–483; `tree_feature_fixture.rs` 1–400/401–672.
+- Active Ledger: 200 entries (2201–2400), exactly 15 fields each. Index: 2,400 sequential unique paths and matching Decisions.
+- These are synthetic fixtures/helpers, not production gameplay. Limitations include comparator equality, stubbed effect notifications, private resource snapshots, unchecked helper conversions, fixed mock positions/dimensions and corpus-specific tick counts.
+- `use_flag_fixture.rs` was not in the pinned tree and was excluded; actual 2398 is `use_flag_reaction_fixture.rs`.
+- The one-time authorization through 2400 is exhausted. **STOP before 2401**; no authorization exists for later paths.
+- No tests/examples executed, no application source changed, and no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation. No new backup at this boundary.
