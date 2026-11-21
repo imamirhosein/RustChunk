@@ -1487,3 +1487,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 entries contain exactly the 15 required Ledger fields. The new Ledger has **250 entries (2001–2250)**; global Index has **2,250 sequential unique paths**, no duplicates, and matching path/Decision rows.
 - Tests/examples were inspected only; none were run. No app source changed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 - Section **2201–2250 is closed at 50/50**. Next range **2251–2300** requires fresh explicit authorization.
+
+
+## Reconciliation correction — 2201–2207 registration and historical authorization snapshots — 2026-11-21
+
+- At the 2176–2200 checkpoint, entries 2201–2207 had been fetched prematurely and were correctly excluded from that checkpoint's counts. That was a historical snapshot, not their final audit disposition.
+- After the user authorized 2201–2250, all seven files were re-fetched one at a time, read through EOF, and added to Ledger/Index as entries 2201–2207. Their exact SHA and byte sizes were rechecked against the pinned recursive tree; all seven rows are unique and sequential. They are no longer excluded or pending.
+- The old Protocol sections that say STOP at 2100 or 2200 describe dated states at those points. They are now explicitly labeled historical; current state is Section 12 and the new authorization is Section 24.
+- The read-back selection script previously used a flawed numeric pattern and selected only 4 of 25 new entries. The corrected numeric interval selected all 25 entries 2226–2250; all 25 were checked for exactly 15 fields, Ledger/Index decision alignment, source SHA and byte size. The final corrected read-back passed.
+- Current authorization: **2251–2300**, with checkpoints 2251–2275 and 2276–2300. Continue without asking at 2275; stop at 2300.

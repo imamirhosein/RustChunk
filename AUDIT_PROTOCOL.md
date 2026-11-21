@@ -137,13 +137,17 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
 - Completed source entries: **1–2250**.
 - Active 200-file stage: **2201–2400**, progress **50/200**.
-- Closed reporting section: **2201–2250 (50/50)**, checkpoints **2201–2225** and **2226–2250** complete.
-- The one-time user authorization for **2201–2250** is exhausted. **STOP before 2251**; request fresh explicit authorization.
-- Active Ledger: `AUDIT_LEDGER_2001_2200.md`, **250 records (2001–2250)** with exactly 15 required fields; Index: **2,250 sequential unique paths**.
-- Upstream: `starling-client/starling` @ `${pinned}`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
-- Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after 1,000 additional entries (entry 3000) and global verification.
-- The 2201–2207 assets previously fetched before authorization were re-fetched and inspected under the 2201–2250 authorization; they are recorded as completed entries.
+- Closed reporting section: **2201–2250 (50/50)**; checkpoints **2201–2225** and **2226–2250** are committed and read-back verified.
+- The user has now explicitly authorized the next standard 50-file section: **2251–2300**. Both checkpoints **2251–2275** and **2276–2300** are covered; do not pause at 2275. **STOP at 2300** and require fresh permission before 2301.
+- Active Ledger file: `AUDIT_LEDGER_2001_2200.md` (legacy filename), containing **250 records (2001–2250)** with exactly 15 required fields. Index contains **2,250 sequential unique paths**.
+- Upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; full recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` is complete (`truncated:false`).
+- Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification; no incremental backups.
+- The seven assets 2201–2207 were initially fetched before authorization, then re-fetched and fully audited after the 2201–2250 authorization. They are now entries 2201–2207 in both Ledger and Index, with exact SHA/size matches; they are not pending or excluded.
 - Tests/examples inspected only, not executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source changes.
+
+## Historical-state interpretation
+
+Sections 13–21 and 23 below preserve dated authorizations and checkpoint snapshots. Statements such as “STOP at 2100”, “STOP at 2200”, “stop before 2201” and “stop before 2251” were correct only at those historical checkpoints; they are superseded for current work by this Section 12 and the latest authorization record in Section 24. Do not interpret historical authorization/status text as a current restriction or permission.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -472,7 +476,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - No application source changed. `main` and both earlier 1,000-entry backup refs remain unchanged. **STOP at 2000**; a new source range requires fresh explicit user authorization.
 
 
-## 14. Latest authoritative resume state — after checkpoint 2026–2050 — 2026-11-21
+## 14. Historical resume snapshot — after checkpoint 2026–2050 — 2026-11-21 (superseded by Section 12)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
 - Completed source entries: **1–2050**.
@@ -488,7 +492,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - No tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation is implied. No application source changed.
 
 
-## 15. Latest authoritative resume state — after checkpoint 2051–2075 — 2026-11-21
+## 15. Historical resume snapshot — after checkpoint 2051–2075 — 2026-11-21 (superseded by Section 12)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
 - Completed source entries: **1–2075**.
@@ -502,7 +506,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Tests/examples inspected only; no tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation. No application source changed.
 
 
-## 16. Latest authoritative resume state — after checkpoint 2076–2100 — 2026-11-21
+## 16. Historical resume snapshot — after checkpoint 2076–2100 — 2026-11-21 (superseded by Section 12)
 
 - Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
 - Completed source entries: **1–2100**.
@@ -515,7 +519,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Tests/examples inspected only; no tests/builds/benchmarks/APK/device/Minecraft/Forge/server/Aternos/renderer validation. No application source changed.
 
 
-## 17. Second one-time expanded authorization — entries 2101–2200 — 2026-11-21
+## 17. Historical authorization record — entries 2101–2200 — 2026-11-21
 
 - The user explicitly authorizes **all entries 2101–2200** as one exceptional 100-file window. This is a specific exception to the standard 50-file STOP/approval boundary; it does not permanently change the default 200 / 50 / 25 protocol.
 - Preserve exact 25-file checkpoint transactions: 2101–2125, 2126–2150, 2151–2175, 2176–2200. At each checkpoint, update and commit the six audit documents together, re-fetch all six and verify structure/provenance/Index alignment before proceeding.
@@ -536,7 +540,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - Binary Coverage must state exact decoded byte count and structures parsed; logical line count is not applicable. If complete semantic parsing is impossible, mark incomplete and do not count it.
 - Keep static integrity distinct from Android rendering, runtime compatibility and performance.
 
-## 19. Latest authoritative resume state — after checkpoint 2126–2150 — 2026-11-21
+## 19. Historical resume snapshot — after checkpoint 2126–2150 — 2026-11-21 (superseded by Section 12)
 
 - Completed entries **1–2150**; active stage **2001–2200**, progress **150/200**.
 - Active Ledger: **150 records (2001–2150)**, each with exactly 15 fields. Index: **2,150 sequential unique paths**.
@@ -547,7 +551,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - No incremental backup. Next backup only after 1,000 further completed entries (entry 3000) and global verification.
 
 
-## 20. Latest authoritative resume state — after checkpoint 2151–2175 — 2026-11-21
+## 20. Historical resume snapshot — after checkpoint 2151–2175 — 2026-11-21 (superseded by Section 12)
 
 - Completed source entries: **1–2175**; active stage **2001–2200**, progress **175/200**.
 - Active Ledger contains **175 entries (2001–2175)** with exactly 15 required fields each. Index contains **2,175 sequential unique paths**.
@@ -558,7 +562,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - No incremental backup at this checkpoint; next backup only after 1,000 further completed entries (entry 3000) and global verification.
 
 
-## 21. Final authorized resume state — after entry 2200 — 2026-11-21
+## 21. Historical final resume snapshot — after entry 2200 — 2026-11-21 (superseded by Section 12)
 
 - Completed source entries **1–2200**. Active stage **2001–2200: 200/200 complete and closed**.
 - Ledger contains **200 records (2001–2200)** with exactly 15 required fields; Index contains **2,200 sequential unique paths**.
@@ -569,7 +573,7 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - No incremental backup at entry 2200; the 1–2000 backup remains the only final backup pending later authorized global verification.
 
 
-## 22. Latest authorized checkpoint — entries 2201–2225 — 2026-11-21
+## 22. Historical checkpoint record — entries 2201–2225 — 2026-11-21
 
 - Completed entries 2201–2225 (25/25) in deterministic lexical path order after excluding all paths in the full Index. Each file was read individually through EOF; SHA and exact byte size match the pinned recursive tree.
 - Ledger AUDIT_LEDGER_2001_2200.md contains 225 entries (2001–2225) with exactly 15 required fields. Index contains 2,225 sequential unique paths.
@@ -579,10 +583,18 @@ For the 1801–1850 section, derive the canonical path sequence by excluding onl
 - No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation; no application source changed. No backup at this checkpoint.
 
 
-## 23. Closed reporting section — entries 2201–2250 — 2026-11-21
+## 23. Historical closed reporting section record — entries 2201–2250 — 2026-11-21
 
 - The user authorized exactly one regular 50-file section, **2201–2250**, with the standard two 25-file checkpoint commits. Both checkpoints are complete and verified.
 - Ledger contains **250 records (2001–2250)** with all 15 required fields exactly once. Index contains **2,250 sequential unique paths**; Ledger/Index Decisions align.
 - Entries 2226–2250 include thread-pool, cross-platform thread and memory watcher facilities plus examples/fixtures for attributes, effects, worldgen, biome, collision, block-entity and landing behavior. The benchmark verifier flaw and fixture-oracle limitations are documented in Ledger/QA.
 - Tests/examples were inspected only; none were run. No application source change or runtime validation.
 - **STOP at 2250.** The authorization is exhausted; 2251–2300 requires fresh explicit permission. Preserve 25-file commits and 50-file reporting boundaries by default.
+
+
+## 24. Current one-time authorization — entries 2251–2300 — 2026-11-21
+
+- The user explicitly authorized the next standard 50-file section **2251–2300** in the current conversation after the discrepancy review.
+- Preserve the normal two 25-file checkpoints: **2251–2275** and **2276–2300**. Complete the first checkpoint, commit and read back all six audit documents, then continue directly to the second without another permission request.
+- At entry **2300**, close section **2251–2300** and STOP. Do not inspect entry 2301 without fresh explicit permission.
+- This authorization does not change the normal 200/50/25 cadence and does not authorize any later section.

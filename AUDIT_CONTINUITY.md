@@ -1,6 +1,6 @@
 # RustChunk Audit Continuity
 
-Last reconciled: 2026-11-20
+Last reconciled: 2026-11-21
 Repository: imamirhosein/RustChunk
 Working branch: starling-1.20.1-port-audit
 
@@ -8,14 +8,14 @@ Working branch: starling-1.20.1-port-audit
 
 - Last reconciled: **2026-11-21**.
 - Completed source entries: **1–2250**.
-- Active 200-file stage: **2201–2400**, progress **50/200**.
-- Closed reporting section: **2201–2250 (50/50)**, checkpoints **2201–2225** and **2226–2250** both complete and read-back verified.
-- The one-time user authorization for **2201–2250** is exhausted. **STOP before entry 2251**; obtain fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_2001_2200.md` contains **250 records (2001–2250)** with exactly 15 fields; Index contains **2,250 sequential unique paths**.
-- Pinned upstream: `starling-client/starling` @ `${pinned}`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
-- Seven previously fetched assets 2201–2207 were re-fetched and included under the new 2201–2250 authorization; all are now legitimate completed entries.
-- Entry 2214 remains a custom Horizon star with unresolved separate asset-license provenance. The jobs/threads/memory issues and chunkgen benchmark verifier defect from 2226–2250 are documented.
-- Existing final backup still covers entries **1–2000** only. No backup at 2250; next backup only after entry 3000 and global verification.
+- Completed prior stage: **2001–2200 (200/200)**; active stage: **2201–2400**, progress **50/200**.
+- Closed reporting section: **2201–2250 (50/50)**; checkpoints **2201–2225** and **2226–2250** both complete and read-back verified.
+- The user has explicitly authorized the next standard section **2251–2300**. Both checkpoints **2251–2275** and **2276–2300** are covered. Continue without another permission request at 2275; **STOP at 2300** and request permission before 2301.
+- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **250 records (2001–2250)** with exactly 15 fields; Index contains **2,250 sequential unique paths**.
+- Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
+- Entries **2201–2207** were initially fetched before authorization but were then re-fetched, completely inspected, SHA/size matched and registered under the 2201–2250 authorization. They are current completed entries in both Ledger and Index, not exclusions.
+- Entry 2214 remains a custom Horizon star with unresolved separate asset-license provenance. Findings for the thread pool, memory watcher, chunkgen verifier and world fixtures are recorded in entries 2226–2250.
+- The verified backup covers entries 1–2000 only. No backup at 2250; next backup only after entry 3000 and global verification.
 - No application source changed. Tests/examples were inspected only, not run; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -547,27 +547,33 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 - Continue at **2176–2200** under the same user authorization. **Do not stop/request permission at 2175; STOP only at 2200** and ask before 2201.
 
 
-## Final authorized checkpoint — entries 2176–2200 — 2026-11-21
+## Historical final checkpoint — entries 2176–2200 — 2026-11-21 (superseded by current state above)
 
 - Repository/branch: `imamirhosein/RustChunk` / `starling-1.20.1-port-audit`.
 - Pinned upstream: `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23`.
 - Entries **2176–2200 (25/25)** read fully in raw Git tree order; exact paths, blob SHAs and sizes match.
 - Seven Glass SVGs, Horizon PNG, Pixelarticons MIT notice and sixteen Pixel SVGs were completely inspected. PNG CRCs are valid and preview was reviewed. Pixelarticons and Hugeicons MIT notices are distinct.
 - SVGs contain no active/external content. Android renderer/conversion untested. Horizon PNG ownership/license unresolved.
-- Seven later assets (2201–2207, `home.svg` through `package.svg`) were inadvertently fetched in an earlier ordering mistake; they are excluded from Ledger/Index and completion counts.
+- Historical status at this checkpoint: seven later assets (2201–2207, `home.svg` through `package.svg`) had been fetched but were not yet authorized/audited, so they were excluded from counts at that time. After the user authorized 2201–2250, those files were re-fetched and completed as entries 2201–2207; they are now present in Ledger and Index.
 - Ledger 200 records with 15 fields each; Index 2,200 sequential unique paths. No app source change or runtime testing.
 - Authorization 2101–2200 exhausted. Stop before entry 2201 and ask for fresh explicit permission.
 
-## Latest verified checkpoint — 2201–2225 — 2026-11-21
+## Historical checkpoint snapshot — 2201–2225 — 2026-11-21 (superseded by 2226–2250)
 
 - Entries 2201–2225 (25/25) inspected individually through EOF in deterministic lexical path order after excluding the full Index skip set. Exact paths, SHAs and sizes match the pinned tree.
 - Ledger has 225 records (2001–2225) with 15 fields per record; Index has 2,225 sequential unique paths.
 - Checkpoint 2226–2250 remains within the same one-time authorization. Continue without a pause at 2225; STOP at 2250.
 - No app source change or runtime validation. No backup at this checkpoint.
 
-## Latest verified checkpoint — 2226–2250 — 2026-11-21
+## Closed section snapshot — 2226–2250 — 2026-11-21 (prior to the next authorization)
 
 - Entries 2226–2250 (25/25) inspected serially through EOF; SHA/size align with the pinned tree. Long files are covered contiguously in chunks <=400 lines.
 - Ledger contains 250 records (2001–2250), 15 fields each; Index has 2,250 sequential unique paths with Decisions aligned.
 - 50-file section 2201–2250 is closed. Authorization exhausted. Stop before 2251 and request fresh permission.
 - No application source change, tests or runtime validation. No backup at this boundary.
+
+## Current authorization update — 2251–2300 — 2026-11-21
+
+- The user has explicitly authorized the next standard 50-file section **2251–2300**.
+- Checkpoints **2251–2275** and **2276–2300** are both authorized; complete and verify the first 25-file checkpoint, then continue without asking at 2275.
+- **STOP at 2300**. Do not inspect 2301+ without fresh explicit permission.

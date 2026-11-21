@@ -4,10 +4,11 @@
 - Branch: `starling-1.20.1-port-audit`
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries **1–2000** passed global structural/provenance verification and final backup; entries **2001–2250** are now complete.
-- Current 200-file stage: **2201–2400**, progress **50/200**.
-- Reporting section **2201–2250 is CLOSED (50/50)**. Both 25-file checkpoints are complete and committed.
-- **STOP at 2250.** Next section 2251–2300 requires fresh explicit user authorization.
+- Entries **1–2000** passed global structural/provenance verification and final backup; entries **2001–2250** are complete.
+- Active 200-file stage: **2201–2400**, progress **50/200**.
+- Reporting section **2201–2250 is CLOSED (50/50)**. Both 25-file checkpoints are committed and read-back verified.
+- The user has explicitly authorized the next section **2251–2300**, including checkpoints **2251–2275** and **2276–2300**.
+- **STOP at 2300** and request fresh permission before entry 2301.
 
 ## Stage partition
 
@@ -28,7 +29,7 @@
 - Shader API and samples are Horizon API 0.1/Naga 30.0.1 and renderer-specific, not drop-in Minecraft 1.20.1 Java shader support.
 - Tests/examples inspected only; none run. No build, benchmark, APK, Android, Forge, server join, Aternos or renderer validation. No app source changed.
 
-## Authorization and next actions
+## Historical authorization and next actions — snapshots from earlier checkpoints
 
 - Section 2001–2050 is complete and closed. Continue 2051–2100 under the user's already-issued one-time authorization.
 - At 2050, report the first 50-file section, then continue directly into pre-authorized 2051–2100; retain checkpoints 2051–2075 and 2076–2100.
@@ -112,14 +113,14 @@
 - **STOP at 2200. Authorization exhausted; fresh explicit permission is required before entry 2201.**
 
 
-## Current stage partition — 2201–2400
+## Historical stage snapshot — after checkpoint 2201–2225 (superseded by current table below)
 
-| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State at that time |
 |---|---|---|---|
 | 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — AUTHORIZED | IN PROGRESS — 25/50 |
-| 2251–2300 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
-| 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
-| 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2251–2300 | NOT STARTED | NOT STARTED | NOT YET AUTHORIZED |
+| 2301–2350 | NOT STARTED | NOT STARTED | NOT YET AUTHORIZED |
+| 2351–2400 | NOT STARTED | NOT STARTED | NOT YET AUTHORIZED |
 
 ## Checkpoint 2201–2225 — COMPLETE (25/25)
 
@@ -134,8 +135,8 @@
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50; authorization exhausted |
-| 2251–2300 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
+| 2251–2300 | 2251–2275 — AUTHORIZED | 2276–2300 — AUTHORIZED | AUTHORIZED — 0/50 |
 | 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 | 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 
@@ -145,4 +146,4 @@
 - New Ledger records 2226–2250 contain exactly 15 required fields. Combined Ledger count is 250 (2001–2250); Index is 2,250 sequential unique paths with Decisions aligned.
 - Critical recorded findings: jobs pool can misreport active worker count after spawn failure; memory watcher Once cannot retry after spawn failure; chunkgen benchmark may accept truncated output; fixture-only comparator, recursive placement and numeric-normalization blind spots.
 - No tests/examples executed; no app source changed; no runtime/build/device/game validation.
-- **STOP at 2250.** No permission exists for 2251 or later until the user explicitly authorizes the next 50-file section.
+- Historical stop condition at this closed boundary: wait for the next explicit authorization. The user has now granted the next section 2251–2300; current state is shown in the table above. **STOP at 2300**, not at 2250.

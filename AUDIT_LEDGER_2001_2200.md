@@ -1,14 +1,13 @@
-# RustChunk Starling Audit Ledger — Entries 2001–2200
+# RustChunk Starling Audit Ledger — Entries 2001–2250 (250 records)
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Entry range: 2001–2200 (200 unique source files; one shared Ledger for this stage).
-- Current progress: **200/200 — CLOSED**. Checkpoints **2001–2025** and **2026–2050** are complete; reporting section **2001–2050 is closed**.
-- One-time expanded authorizations: entries **2001–2100** and **2101–2200**. The second exception covers the complete 2101–2200 window; keep four 25-file commits, do not stop/request permission at 2150, and stop only at 2200.
-- Checkpoint cadence: exact 25-file atomic commits. All four checkpoints in the second one-time authorization (2101–2200) are complete; the authorization is exhausted. Stop before entry 2201 and request fresh permission.
-- Each entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
+- Entry range currently recorded: **2001–2250 (250 unique source files)**. The filename retains its original 2001–2200 label; content now includes the first 50 entries of the 2201–2400 stage.
+- Completed 200-file stages in this file: **2001–2200 (200/200)**; active stage **2201–2400 (50/200)**. Latest 50-file section **2201–2250 is CLOSED (50/50)**.
+- Authorization history: one-time windows **2001–2100** and **2101–2200** were consumed; section **2201–2250** was subsequently authorized and closed. The next standard section **2251–2300 is now authorized**; stop at 2300.
+- Checkpoint cadence: exact 25-file atomic commits. Current section 2201–2250 has checkpoints 2201–2225 and 2226–2250 complete. Current authorized checkpoints are 2251–2275 and 2276–2300.
+- Every entry contains exactly the 15 required fields from AUDIT_PROTOCOL.md. Files over 400 lines were inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
-
 
 ### 2001. `crates/horizon-server/src/signals.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -3473,7 +3472,7 @@
 - Pixelarticons' separate MIT notice (Copyright © 2019 Gerrit Halfmann, 1,072 bytes/21 lines) was fully read. Sixteen Pixelarticons SVGs (2185–2200) were completely read and match this distinct license; do not substitute Hugeicons' separate MIT notice from entry 2143.
 - All inspected SVGs are self-contained without scripts, foreignObjects, embedded resources or external URL references. Glass icons use currentColor line art; Pixelarticons use filled pixel-grid currentColor paths. Android SVG rendering/conversion remains untested.
 - No dedicated license for the Horizon PNG was found at the icon root. Ownership/redistribution permission remains unresolved; do not infer coverage from either neighboring icon pack.
-- Path-order correction incident: seven assets after entry 2200 were fetched unintentionally — `home.svg` (2201), `image.svg` (2202), `info-box.svg` (2203), `message.svg` (2204), `monitor.svg` (2205), `notes.svg` (2206) and `package.svg` (2207). They are explicitly excluded from Ledger, Index and all completion counts; they are not authorized completed entries, and no adoption decision is made. Fresh permission is required before further source review.
+- Historical path-order correction note: at the 2176–2200 checkpoint, seven assets beyond the then-authorized boundary had been fetched but were not yet audited, so they were excluded from completion counts at that time. After the user authorized 2201–2250, all seven were re-fetched, read through EOF and added as entries 2201–2207 in this Ledger and the Index. They are now complete, not pending or excluded; see the matching entry records and the later 2201–2225 checkpoint note.
 - Active Ledger now contains **200 records (2001–2200)**, each with exactly 15 fields. Index contains **2,200 sequential unique paths**. All four authorized 25-file checkpoints in 2101–2200 are closed.
 - No application source changed. No tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation was performed.
 - The one-time authorization for **2101–2200 is exhausted**. Stop before entry 2201 and request fresh explicit permission.

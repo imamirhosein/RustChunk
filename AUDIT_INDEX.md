@@ -1,10 +1,8 @@
-
-- Source ledgers: entries 1–400 through 1801–2000 remain in their linked ledgers; current stage 2001–2200 is recorded in [AUDIT_LEDGER_2001_2200.md](AUDIT_LEDGER_2001_2200.md). Stage progress **200/200 — CLOSED**. One-time authorization covers **2001–2100** and **2101–2200**; the second window ends at 2200 and does not pause at 2150. Verified 1–2000 backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: entries 1–400 through 1801–2000 remain in their linked ledgers; current active Ledger `AUDIT_LEDGER_2001_2200.md` records entries **2001–2250 (250 records)**. Prior 200-file stage 2001–2200 is closed; active stage 2201–2400 is **50/200** complete. Section 2201–2250 is closed; section **2251–2300 is authorized**. Stop at 2300. Verified 1–2000 backup remains `backup/audit-2000-final-2026-11-21`.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
 - Pinned source snapshot: `5432370d573642041585c69b40fb045b27133488`
 - Decisions and one-line reasons summarize each ledger entry's Decision field; consult the ledger for evidence, limitations, implementation mapping and follow-up checks.
-
 ## Part 1 — Entries 1–25
 
 | No. | Source path | Decision | One-line reason |
