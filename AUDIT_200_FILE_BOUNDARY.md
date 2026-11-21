@@ -167,7 +167,7 @@
 ## Checkpoint 2276–2300 — COMPLETE (25/25)
 
 - Each source was inspected individually through EOF; long files were read in consecutive, gap-free chunks no larger than 400 lines. Source paths, SHAs and sizes match the pinned recursive tree.
-- The closed Ledger `AUDIT_LEDGER_2001_2200.md` contains 200 records (2001–2200); the active Ledger `AUDIT_LEDGER_2201_2400.md` contains 100 records (2201–2300). All 300 records have exactly 15 fields; Index contains 2,300 sequential unique paths with matching Decisions.
+- Ledger contains 300 records (2001–2300), each with exactly 15 fields; Index contains 2,300 sequential unique paths with matching Decisions.
 - Section 2251–2300 is closed (50/50); active 200-file stage 2201–2400 is 100/200 complete.
 - Tests/examples inspected only; none executed. No app source changes or runtime/build/device/game validation.
 - **STOP at 2300**. No authorization exists for 2301+ until the user explicitly grants it.
