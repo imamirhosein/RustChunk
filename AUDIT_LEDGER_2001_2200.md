@@ -4868,7 +4868,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: The removed() mock always reads initial state after event mutation; slot inputs are unvalidated. Synthetic policy world, not a real entity/server damage source.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; immunity scenarios only; correct mock mutation and compare all categories with Java 1.20.1
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4886,7 +4886,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: ArmorWorld::modify_armor_effectiveness returns the input unchanged and protection always returns zero; real enchantment/armor protection is not modeled. Slot values and bit strings are unvalidated.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; callback/query-order fixture only; implement real armor/enchantment protection
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4904,7 +4904,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Entity kinds use hard-coded numeric IDs; entity/position/weapon arrays and constructor values are unvalidated. Snapshot registry data does not prove target 1.20.1 ID/message parity.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; catalogue/attribution test design only; rebuild target-version source registry/tags
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4922,7 +4922,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Palette selection indexes a 3×3 array from unvalidated coordinates and repeats synthetic biome sequences; heightmap queries always return Unavailable. No real chunk biome storage.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; decoration-order oracle only; use real 1.20.1 biome/heightmap samples
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4940,7 +4940,7 @@
 - Implementation / logic: The fixture uses resident terrain/biome regions, feature placement and write callbacks, then serializes generated state, heightmap/tick or retrogen data.
 - Findings: Builds resident TerrainRegion/BiomeRegion; exercises pre-light stages, retrogen, write-zone/height gates, block/fluid tags, heightmaps, scheduled ticks and mutation lifecycle. Uses snapshot DATA_VERSION; state/palette IDs and coordinates unvalidated; not async chunk acquisition.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; high-value worldgen scenarios; regenerate data for 1.20.1 and test real chunk residency separately
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Rebuild exact 1.20.1 registries/tags; validate coordinates, dimensions and IDs; compare retrogen, write-zone, heightmap, feature and tick outputs, then test actual async chunk scheduler.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4958,7 +4958,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: State/direction indexes are unchecked; unsupported states panic at expect. Entity/piston states are synthetic JSON, not live ticking block entities.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; dynamic collision/support cases only; compare piston/shulker behavior with 1.20.1
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4976,7 +4976,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Missing clear-array entries silently become false; AABB/vector/step inputs are trusted. Scripted collision answers are not a live block/entity collision world.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; movement edge cases only; validate inputs and compare with real 1.20.1 collision
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -4994,7 +4994,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Models definitions/templates, instance routing, permanent modifier changes, observer callbacks and in-callback mutation. Keys/templates/routes/indexes are unvalidated; mock routing is not a live entity map.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; callback-order scenarios only; validate schema and map effects to 1.20.1 attributes
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5012,7 +5012,7 @@
 - Implementation / logic: The fixture builds effect stores and mock JavaKey maps, then serializes lifecycle, observer, passenger/metadata or synced-value events.
 - Findings: JavaKey::tie_break uses <= so equal identities compare Less. Passenger/connection rules are hard-coded; packets are strings, not wire encoding. Input maps/handles unbounded/unwrapped.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; lifecycle/notification scenarios only; fix comparator and compare packet semantics
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Fix JavaKey comparator to return Equal for identical tie-break identities; validate pool/routes/passenger ids; compare metadata and packet semantics with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5030,7 +5030,7 @@
 - Implementation / logic: The fixture builds effect stores and mock JavaKey maps, then serializes lifecycle, observer, passenger/metadata or synced-value events.
 - Findings: Repeats JavaKey tie_break <= defect; effect/hash/schema IDs trusted. Client/server is a boolean mock; no real metadata packet encoding or client rendering.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; effect sync scenarios only; repair ordering and implement target metadata transport
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Fix JavaKey comparator to return Equal for identical tie-break identities; validate pool/routes/passenger ids; compare metadata and packet semantics with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5048,7 +5048,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Attribute/index/operation inputs unvalidated; every operation builds a Modifier even for read-only lookups. No entity lifecycle or packet sync.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; attribute test matrix only; validate catalog and 1.20.1 definitions
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5066,7 +5066,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Identity indexes are 1-based vector offsets; parent/box indexes unchecked. Mock returns all candidates without query-bound prefilter and has no dynamic removal/building state.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; entity-collision scenarios only; validate filtering and root-vehicle rules
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5084,7 +5084,7 @@
 - Implementation / logic: The fixture builds a scripted mock world and drives fluid interaction or entity movement APIs, recording queries and state changes.
 - Findings: Synthetic cells/tags/states and optional registries. is_pushed_by_fluid uses values.len()-1 and panics for empty arrays; other state/tag indexes unchecked. Embedded budget assertions were not run.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; strong fluid scenarios only; reject empty lists and compare fluid/tick behavior
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Reject empty pushed arrays and invalid state/tag indexes; compare fluid tags, flow, eye immersion, budget and tick scheduling with Java.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5102,7 +5102,7 @@
 - Implementation / logic: The fixture builds a scripted mock world and drives fluid interaction or entity movement APIs, recording queries and state changes.
 - Findings: Mock shapes and scripted world queries; passenger() always true and apply_movement_emission intentionally panics if guard missed. Inputs unvalidated; no async chunk collision or network authority.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; movement regression scenarios only; implement real 1.20.1 collision and authority adapters
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate shapes and movement inputs; implement real chunk collision and client/server authority; compare movement flags/history/fall effects with Java.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5120,7 +5120,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Parent/entity indexes and AABB arrays unvalidated. removed and blocks_building fields are stored but ignored by mock candidate filtering; no live world state.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; obstruction scenarios only; confirm removed/building semantics with Java
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5138,7 +5138,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Combines ItemStacks, component patches, inventory, remainder, predicted drops and cooldowns. Inventory hard-coded to 43 slots; inputs unvalidated; component model is not 1.20.1 legacy ItemStack/NBT.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; inventory/after-use scenarios only; map to target inventory and stack semantics
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Map component remainder/cooldown data to 1.20.1 ItemStack/NBT; use correct inventory layout; validate slot/count/group bounds and event order.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5156,7 +5156,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Grid coordinates may be empty/inconsistent with occupied bits; cube dimensions use len()-1 and may underflow. No cap on geometry complexity.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; geometry-kernel cases only; validate dimensions and compare shapes
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5174,7 +5174,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Loads snapshot block/occlusion registries; rules include mangrove roots and require version verification. Pair parser validates little beyond split and integer conversion.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; renderer visibility scenarios only; rebuild 1.20.1 occlusion/render tables
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5192,7 +5192,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: block_state always returns ID 1 and position is fixed; no actual damage source, sound or server event. Values/positions are trusted JSON.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; fall callback order only; compare fall scaling/support side effects
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5210,7 +5210,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Builds catalog and registry with current DATA_VERSION facts; arrays/repeats/coordinates unvalidated. Heightmap always Unavailable; mock blocks use deterministic hashes rather than resident terrain.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; catalog/codec scenarios only; pin resources and verify with Java 1.20.1
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5228,7 +5228,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Mock height unavailable and block lookups hash-derived; repeats/origin unvalidated. Does not load feature registry, tags, bindings or terrain.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; feature graph/placement harness only; compare codec and random consumption
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5246,7 +5246,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Uses synthetic query adapter/result modes and supplied positions; no real terrain or registry. Input modifiers/context are trusted.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; modifier/RNG sequencing only; compare full placement pipeline
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5264,7 +5264,7 @@
 - Implementation / logic: The fixture uses resident terrain/biome regions, feature placement and write callbacks, then serializes generated state, heightmap/tick or retrogen data.
 - Findings: Builds 3×3 TerrainRegion/BiomeRegion; exercises features, pre-light stage, retrogen, write-zone/height gates, fluid/block tags, heightmaps and tick queues. DATA_VERSION/current snapshot; IDs/arrays unchecked; no async chunk acquisition.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; broad region/worldgen scenarios only; regenerate all data for 1.20.1 and test real scheduler
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Rebuild exact 1.20.1 registries/tags; validate coordinates, dimensions and IDs; compare retrogen, write-zone, heightmap, feature and tick outputs, then test actual async chunk scheduler.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5282,7 +5282,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Converts feature lists and reports topological steps/cycles. IDs cast to u32; fixture does not validate registry resolution or placed-feature dependency data.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; graph-sort cases only; compare dependency order and cycles with Java 1.20.1
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5300,7 +5300,7 @@
 - Implementation / logic: The program loads fixture data, constructs the corresponding Horizon-world model, replays scripted inputs and writes deterministic trace/output files.
 - Findings: Loads current DATA_VERSION block registry; mock world hashes positions to seven states, keeps writes in memory and returns synthetic height failures. Repeats/origin/world_min unvalidated.
 - RustChunk relevance: Differential test transport only; useful for generating version-pinned scenarios and expected query/event/state order, not a production client subsystem.
-- Decision: reference; fill-layer scenarios only; compare codec, write flags and replacement behavior with Java 1.20.1
+- Decision: adaptable; reference
 - 1.20.1 implications: No direct proof of Minecraft Java 1.20.1 / Forge 47.x parity. These fixtures use Horizon snapshot APIs/data and must be compared with the target-version Java implementation.
 - Follow-up checks: Validate fixture arrays, numeric ranges and registry versions; add edge/failure cases and compare outputs with Java 1.20.1.
 - RustChunk implementation mapping: Keep only as a standalone RustChunk differential-test tool. Convert version-confirmed cases into tests; do not include the fixture or mock world in the Android runtime graph.
@@ -5316,3 +5316,10 @@
 - Ledger now contains **300 records (2001–2300)** with exactly 15 fields each. Index now has **2,300 sequential unique paths** with matching Decisions.
 - Tests/examples were inspected only; none executed. No app source changed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 - Reporting section **2251–2300 is CLOSED (50/50)**. The one-time authorization is exhausted. **STOP at 2300** and require fresh explicit permission before entry 2301.
+
+
+## Decision taxonomy normalization — entries 2276–2300 — 2026-11-21
+
+- The initial Ledger/Index rows used reference as a standalone Decision. Protocol requires a primary decision; reference is a qualifier only.
+- All 25 rows are normalized to adaptable; reference. Supporting Findings and RustChunk relevance retain the fixture-only/no-production-runtime limit.
+- Entry IDs, source paths, SHAs, sizes and technical findings are unchanged.

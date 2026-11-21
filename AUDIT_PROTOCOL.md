@@ -134,15 +134,16 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 
 ## 12. Current authoritative resume state (2026-11-21)
 
-- Repository: `imamirhosein/RustChunk`; working branch: `starling-1.20.1-port-audit`.
-- Completed source entries: **1–2300**.
-- Active 200-file stage: **2201–2400**, progress **100/200**.
-- Reporting sections **2201–2250** and **2251–2300** are closed (50/50); all four 25-file checkpoints are committed and read-back verified.
-- The user's one-time authorization for **2251–2300** is exhausted. **STOP before 2301** and request fresh explicit permission.
-- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **300 records (2001–2300)** with exactly 15 fields; Index contains **2,300 sequential unique paths**.
-- Upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`). New selection follows lexical path order after the latest indexed source path; historical IDs are stable.
-- Entries 1–2000 passed global structural/provenance verification and have final backup `backup/audit-2000-final-2026-11-21`. Next backup only after entry 3000 and global verification; no incremental backup.
-- Tests/examples inspected only; none executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source changed.
+- Repository: imamirhosein/RustChunk; working branch: starling-1.20.1-port-audit.
+- Completed source entries: 1–2300.
+- Active 200-file stage: 2201–2400, progress 100/200.
+- Reporting sections 2201–2250 and 2251–2300 are closed (50/50); all four 25-file checkpoints are committed and read-back verified.
+- User authorization covers 2301–2350, including checkpoints 2301–2325 and 2326–2350. Do not pause at 2325. STOP at 2350 and request fresh permission before 2351.
+- Active Ledger AUDIT_LEDGER_2001_2200.md contains 300 records (2001–2300), exactly 15 fields each; Index contains 2,300 sequential unique paths.
+- Upstream starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 is complete. Future source selection is lexical after latest indexed path; historical IDs remain stable.
+- Decisions 2276–2300 are normalized to adaptable; reference. Fixture-only/no-runtime status remains in Findings/Relevance. Entry 2280 is 303 logical lines.
+- Entries 1–2000 have final backup backup/audit-2000-final-2026-11-21. Next backup only after entry 3000 and global verification.
+- Tests/examples inspected only; none executed. No build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation. No application source change.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -618,3 +619,10 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Entries 2276–2300 cover damage/effect/entity/collision/fluid/movement/inventory/decoration/feature fixtures; comparator, mock-world and versioned-data caveats are recorded in Ledger/QA.
 - Tests/examples inspected only; none run. No application source change or runtime/build validation.
 - **STOP at 2300.** Authorization exhausted; entry 2301–2350 requires fresh explicit user authorization.
+
+
+## 28. Decision taxonomy correction and authorization — 2026-11-21
+
+- Decisions 2276–2300 are normalized to the approved primary+qualifier pair adaptable; reference. Reference alone is not a primary Decision; fixture-only/no-shipment limits remain in supporting text.
+- decoration_region_fixture.rs has 303 canonical lines, re-read in ranges 1–200 and 201–303.
+- User authorization covers 2301–2350, including both 25-file checkpoints. Continue without pausing at 2325; STOP at 2350 and request permission before 2351.

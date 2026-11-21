@@ -1,14 +1,13 @@
 # RustChunk — 200-File Audit Boundary Register
 
-- Repository: `imamirhosein/RustChunk`
-- Branch: `starling-1.20.1-port-audit`
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
-- Pinned recursive tree: `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`)
-- Entries **1–2000** passed global structural/provenance verification and final backup; entries **2001–2250** are complete.
-- Active 200-file stage: **2201–2400**, progress **50/200**.
-- Reporting section **2201–2250 is CLOSED (50/50)**. Both 25-file checkpoints are committed and read-back verified.
-- The user has explicitly authorized section **2251–2300**. Checkpoint **2251–2275 is COMPLETE (25/25)**; checkpoint **2276–2300 remains AUTHORIZED** under the same grant.
-- Continue through 2276–2300 under the same authorization; **STOP at 2300** and request fresh permission before entry 2301.
+- Repository: imamirhosein/RustChunk
+- Branch: starling-1.20.1-port-audit
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Pinned recursive tree: aa193ad1daa40ab307340c4a61dc6b0176bd0e23 (truncated:false)
+- Entries 1–2000 passed global verification and final backup; entries 2001–2300 are complete.
+- Active 200-file stage: 2201–2400, progress 100/200.
+- Reporting sections 2201–2250 and 2251–2300 are CLOSED (50/50); all four 25-file checkpoints are complete.
+- User authorization covers 2301–2350; checkpoints 2301–2325 and 2326–2350 are authorized. Do not pause at 2325; STOP at 2350 and require fresh permission before 2351.
 
 ## Stage partition
 
@@ -137,7 +136,7 @@
 |---|---|---|---|
 | 2201–2250 | 2201–2225 — COMPLETE | 2226–2250 — COMPLETE | CLOSED — 50/50 |
 | 2251–2300 | 2251–2275 — COMPLETE | 2276–2300 — COMPLETE | CLOSED — 50/50; authorization exhausted |
-| 2301–2350 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
+| 2301–2350 | 2301–2325 — AUTHORIZED | 2326–2350 — AUTHORIZED | AUTHORIZED — 0/50 |
 | 2351–2400 | NOT STARTED | NOT STARTED | NOT AUTHORIZED |
 
 ## Checkpoint 2226–2250 — COMPLETE (25/25)
@@ -172,3 +171,11 @@
 - Section 2251–2300 is closed (50/50); active 200-file stage 2201–2400 is 100/200 complete.
 - Tests/examples inspected only; none executed. No app source changes or runtime/build/device/game validation.
 - **STOP at 2300**. No authorization exists for 2301+ until the user explicitly grants it.
+
+
+## Decision correction and next authorization — 2026-11-21
+
+- Section 2251–2300 is closed (50/50); stale header status corrected.
+- Decisions 2276–2300 standardized to adaptable; reference in Ledger/Index. Fixture-only limits remain in supporting text.
+- decoration_region_fixture.rs is 303 canonical lines, read in ranges 1–200 and 201–303.
+- User authorization covers 2301–2350, both 25-file checkpoints. Do not pause at 2325; STOP at 2350.

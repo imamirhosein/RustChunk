@@ -1525,3 +1525,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - All 25 entries have exactly 15 fields; Ledger now has **300 records (2001–2300)**; Index has **2,300 sequential unique paths** with matching Decisions.
 - Tests/examples were inspected only; none were run. No application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, server or Aternos validation.
 - Section **2251–2300 is closed (50/50)**. Next range **2301–2350** requires fresh explicit authorization.
+
+
+## Corrective review — Decision taxonomy and next authorization — 2026-11-21
+
+- Read-back found Decisions 2276–2300 used reference as a standalone label, conflicting with Protocol: reference is a qualifier and requires an approved primary Decision.
+- Corrected all 25 Ledger and Index Decisions to adaptable; reference. Fixture-only/no-shipment limits remain in supporting Findings and RustChunk relevance.
+- decoration_region_fixture.rs is 303 canonical lines and was re-read in contiguous ranges 1–200 and 201–303; the previous 493-line estimate is corrected.
+- Section 2251–2300 is closed (50/50). The user has authorized 2301–2350; both checkpoints 2301–2325 and 2326–2350 are covered. Do not pause at 2325. STOP at 2350 and request permission before 2351.
+- All 2,300 Index paths remain sequential/unique; entries 2276–2300 paths, source SHAs and sizes match the pinned tree. No tests/examples executed; no application source changed.

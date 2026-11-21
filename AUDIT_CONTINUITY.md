@@ -6,16 +6,16 @@ Working branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Last reconciled: **2026-11-21**.
-- Completed source entries: **1–2300**.
-- Active 200-file stage: **2201–2400**, progress **100/200**.
-- Reporting sections **2201–2250** and **2251–2300** are both closed (50/50); all four 25-file checkpoints are complete and read-back verified.
-- The one-time user authorization for **2251–2300** is exhausted. **STOP before entry 2301** and request fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_2001_2200.md` (legacy filename) contains **300 records (2001–2300)** with exactly 15 fields; Index contains **2,300 sequential unique paths**.
-- Pinned upstream `starling-client/starling` @ `5432370d573642041585c69b40fb045b27133488`; complete recursive tree `aa193ad1daa40ab307340c4a61dc6b0176bd0e23` (`truncated:false`).
-- Stable historical Index numbering is retained; new source selection follows deterministic lexical path order after the latest indexed path. Entries 2201–2207 were re-fetched and audited after authorization and remain complete.
-- The verified backup covers entries 1–2000 only. No backup at 2300; next backup only after entry 3000 and global verification.
-- No application source changed. Tests/examples inspected only, not executed; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed source entries: 1–2300.
+- Active 200-file stage: 2201–2400, progress 100/200.
+- Reporting sections 2201–2250 and 2251–2300 are closed (50/50); all four 25-file checkpoints are complete and read-back verified.
+- User authorization covers the next section 2301–2350, including 2301–2325 and 2326–2350. Continue without another permission request at 2325; STOP at 2350 and request permission before 2351.
+- Active Ledger AUDIT_LEDGER_2001_2200.md contains 300 records (2001–2300), exactly 15 fields each; Index contains 2,300 sequential unique paths.
+- Pinned upstream starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree aa193ad1daa40ab307340c4a61dc6b0176bd0e23 is complete (truncated:false).
+- Historical Index numbering remains stable; future selection is deterministic lexical order after the latest indexed path. Entries 2201–2207 were re-fetched and audited after authorization.
+- Decisions 2276–2300 are normalized to adaptable; reference. Entry 2280 decoration_region_fixture.rs is 303 lines, fully re-read in ranges 1–200 and 201–303.
+- Backup covers entries 1–2000 only. No backup at 2300; next backup only after entry 3000 and global verification.
+- No application source changed. Tests/examples inspected only, not run; no build/benchmark/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
