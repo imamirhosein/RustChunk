@@ -1,12 +1,12 @@
-# RustChunk Starling Audit Ledger — Entries 2201–2400 (125 of 200 recorded)
+# RustChunk Starling Audit Ledger — Entries 2201–2400 (150 of 200 recorded)
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Entry range currently recorded: **2201–2325 (125 unique source files)**.
-- Active 200-file stage: **2201–2400 (125/200 complete)**.
+- Entry range currently recorded: **2201–2350 (150 unique source files)**.
+- Active 200-file stage: **2201–2400 (150/200 complete)**.
 - Reporting sections **2201–2250** and **2251–2300** are CLOSED (50/50 each); all four 25-file checkpoints are complete.
 - The user has issued a one-time expanded authorization for **2301–2400** (100 files total). Checkpoint **2301–2325 is COMPLETE**; **2326–2350**, **2351–2375** and **2376–2400** remain covered. Do not stop at 2350; **STOP at 2400** and request permission before 2401.
-- Index order clarification: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows at the time of the original reconciliation: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2325. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,325 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal. Preserve existing entry numbers; future selection is deterministic lexical order after the latest indexed path.
+- Index order clarification: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,250 stable Index rows at the time of the original reconciliation: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2350. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,350 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal. Preserve existing entry numbers; future selection is deterministic lexical order after the latest indexed path.
 - Checkpoint cadence: exact 25-file atomic commits, grouped into authorized 50-file sections.
 - Every entry contains exactly the 15 required fields from `AUDIT_PROTOCOL.md`. Files over 400 lines must be inspected through EOF in consecutive, gap-free ranges no larger than 400 lines.
 - Embedded tests/examples are inspected only; they are not executed.
@@ -2770,7 +2770,7 @@
 ## Checkpoint 2326–2350 — COMPLETE (25/25); reporting section 2301–2350 CLOSED
 
 - Entries 2326–2350 were inspected individually through EOF in deterministic lexical path order after excluding the full Index. Exact paths, blob SHAs and sizes match the complete pinned tree.
-- Coverage: item-use lifecycle, Java hash/identity maps, level placement/shape, live attributes/effect notifications, living air/damage/fall/fluid/health/hurt/landing/motion, material conditions/extensions/stage/surface, movement emission/registry/support and object-open maps/sets.
+- Batch contents: item-use lifecycle, Java hash/identity maps, level placement/shape, live attributes/effect notifications, living air/damage/fall/fluid/health/hurt/landing/motion, material conditions/extensions/stage/surface, movement emission/registry/support and object-open maps/sets.
 - These are test/fixture transports with synthetic worlds, fixed registries/arrays, trusted JSON/NBT and unchecked indexing/numeric narrowing; not production implementations or proof of Java 1.20.1/Forge parity. Two JavaKey implementations return invalid Less ordering for equal identities (unit EffectKey in 2332; identity comparator in 2329). Empty sequence arrays can panic in living-air/fluid fixtures. Material-stage is a broad harness but depends on private registry snapshots and unchecked chunk-height/section bounds.
 - Long-file coverage: `live_attribute_updates_fixture.rs` 1–400 and 401–598; `material_condition_fixture.rs` 1–400 and 401–735; `material_stage_fixture.rs` 1–400, 401–800 and 801–828.
 - Active Ledger: **150 records (2201–2350)**, exactly 15 fields each. Index: **2,350 sequential unique paths** with matching path/Decision rows.
