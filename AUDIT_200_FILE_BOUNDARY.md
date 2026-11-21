@@ -3,8 +3,8 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; 2001–2400 closed.
-- Current stage 2401–2600: 25/200; active Ledger `AUDIT_LEDGER_2401_2600.md` has 25 records.
-- One-time authorization 2401–2500 only. Section 2401–2450 is 25/50; 2426–2450 authorized. Section 2451–2500 also covered. **STOP at 2500; 2501+ needs fresh permission.**
+- Current stage 2401–2600: 50/200; active Ledger `AUDIT_LEDGER_2401_2600.md` has 50 records.
+- Section 2401–2450 CLOSED (50/50). One-time authorization 2401–2500 remains active; 2451–2500 pre-authorized. STOP at 2500; 2501+ needs fresh permission.
 - Keep 25-file commits, 50-file reports, max 400-line chunks. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
@@ -132,7 +132,7 @@
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 2401–2450 | 2401–2425 — COMPLETE | 2426–2450 — COMPLETE | CLOSED — 50/50 |
 | 2451–2500 | 2451–2475 — AUTHORIZED | 2476–2500 — AUTHORIZED | PRE-AUTHORIZED BY ONE-TIME 100-FILE GRANT |
 | 2501–2550 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
 | 2551–2600 | NOT AUTHORIZED | NOT AUTHORIZED | WAIT FOR FRESH PERMISSION |
@@ -231,3 +231,12 @@
 - Active Ledger 25 records, 15 fields; Index 2,425 sequential unique paths.
 - 2401–2500 exception active; 2426–2450 authorized. Report at 2450, continue to 2500, then stop.
 - No source changes, tests or build/runtime validation; no backup at 2425.
+
+
+## Checkpoint 2426–2450 — COMPLETE (25/25); section 2401–2450 CLOSED
+
+- All 25 files read through EOF; paths/SHAs/sizes match pinned tree.
+- Long files <=400: block_state_properties.rs 1–400/401–418; block_survival.rs 1–400/401–600/601–800/801–1200/1201–1220; block_state_data.txt 1–400/401–800/801–1200/1201–1600/1601–1703; chunk_leaves.rs 1–400/401–488; files.rs 1–200/201–400/401–600/601–800/801–1000/1001–1147; fixes_a.rs 1–200/201–400/401–600/601–800/801–1000/1001–1116.
+- Active Ledger 50 entries with 15 fields; Index 2,450 sequential unique paths.
+- Authorization 2401–2500 remains active; continue 2451–2475; report at 2500 and stop.
+- No source changes, tests or build/runtime validation; no backup at 2450.

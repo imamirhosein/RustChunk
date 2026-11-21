@@ -468,3 +468,463 @@
 - Index has 2,425 sequential unique paths; all new entries have 15 fields and aligned Decisions.
 - No tests run, source changes, builds, APK/device checks or backup.
 - Continue 2426–2450 under same authorization; report at 2450 and continue through 2500, then STOP.
+
+### 2426. `crates/horizon-world/src/block_render.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `63efd595f8d56a57b06f970b386c3076b8279121`
+- Size: 9461 bytes
+- Coverage: Complete through EOF: 257 logical lines; full file; no gaps.
+- Purpose: Neighbor face visibility and render-face culling
+- Dependencies / cross-references: horizon-world block registry/properties, collision/support, fluids, dynamic world callbacks and pinned tags/NBT.
+- Implementation / logic: Precomputes per-state face IDs from cached occlusion shapes; applies same-block/leaves/liquid/bars/mangrove skip rules and bounded face-pair cache.
+- Findings: Requires every registry state to have render definition and cached shape; cache clears at 4096 pairs. Opaque face visibility only, not translucent sorting, fluids, meshing or lighting.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test canonical empty/full shape identity, bars masks, liquid families and cache rollover; compare with Java 1.20.1 renderer.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 257 logical lines through EOF; exact pinned SHA and 9461-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2427. `crates/horizon-world/src/block_state_properties.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `56e959ca0464f4ff660da8dbe7ff6a29522dbe53`
+- Size: 14206 bytes
+- Coverage: Complete through EOF: 418 logical lines; ranges 1–400, 401–418, each <=400 lines.
+- Purpose: Block-state property registry and decoded access
+- Dependencies / cross-references: horizon-world block registry/properties, collision/support, fluids, dynamic world callbacks and pinned tags/NBT.
+- Implementation / logic: Builds immutable property descriptors from versioned registry data and exposes state-bound lookup/conversion.
+- Findings: 418 lines read 1–400/401–418. Registry/schema completeness and IDs trusted at binding boundaries; properties parsed from string snapshots, not live Forge state.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Validate all 1.20.1 property domains/defaults, unknown/missing keys and malformed values against Java.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 418 logical lines through EOF; exact pinned SHA and 14206-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2428. `crates/horizon-world/src/block_support.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a2fe7811c0884c9e7cca605e7076b5c8e7d8934e`
+- Size: 8310 bytes
+- Coverage: Complete through EOF: 217 logical lines; full file; no gaps.
+- Purpose: Full/center/rigid face support and cached/dynamic dispatch
+- Dependencies / cross-references: horizon-world block registry/properties, collision/support, fluids, dynamic world callbacks and pinned tags/NBT.
+- Implementation / logic: Computes support flags from voxel face shapes and dispatches uncached states to DynamicSupport callbacks.
+- Findings: Cached geometry models context-free branch only; moving-piston/block-entity behavior remains callback-owned. Unsupported dynamic states return error.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Compare support combinations with Java 1.20.1; test registry identity and moving-piston context.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 217 logical lines through EOF; exact pinned SHA and 8310-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2429. `crates/horizon-world/src/block_survival.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f5c6d56a9d476acea54199d78c35efd4fc442ceb`
+- Size: 50928 bytes
+- Coverage: Complete through EOF: 1220 logical lines; ranges 1–400, 401–600, 601–800, 801–1200, 1201–1220, each <=400 lines.
+- Purpose: Block survival rules for plants, attachments, fluids and support
+- Dependencies / cross-references: horizon-world block registry/properties, collision/support, fluids, dynamic world callbacks and pinned tags/NBT.
+- Implementation / logic: Builds typed rules from properties/tags, evaluates fire/cactus/mushroom/vines/crops/doors/chorus/plants/scaffolding through world/support/collision queries.
+- Findings: 1220 lines read 1–400/401–600/601–800/801–1200/1201–1220. CactusFlower reads same below-position twice; Farmland may read above twice after solid test. Duplicate world callbacks can diverge for stateful providers. Registry/tag completeness required.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Confirm duplicate query ordering against Java; add stateful-world query tests and compare every rule/tag/fluid condition with 1.20.1.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1220 logical lines through EOF; exact pinned SHA and 50928-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2430. `crates/horizon-world/src/blocking_item_damage.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `466532f87ea140c0f2e9abcabb140be00aa09cd5`
+- Size: 1301 bytes
+- Coverage: Complete through EOF: 40 logical lines; full file; no gaps.
+- Purpose: Blocking component durability dispatch
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Applies blocking item damage for players, awards item-used on server, computes damage and calls hurt/break.
+- Findings: Stack identity and server-player state are callback-owned; ordering is contractual. Does not decode components or sounds.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test client/server/non-player branches, callback failures and award/hurt order.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 40 logical lines through EOF; exact pinned SHA and 1301-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2431. `crates/horizon-world/src/blocking_rules.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c990b991a96677404e3c5dba90e2903b88610eaa`
+- Size: 2660 bytes
+- Coverage: Complete through EOF: 95 logical lines; full file; no gaps.
+- Purpose: Blocking damage reduction, delay/cooldown and item damage arithmetic
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Resolves angular/type-gated reductions, sums/clamps damage and converts seconds to ticks.
+- Findings: NaN/signed-zero explicit; round uses f64 intermediate on f32 input; angle is caller-supplied radians.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Differential-test half-tick rounding, NaN, signed zero and negative damage.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 95 logical lines through EOF; exact pinned SHA and 2660-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2432. `crates/horizon-world/src/bundle_weight.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cf8715676a1416fc092f3ffae66b9ec7c7d6a896`
+- Size: 6470 bytes
+- Coverage: Complete through EOF: 191 logical lines; full file; no gaps.
+- Purpose: Bundle Fraction arithmetic, recursive weight and contents validation
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Uses checked rational arithmetic, gcd, lazy cached weight and stack-count validation.
+- Findings: Weight cached in Rc OnceCell and permanently captures first ItemWeights view; mutations to that view leave stale weight. Fraction constructor does not fully normalize immediately.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test cache invalidation contract, nested bundles/cycles, negative counts, overflow and Java Fraction edges.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 191 logical lines through EOF; exact pinned SHA and 6470-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2433. `crates/horizon-world/src/chunk_status.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `69ed423859e5ad514c2cfb136ddb0f5a2f4c3da0`
+- Size: 3279 bytes
+- Coverage: Complete through EOF: 100 logical lines; full file; no gaps.
+- Purpose: Chunk status identities, ordering, parsing and heightmap selection
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Defines ten ordered generation statuses, parent/index/name conversions and NBT codec.
+- Findings: by_name maps unknown names to Empty; parse/from_nbt return errors. Status assignment does not execute generation or lighting.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test aliases, unknown namespaces and final heightmaps with Java 1.20.1.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 100 logical lines through EOF; exact pinned SHA and 3279-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2434. `crates/horizon-world/src/climbing.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d0af2e1d5240dd96543f8f6f8ea38de9810e0604`
+- Size: 4931 bytes
+- Coverage: Complete through EOF: 137 logical lines; full file; no gaps.
+- Purpose: Climbing tags, ladders, open trapdoors and last-climbable position
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Builds state cache from tags and runs spectator/fall-flying/trapdoor/ladder checks in native callback order.
+- Findings: Only positive result updates last-climbable position; negative checks preserve old value. Facing limited to horizontal directions.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test callback order, stale last position and trapdoor orientation.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 137 logical lines through EOF; exact pinned SHA and 4931-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2435. `crates/horizon-world/src/collision_context.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `edcb0d51631e2360dbbb942f3c51d3a747785da5`
+- Size: 5362 bytes
+- Coverage: Complete through EOF: 170 logical lines; full file; no gaps.
+- Purpose: Entity, placement and position-only collision contexts
+- Dependencies / cross-references: horizon-world entity/block/fluid/collision interfaces; horizon-core geometry and position.
+- Implementation / logic: Captures entity identity/y/descending/held item/living/placement/fluid flags; implements above-shape and fluid support callbacks.
+- Findings: with_position(None,y) ignores y and uses -MAX; can_stand_on_fluid calls entity callback before same-family test.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Compare context factories, empty-stack semantics, y threshold and callback side effects.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 170 logical lines through EOF; exact pinned SHA and 5362-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2436. `crates/horizon-world/src/collision.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f22f314845baa3b9a650ac065f1af1a763d14c7c`
+- Size: 12724 bytes
+- Coverage: Complete through EOF: 311 logical lines; full file; no gaps.
+- Purpose: Cached voxel collision shape registry and canonical identity
+- Dependencies / cross-references: horizon-world item components, durability, NBT and copy-on-write maps.
+- Implementation / logic: Loads versioned shape NBT, validates geometry metadata, deduplicates grids and maps states to cached shapes.
+- Findings: Context-free branch only; uncached states must invoke block behavior. Older exports without canonical identity retain local aliases only.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Validate canonical empty/full identity, duplicate grids, metadata and state mapping.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 311 logical lines through EOF; exact pinned SHA and 12724-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2437. `crates/horizon-world/src/combat_rules.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4d8aa424f7f604785d8de75396cd1037f6a39bdf`
+- Size: 1719 bytes
+- Coverage: Complete through EOF: 51 logical lines; full file; no gaps.
+- Purpose: Armor/toughness and enchantment-protection arithmetic
+- Dependencies / cross-references: horizon-world item components, durability, NBT and copy-on-write maps.
+- Implementation / logic: Applies vanilla armor formula, optional weapon effectiveness and magic protection clamp.
+- Findings: NaN/signed-zero behavior explicit; depends on correct weapon/server-level callbacks.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test extreme armor/toughness/damage, NaN and enchantment effectiveness.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 51 logical lines through EOF; exact pinned SHA and 1719-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2438. `crates/horizon-world/src/component_durability.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5bf576c08b8f8314af11652899bcf078a8e8f7d5`
+- Size: 5855 bytes
+- Coverage: Complete through EOF: 185 logical lines; full file; no gaps.
+- Purpose: Data-component durability prototype, patch and stack behavior
+- Dependencies / cross-references: horizon-world item components, durability, NBT and copy-on-write maps.
+- Implementation / logic: Models max-damage/damage/unbreakable, patch persistence, clamps, break prediction and count changes.
+- Findings: Raw components remain while stack empty; grow/shrink wrap integers. Only one component family, not full ItemStack.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test empty stack, unbreakable/removal, zero max damage and overflow.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 185 logical lines through EOF; exact pinned SHA and 5855-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2439. `crates/horizon-world/src/component_patch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `675ddce1dc384c602b0022bfe2dc7f84d84cec08`
+- Size: 6731 bytes
+- Coverage: Complete through EOF: 196 logical lines; full file; no gaps.
+- Purpose: Shared component prototypes and ordered copy-on-write patches
+- Dependencies / cross-references: horizon-world item components, durability, NBT and copy-on-write maps.
+- Implementation / logic: Implements prototype/patch/map lookup, set/remove/apply/restore and ordered iteration.
+- Findings: set mutates patch before returning MissingPrototype for unsanitized removal without prototype; partial mutation documented, needs native exception parity.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test malformed patches, return values, iteration/key order, clone sharing and errors.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 196 logical lines through EOF; exact pinned SHA and 6731-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2440. `crates/horizon-world/src/conditions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `da22c072d9225f8ad7c4ad63db4efa6bac55fbaf`
+- Size: 6047 bytes
+- Coverage: Complete through EOF: 161 logical lines; full file; no gaps.
+- Purpose: NeoForge data-pack load conditions
+- Dependencies / cross-references: horizon-world damage, status, tag catalog, combat and entity callbacks.
+- Implementation / logic: Evaluates mod_loaded/true/not/and/or; unknown nested condition types exclude file.
+- Findings: Missing/non-array `values` in `and` becomes empty iterator and passes via vacuous all; malformed shape may be accepted instead of rejected by codec.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test absent/wrong-type values, empty and/or, malformed not and NeoForge 1.20.1/47.x codecs.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 161 logical lines through EOF; exact pinned SHA and 6047-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2441. `crates/horizon-world/src/consumable.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1e504afbe000831dd421ba26e2b78ceee787aac5`
+- Size: 6959 bytes
+- Coverage: Complete through EOF: 208 logical lines; full file; no gaps.
+- Purpose: Consumable timing, particle/sound emission and item consumption
+- Dependencies / cross-references: horizon-world damage, status, tag catalog, combat and entity callbacks.
+- Implementation / logic: Implements use timing, sound volume/pitch, particles, overrides, listeners, effects, criteria and stack shrink.
+- Findings: emit unconditionally draws nextBoolean, triangleFloat and nextFloat before choosing Eat/Drink. Java conditional path likely draws only selected animation values; likely over-consumes RNG.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Verify exact Java call order; split draws by animation and test next RNG state for Eat vs Drink.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 208 logical lines through EOF; exact pinned SHA and 6959-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2442. `crates/horizon-world/src/consume_effect.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8f0bdd4a794a278d6c2a222686d2b2776a29695b`
+- Size: 3944 bytes
+- Coverage: Complete through EOF: 107 logical lines; full file; no gaps.
+- Purpose: Apply/remove/clear status and play-sound consume effects
+- Dependencies / cross-references: horizon-world damage, status, tag catalog, combat and entity callbacks.
+- Implementation / logic: Executes probability, copies instances, resolves tag sets, removes effects and plays sounds.
+- Findings: NaN probability passes because random>=NaN is false; usual Java random<probability predicate returns false. Confirm source oracle.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test NaN/infinities and <0/0/1/>1 probabilities, RNG consumption and tag rebinding.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 107 logical lines through EOF; exact pinned SHA and 3944-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2443. `crates/horizon-world/src/damage_immunity.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c71be64da3be696afcf78e885da78b2806067627`
+- Size: 2668 bytes
+- Coverage: Complete through EOF: 73 logical lines; full file; no gaps.
+- Purpose: Entity/living/player/server-player damage immunity ordering
+- Dependencies / cross-references: horizon-world damage, status, tag catalog, combat and entity callbacks.
+- Implementation / logic: Implements removed/invulnerability/bypass/fire/fall/resistance and player dimension/load checks.
+- Findings: Player rule loop returns on first matching tag; Drowning/Fall/Fire/Freezing order matters and Fall tag is also used in base immunity.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test overlapping tags, bypass/creative and server dimension/load order.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 73 logical lines through EOF; exact pinned SHA and 2668-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2444. `crates/horizon-world/src/damage_reduction.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0bcfce5dd6c99dd46513fb38ebb36f3a2344ba6a`
+- Size: 2926 bytes
+- Coverage: Complete through EOF: 78 logical lines; full file; no gaps.
+- Purpose: Armor, resistance, enchantment and bypass orchestration
+- Dependencies / cross-references: horizon-world damage, status, tag catalog, combat and entity callbacks.
+- Implementation / logic: Applies armor wear, armor/toughness, resistance stats, enchantment bypass and protection callbacks.
+- Findings: Resistance amplifier wraps i32; resisted-stat award uses distinct victim/attacker server-player lookups.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test bypass combinations, amplifier overflow, negative/NaN damage and stat attribution.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 78 logical lines through EOF; exact pinned SHA and 2926-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2445. `crates/horizon-world/src/damage_source.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6af30f736746e95ced18f1b126c4d3fea451627a`
+- Size: 10031 bytes
+- Coverage: Complete through EOF: 286 logical lines; full file; no gaps.
+- Purpose: Version-checked damage type/tag catalog and DamageSource identity
+- Dependencies / cross-references: horizon-world damage, status, tag catalog, combat and entity callbacks.
+- Implementation / logic: Loads definitions/tags and exposes bypass/hurt/immunity tags, direct/causing entities, weapon/position and scaling.
+- Findings: Immutable catalog snapshot; unresolved required tags fail. LivingNonPlayer intentionally excludes Player.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Validate complete 1.20.1 damage registry/tags, scaling and virtual causing-entity dispatch.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 286 logical lines through EOF; exact pinned SHA and 10031-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2446. `crates/horizon-world/src/datafix/block_state_data.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a0c7e7f9bffd3dadb57446e1c7a3ec55e69c9988`
+- Size: 450617 bytes
+- Coverage: Complete through EOF: 1703 logical lines; ranges 1–400, 401–800, 801–1200, 1201–1600, 1601–1703, each <=400 lines.
+- Purpose: Generated legacy 1.12 block-state to 1.13+ mapping table
+- Dependencies / cross-references: horizon-world datafix schemas, NBT, region files, JSON, chunk palettes and legacy 26.3 resources.
+- Implementation / logic: Maps legacy numeric block/data IDs to modern states and aliases in static initializer order.
+- Findings: 1703 lines read 1–400/401–800/801–1200/1201–1600/1601–1703. 1695 rows; IDs strictly increasing/no duplicates; no malformed columns/IDs/property order; max 81 aliases per row. Generated from vanilla 26.3, not 1.20.1.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Pin generator/source version; do not treat as 1.20.1 runtime registry or Forge block-ID table.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1703 logical lines through EOF; exact pinned SHA and 450617-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2447. `crates/horizon-world/src/datafix/chunk_leaves.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `07d59cbdff11c81c184cd2b3ea019a48dd7f7293`
+- Size: 15888 bytes
+- Coverage: Complete through EOF: 488 logical lines; ranges 1–400, 401–488, each <=400 lines.
+- Purpose: Legacy LeavesFix and trapped-chest datafix
+- Dependencies / cross-references: horizon-world datafix schemas, NBT, region files, JSON, chunk palettes and legacy 26.3 resources.
+- Implementation / logic: Rewrites packed section leaf distances with fastutil-compatible iteration and converts trapped-chest IDs.
+- Findings: 488 lines read 1–400/401–488. Trapped-chest local x/y/z pass to get_index without explicit bounds; malformed coordinates can alias another local index. Bad palette/storage can make section skippable.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test out-of-range block-entity coords, malformed palette/storage, duplicate section Ys, fastutil order and packed-bit boundaries.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 488 logical lines through EOF; exact pinned SHA and 15888-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2448. `crates/horizon-world/src/datafix/dynamic.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `69cca1453bccd2781d96d1ae052afeb54d28d76c`
+- Size: 8307 bytes
+- Coverage: Complete through EOF: 264 logical lines; full file; no gaps.
+- Purpose: DataFixerUpper Dynamic/NbtOps number, map, list and conversion helpers
+- Dependencies / cross-references: horizon-world datafix schemas, NBT, region files, JSON, chunk palettes and legacy 26.3 resources.
+- Implementation / logic: Implements Java Number casts/strings, NBT streams, field edits, identifiers and ceil-log2.
+- Findings: Number narrowing follows Java-style casts; stream clones lists and expands arrays. String conversions may be lossy for unpaired UTF-16.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Test NaN/infinity, long/double narrowing, unpaired UTF-16, malformed arrays and Number.toString.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 264 logical lines through EOF; exact pinned SHA and 8307-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2449. `crates/horizon-world/src/datafix/files.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fbf63fd7f2450b0b7dcfc85af14b46153196bbe5`
+- Size: 42765 bytes
+- Coverage: Complete through EOF: 1147 logical lines; ranges 1–200, 201–400, 401–600, 601–800, 801–1000, 1001–1147, each <=400 lines.
+- Purpose: World file-layout migration and world-upgrade orchestration
+- Dependencies / cross-references: horizon-world datafix schemas, NBT, region files, JSON, chunk palettes and legacy 26.3 resources.
+- Implementation / logic: Moves legacy files, extracts level.dat data, upgrades regions/saved data/player JSON and stamps DataVersion last for retry safety.
+- Findings: 1147 lines read 1–200/201–400/401–600/601–800/801–1000/1001–1147. files_with_suffix/subdirectories suppress read_dir errors into empty lists, silently skipping inaccessible world data. Legacy chunk_x±8 ranges may overflow i32. Upgrade targets 26.3, not a 1.20.1 loader.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Propagate filesystem enumeration errors; validate coordinate bounds/staging; keep 26.3 migration separate from 1.20.1 save format.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1147 logical lines through EOF; exact pinned SHA and 42765-byte size verified; inspected, not changed; tests not executed.
+
+
+### 2450. `crates/horizon-world/src/datafix/fixes_a.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e47cf15e4d0f13c3c9d4fea67b2edcb69b57cebe`
+- Size: 36422 bytes
+- Coverage: Complete through EOF: 1116 logical lines; ranges 1–200, 201–400, 401–600, 601–800, 801–1000, 1001–1116, each <=400 lines.
+- Purpose: Datafixes from Minecraft 1.20.2 through 1.20.6
+- Dependencies / cross-references: horizon-world datafix schemas, NBT, region files, JSON, chunk palettes and legacy 26.3 resources.
+- Implementation / logic: Registers sign, random sequence, scoreboard, mob effect, block rename, projectile, horse, position, bee, banner, potion, component and trade migrations.
+- Findings: 1116 lines read 1–200/201–400/401–600/601–800/801–1000/1001–1116. Multiple fixes share same version/substep keys and order is semantic; chested-horse slot conversion subtracts unchecked numeric values.
+- RustChunk relevance: Reference/core behavior for a Rust Android Minecraft engine; pinned upstream is 26.3 and must not be mistaken for target 1.20.1 behavior.
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify version-bound rules against vanilla 1.20.1 and Forge 47.x; 26.3 datafixes/resources are not directly portable to 1.20.1.
+- Follow-up checks: Preserve registration order; test version keys and malformed slots; do not apply 1.20.2–1.20.6 fixes to 1.20.1.
+- RustChunk implementation mapping: Port only version-neutral algorithms behind RustChunk-owned 1.20.1 interfaces; keep 26.3 datafix migration and oracle assets separate from Android runtime.
+- Evidence required before adoption: Canonical 1.20.1 Java sources/data, version-hashed fixtures, malformed-input and differential tests, Android ARM64 evidence and Forge 47.x integration.
+- Completion state: COMPLETE — 1116 logical lines through EOF; exact pinned SHA and 36422-byte size verified; inspected, not changed; tests not executed.
+
+
+## Checkpoint 2426–2450 — COMPLETE (25/25); section 2401–2450 CLOSED
+
+- All 25 files inspected individually through EOF; paths, SHAs and byte sizes match pinned source tree.
+- Long-file coverage: block_state_properties.rs 1–400/401–418; block_survival.rs 1–400/401–600/601–800/801–1200/1201–1220; block_state_data.txt 1–400/401–800/801–1200/1201–1600/1601–1703; chunk_leaves.rs 1–400/401–488; files.rs 1–200/201–400/401–600/601–800/801–1000/1001–1147; fixes_a.rs 1–200/201–400/401–600/601–800/801–1000/1001–1116.
+- Key issues: duplicate survival queries in CactusFlower/Farmland; probable consumable RNG overdraw; NaN consume-effect probability inversion; malformed NeoForge and condition can pass vacuously; filesystem enumeration errors may silently skip world data; legacy coordinate range arithmetic can overflow.
+- Data table 2446: 1695 rows, IDs strictly increasing/no duplicates, no malformed columns/IDs/property order; generated from vanilla 26.3, not 1.20.1.
+- Active Ledger now has 50 records (2401–2450), every entry exactly 15 fields. Index has 2,450 sequential unique paths and matching Decisions.
+- Tests/examples inspected only, none executed. No application source changed, no build/APK/device/runtime validation. No backup at 2450.
+- Section 2401–2450 CLOSED (50/50). Continue 2451–2475 under existing 2401–2500 grant; report at 2500 and STOP.

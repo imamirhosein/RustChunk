@@ -136,13 +136,13 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 
 ## 12. Current authoritative resume state (2026-11-21)
 
-- Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify `main` or backup refs.
-- Completed entries **1–2425**.
-- Active stage **2401–2600**, progress 25/200; active section **2401–2450**, progress 25/50. Checkpoint 2426–2450 authorized.
-- User renewed one-time expanded authorization **2401–2500 (100 files)**. Keep 25-file atomic checkpoints and 50-file reports. Report at 2450, continue to 2500, then **STOP**. No authorization for 2501+.
-- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 25 records, exactly 15 fields. Previous Ledger 2201–2400 closed. Index: 2,425 unique sequential paths and aligned Decisions.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; tracking branch moved, use immutable commit only.
-- Next lexical unindexed entry 2426. Exclude indexed/in-flight paths.
+- Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
+- Completed entries 1–2450.
+- Active stage 2401–2600: 50/200. Section 2401–2450 CLOSED (50/50).
+- User renewed one-time authorization 2401–2500 (100 files). Checkpoints 2451–2475 and 2476–2500 authorized. Keep 25-file commits/50-file reports. Report at 2500, then STOP. No authorization for 2501+.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md`: 50 records, exactly 15 fields. Prior Ledger 2201–2400 closed. Index: 2,450 unique sequential paths and aligned Decisions.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use immutable commit only.
+- Next lexical unindexed entry 2451; exclude indexed/in-flight paths.
 - Backup only after 3000 and global verification. No source changes or runtime/build/Android/Forge/Aternos validation.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -684,3 +684,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` via `upstream/starling`; never follow moving branch.
 - **STOP at 2500** and require fresh permission before 2501+.
 - No app source changes or tests/build/runtime validation. No backup at 2425; next after 3000/global verification.
+
+
+## 36. Closed 50-file section — 2401–2450 — 2026-11-21
+
+- Section 2401–2450 complete (50/50); checkpoints 2401–2425 and 2426–2450 each contain 25 inspected files.
+- Active Ledger `AUDIT_LEDGER_2401_2600.md` contains 50 records; Index 2,450 unique sequential paths. Every Ledger record has exactly 15 fields; path/SHA/size and Index Decision align.
+- One-time authorization 2401–2500 remains active. Continue 2451–2475 and 2476–2500, report at 2500; STOP at 2500 and require fresh permission before 2501+.
+- Notable flags: duplicate survival queries, probable consumable RNG overdraw, NaN consume-effect predicate, malformed condition vacuous truth, filesystem enumeration errors suppressed and unchecked legacy coordinate ranges.
+- Datafix resources are pinned to 26.3, not directly reusable for 1.20.1. No app source changes, tests/build/runtime validation or backup at 2450.

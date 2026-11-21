@@ -1598,3 +1598,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Active Ledger 2401–2600: 25 records, 15 fields. Index: 2,425 unique sequential paths, aligned Decisions.
 - Tests/examples inspected only, none run. No source changes or build/APK/device/runtime validation.
 - One-time authorization 2401–2500 active. Continue 2426–2450; report at 2450, continue to 2500, STOP there. No backup at 2425.
+
+
+## Audit checkpoint 2426–2450 — 2026-11-21
+
+- Completed 2426–2450 (25/25); paths/SHAs/sizes match pinned tree; Index now 2,450 sequential unique paths.
+- Long files <=400 lines through EOF: block_state_properties.rs 1–400/401–418; block_survival.rs 1–400/401–600/601–800/801–1200/1201–1220; block_state_data.txt 1–400/401–800/801–1200/1201–1600/1601–1703; chunk_leaves.rs 1–400/401–488; files.rs 1–200/201–400/401–600/601–800/801–1000/1001–1147; fixes_a.rs 1–200/201–400/401–600/601–800/801–1000/1001–1116.
+- Priority findings: duplicate world queries in CactusFlower/Farmland; likely consumable RNG overdraw; NaN consume-effect probability; malformed and condition vacuous truth; filesystem enumeration errors suppressed; legacy coordinate range overflow.
+- 2446 legacy mapping structurally checked: 1695 rows, monotonic unique IDs, no malformed columns/IDs/property order; generated from 26.3, not 1.20.1.
+- Active Ledger 50 records, each 15 fields; Index 2,450 unique sequential paths. Tests/examples inspected only, none run. No source changes/build/APK/device/runtime validation.
+- Section 2401–2450 closed. Continue 2451–2475 under existing 100-file grant; report at 2500 and STOP.
