@@ -6,13 +6,13 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2675**.
+- Completed entries: **1–2700**.
 - Active 200-file stage: **2601–2800**, currently **75/200**.
-- Section **2601–2650** is closed (50/50); section **2651–2700** is open (25/50). Checkpoints **2601–2625**, **2626–2650** and **2651–2675** are committed and read-back verified.
-- The user's one-time exceptional authorization covers **2601–2700**. The remaining authorized checkpoint is **2676–2700**; complete it and then **STOP at 2700**. Entries 2701+ are not authorized.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **75 records (2601–2675)**, exactly 15 fields each. Index: **2,675 sequential unique paths**, with new paths and Decisions aligned.
+- Sections **2601–2650** and **2651–2700** are both closed (50/50 each). Checkpoints **2601–2625**, **2626–2650**, **2651–2675** and **2676–2700** are committed and read-back verified.
+- The user's one-time exceptional authorization for **2601–2700 is exhausted**. **STOP at 2700**. Entries 2701+ are not authorized.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **100 records (2601–2700)**, exactly 15 fields each. Index: **2,700 sequential unique paths**, with new paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable source pin only.
-- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entry 2700 is the 100th authorized path; entry 2701 is outside the grant.
+- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entry 2700 is the 100th authorized path; entry 2701 is outside the exhausted grant.
 - Backup covers 1–2000 only. No backup at 2675; next backup after 3000 and global verification.
 - Tests/examples were inspected only; none executed. No application source changes, build, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
@@ -25,7 +25,7 @@ Branch: starling-1.20.1-port-audit
 - Select paths in deterministic lexical order, excluding every path already in the full Index. Never repeat or renumber a source path.
 
 - Index order reconciliation: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,450 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2450. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,450 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
-- Current boundary: latest indexed path is `crates/horizon-world/examples/probe/block_landing_fixture.rs`; zero unindexed paths are lexically before/equal to it and 2,718 remain after it. For 2251–2300, continue in deterministic lexical order strictly after that path, excluding the full Index.
+- Current boundary: latest indexed path is `crates/starling-catalog/src/list.rs`; zero unindexed paths are lexically before/equal to it and 2,268 remain after it. Any future authorized selection must use strict raw lexical order after excluding the complete 2,700-row Index.
 - Verify every source SHA and byte size against the pinned tree.
 
 ## Per-file inspection requirements
@@ -750,3 +750,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Ledger and Index now cover 1–2675. The active Ledger contains 75 entries with exactly 15 fields each.
 - The remaining exceptional authorization is exactly 2676–2700. Stop at 2700; do not inspect 2701+.
 - Tests/examples not executed; no product source changes or build/runtime/device/Forge/Aternos validation.
+
+
+## Latest verified checkpoint — 2676–2700 — 2026-11-22
+
+- Entries 2676–2700 were inspected individually through EOF at pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; all 25 paths, SHAs and byte sizes match the complete untruncated tree.
+- Long-file coverage was contiguous and gap-free: `world_io.rs` 1–400/401–413; `files.rs` 1–400/401–436; account `lib.rs` 1–400/401–800/801–875; account `tests.rs` 1–400/401–473; catalog `lib.rs` 1–400/401–432.
+- Ledger: 100 records (2601–2700), exactly 15 fields each. Index: 2,700 sequential unique paths; all 25 new paths and Decisions align.
+- Both 50-file sections 2601–2650 and 2651–2700 are closed. The exceptional 100-file grant is exhausted. **STOP at 2700; no inspection or preparation of 2701+ without a new explicit grant.**
+- Tests/examples were inspected only; none executed. No RustChunk application source changed; no build, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation. No backup is due before 3000/global verification.

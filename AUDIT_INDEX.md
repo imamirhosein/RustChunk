@@ -3112,3 +3112,28 @@
 | 2673 | `crates/horizon-world/src/worldgen/placement.rs` | rewrite required; rebuild the 1.20.1 PlacementModifier catalogue and execution | Modifier order, random draw consumption, emission order, inclusive bounds, short-circuiting and work budgets are observable. The catalogue includes newer/custom modifiers and bounds not automatically equivalent to 1.20.1. |
 | 2674 | `crates/horizon-world/src/worldgen/placement/chain.rs` | adaptable; verify Java 1.20.1 PlacedFeature modifier chain order and failure cleanup | Buffer contents persist after errors, so reusing a placer after failure can retain partial state. Nested feature callbacks intentionally do not inherit the root top-feature context. |
 | 2675 | `crates/horizon-world/src/worldgen/placement/context.rs` | adaptable; rebuild adapters to match 1.20.1 ChunkAccess/WorldGenRegion and Forge side effects | The trait carefully separates raw section writes from ChunkAccess/WorldGenRegion effects; many callbacks default to unavailable or no-op, so host adapters must implement required operations explicitly. |
+| 2676 | `crates/horizon-world/tests/movement_properties.rs` | adaptable; reference; test-only | Movement-property registry decoding and tag-binding regression tests. |
+| 2677 | `crates/horizon-world/tests/native_load_hooks.rs` | adaptable; reference; test-only | Native loot/item hook installation and callback dispatch tests. |
+| 2678 | `crates/horizon-world/tests/placement_bounds.rs` | adaptable; reference; test-only | Placement-modifier negative-extent and world-query work-budget tests. |
+| 2679 | `crates/horizon-world/tests/placement_queries.rs` | adaptable; reference; test-only | Surface-water-depth placement query ordering and failure short-circuit test. |
+| 2680 | `crates/horizon-world/tests/retrogen_biomes.rs` | adaptable; reference; test-only | Retrogen biome selection precedence and section-atomic fill tests. |
+| 2681 | `crates/horizon-world/tests/rule_test_bounds.rs` | adaptable; reference; test-only | Rule-test recursive decode budgets, tag binding and matter-phase semantics tests. |
+| 2682 | `crates/horizon-world/tests/state_provider_bounds.rs` | adaptable; reference; test-only | Block-state provider recursion, aggregate budgets, tags and catalogue resolution tests. |
+| 2683 | `crates/horizon-world/tests/tick_data.rs` | adaptable; reference; test-only | Saved block/fluid tick NBT codec, coordinate filtering and atomic chunk update tests. |
+| 2684 | `crates/horizon-world/tests/weighted_provider.rs` | adaptable; reference; test-only | Weighted-list validation, aggregate decoder budgets and optional zero-weight sampling tests. |
+| 2685 | `crates/horizon-world/tests/world_io.rs` | adaptable; reference; test-only | Region-file sector allocation, external chunk records, chunk NBT edits and compression regression tests. |
+| 2686 | `crates/horizon-world/tests/world_movement.rs` | adaptable; reference; test-only | Movement collision-scan candidate budget and full-sweep behavior tests. |
+| 2687 | `crates/horizon-world/tests/world_ray_limits.rs` | adaptable; reference; test-only | Ray traversal visit-limit, non-finite input and world-provider error tests. |
+| 2688 | `crates/starling-account/Cargo.toml` | adaptable; reference; dependency baseline only | Cargo package and dependency definition for Starling's account, file-download and Android Java-runtime subsystem. |
+| 2689 | `crates/starling-account/src/ely.rs` | adaptable; optional; third-party provider | Ely.by Yggdrasil authentication, refresh, profile validation and skin/cape lookup. |
+| 2690 | `crates/starling-account/src/files.rs` | adaptable; reference; harden before reuse | Pinned Minecraft manifest, client/server/library/asset downloader with hash verification, retry and progress reporting. |
+| 2691 | `crates/starling-account/src/files/tests.rs` | adaptable; reference; test-only | Local mock-server tests for manifest pinning, verified download layout, retries and resumability. |
+| 2692 | `crates/starling-account/src/java.rs` | adaptable; reference; harden before reuse | Downloads and installs pinned Android OpenJDK 25 runtimes for ARM64, ARMv7 and x86_64. |
+| 2693 | `crates/starling-account/src/lib.rs` | adaptable; reference; harden and separate providers | Microsoft OAuth device-code sign-in, Xbox Live/XSTS exchange, Minecraft ownership/profile checks, session refresh and secret-store abstraction. |
+| 2694 | `crates/starling-account/src/profiles.rs` | adaptable; reference; harden before reuse | Provider-aware Microsoft/Ely/offline profile selection, activation, addition and removal. |
+| 2695 | `crates/starling-account/src/skins.rs` | adaptable; optional; harden before reuse | Microsoft skin upload, profile refresh and Ely.by skin-site guidance. |
+| 2696 | `crates/starling-account/src/tests.rs` | adaptable; reference; test-only | Local mock tests for the Microsoft device-code/Xbox/XSTS/Minecraft login chain, refresh, cancellation and secret redaction. |
+| 2697 | `crates/starling-catalog/Cargo.toml` | adaptable; optional; dependency baseline only | Cargo package and dependency definition for Starling's Android-facing mod/resource/shader catalog. |
+| 2698 | `crates/starling-catalog/src/launcher/browser.rs` | unnecessary; placeholder/build shim only | Build-time path shim documenting the desktop browser module's alternate source location. |
+| 2699 | `crates/starling-catalog/src/lib.rs` | rewrite required; optional; ecosystem-specific adapter | Android adapter for Horizon's mod/resource/shader catalog and installation flow. |
+| 2700 | `crates/starling-catalog/src/list.rs` | adaptable; reference; UI utility | UI-independent catalog pagination feed, stale-request rejection and touch scrolling helpers. |

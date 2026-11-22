@@ -1294,3 +1294,429 @@
 - RustChunk implementation mapping: Target MinecraftWorldgenAccess adapter over ChunkAccess/ProtoChunk/WorldGenRegion with explicit effect scheduling.
 - Evidence required before adoption: 1.20.1 Mojang-mapped world/chunk interfaces, Forge 47 patches and callback-level integration fixtures.
 - Completion state: COMPLETE — 381 logical lines through EOF; pinned source SHA and 14852 byte size match; inspected, not modified; tests not executed.
+
+
+### 2676. `crates/horizon-world/tests/movement_properties.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e6e84bdc4bc1c60672e3502e56c3b3dd64372fc5`
+- Size: 4933 bytes
+- Coverage: Complete through EOF: 144 logical lines; full file; no gaps.
+- Purpose: Movement-property registry decoding and tag-binding regression tests.
+- Dependencies / cross-references: MovementProperties; BlockRegistry; MovementTags; RegistryMovementWorld; BlockPos; NBT Tag.
+- Implementation / logic: Builds a two-state NBT fixture and checks malformed/version-mismatched definitions, tag rebinding, coefficient bit preservation and distinct provider/data errors.
+- Findings: Tests preserve negative-zero speed factor and distinguish missing-chunk provider errors from unknown-state data errors. They are fixtures only and do not prove target Java/Forge parity.
+- RustChunk relevance: Reference for designing movement-property validation and world-query error contracts.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Pinned DATA_VERSION and registry schema are later-version inputs; 1.20.1 block movement properties and Forge-added tags require independent reconstruction.
+- Follow-up checks: Compare all movement coefficients, default values, tag reloads, unknown states and provider errors with 1.20.1/Forge 47.
+- RustChunk implementation mapping: RustChunk-owned movement-property codec and immutable registry-bound snapshot tests.
+- Evidence required before adoption: 1.20.1 source/mappings, Forge 47 tag lifecycle, malformed NBT corpus and seeded numeric differential fixtures.
+- Completion state: COMPLETE — 144 logical lines through EOF; pinned source SHA and 4933-byte size match; inspected, not modified; tests not executed.
+
+### 2677. `crates/horizon-world/tests/native_load_hooks.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `626d18f3267215825cbc7f92f7ff50dd981b8044`
+- Size: 2009 bytes
+- Coverage: Complete through EOF: 54 logical lines; full file; no gaps.
+- Purpose: Native loot/item hook installation and callback dispatch tests.
+- Dependencies / cross-references: native_load_hooks; loot; item_defaults; serde_json; NativeLootHooks.
+- Implementation / logic: Checks no-op behavior before install, first successful installation, rejection of a second install, and callback effects on loot tables, item components, loot functions and conditions.
+- Findings: The test asserts single-install semantics and first-callback retention; it does not exercise concurrent installation, callback reentrancy, poisoned state or Android dynamic-library loading.
+- RustChunk relevance: Reference only for optional native-mod hook lifecycle; this is not Forge event registration.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Starling native hook API is not Forge 47's mod/event lifecycle and must not be treated as a Forge mod loader.
+- Follow-up checks: Inspect the implementation's synchronization and failure behavior; separately map any needed hooks to Forge 47 event buses and lifecycle.
+- RustChunk implementation mapping: Keep any native hook bridge isolated behind a RustChunk-owned optional extension API; do not expose it as Forge compatibility.
+- Evidence required before adoption: Pinned implementation review, thread/race tests, Android ARM64 loader evidence and Forge 47 event integration tests.
+- Completion state: COMPLETE — 54 logical lines through EOF; pinned source SHA and 2009-byte size match; inspected, not modified; tests not executed.
+
+### 2678. `crates/horizon-world/tests/placement_bounds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ca9610ceb6d7336b7b975afa866ba2b28fc5318b`
+- Size: 1917 bytes
+- Coverage: Complete through EOF: 58 logical lines; full file; no gaps.
+- Purpose: Placement-modifier negative-extent and world-query work-budget tests.
+- Dependencies / cross-references: PlacementModifier; IntProvider; PlacementContext; WorldGenerationContext; HeightmapType; LegacyRandom.
+- Implementation / logic: Checks a negative cuboid Y extent emits no positions even with huge XZ extents, and an extreme column height returns WorkLimit after a bounded number of queries.
+- Findings: The test expects a 65,536-query ceiling for the layered scan. It does not execute the test or establish the same bound/semantics in Java 1.20.1.
+- RustChunk relevance: Useful regression scenarios for bounded worldgen scans and malformed provider values.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Placement modifier catalogue and worldgen height semantics are snapshot-specific; compare against 1.20.1 serializers and execution.
+- Follow-up checks: Verify negative/zero extents, extreme heights, cancellation/error propagation and exact query counts against target sources.
+- RustChunk implementation mapping: Add bounded 1.20.1 placement scan tests around a RustChunk world-query adapter.
+- Evidence required before adoption: 1.20.1 PlacementModifier sources, seeded oracle traces and boundary/overflow corpus.
+- Completion state: COMPLETE — 58 logical lines through EOF; pinned source SHA and 1917-byte size match; inspected, not modified; tests not executed.
+
+### 2679. `crates/horizon-world/tests/placement_queries.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e49bfd8ae5a18d45f359ec83fa2060bdb1123e33`
+- Size: 1578 bytes
+- Coverage: Complete through EOF: 45 logical lines; full file; no gaps.
+- Purpose: Surface-water-depth placement query ordering and failure short-circuit test.
+- Dependencies / cross-references: PlacementModifier::SurfaceWaterDepth; PlacementContext; HeightmapType; LegacyRandom.
+- Implementation / logic: Records OceanFloor then WorldSurface query order, forces the second query to fail, and checks no emission or random draw occurs.
+- Findings: The test pins callback order and random-stream non-consumption on a query failure; only a mock context is covered.
+- RustChunk relevance: Useful deterministic test shape for worldgen callback ordering.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Heightmap names and modifier behavior must be checked against 1.20.1 and Forge additions.
+- Follow-up checks: Compare query order, failure point, output positions and random state against Java 1.20.1.
+- RustChunk implementation mapping: Use a scripted RustChunk placement context with recorded query and RNG traces.
+- Evidence required before adoption: 1.20.1 placement source and seeded Java-vs-Rust trace corpus.
+- Completion state: COMPLETE — 45 logical lines through EOF; pinned source SHA and 1578-byte size match; inspected, not modified; tests not executed.
+
+### 2680. `crates/horizon-world/tests/retrogen_biomes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c83b77d93b1278e395ebff66dc522dc457512cb6`
+- Size: 3409 bytes
+- Coverage: Complete through EOF: 117 logical lines; full file; no gaps.
+- Purpose: Retrogen biome selection precedence and section-atomic fill tests.
+- Dependencies / cross-references: RetrogenBiomeResolver; BiomeChunk; ChunkPos; BiomeFillError; RefCell.
+- Implementation / logic: Checks candidate biome before old-column fallback, error short-circuiting, cave-biome retention, and that a failed section fill does not partially replace previously stored columns/sections.
+- Findings: The fixture covers selected candidate/old-column paths and one failure point (the 66th resolver call); it is not a complete 1.20.1 retrogen pipeline.
+- RustChunk relevance: Reference for safe biome upgrade transactions and preservation of pre-existing chunk data.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Retrogen behavior, biome quart coordinates, section layout and data version differ by Minecraft version; verify against 1.20.1 chunk/biome upgrade logic.
+- Follow-up checks: Test all section boundaries, negative coordinates, mixed retained/new cave biomes and failures at every column index.
+- RustChunk implementation mapping: Implement retrogen as staged per-section updates with explicit 1.20.1 biome registry and quart-coordinate rules.
+- Evidence required before adoption: 1.20.1 chunk upgrade sources, real saved-chunk fixtures and failure-injection tests.
+- Completion state: COMPLETE — 117 logical lines through EOF; pinned source SHA and 3409-byte size match; inspected, not modified; tests not executed.
+
+### 2681. `crates/horizon-world/tests/rule_test_bounds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e3f614590d9767ff9140403d28e05fd344d27b75`
+- Size: 5126 bytes
+- Coverage: Complete through EOF: 146 logical lines; full file; no gaps.
+- Purpose: Rule-test recursive decode budgets, tag binding and matter-phase semantics tests.
+- Dependencies / cross-references: RuleTest; FeatureBlockBindings; BlockRegistry; NBT Tag; BTreeMap/BTreeSet; LegacyRandom.
+- Implementation / logic: Builds synthetic block registries and tests recursion/branching limits, unknown and duplicate canonical tags, air/liquid/rail/chain matter phases, inversion and invalid enum inputs.
+- Findings: Tests depend on a synthetic registry and a later-version custom matter_phase predicate; they do not prove 1.20.1 rule serializer or block-material parity.
+- RustChunk relevance: Reference for bounded recursive decoders and explicit registry/tag validation.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Custom matter-phase predicates and block classifications are not automatically vanilla 1.20.1 or Forge 47 behavior.
+- Follow-up checks: Rebuild target RuleTest serializers; test depth/node limits, namespace canonicalization and block material flags against target registries.
+- RustChunk implementation mapping: RustChunk 1.20.1 rule-test AST with bounded decode context and versioned block-property snapshots.
+- Evidence required before adoption: 1.20.1/Forge 47 predicate sources, canonical registry data and malformed nested JSON corpus.
+- Completion state: COMPLETE — 146 logical lines through EOF; pinned source SHA and 5126-byte size match; inspected, not modified; tests not executed.
+
+### 2682. `crates/horizon-world/tests/state_provider_bounds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `23553e6b78d9345805e6b3ccab2df5636fd38098`
+- Size: 3904 bytes
+- Coverage: Complete through EOF: 87 logical lines; full file; no gaps.
+- Purpose: Block-state provider recursion, aggregate budgets, tags and catalogue resolution tests.
+- Dependencies / cross-references: BlockStateProvider; StateProviderBindings; StateProviderCatalog; BlockRegistry; serde_json; BTreeMap/BTreeSet.
+- Implementation / logic: Checks recursive depth and list caps, aggregate predicate/provider node budget, shared-tag expansion cap, duplicate tag names, cycles, invalid definitions and direct/alias resolution.
+- Findings: Boundary tests deliberately accept a list of 8,192 entries and reject 8,193; resource catalog fixtures are synthetic and version-bound.
+- RustChunk relevance: Useful patterns for bounded data-driven block-state providers and registry snapshot binding.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Provider types, JSON schemas and tag contents must be rebuilt for Java 1.20.1 and Forge 47 dynamic registries.
+- Follow-up checks: Compare every 1.20.1 provider serializer, recursive limits, tag expansion and cycle detection with target resources.
+- RustChunk implementation mapping: Versioned RustChunk BlockStateProvider decoder using one shared work-budget object per root decode.
+- Evidence required before adoption: 1.20.1 provider sources, Forge registry fixtures and adversarial recursion/branching corpus.
+- Completion state: COMPLETE — 87 logical lines through EOF; pinned source SHA and 3904-byte size match; inspected, not modified; tests not executed.
+
+### 2683. `crates/horizon-world/tests/tick_data.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7060b57a4d1e6d01429d9925ae4c8ce1cc4e0cdb`
+- Size: 3533 bytes
+- Coverage: Complete through EOF: 117 logical lines; full file; no gaps.
+- Purpose: Saved block/fluid tick NBT codec, coordinate filtering and atomic chunk update tests.
+- Dependencies / cross-references: tick_data; SavedTick; TickPriority; TickTypeId; ChunkData; NamedTag; NBT Tag.
+- Implementation / logic: Exercises numeric narrowing/coercion, invalid list/type handling, chunk-coordinate filtering, tick unpack/pack, failed writes without mutation and preservation of unrelated NBT fields.
+- Findings: Fixtures include NaN/infinity and extreme numeric inputs; expected priority/coordinate conversions are pinned to this snapshot. No runtime tick scheduler or 1.20.1 codec is exercised.
+- RustChunk relevance: Strong reference for saved scheduled-tick persistence and transactional chunk edits.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Tick NBT field names, numeric conversions and priority enum mapping must match 1.20.1 saved data and Forge tick types.
+- Follow-up checks: Compare malformed/legacy tick tags, negative chunk coordinates, duplicate ticks, priority ordering and unknown fields with 1.20.1.
+- RustChunk implementation mapping: RustChunk versioned tick-data codec plus atomic ChunkData mutation; keep scheduler separate.
+- Evidence required before adoption: 1.20.1 TickListChunk/ProtoChunk sources, real chunk NBT corpus and differential round-trip tests.
+- Completion state: COMPLETE — 117 logical lines through EOF; pinned source SHA and 3533-byte size match; inspected, not modified; tests not executed.
+
+### 2684. `crates/horizon-world/tests/weighted_provider.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `574e1bb4c39bfd9b2cd79fd675d32cf826b295c4`
+- Size: 2292 bytes
+- Coverage: Complete through EOF: 53 logical lines; full file; no gaps.
+- Purpose: Weighted-list validation, aggregate decoder budgets and optional zero-weight sampling tests.
+- Dependencies / cross-references: WeightedList; OptionalWeightedList; IntProvider; HeightProvider; LegacyRandom.
+- Implementation / logic: Checks invalid/overflowing total weights, 8,192-entry cap, shared nested node budget and zero-weight optional choices without random draws.
+- Findings: The exact allocation and aggregate-node thresholds are implementation policy, not evidence of vanilla 1.20.1 limits. Embedded tests were not executed.
+- RustChunk relevance: Reference for safe weighted sampling and deterministic no-draw cases.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Provider schemas, weight overflow and random draw behavior must be compared with 1.20.1 Java implementations.
+- Follow-up checks: Verify zero-weight semantics, total overflow, nested budgets and seeded draw counts against 1.20.1.
+- RustChunk implementation mapping: RustChunk weighted provider with checked totals and target-specific decode budget.
+- Evidence required before adoption: 1.20.1 provider codecs, Java seeded traces and adversarial allocation tests.
+- Completion state: COMPLETE — 53 logical lines through EOF; pinned source SHA and 2292-byte size match; inspected, not modified; tests not executed.
+
+### 2685. `crates/horizon-world/tests/world_io.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c7cb2887e2cc22552385e0752ae3c96d47ae1397`
+- Size: 15656 bytes
+- Coverage: Complete through EOF: 413 logical lines; ranges 1–400, 401–413; contiguous, no gaps.
+- Purpose: Region-file sector allocation, external chunk records, chunk NBT edits and compression regression tests.
+- Dependencies / cross-references: RegionFile/RegionWriter; ChunkRecord; ChunkData; PalettedContainer; Compression; NBT Limits; filesystem and temporary directories.
+- Implementation / logic: Covers external-chunk threshold, negative coordinates, timestamps, in-place sector reuse, writer rollback, collision with existing destinations, corrupt headers/payloads, block edits and compression tails; includes one ignored microbenchmark.
+- Findings: The fixture explicitly documents and accepts overlapping sector allocations between chunks (two entries survive), a potential corruption hazard requiring independent review. Tests also pin behavior where bytes after the decoded NBT root are ignored; comments identify Java 26.3 behavior. The benchmark is ignored and was not run.
+- RustChunk relevance: High-value test scenarios for Anvil region I/O, crash-safe writes and chunk NBT preservation; not implementation proof.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Region-file allocation and NBT/compression behavior must be checked against 1.20.1 RegionFile/RegionFileStorage and Forge patches; do not inherit 26.3 assumptions.
+- Follow-up checks: Review overlapping-sector handling, header validation, external .mcc lifecycle, truncation, trailing compressed data and crash recovery against 1.20.1.
+- RustChunk implementation mapping: RustChunk region storage with sector-overlap rejection, transactional writes and a versioned chunk NBT codec.
+- Evidence required before adoption: 1.20.1 Java RegionFile/RegionFileStorage sources, malformed .mca corpus, fault-injected writes and round-trip differential tests.
+- Completion state: COMPLETE — 413 logical lines through EOF; pinned source SHA and 15656-byte size match; inspected, not modified; tests not executed.
+
+### 2686. `crates/horizon-world/tests/world_movement.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3937448a0c0dfab42ce3d7794cc758b476065731`
+- Size: 4315 bytes
+- Coverage: Complete through EOF: 132 logical lines; full file; no gaps.
+- Purpose: Movement collision-scan candidate budget and full-sweep behavior tests.
+- Dependencies / cross-references: scan_cells; resolve_world_movement; BlockCollisionWorld; EntityMovementWorld; CollisionContext; AABB/VoxelShape.
+- Implementation / logic: Uses open-air mock worlds to show diagonal movement beyond the candidate budget is still fully scanned and ordinary movement results remain budget-independent.
+- Findings: The test explicitly asserts that a 40×40-block sweep proceeds despite candidate_budget=10; the budget is not a hard cap on movement work. This may preserve a vanilla walk but exposes a potential unbounded-work/performance risk for extreme movement requests.
+- RustChunk relevance: Critical performance and robustness test for collision scanning on mobile; test-only evidence, not proof of production exploitability.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Reconcile exact 1.20.1 collision walk with Forge entity/block hooks; target may require safe movement bounds without changing normal collision semantics.
+- Follow-up checks: Trace caller-supplied movement bounds, maximum legitimate velocity/teleport/knockback, chunk residency and work amplification; compare with Java 1.20.1.
+- RustChunk implementation mapping: Separate a validated movement-distance policy from collision candidate accounting; preserve normal Java axis/order semantics.
+- Evidence required before adoption: 1.20.1 Entity.collide sources, Forge movement hooks, extreme-coordinate tests and ARM64 profiling.
+- Completion state: COMPLETE — 132 logical lines through EOF; pinned source SHA and 4315-byte size match; inspected, not modified; tests not executed.
+
+### 2687. `crates/horizon-world/tests/world_ray_limits.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cc999867bce020da8f9865954bb8c6e1aa566d32`
+- Size: 2818 bytes
+- Coverage: Complete through EOF: 101 logical lines; full file; no gaps.
+- Purpose: Ray traversal visit-limit, non-finite input and world-provider error tests.
+- Dependencies / cross-references: clip_world; RayWorld; RayError; TraversalError; RayBlockMode; RayFluidMode; Vec3.
+- Implementation / logic: Checks visit-budget exhaustion is returned as an error rather than a miss, non-finite rays fail before world reads, and provider errors remain distinguishable.
+- Findings: Tests use a minimal scripted world with fluid mode disabled; they do not cover full block/fluid shape selection or target-version hit ordering.
+- RustChunk relevance: Reference for bounded ray traversal and explicit query-error semantics.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Ray traversal, voxel clipping and interaction-face semantics must be reconstructed from 1.20.1 ClipContext/VoxelShape.
+- Follow-up checks: Compare visit budget, NaN/infinity, tie-breaking, fluid modes and world-query failures with 1.20.1.
+- RustChunk implementation mapping: RustChunk ray service with finite-input validation and distinct traversal/world error types.
+- Evidence required before adoption: 1.20.1 ray/shape sources, Forge query hooks and differential ray corpus.
+- Completion state: COMPLETE — 101 logical lines through EOF; pinned source SHA and 2818-byte size match; inspected, not modified; tests not executed.
+
+### 2688. `crates/starling-account/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `65ffb123011d8b4e968584856b5896d8f890eca0`
+- Size: 764 bytes
+- Coverage: Complete through EOF: 20 logical lines; full file; no gaps.
+- Purpose: Cargo package and dependency definition for Starling's account, file-download and Android Java-runtime subsystem.
+- Dependencies / cross-references: Workspace edition/license/MSRV; ureq; serde/serde_json; sha1/sha2; lzma-rs; tar; getrandom.
+- Implementation / logic: Declares a non-published workspace crate and its HTTP, serialization, hashing, archive and random-number dependencies.
+- Findings: No Android Keystore provider or platform-specific dependency is declared here; secure persistence must be supplied by the host SecretStore. The dependency set does not establish compatibility with the RustChunk toolchain.
+- RustChunk relevance: Reference for separating account/download/runtime responsibilities into RustChunk-owned crates.
+- Decision: adaptable; reference; dependency baseline only
+- 1.20.1 implications: Workspace edition and rust-version are inherited; pin and audit exact crate versions/features for Android ARM64 and the target build toolchain.
+- Follow-up checks: Inspect lockfile resolution, TLS backend, Android ABI builds, archive parser behavior and SecretStore host implementation.
+- RustChunk implementation mapping: Split RustChunk account/session, verified downloads and runtime installation behind independent platform interfaces.
+- Evidence required before adoption: Pinned Cargo.lock, dependency license/security review, Android ARM64 build and Keystore integration tests.
+- Completion state: COMPLETE — 20 logical lines through EOF; pinned source SHA and 764-byte size match; inspected, not modified; tests not executed.
+
+### 2689. `crates/starling-account/src/ely.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `39f5a23e5e5bbc96002506ed6a5e19bcf5d18a7d`
+- Size: 10210 bytes
+- Coverage: Complete through EOF: 260 logical lines; full file; no gaps.
+- Purpose: Ely.by Yggdrasil authentication, refresh, profile validation and skin/cape lookup.
+- Dependencies / cross-references: ureq; Account/Secrets/Provider; SecretStore; getrandom; JSON helpers; Ely.by auth and texture endpoints.
+- Implementation / logic: Sends password with optional six-digit OTP convention, creates a random client token, validates returned UUID/name/access token, refreshes sessions and fetches texture metadata.
+- Findings: Redirects are disabled and password is request-scoped; profile UUID/name are validated. Texture URLs are accepted from the response without scheme/host validation, and texture lookup failures silently leave skin/cape absent. Ely.by credentials are still transmitted to a third-party auth service.
+- RustChunk relevance: Optional third-party account-provider reference; not Microsoft authentication or Forge account handling.
+- Decision: adaptable; optional; third-party provider
+- 1.20.1 implications: Ely.by/Yggdrasil session semantics differ from Microsoft online-mode and may not authenticate to Mojang online-mode servers.
+- Follow-up checks: Verify current provider API/terms, URL validation, token expiry/refresh semantics and server-side compatibility; isolate credentials and opt-in UX.
+- RustChunk implementation mapping: Optional provider adapter behind a RustChunk auth-provider trait; never treat Ely token as Microsoft/Mojang session.
+- Evidence required before adoption: Current provider documentation, security review, TLS/redirect tests and target server authentication traces.
+- Completion state: COMPLETE — 260 logical lines through EOF; pinned source SHA and 10210-byte size match; inspected, not modified; tests not executed.
+
+### 2690. `crates/starling-account/src/files.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7e0b504d09039e0dd34175a56b950ada077a1efb`
+- Size: 15664 bytes
+- Coverage: Complete through EOF: 436 logical lines; ranges 1–400, 401–436; contiguous, no gaps.
+- Purpose: Pinned Minecraft manifest, client/server/library/asset downloader with hash verification, retry and progress reporting.
+- Dependencies / cross-references: research-lock.json pins; Mojang piston-meta/resources endpoints; ureq Agent; SHA-1; filesystem; four scoped download workers; cancellation/progress callbacks.
+- Implementation / logic: Accepts only pinned version manifests, checks client/server hashes, filters library OS rules, validates asset object hashes, writes .part files and downloads concurrently with retries.
+- Findings: Response bodies are read without a size cap; manifest library paths are filtered with substring `..` but not validated component-by-component against absolute/rooted paths; duplicate library destinations are not deduplicated. Pinned metadata narrows exposure but does not replace path and resource limits. Cancellation is checked between queued files, not during each library/asset response.
+- RustChunk relevance: Useful design reference for Mojang-layout file acquisition, resumable verified downloads and progress; pinned Starling lock is not RustChunk's target version.
+- Decision: adaptable; reference; harden before reuse
+- 1.20.1 implications: research-lock pins Java 26.3; RustChunk requires 1.20.1 manifest/client/libraries/assets and Forge 47 artifacts. SHA-1 compatibility is required by Mojang metadata but should not be the only trust boundary for RustChunk-owned artifacts.
+- Follow-up checks: Add bounded streaming reads, path-component containment, destination deduplication, declared-size checks and cancellation-aware streams; verify 1.20.1 manifest and Forge libraries.
+- RustChunk implementation mapping: RustChunk verified downloader with immutable target-version manifest, strict root-relative path validator and bounded worker queue.
+- Evidence required before adoption: Pinned 1.20.1 manifest, malicious path/oversized-body corpus, interrupted-download tests and Android filesystem tests.
+- Completion state: COMPLETE — 436 logical lines through EOF; pinned source SHA and 15664-byte size match; inspected, not modified; tests not executed.
+
+### 2691. `crates/starling-account/src/files/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9287183e4ce9f8300dc7481bbce8354d159a0dfe`
+- Size: 9149 bytes
+- Coverage: Complete through EOF: 244 logical lines; full file; no gaps.
+- Purpose: Local mock-server tests for manifest pinning, verified download layout, retries and resumability.
+- Dependencies / cross-references: files::{download,Pins,Sources,Wanted,Progress}; local TCP listener; SHA-1; temporary filesystem.
+- Implementation / logic: Builds synthetic client/server jars, libraries and asset index, simulates dropped connections, checks hashes and launcher paths, and verifies repeat downloads reuse intact files.
+- Findings: All payloads are made-up and the HTTP server is a test harness; tests do not fetch Mojang files or establish official 1.20.1/Forge library parity.
+- RustChunk relevance: Reference for deterministic downloader integration tests without network dependency.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Test fixture schema and path/OS cases must be expanded for 1.20.1 and Forge 47's additional libraries/natives.
+- Follow-up checks: Add traversal/absolute path, duplicate destination, oversized response, invalid hash, cancellation and ARM64 filesystem tests.
+- RustChunk implementation mapping: RustChunk local mock HTTP test harness for the target-version verified downloader.
+- Evidence required before adoption: Executed tests on host and Android ARM64, 1.20.1/Forge fixture manifests and adversarial path/stream tests.
+- Completion state: COMPLETE — 244 logical lines through EOF; pinned source SHA and 9149-byte size match; inspected, not modified; tests not executed.
+
+### 2692. `crates/starling-account/src/java.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2e5ee1c0ad9a6029b2b281ed7b26315ab8a04a72`
+- Size: 13832 bytes
+- Coverage: Complete through EOF: 352 logical lines; full file; no gaps.
+- Purpose: Downloads and installs pinned Android OpenJDK 25 runtimes for ARM64, ARMv7 and x86_64.
+- Dependencies / cross-references: files::agent/retrying/may_pass; SHA-256; lzma-rs; tar; filesystem staging and rename.
+- Implementation / logic: Streams a fixed-size archive to a .part file while hashing, verifies exact size/SHA-256, decompresses XZ, validates tar entry paths and stages runtime extraction before rename.
+- Findings: The existing runtime directory is removed before the new archive is fully extracted, so a failed update can destroy a working runtime. Expanded tar size/entry count are not bounded; Unix symlinks are allowed and rely on tar::unpack_in protections. Installed marker checks only the marker hash, not the runtime binaries.
+- RustChunk relevance: Android runtime provisioning architecture is relevant, but Starling's JDK 25 and publishers are not a drop-in choice for RustChunk's Java/Forge target.
+- Decision: adaptable; reference; harden before reuse
+- 1.20.1 implications: Forge 1.20.1 needs a compatible Java runtime (normally Java 17); JDK 25 is not the required baseline. ARM ABI, JNI and ART integration need independent verification.
+- Follow-up checks: Use Java 17-compatible Android runtime; stage beside old install and swap only after validation; bound decompression/entries; test symlink and rollback cases.
+- RustChunk implementation mapping: RustChunk runtime manager with version/ABI manifest, transactional install and post-extraction executable/library validation.
+- Evidence required before adoption: Pinned Java 17 Android ARM64 build, SHA provenance, bounded archive corpus, rollback tests and device JVM launch.
+- Completion state: COMPLETE — 352 logical lines through EOF; pinned source SHA and 13832-byte size match; inspected, not modified; tests not executed.
+
+### 2693. `crates/starling-account/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `228fad98798c90cdfdd94f17d69a671d1d75fab9`
+- Size: 31492 bytes
+- Coverage: Complete through EOF: 875 logical lines; ranges 1–400, 401–800, 801–875; contiguous, no gaps.
+- Purpose: Microsoft OAuth device-code sign-in, Xbox Live/XSTS exchange, Minecraft ownership/profile checks, session refresh and secret-store abstraction.
+- Dependencies / cross-references: Microsoft consumers OAuth; Xbox Live; XSTS; Minecraft Services; serde_json; SecretStore; profiles/ely/files/java/skins modules; account mutex.
+- Implementation / logic: Runs device-code polling, token exchange, ownership validation and profile loading; stores tokens separately from account metadata, supports refresh, account CRUD and cancellable background sign-in.
+- Findings: `Accounts::load` silently converts read/JSON errors into an empty account list; profile UUID/name and device-code response fields are weakly validated; HTTP response bodies are unbounded and invalid JSON becomes Null. Session/activation hold a global account mutex during network refresh; account metadata and secret-store mutations are not one transaction. Android Keystore behavior is only a host-supplied trait contract.
+- RustChunk relevance: Core account architecture reference, but it assumes licensed Microsoft ownership for online-mode authentication; not an offline authentication solution.
+- Decision: adaptable; reference; harden and separate providers
+- 1.20.1 implications: Minecraft 1.20.1 online-mode requires valid Microsoft/Mojang session semantics; Forge does not replace authentication. Offline profiles only work on servers configured for offline mode.
+- Follow-up checks: Validate UUID/name/verification URL and response sizes; preserve corrupt account files with explicit errors; shorten lock scope; add transaction/recovery tests and Android Keystore integration.
+- RustChunk implementation mapping: RustChunk AuthProvider interface, encrypted platform SecretStore, versioned account metadata and cancellable login/session state machine.
+- Evidence required before adoption: Microsoft API approval/flow evidence, Keystore implementation, malformed response corpus, atomic persistence fault tests and online/offline server integration.
+- Completion state: COMPLETE — 875 logical lines through EOF; pinned source SHA and 31492-byte size match; inspected, not modified; tests not executed.
+
+### 2694. `crates/starling-account/src/profiles.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `24b47d6e886ad7501b80ddf76dec4b7da02398da`
+- Size: 11336 bytes
+- Coverage: Complete through EOF: 330 logical lines; full file; no gaps.
+- Purpose: Provider-aware Microsoft/Ely/offline profile selection, activation, addition and removal.
+- Dependencies / cross-references: Accounts; Player; Account/Secrets; SecretStore; account_lock; Ely auth; filesystem metadata.
+- Implementation / logic: Maintains signed-in and offline profile lists, validates offline names, refreshes a selected account before activation and serializes profile mutations under a global lock.
+- Findings: Activation holds the global account mutex across network refresh. `remove_profile_if` treats any non-offline key as a secret-store deletion key without first confirming that it belongs to a listed account; cancellation is checked before mutation but not during Ely authentication.
+- RustChunk relevance: Useful separation of offline profile identity from authenticated sessions; selection metadata alone does not create a valid online-mode session.
+- Decision: adaptable; reference; harden before reuse
+- 1.20.1 implications: Offline profiles can only join offline-mode servers; Microsoft token identity and Forge server auth must remain separate.
+- Follow-up checks: Test concurrent selection/removal, storage failures, unknown keys, provider collisions and cancellation during provider network calls.
+- RustChunk implementation mapping: RustChunk profile manager with explicit Offline/Microsoft/Ely states and no implicit auth downgrade.
+- Evidence required before adoption: Persistence fault tests, concurrency tests, Java 1.20.1 session contract and separate online/offline multiplayer tests.
+- Completion state: COMPLETE — 330 logical lines through EOF; pinned source SHA and 11336-byte size match; inspected, not modified; tests not executed.
+
+### 2695. `crates/starling-account/src/skins.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `09bdf1c58cc5805e95f8909554871ff94750028f`
+- Size: 10755 bytes
+- Coverage: Complete through EOF: 261 logical lines; full file; no gaps.
+- Purpose: Microsoft skin upload, profile refresh and Ely.by skin-site guidance.
+- Dependencies / cross-references: Account/Secrets/Provider; SecretStore; multipart HTTP; Minecraft profile API; PNG signature and size checks.
+- Implementation / logic: Checks a 1 MiB limit and PNG signature, verifies the selected account/provider, uploads multipart variant+image and stores the refreshed profile texture URL.
+- Findings: PNG validation checks only the signature and size, not complete PNG structure or 64×64/64×32 dimensions; the service may reject malformed images. Profile texture URLs are accepted from the response without host/scheme validation.
+- RustChunk relevance: Optional account UX reference, not part of core Forge compatibility.
+- Decision: adaptable; optional; harden before reuse
+- 1.20.1 implications: Skin upload requires a valid Microsoft-owned profile; Ely.by uses a separate website and does not expose the same upload API.
+- Follow-up checks: Validate PNG structure/dimensions, URL allowlist, selected-account races and response handling; verify current Mojang/Ely APIs.
+- RustChunk implementation mapping: Optional RustChunk skin service behind provider-specific capability interfaces.
+- Evidence required before adoption: PNG adversarial corpus, official endpoint documentation, URL validation tests and provider integration tests.
+- Completion state: COMPLETE — 261 logical lines through EOF; pinned source SHA and 10755-byte size match; inspected, not modified; tests not executed.
+
+### 2696. `crates/starling-account/src/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `808a98da8ff61f576f93cc4cd206cfaa6f46721a`
+- Size: 17477 bytes
+- Coverage: Complete through EOF: 473 logical lines; ranges 1–400, 401–473; contiguous, no gaps.
+- Purpose: Local mock tests for the Microsoft device-code/Xbox/XSTS/Minecraft login chain, refresh, cancellation and secret redaction.
+- Dependencies / cross-references: Endpoints; SignIn; SecretStore/MemoryStore; local TCP mock; account/session helpers.
+- Implementation / logic: Simulates pending OAuth polls, network drops, Xbox/XSTS errors, ownership/profile responses, refresh, persistence and cancellation; checks tokens are excluded from Debug/account metadata.
+- Findings: Mocks use synthetic tokens and responses and a one-thread local server; they do not validate live Microsoft approval, real token claims, TLS endpoints or Minecraft 1.20.1 server login.
+- RustChunk relevance: Reference for offline deterministic authentication tests and secret-redaction assertions.
+- Decision: adaptable; reference; test-only
+- 1.20.1 implications: Expand to actual RustChunk Java 1.20.1 session and Forge 47 multiplayer integration; do not infer server compatibility from mock OAuth success.
+- Follow-up checks: Add malformed/oversized response, profile validation, cancellation during each HTTP step, concurrent account operations and real online/offline server tests.
+- RustChunk implementation mapping: RustChunk fake endpoint server and SecretStore test doubles for provider adapters.
+- Evidence required before adoption: Executed host/Android tests, Microsoft-approved app configuration and controlled online-mode/offline-mode server joins.
+- Completion state: COMPLETE — 473 logical lines through EOF; pinned source SHA and 17477-byte size match; inspected, not modified; tests not executed.
+
+### 2697. `crates/starling-catalog/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `24277d037ae077569fc29a97e65768596ab76627`
+- Size: 848 bytes
+- Coverage: Complete through EOF: 22 logical lines; full file; no gaps.
+- Purpose: Cargo package and dependency definition for Starling's Android-facing mod/resource/shader catalog.
+- Dependencies / cross-references: horizon-mods index; horizon-port-pack; image; serde/serde_json; sha1/sha2; ureq; zip.
+- Implementation / logic: Declares a non-published Rust 2021 crate with PNG/JPEG/WebP/GIF image support, HTTP and ZIP processing.
+- Findings: Dependencies and feature flags are inherited from a later-version Starling/Horizon workspace; they do not establish Forge 47 mod compatibility or Android packaging suitability.
+- RustChunk relevance: Reference for an optional in-game catalog, separate from the game runtime and mod loader.
+- Decision: adaptable; optional; dependency baseline only
+- 1.20.1 implications: RustChunk Forge 1.20.1 mods are Java/Forge artifacts; Horizon's native/content mod catalog is a different ecosystem.
+- Follow-up checks: Audit resolved dependency versions/licenses, Android ABI builds, archive safety and explicit Forge/Modrinth compatibility metadata.
+- RustChunk implementation mapping: Optional RustChunk catalog crate with Forge 1.20.1/47.x filters and isolated verified downloads.
+- Evidence required before adoption: Pinned lockfile, Android build, ZIP adversarial corpus and real Forge 47 mod metadata/installation tests.
+- Completion state: COMPLETE — 22 logical lines through EOF; pinned source SHA and 848-byte size match; inspected, not modified; tests not executed.
+
+### 2698. `crates/starling-catalog/src/launcher/browser.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `00adc08534a5fbf47e850099f973a7c9ddc370a0`
+- Size: 279 bytes
+- Coverage: Complete through EOF: 4 logical lines; full file; no gaps.
+- Purpose: Build-time path shim documenting the desktop browser module's alternate source location.
+- Dependencies / cross-references: `crates/starling-catalog/src/lib.rs` path attribute; launcher/src/browser.rs; horizon-mixins workspace scanner.
+- Implementation / logic: Contains only a module-level comment explaining that the file is not compiled and exists because the mixin scanner expects a file at this path.
+- Findings: No browser implementation exists in this four-line stub; functionality resides outside the audited path. Do not infer catalog behavior from this shim.
+- RustChunk relevance: Repository/build-layout reference only.
+- Decision: unnecessary; placeholder/build shim only
+- 1.20.1 implications: No direct Minecraft 1.20.1 behavior; source path and workspace scanner assumptions are repository-specific.
+- Follow-up checks: If restructuring, verify the scanner and `#[path]` target together; do not port this placeholder as functionality.
+- RustChunk implementation mapping: Keep RustChunk module paths explicit; avoid fake implementation files unless a build tool demonstrably requires them.
+- Evidence required before adoption: Workspace scanner behavior and compile graph for the target RustChunk workspace.
+- Completion state: COMPLETE — 4 logical lines through EOF; pinned source SHA and 279-byte size match; inspected, not modified; tests not executed.
+
+### 2699. `crates/starling-catalog/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aeeab2676206c3724b96833613e46c4d1eaf7654`
+- Size: 15635 bytes
+- Coverage: Complete through EOF: 432 logical lines; ranges 1–400, 401–432; contiguous, no gaps.
+- Purpose: Android adapter for Horizon's mod/resource/shader catalog and installation flow.
+- Dependencies / cross-references: launcher/src/browser.rs via path attribute; Registry; Modrinth; Installed; horizon-mods; horizon-port-pack; image/ZIP; filesystem.
+- Implementation / logic: Provides mod/resource/shader shelves, search/pagination, shader-pack downloads/validation, installed-state cleanup, project removal and installation result classification; data-pack APIs are explicit stubs.
+- Findings: Registry search materializes all matching mods before paging; shader-registry errors are silently converted to an empty result; `set_game_home` is a one-shot OnceLock that silently ignores later roots. Shader install removes old files best-effort and may leave an installed file untracked if checksum metadata is absent after rename. Catalog code targets Horizon's ecosystem, not Forge Java mods.
+- RustChunk relevance: Optional catalog architecture and verified-install workflow; not a mod loader or proof of Forge mod compatibility.
+- Decision: rewrite required; optional; ecosystem-specific adapter
+- 1.20.1 implications: GAME and support metadata are inherited from Horizon's later-version browser; Forge 47 mods require separate loader/version/dependency handling.
+- Follow-up checks: Audit launcher browser and installed modules separately, validate home/path lifecycle, pagination errors, ZIP limits and failure rollback; keep data packs out until real world-target support.
+- RustChunk implementation mapping: RustChunk optional Forge Mod Browser service backed by explicit Modrinth Forge 1.20.1 metadata and transactional file installation.
+- Evidence required before adoption: Forge 47 metadata matrix, Android ZIP bomb/path corpus, atomic install/rollback tests and real mod discovery/launch checks.
+- Completion state: COMPLETE — 432 logical lines through EOF; pinned source SHA and 15635-byte size match; inspected, not modified; tests not executed.
+
+### 2700. `crates/starling-catalog/src/list.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ff31c47e661441ce814d4d260017c7b401f3bcc6`
+- Size: 7634 bytes
+- Coverage: Complete through EOF: 229 logical lines; full file; no gaps.
+- Purpose: UI-independent catalog pagination feed, stale-request rejection and touch scrolling helpers.
+- Dependencies / cross-references: Project; Range; PAGE; Feed/Ask/Tail; Scroller/Finger.
+- Implementation / logic: Tracks list generations and source offsets, deduplicates projects by source/id, models loading/more/end/failure states and translates pointer movement into bounded scroll offsets and visible row ranges.
+- Findings: `rows_shown` has no guard for zero/negative/non-finite row height or non-finite inputs; `near_end` likewise assumes finite geometry. The 12-unit slop is UI-scale-specific. Fixed PAGE=20 assumes the source paging contract.
+- RustChunk relevance: Reusable UI-independent feed/scroller concepts; touch constants and source paging policy need adaptation.
+- Decision: adaptable; reference; UI utility
+- 1.20.1 implications: No Minecraft protocol or Forge semantics; Android density, viewport and catalog pagination must be integrated separately.
+- Follow-up checks: Test zero/negative/NaN/infinite geometry, stale/duplicate pages, short pages, offset overflow and multi-touch lifecycle.
+- RustChunk implementation mapping: RustChunk catalog state model with validated viewport geometry and source-specific page-size adapters.
+- Evidence required before adoption: Property tests/fuzzing for Feed and Scroller, Android touch-density tests and pagination integration tests.
+- Completion state: COMPLETE — 229 logical lines through EOF; pinned source SHA and 7634-byte size match; inspected, not modified; tests not executed.

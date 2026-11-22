@@ -803,3 +803,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Checkpoint **2676–2700** remains covered by the same explicit exceptional grant. Continue without asking at the 2675 checkpoint.
 - Commit all six audit documents atomically after the final 25 entries and perform full read-back QA.
 - **STOP immediately after entry 2700**. No review, candidate inspection or entry creation for 2701+ is authorized.
+
+
+## 50. Final checkpoint under one-time exceptional authorization — 2676–2700 — COMPLETE — 2026-11-22
+
+- Entries 2676–2700 are complete and read through EOF. This closes the second 50-file section **2651–2700** and completes the user's one-time 100-file exception **2601–2700**.
+- The normal cadence remains unchanged: 25-file commits inside 50-file report sections inside 200-file stages. The exceptional grant changed only the authorization boundary for this one 100-file window.
+- All four checkpoints 2601–2625, 2626–2650, 2651–2675 and 2676–2700 are complete; the active Ledger contains 100 records and the Index 2,700 sequential unique paths.
+- **STOP at entry 2700.** Do not inspect, fetch for audit, draft or create entry 2701 or later until a fresh explicit user authorization.
+- No tests/examples were executed; no application source was changed and no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.

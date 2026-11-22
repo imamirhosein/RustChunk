@@ -324,11 +324,20 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2601–2650 | 2601–2625 — **COMPLETE** | 2626–2650 — **COMPLETE** | **CLOSED — 50/50** |
-| 2651–2700 | 2651–2675 — **COMPLETE** | 2676–2700 — **AUTHORIZED** | OPEN — 25/50 |
+| 2651–2700 | 2651–2675 — **COMPLETE** | 2676–2700 — **COMPLETE** | **CLOSED — 50/50** |
 | 2701–2750 | 2701–2725 — NOT AUTHORIZED | 2726–2750 — NOT AUTHORIZED | **STOP after 2700** |
 
 - Standard 200 / 50 / 25 protocol is unchanged. The one-time exception covers exactly 100 files: two 50-file sections and four 25-file commits.
-- Checkpoint 2651–2675 is complete and verified. Continue with 2676–2700 under the same explicit grant.
-- **STOP at 2700** and do not inspect or prepare entry 2701+.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: 75 records. Index: 2,675 sequential unique paths. No backup is due before 3000/global verification.
+- Checkpoints 2651–2675 and 2676–2700 are complete and verified. The exceptional grant is exhausted.
+- **STOP at 2700** and do not inspect, fetch for audit, draft or prepare entry 2701+ without a fresh explicit grant.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: 100 records (2601–2700), each with exactly 15 fields. Index: 2,700 sequential unique paths. No backup is due before 3000/global verification.
 - No source changes; tests/examples not executed; no build or runtime validation.
+
+
+## Checkpoint 2676–2700 — COMPLETE (25/25)
+
+- All 25 source paths were selected as the next strict raw-lexical unindexed candidates and inspected individually through EOF at the pinned Starling snapshot; path, SHA and exact Git tree byte size match.
+- Long files were read in consecutive, gap-free chunks no larger than 400 lines: `world_io.rs` 1–400/401–413; account `files.rs` 1–400/401–436; account `lib.rs` 1–400/401–800/801–875; account `tests.rs` 1–400/401–473; catalog `lib.rs` 1–400/401–432.
+- Ledger now has 100 entries (2601–2700), all with exactly 15 required fields. Index has 2,700 sequential unique paths and aligned Decisions.
+- Section 2651–2700 is closed at 50/50. The one-time exceptional authorization for 2601–2700 is fully consumed.
+- **STOP at 2700. Entry 2701+ is not authorized.** No tests/examples were run; no product source or runtime validation was performed.
