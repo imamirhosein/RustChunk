@@ -2,8 +2,8 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries 1–2000 globally verified/backed up; entries 2001–2750 inspected and committed; active 200-file stage is **2601–2800 (150/200)** after checkpoint 2726–2750.
-- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed. The current one-time exceptional grant covers **2701–2800**; section 2751–2800 remains authorized.
+- Entries 1–2000 globally verified/backed up; entries 2001–2775 inspected and committed; active 200-file stage is **2601–2800 (175/200)** after checkpoint 2751–2775.
+- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed. Section **2751–2800** is 25/50 complete: checkpoint 2751–2775 is complete, and 2776–2800 remains authorized under the same one-time grant.
 
 - Historical note: the 2401–2600 stage was fully QA-verified and closed after its lexical-order correction. The earlier 2601–2700 grant is also closed; the active 2601–2800 stage and current exceptional grant 2701–2800 are stated below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
@@ -326,11 +326,11 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 | 2601–2650 | 2601–2625 — **COMPLETE** | 2626–2650 — **COMPLETE** | **CLOSED — 50/50** |
 | 2651–2700 | 2651–2675 — **COMPLETE** | 2676–2700 — **COMPLETE** | **CLOSED — 50/50** |
 | 2701–2750 | 2701–2725 — **COMPLETE** | 2726–2750 — **COMPLETE** | **CLOSED — 50/50** |
-| 2751–2800 | 2751–2775 — **AUTHORIZED** | 2776–2800 — **PRE-AUTHORIZED** | **AUTHORIZED — 0/50** |
+| 2751–2800 | 2751–2775 — **COMPLETE** | 2776–2800 — **PRE-AUTHORIZED** | **IN PROGRESS — 25/50** |
 
 - The user explicitly renewed one exceptional grant for exactly **2701–2800**. It covers both remaining 25-file checkpoints; do not stop for permission at 2775.
-- Keep the normal six-document atomic commit/read-back process after each 25-file checkpoint. The active Ledger is `AUDIT_LEDGER_2601_2800.md`; current Ledger count is **150 entries (2601–2750)** and the Index has **2,750 sequential unique paths**.
-- The complete-tree scan at 2701 found 75 previously unindexed Rust paths lexically before/equal to the old Index cutoff; the first 50 are now entries 2701–2750, with **25 remaining**. Continue selecting from the full pinned tree after excluding the complete current Index.
+- Keep the normal six-document atomic commit/read-back process after each 25-file checkpoint. The active Ledger is `AUDIT_LEDGER_2601_2800.md`; current Ledger count is **175 entries (2601–2775)** and the Index has **2,775 sequential unique paths**.
+- The complete-tree scan at 2701 found 75 previously unindexed Rust paths lexically before/equal to the old Index cutoff; entries 2701–2775 now cover all **75** of those paths. Continue selecting from the full pinned tree after excluding the complete current Index.
 - **STOP after entry 2800.** Entry 2801+ is outside this grant. Keep `main` and all backup refs unchanged. No tests/build/runtime claims unless actually executed.
 
 ## Checkpoint 2676–2700 — COMPLETE (25/25)
@@ -362,3 +362,13 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Ledger now has **150 entries (2601–2750)** and the Index has **2,750 sequential unique paths**. All 15 fields, paths and Decisions align.
 - Section **2701–2750 is CLOSED (50/50)**. The same exceptional authorization covers 2751–2800; continue with 2751–2775 without another permission request. **STOP only at 2800.**
 - No product source code changed; embedded tests/examples were not executed and no runtime validation was performed.
+
+
+## Checkpoint 2751–2775 — COMPLETE (25/25)
+
+- All 25 paths are the next strict raw-lexical unindexed Rust candidates after excluding the complete 2,750-row Index from the complete pinned tree. The 75-path earlier-lexical-order blind spot identified at entry 2701 is now fully exhausted; no historical numbering was changed.
+- All 25 files were read through EOF at pinned source `5432370d573642041585c69b40fb045b27133488`; each source SHA, exact byte size and canonical logical line count matches the complete tree and EOF coverage. Long files were read sequentially in contiguous chunks no larger than 400 lines.
+- Ledger now has **175 records (2601–2775)** and the Index has **2,775 sequential unique paths**. Each new record has exactly 15 required fields; paths and Decisions align.
+- The 2726–2750 checkpoint was re-fetched and its 25 files re-verified for source SHA, byte size, EOF line count and Ledger field structure. Content-level finding refinements were made in Ledger entries 2730, 2735 and 2737.
+- Section **2751–2800** remains authorized under the same exceptional grant; continue with **2776–2800** without another permission request. **STOP only after entry 2800.**
+- No source code changed and no tests/examples were executed; no build or runtime validation was performed.

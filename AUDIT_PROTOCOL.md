@@ -134,18 +134,17 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-21; after checkpoint 2651–2675)
+## 12. Current authoritative resume state (2026-11-22; after checkpoint 2751–2775)
 
-- Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify main or backup refs.
-- Completed entries **1–2675**. Stage 2401–2600 remains closed and globally verified.
-- Active 200-file stage **2601–2800**: **75/200** complete. Section 2601–2650 is closed (50/50); section 2651–2700 is 25/50 complete.
-- One-time exceptional grant covers exactly **2601–2700**. Checkpoints 2601–2625, 2626–2650 and 2651–2675 are committed and verified. The remaining authorized checkpoint is **2676–2700**. Complete it, report and **STOP at 2700**; 2701+ is not authorized.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **75 records (2601–2675)**, each with exactly 15 fields. Index: **2,675 sequential unique paths**, with new entries aligned to Ledger paths and Decisions.
+- Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify `main` or backup refs.
+- Completed entries **1–2775**.
+- Active 200-file stage **2601–2800**: **175/200** complete. Sections **2601–2650**, **2651–2700** and **2701–2750** are closed; section **2751–2800** is 25/50 complete.
+- The one-time exceptional grant covers exactly **2701–2800**. Checkpoints 2701–2725, 2726–2750 and 2751–2775 are complete; **2776–2800** remains authorized. Complete it and **STOP at 2800**; 2801+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **175 records (2601–2775)**, each with exactly 15 fields. Index: **2,775 sequential unique paths**, with all new Ledger paths/Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use the immutable commit only.
-- Recursive source tree is complete and untruncated. The 100-entry candidate list was selected in strict raw lexical order after excluding all 2,600 earlier Index paths; entry 2700 is the 100th authorized path.
-- Standard 200 / 50 / 25 cadence remains. Commit every 25 files and stop at the exceptional authorization boundary.
+- The full recursive source tree is complete and untruncated. Entries 2701–2775 cover all **75** previously unindexed Rust paths that sort before/equal to the previous Index cutoff. Select all remaining candidates from the complete pinned tree after excluding the full 2,775-row Index; never renumber historical entries.
+- Standard 200 / 50 / 25 cadence remains. Commit all six audit documents atomically after each 25-file checkpoint, then read them back from GitHub before continuing.
 - Backup only after 3000 and global verification. No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
-
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -818,8 +817,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The user explicitly renewed the exceptional authorization for exactly **100 new source files: entries 2701–2800**. This is a one-time extension across two 50-file reporting sections; it does not change the normal 200 / 50 / 25 cadence.
 - Use the existing active Ledger `AUDIT_LEDGER_2601_2800.md`; do not create a new ledger. Keep source work on `starling-1.20.1-port-audit`; leave `main` and every backup ref untouched.
 - The four authorized checkpoints are **2701–2725**, **2726–2750**, **2751–2775** and **2776–2800**. Commit and read-back verify all six audit documents after each 25-file checkpoint. No permission request is needed between these checkpoints or at 2750 because this same grant covers all 100 files.
-- The full-tree candidate scan at entry 2701 found 75 unindexed Rust blobs lexically before/equal to the previous last Index path. Entries 2701–2750 now cover the first 50 of those paths; **25 remain** in that earlier-path set. The next candidate is `crates/horizon-world/src/worldgen/tree_blocks.rs` (2751). Apply Section 4 literally: sort all pinned-tree candidates after excluding every path in the full Index; do not renumber historical entries.
+- The full-tree candidate scan at entry 2701 found 75 unindexed Rust blobs lexically before/equal to the previous last Index path. Entries **2701–2775 now cover all 75** of those paths. The next candidate is selected from the complete remaining pinned tree after excluding the full 2,775-row Index; do not assume its path sorts after every historical path, and do not renumber old entries.
 - Update Continuity, Index and Boundary records so the current stage counts and remaining earlier-path candidates stay accurate. Preserve the source pin and evidence status of every finding.
 - **STOP immediately after entry 2800.** Entry 2801+ requires a fresh explicit user authorization. No tests/builds/device/Forge/Minecraft/Aternos claims unless actually run.
 
 - Checkpoint **2701–2725** is complete and six-document read-back verified; checkpoint **2726–2750** is also complete and six-document read-back verified. The first 50-file section **2701–2750** is now closed. Continue at **2751–2775** under the same one-time grant; do not request an interim permission at 2750. Stop after 2800.
+
+
+- Checkpoint **2751–2775** is complete and six-document read-back verified. All 25 source blobs match the pinned recursive tree SHA/size, all EOF counts match, and every new Ledger record has 15 fields. The 75-path earlier-lexical-order correction is exhausted at entry 2775. Continue at **2776–2800** under the same one-time grant; do not request interim permission at 2775. **STOP only after entry 2800.**

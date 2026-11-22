@@ -1,18 +1,18 @@
 # RustChunk Audit Continuity
 
-Last reconciled: 2026-11-21
+Last reconciled: 2026-11-22
 Repository: imamirhosein/RustChunk
 Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2750**.
-- Active 200-file stage: **2601–2800**, currently **150/200**.
-- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed (50/50 each). Section **2751–2800** is active and already authorized: checkpoints **2751–2775** and **2776–2800** are covered by the same one-time grant.
+- Completed entries: **1–2775**.
+- Active 200-file stage: **2601–2800**, currently **175/200**.
+- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed (50/50 each). Section **2751–2800** is active (25/50): checkpoint **2751–2775** is complete, and **2776–2800** remains authorized by the same one-time grant.
 - The earlier exceptional authorization for **2601–2700** is exhausted. The current one-time authorization is exactly **2701–2800**; **STOP after 2800**.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **150 records (2601–2750)**, exactly 15 fields each. Index: **2,750 sequential unique paths**, with new paths and Decisions aligned.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **175 records (2601–2775)**, exactly 15 fields each. Index: **2,775 sequential unique paths**, with new paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable source pin only.
-- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entry 2700 is the 100th authorized path; entry 2701 is outside the exhausted grant.
+- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entries 2701–2775 exhaust the 75 previously unindexed Rust paths that sorted before/equal to the old Index cutoff; remaining candidates are selected from the complete tree after excluding all 2,775 current Index paths. The one-time grant still stops at entry 2800.
 - Backup covers 1–2000 only. No backup at 2675; next backup after 3000 and global verification.
 - Tests/examples were inspected only; none executed. No application source changes, build, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
@@ -781,3 +781,13 @@ Keep progress updates extremely short. Report only the current range and the nex
 - The previous lexical-order blind spot is reduced from 75 to **25 unindexed Rust paths** before/equal to `crates/starling-catalog/src/list.rs`; the next candidate is `crates/horizon-world/src/worldgen/tree_blocks.rs` (2751).
 - Sections 2601–2650, 2651–2700 and 2701–2750 are closed. The current one-time authorization still covers 2751–2800; continue at **2751–2775** and **STOP only after 2800**.
 - Long files were reviewed in consecutive ranges no larger than 400 lines. Tests/examples were inspected only; no tests, build, APK, device, Forge, Minecraft, multiplayer or Aternos validation was run. No application source changed.
+
+ 
+## Latest verified checkpoint — 2751–2775 — 2026-11-22
+
+- Entries **2751–2775 inclusive (25/25)** were read through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; all source SHAs and byte sizes match the complete untruncated recursive tree, and the canonical EOF line counts match the recorded Coverage.
+- The active 200-file stage is **175/200 complete**. Ledger: **175 records (2601–2775)**; Index: **2,775 sequential unique paths**. Each new record has exactly 15 fields and its path/Decision aligns with the Index.
+- The 75-path lexical-order blind spot found at entry 2701 is now exhausted: entries 2701–2775 cover all 75 unindexed Rust paths sorting before/equal to the prior Index cutoff. Choose the next 25 from the complete pinned tree after excluding all 2,775 indexed paths.
+- Sections 2601–2650, 2651–2700, 2701–2750 are closed. Section **2751–2800** is 25/50 complete; checkpoint **2776–2800** is already authorized by the same exceptional grant. **STOP only after entry 2800.**
+- Entries 2726–2750 were re-fetched and independently checked for SHA, size, EOF line counts and exactly 15 Ledger fields; all checks passed. The findings in entries 2730, 2735 and 2737 were refined in the Ledger during this checkpoint transaction.
+- Tests/examples were inspected only; no tests, build, APK, device, Forge, Minecraft, multiplayer or Aternos validation was run. No application source changed.
