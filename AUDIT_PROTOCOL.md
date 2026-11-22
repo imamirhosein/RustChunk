@@ -812,3 +812,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - All four checkpoints 2601–2625, 2626–2650, 2651–2675 and 2676–2700 are complete; the active Ledger contains 100 records and the Index 2,700 sequential unique paths.
 - Final read-back QA corrected one transcription error in entry 2682's source SHA; all six audit documents were committed together and verified again. **STOP at entry 2700.** Do not inspect, fetch for audit, draft or create entry 2701 or later until a fresh explicit user authorization.
 - No tests/examples were executed; no application source was changed and no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+
+## 51. One-time exceptional authorization — 2701–2800 — 2026-11-22
+
+- The user explicitly renewed the exceptional authorization for exactly **100 new source files: entries 2701–2800**. This is a one-time extension across two 50-file reporting sections; it does not change the normal 200 / 50 / 25 cadence.
+- Use the existing active Ledger `AUDIT_LEDGER_2601_2800.md`; do not create a new ledger. Keep source work on `starling-1.20.1-port-audit`; leave `main` and every backup ref untouched.
+- The four authorized checkpoints are **2701–2725**, **2726–2750**, **2751–2775** and **2776–2800**. Commit and read-back verify all six audit documents after each 25-file checkpoint. No permission request is needed between these checkpoints or at 2750 because this same grant covers all 100 files.
+- The full-tree candidate scan at entry 2701 found 75 unindexed Rust blobs lexically before/equal to the previous last Index path. The previous Continuity statement claiming zero was inaccurate. Apply Section 4 literally: sort all pinned-tree candidates after excluding every path in the full Index; do not renumber historical entries. The first 25 of those 75 are entries 2701–2725.
+- Update Continuity, Index and Boundary records so the current stage counts and remaining earlier-path candidates stay accurate. Preserve the source pin and evidence status of every finding.
+- **STOP immediately after entry 2800.** Entry 2801+ requires a fresh explicit user authorization. No tests/builds/device/Forge/Minecraft/Aternos claims unless actually run.

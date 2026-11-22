@@ -2,11 +2,11 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **2601–2800**; completed **25/200 (2601–2625)**.
-- One-time exceptional authorization: **2601–2700 only**, two 50-file sections and four 25-file checkpoints.
+- Active 200-file stage: **2601–2800**; completed **125/200 (2601–2725)**.
+- Exceptional authorization 1 (**2601–2700**) is closed. Exceptional authorization 2 (**2701–2800**) is active and covers the next four 25-file checkpoints.
 - Source selection: strict raw lexical path order from the complete pinned tree, excluding every path already in the full Index. The tree is untruncated; all 25 records match pinned paths, SHAs and byte sizes.
 - Starling is a Java Edition 26.3-era reference snapshot, not proof of Java 1.20.1 / Forge 47.x compatibility.
-- Stop after entry **2700**. Entries 2701+ are not authorized. No source file was modified; tests/examples were inspected only, not executed; no build/runtime/device/Forge/Aternos validation was performed.
+- Stop after entry **2800**. Entries 2801+ are not authorized. No source file was modified; tests/examples were inspected only, not executed; no build/runtime/device/Forge/Aternos validation was performed.
 
 ## 50-file section 2601–2650
 
@@ -1720,3 +1720,428 @@
 - RustChunk implementation mapping: RustChunk catalog state model with validated viewport geometry and source-specific page-size adapters.
 - Evidence required before adoption: Property tests/fuzzing for Feed and Scroller, Android touch-density tests and pagination integration tests.
 - Completion state: COMPLETE — 229 logical lines through EOF; pinned source SHA and 7634-byte size match; inspected, not modified; tests not executed.
+
+### 2701. `crates/horizon-world/src/worldgen/placement/layer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ac794bc5546d05e7585fc59ae92c340de3b51537`
+- Size: 2323 bytes
+- Coverage: Complete through EOF: 68 logical lines; full file; no gaps.
+- Purpose: Layered configured-feature placement modifier that selects vertical candidates using a layer layout and local terrain checks.
+- Dependencies / cross-references: Layer configuration and integer providers; FeatureWorld/PlacementContext height and block queries; RandomSource.
+- Implementation / logic: Iterates the configured placement count, draws horizontal offsets within the candidate layer, samples MotionBlocking height and searches down for the required ground/air relationship. Counter and position updates control yielded positions.
+- Findings: No confirmed defect established. Decrement/check order and random-draw sequence are behaviorally significant; malformed or extreme layer settings need validation at the data boundary.
+- RustChunk relevance: Useful reference for deterministic terrain-aware placement modifiers and for keeping placement queries behind a world adapter.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Later Starling snapshot; vanilla 1.20.1 layer codecs, layer count rules, random sequence and heightmap semantics must be recovered independently.
+- Follow-up checks: Differential-test layer ordering, offsets, minY, empty layers, zero counts and negative-coordinate columns against 1.20.1 Java.
+- RustChunk implementation mapping: Implement a target-version LayerPlacement codec and bounded iterator over the RustChunk placement context; retain Java RNG draw order.
+- Evidence required before adoption: Official 1.20.1 LayerPlacement source, serialized feature fixtures, seeded Java/Rust traces and boundary tests.
+- Completion state: COMPLETE — 68 logical lines through EOF; pinned source SHA and 2323-byte size match; inspected, not modified; tests not executed.
+
+### 2702. `crates/horizon-world/src/worldgen/projected.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `63be87cfbbe4d88da2cc12ad742a76de2c7281e9`
+- Size: 10179 bytes
+- Coverage: Complete through EOF: 277 logical lines; full file; no gaps.
+- Purpose: Projected configured features, including patchy-square projection and stepped-column clustering.
+- Dependencies / cross-references: Integer providers; FeatureWorld and PlacementContext; block-state providers; height and surface queries; RandomSource.
+- Implementation / logic: Decodes bounded feature parameters, samples candidate columns, projects positions toward terrain or air, and places selected states. The stepped-column path derives cluster positions and per-column heights from bounded reach/count providers.
+- Findings: The projection/drop loop has an order-sensitive boundary: decrement and stop-test order make zero/one worth checking. This is a parity candidate, not a reproduced defect. Parameter bounds and random draw order are version-specific.
+- RustChunk relevance: Algorithmic reference for projected ores/features and clustered vertical placement, not a drop-in 1.20.1 implementation.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Configured-feature codecs, projection rules, heightmap behavior and random calls may differ from 1.20.1. Reconstruct the exact target serializer and algorithms.
+- Follow-up checks: Compare drop limits 0/1/maximum, negative coordinates, minY, failed surface searches and random draws against Mojang 1.20.1.
+- RustChunk implementation mapping: Build separate 1.20.1 patchy-square and stepped-column placement implementations behind RustChunk's feature registry.
+- Evidence required before adoption: Official 1.20.1 Java implementations, target data-pack JSON, seeded placement traces and chunk-boundary tests.
+- Completion state: COMPLETE — 277 logical lines through EOF; pinned source SHA and 10179-byte size match; inspected, not modified; tests not executed.
+
+### 2703. `crates/horizon-world/src/worldgen/replace_blobs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `96fbd9198cca383a97c65e23af02fe78a96e630b`
+- Size: 5710 bytes
+- Coverage: Complete through EOF: 170 logical lines; full file; no gaps.
+- Purpose: Configured feature that replaces a connected blob of a selected block state around an origin.
+- Dependencies / cross-references: BlockStateId and provider/predicate bindings; FeatureWorld block reads/writes; integer radius provider; RandomSource; bounded work counter.
+- Implementation / logic: Decodes target state and radius, searches for a matching seed, then explores bounded three-dimensional shell positions and replaces matching states while consuming a work budget.
+- Findings: The explicit work budget is a useful safety feature. No confirmed defect was established; exact shell order, radius distribution and replacement flags remain parity-sensitive.
+- RustChunk relevance: Strong reference for bounded blob replacement and avoiding unbounded terrain scans.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Feature schema and seed-selection behavior must match the 1.20.1 ReplaceBlobFeature implementation and block-state registry.
+- Follow-up checks: Check zero/max radius, no matching seed, boundary clipping, budget exhaustion, repeated positions and deterministic order against target Java.
+- RustChunk implementation mapping: Implement a 1.20.1 codec plus a budgeted frontier/shell iterator using RustChunk's versioned block-state IDs.
+- Evidence required before adoption: 1.20.1 ReplaceBlobFeature source, seeded differential fixtures and tests for budget exhaustion and chunk edges.
+- Completion state: COMPLETE — 170 logical lines through EOF; pinned source SHA and 5710-byte size match; inspected, not modified; tests not executed.
+
+### 2704. `crates/horizon-world/src/worldgen/root_system.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `38a9362ea9fe561cfcec85e8e8077fd20573404e`
+- Size: 8912 bytes
+- Coverage: Complete through EOF: 230 logical lines; full file; no gaps.
+- Purpose: Root-system configured feature that places tree-root blocks, rooted dirt and hanging roots around a tree origin.
+- Dependencies / cross-references: Tree/feature configuration; block-state providers; block predicates and tags; FeatureWorld and PlacementContext; RandomSource.
+- Implementation / logic: Decodes root radius, vertical-space tests, attempts, root-column height and hanging-root parameters. It performs bounded root and hanging-root attempts, tests available space and places configured states.
+- Findings: Individual parameters and loops are bounded, but there is no single aggregate work budget across all attempts and column scans. The worst-case product should be measured before accepting untrusted data-pack inputs.
+- RustChunk relevance: Useful reference for target-version tree-root ecology and feature-specific placement rules.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Later-version tree/root behavior. Rooted-dirt, hanging-root, tree decorators, tags and height limits must be compared with 1.20.1 registries and feature codecs.
+- Follow-up checks: Verify attempt limits, maximum vertical scan, chance order, block replacement, tree-feature interactions and writes at minY/maxY.
+- RustChunk implementation mapping: Create a 1.20.1 RootSystemFeature adapter and add a shared per-feature work budget if target pack inputs require it.
+- Evidence required before adoption: 1.20.1 configured-feature and tree-decorator sources, official feature JSON, seeded traces and worst-case work tests.
+- Completion state: COMPLETE — 230 logical lines through EOF; pinned source SHA and 8912-byte size match; inspected, not modified; tests not executed.
+
+### 2705. `crates/horizon-world/src/worldgen/router.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aed50353d3b272329243c0b606d7e49b58b7df51`
+- Size: 6018 bytes
+- Coverage: Complete through EOF: 168 logical lines; full file; no gaps.
+- Purpose: Defines and compiles the modern noise-router channels used by the later terrain-generation pipeline.
+- Dependencies / cross-references: Density-function samplers and compiler/cache; climate and noise settings; sampler context; registry/resource bindings.
+- Implementation / logic: Stores temperature, vegetation, continents, erosion, depth, ridges, chunk-surface-level and final-density samplers and wires them into a compiled router with shared sampling context.
+- Findings: The structure exposes later-version channels and compilation assumptions. No one-to-one compatibility with the 1.20.1 NoiseRouter is established.
+- RustChunk relevance: Architecture reference for separating named density channels from sampling and compilation.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Minecraft 1.20.1 has its own NoiseRouter field graph, noise parameter registries and density-function semantics. A 26.3 router cannot be adapted by renaming fields.
+- Follow-up checks: Reconstruct the complete 1.20.1 NoiseRouter constructor graph, holders, random-state wiring, blender and aquifer dependencies.
+- RustChunk implementation mapping: Build a 1.20.1-specific router schema and compile only after the target density-function registry has been imported and verified.
+- Evidence required before adoption: Official 1.20.1 NoiseRouter/RandomState sources, noise settings JSON, registry exports and sample-by-sample Java/Rust comparisons.
+- Completion state: COMPLETE — 168 logical lines through EOF; pinned source SHA and 6018-byte size match; inspected, not modified; tests not executed.
+
+### 2706. `crates/horizon-world/src/worldgen/rule_test.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5202baa31b1a356022ca51b4078e444b2753af18`
+- Size: 8432 bytes
+- Coverage: Complete through EOF: 220 logical lines; full file; no gaps.
+- Purpose: Implements recursive block rule tests and composite predicates used by the later world-generation feature system.
+- Dependencies / cross-references: Block predicates and state IDs; tag bindings; height access; matter-phase/property helpers; RandomSource; shared decode depth/work accounting.
+- Implementation / logic: Decodes true/not/all/any/state-set/random-state/height/matter-phase variants and evaluates them against a world query context. Recursive and list decoding uses explicit depth, item and work budgets.
+- Findings: Probability values are parsed without an explicit normalized finite [0,1] check; this may be intentional codec parity but needs target confirmation. Matter-phase is an added abstraction, not automatically vanilla semantics.
+- RustChunk relevance: Useful reference for bounded recursive rule ASTs and separating decode-time validation from runtime block queries.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: The target uses 1.20.1 block predicates and legacy block-state/NBT semantics. Later matter-phase rules and serialized variants cannot be assumed compatible.
+- Follow-up checks: Check NaN/infinite/out-of-range probabilities, empty all/any lists, tag resolution, random draw counts and height boundaries against 1.20.1 Java codecs.
+- RustChunk implementation mapping: Use a target-version rule-test enum with bounded recursive decode context and explicit adapters for optional mod-provided predicates.
+- Evidence required before adoption: Official 1.20.1 predicate codecs, tag snapshots, seeded Java traces and malformed recursive JSON tests.
+- Completion state: COMPLETE — 220 logical lines through EOF; pinned source SHA and 8432-byte size match; inspected, not modified; tests not executed.
+
+### 2707. `crates/horizon-world/src/worldgen/sculk.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `79cbfb4e0373ddd99a3e4f3a064068796c890b29`
+- Size: 26288 bytes
+- Coverage: Complete through EOF: 727 logical lines; 1–400, 401–727; no gaps.
+- Purpose: Implements sculk-related world-generation behavior, including cursor growth, spread, decay and placement around sculk catalysts.
+- Dependencies / cross-references: Sculk block-state/tag bindings; block predicates; feature/world and placement contexts; RandomSource; bounded cursor and charge configuration.
+- Implementation / logic: Decodes sculk growth parameters, charge limits, attempts, rounds and cursor data, then processes cursor spread, decay and growth with bounded per-operation loops.
+- Findings: Per-field bounds and cursor limits constrain individual operations, but the whole feature has no single aggregate work budget. Cursor-merging and update ordering are behaviorally important and require differential tests; no runtime defect was reproduced.
+- RustChunk relevance: Potential reference for sculk simulation and procedural feature placement, especially deterministic work queues and bounded cursors.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Sculk sensor/catalyst behavior, block tags, charge rules and game events must match the 1.20.1 implementation. Later block states and registry IDs are not portable.
+- Follow-up checks: Compare cursor merge/decay, charge consumption, spread-attempt ordering, maximum rounds and emitted block updates against 1.20.1 source and fixtures.
+- RustChunk implementation mapping: Reimplement the 1.20.1 Sculk vein/catalyst feature using explicit target-version state/tag data and a shared operation budget.
+- Evidence required before adoption: 1.20.1 SculkVeinFeature/SculkPatchFeature/catalyst sources, target tags, seeded event traces and worst-case work tests.
+- Completion state: COMPLETE — 727 logical lines through EOF; pinned source SHA and 26288-byte size match; inspected, not modified; tests not executed.
+
+### 2708. `crates/horizon-world/src/worldgen/settings.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `770f12bd66dc960cfceae0e86915018047a13612`
+- Size: 1949 bytes
+- Coverage: Complete through EOF: 45 logical lines; full file; no gaps.
+- Purpose: Defines and validates the noise-generation vertical settings, including minimum Y and generation height.
+- Dependencies / cross-references: Integer range parsing; noise router and generator settings; vertical build-height constants.
+- Implementation / logic: Parses minY and height, enforces supported bounds and 16-block alignment, and exposes a clamped height range for generation.
+- Findings: The allowed vertical interval and clamp behavior are properties of the pinned later-version engine. Edge cases where the requested and supported intervals do not overlap need explicit tests.
+- RustChunk relevance: Small reference for validating generator settings before allocating chunks or noise columns.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Minecraft 1.20.1 world-height bounds and dimension-type rules differ from the later snapshot; copying these constants would break target parity.
+- Follow-up checks: Compare minY/height limits, alignment, clamping, inverted ranges and custom dimension types against 1.20.1.
+- RustChunk implementation mapping: Create a dedicated 1.20.1 Dimension/NoiseSettings validator using official dimension-type and generator constraints.
+- Evidence required before adoption: 1.20.1 DimensionType/NoiseSettings sources, vanilla dimension fixtures and min/max-height tests.
+- Completion state: COMPLETE — 45 logical lines through EOF; pinned source SHA and 1949-byte size match; inspected, not modified; tests not executed.
+
+### 2709. `crates/horizon-world/src/worldgen/simple_block.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a732765c5a8dc65a665d59e545e81f5078add355`
+- Size: 3637 bytes
+- Coverage: Complete through EOF: 109 logical lines; full file; no gaps.
+- Purpose: Implements the simple-block configured feature: sample a block-state provider, check survival, place the block and optionally schedule a tick.
+- Dependencies / cross-references: BlockStateProvider and StateProviderCatalog; BlockPlacement; FeatureWorld; PlacementContext; RandomSource; registry identity.
+- Implementation / logic: Requires provider and placement bindings to share the same registry instance, samples an optional state, checks block survival, performs placement and schedules an optional tick.
+- Findings: The explicit shared-registry identity check is a sound invariant. Placement flags, survival callbacks and tick delay must still be checked against target Java behavior.
+- RustChunk relevance: Reusable structural pattern for composing data-driven providers with a transactional placement helper.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Codec and block survival rules must map to the 1.20.1 SimpleBlockFeature/BlockStateProvider and Forge block-state behavior.
+- Follow-up checks: Verify empty provider behavior, survival failure, update flags, tick scheduling, random sequence and registry lifetime.
+- RustChunk implementation mapping: Implement a 1.20.1 simple-block feature around RustChunk's versioned providers and placement adapter.
+- Evidence required before adoption: 1.20.1 SimpleBlockFeature source, block-state provider fixtures and Java/Rust placement traces.
+- Completion state: COMPLETE — 109 logical lines through EOF; pinned source SHA and 3637-byte size match; inspected, not modified; tests not executed.
+
+### 2710. `crates/horizon-world/src/worldgen/snow_freeze.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `776336925ee5216b565ec346b82b10a0c01d1180`
+- Size: 4150 bytes
+- Coverage: Complete through EOF: 115 logical lines; full file; no gaps.
+- Purpose: Performs the freeze-water and place-snow pass across a 16×16 feature footprint.
+- Dependencies / cross-references: FeatureBlockBindings and snowy-state variants; FeatureWorld/PlacementContext biome, height, block and set-block queries; HeightmapType.
+- Implementation / logic: For each column it samples MotionBlocking height, resolves the biome, tests freezing below and snow placement at the surface, writes ice/snow and switches compatible ground states to snowy variants.
+- Findings: The pass relies on the supplied heightmap and biome predicates and does not independently model all support/replaceability rules. This is a parity question, not a confirmed defect.
+- RustChunk relevance: Reference for batching climate-driven surface updates across a chunk-sized area.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: 1.20.1 snow/ice placement, biome temperature and snow-support rules must be recovered exactly; block IDs and snowy-state sets are versioned.
+- Follow-up checks: Compare snowy blocks, freezing position, light/temperature checks, support conditions, update flags and border columns with 1.20.1.
+- RustChunk implementation mapping: Implement the target SnowAndFreezeFeature using 1.20.1 biome predicates and an explicit validated state mapping.
+- Evidence required before adoption: 1.20.1 SnowAndFreezeFeature and Biome temperature methods, block-state registry export and surface-world fixtures.
+- Completion state: COMPLETE — 115 logical lines through EOF; pinned source SHA and 4150-byte size match; inspected, not modified; tests not executed.
+
+### 2711. `crates/horizon-world/src/worldgen/spawn_finder.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `12d0cf5305e0c8e2dc9f9fbdbaf052db3ecfc117`
+- Size: 4459 bytes
+- Coverage: Complete through EOF: 128 logical lines; full file; no gaps.
+- Purpose: Finds a candidate world-spawn column by minimizing the climate fitness of configured spawn-target points.
+- Dependencies / cross-references: DensitySampler and SamplerContext; climate Parameter quantization; deterministic math helpers and seeded noise targets.
+- Implementation / logic: Scores the origin, performs coarse then fine radial searches up to a fixed radius, and chooses the column with lowest summed squared distance from climate intervals, using distance-to-origin as a tie-break.
+- Findings: The public function accepts an empty target list; fitness then remains at its sentinel value and the result is not a meaningful climate match. Callers/data may guarantee non-empty targets, so this remains a boundary-validation candidate.
+- RustChunk relevance: Reference for deterministic, density-driven spawn selection and bounded radial search.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Spawn-target fields, climate quantization, density noise and search constants belong to the target NoiseBasedChunkGenerator implementation.
+- Follow-up checks: Enforce or prove non-empty targets; compare coarse/fine ring visitation, tie-breaking, negative coordinates and exact math/RNG behavior with 1.20.1.
+- RustChunk implementation mapping: Recreate 1.20.1 spawn-target parsing and candidate search with an explicit non-empty validated target set.
+- Evidence required before adoption: Official 1.20.1 NoiseBasedChunkGenerator/SpawnTargetPoint sources, target noise settings and deterministic spawn fixtures.
+- Completion state: COMPLETE — 128 logical lines through EOF; pinned source SHA and 4459-byte size match; inspected, not modified; tests not executed.
+
+### 2712. `crates/horizon-world/src/worldgen/speleothem.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aeb114db37c220493a1c83a8aeaf748400da6b40`
+- Size: 7950 bytes
+- Coverage: Complete through EOF: 210 logical lines; full file; no gaps.
+- Purpose: Generates pointed dripstone-like formations, surrounding base patches and waterlogged pointed states.
+- Dependencies / cross-references: FeatureBlockBindings and block predicates; BlockRegistry state lookup; Direction and RandomSource; FeatureWorld and PlacementContext.
+- Implementation / logic: Builds vertical-direction/thickness/waterlogged state variants, decodes chance values, selects floor or ceiling support, spreads base blocks in cardinal directions and places pointed segments.
+- Findings: The sequence and strictness of chance comparisons determine the Java random stream. Variant lookup and fallback behavior depend on a complete target registry; no defect was reproduced.
+- RustChunk relevance: Reference for state-derived feature variants and multi-step cave formations.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Later Speleothem/Dripstone state properties and feature JSON must be mapped to 1.20.1 pointed-dripstone properties and placement rules.
+- Follow-up checks: Compare chance defaults and comparison operators, RNG draw order, base replacement, waterlogging, floor/ceiling selection and missing-state handling.
+- RustChunk implementation mapping: Implement a target-version dripstone-style feature with precomputed validated 1.20.1 state transitions.
+- Evidence required before adoption: 1.20.1 DripstoneClusterFeature/PointedDripstoneFeature sources, official block-state table and seeded placement tests.
+- Completion state: COMPLETE — 210 logical lines through EOF; pinned source SHA and 7950-byte size match; inspected, not modified; tests not executed.
+
+### 2713. `crates/horizon-world/src/worldgen/spike.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `fd9cec61470447608ccd292cb0568e697f2c0244`
+- Size: 6782 bytes
+- Coverage: Complete through EOF: 187 logical lines; full file; no gaps.
+- Purpose: Builds randomized tapered spike structures with mirrored lower sections and discontinuous root columns.
+- Dependencies / cross-references: Block predicates; FeatureBlockBindings; FeatureWorld/PlacementContext; RandomSource; block-state registry.
+- Implementation / logic: Searches downward for a valid support point under a work budget, chooses randomized height and base radius, places tapered layers and lower mirrored blocks, then descends root columns with a second work bound.
+- Findings: Root termination uses an absolute Y threshold of 50 rather than the world's minY. This is compatible only with intended dimension assumptions; other dimension profiles need a target-specific rule.
+- RustChunk relevance: Reference for deterministic procedural spike geometry and explicit loop budgets.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: End-spike configuration, dimension-height assumptions and state replacement must match 1.20.1's End feature.
+- Follow-up checks: Verify placement only in intended dimension, minY behavior, randomized height/radius, lower-layer symmetry, work-budget exhaustion and seeded RNG order.
+- RustChunk implementation mapping: Implement an EndSpikeFeature from 1.20.1 Java source with a dimension-aware vertical floor and checked geometry.
+- Evidence required before adoption: 1.20.1 SpikeFeature/End island generation sources, End dimension type and seeded geometry fixtures.
+- Completion state: COMPLETE — 187 logical lines through EOF; pinned source SHA and 6782-byte size match; inspected, not modified; tests not executed.
+
+### 2714. `crates/horizon-world/src/worldgen/spring.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9249b04485d5cb903ff9bf7324a2c6bbc2829d0b`
+- Size: 3821 bytes
+- Coverage: Complete through EOF: 116 logical lines; full file; no gaps.
+- Purpose: Places a configured fluid spring after checking its supporting blocks and exact neighbor rock/hole counts.
+- Dependencies / cross-references: FluidState and FluidBlockBindings; block predicates and air states; FeatureWorld/PlacementContext; scheduled fluid ticks.
+- Implementation / logic: Decodes a fluid state and validity set, checks above/below support, counts valid-rock and air neighbors, writes the fluid block and schedules its fluid tick.
+- Findings: rock_count and hole_count are parsed as unrestricted integers; impossible values silently make placement fail rather than rejecting the feature definition. The block write and tick scheduling are separate operations.
+- RustChunk relevance: Reference for fluid-feature checks and ordering of block mutation versus scheduled fluid updates.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: The 1.20.1 SpringFeature codec, neighbor tests, fluid-state model and tick priority need exact reconstruction.
+- Follow-up checks: Validate count ranges, neighbor order, water/lava mapping, update flags, tick scheduling failure and target RNG behavior.
+- RustChunk implementation mapping: Build a target-version SpringFeature codec that validates counts and uses RustChunk's fluid/tick transaction boundary.
+- Evidence required before adoption: 1.20.1 SpringFeature/FluidState sources, target feature JSON, fluid registry export and failure-injection tests.
+- Completion state: COMPLETE — 116 logical lines through EOF; pinned source SHA and 3821-byte size match; inspected, not modified; tests not executed.
+
+### 2715. `crates/horizon-world/src/worldgen/state_provider.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4e0c9d6e602ab45a16e9f77d8f82cc0d0de63f5b`
+- Size: 27397 bytes
+- Coverage: Complete through EOF: 695 logical lines; 1–400, 401–695; no gaps.
+- Purpose: Implements the data-driven block-state provider family, registry bindings, state selection and state-property transformations.
+- Dependencies / cross-references: BlockRegistry and BlockStateJsonCodec; block/fluid/biome predicates; tags; integer and weighted providers; RandomSource; world/placement query traits.
+- Implementation / logic: Binds block defaults and tags, decodes direct or typed providers, evaluates rule-based/noise/simple/weighted/random/rotated/copy-properties/randomized-int nodes, and lazily builds state-rotation/property tables.
+- Findings: MAX_TAG_BLOCKS is 1<<20 while nearby comments describe much smaller tag expectations; array and aggregate limits must be reviewed as one resource policy. Decoder layers also have multiple per-call budgets whose total cost should be measured.
+- RustChunk relevance: Core architectural reference for RustChunk's data-driven block-state generation and registry-bound immutable providers.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Provider types, JSON schemas, block properties, tag expansion and RNG semantics must be rebuilt from 1.20.1/Forge 47 sources.
+- Follow-up checks: Verify provider variants, direct-versus-typed exclusivity, aggregate budgets, tag expansion, cycle/alias behavior and exact rotation/property tables against 1.20.1.
+- RustChunk implementation mapping: Create a target-version StateProvider module using one shared decode/work budget and immutable 1.20.1 registry bindings.
+- Evidence required before adoption: 1.20.1 BlockStateProvider codecs, Forge registry/tag snapshots, Java random traces and adversarial provider/resource fixtures.
+- Completion state: COMPLETE — 695 logical lines through EOF; pinned source SHA and 27397-byte size match; inspected, not modified; tests not executed.
+
+### 2716. `crates/horizon-world/src/worldgen/state_provider/catalog.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e8316713ae9c1752d67cad09885aeb315e5a37f3`
+- Size: 2560 bytes
+- Coverage: Complete through EOF: 64 logical lines; full file; no gaps.
+- Purpose: Stores named block-state provider resources and resolves provider holders lazily against a shared registry binding.
+- Dependencies / cross-references: BlockStateProvider decoder; StateProviderBindings; identifier normalization; serde_json RawValue and ordered maps.
+- Implementation / logic: Normalizes and deduplicates resource identifiers, caps entry count, stores raw JSON without decoding unused providers, and resolves references through shared depth/work budgets.
+- Findings: The item-count cap does not constrain total JSON bytes or per-resource size. Large individual resources can still consume substantial parse and memory work before provider-level budgets apply.
+- RustChunk relevance: Good reference for immutable resource snapshots and lazy resolution of named data-pack resources.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Resource location rules and named provider serialization differ in 1.20.1; integrate only after target registry/tag lifecycle is designed.
+- Follow-up checks: Add total-byte/per-resource limits, test alias cycles and duplicate canonical IDs, and compare resource-location normalization with 1.20.1.
+- RustChunk implementation mapping: Implement a 1.20.1 named-provider catalog backed by bounded immutable resource bundles.
+- Evidence required before adoption: Target provider resource schemas, 1.20.1 ResourceLocation rules, pack-size limits and adversarial cycle/size tests.
+- Completion state: COMPLETE — 64 logical lines through EOF; pinned source SHA and 2560-byte size match; inspected, not modified; tests not executed.
+
+### 2717. `crates/horizon-world/src/worldgen/state_provider/noise.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ee8b7c4604b4a2c5b7157c4147d6510463b54323`
+- Size: 8231 bytes
+- Coverage: Complete through EOF: 231 logical lines; full file; no gaps.
+- Purpose: Implements noise, noise-threshold and dual-noise block-state provider variants.
+- Dependencies / cross-references: Noise/NoiseStack; Density/Noise decoders; seeded LegacyRandom and WorldgenRandom; BlockStateId and provider bindings.
+- Implementation / logic: Decodes seed, noise settings, scale and candidate states, then selects states from one- or two-noise samples with optional threshold/chance or variety behavior.
+- Findings: Float parsing and the custom long-number parser reproduce later codec behavior. Exact parsing, precision and random-draw order are compatibility-sensitive; no parity with Java 1.20.1 was demonstrated.
+- RustChunk relevance: Reference for deterministic noise-driven state choice and isolating variant-specific providers.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: The target uses 1.20.1 noise parameters and Java random implementations; later NoiseStack composition cannot be reused directly.
+- Follow-up checks: Differential-test decimal/exponent seeds, float boundaries, zero/maximum variety, noise sampling precision and every random draw.
+- RustChunk implementation mapping: Implement 1.20.1 noise-based provider variants over the verified target noise registry and LegacyRandom adapter.
+- Evidence required before adoption: 1.20.1 NoiseProvider codecs, NoiseSettings/RandomState sources, official provider JSON and seeded sample traces.
+- Completion state: COMPLETE — 231 logical lines through EOF; pinned source SHA and 8231-byte size match; inspected, not modified; tests not executed.
+
+### 2718. `crates/horizon-world/src/worldgen/state_provider/properties.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cac52e69e712611d4b1930587bb17d3b88731964`
+- Size: 8605 bytes
+- Coverage: Complete through EOF: 206 logical lines; full file; no gaps.
+- Purpose: Builds compact lookup tables for block-state property identities, copying, reading and replacing Cartesian property values.
+- Dependencies / cross-references: BlockRegistry; BlockStateId; integer-property allowlist; ordered property/state maps.
+- Implementation / logic: Groups states by block, validates Cartesian property ordering, calculates strides and property identities, then uses indexed tables for copy and set/get operations.
+- Findings: Correctness depends on the source registry's state ordering and exact property-identity families. Cartesian validation does not prove another target registry uses the same order.
+- RustChunk relevance: Useful data-structure and lookup optimization reference for high-frequency block-state property operations.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: All state IDs and property order must come from the 1.20.1 registry export. The later registry snapshot is not portable.
+- Follow-up checks: Compare every property family, integer-valued property and Cartesian state order with the 1.20.1 BlockState registry.
+- RustChunk implementation mapping: Generate RustChunk property tables from the verified 1.20.1 registry and retain a checked slow path for unmatched property families.
+- Evidence required before adoption: 1.20.1 block-state registry, exhaustive Java/Rust property-copy comparisons and malformed Cartesian-table tests.
+- Completion state: COMPLETE — 206 logical lines through EOF; pinned source SHA and 8605-byte size match; inspected, not modified; tests not executed.
+
+### 2719. `crates/horizon-world/src/worldgen/structure.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2883880d94c0ed8f23ed9452fe203290acc09d1d`
+- Size: 14056 bytes
+- Coverage: Complete through EOF: 409 logical lines; 1–400, 401–409; no gaps.
+- Purpose: Shared structure-template resources, block-state transforms, bounding boxes and processor/template lookup infrastructure.
+- Dependencies / cross-references: NBT codec and limits; BlockRegistry/BlockStateId; processor lists; filesystem prepared-file reader; gzip decoder; rotation and bounding-box helpers.
+- Implementation / logic: Builds rotation/mirror/full-block/entity tables, lazily loads gzip-compressed NBT templates and processor resources, caches templates and derives jigsaw/fluid/waterlogging state metadata.
+- Findings: StateTransforms filters malformed array elements and indexes short inner arrays without checking lengths, which can panic on malformed input. Gzip data is expanded into a Vec before NBT limits are applied. Template ID path containment relies on downstream file handling and needs proof.
+- RustChunk relevance: Core architecture reference for structure templates, processors, block transforms and cached immutable resources.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Structure template NBT, state transforms, processor registries, block-entity IDs and paths must be reconstructed from 1.20.1 data and serialization.
+- Follow-up checks: Validate transform tuples/state IDs before indexing, bound compressed/decompressed sizes, canonicalize template paths and test corrupt gzip/NBT inputs.
+- RustChunk implementation mapping: Create a 1.20.1 structure-resource loader with validated transform tables, bounded decompression and path-contained template lookup.
+- Evidence required before adoption: Official 1.20.1 StructureTemplate/StructurePlaceSettings sources, target transform export, NBT corpora and adversarial archive/path tests.
+- Completion state: COMPLETE — 409 logical lines through EOF; pinned source SHA and 14056-byte size match; inspected, not modified; tests not executed.
+
+### 2720. `crates/horizon-world/src/worldgen/structure/end_city.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b440fc832988ea65f6d2ef82f1d648095a6021a0`
+- Size: 16710 bytes
+- Coverage: Complete through EOF: 467 logical lines; 1–400, 401–467; no gaps.
+- Purpose: Procedurally assembles End City towers, bridges, houses and ship pieces, then handles structure markers during placement.
+- Dependencies / cross-references: StructureResources and templates; BoundingBox/Rotation/Mirror; LegacyPiece/TemplatePiece; ProcessorList; entity and loot-table NBT; RandomSource.
+- Implementation / logic: Builds bounded recursive sections with a maximum generation depth, computes transformed template offsets and rejects intersecting piece groups. Post-processing creates shulkers, item frames with elytra and End City chest loot from marker names.
+- Findings: Generation depth is capped, but geometry depends on exact template dimensions and transform math. Marker handling uses prefix matching; random helper failures are collapsed to zero. These are parity/robustness candidates, not confirmed defects.
+- RustChunk relevance: Reference for multi-piece structure assembly, collision grouping and marker-driven entity/loot placement.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: End City templates, marker names, entity NBT and loot semantics must match Java 1.20.1 assets and structure-piece code.
+- Follow-up checks: Compare template offsets, collision tags, ship probability, marker handling, chunk clipping and loot/entity initialization against 1.20.1.
+- RustChunk implementation mapping: Implement target EndCityStructure through the generic 1.20.1 template-piece engine and target structure templates.
+- Evidence required before adoption: 1.20.1 EndCityPieces/EndCityStructure sources, official NBT templates, seeded piece-layout fixtures and chunk-split placement tests.
+- Completion state: COMPLETE — 467 logical lines through EOF; pinned source SHA and 16710-byte size match; inspected, not modified; tests not executed.
+
+### 2721. `crates/horizon-world/src/worldgen/structure/enhanced_terrain.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `04f14e9698fc66674d5c687d63eac50085a0604f`
+- Size: 13465 bytes
+- Coverage: Complete through EOF: 358 logical lines; full file; no gaps.
+- Purpose: Adapts external structure-library terrain kernels, including YUNG's API and MoogsStructureLib-style piece/junction rules.
+- Dependencies / cross-references: TerrainKernel/KernelPiece/KernelJunction; StructureStart and PoolPiece; jigsaw projection; bounding-box and chunk-position geometry.
+- Implementation / logic: Decodes kernel radius/distance, carving/burying actions, padding, offsets and optional vertical bands, then collects affected structure-piece bounds and terrain junctions near a chunk.
+- Findings: Explicitly a mod-library extension, not vanilla structure terrain behavior. Numeric casts and bounding-box arithmetic deserve checked handling, but adoption is optional and no compatibility claim is established.
+- RustChunk relevance: Potential future extension point for compatibility with specific structure mods; not part of the baseline vanilla world generator.
+- Decision: undetermined; reference; optional/future
+- 1.20.1 implications: No direct Forge 47 integration follows from this later Horizon extension. Each target mod's mixins/API and exact terrain-kernel contract must be separately identified.
+- Follow-up checks: Identify target mods and licenses, validate each kernel algorithm and bound, and prove how Forge 1.20.1 injects equivalent terrain influence.
+- RustChunk implementation mapping: Keep an optional adapter interface for externally supplied structure-terrain kernels; do not wire it into the vanilla core by default.
+- Evidence required before adoption: Exact target mod versions, source/licensing review, Forge 1.20.1 mixin behavior, bounded geometry tests and parity fixtures.
+- Completion state: COMPLETE — 358 logical lines through EOF; pinned source SHA and 13465-byte size match; inspected, not modified; tests not executed.
+
+### 2722. `crates/horizon-world/src/worldgen/structure/features.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `73eecc80818c7d384a10b3dcbde686904ac8095d`
+- Size: 8395 bytes
+- Coverage: Complete through EOF: 231 logical lines; full file; no gaps.
+- Purpose: Implements template and fossil configured features, including weighted template rotation and fossil/overlay placement.
+- Dependencies / cross-references: StructureResources and templates; ProcessorList/PlaceSettings; WeightedList; FeatureWorld/PlacementContext; heightmap and random queries.
+- Implementation / logic: Decodes weighted template entries and processor lists, chooses a rotation, positions templates, finds fossil placement height across the base footprint and places paired base/overlay structures within a bounded box.
+- Findings: An explicitly empty rotation array survives decoding and later produces a zero-bound random request, which returns an error rather than choosing a rotation. Empty/malformed fossil arrays and corner thresholds also require strict validation.
+- RustChunk relevance: Reference for reusable template/fossil feature orchestration and processor-list application.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Target 1.20.1 template/fossil codecs, templates, processor order, heightmap and NBT transformations differ.
+- Follow-up checks: Test empty rotation lists, mismatched/empty fossil pairs, extreme dimensions, corner-count thresholds and exact processor/RNG order.
+- RustChunk implementation mapping: Rebuild TemplateFeature/FossilFeature on the 1.20.1 structure template/processor layer with explicit codec validation.
+- Evidence required before adoption: 1.20.1 TemplateFeature/FossilFeature sources, official structure NBT data, target processor registries and seeded placement tests.
+- Completion state: COMPLETE — 231 logical lines through EOF; pinned source SHA and 8395-byte size match; inspected, not modified; tests not executed.
+
+### 2723. `crates/horizon-world/src/worldgen/structure/formations.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d011966a7b1dc21e7b6332796ad073f5f0464ebb`
+- Size: 14178 bytes
+- Coverage: Complete through EOF: 405 logical lines; 1–400, 401–405; no gaps.
+- Purpose: Implements the external Formations mod's simple and pieced structures using pool elements, height placement and jigsaw children.
+- Dependencies / cross-references: Pools/PoolElement and JigsawConfig; StructureResources; StartContext/NoiseColumn; heightmap; FeatureBlockBindings; RandomSource.
+- Implementation / logic: Chooses an element and rotation inside a chunk, samples five terrain columns for surface/ceiling/water/lava/underground placement, computes its vertical position and optionally expands jigsaw children within a distance box.
+- Findings: Mod-specific format. max_depth and max_distance_from_center are cast to i32 without explicit range checks; large/negative settings can produce invalid geometry or excessive assembly work.
+- RustChunk relevance: Optional integration example for structure mods exposing a pool-based placement format.
+- Decision: undetermined; reference; optional/future
+- 1.20.1 implications: Not a vanilla 1.20.1 structure type. The matching Formations version, serializer and jigsaw mixin behavior must be proven separately.
+- Follow-up checks: Validate depth/distance ranges, dimension clipping, five-column averaging, random order and exact target Formations compatibility.
+- RustChunk implementation mapping: Keep a plugin adapter for supported structure-mod placement definitions, isolated from vanilla structure generation.
+- Evidence required before adoption: Exact Formations 1.20.1 source/version, Forge mixin hooks, sample data packs and bounded jigsaw differential tests.
+- Completion state: COMPLETE — 405 logical lines through EOF; pinned source SHA and 14178-byte size match; inspected, not modified; tests not executed.
+
+### 2724. `crates/horizon-world/src/worldgen/structure/fortress.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `521dac872c9f5c332078d3aeae82e97382d7aeb5`
+- Size: 33739 bytes
+- Coverage: Complete through EOF: 935 logical lines; 1–400, 401–800, 801–935; no gaps.
+- Purpose: Generates and places Nether Fortress bridge/castle pieces, corridors, rooms, spawners, chests and terrain supports.
+- Dependencies / cross-references: LegacyPiece/PieceFrame; BoundingBox/orientation helpers; RandomSource/LegacyRandom; BlockStateId palettes; block and entity/loot placement.
+- Implementation / logic: Uses weighted bridge/castle piece lists, collision tests and a pending-piece worklist bounded by horizontal distance and depth, then shifts the structure vertically and emits each piece's block geometry and spawner/chest markers.
+- Findings: The helper converts random-bound errors to zero. One branch requests a random bound of 10 minus current depth while the generator permits depth up to 30; if depth reaches 10 or more, that bound is non-positive and the helper silently returns zero. Reachability and impact need differential/reproduction before calling this a defect.
+- RustChunk relevance: Important reference for deterministic legacy structure assembly, piece serialization and chunk-wise block placement.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Fortress piece geometry, weights, depth limits, random sequence, block palettes and loot/spawner behavior require exact Java 1.20.1 parity.
+- Follow-up checks: Prove whether the dynamic bound can be non-positive on reachable paths; compare each piece factory, collision, y-shift, NBT save and chunk post-process with 1.20.1.
+- RustChunk implementation mapping: Implement a 1.20.1 NetherFortressStructure/PieceBuilder with checked RNG bounds and explicit deterministic pending-work limits.
+- Evidence required before adoption: Official 1.20.1 NetherFortressPieces sources, seeded structure-layout corpus, serialized-piece fixtures and chunk-split block/loot tests.
+- Completion state: COMPLETE — 935 logical lines through EOF; pinned source SHA and 33739-byte size match; inspected, not modified; tests not executed.
+
+### 2725. `crates/horizon-world/src/worldgen/structure/jigsaw.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7ba24ee02a9bdc5c8a56ae308ad011c238d9b598`
+- Size: 59932 bytes
+- Coverage: Complete through EOF: 1579 logical lines; 1–400, 401–800, 801–1200, 1201–1579; no gaps.
+- Purpose: Implements structure pool elements, jigsaw blocks, pool decoding, vanilla/YUNG/Lithostitched candidate rules, structure assembly and piece placement.
+- Dependencies / cross-references: PoolElement/StructureResources and templates; ProcessorList; NBT; FeatureWorld/PlacementContext; RandomSource; JigsawContext; biome/height queries; enhanced-terrain adapters.
+- Implementation / logic: Decodes nested pool elements and weighted pools, resolves target/fallback pools, attaches jigsaw blocks with rotation/projection rules, tracks free-space boxes and depth-prioritized work, creates piece/junction records and places templates or feature elements.
+- Findings: Pool weights are not range-checked before weight expansion into repeated Vec entries; aggregate i32 weight sums can overflow. Nested list elements and pool/resource sizes have no shared decode/work budget, and assembly has no global piece-count budget. These are resource-exhaustion candidates for content-pack input, not reproduced runtime failures.
+- RustChunk relevance: Core architecture reference for procedural structure assembly, template pools and modded pool selection.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: 1.20.1 jigsaw schemas, random draw order, pool fallback/alias behavior, projection, processors, junctions and saved NBT all require target-specific reconstruction. YUNG/Lithostitched semantics are optional mod integrations.
+- Follow-up checks: Validate positive bounded weights, checked total-weight arithmetic, nested depth, pool-byte and piece-count budgets, alias cycles, free-space collision, max depth/distance and saved-piece round trips.
+- RustChunk implementation mapping: Build a target 1.20.1 JigsawPlacement core first; add explicit per-mod strategy adapters and shared budgets rather than copying later extension rules.
+- Evidence required before adoption: 1.20.1 JigsawPlacement/StructureTemplatePool Java sources, pool/processor resources, target YUNG/Lithostitched versions, seeded Java/Rust layouts and adversarial size/depth tests.
+- Completion state: COMPLETE — 1579 logical lines through EOF; pinned source SHA and 59932-byte size match; inspected, not modified; tests not executed.

@@ -1757,3 +1757,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 - Post-commit provenance QA caught a transcription error in entry 2682's recorded source SHA. Corrected it to the exact pinned-tree blob SHA `23553e6b78d9345806cac3abcc2df5636fd38098`; byte size (3,904) and complete 87-line coverage were already correct.
 - No source file was changed or re-inspected; the exact tree SHA was re-read from the pinned recursive tree. The checkpoint is accepted only after the corrective six-document commit and full read-back verification.
+
+## Source-audit checkpoint 2701–2725 — 2026-11-22 — COMPLETE
+
+- Completed entries **2701–2725 (25/25)** from pinned Starling snapshot `5432370d573642041585c69b40fb045b27133488`.
+- A complete recursive-tree scan excluded all 2,700 existing Index paths and exposed **75 unindexed Rust paths** lexically before or equal to the old last indexed path `crates/starling-catalog/src/list.rs`. The earlier Continuity statement that none existed was incorrect. The 25 paths here are the first 25 of that globally sorted remainder; no historical entry was renumbered.
+- All 25 files were read completely through EOF. Long-file coverage was sequential and gap-free in chunks no larger than 400 lines: `sculk.rs` 1–400/401–727; `state_provider.rs` 1–400/401–695; `structure.rs` 1–400/401–409; `end_city.rs` 1–400/401–467; `formations.rs` 1–400/401–405; `fortress.rs` 1–400/401–800/801–935; `jigsaw.rs` 1–400/401–800/801–1200/1201–1579. Remaining files were read in complete single-file fetches.
+- Every new path exists in the untruncated pinned tree; all 25 source blob SHAs and byte sizes match. Every new Ledger record contains exactly 15 required fields. The 25 Index rows match Ledger paths and Decisions.
+- Index now contains **2,725 sequential entries and 2,725 unique paths**. The active Ledger contains **125 records (2601–2725)**.
+- Potential follow-ups include resource-budget gaps in recursive/provider/pool inputs, unchecked structure-transform table shapes and decompression limits, and a possible non-positive RNG bound in the fortress depth branch. Reachability/runtime impact was not reproduced, so these remain potential/unverified.
+- Embedded tests/examples were inspected only; none were executed. No RustChunk application/game source changed. No build, benchmark, APK, Android device, Forge launch, Minecraft join, multiplayer or Aternos validation was performed.
+- The current exceptional authorization covers **2701–2800**. Checkpoint **2726–2750** remains authorized without an interim permission request. Stop only after entry **2800**.
