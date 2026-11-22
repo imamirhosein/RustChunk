@@ -6,11 +6,11 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2700**.
-- Active 200-file stage: **2601–2800**, currently **125/200**.
-- Sections **2601–2650** and **2651–2700** are closed. Section **2701–2750** is in progress: checkpoint **2701–2725** is complete and **2726–2750** remains authorized. The exceptional grant also covers **2751–2800**.
+- Completed entries: **1–2750**.
+- Active 200-file stage: **2601–2800**, currently **150/200**.
+- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed (50/50 each). Section **2751–2800** is active and already authorized: checkpoints **2751–2775** and **2776–2800** are covered by the same one-time grant.
 - The earlier exceptional authorization for **2601–2700** is exhausted. The current one-time authorization is exactly **2701–2800**; **STOP after 2800**.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **125 records (2601–2725)**, exactly 15 fields each. Index: **2,725 sequential unique paths**, with new paths and Decisions aligned.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **150 records (2601–2750)**, exactly 15 fields each. Index: **2,750 sequential unique paths**, with new paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable source pin only.
 - The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entry 2700 is the 100th authorized path; entry 2701 is outside the exhausted grant.
 - Backup covers 1–2000 only. No backup at 2675; next backup after 3000 and global verification.
@@ -25,7 +25,7 @@ Branch: starling-1.20.1-port-audit
 - Select paths in deterministic lexical order, excluding every path already in the full Index. Never repeat or renumber a source path.
 
 - Index order reconciliation: 70 adjacent transitions relative to the pinned GitHub recursive-tree API order were found among the 2,450 stable Index rows: 69 occur in entries 1–2000, and one occurs at entry 2033. No additional raw-tree-position regressions occur from entry 2034 through 2450. This is a historical ordering divergence, not a missing-file, duplicate-path or source-provenance defect: all 2,450 Index paths are unique and present in the pinned tree. The audit IDs are stable historical chronology and must not be renumbered because Ledger, QA and cross-document references depend on them. Do not describe the whole Index as a literal raw recursive-tree traversal.
-- Ordering correction at the 2700 boundary: the prior claim that zero unindexed Rust paths were lexically before/equal to `crates/starling-catalog/src/list.rs` was wrong. A complete pinned-tree scan found 75 such paths. Entries 2701–2725 cover the first 25 in raw lexical order; **50 remain** in that earlier-path set. The next globally sorted unindexed path is `crates/horizon-world/src/worldgen/structure/legacy.rs` (entry 2726). Always sort the full remaining source set after excluding every indexed path.
+- Ordering correction at the 2700 boundary: a complete pinned-tree scan found 75 unindexed Rust paths lexically before/equal to `crates/starling-catalog/src/list.rs`. Entries 2701–2750 cover the first 50 in raw lexical order; **25 remain** in that earlier-path set. The next globally sorted unindexed path is `crates/horizon-world/src/worldgen/tree_blocks.rs` (entry 2751). Always sort the full remaining source set after excluding every indexed path.
 - Verify every source SHA and byte size against the pinned tree.
 
 ## Per-file inspection requirements
@@ -768,8 +768,16 @@ Keep progress updates extremely short. Report only the current range and the nex
 ## Latest verified checkpoint — 2701–2725 — 2026-11-22
 
 - Entries **2701–2725 inclusive (25/25)** were read through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; source SHAs and byte sizes match the complete untruncated recursive tree.
-- The full-tree candidate scan corrected the prior ordering blind spot: 75 unindexed Rust paths sorted before/equal to the previous last Index path; the first 25 are now indexed. The next candidate is `crates/horizon-world/src/worldgen/structure/legacy.rs` (2726).
-- Ledger: **125 entries (2601–2725)**; Index: **2,725 sequential unique paths**. All new entries have exactly 15 fields and their paths/Decisions align with the Index.
+- The full-tree candidate scan corrected the prior ordering blind spot: 75 unindexed Rust paths sorted before/equal to the previous last Index path; entries 2701–2750 now cover the first 50, with **25 remaining**. The next candidate is `crates/horizon-world/src/worldgen/tree_blocks.rs` (2751).
+- Ledger: **150 entries (2601–2750)**; Index: **2,750 sequential unique paths**. All new entries have exactly 15 fields and their paths/Decisions align with the Index.
 - Long files were read sequentially in contiguous chunks no larger than 400 lines; exact ranges are recorded in the Ledger and QA Log.
-- User authorization covers **2701–2800**. Continue with **2726–2750** without another permission request. Keep 25-file commits and 50-file reports; **STOP only after 2800**.
+- User authorization covers **2701–2800**. Section **2701–2750 is closed**; continue with **2751–2775** without another permission request. Keep 25-file commits and 50-file reports; **STOP only after 2800**.
 - No product source changed. Tests/examples were inspected only; no tests, build, APK, device, Forge, Minecraft, multiplayer or Aternos validation was run.
+
+## Latest verified checkpoint — 2726–2750 — 2026-11-22
+
+- Entries **2726–2750 inclusive (25/25)** were read through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; source SHAs and byte sizes match the complete untruncated recursive tree.
+- The active 200-file stage is **150/200 complete**. Ledger: **150 records (2601–2750)**; Index: **2,750 sequential unique paths**. All new entries contain exactly 15 fields and align with Index paths/Decisions.
+- The previous lexical-order blind spot is reduced from 75 to **25 unindexed Rust paths** before/equal to `crates/starling-catalog/src/list.rs`; the next candidate is `crates/horizon-world/src/worldgen/tree_blocks.rs` (2751).
+- Sections 2601–2650, 2651–2700 and 2701–2750 are closed. The current one-time authorization still covers 2751–2800; continue at **2751–2775** and **STOP only after 2800**.
+- Long files were reviewed in consecutive ranges no larger than 400 lines. Tests/examples were inspected only; no tests, build, APK, device, Forge, Minecraft, multiplayer or Aternos validation was run. No application source changed.
