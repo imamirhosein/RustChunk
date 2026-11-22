@@ -1400,7 +1400,7 @@
 
 ### 2682. `crates/horizon-world/tests/state_provider_bounds.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
-- Source SHA: `23553e6b78d9345805e6b3ccab2df5636fd38098`
+- Source SHA: `23553e6b78d9345806cac3abcc2df5636fd38098`
 - Size: 3904 bytes
 - Coverage: Complete through EOF: 87 logical lines; full file; no gaps.
 - Purpose: Block-state provider recursion, aggregate budgets, tags and catalogue resolution tests.

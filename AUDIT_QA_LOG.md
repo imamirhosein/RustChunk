@@ -1751,3 +1751,9 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings include useful regression scenarios for movement properties, placement query ordering, retrogen atomicity, recursive decode budgets, tick persistence, region-file writes and ray traversal. The world-I/O tests explicitly leave overlapping region sectors un-rejected; the movement test demonstrates that candidate_budget does not cap a large movement sweep. These require target-version/security review, not blind reuse.
 - Account/catalog code is optional reference architecture, not a solution for offline-mode identity or Forge 47 mod loading. Microsoft sign-in checks paid Java ownership; offline profiles only work on offline-mode servers. Ely.by is a distinct third-party provider. Starling's Android runtime is JDK 25, not the Java 17 baseline needed for Forge 1.20.1. Catalog behavior is Horizon-specific.
 - Tests/examples were inspected only; none were executed. No RustChunk application source changed; no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed. No backup is due at this checkpoint.
+
+
+### Read-back correction — entry 2682 — 2026-11-22
+
+- Post-commit provenance QA caught a transcription error in entry 2682's recorded source SHA. Corrected it to the exact pinned-tree blob SHA `23553e6b78d9345806cac3abcc2df5636fd38098`; byte size (3,904) and complete 87-line coverage were already correct.
+- No source file was changed or re-inspected; the exact tree SHA was re-read from the pinned recursive tree. The checkpoint is accepted only after the corrective six-document commit and full read-back verification.

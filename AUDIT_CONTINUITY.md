@@ -759,3 +759,6 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Ledger: 100 records (2601–2700), exactly 15 fields each. Index: 2,700 sequential unique paths; all 25 new paths and Decisions align.
 - Both 50-file sections 2601–2650 and 2651–2700 are closed. The exceptional 100-file grant is exhausted. **STOP at 2700; no inspection or preparation of 2701+ without a new explicit grant.**
 - Tests/examples were inspected only; none executed. No RustChunk application source changed; no build, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation. No backup is due before 3000/global verification.
+
+
+- Final read-back QA caught and corrected one SHA transcription in entry 2682; the corrected SHA now matches the pinned tree. All six audit documents are re-committed together and re-verified after this correction.

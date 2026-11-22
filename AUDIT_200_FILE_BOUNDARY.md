@@ -341,3 +341,9 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Ledger now has 100 entries (2601–2700), all with exactly 15 required fields. Index has 2,700 sequential unique paths and aligned Decisions.
 - Section 2651–2700 is closed at 50/50. The one-time exceptional authorization for 2601–2700 is fully consumed.
 - **STOP at 2700. Entry 2701+ is not authorized.** No tests/examples were run; no product source or runtime validation was performed.
+
+
+## Provenance read-back correction — entry 2682
+
+- Corrected the Ledger's source SHA transcription to `23553e6b78d9345806cac3abcc2df5636fd38098`; pinned tree size remains 3,904 bytes and Coverage/Completion remain 87 logical lines.
+- The correction is persisted atomically with the other audit documents. No source file changed and no test was run.

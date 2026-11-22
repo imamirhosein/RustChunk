@@ -810,5 +810,5 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Entries 2676–2700 are complete and read through EOF. This closes the second 50-file section **2651–2700** and completes the user's one-time 100-file exception **2601–2700**.
 - The normal cadence remains unchanged: 25-file commits inside 50-file report sections inside 200-file stages. The exceptional grant changed only the authorization boundary for this one 100-file window.
 - All four checkpoints 2601–2625, 2626–2650, 2651–2675 and 2676–2700 are complete; the active Ledger contains 100 records and the Index 2,700 sequential unique paths.
-- **STOP at entry 2700.** Do not inspect, fetch for audit, draft or create entry 2701 or later until a fresh explicit user authorization.
+- Final read-back QA corrected one transcription error in entry 2682's source SHA; all six audit documents were committed together and verified again. **STOP at entry 2700.** Do not inspect, fetch for audit, draft or create entry 2701 or later until a fresh explicit user authorization.
 - No tests/examples were executed; no application source was changed and no build, benchmark, APK, device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
