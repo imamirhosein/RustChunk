@@ -791,3 +791,10 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Sections 2601–2650, 2651–2700, 2701–2750 are closed. Section **2751–2800** is 25/50 complete; checkpoint **2776–2800** is already authorized by the same exceptional grant. **STOP only after entry 2800.**
 - Entries 2726–2750 were re-fetched and independently checked for SHA, size, EOF line counts and exactly 15 Ledger fields; all checks passed. The findings in entries 2730, 2735 and 2737 were refined in the Ledger during this checkpoint transaction.
 - Tests/examples were inspected only; no tests, build, APK, device, Forge, Minecraft, multiplayer or Aternos validation was run. No application source changed.
+
+
+## Ledger structure correction — checkpoint 2751–2775 — 2026-11-22
+
+- GitHub read-back of the first checkpoint commit found a field-value alignment defect in the 25 newly authored Ledger entries. The Index decisions and source provenance were correct, but the Ledger's Decision/implementation/evidence/completion values were shifted by one field in the generated draft.
+- All 25 records were corrected and the test-only records 2758–2775 were given explicit RustChunk test-suite mappings. The correction preserves source SHA, byte size, canonical line count, coverage and source findings.
+- The corrective six-document transaction must be committed and re-read from GitHub before treating 2751–2775 as closed or continuing to 2776.

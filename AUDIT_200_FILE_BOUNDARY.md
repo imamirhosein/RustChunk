@@ -372,3 +372,9 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - The 2726–2750 checkpoint was re-fetched and its 25 files re-verified for source SHA, byte size, EOF line count and Ledger field structure. Content-level finding refinements were made in Ledger entries 2730, 2735 and 2737.
 - Section **2751–2800** remains authorized under the same exceptional grant; continue with **2776–2800** without another permission request. **STOP only after entry 2800.**
 - No source code changed and no tests/examples were executed; no build or runtime validation was performed.
+
+
+## Ledger structure correction — checkpoint 2751–2775
+
+- After the first checkpoint commit, a deeper value-level read-back caught a one-field shift in the newly authored Ledger values. The 25 Decision labels, target-version implications, follow-ups, implementation mappings, evidence requirements and completion states were corrected; Index paths/Decisions and source provenance remain unchanged.
+- Entries 2751–2775 are closed only after this correction is included in a six-document atomic commit and all six documents are re-fetched and verified. Do not begin 2776 before that final read-back succeeds.

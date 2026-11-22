@@ -1790,3 +1790,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - New source findings include the ineffective 8,388,608-cell magma work guard relative to the accepted maximum radius, unchecked coordinate/volume arithmetic, large unbounded vegetation radii, pre-cap JSON vector allocation in weighted decoding, i32::MIN absolute-value behavior in write-zone checks, and Java HashMap collision-order compatibility uncertainty. Test-only files were assessed as test specifications; their embedded tests were **not executed**.
 - No RustChunk application/game source changed. No tests, build, benchmark, APK, Android device, Forge launch, Minecraft join, multiplayer or Aternos validation was performed.
 - Section **2751–2800** is 25/50 complete. Checkpoint **2776–2800** remains covered by the same one-time authorization for entries 2701–2800. **STOP only after entry 2800.**
+
+
+## Post-commit structural read-back correction — checkpoint 2751–2775 — 2026-11-22
+
+- The first checkpoint commit passed path/provenance/size/EOF and 15-label-count checks, but a deeper field-value read-back found an authoring alignment error: the generated records had omitted an explicit Decision value in their source specification, shifting later values into the wrong field labels. This affected entries **2751–2775** and was caught before proceeding to checkpoint 2776–2800.
+- Corrected all 25 Ledger records: restored the Decision values to match Index rows; aligned 1.20.1 implications, follow-up checks, RustChunk implementation mapping and evidence fields; supplied an explicit target-test mapping for test-only entries 2758–2775; and moved each COMPLETE marker into Completion state.
+- The correction does not change source paths, source SHAs, byte sizes, coverage, findings or source code. All 25 entries still contain exactly 15 required fields. A subsequent six-document atomic correction commit and GitHub read-back are required before the checkpoint is considered closed.
+- No embedded tests or examples were executed; no build, benchmark, APK, device, Forge, Minecraft, multiplayer or Aternos validation was performed.

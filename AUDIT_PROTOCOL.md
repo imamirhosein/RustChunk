@@ -825,3 +825,6 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 
 - Checkpoint **2751–2775** is complete and six-document read-back verified. All 25 source blobs match the pinned recursive tree SHA/size, all EOF counts match, and every new Ledger record has 15 fields. The 75-path earlier-lexical-order correction is exhausted at entry 2775. Continue at **2776–2800** under the same one-time grant; do not request interim permission at 2775. **STOP only after entry 2800.**
+
+
+- Structural read-back correction for checkpoint **2751–2775**: after the initial commit, value-level validation caught a one-field shift in Ledger fields for all 25 entries. The corrective transaction restores the proper Decision values (matching Index), 1.20.1 implications, follow-up checks, RustChunk mapping, evidence and completion state, and adds explicit test-suite mappings for entries 2758–2775. The checkpoint is closed only after the corrective six-document commit and a fresh six-document GitHub read-back pass. Do not proceed to 2776 until that verification succeeds.
