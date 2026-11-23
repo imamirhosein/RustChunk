@@ -1937,3 +1937,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No embedded tests, Rust builds, benchmarks, APK builds, Android-device tests, renderer tests, Minecraft/Forge launches, multiplayer joins or Aternos checks were executed.
 - No application source code was changed. `main` and the two existing final backup refs remain unchanged.
 - Final snapshot branch: `backup/audit-3000-final-2026-11-23`, created from the verified global-QA commit after this transaction.
+
+## Post-QA documentation correction — 2026-11-23
+
+- Re-read the complete `AUDIT_LEDGER_1_400.md` and restored the three absent trailing schema fields in entries **40** and **100**: RustChunk implementation mapping, Evidence required before adoption, and Completion state. The substantive protocol/network analysis already present in each record was retained; no source entry or path was added or renumbered.
+- Corrected the preamble of `AUDIT_LEDGER_2601_2800.md` from the stale 150/200 and active-authorization wording to the actual CLOSED (200/200) state; all 3,000-entry Index/Ledger numbering remains unchanged.
+- Reconciled the authoritative backup statement in `AUDIT_PROTOCOL.md` with the preserved 3,000-entry snapshot. The backup ref was not modified; documentation corrections are committed only on the audit branch after that snapshot.
+- Revalidated all 3,000 records: exactly 15 required fields each; 3,000 Index rows; no duplicate paths; Ledger/Index path and primary Decision labels align; all source paths, SHA values and byte sizes match the pinned Starling tree.
+- No application source changed. No tests, builds, benchmarks, APK/device, Minecraft/Forge, multiplayer or Aternos validation were run.

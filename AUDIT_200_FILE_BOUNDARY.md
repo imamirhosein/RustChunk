@@ -5,6 +5,7 @@
 - Entries **1–3000** are committed and have passed global structural/provenance QA (2026-11-23). Final snapshot branch: `backup/audit-3000-final-2026-11-23`. Stage **2601–2800 is CLOSED (200/200)**; stage **2801–3000 is CLOSED (200/200)**.
 - Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is exhausted. Exceptional grant **2901–3000** is exhausted; section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is CLOSED (50/50)**. Both 50-file sections under the 2901–3000 grant are closed. **STOP at 3000**.
 
+- Post-QA documentation-only correction: entries 40 and 100 received their missing final three schema fields, and the 2601–2800 Ledger preamble was reconciled. The immutable 3,000-entry snapshot remains at `backup/audit-3000-final-2026-11-23`; no source entry or Index numbering changed.
 - Historical note: stages 2401–2600 and 2601–2800 are fully closed. The latest exceptional grant 2901–3000 is fully exhausted; entry 3001+ requires a fresh explicit authorization.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No application source changes; next backup only after 3001–4000 are authorized, completed and globally verified.
 

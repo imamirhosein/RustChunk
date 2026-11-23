@@ -13,7 +13,7 @@ Branch: starling-1.20.1-port-audit
 - Active Ledger `AUDIT_LEDGER_2801_3000.md`: **200 records (2801–3000)**, each with exactly 15 fields. Index: **3,000 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
 - The complete recursive source tree is untruncated (5,749 entries). New paths were selected from the complete tree after excluding the full Index.
-- Global structural/provenance QA for entries 1–3000 is complete on 2026-11-23. All 3,000 source SHA/byte-size pairs match the pinned tree after the entry 174 correction; all 15 fields, primary Decision labels, Index alignment and recorded Coverage/Completion ranges were reconciled. Tests/examples were inspected only, not executed. No application source changes, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Global structural/provenance QA for entries 1–3000 is complete on 2026-11-23. All 3,000 source SHA/byte-size pairs match the pinned tree after the entry 174 correction; all 15 fields, primary Decision labels, Index alignment and recorded Coverage/Completion ranges were reconciled. A post-QA documentation correction restored the three absent trailing fields in entries 40 and 100 and corrected the stale 2601–2800 Ledger preamble; no source entries were added or renumbered. The immutable 3,000-entry snapshot remains at `backup/audit-3000-final-2026-11-23` (commit `cda463dde56aa10a922600b79546335ba82a059d`); later documentation-only fixes are on this audit branch. Tests/examples were inspected only, not executed. No application source changes, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Global QA closeout — entries 1–3000 — COMPLETE (2026-11-23)
 
@@ -22,6 +22,7 @@ Branch: starling-1.20.1-port-audit
 - All 3,000 Ledger entries have exactly 15 fields, with no undefined placeholders. Primary Decision labels are first and align with Index rows.
 - Entry 2542's missing 401–600 range was re-fetched; entry 1429's long-file coverage was expanded to explicit ranges.
 - 28 shifted records and the separate entry 1397 Evidence/Completion alignment were corrected; two undefined evidence values were filled.
+- Post-QA correction: entries 40 and 100 now contain all 15 required fields; the 2601–2800 Ledger preamble is reconciled. These documentation-only fixes do not alter the 3,000-entry source set or its numbering.
 - No app source changed. No build, APK, Android-device, renderer, Minecraft/Forge or multiplayer validation was performed.
 
 ## Source pin and selection

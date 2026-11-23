@@ -2,8 +2,8 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **2601–2800**; completed **150/200 (2601–2750)**.
-- Exceptional authorization 1 (**2601–2700**) is closed. Exceptional authorization 2 (**2701–2800**) is active and covers the next four 25-file checkpoints.
+- 200-file stage: **2601–2800 — CLOSED (200/200)**.
+- Exceptional authorization 1 (**2601–2700**) is **EXHAUSTED**. Exceptional authorization 2 (**2701–2800**) is **EXHAUSTED**; all eight 25-file checkpoints and all four 50-file sections are closed.
 - Source selection: strict raw lexical path order from the complete pinned tree, excluding every path already in the full Index. The tree is untruncated; all 25 records match pinned paths, SHAs and byte sizes.
 - Starling is a Java Edition 26.3-era reference snapshot, not proof of Java 1.20.1 / Forge 47.x compatibility.
 - Stop after entry **2800**. Entries 2801+ are not authorized. No source file was modified; tests/examples were inspected only, not executed; no build/runtime/device/Forge/Aternos validation was performed.

@@ -151,7 +151,7 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Active stage Ledger `AUDIT_LEDGER_2801_3000.md`: **200 records (2801–3000)** with exactly 15 fields each. Index: **3,000 sequential unique paths**, no duplicates, with path/Decision alignment verified.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot.
 - Recursive tree is complete and untruncated (5,749 entries). All 200 new Ledger source SHA/byte-size pairs match the pinned tree; canonical logical line counts and EOF coverage are recorded.
-- Backup remains at entries 1–2000; next backup only after required global verification at 3000.
+- The 3,000-entry final snapshot is preserved at `backup/audit-3000-final-2026-11-23` (commit `cda463dde56aa10a922600b79546335ba82a059d`, tree `31f0996099df2a54932f0bee20e422fb09f3318d`); the 1,000- and 2,000-entry final backups remain preserved. This backup ref is immutable. The documentation-only corrections recorded after the snapshot remain on the audit branch and do not add or renumber source entries. The next backup is due only after entries 3001–4000 are authorized, completed, committed and globally verified.
 - No application source changes, tests, builds, benchmarks, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 
