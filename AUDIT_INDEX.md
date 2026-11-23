@@ -3424,3 +3424,34 @@
 | 2948 | `launcher/src/glass_instance.rs` | rewrite required; reference; version-specific; platform-specific | Instance isolation and wizard flow are reusable concepts; loader selection and UI require a new Forge-aware implementation. |
 | 2949 | `launcher/src/glass_instance_java.rs` | rewrite required; reference; version-specific | Only version-picker UX concept is reusable. |
 | 2950 | `launcher/src/glass_ui.rs` | unnecessary; reference; platform-specific | Design-system concepts reusable, source code is not. |
+
+
+## Part 119 — Entries 2951–2975
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2951 | `launcher/src/heads.rs` | adaptable; reference; privacy-sensitive | Useful for offline-friendly avatar presentation and resilient skin caching, not required for game compatibility. |
+| 2952 | `launcher/src/home.rs` | adaptable; reference; platform-specific | Readiness-step model and progress UX can be adapted; code itself is desktop-specific. |
+| 2953 | `launcher/src/home_tabs.rs` | unnecessary; reference; platform-specific | Only tab organization concept reusable. |
+| 2954 | `launcher/src/i18n.rs` | adaptable; reference; platform-specific | Translation lookup/fallback architecture is useful; catalog and locale selection require Android-specific adaptation. |
+| 2955 | `launcher/src/i18n/tests.rs` | adaptable; reference; localization | Strong catalog integrity test pattern; needs RustChunk source-key scan and Persian-specific checks. |
+| 2956 | `launcher/src/import.rs` | adaptable; reference; security-sensitive; version-specific | Import classification and path containment are useful; exact format policy cannot be copied unchanged. |
+| 2957 | `launcher/src/import/tests.rs` | adaptable; reference; security-sensitive | Useful path traversal and round-trip test pattern. |
+| 2958 | `launcher/src/import_page.rs` | adaptable; reference; platform-specific | Workflow concept reusable; UI is platform-specific. |
+| 2959 | `launcher/src/installer.rs` | unnecessary; reference; platform-specific | No direct Android code to reuse; installation/update transaction concepts are generic. |
+| 2960 | `launcher/src/instance_icons.rs` | unnecessary; reference; platform-specific | Icon selection logic is a minor UI reference. |
+| 2961 | `launcher/src/instance_mods.rs` | rewrite required; reference; version-specific | A per-profile JAR inventory/toggle concept is useful, but Forge mod lifecycle must be rebuilt around actual loader metadata. |
+| 2962 | `launcher/src/instances.rs` | adaptable; reference; version-specific | Per-profile isolation and pin/follow model are highly reusable, but data schema and filesystem model need Android design. |
+| 2963 | `launcher/src/instances/tests.rs` | rewrite required; reference; version-specific | Good profile isolation test patterns, but fixtures and loader assertions need 1.20.1 Forge replacement. |
+| 2964 | `launcher/src/instances_page.rs` | adaptable; reference; platform-specific | Product flow is useful but should be redesigned as Android UI. |
+| 2965 | `launcher/src/internet.rs` | unnecessary; reference; security-sensitive | Optional private LAN/VPN connectivity idea only; not core launcher functionality. |
+| 2966 | `launcher/src/java.rs` | rewrite required; reference; platform-specific; version-specific | Runtime requirement resolution is important, but runtime acquisition must be Android-specific. |
+| 2967 | `launcher/src/java/tests.rs` | adaptable; reference; version-specific | Useful compatibility selection tests; adapt to Android runtime packages. |
+| 2968 | `launcher/src/java_launch.rs` | Port version JSON/library/asset semantics, then add a real Forge 47.x installer and launch profile; run through Android Java runtime rather than desktop Command. | adaptable; reference; version-specific |
+| 2969 | `launcher/src/java_launch/tests.rs` | rewrite required; reference; version-specific | Useful base tests; add actual Forge-generated fixtures. |
+| 2970 | `launcher/src/language_page.rs` | adaptable; reference; platform-specific | Language choice flow can be reused conceptually. |
+| 2971 | `launcher/src/launch.rs` | rewrite required; reference; security-sensitive; platform-specific | Memory-budget and environment planning concepts are useful; execution must be Android-specific and tightly controlled. |
+| 2972 | `launcher/src/launch/tests.rs` | adaptable; reference; platform-specific | Useful parser and memory-policy test concepts. |
+| 2973 | `launcher/src/launch_page.rs` | adaptable; reference; platform-specific | Memory settings UX may be adapted to mobile. |
+| 2974 | `launcher/src/lib.rs` | adaptable; reference; platform-specific | Useful only as module organization reference. |
+| 2975 | `launcher/src/line_edit.rs` | unnecessary; reference; platform-specific | Text-editing invariants may inform future custom widget, but native Android text fields are safer. |

@@ -887,3 +887,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Active stage 2801–3000 now has 150/200 entries; the user's exceptional grant **2901–3000 remains ACTIVE** with 50 entries remaining.
 - Continue **2951–2975** and **2976–3000** without requesting another authorization. At entry 3000, close the stage and STOP; 3001+ requires a new explicit grant.
 - Active Ledger has 150 records (2801–2950), Index has 2,950 sequential unique paths. Keep six-document atomic commits and all 15 Ledger fields.
+
+
+## 55. Progress under exceptional authorization 2901–3000 — 2026-11-23
+
+- Checkpoints **2901–2925**, **2926–2950** and **2951–2975** are complete and read-back verified. Section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is 25/50 complete**.
+- Active stage 2801–3000 has 175/200 entries. Exceptional grant **2901–3000 remains ACTIVE** with exactly 25 files remaining.
+- Complete **2976–3000** without requesting another authorization. At entry 3000 close the stage and STOP; 3001+ requires a fresh explicit grant.
+- Active Ledger has 175 records (2801–2975), Index has 2,975 sequential unique paths. Preserve six-document atomic commits and all 15 Ledger fields.

@@ -2562,3 +2562,428 @@
 - Evidence required before adoption: Android UI implementation and device accessibility/performance review.
 - Completion state: COMPLETE — 628 logical lines through EOF; pinned source SHA and 18800 byte size match; reviewed, not modified; tests not executed.
 
+### 2951. `launcher/src/heads.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ce81478cd1fec981ae74d86a4d88f1c8becd9353`
+- Size: 9544 bytes
+- Coverage: 1–258; complete EOF; 258 canonical logical lines, no gaps.
+- Purpose: Builds player head/face textures from Mojang profile skins with UUID-based fallback and cache.
+- Dependencies / cross-references: Mojang profile/skin endpoints, account UUID, local image cache and launcher rendering.
+- Implementation / logic: Parses UUID, downloads skin/profile textures, extracts face pixels, caches by skin identity and falls back to deterministic UUID-derived default skin when profile unavailable.
+- Findings: Skin services and image handling are not Forge-specific; online profile requests and cache policy need privacy/offline review. Fallback does not imply authenticated identity.
+- RustChunk relevance: Useful for offline-friendly avatar presentation and resilient skin caching, not required for game compatibility.
+- Decision: adaptable; reference; privacy-sensitive
+- 1.20.1 implications: Implement optional skin retrieval separately from account authentication; offline profile must never be presented as a Mojang-authenticated account.
+- Follow-up checks: Test no-network fallback, malformed profile/skin data, cache poisoning, stale skin refresh, UUID normalization and Android storage.
+- RustChunk implementation mapping: RustChunk profile avatar/skin cache.
+- Evidence required before adoption: Android image decode, Mojang API behavior, privacy policy and offline-mode server tests.
+- Completion state: COMPLETE — 258 logical lines through EOF; pinned source SHA and 9544 byte size match; reviewed, not modified; tests not executed.
+
+### 2952. `launcher/src/home.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6812b3b5a6f3aa76eb4a75d8f6f4e31c3e522b5d`
+- Size: 22764 bytes
+- Coverage: 1–400, 401–579; complete EOF; 579 canonical logical lines, no gaps.
+- Purpose: Composes desktop Home hero, launch actions, readiness preview, download progress and friend join controls.
+- Dependencies / cross-references: GPUI, launcher shell actions, download state, backend preparation and Home navigation.
+- Implementation / logic: Displays preparation steps in order, progress/time estimate and launch/friend actions; tests step ordering and estimated remaining time.
+- Findings: Desktop GPUI workflow and Horizon preparation phases; not an Android launcher screen or Forge installer.
+- RustChunk relevance: Readiness-step model and progress UX can be adapted; code itself is desktop-specific.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Build Android-first preparation checklist for Java 17, Forge 47.x, libraries, assets, mods and profile validation.
+- Follow-up checks: Test interrupted downloads, resume, progress accuracy, cancellation, background lifecycle and low-memory recovery.
+- RustChunk implementation mapping: RustChunk Home screen and launch readiness state machine.
+- Evidence required before adoption: Actual 1.20.1 Forge profile preparation on ARM64 Android with reliable progress and resume.
+- Completion state: COMPLETE — 579 logical lines through EOF; pinned source SHA and 22764 byte size match; reviewed, not modified; tests not executed.
+
+### 2953. `launcher/src/home_tabs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e716fa69e9c440546c2919fd17bc259da1dcc6e6`
+- Size: 5216 bytes
+- Coverage: 1–132; complete EOF; 132 canonical logical lines, no gaps.
+- Purpose: Selects and renders desktop Home tab configuration, including environment overrides.
+- Dependencies / cross-references: Launcher environment config, HomeTab enum and GPUI shell.
+- Implementation / logic: Reads optional environment override, chooses available tabs and splits display sections.
+- Findings: Horizon desktop navigation and environment variables; no game runtime behavior.
+- RustChunk relevance: Only tab organization concept reusable.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use RustChunk Android navigation settings independent from desktop environment variables.
+- Follow-up checks: Test persisted tab state, process recreation and accessibility.
+- RustChunk implementation mapping: RustChunk navigation model.
+- Evidence required before adoption: Android navigation lifecycle tests.
+- Completion state: COMPLETE — 132 logical lines through EOF; pinned source SHA and 5216 byte size match; reviewed, not modified; tests not executed.
+
+### 2954. `launcher/src/i18n.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `abb4380459babf4af77cfcaccbda26122b62d6fc`
+- Size: 6626 bytes
+- Coverage: 1–203; complete EOF; 203 canonical logical lines, no gaps.
+- Purpose: Loads launcher language catalogs, detects system locale, selects language and resolves translated strings with fallback.
+- Dependencies / cross-references: Locale JSON files, serde, global atomic language selection, OnceLock translation table.
+- Implementation / logic: Parses locale codes, maps display names, chooses system/explicit locale, caches table and resolves tr/trf interpolation with fallback.
+- Findings: Global process-wide state and desktop locale assumptions may be unsuitable for Android configuration changes; source keys are Horizon UI copy.
+- RustChunk relevance: Translation lookup/fallback architecture is useful; catalog and locale selection require Android-specific adaptation.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Use RustChunk-owned Persian-first resources; prefer explicit locale state and robust RTL-aware Android UI.
+- Follow-up checks: Test unknown locale, system locale changes, fallback, interpolation, plural rules, bidi and concurrent locale changes.
+- RustChunk implementation mapping: RustChunk localization engine and resource catalogs.
+- Evidence required before adoption: Persian RTL screenshots, locale-switch lifecycle, placeholder/plural tests and Android font coverage.
+- Completion state: COMPLETE — 203 logical lines through EOF; pinned source SHA and 6626 byte size match; reviewed, not modified; tests not executed.
+
+### 2955. `launcher/src/i18n/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c9bf66b44d435ffa0623f8ad2eb60e6879bf72da`
+- Size: 9348 bytes
+- Coverage: 1–233; complete EOF; 233 canonical logical lines, no gaps.
+- Purpose: Tests that all code-requested translation strings exist, language order is valid and placeholders are preserved.
+- Dependencies / cross-references: i18n parser, source-code scanner, locale JSON files and interpolation syntax.
+- Implementation / logic: Scans translation calls including multiline syntax while ignoring comments/quoted code, checks catalog coverage and placeholder validity, tests fallback and locale order.
+- Findings: Tests use the inspected Horizon locale catalog; coverage scanner cannot establish translation quality or Android visual fit.
+- RustChunk relevance: Strong catalog integrity test pattern; needs RustChunk source-key scan and Persian-specific checks.
+- Decision: adaptable; reference; localization
+- 1.20.1 implications: Adopt missing-key and placeholder CI checks for RustChunk; add RTL and pluralization validation beyond catalog parity.
+- Follow-up checks: Test scanner against Rust syntax edge cases, dynamic keys, nested interpolation, duplicate keys and locale file drift.
+- RustChunk implementation mapping: RustChunk localization CI.
+- Evidence required before adoption: Full RustChunk catalog coverage, parser fixtures, Persian native review and device screenshots.
+- Completion state: COMPLETE — 233 logical lines through EOF; pinned source SHA and 9348 byte size match; reviewed, not modified; tests not executed.
+
+### 2956. `launcher/src/import.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ad0ca3c01f85bcfe672e010bb95453958d0d5452`
+- Size: 8823 bytes
+- Coverage: 1–236; complete EOF; 236 canonical logical lines, no gaps.
+- Purpose: Recognizes dropped files and imports supported instance exports, modpacks, resource packs and shader packs.
+- Dependencies / cross-references: browser download metadata, export layout, instance manager, packs service, ZIP reader and filesystem paths.
+- Implementation / logic: Inspects file/container contents, identifies target import kind, validates relative components and imports into instance or pack locations.
+- Findings: Horizon 26.3 format/loader model; import paths and resource/shader formats need 1.20.1 Forge adaptation. Archive extraction and symlink safety need deeper review.
+- RustChunk relevance: Import classification and path containment are useful; exact format policy cannot be copied unchanged.
+- Decision: adaptable; reference; security-sensitive; version-specific
+- 1.20.1 implications: Create Forge-aware import routing for .mrpack, CurseForge ZIP, Prism/MultiMC instances and standalone JARs; validate every path and checksum.
+- Follow-up checks: Fuzz archive names, zip bombs, symlinks, nested archives, duplicate entries, malformed manifests, partial extraction and SAF URI handling.
+- RustChunk implementation mapping: RustChunk import dispatcher and profile import service.
+- Evidence required before adoption: Actual Forge 1.20.1 modpacks, malicious archive suite, Android storage permissions and successful launch.
+- Completion state: COMPLETE — 236 logical lines through EOF; pinned source SHA and 8823 byte size match; reviewed, not modified; tests not executed.
+
+### 2957. `launcher/src/import/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7865cdba354226c6f6dc1d403cdeb932d500436e`
+- Size: 7084 bytes
+- Coverage: 1–209; complete EOF; 209 canonical logical lines, no gaps.
+- Purpose: Tests import classification and round-trip of exported instance ZIPs while keeping extraction inside target folder.
+- Dependencies / cross-references: import/export modules, ZIP fixtures, temp directories and path checks.
+- Implementation / logic: Creates fixture archives, detects supported dropped-file types, imports export back as instance and asserts no archive path escapes profile root.
+- Findings: Tests reflect current Horizon formats and do not prove 1.20.1 Forge modpack compatibility or Android URI handling.
+- RustChunk relevance: Useful path traversal and round-trip test pattern.
+- Decision: adaptable; reference; security-sensitive
+- 1.20.1 implications: Expand with Forge/CurseForge/Prism fixtures and adversarial ZIP entries before enabling user imports.
+- Follow-up checks: Test ../ paths, absolute paths, Windows drive paths, symlinks, nested ZIP, decompression bombs, partial failure and duplicate names.
+- RustChunk implementation mapping: RustChunk import regression suite.
+- Evidence required before adoption: Adversarial archive fuzzing, Android SAF import and real Forge launch.
+- Completion state: COMPLETE — 209 logical lines through EOF; pinned source SHA and 7084 byte size match; reviewed, not modified; tests not executed.
+
+### 2958. `launcher/src/import_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d463f6b8ba92b6e8314b2bf4686c44976e493217`
+- Size: 5477 bytes
+- Coverage: 1–137; complete EOF; 137 canonical logical lines, no gaps.
+- Purpose: Handles desktop drag/drop import flow and displays import result.
+- Dependencies / cross-references: GPUI ExternalPaths, import service, selected instance and background tasks.
+- Implementation / logic: Routes dropped files to import classifier, performs asynchronous import and displays success/error state.
+- Findings: Desktop drag/drop and path-based access do not translate to Android SAF/content URIs.
+- RustChunk relevance: Workflow concept reusable; UI is platform-specific.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Use Android document picker with explicit import preview and per-file results.
+- Follow-up checks: Test canceled selection, multi-file partial failure, duplicate import, content URI lifetime and background interruption.
+- RustChunk implementation mapping: RustChunk Android import screen.
+- Evidence required before adoption: Android SAF tests and Forge modpack import.
+- Completion state: COMPLETE — 137 logical lines through EOF; pinned source SHA and 5477 byte size match; reviewed, not modified; tests not executed.
+
+### 2959. `launcher/src/installer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b48f528aed3215f740e504ae85862d48b9270373`
+- Size: 19987 bytes
+- Coverage: 1–400, 401–547; complete EOF; 547 canonical logical lines, no gaps.
+- Purpose: Installs, updates and uninstalls the Windows desktop launcher, shortcuts and registry/uninstall entries.
+- Dependencies / cross-references: Windows registry, shortcut target, executable paths, temporary staging and backend update lifecycle.
+- Implementation / logic: Detects installer mode, chooses install folder, writes shortcuts/registry, stages/removes files and runs quiet update operations.
+- Findings: Windows-only desktop installer; registry and shortcut APIs are irrelevant to Android APK installation. Unsafe FFI and filesystem ownership need Windows-specific review.
+- RustChunk relevance: No direct Android code to reuse; installation/update transaction concepts are generic.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use Android PackageInstaller/OS-managed APK updates, signed APKs and rollback-safe app data migrations.
+- Follow-up checks: Test Android signature continuity, split APK handling, version downgrade, app data migration, storage and update failure recovery.
+- RustChunk implementation mapping: RustChunk APK distribution/update flow at platform boundary.
+- Evidence required before adoption: Signed release APK, PackageInstaller tests on Android 13 and upgrade/rollback tests.
+- Completion state: COMPLETE — 547 logical lines through EOF; pinned source SHA and 19987 byte size match; reviewed, not modified; tests not executed.
+
+### 2960. `launcher/src/instance_icons.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3a8a34d7ed27865aa6965a6c8b6f10917ee8092a`
+- Size: 7829 bytes
+- Coverage: 1–197; complete EOF; 197 canonical logical lines, no gaps.
+- Purpose: Loads and displays instance icons, loader logos and custom pictures in desktop instance rows.
+- Dependencies / cross-references: GPUI RenderImage, browser image cache, instance metadata and loader logo assets.
+- Implementation / logic: Selects user icon or loader logo, decodes/resizes image and fits it into desktop icon bounds.
+- Findings: GPUI image representation and desktop scaling; no Minecraft rendering or Forge runtime behavior.
+- RustChunk relevance: Icon selection logic is a minor UI reference.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use Android image loader and app-specific profile icon resources; do not couple to renderer.
+- Follow-up checks: Test malformed image, oversized dimensions, cache eviction and Android bitmap memory pressure.
+- RustChunk implementation mapping: RustChunk profile icon presentation.
+- Evidence required before adoption: Android bitmap bounds, memory profiling and accessibility descriptions.
+- Completion state: COMPLETE — 197 logical lines through EOF; pinned source SHA and 7829 byte size match; reviewed, not modified; tests not executed.
+
+### 2961. `launcher/src/instance_mods.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bc897d419c7e3d869ee3fb260afac3e65d5f23df`
+- Size: 26676 bytes
+- Coverage: 1–400, 401–691; complete EOF; 691 canonical logical lines, no gaps.
+- Purpose: Lists and toggles installed mods per instance, including Horizon-native mods and Java JAR files.
+- Dependencies / cross-references: Instance filesystem, native mod registry, Java instance metadata, browser images, mod cache and UI list state.
+- Implementation / logic: Tracks filesystem fingerprints, reloads asynchronously, displays mod rows, enables/disables JARs by renaming, and avoids duplicate native registry rows.
+- Findings: Three TODO markers remain; Java JAR inventory is basic and does not prove Forge dependency resolution, mod metadata compatibility or safe toggling of locked/open files. Native mod handling is Horizon-specific.
+- RustChunk relevance: A per-profile JAR inventory/toggle concept is useful, but Forge mod lifecycle must be rebuilt around actual loader metadata.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Implement robust Forge 1.20.1 mod list from mods folder, parse mod metadata/dependencies, support disabled suffix semantics only if Forge honors it, and avoid modifying active profile during game run.
+- Follow-up checks: Inspect TODO sites; test fingerprint races, stale async reads, duplicate IDs, malformed JARs, dependency conflicts, locked files, disabled mods and Forge restart behavior.
+- RustChunk implementation mapping: RustChunk Forge mod manager and per-profile mod state.
+- Evidence required before adoption: Actual Forge 47.x JAR corpus, mod metadata parser, dependency graph, safe enable/disable and launch regression.
+- Completion state: COMPLETE — 691 logical lines through EOF; pinned source SHA and 26676 byte size match; reviewed, not modified; tests not executed.
+
+### 2962. `launcher/src/instances.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d5f56d1c21715bd3fa50d5c4c782832a7eb9f78d`
+- Size: 26679 bytes
+- Coverage: 1–400, 401–726; complete EOF; 726 canonical logical lines, no gaps.
+- Purpose: Defines isolated launcher instances, profile metadata, creation/copy/edit/delete, version pinning and play-time accounting.
+- Dependencies / cross-references: Serde instance config, Horizon backend version resolution, Java instance layout, modpacks, filesystem copy and launch command.
+- Implementation / logic: Stores per-instance game folders, creates Horizon/Java instances, copies settings/packs, tracks selected profile and play time, follows or pins versions, and moves deleted profiles to trash.
+- Findings: Java instance model is tied to Horizon loader support; create_java does not itself prove Forge install/launch. Process command and file copy paths require Android adaptation.
+- RustChunk relevance: Per-profile isolation and pin/follow model are highly reusable, but data schema and filesystem model need Android design.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Build RustChunk profile isolation with independent 1.20.1 Forge libraries/mods/config/saves and explicit runtime selection.
+- Follow-up checks: Test copy rollback, path collision, rename, delete/trash, selected profile recovery, version pin/follow, corrupted metadata and concurrent launches.
+- RustChunk implementation mapping: RustChunk profile/instance data model.
+- Evidence required before adoption: Real 1.20.1 Forge profile creation, Java 17 runtime, modpack isolation and Android storage tests.
+- Completion state: COMPLETE — 726 logical lines through EOF; pinned source SHA and 26679 byte size match; reviewed, not modified; tests not executed.
+
+### 2963. `launcher/src/instances/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `39923cf3bb4f1e0360ac640f52da20b498672def`
+- Size: 17202 bytes
+- Coverage: 1–400, 401–425; complete EOF; 425 canonical logical lines, no gaps.
+- Purpose: Tests instance naming, copy behavior, version pinning, Java profile layout, mod browser loader targeting and deletion.
+- Dependencies / cross-references: instances service, temp filesystem, browser/mod loader, play time and trash integration.
+- Implementation / logic: Exercises unique names, profile copies, Java version isolation, play-time accounting, icon validation, mod install target and trash removal.
+- Findings: Test data targets 1.21.1 Fabric/Quilt/NeoForge and Horizon versions; no Forge 1.20.1 end-to-end test.
+- RustChunk relevance: Good profile isolation test patterns, but fixtures and loader assertions need 1.20.1 Forge replacement.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Build Forge-specific profile fixtures and ensure copies don't share mutable mods/config/saves unexpectedly.
+- Follow-up checks: Test simultaneous profiles, crash during copy, path escape, loader mismatch, version pin, Forge installer and delete recovery.
+- RustChunk implementation mapping: RustChunk instance regression tests.
+- Evidence required before adoption: Forge 47.x profile launch and mod isolation on Android.
+- Completion state: COMPLETE — 425 logical lines through EOF; pinned source SHA and 17202 byte size match; reviewed, not modified; tests not executed.
+
+### 2964. `launcher/src/instances_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `f72c9ae57f249108d27a04bc0dd9a6fb00378fd6`
+- Size: 36511 bytes
+- Coverage: 1–400, 401–800, 801–925; complete EOF; 925 canonical logical lines, no gaps.
+- Purpose: Renders desktop instance list, creation/edit dialog, profile selection, version pinning and deletion confirmation.
+- Dependencies / cross-references: GPUI, instances model, Java loader list, version selector, image cache and theme.
+- Implementation / logic: Builds profile rows/dialogs, copy/new flows, version and icon selection, delete confirmation and played-time display.
+- Findings: Desktop UI and current Fabric/Quilt loader choices; no Android controls or Forge installer progress flow.
+- RustChunk relevance: Product flow is useful but should be redesigned as Android UI.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Build a touch-first RustChunk profile wizard that explicitly selects Minecraft 1.20.1, Forge 47.x and Java 17.
+- Follow-up checks: Test orientation/rotation, accessibility, large profile list, duplicate names, cancel/rollback, background install and profile selection persistence.
+- RustChunk implementation mapping: RustChunk Android profile manager screen.
+- Evidence required before adoption: Device UI tests and successful Forge profile creation/launch.
+- Completion state: COMPLETE — 925 logical lines through EOF; pinned source SHA and 36511 byte size match; reviewed, not modified; tests not executed.
+
+### 2965. `launcher/src/internet.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e5ba460bf5f2f7be6732f43285fd58bccd30f224`
+- Size: 29591 bytes
+- Coverage: 1–400, 401–709; complete EOF; 709 canonical logical lines, no gaps.
+- Purpose: Implements desktop Tailscale integration, account token handling, invite links and connectivity policy UI.
+- Dependencies / cross-references: Tailscale local API, OAuth/auth tokens, invite flow, network reachability, GPUI settings and state polling.
+- Implementation / logic: Reads local Tailscale status, stores/clears auth token, refreshes state, creates friend invites and changes network policy.
+- Findings: Tailscale private-network feature is not required for Aternos/public servers; token handling and local API access are security-sensitive.
+- RustChunk relevance: Optional private LAN/VPN connectivity idea only; not core launcher functionality.
+- Decision: unnecessary; reference; security-sensitive
+- 1.20.1 implications: Do not make Tailscale a dependency for joining Aternos; use ordinary Minecraft server address and protocol.
+- Follow-up checks: If optional VPN support is later requested, review token storage, invite scope, device authorization and Android VPN permission requirements.
+- RustChunk implementation mapping: No baseline mapping; optional networking integration only.
+- Evidence required before adoption: Explicit feature scope, Android VPN APIs, token threat model and real connection tests.
+- Completion state: COMPLETE — 709 logical lines through EOF; pinned source SHA and 29591 byte size match; reviewed, not modified; tests not executed.
+
+### 2966. `launcher/src/java.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a3bd1492e3f73be1c3bd45e0a8acd43d5d411d59`
+- Size: 9348 bytes
+- Coverage: 1–275; complete EOF; 275 canonical logical lines, no gaps.
+- Purpose: Discovers, selects and installs Mojang Java runtimes required by Minecraft versions.
+- Dependencies / cross-references: Mojang version metadata, runtime manifests, OS/architecture rules, Java home folders and download verification.
+- Implementation / logic: Reads Java major/component requirement, locates installed runtimes, chooses exact compatible major and downloads runtime component files.
+- Findings: Desktop OS runtime selection and Mojang runtime archives; Android ARM64 Java runtime distribution is different. Minecraft 1.20.1 generally requires Java 17, not a generic newest runtime.
+- RustChunk relevance: Runtime requirement resolution is important, but runtime acquisition must be Android-specific.
+- Decision: rewrite required; reference; platform-specific; version-specific
+- 1.20.1 implications: Bundle or provision a compatible ARM64 Java 17 runtime for Android; preserve version metadata and avoid selecting unsupported host runtime.
+- Follow-up checks: Test 1.20.1 Java 17 selection, ARM64 ABI, JNI, native library paths, memory limits, TLS and runtime update integrity.
+- RustChunk implementation mapping: RustChunk Android Java runtime manager.
+- Evidence required before adoption: Real Android ARM64 Java 17 execution of Forge 47.4.5 and native library loading.
+- Completion state: COMPLETE — 275 logical lines through EOF; pinned source SHA and 9348 byte size match; reviewed, not modified; tests not executed.
+
+### 2967. `launcher/src/java/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1d07e0b21fb343e20344a11f35e82d3645a1bed6`
+- Size: 4397 bytes
+- Coverage: 1–135; complete EOF; 135 canonical logical lines, no gaps.
+- Purpose: Tests Java version requirement parsing, Mojang runtime layout discovery and exact-major selection.
+- Dependencies / cross-references: java module, fake runtime home and Mojang metadata fixtures.
+- Implementation / logic: Covers Java 8 historical versions, runtime manifest requirements, exact major choice and instance-owned Java override.
+- Findings: Desktop runtime fixtures only; no Android Java 17 ARM64 runtime test.
+- RustChunk relevance: Useful compatibility selection tests; adapt to Android runtime packages.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Add tests ensuring Forge 1.20.1 selects Java 17 and rejects Java 8/21 when the profile requires 17.
+- Follow-up checks: Test component runtime metadata, missing files, wrong architecture and invalid JAVA_HOME.
+- RustChunk implementation mapping: RustChunk Java runtime selection tests.
+- Evidence required before adoption: Android ARM64 Java 17 package, JNI launch and Forge integration.
+- Completion state: COMPLETE — 135 logical lines through EOF; pinned source SHA and 4397 byte size match; reviewed, not modified; tests not executed.
+
+### 2968. `launcher/src/java_launch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ef17c2e37f0759d3b43ce5c3d410210402c953ce`
+- Size: 18593 bytes
+- Coverage: 1–400, 401–489; complete EOF; 489 canonical logical lines, no gaps.
+- Purpose: Resolves Java Edition version JSON, libraries, natives, assets, placeholders and final game process command.
+- Dependencies / cross-references: Mojang version metadata, OS feature/rule filtering, library downloads, asset index, classpath, native extraction and Java process.
+- Implementation / logic: Loads version/inheritance metadata, validates library rules, builds classpath, extracts native archives, resolves assets and fills JVM/game arguments including server host/port.
+- Findings: This is the strongest reusable Java launch foundation in this batch, but Forge requires installer-generated version JSON, extra libraries, tweakers/launch targets, argument merging and mod-loader handshake. Desktop process execution is not Android runtime integration.
+- RustChunk relevance: adaptable; reference; version-specific
+- Decision: Port version JSON/library/asset semantics, then add a real Forge 47.x installer and launch profile; run through Android Java runtime rather than desktop Command.
+- 1.20.1 implications: Test 1.20.1 inheritance, artifact/native classifiers, OS rules, checksum/size, classpath ordering, arg placeholders, Forge arguments, secure chat/login and Aternos join.
+- Follow-up checks: RustChunk Java launch resolver, library/asset downloader and Forge profile launch bridge.
+- RustChunk implementation mapping: Actual 1.20.1 Forge version JSON, Java 17 ARM64 runtime, classpath parity and real Forge multiplayer test.
+- Evidence required before adoption: undefined
+- Completion state: COMPLETE — 489 logical lines through EOF; pinned source SHA and 18593 byte size match; reviewed, not modified; tests not executed.
+
+### 2969. `launcher/src/java_launch/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `694a0847592ef5ea02dbd734bc9c8165d7d52d0e`
+- Size: 16233 bytes
+- Coverage: 1–400, 401–413; complete EOF; 413 canonical logical lines, no gaps.
+- Purpose: Tests modern/legacy Java launch metadata, placeholder expansion, loader-profile inheritance and server address arguments.
+- Dependencies / cross-references: java_launch module, synthetic version JSON, libraries/native archives, assets and argument resolver.
+- Implementation / logic: Covers modern version rules, legacy natives/assets, inheritance cycle refusal, server host/port splitting and loader profile parent resolution.
+- Findings: Fixtures are synthetic and primarily test generic loader profile inheritance; do not establish Forge 1.20.1 argument/installer compatibility or actual launch.
+- RustChunk relevance: Useful base tests; add actual Forge-generated fixtures.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Create captured/official Forge 47.4.5 metadata fixtures and compare generated JVM/game args with vanilla/Forge launcher output.
+- Follow-up checks: Test Forge launch target, argument merge order, library checksums, natives on Android, IPv6/server parsing and auth/session handoff.
+- RustChunk implementation mapping: RustChunk Java/Forge launch regression suite.
+- Evidence required before adoption: Real Forge 1.20.1 profile, Android runtime, actual modpack and multiplayer server tests.
+- Completion state: COMPLETE — 413 logical lines through EOF; pinned source SHA and 16233 byte size match; reviewed, not modified; tests not executed.
+
+### 2970. `launcher/src/language_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `977c783aa989d71ddcb43724070fe21b3a9d8c68`
+- Size: 5130 bytes
+- Coverage: 1–123; complete EOF; 123 canonical logical lines, no gaps.
+- Purpose: Renders desktop language selector and system-language option.
+- Dependencies / cross-references: GPUI, i18n Language model and launcher settings.
+- Implementation / logic: Displays available language choices and persists selected language.
+- Findings: Desktop presentation only; no Android RTL handling or accessibility proof.
+- RustChunk relevance: Language choice flow can be reused conceptually.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Implement Android locale settings with Persian as primary language and correct RTL direction.
+- Follow-up checks: Test system locale, manual override, process recreation, bidi and accessibility.
+- RustChunk implementation mapping: RustChunk language settings screen.
+- Evidence required before adoption: Persian Android screenshots and locale lifecycle tests.
+- Completion state: COMPLETE — 123 logical lines through EOF; pinned source SHA and 5130 byte size match; reviewed, not modified; tests not executed.
+
+### 2971. `launcher/src/launch.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9723b40bda69ca93c51f22a4ebb0a52021e206a3`
+- Size: 19883 bytes
+- Coverage: 1–400, 401–542; complete EOF; 542 canonical logical lines, no gaps.
+- Purpose: Builds launch-time process plan with memory limits, environment variables, wrappers, pre/post commands and OS-specific execution.
+- Dependencies / cross-references: Instance config, system memory detection, shell command parsing, environment variables and process Command.
+- Implementation / logic: Computes memory cap from system RAM/explicit setting, resolves executable/wrapper, parses environment, creates pre/post scripts and composes platform-specific command plan.
+- Findings: Desktop process/shell assumptions and OS memory sources are not Android; arbitrary shell hooks introduce code-execution risk. Must not pass untrusted profile text to shell.
+- RustChunk relevance: Memory-budget and environment planning concepts are useful; execution must be Android-specific and tightly controlled.
+- Decision: rewrite required; reference; security-sensitive; platform-specific
+- 1.20.1 implications: Use Android memory APIs and bounded JVM heap; avoid arbitrary shell hooks in user-facing mobile profile settings.
+- Follow-up checks: Test Android available memory, low-memory kill behavior, shell injection, environment escaping, wrapper paths, process cancellation and post-exit cleanup.
+- RustChunk implementation mapping: RustChunk Android Java process launcher and memory budget manager.
+- Evidence required before adoption: Galaxy A22 runtime profiling, safe argument construction, Java 17 stability and process lifecycle tests.
+- Completion state: COMPLETE — 542 logical lines through EOF; pinned source SHA and 19883 byte size match; reviewed, not modified; tests not executed.
+
+### 2972. `launcher/src/launch/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e59e70b8c14331920581111d6ded5fd3c259623e`
+- Size: 9977 bytes
+- Coverage: 1–303; complete EOF; 303 canonical logical lines, no gaps.
+- Purpose: Tests launch memory settings, environment parsing, per-OS process plans and pre/post command ordering.
+- Dependencies / cross-references: launch module, synthetic OS targets, instance variables and child process fixtures.
+- Implementation / logic: Checks unset/default memory, user overrides, argument quoting, wrapper ordering, Linux flags and post-exit environment.
+- Findings: Host OS tests and desktop command semantics only; no Android heap tuning or lifecycle validation.
+- RustChunk relevance: Useful parser and memory-policy test concepts.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Add Android-specific tests for safe JVM args and memory allocation based on actual available RAM.
+- Follow-up checks: Test boundary values, invalid env keys, shell metacharacters, Windows quoting, Android process death and low-memory device behavior.
+- RustChunk implementation mapping: RustChunk launch configuration and process tests.
+- Evidence required before adoption: Actual Galaxy A22 memory tests and Forge 1.20.1 launch.
+- Completion state: COMPLETE — 303 logical lines through EOF; pinned source SHA and 9977 byte size match; reviewed, not modified; tests not executed.
+
+### 2973. `launcher/src/launch_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `56784dd13529a805e1bc69343d7d4b255f96c3a9`
+- Size: 19490 bytes
+- Coverage: 1–400, 401–517; complete EOF; 517 canonical logical lines, no gaps.
+- Purpose: Renders desktop launch settings panel for memory, wrappers, pre/post commands and Linux-specific toggles.
+- Dependencies / cross-references: GPUI, launch config service, memory settings and desktop environment.
+- Implementation / logic: Allows memory selection/typed values and Linux GameMode/MangoHud/dedicated GPU toggles.
+- Findings: Desktop-only controls; shell hooks and Linux GPU options do not belong in Android UI.
+- RustChunk relevance: Memory settings UX may be adapted to mobile.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Build simple Android heap preset/custom setting with safe upper bounds; omit desktop wrappers.
+- Follow-up checks: Test slider bounds, persisted values, device memory, OOM and thermal throttling.
+- RustChunk implementation mapping: RustChunk Android performance settings.
+- Evidence required before adoption: Device memory profiling and stable frame-time/GC tests.
+- Completion state: COMPLETE — 517 logical lines through EOF; pinned source SHA and 19490 byte size match; reviewed, not modified; tests not executed.
+
+### 2974. `launcher/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6018e8a6f0f3c600b781d3e1a95d9d1a84a70639`
+- Size: 947 bytes
+- Coverage: 1–49; complete EOF; 49 canonical logical lines, no gaps.
+- Purpose: Declares launcher library module exports and public crate surface.
+- Dependencies / cross-references: All launcher modules and Cargo crate graph.
+- Implementation / logic: Defines module visibility and feature compilation boundaries.
+- Findings: Thin desktop launcher crate root; does not define Android workspace or RustChunk client/core module split.
+- RustChunk relevance: Useful only as module organization reference.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Keep Android launcher UI crate separate from game core/runtime crates and expose only stable interfaces.
+- Follow-up checks: Check feature flags, target-specific modules, crate dependency cycles and public API boundaries.
+- RustChunk implementation mapping: RustChunk Cargo workspace/module architecture.
+- Evidence required before adoption: Successful ARM64 Android cross-build and module boundary tests.
+- Completion state: COMPLETE — 49 logical lines through EOF; pinned source SHA and 947 byte size match; reviewed, not modified; tests not executed.
+
+### 2975. `launcher/src/line_edit.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d3acb1becb1a9072dfb5974cb8c700ca9cadbd6c`
+- Size: 22624 bytes
+- Coverage: 1–400, 401–707; complete EOF; 707 canonical logical lines, no gaps.
+- Purpose: Implements custom desktop text editing with caret, selection, undo/redo, word movement, paste and viewport reveal.
+- Dependencies / cross-references: GPUI keyboard/mouse events, text buffer, cursor/selection ranges and rendering.
+- Implementation / logic: Maintains UTF-8-safe byte boundaries, editing history, selection replacement, word navigation, max length and scroll-to-caret behavior; includes extensive tests.
+- Findings: Desktop keyboard/mouse interaction model; no touch IME, Android selection handles, accessibility or composing-region support.
+- RustChunk relevance: Text-editing invariants may inform future custom widget, but native Android text fields are safer.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Prefer Android native text input/IME for server addresses, profile names and search; avoid reimplementing keyboard composition.
+- Follow-up checks: Test RTL/Persian text, combining marks, emoji graphemes, IME composition, selection handles, paste, undo and accessibility if custom editor considered.
+- RustChunk implementation mapping: RustChunk Android forms/search fields using native IME.
+- Evidence required before adoption: Real Android keyboard tests for Persian/RTL and Unicode grapheme behavior.
+- Completion state: COMPLETE — 707 logical lines through EOF; pinned source SHA and 22624 byte size match; reviewed, not modified; tests not executed.
+

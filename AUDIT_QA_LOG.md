@@ -1882,3 +1882,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Findings emphasize desktop-only GPUI/Linux/macOS integration and Horizon-native Rust mods: none demonstrates Android UI, Samsung Gaming Hub classification or Java Forge 1.20.1 support. GitHub native mods are explicitly privileged native code and are not a substitute for Forge JARs.
 - No test/build/benchmark was executed. No RustChunk application source changed; no APK, Android device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
 - Checkpoint 2926–2950 is recorded and the 50-file section 2901–2950 is closed. Continue 2951–2975 under the same active exceptional grant without requesting permission.
+
+
+## Checkpoint QA — 2951–2975 — 2026-11-23
+
+- Entries **2951–2975 (25/25)** were selected from the complete, untruncated pinned tree after excluding all 2,950 prior Index paths; all 25 source blobs were fetched through EOF.
+- Exact source SHA and byte size match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded in Ledger; files over 400 lines use contiguous gap-free chunks <=400 lines.
+- Critical target findings: Java runtime selection and launch command resolution are useful foundations, but Android ARM64 Java 17 runtime and Forge 47.x installation/argument merging remain unimplemented in these inspected desktop modules. Tailscale, Windows installer and GPUI controls are platform-specific/nonessential.
+- No test/build/benchmark was executed. No RustChunk application source changed; no APK, Android device, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- Checkpoint 2951–2975 is complete; continue 2976–3000 under the same active exceptional grant without asking.
