@@ -2,12 +2,11 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3000** are committed and have passed global structural/provenance QA (2026-11-23). Final snapshot branch: `backup/audit-3000-final-2026-11-23`. Stage **2601–2800 is CLOSED (200/200)**; stage **2801–3000 is CLOSED (200/200)**.
-- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is exhausted. Exceptional grant **2901–3000** is exhausted; section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is CLOSED (50/50)**. Both 50-file sections under the 2901–3000 grant are closed. **STOP at 3000**.
-
-- Post-QA documentation-only correction: entries 40 and 100 received their missing final three schema fields, and the 2601–2800 Ledger preamble was reconciled. The immutable 3,000-entry snapshot remains at `backup/audit-3000-final-2026-11-23`; no source entry or Index numbering changed.
-- Historical note: stages 2401–2600 and 2601–2800 are fully closed. The latest exceptional grant 2901–3000 is fully exhausted; entry 3001+ requires a fresh explicit authorization.
-- Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No application source changes; next backup only after 3001–4000 are authorized, completed and globally verified.
+- Entries **1–3050** are committed. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (50/200)**.
+- Section **3001–3050 is CLOSED (50/50)**; checkpoints 3001–3025 and 3026–3050 are complete and read-back verified.
+- Exceptional authorization **3001–3100 is ACTIVE (50/100 consumed)**. Section 3051–3100 remains authorized under the same grant; continue 3051–3075 and 3076–3100 without another permission request. **STOP at 3100**; 3101+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **50 records (3001–3050)** with exactly 15 fields each. Index: **3,050 sequential unique paths**, no duplicates and Ledger/Index alignment.
+- Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No application source changes or runtime validation. Next backup only after entries 3001–4000 are complete and globally verified.
 
 ## Stage partition
 

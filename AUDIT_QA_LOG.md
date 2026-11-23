@@ -1976,3 +1976,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Important findings: launcher source resolution and fixtures are pinned to Minecraft 26.3 and do not establish Forge 1.20.1 support; Horizon's offline skin environment variables are proprietary; offline identities are explicitly not accepted by online-mode servers; Tailscale sharing is optional hosting infrastructure rather than ordinary multiplayer; telemetry sends a periodic play ping independently of the four opt-in switches; world backup/copy traversal follows symlink targets and needs hardening.
 - No tests/builds/benchmarks/APK/device/Forge/Minecraft/multiplayer/Aternos validation was run. Tests were inspected only; no RustChunk application source changed.
 - Exceptional authorization **3001–3100 remains ACTIVE (50/100 consumed)**. Section **3001–3050 is CLOSED (50/50)**. Continue **3051–3075** and **3076–3100** under the same grant; **STOP at 3100**.
+
+
+## Boundary-register resume-header correction — 2026-11-24
+
+- Read-back of the 3026–3050 checkpoint found the appended active-stage table was correct, but the opening summary at the top of `AUDIT_200_FILE_BOUNDARY.md` still reflected the historical stop at 3000.
+- Replaced the opening summary with the verified 1–3050 state, closed section 3001–3050, active 3001–3100 exceptional grant and stop boundary 3100.
+- The active-stage table already correctly records 3001–3050 as CLOSED (50/50) and 3051–3100 as authorized; no source records or Index rows changed.
+- This correction is included in a six-document atomic transaction and read-back verification.
