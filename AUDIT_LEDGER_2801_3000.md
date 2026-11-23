@@ -2225,7 +2225,7 @@
 ### 2931. `launcher/src/export_page.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f13f224371b912ef40422915d42f8a19d3623da9`
-- Size: 8617 bytes
+- Size: 8621 bytes
 - Coverage: 1–227; complete EOF; 227 canonical logical lines, no gaps.
 - Purpose: Implements desktop instance export panel and asynchronous export workflow.
 - Dependencies / cross-references: GPUI, instance selection, export module and filesystem path picker.
@@ -2395,7 +2395,7 @@
 ### 2941. `launcher/src/github_mods_page.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e4476d962b6b615e0f3a23263d8325799a5b2e78`
-- Size: 21155 bytes
+- Size: 21162 bytes
 - Coverage: 1–400, 401–548; complete EOF; 548 canonical logical lines, no gaps.
 - Purpose: Implements desktop UI for adding GitHub-hosted Horizon-native mods, reviewing resolved source and choosing/installing bundles.
 - Dependencies / cross-references: GPUI forms, github_mods resolver, native_mods installer, release/ref picker and async background tasks.
@@ -2446,7 +2446,7 @@
 ### 2944. `launcher/src/glass_home_lists.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f6f4364a37a85112e386f3ddb263251705985390`
-- Size: 18170 bytes
+- Size: 18184 bytes
 - Coverage: 1–400, 401–465; complete EOF; 465 canonical logical lines, no gaps.
 - Purpose: Renders desktop world and multiplayer server lists, row menus, add/drop interactions and destructive actions.
 - Dependencies / cross-references: GPUI, worlds model, server list, drag/drop, filesystem and list action handlers.
@@ -2514,7 +2514,7 @@
 ### 2948. `launcher/src/glass_instance.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f9fcbd5df57379b6626c04fd299755b4bcc19e43`
-- Size: 37146 bytes
+- Size: 37162 bytes
 - Coverage: 1–400, 401–800, 801–1007; complete EOF; 1007 canonical logical lines, no gaps.
 - Purpose: Implements desktop instance creation/edit screen, loader and version selection, icon, profile settings and side panel.
 - Dependencies / cross-references: GPUI, instances service, loader registry, version lists, Minecraft version picker and theme.
@@ -2548,7 +2548,7 @@
 ### 2950. `launcher/src/glass_ui.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4d5816498330ea940744779c4250afbad8cc974d`
-- Size: 18800 bytes
+- Size: 18801 bytes
 - Coverage: 1–400, 401–628; complete EOF; 628 canonical logical lines, no gaps.
 - Purpose: Defines reusable desktop Glass UI primitives for text, buttons, rows, tabs, menus, popovers, lists and form fields.
 - Dependencies / cross-references: GPUI, Horizon theme colors, hover tracking, keyboard state and custom component wrappers.
@@ -3143,7 +3143,7 @@
 ### 2985. `launcher/src/modpacks.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `08d524170eee97284953e4d058524bb64aa2c090`
-- Size: 17885 bytes
+- Size: 17888 bytes
 - Coverage: 1–400, 401–480; complete EOF; 480 canonical logical lines, no gaps.
 - Purpose: Imports Java modpacks and converts compatible parts into Horizon-native mod profiles/resources.
 - Dependencies / cross-references: Modrinth .mrpack, CurseForge ZIP parsing, Horizon port pack tool, browser sources, instance manager and process execution.
@@ -3160,7 +3160,7 @@
 ### 2986. `launcher/src/modpacks_page.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `c1cc5091014a11648230201032bf44ac3e3117e7`
-- Size: 20435 bytes
+- Size: 20443 bytes
 - Coverage: 1–400, 401–536; complete EOF; 536 canonical logical lines, no gaps.
 - Purpose: Renders desktop Modpacks tab, import/port progress, report and profile play/remove controls.
 - Dependencies / cross-references: GPUI, modpacks service, Horizon port report, browser and async job state.
@@ -3177,7 +3177,7 @@
 ### 2987. `launcher/src/mods_page.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `c3a595775ab16ead83501a22d2826c3cee28796b`
-- Size: 74089 bytes
+- Size: 74109 bytes
 - Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1809; complete EOF; 1809 canonical logical lines, no gaps.
 - Purpose: Desktop Mods page for registry search, install/update/remove, native-mod builds and pack management.
 - Dependencies / cross-references: Browser sources, modpacks, native_mods, GPUI state, loader target, project details and background jobs.
@@ -3194,7 +3194,7 @@
 ### 2988. `launcher/src/mods_project.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `f8d3e37927eeea0d1fafe462a4a9010c407eff68`
-- Size: 32290 bytes
+- Size: 32300 bytes
 - Coverage: 1–400, 401–800, 801–832; complete EOF; 832 canonical logical lines, no gaps.
 - Purpose: Renders project detail page, icons, categories, filters, sorting and project checks on desktop Mods page.
 - Dependencies / cross-references: Browser project metadata, GPUI images, sort/filter models and mod support checks.
@@ -3245,7 +3245,7 @@
 ### 2991. `launcher/src/multiplayer_page.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `98813b1cf5353d5f3b015dc860771e0fda35f8bb`
-- Size: 9757 bytes
+- Size: 9758 bytes
 - Coverage: 1–261; complete EOF; 261 canonical logical lines, no gaps.
 - Purpose: Renders desktop saved multiplayer server list, icons, add/edit and count.
 - Dependencies / cross-references: GPUI, server_list model, server image cache and text field.

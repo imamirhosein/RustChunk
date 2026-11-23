@@ -3,7 +3,7 @@
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
 - Entries 1–2000 globally verified/backed up; entries 2001–3000 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; stage **2801–3000 is CLOSED (200/200)**.
-- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is exhausted. New exceptional grant **2901–3000** is active; section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is CLOSED (50/50)**. Both 50-file sections under the 2901–3000 grant are closed. **STOP at 3000**.
+- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is exhausted. New exceptional grant **2901–3000** is exhausted; section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is CLOSED (50/50)**. Both 50-file sections under the 2901–3000 grant are closed. **STOP at 3000**.
 
 - Historical note: stages 2401–2600 and 2601–2800 are fully closed. The current exceptional grant 2901–3000 is stated in the latest stage section below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
