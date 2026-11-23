@@ -1,20 +1,21 @@
 # RustChunk Audit Continuity
 
-Last reconciled: 2026-11-22
+Last reconciled: 2026-11-23
 Repository: imamirhosein/RustChunk
 Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2775**.
-- Active 200-file stage: **2601–2800**, currently **175/200**.
-- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed (50/50 each). Section **2751–2800** is active (25/50): checkpoint **2751–2775** is complete, and **2776–2800** remains authorized by the same one-time grant.
-- The earlier exceptional authorization for **2601–2700** is exhausted. The current one-time authorization is exactly **2701–2800**; **STOP after 2800**.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **175 records (2601–2775)**, exactly 15 fields each. Index: **2,775 sequential unique paths**, with new paths and Decisions aligned.
+- Completed entries: **1–2800**.
+- Active 200-file stage **2601–2800 is CLOSED (200/200)**.
+- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are all closed (50/50 each).
+- The one-time exceptional authorization covered exactly **2701–2800** and is exhausted. **STOP after 2800**; entry 2801+ requires fresh explicit user authorization.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **200 records (2601–2800)**, each with exactly 15 fields. Index: **2,800 sequential unique paths**, with all new Ledger paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable source pin only.
-- The 100 authorized candidates were selected in strict raw lexical order from the complete, untruncated pinned tree after excluding all 2,600 earlier indexed paths. Entries 2701–2775 exhaust the 75 previously unindexed Rust paths that sorted before/equal to the old Index cutoff; remaining candidates are selected from the complete tree after excluding all 2,775 current Index paths. The one-time grant still stops at entry 2800.
-- Backup covers 1–2000 only. No backup at 2675; next backup after 3000 and global verification.
-- Tests/examples were inspected only; none executed. No application source changes, build, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- The full recursive source tree is complete and untruncated. Entries 2701–2775 exhaust all 75 earlier-lexical unindexed Rust paths; no historical entries were renumbered.
+- Entries 2776–2800 passed a second structural/provenance check: all 25 source SHAs, byte sizes and canonical EOF line counts match the pinned blobs; every new Ledger record has 15 fields; Index paths and Decisions align. Entry 2764's SHA transcription was corrected.
+- Long-file reads in the final checkpoint are recorded as contiguous, gap-free ranges no larger than 400 lines. The final repeat check was structural/provenance QA, not a second semantic re-audit.
+- Backup remains at 1–2000 only; next backup after 3000 and global verification. Tests/examples were inspected only, not executed. No application source changes, build, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -798,3 +799,11 @@ Keep progress updates extremely short. Report only the current range and the nex
 - GitHub read-back of the first checkpoint commit found a field-value alignment defect in the 25 newly authored Ledger entries. The Index decisions and source provenance were correct, but the Ledger's Decision/implementation/evidence/completion values were shifted by one field in the generated draft.
 - All 25 records were corrected and the test-only records 2758–2775 were given explicit RustChunk test-suite mappings. The correction preserves source SHA, byte size, canonical line count, coverage and source findings.
 - The corrective six-document transaction must be committed and re-read from GitHub before treating 2751–2775 as closed or continuing to 2776.
+
+## Closed reporting section — 2751–2800 — 2026-11-23
+
+- Entries **2751–2800 inclusive (50/50)** are complete in two 25-file checkpoints.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **200 entries (2601–2800)**. Index: **2,800 sequential unique paths**.
+- The 2776–2800 checkpoint passed a second structural/provenance check for all source SHA/size/EOF counts, all 15 Ledger fields and Index path/Decision alignment. Entry 2764's SHA transcription was corrected.
+- Stage **2601–2800 is CLOSED (200/200)**. The exceptional grant is exhausted. **STOP at 2800; 2801+ requires fresh explicit authorization.**
+- No tests/builds/APK/device/Forge/Minecraft/server validation; no product source changed.

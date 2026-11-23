@@ -134,17 +134,19 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-22; after checkpoint 2751–2775)
+## 12. Current authoritative resume state (2026-11-23; after checkpoint 2776–2800)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify `main` or backup refs.
-- Completed entries **1–2775**.
-- Active 200-file stage **2601–2800**: **175/200** complete. Sections **2601–2650**, **2651–2700** and **2701–2750** are closed; section **2751–2800** is 25/50 complete.
-- The one-time exceptional grant covers exactly **2701–2800**. Checkpoints 2701–2725, 2726–2750 and 2751–2775 are complete; **2776–2800** remains authorized. Complete it and **STOP at 2800**; 2801+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **175 records (2601–2775)**, each with exactly 15 fields. Index: **2,775 sequential unique paths**, with all new Ledger paths/Decisions aligned.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use the immutable commit only.
-- The full recursive source tree is complete and untruncated. Entries 2701–2775 cover all **75** previously unindexed Rust paths that sort before/equal to the previous Index cutoff. Select all remaining candidates from the complete pinned tree after excluding the full 2,775-row Index; never renumber historical entries.
-- Standard 200 / 50 / 25 cadence remains. Commit all six audit documents atomically after each 25-file checkpoint, then read them back from GitHub before continuing.
-- Backup only after 3000 and global verification. No source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed entries **1–2800**.
+- Active 200-file stage **2601–2800 is CLOSED (200/200)**. Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are all closed (50/50 each).
+- The one-time exceptional grant covered exactly **2701–2800** and is exhausted. Checkpoint **2776–2800** is complete; **STOP at 2800**. Entry 2801+ requires fresh explicit user authorization.
+- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **200 records (2601–2800)**, each with exactly 15 fields. Index: **2,800 sequential unique paths**, with Ledger paths and Decisions aligned.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot.
+- The full recursive source tree is complete and untruncated. Entries 2701–2775 exhaust all 75 earlier-lexical unindexed Rust paths. No source path was duplicated or renumbered.
+- Checkpoint 2776–2800 passed a second structural/provenance check: all 25 pinned SHA/byte-size pairs and canonical EOF counts match; every new Ledger entry contains exactly 15 fields; Index path/Decision values align. Entry 2764's SHA transcription was corrected to the pinned blob SHA.
+- Long files were read in consecutive, gap-free ranges no larger than 400 logical lines. The final repeat check was structural/provenance QA, not a fresh semantic re-audit.
+- Backup only after 3000 and global verification. No product source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
@@ -828,3 +830,9 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 
 - Structural read-back correction for checkpoint **2751–2775**: after the initial commit, value-level validation caught a one-field shift in Ledger fields for all 25 entries. The corrective transaction restores the proper Decision values (matching Index), 1.20.1 implications, follow-up checks, RustChunk mapping, evidence and completion state, and adds explicit test-suite mappings for entries 2758–2775. The checkpoint is closed only after the corrective six-document commit and a fresh six-document GitHub read-back pass. Do not proceed to 2776 until that verification succeeds.
+
+## Final closeout — checkpoint 2776–2800 — 2026-11-23
+
+- The 2751–2775 field-alignment correction is superseded by the completed closeout transaction: all six audit documents are synchronized at the 2800 boundary and will be read back after commit.
+- The 2776–2800 candidate set was derived from the complete untruncated pinned tree after excluding every path in the existing Index. Five previously indexed paths were excluded rather than duplicated.
+- Stage 2601–2800 is closed at 200/200. The user grant is exhausted; stop at 2800 and obtain fresh explicit authorization before 2801.

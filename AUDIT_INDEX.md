@@ -1,4 +1,4 @@
-- Source ledgers: 1–2600 in prior ledgers; active `AUDIT_LEDGER_2601_2800.md` now has **175 records (2601–2775)**. Stage 2601–2800 is active (175/200); sections 2601–2650, 2651–2700 and 2701–2750 are closed. Section 2751–2800 is 25/50 complete; checkpoint 2776–2800 remains authorized under the same exceptional grant. Stop only after entry 2800. Backup remains `backup/audit-2000-final-2026-11-21`.
+- Source ledgers: 1–2600 in prior ledgers; active `AUDIT_LEDGER_2601_2800.md` now has **200 records (2601–2800)**. Stage 2601–2800 is **CLOSED (200/200)**; all four sections 2601–2650, 2651–2700, 2701–2750 and 2751–2800 are closed. Index: **2,800 sequential unique paths**. The one-time grant 2701–2800 is exhausted; stop at 2800. Backup remains `backup/audit-2000-final-2026-11-21`.
 - Ordering correction at entry 2701: a full scan of the pinned tree found **75 unindexed Rust blobs** lexically before or equal to the old last indexed path. Entries 2701–2775 now record all **75** of those paths in strict lexical order; no earlier-path candidates remain. Select the next entries from the complete remaining pinned tree after excluding all 2,775 indexed paths; historical entry numbers are not renumbered.
 - Cross-chat resume state: [AUDIT_CONTINUITY.md](AUDIT_CONTINUITY.md). Read this file before resuming work in a new chat.
 - Source repository/ref: `starling-client/starling` / `starling`
@@ -3214,3 +3214,28 @@
 | 2773 | `crates/horizon-world/tests/feature_sort_bounds.rs` | unnecessary; reference; optional/future | Tests iterative feature sorting, large dependency chains and cycle detection; not executed. |
 | 2774 | `crates/horizon-world/tests/material_rule_specialization.rs` | unnecessary; reference; optional/future | Tests material-rule specialization, density binding order, short-circuiting and error propagation; not executed. |
 | 2775 | `crates/horizon-world/tests/material_stage.rs` | unnecessary; reference; optional/future | Tests material-stage sampler-cache retention and failure context; not executed. |
+| 2776 | `crates/starling-catalog/tests/catalog.rs` | unnecessary; reference; optional/future | Test-only catalog parsing, shader classification and installed-project bookkeeping. |
+| 2777 | `crates/starling-catalog/tests/list.rs` | unnecessary; reference; optional/future | Test-only specs for paginated catalog feeds, stale responses, retries and touch scrolling. |
+| 2778 | `launcher/build.rs` | unnecessary; version-specific | Embeds Horizon Windows icon; unrelated to game/runtime. |
+| 2779 | `launcher/src/account.rs` | unnecessary; reference; version-specific | Horizon Microsoft/Xbox authentication and paid Java ownership gate conflict with RustChunk offline-first accounts. |
+| 2780 | `launcher/src/account/session.rs` | adaptable; reference; optional/future | Process/file locking and status model may help an optional online-account module. |
+| 2781 | `launcher/src/account/tests.rs` | unnecessary; reference; optional/future | Horizon-only account/keychain test suite; selected failure cases are test ideas. |
+| 2782 | `launcher/src/agents.rs` | unnecessary; reference; optional/future | Desktop MCP-agent configuration is outside Android client/current scope. |
+| 2783 | `launcher/src/agents_page.rs` | unnecessary; version-specific | GPUI desktop AI-agent settings page, unrelated to Android game runtime. |
+| 2784 | `launcher/src/art.rs` | unnecessary; version-specific | Horizon launcher pixel-art rasterizer, not Minecraft renderer. |
+| 2785 | `launcher/src/backend.rs` | rewrite required; reference; version-specific | Large Horizon desktop backend is coupled to GPUI, installer/update model and Minecraft 26.3. |
+| 2786 | `launcher/src/backend/java_tests.rs` | unnecessary; reference; optional/future | Test-only check for JDK propagation to external preparers. |
+| 2787 | `launcher/src/backend/release_loading_tests.rs` | unnecessary; reference; optional/future | Test-only fixtures for Horizon release metadata and asset selection. |
+| 2788 | `launcher/src/blocks.rs` | unnecessary; version-specific | GPUI pixel-design components are UI presentation, not Minecraft blocks/collision. |
+| 2789 | `launcher/src/browser.rs` | rewrite required; reference; version-specific | Content browser is tied to Horizon 26.3 sources and native .hmod packages, not Forge 1.20.1. |
+| 2790 | `launcher/src/browser/curseforge.rs` | adaptable; reference; version-specific | Provider adapter structure may be reused; defaults and classes are Horizon-specific. |
+| 2791 | `launcher/src/browser/details.rs` | unnecessary; version-specific | GPUI project-details screen is desktop presentation, not game/loader abstraction. |
+| 2792 | `launcher/src/browser/download.rs` | adaptable; reference; optional/future | Host allowlists, safe names and checksum/size checks are useful; temp concurrency needs redesign. |
+| 2793 | `launcher/src/browser/horizon.rs` | rewrite required; reference; version-specific | Signed registry and pack resolution are tied to Horizon native content ecosystem. |
+| 2794 | `launcher/src/browser/horizon/pack.rs` | rewrite required; reference; version-specific | Horizon pack sequencing; multi-file install needs transactional safeguards. |
+| 2795 | `launcher/src/browser/horizon/tests.rs` | unnecessary; reference; optional/future | Test-only specifications for Horizon registry/installer; not Forge compatibility proof. |
+| 2796 | `launcher/src/browser/images.rs` | adaptable; reference; optional/future | Image allowlists, byte/pixel caps and bounded cache may be adapted for catalog artwork. |
+| 2797 | `launcher/src/browser/installed.rs` | rewrite required; reference; version-specific | Manifest ownership concept is useful, but Horizon installer/dependency loop needs transactional redesign. |
+| 2798 | `launcher/src/browser/installed/tests.rs` | unnecessary; reference; optional/future | Test-only Horizon install fixtures for dependencies, Java-port behavior and data packs. |
+| 2799 | `launcher/src/browser/java.rs` | rewrite required; reference; version-specific | Ports Java mod content into Horizon native pack; it does not load Forge JARs. |
+| 2800 | `launcher/src/browser/java_instance.rs` | adaptable; reference; version-specific | Per-instance version/loader filters and disabled-mod preservation are useful concepts; current installer needs Forge rewrite. |

@@ -2,8 +2,8 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries 1–2000 globally verified/backed up; entries 2001–2775 inspected and committed; active 200-file stage is **2601–2800 (175/200)** after checkpoint 2751–2775.
-- Sections **2601–2650**, **2651–2700** and **2701–2750** are closed. Section **2751–2800** is 25/50 complete: checkpoint 2751–2775 is complete, and 2776–2800 remains authorized under the same one-time grant.
+- Entries 1–2000 globally verified/backed up; entries 2001–2800 are inspected and committed. Active 200-file stage **2601–2800 is CLOSED (200/200)**.
+- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are all closed (50/50). The one-time grant 2701–2800 is exhausted; **STOP at 2800**.
 
 - Historical note: the 2401–2600 stage was fully QA-verified and closed after its lexical-order correction. The earlier 2601–2700 grant is also closed; the active 2601–2800 stage and current exceptional grant 2701–2800 are stated below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
@@ -319,14 +319,14 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Stage closed at 200/200. Stop at 2600; fresh authorization is required for 2601+.
 
 
-## Active stage 2601–2800 — exceptional extension in progress
+## Closed stage 2601–2800 — one-time exceptional extension completed
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 2601–2650 | 2601–2625 — **COMPLETE** | 2626–2650 — **COMPLETE** | **CLOSED — 50/50** |
 | 2651–2700 | 2651–2675 — **COMPLETE** | 2676–2700 — **COMPLETE** | **CLOSED — 50/50** |
 | 2701–2750 | 2701–2725 — **COMPLETE** | 2726–2750 — **COMPLETE** | **CLOSED — 50/50** |
-| 2751–2800 | 2751–2775 — **COMPLETE** | 2776–2800 — **PRE-AUTHORIZED** | **IN PROGRESS — 25/50** |
+| 2751–2800 | 2751–2775 — **COMPLETE** | 2776–2800 — **COMPLETE** | **CLOSED — 50/50** |
 
 - The user explicitly renewed one exceptional grant for exactly **2701–2800**. It covers both remaining 25-file checkpoints; do not stop for permission at 2775.
 - Keep the normal six-document atomic commit/read-back process after each 25-file checkpoint. The active Ledger is `AUDIT_LEDGER_2601_2800.md`; current Ledger count is **175 entries (2601–2775)** and the Index has **2,775 sequential unique paths**.
@@ -378,3 +378,13 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 
 - After the first checkpoint commit, a deeper value-level read-back caught a one-field shift in the newly authored Ledger values. The 25 Decision labels, target-version implications, follow-ups, implementation mappings, evidence requirements and completion states were corrected; Index paths/Decisions and source provenance remain unchanged.
 - Entries 2751–2775 are closed only after this correction is included in a six-document atomic commit and all six documents are re-fetched and verified. Do not begin 2776 before that final read-back succeeds.
+
+## Final checkpoint 2776–2800 — COMPLETE; stage 2601–2800 CLOSED — 2026-11-23
+
+- Entries 2776–2800 are registered in the active Ledger and Index. All 25 pinned source SHA/byte-size pairs and canonical EOF line counts passed the second structural/provenance check.
+- Long files were read in consecutive, gap-free ranges no larger than 400 lines; all 25 records contain exactly 15 Ledger fields.
+- Index: 2,800 sequential unique paths. Active Ledger: 200 entries (2601–2800). Ledger/Index path and Decision alignment passed.
+- Five paths initially considered for 2796–2800 were already Index entries 521, 522, 523, 536 and 539; the correct next lexical files were recorded instead, without duplicate paths.
+- Entry 2764 SHA was corrected to `688daea45e4cc257ee582d7c6f25ec2b32684e50`.
+- Section 2751–2800 is closed (50/50); stage 2601–2800 is closed (200/200). The one-time authorization is exhausted. **STOP at 2800; obtain a fresh explicit grant before 2801.**
+- No tests/examples were executed, no application source changed, and no build/APK/device/Forge/Minecraft/server validation was performed.
