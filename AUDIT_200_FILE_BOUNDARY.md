@@ -2,7 +2,7 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries 1–2000 globally verified/backed up; entries 2001–2900 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; active stage **2801–3000 is 100/200 complete**.
+- Entries 1–2000 globally verified/backed up; entries 2001–2925 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; active stage **2801–3000 is 125/200 complete**.
 - Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is active; checkpoints **2801–2825** and **2826–2850** are complete. Continue 2851–2900 under the same grant and **STOP at 2900**.
 
 - Historical note: stages 2401–2600 and 2601–2800 are fully closed. The active stage and current exceptional grant 2801–2900 are stated above and in the latest stage section below.
@@ -433,3 +433,13 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Large files were read in consecutive, gap-free ranges <=400 logical lines: Rust parity (1–1595), server-next (1–472), server (1–701), launcher README (1–538). All other files were read completely in one retrieval.
 - Exceptional authorization 2801–2900 is exhausted. Both 50-file sections are closed. **STOP at 2900**; fresh explicit authorization required before 2901.
 - No source/app code changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.
+
+
+## Exceptional authorization 2901–3000 — ACTIVE
+
+| Section | First 25 | Second 25 | Status |
+|---|---|---|---|
+| 2901–2950 | 2901–2925 — **COMPLETE** | 2926–2950 — **AUTHORIZED** | **25/50 — CONTINUE UNDER SAME GRANT** |
+| 2951–3000 | 2951–2975 — **AUTHORIZED** | 2976–3000 — **AUTHORIZED** | **0/50 — WITHIN ACTIVE 100-FILE GRANT** |
+
+Checkpoint 2901–2925 is complete and read-back verified. The user's exceptional authorization explicitly covers all entries 2901–3000; continue without requesting another authorization and stop only at 3000.

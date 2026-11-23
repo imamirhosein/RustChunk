@@ -870,3 +870,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The new stage Ledger is `AUDIT_LEDGER_2801_3000.md`; it contains **100 records** through entry 2900. Do not append to the closed 2601–2800 Ledger. Keep audit-only changes on `starling-1.20.1-port-audit`; leave `main` and backup refs untouched.
 - Checkpoints **2801–2825**, **2826–2850**, **2851–2875** and **2876–2900** are complete and read-back verified. Sections **2801–2850** and **2851–2900** are closed. The 100-file grant is fully consumed.
 - **STOP at 2900.** Entry 2901 and later are outside this grant and require fresh explicit authorization. Preserve exact 25-file commits, six-document atomic transactions, full Index uniqueness, pinned-tree provenance, EOF coverage and the 15-field Ledger schema.
+
+
+## 53. One-time exceptional authorization — 2901–3000 — 2026-11-23 — ACTIVE
+
+- The user explicitly authorized exactly **100 new source files: entries 2901–3000**, as a new one-time exceptional grant. This follows the prior exhausted grant 2801–2900 and does not alter the standard 200 / 50 / 25 cadence.
+- Continue without asking for another permission through entry **3000**. Preserve exact 25-file commits and report/record 50-file boundaries; do not stop between checkpoints inside this 100-file grant.
+- Active Ledger remains `AUDIT_LEDGER_2801_3000.md`; do not create a new Ledger or append to the closed 2601–2800 Ledger. Keep audit-only changes on `starling-1.20.1-port-audit`; leave `main` and backup refs untouched.
+- Checkpoint **2901–2925** is complete and verified. Continue **2926–2950**, then **2951–2975**, **2976–3000**. At 3000 close the 200-file stage and **STOP**; 3001+ requires fresh explicit authorization.
+- Current counts: Ledger 125 records (2801–2925), Index 2,925 sequential unique paths. Maintain exactly 15 fields per Ledger record, full pinned-tree provenance, SHA/size, canonical line counts and EOF coverage.

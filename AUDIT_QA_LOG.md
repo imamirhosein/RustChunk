@@ -1863,3 +1863,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Source review included documentation, Cargo manifest and embedded test/benchmark descriptions only; no test or benchmark was executed or independently reproduced.
 - No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
 - Exceptional authorization **2801–2900 is fully consumed**. Both 50-file sections 2801–2850 and 2851–2900 are closed. **STOP at 2900**; 2901+ requires a fresh explicit authorization.
+
+
+## Checkpoint QA — 2901–2925 — 2026-11-23
+
+- Entries **2901–2925 (25/25)** selected from the complete, untruncated pinned recursive tree after excluding all 2,900 paths already in Index; all 25 source blobs were fetched through EOF.
+- Exact source SHAs and byte sizes match the pinned Git tree. Canonical logical line counts and complete coverage are recorded in the active Ledger; large files have consecutive gap-free ranges no larger than 400 lines.
+- The ten locale JSON files each parse successfully and contain the same 914 keys, with no empty/non-string values. Placeholder sets match across locales. Some values remain identical to English: de 124, es 28, fr 116, ja 146, pl 107, pt-BR 48, ru 84, tr 154, uk 94, zh 97. This is a localization completeness observation, not a JSON validity failure.
+- Browser test fixtures explicitly assert that Java mods for Minecraft 1.20.1 are not installable in the inspected Horizon workflow; the current catalog/port model is not evidence of Forge 1.20.1 support.
+- No test, benchmark or live network check was executed. No RustChunk application source changed; no build, APK, Android device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- Checkpoint 2901–2925 is recorded; continue 2926–2950 under the user's active exceptional grant, without requesting another authorization.

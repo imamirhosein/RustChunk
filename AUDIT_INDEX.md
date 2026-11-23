@@ -3362,3 +3362,34 @@
 | 2898 | `docs/world-height.md` | rewrite required; reference; version-specific | Important for chunk storage, remote dimension changes and correct render/lighting bounds. |
 | 2899 | `launcher/Cargo.toml` | adaptable; reference; platform-specific | Useful as a dependency-boundary and separate-workspace reference, not as a RustChunk Android manifest. |
 | 2900 | `launcher/README.md` | adaptable; reference; version-specific | Strong reference for launcher feature taxonomy, profile isolation, preparation, safe update and import/export flows; its mod/account model is not directly compatible with RustChunk goals. |
+
+
+## Part 117 — Entries 2901–2925
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2901 | `launcher/benchmarks/release-loading.md` | adaptable; reference; benchmark-only | Useful measurement method for reducing duplicate network/JSON work; desktop backend architecture and numbers are not transferable to Android. |
+| 2902 | `launcher/lang/de.json` | adaptable; reference; localization | Localization coverage and placeholder preservation are relevant to RustChunk UI, but the vocabulary reflects Horizon desktop functionality. |
+| 2903 | `launcher/lang/es.json` | adaptable; reference; localization | Useful localization reference, but Horizon-specific copy is not directly reusable. |
+| 2904 | `launcher/lang/fr.json` | adaptable; reference; localization | Localization model is reusable; Horizon copy and desktop labels are version-specific. |
+| 2905 | `launcher/lang/ja.json` | adaptable; reference; localization | Shows localization coverage needs and CJK text handling; desktop GPUI font behavior does not transfer. |
+| 2906 | `launcher/lang/pl.json` | adaptable; reference; localization | Useful localization structure, but all text must be scoped to RustChunk UI. |
+| 2907 | `launcher/lang/pt-br.json` | adaptable; reference; localization | Localization example; desktop launcher terminology needs adaptation. |
+| 2908 | `launcher/lang/ru.json` | adaptable; reference; localization | Localization reference; Cyrillic font and line behavior must be validated on Android. |
+| 2909 | `launcher/lang/tr.json` | adaptable; reference; localization | Demonstrates locale completeness QA; Horizon text is not a RustChunk translation source. |
+| 2910 | `launcher/lang/uk.json` | adaptable; reference; localization | Localization reference with CJK/RTL/platform concerns separate. |
+| 2911 | `launcher/lang/zh.json` | adaptable; reference; localization | Useful CJK localization reference; desktop font assumptions do not transfer to Android. |
+| 2912 | `launcher/links.json` | unnecessary; reference; branding-sensitive | No product functionality to port; avoid accidental branding, network routing or endorsement transfer. |
+| 2913 | `launcher/src/browser/java_instance/tests.rs` | rewrite required; reference; version-specific | Useful behavioral test design for RustChunk's mod browser and install transactions, but current compatibility policy conflicts with required Forge 1.20.1. |
+| 2914 | `launcher/src/browser/modrinth.rs` | rewrite required; reference; API-version-sensitive | Useful API adapter and checksum parsing reference, but cannot be treated as a Forge loader or 1.20.1 compatibility implementation. |
+| 2915 | `launcher/src/browser/tests.rs` | rewrite required; reference; version-specific; security-sensitive | Critical compatibility evidence: the inspected browser's current Java mod policy does not meet RustChunk's Forge 1.20.1 goal. |
+| 2916 | `launcher/src/build_import.rs` | adaptable; reference; security-sensitive; platform-specific | Atomic import and bounded extraction patterns are useful; platform binary checks and native-mod APIs are not compatible with Android Java runtime installation. |
+| 2917 | `launcher/src/cli.rs` | rewrite required; reference; version-specific; security-sensitive | Command taxonomy and clear separation of parsing/dispatch from backend are useful; most commands and assumptions need an Android/1.20.1 redesign. |
+| 2918 | `launcher/src/cli_tools.rs` | adaptable; reference; security-sensitive | Useful policy pattern for any future RustChunk automation/API; do not expose unrestricted shell or account/session internals. |
+| 2919 | `launcher/src/collection.rs` | adaptable; reference; privacy-sensitive | Consent preview, granular opt-in and deletion affordances are reusable; the always-on ping must not be copied. |
+| 2920 | `launcher/src/console.rs` | unnecessary; reference; platform-specific | Not needed for Android launcher; demonstrates narrow platform-specific unsafe isolation. |
+| 2921 | `launcher/src/console_page.rs` | adaptable; reference; privacy-sensitive | Console viewing, filtering and explicit share consent are useful; desktop GPUI and mclo.gs endpoint should not be inherited without review. |
+| 2922 | `launcher/src/cull.rs` | adaptable; reference; platform-specific | Useful for long mod/server/world catalogs to reduce UI element count and memory. |
+| 2923 | `launcher/src/datapacks.rs` | adaptable; reference; version-specific | World datapack management is relevant to RustChunk profile/world tooling; not central to Forge JAR loading. |
+| 2924 | `launcher/src/datapacks/tests.rs` | rewrite required; reference; version-specific | Useful testing pattern, but fixtures need replacement with actual 1.20.1 formats. |
+| 2925 | `launcher/src/datapacks_page.rs` | adaptable; reference; platform-specific | Useful interaction flow and confirmation pattern; needs Android SAF picker and explicit partial-failure reporting. |
