@@ -394,8 +394,8 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 2801–2850 | 2801–2825 — **COMPLETE** | 2826–2850 — **AUTHORIZED** | **25/50 — STOP AT 2850** |
-| 2851–2900 | 2851–2875 — **NOT AUTHORIZED** | 2876–2900 — **NOT AUTHORIZED** | **WAIT FOR FRESH GRANT AT 2850** |
+| 2801–2850 | 2801–2825 — **COMPLETE** | 2826–2850 — **AUTHORIZED** | **25/50 — CONTINUE UNDER 100-FILE GRANT** |
+| 2851–2900 | 2851–2875 — **AUTHORIZED** | 2876–2900 — **AUTHORIZED** | **AUTHORIZED UNDER SAME GRANT; STOP AT 2900** |
 | 2901–2950 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
 | 2951–3000 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
 
@@ -404,5 +404,5 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - 25 new files inspected individually through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; paths, SHAs and byte sizes match the complete untruncated tree.
 - Ledger `AUDIT_LEDGER_2801_3000.md` has 25 records with exactly 15 fields; Index has 2,825 sequential unique paths and matching path/Decision rows.
 - Long files were read fully; all selected files are <=400 logical lines, so each was read in one complete retrieval.
-- Continue 2826–2850 under the one-time 2801–2900 authorization. **STOP at 2850**; fresh authorization required before 2851.
+- Continue 2826–2850 and report at 2850, then continue 2851–2875 and 2876–2900 under the same one-time 2801–2900 authorization. **STOP at 2900**.
 - No source/app code changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.

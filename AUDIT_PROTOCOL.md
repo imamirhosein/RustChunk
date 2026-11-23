@@ -140,7 +140,7 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Completed entries **1–2825**.
 - Stage **2601–2800 is CLOSED (200/200)**. The new active 200-file stage **2801–3000** is **25/200 complete**.
 - Reporting section **2801–2850** is 25/50 complete. Checkpoint **2801–2825** is complete, committed and read-back verified.
-- The user explicitly authorized the one-time exceptional window **2801–2900**. Continue **2826–2850** without another permission request; **STOP at 2850**. Entries 2851–2900 need a fresh explicit grant after that report.
+- The user explicitly authorized the one-time exceptional window **2801–2900**. Continue **2826–2850** without another permission request, report at 2850, then continue **2851–2875** and **2876–2900** under the same explicit 100-file grant. **STOP at 2900**.
 - Active Ledger `AUDIT_LEDGER_2801_3000.md`: **25 records (2801–2825)** with exactly 15 fields each. Index: **2,825 sequential unique paths**; path/Decision alignment verified.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot.
 - The recursive tree is complete and untruncated (5,749 entries). The first 25 eligible paths were selected from the full remaining set after excluding all 2,800 indexed paths.
@@ -843,6 +843,6 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 - The user explicitly authorized exactly **100 new source files: entries 2801–2900**, as a one-time exceptional extension across two 50-file reporting sections. This does not change the standard 200 / 50 / 25 cadence.
 - The new stage Ledger is `AUDIT_LEDGER_2801_3000.md`; do not append to the closed 2601–2800 Ledger. Keep all audit-only changes on `starling-1.20.1-port-audit`; leave `main` and backup refs untouched.
-- Checkpoint **2801–2825** is complete and verified. Continue **2826–2850** under the same grant without asking at 2825. Report and **STOP at 2850**; do not inspect 2851–2900 until a fresh explicit authorization is received.
+- Checkpoint **2801–2825** is complete and verified. Continue **2826–2850** under the same grant without asking at 2825. Report at 2850, then continue **2851–2875** and **2876–2900** under the same one-time grant without another permission request. **STOP at 2900**.
 - The remaining 50-file section 2851–2900 is not pre-authorized by this grant at the 2850 boundary. The 2901–3000 section is also not authorized.
 - Preserve exact 25-file commits, six-document atomic transactions, full Index uniqueness, pinned-tree provenance, EOF coverage and the 15-field Ledger schema.

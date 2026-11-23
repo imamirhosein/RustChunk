@@ -3,7 +3,7 @@
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
 - Active 200-file stage: **2801–3000**; completed **25/200 (2801–2825)**.
-- One-time exceptional authorization covers exactly **2801–2900**. The first checkpoint **2801–2825** is registered; continue to **2826–2850** under the same grant, then stop at the 50-file boundary **2850** and report. Do not inspect 2851+ until the user authorizes the next 50-file section.
+- One-time exceptional authorization covers exactly **2801–2900**. The first checkpoint **2801–2825** is registered; continue through **2826–2850**, report that 50-file boundary, then continue **2851–2875** and **2876–2900** under the same explicit 100-file grant. **STOP at 2900**.
 - Source selection: first 25 eligible source/documentation blobs in strict raw lexical order from the complete pinned recursive tree after excluding all 2,800 paths in the Index. The tree is untruncated; all 25 selected paths, SHAs and byte sizes match the pin.
 - Starling/Horizon documentation and implementation target Minecraft Java 26.3; this audit is compatibility research, not evidence of Minecraft 1.20.1 / Forge 47.x support.
 - No application source was modified. Documentation/tests were inspected only; no tests, builds, benchmarks, APK, device, Forge, Minecraft or server validation was run.

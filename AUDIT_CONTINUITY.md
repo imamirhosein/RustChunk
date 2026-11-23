@@ -9,7 +9,7 @@ Branch: starling-1.20.1-port-audit
 - Completed entries: **1–2825**.
 - Stage **2601–2800 is CLOSED (200/200)**; all four 50-file sections in that stage are closed.
 - Active 200-file stage **2801–3000** is **25/200 complete**. Section **2801–2850** is 25/50 complete; checkpoint **2801–2825** is committed and read-back verified.
-- The user explicitly authorized one-time exceptional range **2801–2900 (100 files)**. Continue checkpoint **2826–2850** under the same grant; report and **STOP at 2850**. The remaining 2851–2900 requires a fresh explicit authorization after that boundary.
+- The user explicitly authorized one-time exceptional range **2801–2900 (100 files)**. Continue checkpoint **2826–2850**, report that 50-file boundary, then continue **2851–2875** and **2876–2900** under the same 100-file grant without another permission request. **STOP at 2900**.
 - Active Ledger `AUDIT_LEDGER_2801_3000.md`: **25 records (2801–2825)**, each with exactly 15 fields. Index: **2,825 sequential unique paths**, all paths unique and the new Ledger paths/Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
 - The full recursive source tree contains 5,749 entries and is untruncated. Candidate selection was recomputed from the complete tree after excluding all 2,800 prior Index paths; entries 2801–2825 are the first 25 eligible lexical paths.
@@ -813,5 +813,5 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Entries **2801–2825 inclusive (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
 - Exact source paths, SHAs and byte sizes match the complete untruncated recursive tree. Canonical logical line counts and EOF coverage are recorded in the Ledger.
 - New Ledger `AUDIT_LEDGER_2801_3000.md`: 25 records, each with exactly 15 required fields. Index: 2,825 sequential unique paths; new paths and Decisions align.
-- Section **2801–2850** is 25/50 complete. Continue **2826–2850** under the same exceptional authorization; **STOP at 2850**. Do not inspect 2851+ without fresh permission.
+- Section **2801–2850** is 25/50 complete. Continue **2826–2850** and report at 2850, then continue **2851–2875** and **2876–2900** under the same exceptional authorization. **STOP at 2900**.
 - This was source/documentation review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation; no application source changes.
