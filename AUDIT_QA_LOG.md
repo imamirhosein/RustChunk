@@ -1847,3 +1847,9 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Source review included documentation and embedded benchmark/test descriptions only; no test or benchmark was executed or independently reproduced.
 - No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
 - The same exceptional grant covers **2801–2900**. Checkpoint **2876–2900** remains authorized; continue without another permission request and **STOP at 2900**.
+
+
+## Source byte-size correction — checkpoint 2851–2875 — 2026-11-23
+
+- A provenance comparison found 11 Ledger Size values had used character counts rather than UTF-8 byte sizes. The source SHAs and canonical logical line counts were correct; the 11 byte-size transcriptions are corrected to the pinned recursive tree values.
+- All 25 entries 2851–2875 now have exact pinned SHA and byte-size matches. The six-document correction transaction is committed and read back; structural QA must pass before this checkpoint is accepted.

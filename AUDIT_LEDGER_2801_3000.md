@@ -882,7 +882,7 @@
 ### 2852. `docs/microsoft-account.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `496e4a30b1eda869cc4c4a56188c3bc5b656c4df`
-- Size: 26216 bytes
+- Size: 26259 bytes
 - Coverage: 1–351; complete EOF; 351 canonical logical lines, no gaps.
 - Purpose: Documents Microsoft device-code sign-in, Xbox/XSTS/Minecraft token exchange, ownership checks, token storage, session handoff, online login, skins and secure chat.
 - Dependencies / cross-references: References launcher account module, keychain abstraction, Microsoft/Xbox/Minecraft HTTPS endpoints, Minecraft protocol handshake, session files and secure-chat signatures.
@@ -899,7 +899,7 @@
 ### 2853. `docs/mod-browser.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `e69d8dd77c393c9295c3f9141e42a6b8a784964e`
-- Size: 17830 bytes
+- Size: 17834 bytes
 - Coverage: 1–215; complete EOF; 215 canonical logical lines, no gaps.
 - Purpose: Describes a mod browser that searches Modrinth and Horizon's registry, checks compatibility, installs packs and verifies downloads.
 - Dependencies / cross-references: References launcher browser, Modrinth API, content/native Horizon mod formats, modpack importer, file checksums and game-side mod registry.
@@ -933,7 +933,7 @@
 ### 2855. `docs/narrator.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `428751a7f096839e779b8c8c89bd686a7c9b3440`
-- Size: 8018 bytes
+- Size: 8022 bytes
 - Coverage: 1–143; complete EOF; 143 canonical logical lines, no gaps.
 - Purpose: Documents screen/chat narration, narrator modes, keyboard toggle and platform text-to-speech backends.
 - Dependencies / cross-references: References narrator state machine, screen widget narration collection, translation keys, UI focus and OS speech APIs.
@@ -967,7 +967,7 @@
 ### 2857. `docs/noise-aquifer-benchmark.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `a68f18f2d915f3120df3c5c89a7a2dcce9cc2517`
-- Size: 10086 bytes
+- Size: 10171 bytes
 - Coverage: 1–64; complete EOF; 64 canonical logical lines, no gaps.
 - Purpose: Reports bulk density/noise generation optimizations, whole-terrain timing and worker scaling.
 - Dependencies / cross-references: References DensityCompiler, Perlin bulk kernels, Beardifier, aquifer/surface work, chunk generation benchmarks and pinned Java parity.
@@ -1086,7 +1086,7 @@
 ### 2864. `docs/performance/server-vs-pumpkin.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `300aaeee10afd595497cf0f7a19228552172c7c9`
-- Size: 5936 bytes
+- Size: 5966 bytes
 - Coverage: 1–90; complete EOF; 90 canonical logical lines, no gaps.
 - Purpose: Compares Horizon's dedicated server performance with Pumpkin under identical 26.3 protocol workloads.
 - Dependencies / cross-references: References horizon-server, Pumpkin black-box binary, bot harness, tick query, chunk throughput and CPU/RSS measurements.
@@ -1103,7 +1103,7 @@
 ### 2865. `docs/performance/startup-stage-3.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `b3258aada196364f1d859af81a2bed495f7bc3d1`
-- Size: 8359 bytes
+- Size: 8361 bytes
 - Coverage: 1–61; complete EOF; 61 canonical logical lines, no gaps.
 - Purpose: Documents progressive startup, core/rest resource loading, interactive loading menu and deferred world entry.
 - Dependencies / cross-references: References resource worker, renderer creation, loading UI, event loop, pack overlays, renderer facts and memory measurements.
@@ -1120,7 +1120,7 @@
 ### 2866. `docs/play-with-friends.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ae80f3f96b1ab579963fec2faec75892b3118c3c`
-- Size: 15109 bytes
+- Size: 15549 bytes
 - Coverage: 1–227; complete EOF; 227 canonical logical lines, no gaps.
 - Purpose: Describes direct encrypted tunnels and optional relays for hosting a single-player world to friends.
 - Dependencies / cross-references: References integrated server LAN listener, NAT-PMP/PCP/UPnP, STUN, SPAKE2, Ed25519, ChaCha20-Poly1305, relay protocol and invite codes.
@@ -1171,7 +1171,7 @@
 ### 2869. `docs/prepare-performance.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `ec1df683d57c1907afeda441971c8218734d9a00`
-- Size: 3249 bytes
+- Size: 3253 bytes
 - Coverage: 1–46; complete EOF; 46 canonical logical lines, no gaps.
 - Purpose: Discusses resource preparation I/O bottlenecks, asset-index reuse, file cloning and immutable resource stores.
 - Dependencies / cross-references: References horizon-prepare, Mojang asset index, exporters, ZIP CRC, FICLONE/clonefile, staging and cache markers.
@@ -1222,7 +1222,7 @@
 ### 2872. `docs/release-flow.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `04241e8fc5125f2422050f058f2483acfb7a1913`
-- Size: 44042 bytes
+- Size: 44061 bytes
 - Coverage: 1–400, 401–571; complete EOF; 571 canonical logical lines, no gaps.
 - Purpose: Documents CI checks, parity gates, branch review, signed release builds, Nightly promotion, trusted reviewers and artifact cleanup.
 - Dependencies / cross-references: References GitHub Actions workflows, release_train.py, parity harnesses, signing keys, CODEOWNERS and release assets.
@@ -1256,7 +1256,7 @@
 ### 2874. `docs/resource-packs.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `bdabadbaeebf0788c62e329a165cedd32691b6de`
-- Size: 15496 bytes
+- Size: 15498 bytes
 - Coverage: 1–105; complete EOF; 105 canonical logical lines, no gaps.
 - Purpose: Lists resource-pack features and parity status for metadata, models, textures, fonts, sounds, GUI, shaders, entity models and connected textures.
 - Dependencies / cross-references: References pack overlay builder, reload listeners, resource loaders, OptiFine/CIT compatibility, renderer and many parity harnesses.
@@ -1273,7 +1273,7 @@
 ### 2875. `docs/reuse-pack-overlays.md`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `53e8bbc3a2e22644f2dea589015b7c72eb6fcfc4`
-- Size: 4758 bytes
+- Size: 4762 bytes
 - Coverage: 1–46; complete EOF; 46 canonical logical lines, no gaps.
 - Purpose: Describes persistent caching of completed resource-pack overlays using versioned markers and source identity stamps.
 - Dependencies / cross-references: References packs::build_overlay, filesystem metadata, symlinks, ZIP source stamps, lock files and overlay invalidation.
