@@ -71,6 +71,7 @@ For every entry:
 - Multi-range coverage must be consecutive, gap-free and end at the canonical final line.
 - Separate observed source behavior from interpretation, suspected defects, target-version implications and proposed RustChunk design. Do not claim a suspected issue was reproduced unless it was.
 - Primary Decision vocabulary: **essential**, **adaptable**, **rewrite required**, **integrate**, **unnecessary**, **undetermined**. Secondary qualifiers may include **reference**, **version-specific**, **optional/future**. Qualifiers do not replace a primary decision. Index decisions must agree with the Ledger.
+- The first semicolon-delimited Decision label in both the Ledger and Index must be one of the six primary labels above. Additional primary labels may follow when justified; secondary qualifiers come after primary labels. A rationale-only phrase without a primary label is invalid.
 
 ## 7. Six-document checkpoint transaction
 
