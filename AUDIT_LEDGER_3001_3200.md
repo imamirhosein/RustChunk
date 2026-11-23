@@ -1292,3 +1292,431 @@
 - RustChunk implementation mapping: RustChunk protocol/network test harness for entity synchronization, not launcher source.
 - Evidence required before adoption: Protocol-763 fixtures, real 1.20.1 server packet captures and deterministic replay tests.
 - Completion state: COMPLETE — 181 logical lines through EOF; pinned SHA and 8884-byte size match; test helper inspected, not executed.
+
+
+## Checkpoint 3076–3100 — COMPLETE — exceptional authorization exhausted
+
+### 3076. `mods/horizon/src/test/java/dev/horizonlab/parity/KnockbackClient.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ddc06af0f4fe64f90faac805626bebded748a785`
+- Size: 26643 bytes
+- Coverage: 1–400, 401–522; consecutive, gap-free; 522 logical lines through EOF.
+- Purpose: Runs a minimal vanilla-protocol client against a local test server to record knockback velocity, movement and collision outcomes.
+- Dependencies / cross-references: Minecraft 26.3 protocol packets, raw TCP socket/framing, offline UUID, entity movement, player input, attack/knockback packets and local parity scripts.
+- Implementation / logic: Logs spawn/teleport/motion/velocity/position updates, sends movement/attack inputs, answers keep-alives and compares server-applied knockback against a transcript.
+- Findings: Dev-only hand-written socket client uses offline authentication and current 26.3 packet APIs. Frame length is allocated directly from peer VarInt and compressed payload length is trusted; no production-grade bounds. Online-mode server auth is not satisfied by offline UUID.
+- RustChunk relevance: Useful as a deterministic server-client movement/knockback parity harness, not as a production network stack or Forge loader.
+- Decision: adaptable; reference; version-specific; network-sensitive
+- 1.20.1 implications: Rebuild protocol packet handling for Minecraft 1.20.1 protocol 763 and Java 17; do not reuse raw frame parser without strict size/decompression limits.
+- Follow-up checks: Add malicious frame/compression tests, teleport/relative-move ordering, movement validation, collision scenes, online-mode auth and Forge-modified packet coverage.
+- RustChunk implementation mapping: RustChunk dev-only multiplayer movement/knockback parity harness.
+- Evidence required before adoption: Protocol-763 packet captures, bounded network decoder tests and reproducible Forge 47.x server traces.
+- Completion state: COMPLETE — 522 logical lines read in 1–400 and 401–522; pinned SHA and 26643-byte size match; test client inspected, not executed.
+
+### 3077. `mods/horizon/src/test/java/dev/horizonlab/parity/LocatorBarClient.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9f964c197d40857e35e27894c6d04c72c18dbf82`
+- Size: 38214 bytes
+- Coverage: 1–400, 401–686; consecutive, gap-free; 686 logical lines through EOF.
+- Purpose: Implements a configurable raw-protocol test client to observe locator/waypoint, entities, player state, chat, hooks, boats, chunk batches and tick-step packets.
+- Dependencies / cross-references: Minecraft 26.3 protocol codecs, raw TCP socket, offline UUID, configuration/game packet states, entity registry, waypoint packets and transcript scripts.
+- Implementation / logic: Performs handshake/login/configuration, tracks player/entity IDs and positions, records waypoint/chat/effect/boat/hook events, acknowledges keep-alive/ping/teleport/chunk batches and emits deterministic transcripts.
+- Findings: This is a test harness using 26.3 packet classes and offline-mode UUIDs, not a production multiplayer client. Frame and decompressed lengths are peer-controlled allocations without strict upper bounds; `vanilla` brand is synthetic. It does not implement Forge mod handshake.
+- RustChunk relevance: Strong reference for protocol-state parity and packet transcript testing; must be rewritten for 1.20.1 protocol 763 and hardened before any production networking.
+- Decision: adaptable; reference; version-specific; network-sensitive
+- 1.20.1 implications: Use the transcript scenarios to test RustChunk's 1.20.1 client protocol, but implement standard Forge/FML negotiation separately and authenticate online-mode servers correctly.
+- Follow-up checks: Bound frame/decompression sizes, test packet state transitions, entity ID reuse, waypoint support, unknown payloads, disconnects, chat signatures and Forge handshake sequence.
+- RustChunk implementation mapping: RustChunk dev-only protocol parity client and packet-state test harness.
+- Evidence required before adoption: Protocol-763 captures, malformed packet tests, Forge 47.x handshake tests and online/offline authentication integration.
+- Completion state: COMPLETE — 686 logical lines read in 1–400 and 401–686; pinned SHA and 38214-byte size match; harness inspected, not executed.
+
+### 3078. `mods/horizon/src/test/java/dev/horizonlab/parity/OfflineLanHost.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a643805b790a7e66bd9e05cc8ee2a899ebb3df1f`
+- Size: 1906 bytes
+- Coverage: 1–42; complete EOF; 42 canonical logical lines, no gaps.
+- Purpose: Starts an unchanged vanilla client and opens its integrated single-player world to LAN with authentication disabled for offline protocol test clients.
+- Dependencies / cross-references: Minecraft integrated server, `MinecraftServer.MultiplayerScope.LAN`, test JVM property `horizon.lanPort` and `VanillaProtocolClient` scripts.
+- Implementation / logic: Polls until the single-player server is ready, calls `setUsesAuthentication(false)` and publishes the world to LAN with commands enabled.
+- Findings: Authentication is disabled only to enable a local test harness to connect using offline UUIDs. This is not an online-mode authentication bypass for public servers and must not be generalized to Aternos.
+- RustChunk relevance: Useful for isolated offline-mode LAN regression tests, but dangerous if reused as a general multiplayer configuration.
+- Decision: adaptable; reference; security-sensitive; version-specific
+- 1.20.1 implications: RustChunk may test offline-mode LAN servers separately; ordinary online-mode/Aternos servers still require legitimate account authentication unless server owners disable it.
+- Follow-up checks: Ensure test server binds only to intended LAN interface, is disposable, restores authentication defaults and cannot be enabled in production builds.
+- RustChunk implementation mapping: RustChunk offline-mode local integration-test fixture only.
+- Evidence required before adoption: Isolated local network tests and proof that production build cannot disable authentication silently.
+- Completion state: COMPLETE — 42 logical lines through EOF; pinned SHA and 1906-byte size match; test host inspected, not executed.
+
+### 3079. `mods/horizon/src/test/java/dev/horizonlab/parity/ParityData.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `34cb8d05e9a4a41f0b34ed3a9bb313c659e4a8a9`
+- Size: 6475 bytes
+- Coverage: 1–135; complete EOF; 135 canonical logical lines, no gaps.
+- Purpose: Bootstraps vanilla registries/data pack, exposes registry/NBT codecs and creates a lightweight stand-in ServerLevel for parity tools.
+- Dependencies / cross-references: Vanilla server data pack, RegistryLayer, TagLoader, ReloadableServerRegistries, NBT/ItemStack codecs, `Unsafe` and private Level fields.
+- Implementation / logic: Loads vanilla registries and tags, applies components, creates RegistryOps, allocates an unconstructed ServerLevel and injects registryAccess; canonicalizes NBT with sorted keys and type markers.
+- Findings: Dev-only test support uses `sun.misc.Unsafe`, reflective private-field writes and direct vanilla bootstrap; brittle across mappings/versions and unsuitable for production runtime.
+- RustChunk relevance: Useful shared setup and canonical serialization approach for a Rust-vs-vanilla oracle harness.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: For 1.20.1, use exact registries/NBT codecs and a dedicated test runtime; never depend on 26.3 private field names or Unsafe in launcher/game production.
+- Follow-up checks: Version-pin registry setup, eliminate Unsafe where possible, test cyclic/large NBT and deterministic canonical encoding, isolate test classpath.
+- RustChunk implementation mapping: RustChunk test-only vanilla oracle support module or JVM harness.
+- Evidence required before adoption: Protocol/version-pinned registry fixtures and deterministic NBT parity tests.
+- Completion state: COMPLETE — 135 logical lines through EOF; pinned SHA and 6475-byte size match; test support inspected, not executed.
+
+### 3080. `mods/horizon/src/test/java/dev/horizonlab/parity/ParityFont.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3390b37f6737cbdd71028b324ac5a48a4bdcd597`
+- Size: 5822 bytes
+- Coverage: 1–132; complete EOF; 132 canonical logical lines, no gaps.
+- Purpose: Loads vanilla font provider definitions and reports glyph metrics without stitching glyphs or using a GPU.
+- Dependencies / cross-references: Minecraft font provider codecs, vanilla resource pack, GlyphProvider, GlyphSource, Font and font reference resolution.
+- Implementation / logic: Loads space/default providers, resolves references with cycle detection, returns metrics-only BakedGlyphs and uses six-pixel fallback for missing glyphs.
+- Findings: Uses Minecraft 26.3 font APIs and reflective `ClientPackSource`; it is a test oracle, not an Android font renderer. Metrics-only output cannot validate GPU atlas stitching or visual rasterization.
+- RustChunk relevance: Useful for text-width/font-metric parity and localization layout tests; not a renderer optimization.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: If RustChunk needs accurate 1.20.1 UI/game text measurements, query target Minecraft font providers; do not infer glyph rasterization performance from this metrics-only oracle.
+- Follow-up checks: Test fallback providers, cycles, Unicode/RTL shaping, resource-pack font overrides, atlas generation and actual Android rendering.
+- RustChunk implementation mapping: RustChunk optional font-metric parity tests for target 1.20.1.
+- Evidence required before adoption: 1.20.1 font-provider fixtures and pixel/metric comparisons on Android.
+- Completion state: COMPLETE — 132 logical lines through EOF; pinned SHA and 5822-byte size match; test helper inspected, not executed.
+
+### 3081. `mods/horizon/src/test/java/dev/horizonlab/parity/PrepareWorker.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `26104bbe1e2f351731d79d25ddf87bf630ec8c04`
+- Size: 3709 bytes
+- Coverage: 1–69; complete EOF; 69 canonical logical lines, no gaps.
+- Purpose: Runs multiple parity oracle tasks in one long-lived JVM with separate server/client classpaths and JSON-lines control transport.
+- Dependencies / cross-references: Vanilla Bootstrap, BuiltInRegistries, registry tag reload, reflection, JSON task input, classpath worker process and file descriptor stdout.
+- Implementation / logic: Validates classpath classes, bootstraps once, resets registry tags between tasks, redirects task logs and invokes named oracle main classes reflectively.
+- Findings: Test-only worker executes task-selected classes and writes task-selected log paths; reflection and process-exit behavior are unsuitable as a user-facing service. One JVM/classpath per worker is a useful isolation rule.
+- RustChunk relevance: Useful for a separate parity CI harness, not a production launcher subsystem.
+- Decision: adaptable; reference; security-sensitive; version-specific
+- 1.20.1 implications: Keep any test worker isolated from the Android launcher and game process; use strict task allowlists and app-owned temp paths.
+- Follow-up checks: Validate task JSON schema, class allowlist, path containment, worker crash recovery, registry reset completeness and stdout/stderr separation.
+- RustChunk implementation mapping: RustChunk dev/test parity worker only, not app runtime.
+- Evidence required before adoption: Isolated CI runner, sandbox/path tests and reproducible task execution.
+- Completion state: COMPLETE — 69 logical lines through EOF; pinned SHA and 3709-byte size match; worker inspected, not run.
+
+### 3082. `mods/horizon/src/test/java/dev/horizonlab/parity/SecureChatClient.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `49e4b2254cd1a04986494bf680fee8e5b0ad5d2c`
+- Size: 35191 bytes
+- Coverage: 1–400, 401–689; consecutive, gap-free; 689 logical lines through EOF.
+- Purpose: Simulates multiple vanilla clients to verify secure-chat signatures, session keys, last-seen tracking, commands, acknowledgements and enforce-secure-profile behavior.
+- Dependencies / cross-references: Minecraft 26.3 protocol packets, RSA profile keys, mock session-service HTTP endpoint, Cipher streams, SignedMessageChain, LastSeenMessagesTracker and signature validators.
+- Implementation / logic: Creates mock service key pairs, joins offline/online test scenarios, signs chat/command bodies, validates incoming signatures and records signature/session/transcript outcomes.
+- Findings: Uses mock access tokens/session service and synthetic player keys; it does not perform real Microsoft/Xbox authentication. Protocol packet types and chat-session details are 26.3-specific; raw compression framing allocates untrusted lengths.
+- RustChunk relevance: High-value reference for testing secure chat and online-mode authentication semantics; not a production account/login implementation.
+- Decision: adaptable; reference; authentication-sensitive; version-specific; network-sensitive
+- 1.20.1 implications: RustChunk 1.20.1 secure chat support must follow protocol 763 and official account/profile-key flow; offline-mode test chat does not imply online-mode server access.
+- Follow-up checks: Test profile-key expiry/signature, borrowed keys, secure-profile enforcement, last-seen chain, command argument signatures, compression limits and real authenticated login.
+- RustChunk implementation mapping: RustChunk dev-only secure-chat protocol test suite.
+- Evidence required before adoption: Protocol-763 secure-chat packet captures, official auth integration and cryptographic review.
+- Completion state: COMPLETE — 689 logical lines read in 1–400 and 401–689; pinned SHA and 35191-byte size match; harness inspected, not executed.
+
+### 3083. `mods/horizon/src/test/java/dev/horizonlab/parity/ServerPackClient.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ac59104d9b4eee372fdf215cae69a645fb51607a`
+- Size: 17394 bytes
+- Coverage: 1–378; complete EOF; 378 canonical logical lines, no gaps.
+- Purpose: Simulates vanilla clients responding to server resource-pack offers during configuration and play.
+- Dependencies / cross-references: Minecraft 26.3 resource-pack packets, raw TCP framing/compression, offline UUID, configuration/game protocol codecs and scripted actions.
+- Implementation / logic: Joins a test server, records configuration packet runs and pack offer UUID/URL/hash/required/prompt, keeps connection alive during delay and sends selected ACCEPTED/DECLINED/FAILED actions.
+- Findings: The harness records server offers and responses but does not download, hash-verify or apply the pack. It uses offline-mode identity and unbounded peer frame/decompression lengths; 26.3 packet API is not 1.20.1.
+- RustChunk relevance: Useful to validate server resource-pack handshake and prompt/action sequencing, not a pack downloader or production network implementation.
+- Decision: adaptable; reference; version-specific; network-sensitive
+- 1.20.1 implications: Implement 1.20.1 protocol-763 resource-pack negotiation and separately verify downloaded pack hash/size, HTTPS policy, storage and user consent.
+- Follow-up checks: Test required/optional prompts, delayed response, duplicate offers, URL/hash validation, redirect policy, decompression bounds, disconnect and 1.20.1 packet ordering.
+- RustChunk implementation mapping: RustChunk resource-pack protocol integration test harness and separate secure downloader.
+- Evidence required before adoption: Real Forge 47.x client/server traces and malicious URL/hash/size tests.
+- Completion state: COMPLETE — 378 logical lines through EOF; pinned SHA and 17394-byte size match; harness inspected, not executed.
+
+### 3084. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaActiveEffectTickOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b2863fad467e83cc197c1c6ab84956fe1b2b28c9`
+- Size: 20514 bytes
+- Coverage: 1–101; complete EOF; 101 canonical logical lines, no gaps.
+- Purpose: Executes vanilla LivingEntity active-effect tick logic over synthetic entities, levels, random sources and observable callbacks.
+- Dependencies / cross-references: MobEffect/MobEffectInstance, SynchedEntityData, particle/sound events, Unsafe allocation, reflection into private effect/blend fields and deterministic RNG.
+- Implementation / logic: Models effect maps/hidden chains, tick callbacks, particles/sounds, random draws, mutations and concurrent modification/failure points; emits deterministic trace.
+- Findings: Uses extensive Unsafe/private-field access and current 26.3 effect APIs; test oracle only. It does not run a real game world or Forge event bus.
+- RustChunk relevance: Useful as a model for high-fidelity vanilla behavior parity tests, but unrelated to chunk renderer performance.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: If RustChunk later ports game logic, use 1.20.1 effect semantics and a safe isolated oracle; do not embed Unsafe reflection in the launcher.
+- Follow-up checks: Replace private-field assumptions with test adapters where possible, verify deterministic RNG and cover Forge event/modifier hooks.
+- RustChunk implementation mapping: RustChunk dev-only status-effect parity suite, outside production launcher.
+- Evidence required before adoption: Protocol/version-pinned vanilla traces and Forge event integration tests.
+- Completion state: COMPLETE — 101 logical lines through EOF; pinned SHA and 20514-byte size match; oracle inspected, not executed.
+
+### 3085. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaActiveEffectsOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0aa385cb0af9148237004760601f68e0c53b4150`
+- Size: 8970 bytes
+- Coverage: 1–44; complete EOF; 44 canonical logical lines, no gaps.
+- Purpose: Tests vanilla LivingEntity active-effect storage, add/update/remove/clear and blend-factor behavior.
+- Dependencies / cross-references: MobEffectInstance, AttributeMap, Unsafe allocation, private fields and synthetic Actor/ServerLevel.
+- Implementation / logic: Builds controlled effect holders/instances, mutates identity-linked maps and records callbacks, hidden-effect chains and state after each operation.
+- Findings: Dev-only 26.3 reflection harness; does not represent a supported public API or Forge-specific mod event behavior.
+- RustChunk relevance: Reference for differential effect-storage tests only.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: Use exact 1.20.1 effect lifecycle and Forge 47.x hooks if mod compatibility requires effect parity.
+- Follow-up checks: Test duplicate holders, identity/hash collisions, hidden chain, callbacks, removal and private-field changes across mappings.
+- RustChunk implementation mapping: RustChunk test-only effect parity oracle.
+- Evidence required before adoption: Target 1.20.1 expected traces and real Forge behavior tests.
+- Completion state: COMPLETE — 44 logical lines through EOF; pinned SHA and 8970-byte size match; oracle inspected, not executed.
+
+### 3086. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAmbientOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d20c5f8921381e5495d7786c6686f47426d9f772`
+- Size: 12910 bytes
+- Coverage: 1–249; complete EOF; 249 canonical logical lines, no gaps.
+- Purpose: Runs vanilla local-player underwater, bubble-column and biome ambient sound handlers through a real SoundEngine over synthetic client scenes.
+- Dependencies / cross-references: Minecraft ClientLevel/LocalPlayer, SoundEngine, ambient handlers, environment attributes, seeded random, brightness and block-column state.
+- Implementation / logic: Scripts player position/eye-water/spectator/removal/light, biome ambient definitions and volume; records sound instances, fades, moodiness, delay and random state.
+- Findings: High-fidelity but dev-only audio oracle for 26.3; it constructs synthetic ClientLevel/LocalPlayer via reflection and does not validate Android audio output/latency.
+- RustChunk relevance: Useful for sound behavior parity if RustChunk ports gameplay/audio semantics; not directly relevant to chunk load or FPS.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Any audio parity work must target 1.20.1 sound handlers and Forge events; Android audio backend needs separate latency/device testing.
+- Follow-up checks: Test underwater transitions, bubble columns, biome loop/mood, random determinism, sound category volume and Android audio lifecycle.
+- RustChunk implementation mapping: RustChunk optional audio/gameplay parity tests.
+- Evidence required before adoption: Target-version sound traces and Android device audio tests.
+- Completion state: COMPLETE — 249 logical lines through EOF; pinned SHA and 12910-byte size match; oracle inspected, not executed.
+
+### 3087. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAnchorOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9d8c4ec7011574078f31c86d3f5fa11e560cb2fa`
+- Size: 3829 bytes
+- Coverage: 1–57; complete EOF; 57 canonical logical lines, no gaps.
+- Purpose: Checks vanilla vertical-anchor resolution and codec behavior under varied world height/sea-level/generator contexts.
+- Dependencies / cross-references: VerticalAnchor.CODEC, WorldGenerationContext, NoiseGeneratorSettings, NoiseRouter, DensityFunctions and synthetic LevelAccessor.
+- Implementation / logic: Constructs generator or accessor contexts, resolves bottom/top/sea/absolute/above-bottom/below-top/relative-sea anchors and parses/encodes JSON forms.
+- Findings: Version 26.3 world-generation codec oracle; not a client chunk scheduler or renderer test.
+- RustChunk relevance: Useful only for world-generation parity.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Use Minecraft 1.20.1 world-height and anchor codec semantics if RustChunk ports worldgen or mod data; this does not prove Forge client support.
+- Follow-up checks: Test negative minY, height bounds, sea-level edge, malformed codec and retrogen contexts.
+- RustChunk implementation mapping: RustChunk optional worldgen codec parity suite.
+- Evidence required before adoption: Target 1.20.1 codec fixtures and modded dimension tests.
+- Completion state: COMPLETE — 57 logical lines through EOF; pinned SHA and 3829-byte size match; oracle inspected, not executed.
+
+### 3088. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaArrowOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4168db9aae4c2af847c470fa9d1c41033bf84614`
+- Size: 19912 bytes
+- Coverage: 1–233; complete EOF; 233 canonical logical lines, no gaps.
+- Purpose: Runs real vanilla Arrow/AbstractArrow tick and collision behavior against a synthetic resident scene.
+- Dependencies / cross-references: Arrow/AbstractArrow, block/fluid collision, projectile physics, DamageSources, game events, particles/sounds, inventory pickup and `VanillaSceneCollisionOracle`.
+- Implementation / logic: Exercises flight, water/bubble inertia, fluid currents, sticking/despawn, fire/lava/water, TNT/campfires/candles, entity hit/deflection and pickup rules; records event order and velocity.
+- Findings: Uses Unsafe allocation and hand-built ServerLevel/Entity/Inventory shells; test oracle for 26.3 only. Does not model a complete live server tick or Forge projectile modifications.
+- RustChunk relevance: Useful for game-physics parity tests, not chunk loading optimization.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: If RustChunk implements any native gameplay/physics behavior, compare with 1.20.1 vanilla/Forge; otherwise preserve Java game behavior via Forge runtime.
+- Follow-up checks: Test collision ordering, fluid tags, RNG, entity damage/deflection, pickup inventory and modded projectile hooks.
+- RustChunk implementation mapping: RustChunk optional projectile/physics parity harness.
+- Evidence required before adoption: Target 1.20.1 server/client traces and Forge mod interaction tests.
+- Completion state: COMPLETE — 233 logical lines through EOF; pinned SHA and 19912-byte size match; oracle inspected, not executed.
+
+### 3089. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAttributeHealthOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `18c14f659076189e76932c88026f107599507f83`
+- Size: 7785 bytes
+- Coverage: 1–53; complete EOF; 53 canonical logical lines, no gaps.
+- Purpose: Tests vanilla entity attribute limits, synced health, absorption and hunger regeneration/exhaustion.
+- Dependencies / cross-references: AttributeMap, Attributes.MAX_HEALTH/MAX_ABSORPTION, FoodData, GameRules, SynchedEntityData and Unsafe/reflection.
+- Implementation / logic: Builds synthetic ServerPlayer/Level, changes base/modifier values, runs health/heal/hurt/absorption/food operations and records packed dirty state.
+- Findings: Dev-only 26.3 oracle uses private fields and Unsafe; not a supported game runtime extension.
+- RustChunk relevance: Useful for gameplay state parity, unrelated to renderer/chunk scheduling.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: Port only if RustChunk implements native gameplay state; use exact 1.20.1 health/food semantics and Forge events.
+- Follow-up checks: Test modifier bounds, health sync, absorption, regeneration rule, difficulty, death and packet dirty flags.
+- RustChunk implementation mapping: RustChunk optional entity-state parity suite.
+- Evidence required before adoption: 1.20.1 expected traces and Forge event/packet tests.
+- Completion state: COMPLETE — 53 logical lines through EOF; pinned SHA and 7785-byte size match; oracle inspected, not executed.
+
+### 3090. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAttributeMapQueriesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `085644cae53611d11ed2f648dbfab391666c8bcc`
+- Size: 9710 bytes
+- Coverage: 1–92; complete EOF; 92 canonical logical lines, no gaps.
+- Purpose: Tests AttributeMap lookup/cache/prototype behavior, modifier queries, reset and effect-triggered dirty refresh.
+- Dependencies / cross-references: AttributeMap/AttributeSupplier, AttributeInstance private maps/cache, LivingEntity effect refresh, MobEffect and Unsafe/reflection.
+- Implementation / logic: Reads and mutates supplier prototypes and live instances, tests modifiers, notifications, pending updates, duplicate/missing values and refresh behavior.
+- Findings: Relies on private supplier/prototype/cache fields and 26.3 internals; not production-safe and not a chunk-performance benchmark.
+- RustChunk relevance: Reference for modded attribute compatibility tests only.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: If porting gameplay state, target 1.20.1 AttributeMap and Forge modifier events; avoid copying private-field reflection into app code.
+- Follow-up checks: Test prototype isolation, cached values, modifier duplicates, refresh ordering, effect dirty flags and mapping stability.
+- RustChunk implementation mapping: RustChunk dev-only attribute parity suite.
+- Evidence required before adoption: 1.20.1 Forge traces and tests without private-field dependence where possible.
+- Completion state: COMPLETE — 92 logical lines through EOF; pinned SHA and 9710-byte size match; oracle inspected, not executed.
+
+### 3091. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAttributeOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c10e9f8c4af5aeee19d002040ffebd1077bb1143`
+- Size: 6439 bytes
+- Coverage: 1–43; complete EOF; 43 canonical logical lines, no gaps.
+- Purpose: Tests vanilla AttributeInstance modifier storage, operation ordering, dirty callbacks, packing and application.
+- Dependencies / cross-references: AttributeInstance, AttributeModifier operations, AttributeMap, BuiltInRegistries and private field reflection.
+- Implementation / logic: Creates attributes/modifiers, applies transient/permanent/replace/remove/copy/pack/unpack/many operations and records values, order and callback state.
+- Findings: 26.3 dev oracle, uses private fields and synthetic attributes; no runtime game integration.
+- RustChunk relevance: Useful for precise attribute math parity if native gameplay code is introduced.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Use target 1.20.1 attribute operation semantics and modded attribute registry data; not a launcher or renderer feature.
+- Follow-up checks: Test operation ordering, duplicate IDs, ranged bounds, serialization and Forge attribute registration.
+- RustChunk implementation mapping: RustChunk dev-only attribute math parity suite.
+- Evidence required before adoption: Target-version differential tests and Forge registry integration.
+- Completion state: COMPLETE — 43 logical lines through EOF; pinned SHA and 6439-byte size match; oracle inspected, not executed.
+
+### 3092. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAttributeUpdatesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bfdc96dd60067bd9b515c4981a13155050d49aa5`
+- Size: 22260 bytes
+- Coverage: 1–94; complete EOF; 94 canonical logical lines, no gaps.
+- Purpose: Composes vanilla attribute updates with effect lifecycle, health sync, passenger propagation, waypoint tracking and server packets.
+- Dependencies / cross-references: LivingEntity, AttributeMap, MobEffect, SynchedEntityData, ServerGamePacketListenerImpl, ServerWaypointManager, Unsafe and private fields.
+- Implementation / logic: Models attribute dirty notifications, pending update sets, effect add/remove, health/absorption changes, waypoint manager transitions and outbound effect packets.
+- Findings: Large synthetic 26.3 test oracle with Unsafe/private-field manipulation and many mocked server classes; not production code or direct chunk engine.
+- RustChunk relevance: Useful for cross-system regression tests if RustChunk ports gameplay internals, but not relevant to launcher rendering/performance.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: If native gameplay logic is ever implemented, validate 1.20.1 Forge attribute/effect synchronization; otherwise let the Java game/Forge runtime own it.
+- Follow-up checks: Test packet order, passenger propagation, waypoint changes, health data dirty state, effect mutation during callbacks and concurrency.
+- RustChunk implementation mapping: RustChunk optional deep gameplay parity harness only.
+- Evidence required before adoption: Target 1.20.1 Forge integration traces and deterministic callback ordering tests.
+- Completion state: COMPLETE — 94 logical lines through EOF; pinned SHA and 22260-byte size match; oracle inspected, not executed.
+
+### 3093. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAudioAttributesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `33cc3877673eee93354547ca92c127361ccab440`
+- Size: 6584 bytes
+- Coverage: 1–112; complete EOF; 112 canonical logical lines, no gaps.
+- Purpose: Exports vanilla audio environment attributes from dimension/biome/timeline/weather layers and music selection rules.
+- Dependencies / cross-references: Vanilla server data pack, RegistryLayer, TagLoader, EnvironmentAttributeSystem, biome/dimension registries, ClockManager and Musics.
+- Implementation / logic: Loads vanilla registries, evaluates background music choices for creative/underwater states, music volume, ambient loop/mood/additions at requested ticks.
+- Findings: Data-pack oracle for 26.3; no real Android audio playback or performance instrumentation.
+- RustChunk relevance: Useful for audio/world environment parity, not chunk rendering.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: If supporting world environment semantics natively, use 1.20.1 dimension/biome attributes and validate Forge datapack modifications.
+- Follow-up checks: Test timeline boundaries, weather layers, dimension overrides, biome layers and audio category volume.
+- RustChunk implementation mapping: RustChunk optional environment/audio parity tests.
+- Evidence required before adoption: 1.20.1 data-pack fixtures and Android audio output tests.
+- Completion state: COMPLETE — 112 logical lines through EOF; pinned SHA and 6584-byte size match; oracle inspected, not executed.
+
+### 3094. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaAutoJumpOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dc55541977ba9ebdaed0e34b68b8843a9278b4fa`
+- Size: 8377 bytes
+- Coverage: 1–159; complete EOF; 159 canonical logical lines, no gaps.
+- Purpose: Runs actual LocalPlayer.updateAutoJump against synthetic blocks/collision shapes and varied movement state.
+- Dependencies / cross-references: LocalPlayer/ClientInput, collision shapes, movement speed attribute, jump boost, resident chunk scene and Unsafe/reflection.
+- Implementation / logic: Loads test blocks, configures player box/rotation/ground/input/speed/effects, invokes auto-jump and records result, then restores scene blocks.
+- Findings: Uses 26.3 LocalPlayer APIs and reflection; tests auto-jump physics, not chunk load scheduling or GPU rendering.
+- RustChunk relevance: Useful for player movement parity; separate from the user's primary chunk/FPS bottleneck.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: If implementing custom movement or porting behavior, compare against Minecraft 1.20.1 and Forge; otherwise preserve vanilla movement in Java client.
+- Follow-up checks: Test stairs/slabs/edges, collision bounds, jump boost, input, sprint/sneak and Forge movement-mod hooks.
+- RustChunk implementation mapping: RustChunk optional movement parity test harness.
+- Evidence required before adoption: Protocol/version-specific movement traces and Android input integration tests.
+- Completion state: COMPLETE — 159 logical lines through EOF; pinned SHA and 8377-byte size match; oracle inspected, not executed.
+
+### 3095. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBasicFeatureOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1b566c2aea37959c4f5ad4ef2ae5586562680c3e`
+- Size: 5845 bytes
+- Coverage: 1–78; complete EOF; 78 canonical logical lines, no gaps.
+- Purpose: Executes vanilla world-generation Features and PlacementModifiers in an observable mutable world with deterministic random.
+- Dependencies / cross-references: Feature/PlacedFeature codecs, PlacementContext, WorldGenLevel proxy, BlockState registry and Legacy/Xoroshiro RNG.
+- Implementation / logic: Decodes feature/placement JSON, records block reads/writes, injects failures/rejected writes and outputs resulting world state and RNG sequence.
+- Findings: Dev-only 26.3 worldgen oracle; only a small fixed block set is exported and it does not test a live chunk-generation pipeline.
+- RustChunk relevance: Useful for feature placement/worldgen parity tests, not direct client chunk scheduling.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: If RustChunk implements native worldgen, compare 1.20.1 feature codecs and random sequence; Forge mods may add feature types and placement modifiers.
+- Follow-up checks: Test codec failures, random determinism, block-write flags, feature exceptions and modded registry extensions.
+- RustChunk implementation mapping: RustChunk optional worldgen feature parity harness.
+- Evidence required before adoption: Target 1.20.1 datapack fixtures and Forge registry/worldgen integration.
+- Completion state: COMPLETE — 78 logical lines through EOF; pinned SHA and 5845-byte size match; oracle inspected, not executed.
+
+### 3096. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeChunkOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9c203bd2f27fe256d60b8e8c159b3133be4abfe1`
+- Size: 5204 bytes
+- Coverage: 1–69; complete EOF; 69 canonical logical lines, no gaps.
+- Purpose: Tests vanilla section-atomic biome filling and chunk biome reads, including BelowZeroRetrogen resolver behavior.
+- Dependencies / cross-references: ProtoChunk, PalettedContainerFactory, biome IdMapper, BelowZeroRetrogen, BiomeResolver and `fillBiomesFromNoise`.
+- Implementation / logic: Fills biome containers for each section, injects provider failures, toggles retrogen and reads biome coordinates back from sections/resolver.
+- Findings: Directly relevant to biome data inside chunk generation, but not block-state chunk loading, network chunk decode, mesh building or rendering. Uses 26.3 APIs and synthetic biome holders.
+- RustChunk relevance: High-value test pattern for a RustChunk biome/chunk-data implementation, limited to the biome portion of chunk lifecycle.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Port to Minecraft 1.20.1 chunk/biome codecs and retrogen semantics; do not treat successful biome fill as proof that visible chunks are ready/rendered.
+- Follow-up checks: Test section atomicity, partial provider failure, retrogen transitions, coordinate quantization, palette serialization and 1.20.1 section layout.
+- RustChunk implementation mapping: RustChunk dev-only biome container parity suite.
+- Evidence required before adoption: Protocol/version-specific chunk fixtures, real 1.20.1 chunk NBT/network packets and Forge worldgen tests.
+- Completion state: COMPLETE — 69 logical lines through EOF; pinned SHA and 5204-byte size match; oracle inspected, not executed.
+
+### 3097. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeExport.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `03718e6a12654012b8c7139264de6cc9d4d922c2`
+- Size: 1870 bytes
+- Coverage: 1–32; complete EOF; 32 canonical logical lines, no gaps.
+- Purpose: Exports vanilla multi-noise biome preset parameter points to deterministic JSON for worldgen parity.
+- Dependencies / cross-references: MultiNoiseBiomeSourceParameterList, Climate.ParameterList, ResourceKey and Gson.
+- Implementation / logic: Enumerates known presets, exports six climate parameter intervals, offset and biome identifier in sorted preset order.
+- Findings: Data export helper for 26.3 presets; not a runtime biome source or renderer.
+- RustChunk relevance: Useful fixture-generation approach for biome generation parity.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Generate the same export from Minecraft 1.20.1 and Forge datapack registries; presets can change between versions/modpacks.
+- Follow-up checks: Verify stable ordering, complete preset coverage, modded biome keys and numeric precision.
+- RustChunk implementation mapping: RustChunk test fixture exporter only.
+- Evidence required before adoption: 1.20.1 exported fixture comparison and modded datapack test.
+- Completion state: COMPLETE — 32 logical lines through EOF; pinned SHA and 1870-byte size match; exporter inspected, not executed.
+
+### 3098. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeGenerationOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `2246e960d25ef4d797399273eda48e64b6278f4b`
+- Size: 8401 bytes
+- Coverage: 1–72; complete EOF; 72 canonical logical lines, no gaps.
+- Purpose: Invokes vanilla ChunkGenerator.doCreateBiomes with real noise/density registries, multi-noise/fixed/checkerboard/end sources and retrogen.
+- Dependencies / cross-references: NoiseRouter, NormalNoise, DensityFunction registries, RandomState, NoiseBasedChunkGenerator, ProtoChunk, Blender and biome paletted sections.
+- Implementation / logic: Reconstructs registry/noise inputs, fills biome sections repeatedly, tests retrogen and queries resulting biome manager positions.
+- Findings: Directly relevant to biome generation and chunk section population; still does not cover block-state terrain generation, chunk scheduling, network transfer, meshing or render readiness. Uses 26.3 APIs and private reflective `doCreateBiomes`.
+- RustChunk relevance: Strong reference for a target-version biome-generation oracle, not a drop-in Rust chunk engine.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Port to 1.20.1 NoiseRouter/DensityFunction/RandomState/ChunkGenerator APIs and compare with Forge 47.x datapack modifications.
+- Follow-up checks: Test deterministic seeds, legacy/Xoroshiro RNG, noise registry loading, biome presets, retrogen, section boundaries and parallel generation.
+- RustChunk implementation mapping: RustChunk dev-only biome-generation parity harness.
+- Evidence required before adoption: 1.20.1 oracle outputs, deterministic multi-seed comparisons and Android chunk-generation profiling.
+- Completion state: COMPLETE — 72 logical lines through EOF; pinned SHA and 8401-byte size match; oracle inspected, not executed.
+
+### 3099. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomePlacementOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c5cbf4f0019cad8de1aeddc3643079a91f3959db`
+- Size: 6525 bytes
+- Coverage: 1–80; complete EOF; 80 canonical logical lines, no gaps.
+- Purpose: Tests biome-filter placement decisions and per-invocation context for PlacedFeature/FeaturePlacer.
+- Dependencies / cross-references: BiomeGenerationSettings, PlacementModifier/BiomeFilter, FeaturePlacer, ChunkGenerator, WorldGenLevel proxy and deterministic RNG.
+- Implementation / logic: Constructs root/copy/other placed features, scripts biome membership and failure points, records biome queries/feature writes and random progression.
+- Findings: Worldgen placement oracle for 26.3; not a chunk renderer, networking or Android performance harness.
+- RustChunk relevance: Useful for validating biome-aware feature placement in a future native worldgen implementation.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Use exact 1.20.1 biome placement modifier and FeaturePlacer semantics; Forge modded biome registries must be included.
+- Follow-up checks: Test nested placement, biome-filter membership identity, random draws, exceptions and placement context propagation.
+- RustChunk implementation mapping: RustChunk optional worldgen placement parity tests.
+- Evidence required before adoption: Target 1.20.1/Forge datapack fixtures and deterministic placement traces.
+- Completion state: COMPLETE — 80 logical lines through EOF; pinned SHA and 6525-byte size match; oracle inspected, not executed.
+
+### 3100. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeSourceCodecOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8e79ae90533ec0639c321bff61fecd357c826381`
+- Size: 4293 bytes
+- Coverage: 1–47; complete EOF; 47 canonical logical lines, no gaps.
+- Purpose: Tests vanilla BiomeSource.CODEC decode/encode, possible-biome sets and resolver sampling for multi-noise/fixed/nether sources.
+- Dependencies / cross-references: BiomeSource.CODEC, registry ops, biome/preset registries, DensitySampler and climate sampler.
+- Implementation / logic: Loads biome registry fixtures, decodes source JSON, emits normalized canonical codec output and samples resolved biome at deterministic positions.
+- Findings: Uses 26.3 registry/codec types and helper loaders; validates biome source semantics, not full chunk generation or renderer readiness.
+- RustChunk relevance: Useful final piece of a biome-generation parity suite; no production code value.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Generate protocol/version-appropriate 1.20.1 biome source fixtures and validate Forge-modified biome registries; keep codecs in the game Java runtime unless native port is proven necessary.
+- Follow-up checks: Test malformed codec, unknown registry key, deterministic resolver samples, numeric normalization and modded biome source types.
+- RustChunk implementation mapping: RustChunk dev-only biome source codec parity harness.
+- Evidence required before adoption: 1.20.1 codec fixtures, Forge registry integration and deterministic sample comparisons.
+- Completion state: COMPLETE — 47 logical lines through EOF; pinned SHA and 4293-byte size match; oracle inspected, not executed.

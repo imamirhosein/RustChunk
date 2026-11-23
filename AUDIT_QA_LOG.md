@@ -1996,3 +1996,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Create-derived code notice says Create code portions are MIT but Create assets are All Rights Reserved; exact file provenance and asset rights must be checked before reuse.
 - No tests/builds/benchmarks/APK/device/Forge/Minecraft/multiplayer/Aternos validation was run. Test sources were inspected only; no RustChunk application source changed.
 - Exceptional authorization **3001–3100 remains ACTIVE (75/100 consumed)**. Section **3051–3100 is 25/50 complete**. Continue **3076–3100** under the same grant; **STOP at 3100**.
+
+
+## Final checkpoint QA — 3076–3100 — 2026-11-24
+
+- Entries **3076–3100 (25/25)** were selected from the complete pinned recursive tree after excluding all 3,075 prior Index paths; all 25 files were read through EOF.
+- All 25 paths are unique. Source SHA and exact byte size match the pinned tree; canonical logical line counts and complete EOF coverage are recorded in the active Ledger.
+- Long files were read in consecutive, gap-free ranges no larger than 400 lines: `KnockbackClient.java` (522), `LocatorBarClient.java` (686) and `SecureChatClient.java` (689). All other files were read completely in one retrieval.
+- Each new Ledger record contains exactly 15 required fields. Index entries 3076–3100 align with Ledger numbering, paths and primary Decisions.
+- The test harnesses provide valuable parity patterns for knockback/movement, locator/waypoint, secure chat, server resource-pack negotiation, status effects, audio, arrows, attributes, auto-jump and worldgen/biome generation. They are all tied to Starling's Minecraft 26.3 code and must not be treated as 1.20.1 evidence. The biome chunk/generation oracles test biome data and generation methods, not chunk network loading, meshing or renderer readiness.
+- Raw socket test clients trust peer-controlled frame/decompression lengths and are not production-ready network parsers. The offline LAN host disables authentication only for isolated local tests; this must not be generalized to public online-mode servers. Several oracles use Unsafe/private reflection and are test-only.
+- No tests/builds/benchmarks/APK/device/Forge/Minecraft/multiplayer/Aternos validation was run. Test sources were inspected only; no RustChunk application source changed.
+- Exceptional authorization **3001–3100 is EXHAUSTED**. Stage section **3051–3100 is CLOSED (50/50)**; stage **3001–3200 is 100/200 complete**. **STOP at 3100**; 3101+ requires fresh explicit authorization.

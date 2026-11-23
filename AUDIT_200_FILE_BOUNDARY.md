@@ -2,10 +2,10 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3075** are committed. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (75/200)**.
-- Section **3001–3050 is CLOSED (50/50)**. Section **3051–3100 is 25/50 complete**; checkpoint 3051–3075 is complete and read-back verified.
-- Exceptional authorization **3001–3100 is ACTIVE (75/100 consumed)**. Continue 3076–3100 without another permission request. **STOP at 3100**; 3101+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **75 records (3001–3075)** with exactly 15 fields each. Index: **3,075 sequential unique paths**, no duplicates and Ledger/Index alignment.
+- Entries **1–3100** are committed. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (100/200)**.
+- Sections **3001–3050** and **3051–3100 are CLOSED (50/50 each)**; all four 25-file checkpoints are complete and read-back verified.
+- Exceptional authorization **3001–3100 is EXHAUSTED (100/100)**. **STOP at 3100**; 3101+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **100 records (3001–3100)** with exactly 15 fields each. Index: **3,100 sequential unique paths**, no duplicates and Ledger/Index alignment.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No application source changes or runtime validation. Next backup only after entries 3001–4000 are complete and globally verified.
 
 ## Stage partition
@@ -475,7 +475,7 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 3001–3050 | 3001–3025 — **COMPLETE** | 3026–3050 — **COMPLETE** | **CLOSED — 50/50** |
-| 3051–3100 | 3051–3075 — **COMPLETE** | 3076–3100 — **AUTHORIZED** | **25/50 — CONTINUE UNDER SAME GRANT** |
+| 3051–3100 | 3051–3075 — **COMPLETE** | 3076–3100 — **COMPLETE** | **CLOSED — 50/50; EXCEPTIONAL GRANT EXHAUSTED AT 3100** |
 | 3101–3150 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
 | 3151–3200 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
 
@@ -504,4 +504,13 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Exact source SHA and byte size match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded; long files use consecutive chunks no larger than 400 lines.
 - Active Ledger has 75 entries (3001–3075), exactly 15 fields each; Index has 3,075 sequential unique paths and matching path/Decision rows.
 - Exceptional authorization 3001–3100 remains active with 25 files remaining. Continue 3076–3100 without another permission request. **STOP at 3100**.
+- No application source changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.
+
+
+## Final checkpoint 3076–3100 — COMPLETE — 2026-11-24
+
+- 25 source files inspected through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; paths selected from the complete tree after excluding all 3,075 prior Index paths.
+- Exact source SHA and byte size match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded; long files were read in consecutive chunks no larger than 400 lines.
+- Active Ledger has 100 entries (3001–3100), exactly 15 fields each; Index has 3,100 sequential unique paths and matching path/Decision rows.
+- Both 50-file sections 3001–3050 and 3051–3100 are closed. Exceptional authorization 3001–3100 is exhausted. **STOP at 3100**; fresh explicit authorization required before 3101.
 - No application source changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.
