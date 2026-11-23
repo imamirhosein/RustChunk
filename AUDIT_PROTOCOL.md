@@ -134,18 +134,17 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-23; after checkpoint 2876–2900)
+## 12. Current authoritative resume state (2026-11-23; after final checkpoint 2976–3000)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify `main` or backup refs.
-- Completed entries **1–2900**.
-- Stage **2601–2800 is CLOSED (200/200)**. New active stage **2801–3000** is **100/200 complete**.
-- Reporting sections **2801–2850** and **2851–2900** are both **CLOSED (50/50)**. All four checkpoints in the exceptional range are committed and read-back verified.
-- The user explicitly authorized the one-time exceptional window **2801–2900**, now **EXHAUSTED**. **STOP at 2900**; entry 2901+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **100 records (2801–2900)** with exactly 15 fields each. Index: **2,900 sequential unique paths**, with path/Decision alignment verified.
+- Completed entries **1–3000**.
+- Stage **2601–2800 is CLOSED (200/200)**. Stage **2801–3000 is CLOSED (200/200)**.
+- Sections **2801–2850**, **2851–2900**, **2901–2950** and **2951–3000** are all **CLOSED (50/50)**. All eight 25-file checkpoints in stage 2801–3000 are committed and read-back verified.
+- Exceptional grant **2801–2900 is EXHAUSTED**; exceptional grant **2901–3000 is EXHAUSTED**. **STOP at 3000**; entry 3001+ requires fresh explicit authorization.
+- Active stage Ledger `AUDIT_LEDGER_2801_3000.md`: **200 records (2801–3000)** with exactly 15 fields each. Index: **3,000 sequential unique paths**, no duplicates, with path/Decision alignment verified.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot.
-- The recursive tree is complete and untruncated (5,749 entries). The latest 25 paths were selected from the full remaining tree after excluding all 2,875 indexed paths.
-- All latest 25 source SHA/byte-size pairs match the pinned tree; canonical EOF counts and complete coverage are recorded.
-- Backup remains at entries 1–2000; next backup only after 3000 and global verification.
+- Recursive tree is complete and untruncated (5,749 entries). All 200 new Ledger source SHA/byte-size pairs match the pinned tree; canonical logical line counts and EOF coverage are recorded.
+- Backup remains at entries 1–2000; next backup only after required global verification at 3000.
 - No application source changes, tests, builds, benchmarks, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 

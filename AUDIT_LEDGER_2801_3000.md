@@ -2,11 +2,15 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **2801–3000**; completed **100/200 (2801–2900)**.
-- One-time exceptional authorization covers exactly **2801–2900**. Checkpoints **2801–2825**, **2826–2850**, **2851–2875** and **2876–2900** are complete; sections **2801–2850** and **2851–2900** are closed. Continue **2851–2875** and **2876–2900** under the same explicit 100-file grant without another permission request. **STOP at 2900**.
-- Source selection: first 50 eligible source/documentation blobs in strict raw lexical order from the complete pinned recursive tree after excluding all 2,800 paths in the Index. The tree is untruncated; all 25 selected paths, SHAs and byte sizes match the pin.
+- Active 200-file stage: **2801–3000 — CLOSED (200/200)**.
+- Exceptional authorization 2801–2900: **EXHAUSTED**. New exceptional authorization 2901–3000: **EXHAUSTED**.
+- All eight 25-file checkpoints 2801–3000 are complete and committed; all four 50-file sections (2801–2850, 2851–2900, 2901–2950, 2951–3000) are closed.
+- Final Ledger: **200 records (2801–3000)**, each with exactly 15 required fields. Index: **3,000 sequential unique paths** with path/Decision alignment. All 200 source SHAs and byte sizes match the pinned tree.
+- Source selection: eligible source/documentation blobs in strict raw lexical order from the complete pinned recursive tree after excluding every previously indexed path. The tree is untruncated; every source was inspected through EOF.
 - Starling/Horizon documentation and implementation target Minecraft Java 26.3; this audit is compatibility research, not evidence of Minecraft 1.20.1 / Forge 47.x support.
-- No application source was modified. Documentation/tests were inspected only; no tests, builds, benchmarks, APK, device, Forge, Minecraft or server validation was run.
+- No application source was modified. Tests/docs were inspected only; no tests, builds, benchmarks, APK, device, Forge, Minecraft or server validation was run.
+- **STOP at 3000**. Entry 3001+ requires fresh explicit user authorization.
+
 
 ## Checkpoint 2801–2825 — COMPLETE
 
