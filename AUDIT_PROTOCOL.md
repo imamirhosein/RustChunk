@@ -129,10 +129,16 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 11. Backup policy
 
 - Create a new backup only after each additional **1,000 newly completed audit entries** have been committed and globally verified.
-- Entries **1–2000** have passed global verification on 2026-11-21. The single final backup branch is `backup/audit-2000-final-2026-11-21`; no incremental backups were created.
+- Historical global verification for entries **1–2000** completed on 2026-11-21. Global structural/provenance QA for entries **1–3000** completed on 2026-11-23.
+- Current preserved backup refs:
+  - `backup/audit-1000-final-2026-11-19` -> `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`.
+  - `backup/audit-2000-final-2026-11-21` -> `f0d7c32d0bdcf70fa30a88e54f049fe08dfca283`.
+- Historical `backup/audit-1000-unique-2026-11-18` is absent from the current branch list; do not recreate it.
+- Create exactly one final backup for the completed 3,000-entry audit: `backup/audit-3000-final-2026-11-23`, based on the verified global-QA commit.
+- Never modify an existing backup branch. Existing refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not create backups at 200-entry stage boundaries, 100-entry points, 50-file reporting boundaries or 25-file checkpoints.
-- Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
-- Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
+- The next backup is due only after entries **3001–4000** are authorized, completed, committed and globally verified.
+- Do not copy audit ledgers onto `main`.
 
 ## 12. Current authoritative resume state (2026-11-23; after final checkpoint 2976–3000)
 

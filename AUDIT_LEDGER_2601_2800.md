@@ -3010,7 +3010,7 @@
 - 1.20.1 implications: Add corrupt/oversized ZIPs, bad manifests, concurrent updates and Forge metadata.
 - Follow-up checks: Port selected assertions to RustChunk catalog tests.
 - RustChunk implementation mapping: Target pack metadata, install layout and executed archive/filesystem tests.
-- Evidence required before adoption: undefined
+- Evidence required before adoption: Executed RustChunk catalog tests against real 1.20.1/Forge pack metadata, corrupt and oversized archives, traversal-safe paths, concurrent install/remove and rollback; verify no server-only catalog dependencies ship in the Android client.
 - Completion state: COMPLETE — 187 logical lines through EOF; pinned source SHA and 6,205 byte size match; inspected only; tests not executed.
 
 ### 2777. `crates/starling-catalog/tests/list.rs`
@@ -3027,7 +3027,7 @@
 - 1.20.1 implications: Port stale/retry cases and test rotation, slow network and pointer cancellation.
 - Follow-up checks: Use as launcher async-list test cases.
 - RustChunk implementation mapping: RustChunk UI framework and executed device/emulator tests.
-- Evidence required before adoption: undefined
+- Evidence required before adoption: Executed Android UI tests on the selected RustChunk UI framework for pagination, stale-request rejection, retries, scrolling, rotation, slow-network behavior, pointer cancellation and accessibility.
 - Completion state: COMPLETE — 329 logical lines through EOF; pinned source SHA and 11,313 byte size match; inspected only; tests not executed.
 
 ### 2778. `launcher/build.rs`

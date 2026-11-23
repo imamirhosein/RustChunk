@@ -1928,7 +1928,7 @@
 - Implementation / logic: Validates schema/version and contiguous IDs, builds indexed item and class data, and exposes durations, stackability and instrument metadata.
 - Findings: Duration values can be negative, NaN or infinite through numeric/raw-bit fields; fallback casts then inherit Rust float-to-int behavior. The catalogue's classes, item names and data schema are tied to the pinned 26.3 resource export.
 - RustChunk relevance: Useful pattern for separating immutable item metadata from per-stack runtime state; exact catalogue is not a target-compatible resource.
-- Decision: reference; version-specific; do not ship
+- Decision: undetermined; reference; version-specific; do not ship
 - 1.20.1 implications: Do not load 26.3 registry IDs/classes or use-duration facts in a 1.20.1 client. 1.20.1 instrument and item tables differ.
 - Follow-up checks: Reject or deliberately normalize non-finite/negative durations; test raw f32-bit inputs, ID gaps/duplicates, missing classes and exact Java rounding.
 - RustChunk implementation mapping: Generate a version-hashed RustChunk 1.20.1 item-use table from the target game data; keep loader/schema validation separate from runtime item logic.
@@ -1982,7 +1982,7 @@
 - Implementation / logic: Implements bucket arrays, resize/split, collision chains, tree bins, put/get/remove/clear, map copy and a cursor that can remove the current entry.
 - Findings: The map has extensive custom collision/tree balancing logic and no executed differential evidence here. copied() computes capacity from ceil(size/0.75) before next_power_of_two; verify this against the exact Java HashMap putMapEntries formula, especially sizes divisible by three. Tie-break identity and iterator mod-count behavior are compatibility-sensitive.
 - RustChunk relevance: Potentially useful only where Java iteration/bucket order is externally observable; ordinary Rust collections are safer otherwise.
-- Decision: reference; compatibility-only; do not ship
+- Decision: undetermined; reference; compatibility-only; do not ship
 - 1.20.1 implications: Java 1.20.1 runtime collection implementation/version must be the oracle. HashMap iteration order is not a stable API and may vary with capacity and insertion sequence.
 - Follow-up checks: Differentially test capacity thresholds, hash collisions/treeification/untreeification, resize splits, equal identity hashes, replacement modCount, iterator remove and fail-fast behavior.
 - RustChunk implementation mapping: Prefer std collections for ordinary maps; isolate a Java-compatible map only behind a tested compatibility adapter where observable ordering requires it.
@@ -2072,7 +2072,7 @@
 - Implementation / logic: Converts exact Java class-name strings to enum variants, stores class ancestry in a 320-bit set and marker interfaces in a compact mask.
 - Findings: The enum includes classes introduced after 1.20.1 (including Creaking/CopperGolemStatue-era entries), so its universe is not the 1.20.1 block hierarchy. Unknown class names are not represented and dispatch silently lacks that class behavior.
 - RustChunk relevance: Compact ancestry dispatch is useful, but must be generated against the exact target registry and inheritance hierarchy.
-- Decision: reference; version-specific; do not ship
+- Decision: undetermined; reference; version-specific; do not ship
 - 1.20.1 implications: Do not reuse class numbers/names or assume every 26.3 block exists in 1.20.1; registry and Java superclass relationships differ.
 - Follow-up checks: Generate the exact 1.20.1 class/interface universe; check every registered block chain, unknown class handling and enum capacity.
 - RustChunk implementation mapping: Use version-generated class metadata with explicit unknown-class diagnostics and stable RustChunk-owned IDs.
@@ -2090,7 +2090,7 @@
 - Implementation / logic: Checks adjacent pale-oak log structure, derives facing/axis and chooses uprooted/awake/dormant state using a time window.
 - Findings: The block and its pale-oak/Creaking behavior are absent from Minecraft 1.20.1. The time calculation also uses Euclidean remainder for negative day time, unlike Java remainder semantics.
 - RustChunk relevance: No direct gameplay relevance to the 1.20.1 port; can be kept as an example of data-driven block-state transitions for future versions.
-- Decision: not applicable to 1.20.1; do not ship
+- Decision: unnecessary; version-specific
 - 1.20.1 implications: Do not port the block or its class dispatch into RustChunk 1.20.1.
 - Follow-up checks: Exclude from the target feature list; if a later version is targeted, compare negative day-time and log-neighbor behavior to that version's Java source.
 - RustChunk implementation mapping: No 1.20.1 implementation mapping. Keep version-specific features out of the core vanilla registry.
@@ -2108,7 +2108,7 @@
 - Implementation / logic: Builds block/state maps, named blocks, tags, shape tables, dynamic support and fluid tag masks; supports JSON fallback and typed gameplay projections.
 - Findings: Mandatory named IDs and class lists include post-1.20.1 content. Several unknown/missing fields silently default to false/zero/empty or skip rows; shape dedup searches existing shapes linearly (potential quadratic work). Registry IDs and casts assume bounded tables.
 - RustChunk relevance: The data-loading boundary is central to any native world simulation; architecture is useful but data and validation policy must be RustChunk-owned.
-- Decision: reference; rewrite registry for 1.20.1
+- Decision: rewrite required; reference; version-specific
 - 1.20.1 implications: All tables, class names, block IDs, fluid tags and facts must come from exact 1.20.1/Forge 47.x sources, not the pinned 26.3 export.
 - Follow-up checks: Add strict schema/version checks, required-field validation, duplicate detection, shape-count caps and benchmark hash/map-based shape deduplication.
 - RustChunk implementation mapping: Create a version-hashed 1.20.1 RegistrySnapshot with fail-closed parsing and separate optional Forge extension layers.
@@ -2216,7 +2216,7 @@
 - Implementation / logic: Builds an in-memory world and tests seeded growth scenarios, mod bonemeal callbacks, crop aging, water plants, templates, eyeblossoms and eggs.
 - Findings: Tests return early when resources are absent, so a green run can skip all cases unless the resource precondition is checked. Mock is_loaded always returns true and omits realistic chunk/bounds failure modes. Seeded probabilistic thresholds test a narrow sample and do not constitute exhaustive Java parity.
 - RustChunk relevance: Fixture architecture is useful for RustChunk regression testing; the tests are not runtime code.
-- Decision: fixture-only; do not ship
+- Decision: unnecessary; test-only
 - 1.20.1 implications: Several test blocks/features are absent in 1.20.1 and fixtures depend on the 26.3 resource bundle.
 - Follow-up checks: Make skipped-resource status explicit, add 1.20.1 fixtures and unloaded/bounds/failure mocks, and compare exact outputs/RNG traces to Java rather than only growth thresholds.
 - RustChunk implementation mapping: Use the fixture style for RustChunk tests but isolate target-version resources and add a fail-on-skip CI mode for required suites.
@@ -2434,7 +2434,7 @@
 - Implementation / logic: Builds local wire graph, evaluates signal and applies changes in discovery order.
 - Findings: An assertion assumes a monotonic signal invariant; prove it for every legal experimental configuration. Separate from ordinary redstone logic.
 - RustChunk relevance: Optional reference only; exclude from stable world core absent exact feature.
-- Decision: reference; experimental-feature-gated; do not enable by default
+- Decision: undetermined; reference; optional/future
 - 1.20.1 implications: Confirm the exact 1.20.1 experiment/configuration and algorithm before considering it.
 - Follow-up checks: Test cycles, loops, source removal, orientation bias and assertion reachability against target Java.
 - RustChunk implementation mapping: Keep isolated behind a disabled-by-default versioned feature interface.
@@ -2502,7 +2502,7 @@
 - Implementation / logic: Computes shelf chain/part states and shelf interactions.
 - Findings: This shelf family is absent from vanilla 1.20.1; exclude its block/state data from target vanilla tables.
 - RustChunk relevance: Not applicable to vanilla 1.20.1; only a future mod-specific reference.
-- Decision: not applicable to 1.20.1; do not ship
+- Decision: unnecessary; version-specific
 - 1.20.1 implications: No vanilla 1.20.1 shelf equivalent; any mod implementation belongs in its own adapter.
 - Follow-up checks: No vanilla parity work; future shelf mod must provide its registry/source/version evidence.
 - RustChunk implementation mapping: Keep outside the 1.20.1 vanilla core.
@@ -2581,13 +2581,13 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `4f4a92bd06ca0ef324ed299c0561c0b301549406`
 - Size: 118047 bytes
-- Coverage: Complete through EOF: 3515 logical lines; ranges 1–200/201–400/601–800/801–1000/1001–1200/1201–1400/1401–1600/1601–1800/1801–2000/2001–2200/2201–2400/2401–2600/2601–2800/2801–3000/3001–3200/3201–3400/3401–3515; no gaps.
+- Coverage: Complete through EOF: 3515 logical lines; ranges 1–200/201–400/401–600/601–800/801–1000/1001–1200/1201–1400/1401–1600/1601–1800/1801–2000/2001–2200/2201–2400/2401–2600/2601–2800/2801–3000/3001–3200/3201–3400/3401–3515; no gaps.
 - Purpose: Integration test harness for blocks, fluids, redstone, pistons, interactions, sculk and ticks.
 - Dependencies / cross-references: Rust tests, fixture registry/resources, Behaviours and mock LevelAccess.
 - Implementation / logic: Builds in-memory test worlds and asserts block states, events, scheduled ticks and interaction results.
 - Findings: Fixture loader can return None when block-behaviours.json is missing and each test returns early; suite may silently skip without explicit resource/skip gates. Mock assumes loaded chunks.
 - RustChunk relevance: Use the patterns for a RustChunk differential/regression harness; never ship this test source.
-- Decision: fixture-only; do not ship
+- Decision: unnecessary; test-only
 - 1.20.1 implications: Create 1.20.1 fixture resources and fail CI on required test skips; later block cases are not target proof.
 - Follow-up checks: Check asset presence and skip count, then add unloaded/bounds/error mocks and Java differential traces.
 - RustChunk implementation mapping: Rebuild selected scenarios in a test-only 1.20.1 crate; exclude from Android release.
@@ -2638,7 +2638,7 @@
 - Implementation / logic: Maps day time to timed block actions, schedules nearby changes, ticks turtle eggs and handles dried-ghast hydration.
 - Findings: Eyeblossom and dried-ghast behavior postdates 1.20.1; isolate turtle egg behavior and verify exact target schedule/random window.
 - RustChunk relevance: Selective reference only; do not adopt module wholesale.
-- Decision: version-specific; selective reference; later blocks excluded
+- Decision: undetermined; reference; version-specific
 - 1.20.1 implications: Exclude later blocks; compare turtle egg hatch timing/chance and event behavior with 1.20.1.
 - Follow-up checks: Test target day-time normalization, hatch windows, event order and RNG traces.
 - RustChunk implementation mapping: Separate generic timeline service from version-specific block callbacks.
@@ -2689,7 +2689,7 @@
 - Implementation / logic: Exports module surface, forbids unsafe code and aliases DATA_VERSION.
 - Findings: This is a module inventory only, not game implementation; listed modules belong to a newer source snapshot.
 - RustChunk relevance: Navigation/architecture reference only.
-- Decision: architectural reference; version-specific; do not copy wholesale
+- Decision: undetermined; reference; version-specific
 - 1.20.1 implications: Design RustChunk crates around selected 1.20.1 systems and own DataVersion.
 - Follow-up checks: Inspect selected subsystem dependency graph and target version constants.
 - RustChunk implementation mapping: Use only as a map for decomposition, not copied crate structure.
@@ -2854,11 +2854,11 @@
 - Implementation / logic: Refreshes fluid interaction; calls changed-block on server landing; computes safe-distance particle strength/position; calls fall logic and clears climbable position.
 - Findings: Callback failures leave partial effects. Caller must pass original movement-phase state/landing coordinates. Edge normalization needs degenerate/NaN tests; level side differs from client flag.
 - RustChunk relevance: Landing callback-order reference; block/particle behavior target-specific.
-- Decision: Rebuild from 1.20.1 Entity.checkFallDamage/LivingEntity landing and Forge block callbacks.
-- 1.20.1 implications: Test changed-block/particle/fall order, edge-center/degenerate positions, water refresh and level-side behavior.
-- Follow-up checks: Keep in RustChunk world movement with typed block/particle sinks and no hidden writes.
-- RustChunk implementation mapping: Java 1.20.1 landing source and particle coordinate/callback-failure tests.
-- Evidence required before adoption: undefined
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Rebuild from 1.20.1 Entity.checkFallDamage/LivingEntity landing and Forge block callbacks.
+- Follow-up checks: Test changed-block/particle/fall order, edge-center/degenerate positions, water refresh and level-side behavior.
+- RustChunk implementation mapping: Keep in RustChunk world movement with typed block/particle sinks and no hidden writes.
+- Evidence required before adoption: Java 1.20.1 landing source and particle coordinate/callback-failure tests.
 - Completion state: COMPLETE — 69 logical lines through EOF; pinned SHA and 2901 byte size match; inspected, not modified; tests not executed.
 
 ### 2558. `crates/horizon-world/src/living_motion.rs`
@@ -3007,11 +3007,11 @@
 - Implementation / logic: Computes support block from captured supporting block and float offsets; reads current/lower block jump/speed factors in native short-circuit order.
 - Findings: Offsets 0.2, 0.500001 and 1e-5 and float widening are exact. Jump always reads lower block; speed skips lower lookup for water/bubble or non-default current factor.
 - RustChunk relevance: Compact entity movement rule reference; predicates/data version-bound.
-- Decision: Recreate 1.20.1 support and fence/wall/gate semantics; regenerate water/bubble/tag identities.
-- 1.20.1 implications: Test negative-coordinate flooring, offset boundary, supporting-block cases, short-circuit query order and lower-factor precedence.
-- Follow-up checks: Keep in RustChunk entity physics with registry-backed block predicates.
-- RustChunk implementation mapping: Java 1.20.1 Entity support/factor sources and tag/position traces.
-- Evidence required before adoption: undefined
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Recreate 1.20.1 support and fence/wall/gate semantics; regenerate water/bubble/tag identities.
+- Follow-up checks: Test negative-coordinate flooring, offset boundary, supporting-block cases, short-circuit query order and lower-factor precedence.
+- RustChunk implementation mapping: Keep in RustChunk entity physics with registry-backed block predicates.
+- Evidence required before adoption: Java 1.20.1 Entity support/factor sources and tag/position traces.
 - Completion state: COMPLETE — 95 logical lines through EOF; pinned SHA and 3597 byte size match; inspected, not modified; tests not executed.
 
 ### 2567. `crates/horizon-world/src/native_load_hooks.rs`
@@ -3177,11 +3177,11 @@
 - Implementation / logic: Checks invulnerability/death, no-action time, shoulder entities, difficulty damage and delegates to living hurt; server wrapper applies PvP restrictions.
 - Findings: Nested path can re-query invulnerability/difficulty; callback order, NaN/min and owner checks are observable.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Rebuild 1.20.1 Player.hurtServer, difficulty and server PvP rules; verify Forge events.
-- 1.20.1 implications: Compare all difficulties, bypasses, arrow owners and repeated gate calls.
-- Follow-up checks: Player-only gate preceding shared RustChunk damage pipeline.
-- RustChunk implementation mapping: Mapped 1.20.1 Player/ServerPlayer sources and Forge damage traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Rebuild 1.20.1 Player.hurtServer, difficulty and server PvP rules; verify Forge events.
+- Follow-up checks: Compare all difficulties, bypasses, arrow owners and repeated gate calls.
+- RustChunk implementation mapping: Player-only gate preceding shared RustChunk damage pipeline.
+- Evidence required before adoption: Mapped 1.20.1 Player/ServerPlayer sources and Forge damage traces.
 - Completion state: COMPLETE — 108 logical lines through EOF; exact pinned SHA and 3144 byte size match; inspected, not modified; tests not executed.
 
 ### 2577. `crates/horizon-world/src/player_inventory.rs`
@@ -3194,11 +3194,11 @@
 - Implementation / logic: Maps 36 main slots and equipment, handles get/set/remove, search, pickup/hotbar, alias-aware removal and replacement.
 - Findings: Body/Saddle slots are newer than 1.20.1; main hand aliases selected slot. Invalid indices have asymmetric no-op/empty/error behavior; pick_slot mutates before validation; Map.of equipment order is runtime-sensitive.
 - RustChunk relevance: rewrite required; version-specific; reference
-- Decision: Rebuild 1.20.1 inventory/equipment layout and pre-component ItemStack; exclude Body/Saddle.
-- 1.20.1 implications: All slot mappings, invalid indexes, aliases, hotbar, remove_reference order and failure-after-mutation.
-- Follow-up checks: Generated 1.20.1 slot map plus Rust-owned stack handles and menu adapter.
-- RustChunk implementation mapping: 1.20.1 inventory sources, Forge hooks and Java/Rust alias traces.
-- Evidence required before adoption: undefined
+- Decision: rewrite required; version-specific; reference
+- 1.20.1 implications: Rebuild 1.20.1 inventory/equipment layout and pre-component ItemStack; exclude Body/Saddle.
+- Follow-up checks: All slot mappings, invalid indexes, aliases, hotbar, remove_reference order and failure-after-mutation.
+- RustChunk implementation mapping: Generated 1.20.1 slot map plus Rust-owned stack handles and menu adapter.
+- Evidence required before adoption: 1.20.1 inventory sources, Forge hooks and Java/Rust alias traces.
 - Completion state: COMPLETE — 351 logical lines through EOF; exact pinned SHA and 11475 byte size match; inspected, not modified; tests not executed.
 
 ### 2578. `crates/horizon-world/src/player_travel.rs`
@@ -3211,11 +3211,11 @@
 - Implementation / logic: Passenger delegates immediately; swimming blends vertical velocity by look angle; virtual flight wraps living travel and damps Y; flying speed uses direct ability state.
 - Findings: Direct flying field differs from virtual getAbilities query; exact thresholds, floor position and callback order matter.
 - RustChunk relevance: adaptable; reference
-- Decision: Rebuild 1.20.1 Player.travel and swimming; check Forge overrides.
-- 1.20.1 implications: Passenger branch, -0.2 look threshold, .085/.06 factors, Y damping and direct/virtual flight.
-- Follow-up checks: Player travel layer above shared living-physics.
-- RustChunk implementation mapping: Java 1.20.1 Player/LivingEntity sources and fluid-boundary traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild 1.20.1 Player.travel and swimming; check Forge overrides.
+- Follow-up checks: Passenger branch, -0.2 look threshold, .085/.06 factors, Y damping and direct/virtual flight.
+- RustChunk implementation mapping: Player travel layer above shared living-physics.
+- Evidence required before adoption: Java 1.20.1 Player/LivingEntity sources and fluid-boundary traces.
 - Completion state: COMPLETE — 71 logical lines through EOF; exact pinned SHA and 2661 byte size match; inspected, not modified; tests not executed.
 
 ### 2579. `crates/horizon-world/src/powder_snow_collision.rs`
@@ -3228,11 +3228,11 @@
 - Implementation / logic: Placement/no entity yields empty; fall distance >2.5 returns .9-high shape; falling block full collision; otherwise boots/tag/above/descending decide.
 - Findings: Exact 2.5 threshold and context order matter; leather boots queried only for living entities; cached shape.
 - RustChunk relevance: adaptable; reference
-- Decision: Verify 1.20.1 PowderSnowBlock/CollisionContext and tag semantics.
-- 1.20.1 implications: Threshold edges, placement, falling blocks, boots, walkability tag and descending.
-- Follow-up checks: Dynamic collision adapter using generated 1.20.1 tags.
-- RustChunk implementation mapping: Java 1.20.1 powder snow sources and shape corpus.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Verify 1.20.1 PowderSnowBlock/CollisionContext and tag semantics.
+- Follow-up checks: Threshold edges, placement, falling blocks, boots, walkability tag and descending.
+- RustChunk implementation mapping: Dynamic collision adapter using generated 1.20.1 tags.
+- Evidence required before adoption: Java 1.20.1 powder snow sources and shape corpus.
 - Completion state: COMPLETE — 74 logical lines through EOF; exact pinned SHA and 2419 byte size match; inspected, not modified; tests not executed.
 
 ### 2580. `crates/horizon-world/src/registry/facts.rs`
@@ -3245,11 +3245,11 @@
 - Implementation / logic: Reads fixed state-row columns, accepts string or object state forms, interns properties and ignores extra fields.
 - Findings: Thread-local cleanup occurs only on normal return; panic may leave shared pool active. Test silently skips if 26.3 facts file missing; schema is not 1.20.1.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Create a new 1.20.1 facts schema/data corpus; do not use 26.3 facts file.
-- 1.20.1 implications: Malformed/short rows, duplicate keys, panic cleanup, thread-local reuse and full registry parity.
-- Follow-up checks: Versioned parser with RAII cleanup/interning.
-- RustChunk implementation mapping: 1.20.1 registry export, parser fuzzing and startup/memory profile.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Create a new 1.20.1 facts schema/data corpus; do not use 26.3 facts file.
+- Follow-up checks: Malformed/short rows, duplicate keys, panic cleanup, thread-local reuse and full registry parity.
+- RustChunk implementation mapping: Versioned parser with RAII cleanup/interning.
+- Evidence required before adoption: 1.20.1 registry export, parser fuzzing and startup/memory profile.
 - Completion state: COMPLETE — 237 logical lines through EOF; exact pinned SHA and 9815 byte size match; inspected, not modified; tests not executed.
 
 ### 2581. `crates/horizon-world/src/registry/json.rs`
@@ -3262,11 +3262,11 @@
 - Implementation / logic: Decodes compact strings or full objects, starts at default state, applies valid properties with rollback and encodes compact/full states.
 - Findings: Invalid/missing property values are silently ignored; integer-property set and registry are external version-bound inputs.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Regenerate 1.20.1 property kinds and confirm target compact/full codec semantics.
-- 1.20.1 implications: Namespace normalization, invalid int, bad combinations, missing fields and round-trip of every state.
-- Follow-up checks: Separate versioned JSON codec backed by generated block registry.
-- RustChunk implementation mapping: Java 1.20.1 BlockState codecs and fixtures.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Regenerate 1.20.1 property kinds and confirm target compact/full codec semantics.
+- Follow-up checks: Namespace normalization, invalid int, bad combinations, missing fields and round-trip of every state.
+- RustChunk implementation mapping: Separate versioned JSON codec backed by generated block registry.
+- Evidence required before adoption: Java 1.20.1 BlockState codecs and fixtures.
 - Completion state: COMPLETE — 106 logical lines through EOF; exact pinned SHA and 4123 byte size match; inspected, not modified; tests not executed.
 
 ### 2582. `crates/horizon-world/src/registry/snapshot.rs`
@@ -3279,11 +3279,11 @@
 - Implementation / logic: Captures deduplicated string table, states, flags, hashed IDs, collisions and defaults; restore validates IDs, flags, indexes and mappings.
 - Findings: Restore checks many invariants, but capture assumes lengths match. Snapshot hash tables/schema depend on exact registry build.
 - RustChunk relevance: adaptable; reference
-- Decision: Version/hash-bind cache to 1.20.1 plus Forge and generated registry digest.
-- 1.20.1 implications: Corrupt IDs/defaults, missing states, duplicate hashes, flag bits and capture length mismatch.
-- Follow-up checks: Immutable version-keyed registry cache with validated writer and reader.
-- RustChunk implementation mapping: 1.20.1 registry digest, cache header and corruption/fuzz fixtures.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Version/hash-bind cache to 1.20.1 plus Forge and generated registry digest.
+- Follow-up checks: Corrupt IDs/defaults, missing states, duplicate hashes, flag bits and capture length mismatch.
+- RustChunk implementation mapping: Immutable version-keyed registry cache with validated writer and reader.
+- Evidence required before adoption: 1.20.1 registry digest, cache header and corruption/fuzz fixtures.
 - Completion state: COMPLETE — 265 logical lines through EOF; exact pinned SHA and 9193 byte size match; inspected, not modified; tests not executed.
 
 ### 2583. `crates/horizon-world/src/registry_collision_scan.rs`
@@ -3296,11 +3296,11 @@
 - Implementation / logic: Validates canonical cached shapes; adapts chunk handles/state IDs and delegates block, dynamic shape, entity, border and fluid queries.
 - Findings: Chunk handle lifetime and registry identity are invariants; chunk-local suffocation world differs from global contextual world.
 - RustChunk relevance: adaptable; reference
-- Decision: Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks.
-- 1.20.1 implications: Unloaded chunks, stale handles, registry mismatch, provider errors and query-context separation.
-- Follow-up checks: Version-bound adapter over RustChunk chunk cache.
-- RustChunk implementation mapping: 1.20.1 registry, collision context, block-entity and handle-lifetime tests.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Regenerate 1.20.1 registry shapes/tags and block-entity collision callbacks.
+- Follow-up checks: Unloaded chunks, stale handles, registry mismatch, provider errors and query-context separation.
+- RustChunk implementation mapping: Version-bound adapter over RustChunk chunk cache.
+- Evidence required before adoption: 1.20.1 registry, collision context, block-entity and handle-lifetime tests.
 - Completion state: COMPLETE — 161 logical lines through EOF; exact pinned SHA and 5600 byte size match; inspected, not modified; tests not executed.
 
 ### 2584. `crates/horizon-world/src/registry_fall_ray.rs`
@@ -3313,11 +3313,11 @@
 - Implementation / logic: Snapshots reset tags, portal IDs, per-state fluids and water mask; validates ray mode/state and shares fluid-shape cache.
 - Findings: Tag snapshots need rebuild after reload; portal set explicit; cache's first query is retained; camera support query intentionally errors here.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown.
-- 1.20.1 implications: Tag reload, invalid IDs, each portal, server/player gates, ray limits and fluid cache.
-- Follow-up checks: Immutable registry-bound ray adapter with shared shape cache.
-- RustChunk implementation mapping: 1.20.1 ray/portal sources, tags and Java-Rust traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Rebuild 1.20.1 reset tags/portals/ray semantics and cooldown.
+- Follow-up checks: Tag reload, invalid IDs, each portal, server/player gates, ray limits and fluid cache.
+- RustChunk implementation mapping: Immutable registry-bound ray adapter with shared shape cache.
+- Evidence required before adoption: 1.20.1 ray/portal sources, tags and Java-Rust traces.
 - Completion state: COMPLETE — 216 logical lines through EOF; exact pinned SHA and 7600 byte size match; inspected, not modified; tests not executed.
 
 ### 2585. `crates/horizon-world/src/registry_fluid.rs`
@@ -3330,11 +3330,11 @@
 - Implementation / logic: Builds per-state fluid/flow/ice data; verifies registry identity; exposes fluid height, flow/sturdy-face and entity immersion.
 - Findings: Block-state and fluid-cell lookups are separate; ice is class/tag membership, not suffix; bindings stale after tag reload.
 - RustChunk relevance: adaptable; reference
-- Decision: Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids.
-- 1.20.1 implications: Registry mismatch, tag reload, fluid levels, ice types, sturdy faces, unloaded chunks.
-- Follow-up checks: Versioned fluid snapshot plus chunk immersion service.
-- RustChunk implementation mapping: 1.20.1 fluid registry/tag sources and Forge fluid tests.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Regenerate exact 1.20.1 fluid registries, ice and water/flow tags; verify Forge fluids.
+- Follow-up checks: Registry mismatch, tag reload, fluid levels, ice types, sturdy faces, unloaded chunks.
+- RustChunk implementation mapping: Versioned fluid snapshot plus chunk immersion service.
+- Evidence required before adoption: 1.20.1 fluid registry/tag sources and Forge fluid tests.
 - Completion state: COMPLETE — 209 logical lines through EOF; exact pinned SHA and 7936 byte size match; inspected, not modified; tests not executed.
 
 ### 2586. `crates/horizon-world/src/retrogen.rs`
@@ -3347,11 +3347,11 @@
 - Implementation / logic: Loads target status and mask; converts bottom bedrock, clears masked columns and selects newly sampled biome or old biome during upgrades.
 - Findings: Lenient multiple NBT mask encodings and no explicit 4-word cap; malformed optional mask is absent. Terrain writes can partially apply; scheduling belongs to caller.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Rebuild 1.20.1 BelowZeroRetrogen, chunk statuses and dimension heights.
-- 1.20.1 implications: Mask bits, NBT leniency, vertical bounds, write failure and biome query order.
-- Follow-up checks: Separate metadata, pure mask, transactional transform and scheduler.
-- RustChunk implementation mapping: Java 1.20.1 retrogen/chunk-status sources and overworld fixtures.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Rebuild 1.20.1 BelowZeroRetrogen, chunk statuses and dimension heights.
+- Follow-up checks: Mask bits, NBT leniency, vertical bounds, write failure and biome query order.
+- RustChunk implementation mapping: Separate metadata, pure mask, transactional transform and scheduler.
+- Evidence required before adoption: Java 1.20.1 retrogen/chunk-status sources and overworld fixtures.
 - Completion state: COMPLETE — 177 logical lines through EOF; exact pinned SHA and 6388 byte size match; inspected, not modified; tests not executed.
 
 ### 2587. `crates/horizon-world/src/server_player_combat.rs`
@@ -3364,11 +3364,11 @@
 - Implementation / logic: Validates player schema then forwards outer hurt gates, death checks, damage events and inner damage adapter.
 - Findings: Nested dispatch repeats invulnerability queries. `expect` assumes schema immutable after validation; mutation/rebind could panic.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Rebuild 1.20.1 ServerPlayer damage and Forge armor/damage event flow; enforce immutable schema.
-- 1.20.1 implications: Check gate counts/order, health/dead branch, armor break recompute, nested callbacks and schema changes.
-- Follow-up checks: Coherent authoritative player-state borrow and typed event adapter.
-- RustChunk implementation mapping: 1.20.1 ServerPlayer/LivingEntity sources and Forge event traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Rebuild 1.20.1 ServerPlayer damage and Forge armor/damage event flow; enforce immutable schema.
+- Follow-up checks: Check gate counts/order, health/dead branch, armor break recompute, nested callbacks and schema changes.
+- RustChunk implementation mapping: Coherent authoritative player-state borrow and typed event adapter.
+- Evidence required before adoption: 1.20.1 ServerPlayer/LivingEntity sources and Forge event traces.
 - Completion state: COMPLETE — 323 logical lines through EOF; exact pinned SHA and 12346 byte size match; inspected, not modified; tests not executed.
 
 ### 2588. `crates/horizon-world/src/server_player_damage.rs`
@@ -3381,11 +3381,11 @@
 - Implementation / logic: Resolves armor/toughness/health at construction and applies reduction/damage with host callbacks for armor, resistance, stats, exhaustion and events.
 - Findings: Equipment damage can change attributes before queries; health binding uses expect on immutable-schema assumption; errors may leave partial state.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Use 1.20.1 attribute set, damage reduction, exhaustion and Forge events.
-- 1.20.1 implications: Armor break ordering, resistance, attacker stats, immunity, food/event failure and schema rebinding.
-- Follow-up checks: Validated per-player schema and error-returning host interfaces.
-- RustChunk implementation mapping: 1.20.1 combat sources, attribute registry and event traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Use 1.20.1 attribute set, damage reduction, exhaustion and Forge events.
+- Follow-up checks: Armor break ordering, resistance, attacker stats, immunity, food/event failure and schema rebinding.
+- RustChunk implementation mapping: Validated per-player schema and error-returning host interfaces.
+- Evidence required before adoption: 1.20.1 combat sources, attribute registry and event traces.
 - Completion state: COMPLETE — 285 logical lines through EOF; exact pinned SHA and 10878 byte size match; inspected, not modified; tests not executed.
 
 ### 2589. `crates/horizon-world/src/simple_container.rs`
@@ -3398,11 +3398,11 @@
 - Implementation / logic: Implements slot access, add/merge, set/remove/remove_type, clear and remove-all using component-aware item matching.
 - Findings: Callback failures can follow mutations; operations aren't transactional. Aliases retained by from_items; component model is post-1.20.5.
 - RustChunk relevance: rewrite required; version-specific; reference
-- Decision: Use 1.20.1 NBT ItemStack matching and Forge container hooks; no data components.
-- 1.20.1 implications: Partial failures, dynamic limits, aliases, reverse removal and bad indexes.
-- Follow-up checks: RustChunk container service with explicit transaction model and legacy item tags.
-- RustChunk implementation mapping: Java 1.20.1 SimpleContainer/ItemStack and Forge slot callbacks.
-- Evidence required before adoption: undefined
+- Decision: rewrite required; version-specific; reference
+- 1.20.1 implications: Use 1.20.1 NBT ItemStack matching and Forge container hooks; no data components.
+- Follow-up checks: Partial failures, dynamic limits, aliases, reverse removal and bad indexes.
+- RustChunk implementation mapping: RustChunk container service with explicit transaction model and legacy item tags.
+- Evidence required before adoption: Java 1.20.1 SimpleContainer/ItemStack and Forge slot callbacks.
 - Completion state: COMPLETE — 220 logical lines through EOF; exact pinned SHA and 7522 byte size match; inspected, not modified; tests not executed.
 
 ### 2590. `crates/horizon-world/src/snbt_text.rs`
@@ -3415,11 +3415,11 @@
 - Implementation / logic: Serializes all tag kinds and arrays, escapes strings/control chars and formats floats in plain/scientific ranges.
 - Findings: Rust float formatting may differ from Java shortest representation/exponents; compound keys are sorted, requiring 1.20.1 visitor-order proof; Unicode/quotes need oracle tests.
 - RustChunk relevance: adaptable; exact-compatibility required
-- Decision: Rebuild exact 1.20.1 SNBT StringTagVisitor and Java numeric conversion.
-- 1.20.1 implications: Bit corpus, exponent boundaries, NaN/infinity/signed zero, quotes, controls, Unicode and compound ordering.
-- Follow-up checks: Java-oracle-tested SNBT codec for RustChunk serialization/hashes.
-- RustChunk implementation mapping: Java 1.20.1 StringTagVisitor and Float/Double.toString corpus.
-- Evidence required before adoption: undefined
+- Decision: adaptable; exact-compatibility required
+- 1.20.1 implications: Rebuild exact 1.20.1 SNBT StringTagVisitor and Java numeric conversion.
+- Follow-up checks: Bit corpus, exponent boundaries, NaN/infinity/signed zero, quotes, controls, Unicode and compound ordering.
+- RustChunk implementation mapping: Java-oracle-tested SNBT codec for RustChunk serialization/hashes.
+- Evidence required before adoption: Java 1.20.1 StringTagVisitor and Float/Double.toString corpus.
 - Completion state: COMPLETE — 177 logical lines through EOF; exact pinned SHA and 5337 byte size match; inspected, not modified; tests not executed.
 
 ### 2591. `crates/horizon-world/src/status_effect.rs`
@@ -3432,11 +3432,11 @@
 - Implementation / logic: Clone retains identity; copy drops hidden/blend; updates amplifier/duration/visibility, ticks hidden effects, downgrades expired effect and blends factor.
 - Findings: Reentrancy and aliasing observable; differing effect holders don't block update; duration and blend floating-point behavior need parity.
 - RustChunk relevance: adaptable; reference
-- Decision: Rebuild 1.20.1 MobEffectInstance fields, hidden chain and Forge effect hooks.
-- 1.20.1 implications: Shared/copy semantics, hidden downgrade, infinite durations, order and NaN blend.
-- Follow-up checks: Separate Rust effect instance identity from active-effect storage.
-- RustChunk implementation mapping: Java 1.20.1 MobEffectInstance and tick oracle.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild 1.20.1 MobEffectInstance fields, hidden chain and Forge effect hooks.
+- Follow-up checks: Shared/copy semantics, hidden downgrade, infinite durations, order and NaN blend.
+- RustChunk implementation mapping: Separate Rust effect instance identity from active-effect storage.
+- Evidence required before adoption: Java 1.20.1 MobEffectInstance and tick oracle.
 - Completion state: COMPLETE — 309 logical lines through EOF; exact pinned SHA and 10276 byte size match; inspected, not modified; tests not executed.
 
 ### 2592. `crates/horizon-world/src/stepped_interpolation.rs`
@@ -3449,11 +3449,11 @@
 - Implementation / logic: Queues linear/stepped segments and ticks, interpolates pos/yaw/pitch, accelerates backlog and snaps zero-interval entities.
 - Findings: Position equality uses f64 bits, yaw equality normal float; angle wrapping and accumulated tick sum matter; i32 step sum may overflow.
 - RustChunk relevance: adaptable; reference
-- Decision: Rebuild 1.20.1 entity update intervals and movement packet semantics.
-- 1.20.1 implications: Packet sequences, -0 positions, yaw wrap, overflow and backlog speed.
-- Follow-up checks: Client-only smoothing separated from authoritative entity simulation.
-- RustChunk implementation mapping: 1.20.1 entity intervals, packet sources and tick-by-tick oracle.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild 1.20.1 entity update intervals and movement packet semantics.
+- Follow-up checks: Packet sequences, -0 positions, yaw wrap, overflow and backlog speed.
+- RustChunk implementation mapping: Client-only smoothing separated from authoritative entity simulation.
+- Evidence required before adoption: 1.20.1 entity intervals, packet sources and tick-by-tick oracle.
 - Completion state: COMPLETE — 341 logical lines through EOF; exact pinned SHA and 11303 byte size match; inspected, not modified; tests not executed.
 
 ### 2593. `crates/horizon-world/src/stored_consume.rs`
@@ -3466,11 +3466,11 @@
 - Implementation / logic: Routes RNG streams, add/remove/remove-all, effect-set, block position and sound through the live effect store/world hooks.
 - Findings: Callbacks can reenter and mutate live storage; random handles preserve stream identity; failures can leave partial changes.
 - RustChunk relevance: adaptable; reference
-- Decision: Rebuild 1.20.1 consumable/effect add-remove and sound semantics; use target random streams.
-- 1.20.1 implications: Reentrant mutation, RNG lifetime, removal iteration and sound failures.
-- Follow-up checks: RustChunk active effect store plus explicit world callback layer.
-- RustChunk implementation mapping: 1.20.1 effect/consumable Java source and mutation traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild 1.20.1 consumable/effect add-remove and sound semantics; use target random streams.
+- Follow-up checks: Reentrant mutation, RNG lifetime, removal iteration and sound failures.
+- RustChunk implementation mapping: RustChunk active effect store plus explicit world callback layer.
+- Evidence required before adoption: 1.20.1 effect/consumable Java source and mutation traces.
 - Completion state: COMPLETE — 83 logical lines through EOF; exact pinned SHA and 3072 byte size match; inspected, not modified; tests not executed.
 
 ### 2594. `crates/horizon-world/src/stored_effect_attributes.rs`
@@ -3483,11 +3483,11 @@
 - Implementation / logic: Creates/looks up instances and routes permanent modifier add/remove through one captured mutable map.
 - Findings: Supplier gets live map including pending queues before insertion; instance operations continue after membership changes, so reentrancy matters.
 - RustChunk relevance: adaptable; reference
-- Decision: Regenerate 1.20.1 effect modifiers, UUIDs and operations; Forge custom attributes.
-- 1.20.1 implications: Creation timing, pending queues, deletion/reinsert and callback errors.
-- Follow-up checks: Typed handle-based attribute adapter with explicit pending-update behavior.
-- RustChunk implementation mapping: 1.20.1 MobEffect modifier map and Forge attributes tests.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Regenerate 1.20.1 effect modifiers, UUIDs and operations; Forge custom attributes.
+- Follow-up checks: Creation timing, pending queues, deletion/reinsert and callback errors.
+- RustChunk implementation mapping: Typed handle-based attribute adapter with explicit pending-update behavior.
+- Evidence required before adoption: 1.20.1 MobEffect modifier map and Forge attributes tests.
 - Completion state: COMPLETE — 95 logical lines through EOF; exact pinned SHA and 3242 byte size match; inspected, not modified; tests not executed.
 
 ### 2595. `crates/horizon-world/src/suffocation.rs`
@@ -3500,11 +3500,11 @@
 - Implementation / logic: Precomputes constant/dynamic/shulker rules and caches full-cube decisions by canonical shape identity.
 - Findings: Requires definition per state and rebuild after tag reload; unknown shulker state defaults suffocating; extended piston property parsed exactly.
 - RustChunk relevance: adaptable; reference
-- Decision: Recreate 1.20.1 suffocation rules/tags and piston/shulker behavior.
-- 1.20.1 implications: All blocks, partial shapes, block entities, shulker unknown state and tag reload.
-- Follow-up checks: Versioned immutable suffocation rules attached to collision registry.
-- RustChunk implementation mapping: 1.20.1 suffocation sources, tags and shape traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Recreate 1.20.1 suffocation rules/tags and piston/shulker behavior.
+- Follow-up checks: All blocks, partial shapes, block entities, shulker unknown state and tag reload.
+- RustChunk implementation mapping: Versioned immutable suffocation rules attached to collision registry.
+- Evidence required before adoption: 1.20.1 suffocation sources, tags and shape traces.
 - Completion state: COMPLETE — 120 logical lines through EOF; exact pinned SHA and 4617 byte size match; inspected, not modified; tests not executed.
 
 ### 2596. `crates/horizon-world/src/swimming.rs`
@@ -3517,11 +3517,11 @@
 - Implementation / logic: Computes underwater/shallow checks, updates swimming from sprint/water/passenger state and forces flying players out of swimming.
 - Findings: Direct abilities field is used, not virtual getAbilities; query order and captured block position can affect modded subclasses.
 - RustChunk relevance: adaptable; reference
-- Decision: Rebuild 1.20.1 swimming and fluid jump threshold; confirm Forge abilities overrides.
-- 1.20.1 implications: Passenger and water paths, eye-in-water query order and eye-height at 0.4.
-- Follow-up checks: Entity tick state transition with direct/virtual access kept distinct.
-- RustChunk implementation mapping: Java 1.20.1 Entity/Player swimming source and query traces.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild 1.20.1 swimming and fluid jump threshold; confirm Forge abilities overrides.
+- Follow-up checks: Passenger and water paths, eye-in-water query order and eye-height at 0.4.
+- RustChunk implementation mapping: Entity tick state transition with direct/virtual access kept distinct.
+- Evidence required before adoption: Java 1.20.1 Entity/Player swimming source and query traces.
 - Completion state: COMPLETE — 50 logical lines through EOF; exact pinned SHA and 1952 byte size match; inspected, not modified; tests not executed.
 
 ### 2597. `crates/horizon-world/src/synced_floats.rs`
@@ -3534,11 +3534,11 @@
 - Implementation / logic: Re-exports float storage/error/observer aliases; contains no independent synchronization logic.
 - Findings: Full entity schemas, heterogeneous serializers and packets live elsewhere; alias does not establish wire parity.
 - RustChunk relevance: adaptable; reference
-- Decision: Use 1.20.1 serializer registry and generated field IDs.
-- 1.20.1 implications: Verify Java Float equality and all synced f32 field codecs.
-- Follow-up checks: Internal convenience alias over typed RustChunk synced-data layer.
-- RustChunk implementation mapping: 1.20.1 EntityDataSerializers and packet schema.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Use 1.20.1 serializer registry and generated field IDs.
+- Follow-up checks: Verify Java Float equality and all synced f32 field codecs.
+- RustChunk implementation mapping: Internal convenience alias over typed RustChunk synced-data layer.
+- Evidence required before adoption: 1.20.1 EntityDataSerializers and packet schema.
 - Completion state: COMPLETE — 6 logical lines through EOF; exact pinned SHA and 371 byte size match; inspected, not modified; tests not executed.
 
 ### 2598. `crates/horizon-world/src/synced_values.rs`
@@ -3551,11 +3551,11 @@
 - Implementation / logic: Maintains ID-sorted fields, validates IDs, handles set/assign, emits dirty values and non-default values.
 - Findings: f32 equality treats NaNs equal but distinguishes signed zero; set writes before observer and marks dirty after; assign always notifies and doesn't alter dirty flags.
 - RustChunk relevance: adaptable; reference
-- Decision: Rebuild 1.20.1 SynchedEntityData serializers, IDs and packet dirty behavior.
-- 1.20.1 implications: Duplicate/reserved IDs, NaN/-0, force set, observer failures/reentry, assign and take_dirty order.
-- Follow-up checks: Schema-generated typed synced data with dirty packet queue.
-- RustChunk implementation mapping: 1.20.1 SynchedEntityData/DataItem and packet differential tests.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Rebuild 1.20.1 SynchedEntityData serializers, IDs and packet dirty behavior.
+- Follow-up checks: Duplicate/reserved IDs, NaN/-0, force set, observer failures/reentry, assign and take_dirty order.
+- RustChunk implementation mapping: Schema-generated typed synced data with dirty packet queue.
+- Evidence required before adoption: 1.20.1 SynchedEntityData/DataItem and packet differential tests.
 - Completion state: COMPLETE — 167 logical lines through EOF; exact pinned SHA and 5142 byte size match; inspected, not modified; tests not executed.
 
 ### 2599. `crates/horizon-world/src/teleport_consume.rs`
@@ -3568,11 +3568,11 @@
 - Implementation / logic: Draws up to 16 x/y/z candidates, clamps Y, stops riding, invokes mod hook and teleport; success dispatches event/sound/particles and resets fall/impulse.
 - Findings: Minimum Y queried twice; hook occurs after stop-riding and can mutate/veto candidate; random draw order and packed offsets observable. Some modern hooks/resets may not exist in 1.20.1.
 - RustChunk relevance: adaptable; version-specific; reference
-- Decision: Rebuild 1.20.1 chorus fruit/teleport and Forge event ordering; gate modern extras.
-- 1.20.1 implications: 16 failures, random sequence, dimension bounds, hook veto/mutation, sound and particle offsets.
-- Follow-up checks: Separate candidate RNG, host teleport and Forge event adapter.
-- RustChunk implementation mapping: Java 1.20.1 ChorusFruitItem/Entity sources, seed traces and Forge events.
-- Evidence required before adoption: undefined
+- Decision: adaptable; version-specific; reference
+- 1.20.1 implications: Rebuild 1.20.1 chorus fruit/teleport and Forge event ordering; gate modern extras.
+- Follow-up checks: 16 failures, random sequence, dimension bounds, hook veto/mutation, sound and particle offsets.
+- RustChunk implementation mapping: Separate candidate RNG, host teleport and Forge event adapter.
+- Evidence required before adoption: Java 1.20.1 ChorusFruitItem/Entity sources, seed traces and Forge events.
 - Completion state: COMPLETE — 247 logical lines through EOF; exact pinned SHA and 9163 byte size match; inspected, not modified; tests not executed.
 
 ### 2600. `crates/horizon-world/src/tick_data.rs`
@@ -3585,9 +3585,9 @@
 - Implementation / logic: Reads/writes tick compounds and resolves type IDs; integer conversion accepts numeric NBT types with narrowing.
 - Findings: Numeric cast parity, unknown types, malformed values and registry identity matter; scheduling algorithm remains external.
 - RustChunk relevance: adaptable; reference
-- Decision: Validate 1.20.1 ChunkSerializer saved tick schema and priority mapping.
-- 1.20.1 implications: Numeric types, overflow, NaN/infinity, unknown IDs, malformed lists and round-trip.
-- Follow-up checks: Version-bound save codec separate from live tick scheduling.
-- RustChunk implementation mapping: Java 1.20.1 SavedTick/ChunkSerializer and NBT fixtures.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference
+- 1.20.1 implications: Validate 1.20.1 ChunkSerializer saved tick schema and priority mapping.
+- Follow-up checks: Numeric types, overflow, NaN/infinity, unknown IDs, malformed lists and round-trip.
+- RustChunk implementation mapping: Version-bound save codec separate from live tick scheduling.
+- Evidence required before adoption: Java 1.20.1 SavedTick/ChunkSerializer and NBT fixtures.
 - Completion state: COMPLETE — 81 logical lines through EOF; exact pinned SHA and 2863 byte size match; inspected, not modified; tests not executed.

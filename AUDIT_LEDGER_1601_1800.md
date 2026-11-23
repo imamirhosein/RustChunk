@@ -2858,7 +2858,7 @@
 - Implementation / logic: Declares public crate modules and forbids unsafe Rust.
 - Findings: The crate explicitly states it is not a playable game and only a limited subset of Vanilla has differential checks; full terrain generation is still absent elsewhere.
 - RustChunk relevance: Useful evidence of current upstream scope and modular boundaries.
-- Decision: reference; incomplete; not a playable client
+- Decision: undetermined; reference; incomplete; not a playable client
 - 1.20.1 implications: Do not mistake this crate for a complete game engine or use its module list as proof of 1.20.1 Forge support.
 - Follow-up checks: Map each required client subsystem to implemented code and identify missing protocol, rendering, entity, inventory, resource and mod-loader systems.
 - RustChunk implementation mapping: RustChunk gap analysis and module boundary planning.

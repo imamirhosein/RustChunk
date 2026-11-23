@@ -994,7 +994,7 @@
 - Implementation / logic: Detailed implementation and behavior are documented in this entry's implementation-specific subsections above.
 - Findings: File-specific risks, limitations, and compatibility observations are documented in the corresponding subsections above.
 - RustChunk relevance: **critical**. This file is the bridge between version-specific vanilla truth and every large subsystem in the native Rust game. It pinpoints the major conversion effort: 1.20.1-compatible JAR mapping, exporter/oracle rewrite, data-format adaptation and resource-reader updates.
-- Decision: **reuse the pipeline architecture**, especially provenance, content hashes, reproducible generation, output stamps, lock protection, local-only source data and explicit staged preparation; **substantial version-specific rewrite required** for Java oracles/exporters, modern item components, registries, worldgen, resource manifest contract and Android memory policy.
+- Decision: Adaptable; Rewrite required; Version-specific — **reuse the pipeline architecture**, especially provenance, content hashes, reproducible generation, output stamps, lock protection, local-only source data and explicit staged preparation; **substantial version-specific rewrite required** for Java oracles/exporters, modern item components, registries, worldgen, resource manifest contract and Android memory policy.
 - Dependencies / cross-references: `artifacts.rs`; `java.rs`; `exporters.rs`; `sounds.rs`; `survival.rs`; `worker.rs`; `pool.rs`; `pyjson.rs`; `mods/horizon/src/test/java/dev/horizonlab/parity`; `horizon-world`; `horizon-assets`; `horizon-client`; `research-lock.json`; `horizon-resources.json`; `output-versions.txt`.
 - Follow-up checks: inspect `exporters.rs`, `survival.rs`, `sounds.rs`, `worker.rs`, `pool.rs`, build-time source hashing; inspect the Java parity oracle classes actually compiled; compare 1.20.1's `version.json`, datagen reports, registries, item model and worldgen JSON with the current generated resource contract; design a separate resource schema for 1.20.1 where necessary.
 
@@ -1096,7 +1096,7 @@
   - The core field ordering and VarInt/port/string structure is likely largely reusable, but the protocol number must be the 1.20.1 value and the accepted intent set must match that protocol's handshake exactly.
   - `TRANSFER=3` is a later protocol feature and must not be advertised/sent to a 1.20.1 server unless its handshake implementation explicitly supports it. The exact 1.20.1 packet ID and maximum host string interpretation should be confirmed against a version-matched reference.
   - A handshake packet alone cannot establish compatibility: status/login/configuration/play packet IDs, encryption/compression, registry negotiation and packet payload schemas must also match.
-- Decision: **mostly adaptable** for the basic handshake field codec; **version-gate protocol constant and intent options** for 1.20.1. Do not carry forward protocol 777 or later-only transfer semantics.
+- Decision: Adaptable — **mostly adaptable** for the basic handshake field codec; **version-gate protocol constant and intent options** for 1.20.1. Do not carry forward protocol 777 or later-only transfer semantics.
 - Dependencies / cross-references: `buf::StrN`; `UShort`; `VarInt`; `packet!`; `packet_enum!`; `ids::handshake::serverbound`; `State::Handshake`; protocol connection startup; `adapter.rs`.
 - Follow-up checks: inspect the connection state machine and generated IDs; verify 1.20.1 handshake bytes against an authoritative protocol specification and a vanilla 1.20.1 server.
 - RustChunk implementation mapping: Maps to the future protocol-763 Handshake packet codec and connection bootstrap. This is multiplayer work and not required for the first local single-player vertical slice.
@@ -1121,7 +1121,7 @@
   - This file is for the current 26.3 protocol and includes later login-era features such as cookie requests/responses and a separate login acknowledgement, as well as a LoginFinished body carrying a session UUID. These must not be assumed to exist in 1.20.1.
   - The 1.20.1 login state uses its own Login Start/Encryption Response/Plugin Request-Response/Set Compression/Login Success or Disconnect forms and a different transition into play; exact IDs, field order, bounds, optionality and session/profile fields must come from a 1.20.1 protocol reference or vanilla oracle.
   - A 1.20.1 port needs to reconcile offline identity and online authentication behavior with that older handshake/login flow. Merely mapping packet IDs while retaining these current packet bodies will produce wire-incompatible messages.
-- Decision: **reuse low-level codecs and cryptographic primitives only where protocol semantics match**; **rewrite the Login state packet set and connection transition for 1.20.1**. Do not expose current cookie/acknowledgement/session fields to the 1.20.1 adapter by default.
+- Decision: Adaptable; Rewrite required — **reuse low-level codecs and cryptographic primitives only where protocol semantics match**; **rewrite the Login state packet set and connection transition for 1.20.1**. Do not expose current cookie/acknowledgement/session fields to the 1.20.1 adapter by default.
 - Dependencies / cross-references: `ids::login`; `buf` codecs; `crypto`; `packets::Empty`; login connection state machine; encryption/compression negotiation; authentication/offline UUID generation; `adapter.rs`.
 - Follow-up checks: inspect `connection.rs`, crypto and status packets; verify the precise 1.20.1 Login Start, Encryption Request/Response, Plugin Request/Response, Set Compression, Login Success and Disconnect packet structures and phase transition against a real 1.20.1 server.
 
@@ -1178,7 +1178,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - No numeric ID from this file can be presumed valid for 1.20.1. It belongs to protocol 777 and contains packet kinds absent from 1.20.1; older protocol also uses a different login/configuration/play split and packet catalog.
   - A 1.20.1 port needs a fresh, authoritative packet report/ID inventory and version-specific generated constants and names, plus code changes for packet types that were added/removed or structurally different.
   - The generator's input format and ability to obtain packet data from a 1.20.1 mapped JAR must be validated; the current import workflow refuses mapped releases. Do not manually renumber this table or mechanically offset IDs.
-- Decision: **do not reuse data**; **regenerate entirely for 1.20.1** using a verified 1.20.1 vanilla report. The generator pattern and `name()` lookup API are adaptable, provided all packet consumers switch atomically to coherent version-specific definitions.
+- Decision: Adaptable; Version-specific — **do not reuse data**; **regenerate entirely for 1.20.1** using a verified 1.20.1 vanilla report. The generator pattern and `name()` lookup API are adaptable, provided all packet consumers switch atomically to coherent version-specific definitions.
 - Dependencies / cross-references: `tools/generate_packet_ids.py`; vanilla datagen `packets.json`; `State`; `Direction`; packet enums in `packets/*.rs`; `adapter.rs`; protocol probes; `horizon-core::version`.
 - Follow-up checks: inspect the generator and packet report schema, all consumers of numeric constants and `NAMES`, and the handshake/login/configuration transitions for 1.20.1. Confirm whether a unified `Configuration` state is even valid for the target version.
 - RustChunk implementation mapping: Maps to generated protocol-763 packet IDs and reverse name tables in a future protocol crate. Do not check in Starling's 26.3 IDs as RustChunk data.
@@ -1210,7 +1210,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - This implementation uses the 26.3-era crate's `frame` API and packet assumptions. 1.20.1 connection phase handling (login success/transition directly to Play versus modern Configuration) must be implemented above it; transport alone does not make the packet stream compatible.
   - CFB8 key exchange and enabling point depend on the 1.20.1 login sequence. The connection primitive can likely support the older flow, but exact ordering and encryption boundary must be verified against a real server.
   - Address racing and SRV behavior are launcher/client features rather than Minecraft-version-specific gameplay, but the precise DNS behavior should be compared to the target client/version.
-- Decision: **largely adaptable** as transport and packet framing infrastructure; **verify and adapt boundaries** for 1.20.1 frame/compression rules, crypto activation and connection-state orchestration. Do not confuse the in-memory Pipe with remote server networking.
+- Decision: Adaptable — **largely adaptable** as transport and packet framing infrastructure; **verify and adapt boundaries** for 1.20.1 frame/compression rules, crypto activation and connection-state orchestration. Do not confuse the in-memory Pipe with remote server networking.
 - Dependencies / cross-references: `frame`; `crypto::Cfb8`; `buf::Reader`; `resolver`; `State` consumers; login packet flow; `ConnReader`; `ConnWriter`; `Closer`; `Counters`.
 - Follow-up checks: inspect `frame.rs`, `crypto.rs`, `resolver.rs`, login/connection state machine and packet size limits; validate handshake/login/encryption/compression with a vanilla 1.20.1 server.
 - RustChunk implementation mapping: Maps to future TCP transport, connection lifecycle, framing handoff and online-mode encryption/compression plumbing. The current downloader networking is not a Minecraft protocol connection.
@@ -1242,7 +1242,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - NBT itself remains a core 1.20.1 wire type, but integration with 26.3-specific `horizon_world::nbt` semantics, quota accounting and root-name/list changes should be verified against 1.20.1's NbtIo implementation.
   - Modern data-component/item payloads introduced after 1.20.1 must not be carried back into the old item wire model just because generic codecs compile.
   - Writer length/count casts are not uniformly validated before emitting VarInt counts; callers/codecs must enforce their own bounds where vanilla does. The protocol parser should also ensure packet payloads are fully consumed at the right decode boundary.
-- Decision: **largely adaptable** for primitive codecs and macro composition; **method-by-method validation and selective replacement required** for special packed/vector/NBT codecs and version-specific structures.
+- Decision: Adaptable; Version-specific — **largely adaptable** for primitive codecs and macro composition; **method-by-method validation and selective replacement required** for special packed/vector/NBT codecs and version-specific structures.
 - Dependencies / cross-references: `horizon_world::nbt`; `Reader`; `Writer`; `Codec`; `packet!`; `frame`; packet modules; `chunk.rs`; `item.rs`; `entity_data.rs`; NBT quota and Java's FriendlyByteBuf/ByteBufCodecs.
 - Follow-up checks: compare each specialized codec's source behavior with 1.20.1 vanilla methods; inspect NBT read/write and packet decode strictness; add a 1.20.1 golden-byte corpus for boundary and malformed inputs.
 - RustChunk implementation mapping: Maps to a future protocol codec library for VarInt, strings, arrays, NBT and typed fields. The current RustChunk engine has no Minecraft wire codec.
@@ -1265,7 +1265,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: File-specific risks, limitations, and compatibility observations are documented in the corresponding subsections above.
 - RustChunk relevance: high. This is generic transport framing and compression infrastructure shared beneath Minecraft packet schemas.
 - 1.20.1 implications: packet framing, VarInt21 and zlib compression are core Java Edition wire mechanics that are likely reusable for 1.20.1, but the exact uncompressed-size cap, threshold semantics, handling of malformed/noncanonical prefixes and error behavior should be checked against the 1.20.1 NetworkCompression/PacketDecoder implementation. It does not solve differences in packet IDs or packet bodies.
-- Decision: **likely reusable with targeted parity verification**. Keep framing separate from version-specific packet codecs and add 1.20.1 boundary vectors before trusting interoperability.
+- Decision: Adaptable; Version-specific — **likely reusable with targeted parity verification**. Keep framing separate from version-specific packet codecs and add 1.20.1 boundary vectors before trusting interoperability.
 - Dependencies / cross-references: `buf::Reader`; `buf::write_varint`; `connection.rs`; `Inflater`; `flate2` zlib; packet-size limits.
 - Follow-up checks: verify Java 1.20.1 VarInt21FrameDecoder/LengthFieldPrepender and CompressionDecoder/Encoder edge behavior, including empty frames and declared-size limits; test actual compressed traffic with vanilla 1.20.1.
 - RustChunk implementation mapping: Maps to future protocol framing/compression below the 1.20.1 packet codecs; it is separate from world/chunk storage compression.
@@ -1312,7 +1312,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: File-specific risks, limitations, and compatibility observations are documented in the corresponding subsections above.
 - RustChunk relevance: moderate-to-high. Status ping is a useful minimal first connectivity test before attempting login; the body shapes are simple and mostly stable across Java Edition versions.
 - 1.20.1 implications: The general status JSON string and ping/pong long bodies are likely reusable, but packet IDs must come from the 1.20.1 status packet table. Status JSON's `version.name` and `version.protocol` must report the actual target version/protocol, not 26.3. Server list favicon, sample players, secure-chat/previews or other JSON fields may differ and should be treated as data rather than hardcoded current-version assumptions.
-- Decision: **body codecs largely adaptable**; **IDs and response metadata must be version-specific** for 1.20.1.
+- Decision: Adaptable; Version-specific — **body codecs largely adaptable**; **IDs and response metadata must be version-specific** for 1.20.1.
 - Dependencies / cross-references: `ids::status`; `buf::Str`; `buf::Long`; `packets::Empty`; status response builder; `Connection` and server list ping code.
 - Follow-up checks: inspect status packet construction/server-list code and protocol version reporting; compare JSON and status/ping flow with a vanilla 1.20.1 server.
 - RustChunk implementation mapping: Maps to a future optional server-list ping path in the protocol/UI layer; it is not needed to create a local single-player world.
@@ -1340,7 +1340,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - Registry data, tags, client information, resource-pack requests, custom payloads and keepalives may still be needed in 1.20.1, but several are carried in different connection phases and can have different packet IDs and body shapes. For example, dimension/biome registry data belongs to older login/join-game-era structures rather than this modern generic Configuration registry synchronization packet.
   - Current `ClientInformation` includes modern fields (notably listing permission and particle status) and uses newer codec assumptions; its 1.20.1 predecessor must be reconstructed field-by-field from that version's vanilla client/server classes.
   - NBT, identifiers, lists and UUID primitive codecs can be reused selectively, but all packet structs/enums and their routing should be versioned separately.
-- Decision: **do not reuse this module as a 1.20.1 Configuration state**. Extract only genuinely shared packet/data structures and primitive codecs; design 1.20.1 Status/Login/Play packets and move any compatible configuration-like messages into their historically correct state.
+- Decision: Adaptable — **do not reuse this module as a 1.20.1 Configuration state**. Extract only genuinely shared packet/data structures and primitive codecs; design 1.20.1 Status/Login/Play packets and move any compatible configuration-like messages into their historically correct state.
 - Dependencies / cross-references: `ids::configuration`; `buf` codecs; `Tag`; `packets::Empty`; `packet!`/`packet_enum!`; `registry.rs`; `item.rs`; `connection.rs`; `State::Configuration`.
 - Follow-up checks: inspect current login and play codecs, registry/chunk login payloads and state-transition handling; compare exact 1.20.1 clientbound Login/Join Game, Update Tags, Client Settings, Resource Pack, Keep Alive and Plugin Message structures against vanilla 1.20.1.
 - RustChunk implementation mapping: No 1.20.1 Configuration-state mapping: protocol 763 goes from Login to Play without a separate post-login Configuration state. Reuse only independently verified primitive/data codecs in their actual 1.20.1 context.
@@ -1375,7 +1375,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Detailed implementation and behavior are documented in this entry's implementation-specific subsections above.
 - Findings: File-specific risks, limitations, and compatibility observations are documented in the corresponding subsections above.
 - RustChunk relevance: **critical**. This file is the bulk of the network protocol surface between the Rust game and a Java server; its current content is one of the largest version-specific obstacles to running 1.20.1.
-- Decision: **do not port the current Play packet structs as a set**. Keep the typed packet design and generic codecs, but build a dedicated 1.20.1 Play packet catalogue with independently sourced IDs, payload schemas, registry assumptions and golden-byte/parity tests. Separate the reusable game concepts from their wire representations. The existing modern code may remain a reference for behavior only where method-level comparison proves equivalence.
+- Decision: Adaptable; Reference — **do not port the current Play packet structs as a set**. Keep the typed packet design and generic codecs, but build a dedicated 1.20.1 Play packet catalogue with independently sourced IDs, payload schemas, registry assumptions and golden-byte/parity tests. Separate the reusable game concepts from their wire representations. The existing modern code may remain a reference for behavior only where method-level comparison proves equivalence.
 - Dependencies / cross-references: `ids::play`; `buf`; `chunk::{ChunkData,LightData,Paletted}`; `entity_data`; `item::{Component,Slot,Stack,Hashed}`; `packets::configuration`; `packets::login::Property`; `packets::recipes`; `horizon-world::nbt`; `registry`; connection state machine and vanilla packet reports.
 - Follow-up checks: inspect `chunk.rs`, `entity_data.rs`, `item.rs`, `registry.rs`, `packets/recipes.rs` and `packets/play.rs` consumers; obtain 1.20.1 serverbound/clientbound packet schemas and mappings; create separate 1.20.1 golden traces for login, join game, chunk load/light, inventory, entity metadata, movement, chat and common interactions.
 
@@ -1407,7 +1407,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - `ChunkData` section buffer shape, included biome containers, block entity info and section count depend on 1.20.1's dimension/build-height and registry rules. Current caller-supplied global widths and section counts must be derived from target version data.
   - Light layer masks are conceptually similar across releases, but mask bit indexing, trust-edges behavior, sky dimension rules, light section count and packet envelope must be checked against the target client/server.
   - Current code is bound to modern 26.3 registry IDs and resource exports. Matching serialized numeric palette values without a 1.20.1 registry is unsafe.
-- Decision: **adapt the palette/storage and light primitives**, but **rewrite the chunk packet envelope, section structure, heightmap format and registry integration** for 1.20.1. Keep a dedicated version-specific chunk decoder rather than a shared struct with unchecked modern fields.
+- Decision: Rewrite required; Version-specific — **adapt the palette/storage and light primitives**, but **rewrite the chunk packet envelope, section structure, heightmap format and registry integration** for 1.20.1. Keep a dedicated version-specific chunk decoder rather than a shared struct with unchecked modern fields.
 - Dependencies / cross-references: `buf::{BitSet,Longs,Bytes,VarInt}`; `horizon_world::nbt::Tag`; `packets::play::{LevelChunkWithLight,ChunksBiomes,LightUpdate}`; registry state/biome widths; world section dimensions; renderer chunk loader.
 - Follow-up checks: inspect `registry.rs`, `packets/play.rs` chunk packet call sites and `horizon-world` palette representation; compare against 1.20.1 `LevelChunkPacketData`, `LevelChunkSection`, `Heightmap` and `ClientboundLightUpdatePacket` serializers, including actual captures for overworld/nether/end and negative/minimum-height chunks.
 - RustChunk implementation mapping: Maps to the future network chunk decoder and its adapter into the 1.20.1 world/chunk model. This is distinct from local chunk generation/storage and is later multiplayer work.
@@ -1468,7 +1468,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - Particle IDs and payload shapes use current `minecraft:particle_type` order; numeric IDs and data-bearing particle variants must be regenerated for 1.20.1. Unknown IDs are dangerous because the decoder cannot know how many bytes to skip; it stops the metadata list rather than recovering subsequent entries.
   - Components as NBT and simple primitives are useful concepts, but exact metadata serializer values, optional sentinels, registry IDs and nested NBT need target-specific codecs.
   - The negative mod-particle sentinel is a Starling extension and cannot be sent to ordinary vanilla 1.20.1 servers. Keep it strictly outside vanilla wire data or omit it from the target path.
-- Decision: **reuse the generic metadata-list mechanism and primitive codecs**, but **replace serializer IDs, value codecs, particle IDs/data, item/profile handling and registry bindings** with a 1.20.1-specific implementation. Do not share the current numeric serializer table.
+- Decision: Adaptable — **reuse the generic metadata-list mechanism and primitive codecs**, but **replace serializer IDs, value codecs, particle IDs/data, item/profile handling and registry bindings** with a 1.20.1-specific implementation. Do not share the current numeric serializer table.
 - Dependencies / cross-references: `packets/play.rs::SetEntityData`; `buf`; `item::{Slot,Stack,Template}`; `packets/login::Property`; `Tag`; `registry` particle/entity/block/item IDs; `MOD_PARTICLE_ID`.
 - Follow-up checks: extract 1.20.1 `EntityDataSerializers` registry order and serializer read/write methods; create exhaustive version-specific metadata and particle fixtures; verify unknown-ID handling and metadata termination against vanilla.
 - RustChunk implementation mapping: Maps to future 1.20.1 entity metadata decoding and the native entity model/render bridge. It is not an existing RustChunk entity runtime.
@@ -1501,7 +1501,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Detailed implementation and behavior are documented in this entry's implementation-specific subsections above.
 - Findings: File-specific risks, limitations, and compatibility observations are documented in the corresponding subsections above.
 - RustChunk relevance: **critical / blocking for item, inventory and interaction networking**. This is an explicit structural incompatibility, not a small compatibility gap. The project needs a dedicated 1.20.1 item stack codec and item metadata model before normal inventory, crafting, containers and item use can interoperate.
-- Decision: **do not adapt current item.rs by editing component IDs**. Implement a separate legacy 1.20.1 ItemStack/NBT codec and version-specific inventory synchronization. Reuse the safe Reader/Writer, NBT library, nesting protections and selected semantic helper concepts only where matching 1.20.1 behavior is demonstrated. Keep modern item components for a future 1.20.5+ version, not in the 1.20.1 path.
+- Decision: Adaptable; Optional/future; Version-specific — **do not adapt current item.rs by editing component IDs**. Implement a separate legacy 1.20.1 ItemStack/NBT codec and version-specific inventory synchronization. Reuse the safe Reader/Writer, NBT library, nesting protections and selected semantic helper concepts only where matching 1.20.1 behavior is demonstrated. Keep modern item components for a future 1.20.5+ version, not in the 1.20.1 path.
 - Dependencies / cross-references: `component` table; `Component`; `Stack`; `Slot`; `DelimitedSlot`; `Template`; `HashedSlot`; `WirePatch`; `custom.rs`; `hash.rs`; `skip.rs`; `buf`; `registry`; `packets/play.rs` item-bearing packets; `packets/recipes.rs`; `entity_data.rs`.
 - Follow-up checks: inspect `hash.rs`, `skip.rs`, `custom.rs` and Play packet consumers. Then source 1.20.1 FriendlyByteBuf/ItemStack read/write semantics and implement byte-golden tests for empty/ordinary/enchanted/damaged/named/potion/book/container/map/banner/shulker stacks; verify container clicks and creative slot packets with vanilla 1.20.1.
 
@@ -1556,7 +1556,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - The current wire model depends on later `recipe_display` and `slot_display` registries, their IDs, and modern display-specific variants such as `OnlyWithComponent`, `WithRemainder`, and richer registry-holder trim representations. They cannot be sent to 1.20.1.
   - The 1.20.1 recipe-book packet format uses the older recipe book packet model and recipe identifiers/collections rather than this modern display tree. Its add/remove/settings/ghost/place semantics must be reconstructed from the target version's vanilla packet classes.
   - `HolderSet`, generic recursive display nodes and primitive codecs may be useful domain structures for a future renderer/recipe UI, but the current `Stack` reference itself uses the modern data-component item format; it must not leak into legacy item wire encoding.
-- Decision: **rewrite the recipe networking codecs for 1.20.1**. Retain only generic codec patterns and possibly recipe UI concepts after translating them into the older recipe model. Treat current recipe display/slot display IDs as unusable target-version data.
+- Decision: Rewrite required — **rewrite the recipe networking codecs for 1.20.1**. Retain only generic codec patterns and possibly recipe UI concepts after translating them into the older recipe model. Treat current recipe display/slot display IDs as unusable target-version data.
 - Dependencies / cross-references: `item::{Stack,Template}`; `buf::{Codec,Reader,Writer}`; `horizon_world::nbt::Tag`; `packets/play.rs` recipe book variants; `ids::play`; recipe and item registries; `recipe_display`/`slot_display` data.
 - Follow-up checks: inspect 1.20.1 serverbound/clientbound recipe-book packet classes and serializers; trace recipe definitions, ingredient encoding and recipe identifiers; implement and compare legacy recipe-book add/remove/settings/ghost/place packets against a vanilla 1.20.1 oracle.
 - RustChunk implementation mapping: Maps to a future 1.20.1 recipe/recipe-book model and packet codecs, after the base gameplay/inventory model exists. Current recipe display IDs and structures are not reusable data.
@@ -1585,7 +1585,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - Offline UUID v3 derivation is a general Minecraft Java convention and is likely reusable for offline-mode player identity. It is not equivalent to Microsoft authentication and does not grant online-mode access.
   - The newer client protocol's login packet flow may differ, but the low-level CFB8 primitive remains independent of whether the login packets use older or newer packet IDs.
   - The AES implementation relies on hardware/architecture-aware internals (`blocks.rs`); the ARM64 Android target needs actual performance/correctness validation. This file itself does not establish the safety of every platform backend.
-- Decision: **largely adaptable/reusable** for 1.20.1 cryptographic primitives and offline UUID derivation. Keep key exchange and login state ordering version-specific; audit platform AES backend separately.
+- Decision: Adaptable; Version-specific — **largely adaptable/reusable** for 1.20.1 cryptographic primitives and offline UUID derivation. Keep key exchange and login state ordering version-specific; audit platform AES backend separately.
 - Dependencies / cross-references: `crypto::blocks`; `LANES`; `getrandom`; `sha1`; `horizon-protocol::connection::enable_encryption`; `rsa.rs`; `packets/login.rs`; authentication/session service; offline account identity.
 - Follow-up checks: inspect `blocks.rs` and `rsa.rs`; trace the 1.20.1 Encryption Request/Response sequence and signed server hash inputs against vanilla; verify ARM64 Android AES backend and OS RNG availability.
 - RustChunk implementation mapping: Maps to future online-mode login cryptography and offline UUID derivation, not to local world simulation. Select only primitives whose exact 1.20.1 usage is verified.
@@ -1615,7 +1615,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - Pure-Rust private exponentiation uses variable-time control flow (square-and-multiply branches on exponent bits) and big-integer arithmetic not designed as constant-time cryptography. Private-key decryption/signing should not be exposed to hostile timing observations without a security review; a vetted constant-time cryptographic implementation may be preferable for production.
   - The DER helper returns trailing input slices, while some nested parsers ignore them. Exact strictness/trailing-byte rejection and bounds should be fuzzed; malformed public/private key input is attacker-controlled in login/profile verification paths.
   - Key generation is substantial custom cryptographic code. The client generally needs to consume a server public key and a service-issued profile key; generating a server key pair is not required merely to connect to a server.
-- Decision: **cryptographic standards and data model are adaptable**, but **version-specific login/chat wiring and security review required**. Prefer vetted constant-time implementations for private operations where feasible; do not treat test vectors as a complete security audit.
+- Decision: Adaptable; Version-specific — **cryptographic standards and data model are adaptable**, but **version-specific login/chat wiring and security review required**. Prefer vetted constant-time implementations for private operations where feasible; do not treat test vectors as a complete security audit.
 - Dependencies / cross-references: `crypto.rs`; `secure_chat.rs`; `packets/login.rs`; `packets/play.rs` chat/session packets; `rsa::SignatureHash`; `getrandom`; SHA-1/SHA-256; `Cfb8`; service-signed profile public keys.
 - Follow-up checks: inspect `secure_chat.rs` and authentication call sites; determine 1.20.1's exact signed-chat/profile-key requirements, key sizes and trust chain; review private-key timing behavior, malformed DER handling and maximum key lengths; consider replacing private operations with a vetted crypto crate.
 - RustChunk implementation mapping: Maps only to the cryptographic support needed by future online login/profile-key verification. Prefer vetted constant-time libraries over carrying custom private-key arithmetic without review.
@@ -1648,7 +1648,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - Current LastSeen update is `(offset, 3-byte 20-bit acknowledged mask, checksum)` and signature caching uses a modern packed format. Validate the exact 1.20.1 representation/window semantics before sharing these structures.
   - Current Login/Play/session packet structures for initializing chat keys differ across protocol generations. The key service payload may retain a common shape, but the session registration and message-chain lifecycle must be version-specific.
   - The 5-minute server message expiry and 8-hour key expiry grace are hardcoded from the current vanilla implementation; they must be checked against 1.20.1's corresponding constants and not copied without verification.
-- Decision: **adapt selected cryptographic primitives and abstract concepts**, but **rewrite 1.20.1 signed payload, login/player-info key exchange, chain protocol, last-seen updates and packet integration** from target-version vanilla. Keep modern 26.3 state machine isolated from the 1.20.1 path.
+- Decision: Rewrite required — **adapt selected cryptographic primitives and abstract concepts**, but **rewrite 1.20.1 signed payload, login/player-info key exchange, chain protocol, last-seen updates and packet integration** from target-version vanilla. Keep modern 26.3 state machine isolated from the 1.20.1 path.
 - Dependencies / cross-references: `rsa::{RsaPrivateKey,RsaPublicKey,SignatureHash}`; `packets::play::LastSeenUpdate`; modern Login/Play chat packets; profile public key/session; chat message signing; `crypto.rs`.
 - Follow-up checks: inspect `packets/play.rs` chat structs and `packets/login.rs` against exact 1.20.1 source; establish profile key signature payload, message signing payload, session/index behavior, last-seen window, acknowledgement and enforcement modes using a 1.20.1 oracle/server.
 - RustChunk implementation mapping: Maps to future 1.20.1 secure-chat signing, profile-key and message-chain handling in protocol/game UI. It must be rewritten for 1.20.1 rather than inherited from the modern implementation.
@@ -1676,7 +1676,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
   - The login handshake must carry the resolved target host and port, while the UI/status display may preserve the originally entered hostname; this code explicitly separates that concern.
   - Android's active-network DNS provider hook is highly relevant to a native Android client; it must be connected to the actual Android network APIs and refreshed on network changes.
   - The DNS packet implementation and resolver timeout/error policy live in `resolver/dns.rs`, which still needs full review. Correct SRV parsing and DNS response validation are essential; never trust DNS target names as packet payload instructions.
-- Decision: **largely adaptable/reusable** for 1.20.1 and Android. Keep the SRV selection rules and injected DNS provider; verify target-version behavior and ensure the Android host supplies current DNS servers.
+- Decision: Adaptable — **largely adaptable/reusable** for 1.20.1 and Android. Keep the SRV selection rules and injected DNS provider; verify target-version behavior and ensure the Android host supplies current DNS servers.
 - Dependencies / cross-references: `resolver::dns`; `NAME_SERVERS`; `dns::system_name_servers`; `dns::query_srv`; `connection::connect_server`; `connect_server_with_address`; Android activity/network DNS callback.
 - Follow-up checks: inspect `resolver/dns.rs`, DNS response parsing, retry/timeout and name-server selection; verify 1.20.1 server redirect behavior against vanilla. Confirm Android integration fetches DNS servers from the current active network without stale caching.
 - RustChunk implementation mapping: Maps to a later multiplayer server-address resolver and connection bootstrap. It is not used by the first offline single-player milestone.
@@ -1738,7 +1738,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This is neither a hash of raw NBT nor SHA-256; it hashes the exact HashOps representation of a 26.3 Codec and is used for HashedPatchMap/Data Components. Floats and doubles use their raw bits; strings use UTF-16 length and code units. A wrong codec type or boolean-field interpretation changes the result. Tests assert standard CRC32C vectors, primitive byte payloads, map/list ordering, NBT conversion, and sample values emitted by vanilla 26.3; they were not run.
 - RustChunk relevance: Useful for understanding how modern item-component packets carry component hashes, but it is not directly usable in the vanilla 1.20.1 core.
 - 1.20.1 implications: Minecraft 1.20.1 predates this generation's Data Components and HashedStack. Do not use this implementation as an ItemStack/NBT hash or integrity mechanism for 1.20.1. If RustChunk needs a canonical hash, define it for the exact serializer and purpose; for file integrity, use SHA-256 or another explicitly selected algorithm, not this CRC32C scheme.
-- Decision: **Version-specific and unsuitable for protocol 1.20.1; retain only as a reference for implementing the newer Codec-hash scheme.**
+- Decision: undetermined; Reference; Version-specific — **Version-specific and unsuitable for protocol 1.20.1; retain only as a reference for implementing the newer Codec-hash scheme.**
 - Dependencies / cross-references: horizon_world::nbt::Tag; crates horizon-protocol::item/hash.rs and modern Data Component codecs/HashedPatchMap; Guava HashOps reference.
 - Follow-up checks: When porting the 1.20.1 ItemStack, omit the Data Component hash path entirely and compare against that version's own serialization and NBT behavior.
 - RustChunk implementation mapping: No base 1.20.1 item mapping. This CRC32C/Data Component hash path is not a replacement for legacy ItemStack/NBT serialization or integrity checks.
@@ -1840,7 +1840,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The ARM64 section is the only unsafe code in this crate. Its safety relies on the assumption that `target_feature=aes` is guaranteed by the CPUs targeted by the binary; build target flags must match the actual minimum device. Enabling the AES feature for every ARM64 release could make the binary unusable on devices without the crypto extension. The custom key schedule uses a table-based S-box lookup indexed from key material; timing/cache side channels require review. The fallback depends on a vetted crate. This file contains no standalone tests; the algorithm and known-answer vectors must be tested at the wrapper/crypto-crate level.
 - RustChunk relevance: Important for login-connection encryption. Android ARM64 can benefit from hardware AES, but feature detection and security matter more than benchmarking.
 - 1.20.1 implications: Minecraft 1.20.1 also uses AES/CFB8 for online-mode login encryption, so the CFB8 semantics and key/IV handling are potentially reusable, but must not be copied without tests. Runtime ARM64 feature dispatch is safer than assuming compile-time AES support for broad Android distribution. Offline-mode login does not require this server-encryption step.
-- Decision: **The CFB8 algorithm is adaptable; the custom ARM AES backend is usable only after security review and safe feature dispatch.**
+- Decision: Adaptable — **The CFB8 algorithm is adaptable; the custom ARM AES backend is usable only after security review and safe feature dispatch.**
 - Dependencies / cross-references: protocol::crypto.rs, aes crate, ARMv8 AES/NEON intrinsics, RustCrypto AES, target CPU feature configuration.
 - Follow-up checks: Inspect Android arm64-v8a build target flags and device crypto-extension support; test NIST AES vectors and CFB8 known-answer vectors; compare with a constant-time RustCrypto backend and assess the S-box key schedule.
 - RustChunk implementation mapping: Maps to the future AES/CFB8 protocol encryption primitive or vetted replacement. It is not needed for local single-player and must not be accepted solely on architecture review.
@@ -1857,7 +1857,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This implementation directly depends on `DataComponentType`, 26.3 registry IDs, and modern Codecs. The result is neither SHA nor a file hash; it is CRC32C over the Codec representation. Unknown or unnamed components are silently omitted from the added-component hashes and, according to the module documentation, may cause the server to resynchronize the slot. The test suite fixes the hash values generated by vanilla 26.3 for dozens of components; those tests were not run in this audit.
 - RustChunk relevance: Useful for understanding item-patch transfer semantics in the newer Horizon generation, but RustChunk 1.20.1 does not need this Data Component system.
 - 1.20.1 implications: Minecraft 1.20.1 predates the Item Data Components introduced in 1.20.5; its ItemStack uses item ID/count and the traditional NBT tag. This file and the hashed-patch protocol must not be ported. Implement the legacy 1.20.1 ItemStack serialization and NBT independently. If a digest is needed, define separate, explicit semantics and an algorithm.
-- Decision: **Version-specific and unusable for 1.20.1; unnecessary for the target protocol. The ItemStack+NBT path must be rewritten.**
+- Decision: Unnecessary; Version-specific — **Version-specific and unusable for 1.20.1; unnecessary for the target protocol. The ItemStack+NBT path must be rewritten.**
 - Dependencies / cross-references: hash_ops.rs, item.rs::{Component,Stack,WirePatch,Hashed}, registry name lookup, packets/play.rs ItemStack encoders and vanilla DataComponent Codec definitions.
 - Follow-up checks: Compare the complete 1.20.1 ItemStack Codec and NBT layout against a vanilla oracle; keep all `HashedPatchMap` references outside the base-milestone scope.
 - RustChunk implementation mapping: No 1.20.1 ItemStack mapping. This file hashes modern Data Component item content; RustChunk must use the legacy 1.20.1 item ID/count/NBT path.
@@ -1874,7 +1874,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: It depends on `DataComponentExactPredicate.CODEC` and the 26.3 `DataComponentPredicate` types. NBT alone cannot distinguish a boolean from a byte, so the Shape metadata is maintained manually and must be extended when a new Codec is added. Component names must use the `minecraft` namespace; components without a persistent Codec cannot be hashed. This file has no packet framing; it is part of the hashed-item-component logic.
 - RustChunk relevance: Useful only for understanding newer-generation item predicates and the risk of confusing boolean and byte values in NBT.
 - 1.20.1 implications: Vanilla 1.20.1 predicates and ItemStack NBT do not use the 26.3 Data Components model. Do not reuse this Shape table or HashOps mapping. If 1.20.1 item or loot predicates are needed, derive them from the actual 1.20.1 Codec/serializer and data structures.
-- Decision: **Version-specific and unnecessary for the 1.20.1 core; predicate parsing for the target version must be rewritten separately.**
+- Decision: Unnecessary; Version-specific — **Version-specific and unnecessary for the 1.20.1 core; predicate parsing for the target version must be rewritten separately.**
 - Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs PREDICATE_BOOLS, HashOps, NBT Compound/Tag, DataComponentPredicate/ExactPredicate codecs.
 - Follow-up checks: When designing 1.20.1 loot/item predicates, separately verify NBT matching semantics and the distinction between exact and partial predicates.
 - RustChunk implementation mapping: No base mapping. The nested/exact Data Component predicate hash model is not the 1.20.1 vanilla item-predicate representation.
@@ -1891,7 +1891,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Dispatch is based on fixed DataComponents IDs from generation 26.3. Many decoder helpers use `Option`; malformed streams, unsupported enum values, or unnamed registry IDs become `None`. Exact Codec defaults affect the hash, so omitting the wrong value causes a mismatch. This code does not mix modern components with legacy ItemStack data; it is not a 1.20.1 path.
 - RustChunk relevance: This section shows which behavioral metadata Minecraft 26.3 stores in item components and is useful for documenting architectural differences.
 - 1.20.1 implications: In 1.20.1, item behavior and metadata primarily come from ItemStack NBT, item classes/registries, and server code, not these Data Component schemas. Do not port this Codec map into the RustChunk base. If equivalent gameplay semantics are required, implement the 1.20.1 NBT handling and item behavior independently.
-- Decision: **Version-specific and unusable for 1.20.1; the legacy implementation must be written separately.**
+- Decision: undetermined; Version-specific — **Version-specific and unusable for 1.20.1; the legacy implementation must be written separately.**
 - Dependencies / cross-references: item/hash.rs, item/hash/raw.rs, item/hash/exact.rs, HashOps, Reader, Registry Names, modern component stream codecs.
 - Follow-up checks: Extract ItemStack, FoodProperties, AttributeModifiers, and item-specific NBT independently from 1.20.1 source, then prepare separate golden vectors.
 - RustChunk implementation mapping: No base mapping. These gameplay component hashes describe the modern item component model, not 1.20.1 ItemStack metadata.
@@ -1908,7 +1908,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Both the code and its registry/test-fixture tables depend on the 26.3 ID order and Codecs. Some paths fall back to other component modules. Unknown, malformed, or registry-unresolved components yield `None`; raw bytes alone are insufficient to construct a hash. The tests cover many components but were not run in this audit. The file has 1,156 lines and was read completely in three consecutive ranges: 1–400, 401–800, and 801–1,156.
 - RustChunk relevance: Useful for understanding the reverse-engineering method from `STREAM_CODEC` to `Codec` and for maintaining golden vectors, but the modern 26.3 schema itself must not be transferred to RustChunk 1.20.1.
 - 1.20.1 implications: 1.20.1 does not have these Data Component registry/stream IDs. Copying the dispatch table or hash rules would misparse packets and item metadata. The actual 1.20.1 ItemStack/NBT serializer must be implemented for the base client. The method of extracting exact byte vectors from a vanilla oracle and rejecting trailing bytes can be retained.
-- Decision: **Version-specific and unusable for 1.20.1; the golden-vector/oracle-testing method is reusable.**
+- Decision: Adaptable; Version-specific — **Version-specific and unusable for 1.20.1; the golden-vector/oracle-testing method is reusable.**
 - Dependencies / cross-references: item/hash.rs, item/hash/gameplay.rs, item/hash/exact.rs, item/skip.rs, HashOps, Item::Component::Raw, registry name tables, vanilla 26.3 StreamCodec and persistent Codec.
 - Follow-up checks: Record the 1.20.1 vanilla StreamCodec/packet schema for ItemStack and NBT; create golden vectors for every item form and specify unknown/trailing-field behavior precisely.
 - RustChunk implementation mapping: No direct runtime mapping. The reverse-engineering and golden-vector methodology may be reused for a future version-specific serializer, but none of the modern component IDs/data are portable.
@@ -1925,7 +1925,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This file is critical because the current item-data format has no separate length prefix for each component. If a skip routine consumes the wrong number of bytes, all following components and subsequent packets become misaligned. At the same time, an unknown kind cannot safely be skipped generically and immediately produces an error. The kind-ID table, nested-component forms, holder encoding, and registry order are all specific to 26.3. The file was read completely in two consecutive ranges, 1–400 and 401–426; no standalone tests were found in this file.
 - RustChunk relevance: It provides an important defensive rule: skip unknown data only when its exact Codec length/schema is known; otherwise reject the connection instead of guessing.
 - 1.20.1 implications: Minecraft 1.20.1 predates Data Components and does not have this component registry/network format. Do not use this skip table. Implement the legacy ItemStack serializer for the target version (item registry ID, count, optional NBT) and its NBT bounds. The only reusable rule is: never guess an unknown length.
-- Decision: **Version-specific and unnecessary for 1.20.1; the legacy ItemStack decoder must be implemented separately.**
+- Decision: Unnecessary; Version-specific — **Version-specific and unnecessary for 1.20.1; the legacy ItemStack decoder must be implemented separately.**
 - Dependencies / cross-references: item.rs Component/Template/Reader, buf::Reader, horizon_world NBT, packet slot/item readers and 26.3 DataComponents registry order.
 - Follow-up checks: During the 1.20.1 packet/item audit, extract the empty/non-empty Slot paths and NBT limits/terminator from vanilla source, then write malformed-NBT tests.
 - RustChunk implementation mapping: No base mapping. The component skip table is specific to a wire schema absent from 1.20.1; unknown item data must be handled according to the 1.20.1 Slot/NBT grammar.
@@ -1976,7 +1976,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This is a stateful packet scheduler. If its baseline is not synchronized after a teleport or a packet sent through another path, a movement packet may be skipped or duplicated. The position threshold and 20-tick reminder are intended to mirror vanilla behavior and must be checked against the exact 1.20.1 code. `told_rotation` supports Starling's custom steering/free-direction feature and may not be needed by vanilla. The included test is a regression test for a changed look direction after teleport; it was not run.
 - RustChunk relevance: Highly relevant to a playable client and server joining; correct player movement and teleport handling are essential for multiplayer.
 - 1.20.1 implications: 1.20.1 has the move-position/rotation/status packet family and relative teleport flags, but names, flags, thresholds, and ordering must come from that version's protocol and client source. Reset/update the baseline precisely on login, correction/teleport acknowledgement, respawn, and dimension changes. Do not include the Free Direction extension in the base milestone.
-- Decision: **The baseline and delta-handling algorithm is adaptable; packet IDs, thresholds, and the steering extension must be validated or rewritten for 1.20.1.**
+- Decision: Adaptable — **The baseline and delta-handling algorithm is adaptable; packet IDs, thresholds, and the steering extension must be validated or rewritten for 1.20.1.**
 - Dependencies / cross-references: horizon_protocol::packets::play::{MovePlayer*,PlayerPosition,relative}, horizon_core::geometry::Vec3, local player tick/input, teleport acknowledgement path.
 - Follow-up checks: Inspect the 1.20.1 `MovePlayer` and `ClientboundPlayerPosition` dispatch paths; produce a vanilla comparison trace for the stationary 20-tick heartbeat, on-ground/collision flags, and relative velocity rotation.
 - RustChunk implementation mapping: Maps to future local-player simulation and, later, protocol-763 movement/teleport synchronization. The movement algorithm may inform simulation, but packet thresholds/flags are server-version-specific.
@@ -1993,7 +1993,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This file is a module index/aggregation root. The number and names of its modules show subsystem separation in Starling/Horizon, but do not by themselves prove the runtime architecture or boot flow. Many re-exports come from independent crates; the actual dependency graph is defined by the Cargo manifests/workspace. `forbid(unsafe_code)` applies only to this crate, not necessarily to its dependencies.
 - RustChunk relevance: Useful for deriving subsystem boundaries and avoiding a monolith in RustChunk; neither the implementation nor its public API should be copied verbatim.
 - 1.20.1 implications: RustChunk needs crate boundaries suited to the 1.20.1 core and Android platform. Keep the core protocol/registries/world model, renderer/input/platform, and game loop independent at first; add public re-exports after the APIs stabilize. This file is not tied to a particular 1.20.1 protocol detail, but its names and module contents are Horizon-specific.
-- Decision: **A reference/adaptable example for crate organization; this file contains no runtime code to port directly.**
+- Decision: Adaptable; Reference — **A reference/adaptable example for crate organization; this file contains no runtime code to port directly.**
 - Dependencies / cross-references: Cargo workspace manifests, horizon-client-render, horizon-client-core, horizon-client-input, horizon-command, horizon-items, horizon-server-files and modules declared in this root.
 - Follow-up checks: Inspect the workspace Cargo.toml files and the entry point/game loop that consumes this crate; define the minimal RustChunk crate graph before moving subsystems.
 - RustChunk implementation mapping: Maps as a crate-boundary reference for separating reusable client systems from application/platform startup. Do not assume a corresponding `client_lib` crate exists in RustChunk yet.
@@ -2027,7 +2027,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Separating the status key from localized text is more reliable because server messages may be resolved in different languages; the text fallback is limited to literal/OS errors and may be insufficient for non-English messages. Classification keys include Horizon-specific keys and authentication errors, so they must be synchronized with the exact target-version keys. Changing the address resets attempts; a kick or exhausted retry budget resets the tracker and forgets the address. Tests cover classification/localized keys, backoff, stable sessions, and address reset; they were not run.
 - RustChunk relevance: Improves connection UX and resilience to network interruptions on Android; the implementation is relatively independent of the protocol version.
 - 1.20.1 implications: Disconnect component keys and authentication flow for 1.20.1 must come from vanilla 1.20.1; do not copy 26.3 translation keys or Horizon offline-mode refusal assumptions verbatim. A new connection must not automatically loop after a kick, ban, or invalid session. Retry policy should use a reason code/component key where possible, not just text search.
-- Decision: **The backoff logic is adaptable; the classification table and 1.20.1 login/disconnect integration must be rewritten or verified.**
+- Decision: Adaptable — **The backoff logic is adaptable; the classification table and 1.20.1 login/disconnect integration must be rewritten or verified.**
 - Dependencies / cross-references: net.rs disconnect/auth result, multiplayer connection lifecycle, localized component/translation keys, server list selected address, Retry UI scheduler.
 - Follow-up checks: After auditing network/login, map all 1.20.1 disconnect reason keys, online-mode/session failures, and server-shutdown cases; verify that intentional disconnect/cancel clears the retry state.
 - RustChunk implementation mapping: Maps to future multiplayer connection recovery and UI status handling. It is not needed for local single-player world creation.
@@ -2044,7 +2044,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: State management/recovery is separated from download and resource reload and is callback-driven. If one pack fails, the remaining packs in that batch are discarded. If the first resource reload fails, previously active packs are reloaded; if recovery also fails, server packs are removed. `valid_url` is not a full URL parser and checks only the scheme prefix; SSRF, redirect, and path checks must occur in the download backend. An absent or malformed SHA-1 means there is no integrity check. `SUCCESSFULLY_LOADED`, `DECLINED`, `FAILED_DOWNLOAD`, `ACCEPTED`, `DOWNLOADED`, `INVALID_URL`, `FAILED_RELOAD`, and `DISCARDED` reflect the 26.3 model. Tests cover state transitions, recovery, pack replacement/status order, and URL/SHA-1 parsing; they were not run. The 645-line file was read completely in two ranges, 1–400 and 401–645.
 - RustChunk relevance: Highly relevant to a real client: server resource packs are also an important part of 1.20.1 multiplayer, including textures/models/sounds and server compatibility. The state machine and recovery design are valuable.
 - 1.20.1 implications: Compare resource-pack negotiation and packet-status semantics exactly with protocol 1.20.1, especially status-code enums and additions in newer versions. Audit the download backend, redirect policy, ZIP validation, cache path, and hash semantics independently. Secure downloads should enforce redirect/domain/IP checks and archive-traversal/ZIP-bomb checks; SHA-1 is only a compatibility checksum, not a publisher signature. Use the 1.20.1 resource-pack format and `server.properties` prompt behavior as the reference.
-- Decision: **The state machine and recovery design are adaptable; status codes, the download/security pipeline, and pack-priority semantics must be verified or rewritten for 1.20.1.**
+- Decision: Adaptable — **The state machine and recovery design are adaptable; status codes, the download/security pipeline, and pack-priority semantics must be verified or rewritten for 1.20.1.**
 - Dependencies / cross-references: server_packs::download submodule, ServerboundResourcePackPacket actions, servers.dat acceptTextures, pack reload scheduler, local resourcepack source and resource reload callbacks.
 - Follow-up checks: Fully audit `server_packs/download.rs` and the ZIP/resource manager; compare the packet-status enum with 1.20.1; inspect URL redirects, TLS, file size, archive traversal, SHA-1 policy, and preservation of user-pack priority.
 - RustChunk implementation mapping: Maps to future 1.20.1 server resource-pack negotiation/download/reload, using the resource manager and protocol-763 packet layer. This is later multiplayer functionality.
@@ -2061,7 +2061,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The file defines only the module surface and unsafe-code policy; it does not implement an event loop or input mapping. Actual dependencies, backends, and settings live in child modules. The unsafe-code prohibition in this crate does not extend to external dependencies or other crates.
 - RustChunk relevance: A separate input crate that is isolated from gameplay and UI is a useful pattern, particularly for maintaining Android and desktop backends.
 - 1.20.1 implications: The overall architecture is independent of the Minecraft protocol; do not assume Horizon's module names or APIs can be reused verbatim. RustChunk should define a small platform-oriented input abstraction and connect it to game actions.
-- Decision: **The crate structure is adaptable; this file itself is only an organizational reference.**
+- Decision: Adaptable; Reference — **The crate structure is adaptable; this file itself is only an organizational reference.**
 - Dependencies / cross-references: `crates/horizon-client/Cargo.toml`, `client_lib.rs` re-exports, and child modules listed above.
 - Follow-up checks: Review each module's public API, platform feature gates, and actual Android/desktop backends in the following files in this audit.
 - RustChunk implementation mapping: Maps to a future platform-neutral input crate boundary. Existing Android/Kotlin controls are application UI only; a Rust gameplay input crate is not yet present.
@@ -2078,7 +2078,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The comment explicitly identifies the model as 26.3 and excludes sprint eligibility, pose, and input lifecycle from scope. Zero movement returns before multipliers are applied. Rust `f32::min` and Java `Math.min` differ for NaN, and the implementation compensates for this. Tests cover only platform quit shortcuts; no movement-math tests are present in this file, and no tests were run.
 - RustChunk relevance: Key direction, diagonal normalization, and movement-scalar semantics are part of player input and the gameplay core; this logic should remain independent of winit and the event source.
 - 1.20.1 implications: Compare the movement algorithm with a 1.20.1 `LocalPlayer`/`Input` oracle. Movement multipliers and item-use, sneak, riding, and sprint behavior may differ in the target version. Desktop quit shortcuts are not needed on Android and should come from the platform abstraction.
-- Decision: **The vector-normalization approach and multiplier concept are adaptable; the multiplier values and lifecycle logic must be reviewed against 1.20.1.**
+- Decision: Adaptable — **The vector-normalization approach and multiplier concept are adaptable; the multiplier values and lifecycle logic must be reviewed against 1.20.1.**
 - Dependencies / cross-references: winit KeyCode/ModifiersState; LocalPlayer.modifyInput semantics; key event state provider; sprint/pose/riding lifecycle not implemented here.
 - Follow-up checks: Compare movement-input functions with vanilla 1.20.1; locate the item-use/sneaking calculations; inspect NaN/infinite input and add diagonal/analog-controller tests.
 - RustChunk implementation mapping: Maps to future normalized movement/action input feeding vanilla 1.20.1 local-player simulation; this is not an existing game-logic function in RustChunk.
@@ -2095,7 +2095,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Physical-keyboard detection relies on a numeric Android keycode allowlist and source/device metadata, so it must be validated as APIs and device drivers change. Mode behavior intentionally differs between touch laptops and phones. `held_modifiers` derives state from held keys; correctness depends on key-up/cancel/focus-loss handling. Tests cover mode transitions, physical-vs-virtual keyboard detection, and modifier aggregation; they were not run.
 - RustChunk relevance: Directly relevant to Galaxy/Android touchscreens, physical keyboards, and gamepads. Mode detection can select the touch overlay and prevent OS navigation keys from being mistaken for typing.
 - 1.20.1 implications: Independent of the protocol, but it must be reviewed in the RustChunk Android backend against the Android NDK/Java key-event codes and the selected winit integration. Do not copy the current allowlist without checking the platform SDK; handle focus loss and key cancellation in the global lifecycle.
-- Decision: **The mode-switching design and modifier reconstruction are adaptable; the Android keycode/source allowlist must be validated on target devices.**
+- Decision: Adaptable — **The mode-switching design and modifier reconstruction are adaptable; the Android keycode/source allowlist must be validated on target devices.**
 - Dependencies / cross-references: winit KeyCode/ModifiersState; `crate::gamepad::android::from_pad`; Android key event source/device/scan-code mapping; touch overlay and keyboard event dispatch.
 - Follow-up checks: Inspect the Android input-event bridge, key-up/focus-loss cleanup, device-specific scan codes, and real HID/gamepad devices.
 - RustChunk implementation mapping: Maps to a future Android/desktop input-mode adapter that distinguishes touch, keyboard/mouse and controller sources. No equivalent native Rust mode manager is present yet.
@@ -2112,7 +2112,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Retaining one hit result for the whole tick is important: multiple clicks in a single tick should not acquire a different crosshair target after a block changes. Distinguishing active item use from a quick click depends on exact start/release lifecycle behavior. The Attack → Use → Pick order, discarding input during active use, and `continue_attack` after an instant attack are significant. Counters are `u32`, and incrementing on press can overflow during an input storm; in debug builds this may panic. Tests model five scenarios involving click order, use release, delay/digging, and a shared hit result; they were not run.
 - RustChunk relevance: Very important for mobile and desktop: short taps may occur between ticks and must not be lost. Separating input-edge buffering from the gameplay tick is a suitable pattern for RustChunk.
 - 1.20.1 implications: Comments and names refer to 26.3; behavior must be compared with 1.20.1 `Minecraft.handleKeybinds`, `startUseItem`, `MultiPlayerGameMode`, and hit-result logic. This is primarily gameplay lifecycle logic rather than wire protocol, but its outcomes become interaction/break/use packets; ordering and cancellation must be tested against a 1.20.1 server.
-- Decision: **Tick buffering and a stable hit result are adaptable patterns; lifecycle behavior and edge cases must be rewritten/validated against 1.20.1 code.**
+- Decision: Adaptable — **Tick buffering and a stable hit result are adaptable patterns; lifecycle behavior and edge cases must be rewritten/validated against 1.20.1 code.**
 - Dependencies / cross-references: Minecraft.handleKeybinds, MultiPlayerGameMode startAttack/startDestroyBlock/releaseUsingItem, hitResult/pick lifecycle, screen set/release key mappings, player item-use state.
 - Follow-up checks: Match the exact vanilla 1.20.1 input-tick order; test overflow/capacity, focus loss, touch cancellation, and multiple taps before a tick; inspect server acknowledgements for break/use synchronization.
 - RustChunk implementation mapping: Maps to a future tick-boundary interaction queue for attack/use/pick actions, connecting input edges to 1.20.1 hit results and game-mode actions.
@@ -2146,7 +2146,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The `MAPPINGS` table uses 26.3 defaults and categories and includes newer actions (such as friends/quickActions and debug bindings); it must be compared with 1.20.1 `Options.keyMappings`. `KEYS` is only a subset of key names. An unknown mapping returns `None` from `key_code`, and `translate` passes through a physical `KeyCode` when no name exists. `mouse_button` decodes only Left/Right/Middle/Back/Forward, while `mouse_name` also produces names for `Other`; round-tripping buttons 6+ is not guaranteed. `set` accepts only registered mappings but does not validate the key string. Reassigned default keys become inert, and multiple mappings can trigger from one physical input. Tests cover rebinding, conflicts, default-action removal, container priority, and display names; none were run.
 - RustChunk relevance: Highly relevant to keyboard/mouse/touch/gamepad action mapping and preserving vanilla gameplay semantics when users customize keybinds. Normalizing input to default action IDs can keep game logic independent of physical keys.
 - 1.20.1 implications: Extract the mapping catalogue, category order, toggles, mouse behavior, and persistence schema from 1.20.1 `Options`. Feed vanilla game code with logical actions rather than direct physical keys. Android touchscreen buttons should produce the same action identifiers, not synthetic key names inserted into OS input.
-- Decision: **The KeyBinds abstraction and physical-key-to-action translation are adaptable; MAPPINGS/KEYS and container behavior must be regenerated or adapted for 1.20.1.**
+- Decision: Adaptable — **The KeyBinds abstraction and physical-key-to-action translation are adaptable; MAPPINGS/KEYS and container behavior must be regenerated or adapted for 1.20.1.**
 - Dependencies / cross-references: winit KeyCode/MouseButton and KeyEvent; horizon_client_core::key_display; SDL/translation key names; Options.keyMappings ordering; screen container hotbar checks; debug_keys physical key handling.
 - Follow-up checks: Compare the exact mapping list with 1.20.1; test keyboard layouts, persistence of unknown keys, other mouse-button IDs, duplicate bindings, focus loss, and Android touch-action routing.
 - RustChunk implementation mapping: Maps to future keybind defaults, persistence and action translation in the input/settings layer. Existing app settings are not a replacement for vanilla 1.20.1 game keybinds.
@@ -2163,7 +2163,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: In this model, opening a screen blocks key presses but still accepts releases to prevent stuck keys. Toggle state is controlled by `shouldRestore` and keyboard origin. `pad_toggled` is a Horizon extension that makes controller sneak behave as a toggle even when the option is disabled. `ToggleKeys::key` also increments click count for Repeat, so winit repeat behavior must be aligned with vanilla event handling. `click_count` is an unsaturated `i32` and can overflow under a large event burst. Tests model screen lifecycle, toggle/hold, pad toggling, and respawn; they were not run.
 - RustChunk relevance: Important for touch, gamepad, and keyboard controls. The state model prevents sneak/use/attack from remaining stuck when a menu opens. Physical events can be converted into key-action state, keeping the gameplay layer independent of hardware.
 - 1.20.1 implications: Compare vanilla 1.20.1 `ToggleKeyMapping` and `KeyMapping` behavior with the target source; do not assume the four mappings or pad-specific toggle extension are part of 1.20.1. On Android, pointer cancellation/focus loss and controller disconnection must also produce Release/cleanup events.
-- Decision: **The base state machine is adaptable; pad toggling and event/screen semantics must be aligned with the 1.20.1 and Android implementations.**
+- Decision: Adaptable — **The base state machine is adaptable; pad toggling and event/screen semantics must be aligned with the 1.20.1 and Android implementations.**
 - Dependencies / cross-references: Options toggleKeySneak/toggleKeySprint/toggleKeyAttack/toggleKeyUse; KeyMapping and ToggleKeyMapping; input event dispatch; winit keyboard/mouse events; controller toggle-sneak extension.
 - Follow-up checks: Match the exact 1.20.1 `KeyMapping`/`ToggleKeyMapping`; inspect repeat semantics, focus loss, pointer cancellation, controller disconnection, and click-counter bounds.
 - RustChunk implementation mapping: Maps to future held/click/toggle key state management across screens, respawn and Android focus changes.
@@ -2180,7 +2180,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This module reconciles OS-level modifier state with the programmatically maintained physical-key set; it explicitly handles the right key remaining held when the left key is released. `reconcile` checks the current `KeyBinds` binding so that losing SHIFT does not accidentally release sneak when sneak has been rebound to another key; pad-held state and toggle options are also preserved. `hold`/`restore` snapshot an aggregate bit; if an independent modifier event arrives between them, `restore` can reinstate stale state. This API should therefore be used for short synchronous clicks or refined with a more precise state token. Tests cover left/right modifiers, synthetic hold/restore, and lost-release/rebinding/pad cases; they were not run.
 - RustChunk relevance: Useful for Android modifier reconstruction and macro/controller-generated input. Preventing sticky modifiers and accidental sneak/sprint release is important for gameplay.
 - 1.20.1 implications: Check `ToggleKeys` semantics against the target version; reconciliation and the physical-key set are primarily platform-input concerns. On Android, where winit modifier events may be incomplete, use actual key-down/up events and focus loss as the source of truth rather than the bit field alone.
-- Decision: **Modifier reconciliation and paired-key logic are adaptable; snapshot restoration must be synchronous/serialized and tested against the 1.20.1 key lifecycle.**
+- Decision: Adaptable — **Modifier reconciliation and paired-key logic are adaptable; snapshot restoration must be synchronous/serialized and tested against the 1.20.1 key lifecycle.**
 - Dependencies / cross-references: winit ModifiersState/KeyCode; keybinds KeyBinds; keymapping ToggleKeys; Android key event bridge; controller agent/touch synthesized input.
 - Follow-up checks: Test interleaving of real modifier events during hold/restore, IME/Android modifier state, focus loss, and key cancellation; inspect keybindings rebound to Shift/Control themselves.
 - RustChunk implementation mapping: Maps to the future input platform adapter's modifier-state reconciliation, particularly synthetic touch/controller modifiers versus physical keyboard state.
@@ -2197,7 +2197,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: implementation is explicitly version 26.3. The sensitivity multiplication uses Java float constants widened to f64 to reproduce exact rounding; yaw/pitch are converted back to f32 before turn. smooth camera uses elapsed frame time and retains residual movement across later frames. Scroll fraction handling and direction reset matter for high-resolution touchpads. next_selection repeatedly wraps selected index but assumes limit > 0; limit 0 would loop indefinitely and should be guarded at call boundary or helper. mouse_position_after_grab_change divides by scale without checking zero/non-finite scale. macOS Control-click state is captured at press and retained to release even if Control key state changes. Tests cover vanilla sensitivity formula, scoping/inversion, inverse motion, cinematic smoothing, fractional scroll, pointer centering and Control-click. Tests not run.
 - RustChunk relevance: valuable for accurate camera and scrolling on desktop, and for using relative deltas/virtual mouse-look from touch/gamepad/agent input; sensitivity consistency impacts multiplayer aiming and view direction.
 - 1.20.1 implications: all sensitivity/cinematic behavior should be compared to the 1.20.1 MouseHandler/Entity.turn source rather than assumed compatible. Android generally uses touch-look rather than OS mouse grab; keep a platform-independent accumulated-delta API and place sensitivity/gesture handling in platform adapter. Pointer center semantics only apply when a real pointer grab changes.
-- Decision: **core mouse delta aggregation, sensitivity curve and scroll accumulation are adaptable; 1.20.1 constants and platform-specific grab semantics require verification**.
+- Decision: Adaptable — **core mouse delta aggregation, sensitivity curve and scroll accumulation are adaptable; 1.20.1 constants and platform-specific grab semantics require verification**.
 - Dependencies / cross-references: winit pointer events, MouseHandler/Entity.turn behavior, sensitivity/smoothCamera/invertMouseX/invertMouseY/scoping options, spectator abilities, window DPI scale and macOS Control-click option.
 - Follow-up checks: verify 1.20.1 exact mouse sensitivity and smoothing; guard positive scroll limit and nonzero scale; compare Android touch-look conversion and DPI/rotation with game coordinate space.
 - RustChunk implementation mapping: Maps to future camera look/scroll input and desktop pointer handling; Android touch-look should feed a common camera-action API rather than assume desktop pointer grab.
@@ -2214,7 +2214,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The file explicitly targets 26.3. `FramerateLimiter` applies the cap only for FPS values below 260; dividing the frame period by framerate assumes a positive limit. `gui_scaled_size` and `scaled_pos` assume positive GUI scale/screen dimensions; zero scale would divide by zero. With Unicode enforcement enabled, `calculate_scale` may exceed `max_scale` by adding one to an odd result; this matches the current test but must be checked against target vanilla semantics. `VideoMode.read` manually parses JSON by searching property names and does not fully validate JSON grammar, duplicate keys, or complete input; a serde JSON parser would be safer. `from_winit` approximates total bit depth by dividing it among channels. `FramerateLimiter` has two modes: vanilla-like sleep/spin and grid pacing. `SleepingClock` replaces spinning with 50µs sleeps to reduce busy CPU use, with different granularity/latency. Extensive tests cover scaling, fullscreen transitions, FPS caps, timer overshoot, grid recovery, VSync, and monitor caching; they were not run.
 - RustChunk relevance: FPS pacing, GUI scaling, and pointer scaling matter for Android performance and responsiveness. Grid deadlines may prevent frame-pacing drift, but the sleep/spin trade-off must be measured on ARM mobile devices and Mali GPUs.
 - 1.20.1 implications: Window/MouseHandler/Options values must be compared with 1.20.1; there is no direct protocol dependency. Use the 1.20.1 game loop and frame limiter as the oracle, while RustChunk may build an independent Android timing backend. The mobile backend must account for display refresh rate, actual surface present mode, app background lifecycle, and battery/thermal state. Exclusive fullscreen and monitor switching differ substantially or are unavailable on Android.
-- Decision: **GUI scaling and throttling concepts are adaptable; the FPS limiter needs Android-specific design and measurement; fullscreen/video-mode implementation is primarily desktop-only and must be adapted or omitted.**
+- Decision: Adaptable — **GUI scaling and throttling concepts are adaptable; the FPS limiter needs Android-specific design and measurement; fullscreen/video-mode implementation is primarily desktop-only and must be adapted or omitted.**
 - Dependencies / cross-references: winit Window/MonitorHandle/VideoModeHandle/Fullscreen, renderer surface capabilities, game loop end_frame, Options GUI scale/VSync/FPS cap/fullscreen, embedded PNG theme asset, system clock/sleep and thread interruption.
 - Follow-up checks: validate positive limits/scales and strict JSON; measure CPU/battery/frame pacing on ARM64 Android; confirm winit/GPU present modes for GLES/Vulkan; verify 1.20.1 scale and throttle constants; skip desktop fullscreen assumptions on Android.
 - RustChunk implementation mapping: Maps to future Android display/window abstraction, GUI scale and frame-pacing controls. Current app Activity is not the Starling window/game loop implementation.
@@ -2231,7 +2231,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The file explicitly models 26.3 input/text and clipboard behavior. The Android backend uses `OnceLock` platform-function hooks, which cannot be replaced after being set. Loss of the desktop clipboard causes a system-backend reset; the copied fallback text is retained, but `get` uses it only when the system object is unavailable. `ContentNotAvailable` returns an empty string directly. `filter_text` removes newlines from chat but permits them in multiline fields; it does not remove C1 characters (including U+0080). `strip_formatting` removes only valid formatting codes and preserves §z. `append_limited` returns true whenever room remains, even if filtering makes the input empty or no character is appended; this may violate a “value changed” return contract. `AppendSelection` invalidates its selection using a snapshot of the entire value. Tests cover shortcuts/AltGr, layout fallback, filtering, edit fields, append-only behavior, and rejected paste; they were not run.
 - RustChunk relevance: An Android clipboard bridge is needed for copy/paste. Chat sanitization, multiline book/sign fields, and key shortcuts also matter for a complete client. A platform-independent clipboard abstraction is appropriate.
 - 1.20.1 implications: Extract the chat-character allowlist, formatting-code behavior, shortcut conditions, and sign/book constraints from 1.20.1. RustChunk on Android should use the native clipboard API with appropriate lifecycle/permissions; a static hook must not make UI calls from an invalid thread. Chat filtering must not over-restrict valid Unicode player text or protocol chat-component payloads.
-- Decision: **The Clipboard trait and append-selection pattern are adaptable; filter/chat/shortcut rules and the Android bridge must be reviewed against 1.20.1 and the Android platform.**
+- Decision: Adaptable — **The Clipboard trait and append-selection pattern are adaptable; filter/chat/shortcut rules and the Android bridge must be reviewed against 1.20.1 and the Android platform.**
 - Dependencies / cross-references: winit Key/PhysicalKey; arboard desktop clipboard; Android platform clipboard callbacks; horizon_client::platform::set; EditBox/TextFieldHelper/ChatFormatting/StringUtil and sign/book text input.
 - Follow-up checks: validate clipboard callbacks thread affinity and lifecycle; check append_limited return contract; test Unicode codepoint/UTF-16/byte cursor behavior, multi-line filters and 1.20.1 text length rules.
 - RustChunk implementation mapping: Maps to a future clipboard/text-editing interface between Android APIs and in-game chat/book/sign fields. Existing UI clipboard code, if any, must be traced before reuse.
@@ -2248,7 +2248,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The file states that controller support is a Horizon feature and vanilla 26.3 itself has no gamepad input; the entire feature must not be attributed to vanilla. UI glyphs and ACTIONS layout, defaults, pad-only controls, Steam Deck keyboard detection, server stick modes, and rumble/adaptive triggers are extensions. `java_move_vector` selects the nearest of eight directions using thresholds so movement on Java servers approximates boolean-direction packets; this differs from free analog movement and is selected by ServerStick mode. The settings parser is tolerant and defaults unknown/malformed values; it clamps floats to finite ranges. Radial deadzone normalization uses denominator `(1-deadzone)` and the public API assumes `deadzone<1`; `PadSettings` clamps it to at most 0.9, but direct callers must preserve this invariant. `PadState.merge` sums/clamps controller sources; edge hysteresis prevents trigger chatter. UI focus navigation for target rectangles uses a detailed geometry algorithm. Tests cover mapping, persistence, deadzone, edge hysteresis, menu focus, settings, rumble, lightbar, trigger effects, and movement sectors; none were run.
 - RustChunk relevance: Controllers/gamepads can be a second input layer on Android/desktop. The state/edge/deadzone/action abstraction and eight-way Java movement are worth studying. Even if the first release supports only touch, an action-based API allows controllers to be added later without rewriting gameplay.
 - 1.20.1 implications: Vanilla 1.20.1 has no built-in gamepad support; if added, this subsystem should remain a separate client-side input adapter. Network movement packets must still follow protocol 1.20.1; analog-stick input should map to that version's PlayerInput/command directions. Java eight-way conversion and server-stick options must match 1.20.1 client/server behavior and prediction, not introduce a custom protocol. Item-use, attack, sneak/sprint, hotbar, and focus events must connect to the same action IDs/gameplay tick.
-- Decision: **PadState/Edges/action-map architecture and radial deadzone are adaptable; layout, tuning, navigation, and haptics should be rewritten/ported as optional features, not required parts of the 1.20.1 core.**
+- Decision: Adaptable; Optional/future — **PadState/Edges/action-map architecture and radial deadzone are adaptable; layout, tuning, navigation, and haptics should be rewritten/ported as optional features, not required parts of the 1.20.1 core.**
 - Dependencies / cross-references: gilrs/SDL controller layout (documented in module), android submodule, horizon-controller.txt, horizon_dualsense optional feature, KeyBinds/KeyMapping/KeyboardInput, Player movement packet/remote prediction, UI focus rectangles, health/dimension/item state.
 - Follow-up checks: If gamepad support is added to RustChunk, choose gilrs or the Android native event path, normalize HID axis maps, and handle disconnect `release_all` and focus loss. Validate radial-deadzone boundaries, analog-vs-eight-direction server behavior, frame-time units, rumble limits, and DualSense firmware behavior on real hardware.
 - RustChunk implementation mapping: Optional future controller input backend; keep it separate from the first touchscreen/keyboard path. Do not make gamepad support a prerequisite for the native 1.20.1 core.
@@ -2265,7 +2265,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Source classification and Android keycode values are platform-specific and must be matched to the Android SDK/NDK event API and the selected winit version. The AndroidPad stick-rest threshold is a noise filter applied before the radial gameplay deadzone. Triggers reported as keycodes are converted to full axis values and removed from the button bitset so the main Edges layer can apply trigger hysteresis. Multiple axes (LTRIGGER vs BRAKE, RTRIGGER vs GAS) are merged by taking the maximum. This file has no disconnect/remove_device/clear-state API in `AndroidPads`; if the event bridge does not report device removal elsewhere, the last buttons/axes can remain stale. The pad list is not pruned and the number of devices is not capped. Tests cover key mapping, source classification, stick axes, hat, trigger mapping, and last-active-pad switching; they were not run.
 - RustChunk relevance: Highly relevant to physical Android controllers and conversion of input into a common PadState. This pattern can route touch emulation and gamepads through one action layer.
 - 1.20.1 implications: This Android backend is not protocol-specific; its PadState must feed the movement/action semantics of the 1.20.1 game. Verify InputDevice constants against the target API level (Android 13/API 33 on the test device) and winit event handling. Explicitly handle controller disconnection, app pause/resume, multiple-controller selection, and gamepad-source masquerading.
-- Decision: **The common-state adapter structure is adaptable; Android key/source codes and noise/takeover thresholds require device testing and a complete disconnect lifecycle.**
+- Decision: Adaptable — **The common-state adapter structure is adaptable; Android key/source codes and noise/takeover thresholds require device testing and a complete disconnect lifecycle.**
 - Dependencies / cross-references: Android InputDevice.SOURCE_GAMEPAD/SOURCE_CLASS_JOYSTICK; KeyEvent.KEYCODE_BUTTON_*; MotionEvent AXIS_X/Y/Z/RZ/HAT/LTRIGGER/RTRIGGER/BRAKE/GAS; gamepad::PadState/Edges/PadSettings; horizon-android event bridge and game/pad/android.rs poller.
 - Follow-up checks: Inspect disconnect/remove-device and pause/resume paths; validate HID axis maps and keycodes on several Android controllers; verify that zeroed axes are delivered to the active pad on focus loss and controller removal.
 - RustChunk implementation mapping: Maps to a future Android `InputDevice`/`MotionEvent` adapter feeding the common input-action state. This is not implemented by the current JNI downloader/installer crate.
@@ -2350,7 +2350,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: This file largely duplicates the keyboard state and navigation in `osk.rs`, but adds touch hit-testing and KeyCode output for the Android control-configuration editor. Touch geometry depends on fixed drawing constants; changes to UNIT/GAP/KEY_H or layout dimensions must be reflected in hit-testing at the same time. The keyboard is fixed QWERTY/Latin and has no IME/native composition or locale-specific input. `Output::Key(KeyCode)` provides only hardware-key identity and does not determine character text; the caller must interpret it in the correct editor context. The header explicitly attributes the adaptation to Horizon Android/MIT; any code transfer must comply with LICENSE and THIRD_PARTY_NOTICES. Tests cover touch rectangles, row width, navigation, shift/caps, symbol mode, and output mapping; they were not run.
 - RustChunk relevance: Relevant to the Android control/layout editor and keybind remapping, not core gameplay. It could provide a fallback for selecting physical/virtual keys in an editor; Android IME remains more suitable for free text entry.
 - 1.20.1 implications: This layer is protocol-agnostic and does not change the 1.20.1 packet stack. RustChunk may keep a simple keyboard overlay for the touch-control editor, but it must not replace the system IME or locale-aware text input. KeyCode mappings must match the winit/platform adapter and 1.20.1 KeyMapping names.
-- Decision: **Optional for the Android control editor; touch hit-testing/output design is adaptable, but the keyboard layout is duplicated and Latin-only. Attribution/license compliance is required.**
+- Decision: Adaptable; Optional/future — **Optional for the Android control editor; touch hit-testing/output design is adaptable, but the keyboard layout is duplicated and Latin-only. Attribution/license compliance is required.**
 - Dependencies / cross-references: winit::keyboard::KeyCode; gamepad::{Button,GlyphStyle}; android_control_theme::{Ui,Face,color}; Android control editor text/key binding fields; LICENSE and THIRD_PARTY_NOTICES.md.
 - Follow-up checks: Inspect consumers of Output::Key and Text; unify duplicated OSK logic in the RustChunk design; validate geometry values against actual touch-event scaling; review license attribution before copying.
 - RustChunk implementation mapping: Optional future control-layout editor only; a duplicate Latin-only virtual keyboard is not required for the native engine and must not replace Android IME.
@@ -2367,7 +2367,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The function uses byte indices from `char_indices`, so slicing is safe at UTF-8 boundaries; tests cover mixed Latin/Cyrillic/CJK/emoji text. Ellipsis width is computed using the final actual prefix character so kerning is respected. With negative/very small width and no prefix that fits with an ellipsis, the result is empty. This is a generic text-fitting helper only; it does not perform complex shaping, ligatures, bidi, grapheme-cluster handling, or line wrapping, and relies on the `advance` callback for actual glyph metrics. The header attributes an MIT adaptation from Horizon Android; attribution and notice must be retained. Tests compare it with the old quadratic algorithm and cover Unicode/kerning and callback counts; they were not run.
 - RustChunk relevance: Useful for fitting UI labels, option descriptions, and resource names into limited mobile widths; the algorithm is simple and independent of the Minecraft protocol.
 - 1.20.1 implications: This has no packet or gameplay dependency. Use RustChunk's own font metrics/rendering backend for `advance`; for right-to-left text, shaping, or grapheme-level truncation, use a real text-layout engine rather than this helper.
-- Decision: **The linear helper is adaptable for simple labels; it is not a replacement for a text-layout engine for rich/RTL text or shaping. MIT attribution is required.**
+- Decision: Adaptable — **The linear helper is adaptable for simple labels; it is not a replacement for a text-layout engine for rich/RTL text or shaping. MIT attribution is required.**
 - Dependencies / cross-references: font advance callback; UI catalog description rendering; UTF-8 Rust str slicing; THIRD_PARTY_NOTICES.md and LICENSE.
 - Follow-up checks: Inspect the caller/source font metrics; in RustChunk, ensure truncation occurs at grapheme boundaries for combined emoji and RTL text.
 - RustChunk implementation mapping: Maps only to simple label truncation in future mobile settings/control UI. It is not a substitute for RustChunk's text shaping, bidi or grapheme-aware layout.
@@ -2384,7 +2384,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The file is tightly coupled to `PROTOCOL_VERSION` and Horizon protocol 26.3 packet schemas; status/configuration/play/login packet IDs and registry models cannot be retained for 1.20.1. Friend relay/tunnel, Horizon custom content identity, mod_list, quiet commands, mod_net, the far-LOD channel, dialogs/code-of-conduct, and transfer/cookies are modern or Horizon-specific and must be omitted from the vanilla base or deferred to a separate phase. The most valuable reusable architecture is the network thread + typed Event channel + single writer lock + game-thread event consumption. `Session::start` discards thread-spawn errors with `.ok()`; if the thread is not created, Session returns without reporting a disconnect and without an active connection. The Event channel uses unbounded `mpsc::channel`; if game-thread polling stops or packets flood in, the queue can grow. `send` drops packets while configuring; real lifecycle call sites must guarantee that required packets are not lost during this interval. Play packet-decode errors become `DecodeError` and the loop continues; for 1.20.1, only genuinely skippable packets should be ignored, while malformed critical packets should disconnect. The fixed read timeout is 30 seconds, explained in relation to keep-alive cadence; connect timeout is 10 seconds. TCP host resolution/SRV is done in the Connection layer, except for friend relay where the endpoint is already concrete. `Reason::component/tag` extracts a translation key separately from the text so reconnect classification is language-independent. Round-trip ping is measured only after a Status response; `ping_legacy` uses the legacy 0xFE/MC|PingHost packet and reads the UTF-16 response length as a u16. `json_text` and component flattening produce plain text, not rich chat rendering. The file contains many tests for status/login/keepalive/configuration/transfer/cookies/reconnect/auth/drop behavior; none were run.
 - RustChunk relevance: This is the most important networking-architecture reference for a real client. Thread ownership, separation of network I/O from the game thread, typed events, serialized connection writing, immediate keep-alive, ping ordering, compression/encryption, and disconnect classification are essential to a stable multiplayer client.
 - 1.20.1 implications: Rewrite the state machine and packet codecs entirely for Minecraft Java 1.20.1. **Protocol 763 has no separate Configuration connection state in 1.20.1; after Login it enters Play directly.** Registry/dimension data uses the older Login/Join Game structures and Play messages from that version, so do not import the Configuration state machine or packets introduced in 1.20.2 and later. Extract packet IDs, Login Start, Encryption Request/Response, Plugin Request/Response, Set Compression, Login Success, Join Game, Resource Pack, KeepAlive/Ping, Player Info, and Respawn/Dimension exactly from 1.20.1. 1.20.1 predates the newer Data Components system and has a different ItemStack/NBT model. First implement vanilla online/offline Handshake/Status/Login/Play without a Configuration state, friend relay, Horizon channels, or content mods; Forge remains deferred. Online-mode login requires a valid session service; an offline UUID is only for servers configured for offline mode and does not create Microsoft authentication or entitlement. On Android, verify socket read/write timeouts, cancellation, DNS/SRV, background lifecycle, and thread shutdown on real ARM64 hardware.
-- Decision: **Thread/event/writer architecture and the high-level state-machine structure are adaptable; all wire packet IDs/schemas and 26.3 registry/auth extensions must be rewritten for 1.20.1.**
+- Decision: Adaptable — **Thread/event/writer architecture and the high-level state-machine structure are adaptable; all wire packet IDs/schemas and 26.3 registry/auth extensions must be rewritten for 1.20.1.**
 - Dependencies / cross-references: horizon_protocol connection/packets/crypto/rsa/registry/text/servers; horizon_auth AuthSession/session join; horizon_friends relay; content_identity and mod_list custom channels; lod_net; reconnect reason classifier; client event polling and game-thread packet handling; resource-pack/dialog/code-of-conduct UI.
 - Follow-up checks: Audit `AuthSession`/`join_server` and DNS/SRV/Connection connect methods; extract exact 1.20.1 handshake/login encryption/compression/keep-alive/registry/resource-pack packet vectors (without assuming a Configuration state); fix spawn-failure handling and use a bounded event queue; define fatal-versus-skippable packet-decode policy; test reconfiguration races, Android disconnect/cancellation, and thread shutdown.
 
@@ -2931,7 +2931,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Architecture is useful, but each fix/key/schema targets 26.3. A read hook converts older ItemStacks to Data Components at a later key, which must never run in a live 1.20.1 client. update_chunk_to attaches temporary context and removes it after normal return; panic cleanup is not guaranteed. Equal-key fix order matters. OLDEST_SUPPORTED=-1 is not proof every old world is recoverable.
 - RustChunk relevance: Useful only if older-save import/upgrade is required; not needed for connecting or loading a current 1.20.1 world.
 - 1.20.1 implications: 1.20.1 is the target schema, not 26.3. Any migration must implement the chain to DataVersion 3465 with correct schemas; never apply 26.3 component/registry transformations to 1.20.1 saves.
-- Decision: Reference for migration architecture only; current 26.3 fix pipeline is unsuitable for base and must be independently versioned if legacy imports are required.
+- Decision: undetermined; Reference — Reference for migration architecture only; current 26.3 fix pipeline is unsuitable for base and must be independently versioned if legacy imports are required.
 - Dependencies / cross-references: schema; dynamic NBT helpers; block_state_data/chunk_flatten/chunk_leaves; fix modules; items; files; world_upgrader; NBT Tag; DATA_VERSION.
 - Follow-up checks: Define import version matrix; obtain exact 1.20.1 DFU chain; test unknown-field preservation/idempotence and panic/I/O recovery; separate options migrations from world data.
 - RustChunk implementation mapping: Not needed in live client path; future offline world/data migration tool only.
@@ -2999,7 +2999,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Tests document migrations to 26.3, not correctness of the live 1.20.1 serializer. Component output is unsuitable for 1.20.1 runtime. The limited cases do not prove full DFU parity. Tests were read but not run.
 - RustChunk relevance: Useful test-design pattern: compact SNBT fixtures and assertions over nested fields make migrations auditable.
 - 1.20.1 implications: Preserve 1.20.1 ItemStack/Level structures. Only an optional migration tool should apply a chain whose target is 1.20.1.
-- Decision: Reference-only for migration-test structure; expected 26.3 output is not a 1.20.1 oracle.
+- Decision: undetermined; Reference — Reference-only for migration-test structure; expected 26.3 output is not a 1.20.1 oracle.
 - Dependencies / cross-references: datafix/mod.rs; dynamic helpers; SNBT parser; DataVersion 3465 fixture; ItemStack/Level/block-state fixes.
 - Follow-up checks: Create no-op round-trip fixtures from genuine 1.20.1 worlds; compare migration outputs with target-version vanilla DFU.
 - RustChunk implementation mapping: Methodology for future world/datafix_1_20_1 tests only; not live runtime conversion.
@@ -3213,7 +3213,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Lint configuration only; it does not provision runners or secure them. Its comment says the runner holds the maintainer's Minecraft files, making runner trust and workflow routing security-sensitive.
 - RustChunk relevance: Low unless RustChunk introduces self-hosted GitHub Actions runners; otherwise GitHub-hosted runners avoid this extra boundary.
 - 1.20.1 implications: Never schedule untrusted fork code on a runner containing local 1.20.1 files, credentials or signing material.
-- Decision: Reference; Optional/future — Reference-only unless a self-hosted runner is introduced; rewrite labels and security assumptions.
+- Decision: undetermined; Reference; Optional/future — Reference; Optional/future — Reference-only unless a self-hosted runner is introduced; rewrite labels and security assumptions.
 - Dependencies / cross-references: actionlint; workflows using runs-on labels; GitHub runner configuration and access policy.
 - Follow-up checks: Validate the config with the chosen actionlint version; inspect workflow triggers and runner groups before adding private runners.
 - RustChunk implementation mapping: Optional CI lint configuration only; no client code mapping.
@@ -3332,7 +3332,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: A simple revocable allowlist, but its security depends on consuming scripts correctly enforcing membership and on protected review for changes. This file does not implement identity verification, parsing, authorization or audit logging.
 - RustChunk relevance: Only relevant if RustChunk adds repository moderation commands; it is not a Minecraft player/account allowlist.
 - 1.20.1 implications: No gameplay or protocol impact. Keep automation identities distinct from Minecraft accounts and server operator permissions.
-- Decision: Reference; Optional/future — Reference-only for possible future repository moderation tooling; no client need.
+- Decision: undetermined; Reference; Optional/future — Reference; Optional/future — Reference-only for possible future repository moderation tooling; no client need.
 - Dependencies / cross-references: docs/release-flow.md; tools/ci/nightly_set.py; tools/ci/triage_command.py; CODEOWNERS; GitHub issue/PR permission scopes.
 - Follow-up checks: Inspect the consumer scripts for exact matching, bot handling, pause/revoke behavior and audit output; verify this file is owner-protected.
 - RustChunk implementation mapping: Optional repository automation config only; never part of Android app or game login.
@@ -3621,7 +3621,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Raw values are consistent with the README medians, but there is no independent fixture SHA, tested source commit or hardware/toolchain metadata. It is not a whole-client startup/FPS result.
 - RustChunk relevance: Useful raw-sample/report schema only, not a RustChunk target.
 - 1.20.1 implications: Data belongs to Starling 26.3 and a synthetic model document.
-- Decision: Reference; Adaptable — Raw timings agree with README but lack independent fixture/source/hardware provenance.
+- Decision: adaptable; reference; version-specific — Raw timings agree with README but lack independent fixture/source/hardware provenance.
 - Dependencies / cross-references: Companion README/generator; tested parser implementations; benchmark runner.
 - Follow-up checks: Any RustChunk report should include fixture/source hashes, commit, device, toolchain, cache state and independently recalculated summaries.
 - RustChunk implementation mapping: Potential future RustChunk benchmark artifact in benchmarks/ for 1.20.1 resource parsing; current engine does not consume it.
@@ -3679,7 +3679,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: RD16/RD32 drawn-section counter is at or near zero in some scenes, so it is not yet a reliable visual-completeness metric. No repeated confidence interval data.
 - RustChunk relevance: Historical before-state template for renderer regression tests only.
 - 1.20.1 implications: 26.3 RTX4080/Vulkan desktop results do not establish a 1.20.1 or phone baseline.
-- Decision: Reference; Version-specific
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific
 - Dependencies / cross-references: tools/graphics_bench.py; Horizon baseline commit; renderer/GPU metrics.
 - Follow-up checks: Pair only with after-4080 after checking identical inputs/settings and counter meanings; repeat with source and driver pinned.
 - RustChunk implementation mapping: Future RustChunk baseline/after pair after a native renderer exists.
@@ -3696,7 +3696,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: RD16/RD32 drawn-section counts are around one; this cannot be treated as a visual-completeness check. It is a historical software-render snapshot, not a physical GPU measurement.
 - RustChunk relevance: Reference-only for host software-renderer regression methodology.
 - 1.20.1 implications: Linux llvmpipe cannot predict Android Mali-G52 or 1.20.1 rendering.
-- Decision: Reference; Version-specific
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific
 - Dependencies / cross-references: graphics benchmark harness; Mesa software Vulkan; Horizon renderer baseline.
 - Follow-up checks: Check counter definitions and matching after-lavapipe conditions; preserve CPU timings and repeat runs.
 - RustChunk implementation mapping: Optional host software-renderer baseline after RustChunk renderer exists.
@@ -3705,7 +3705,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 
 ### 174. `benchmarks/model-state-parse-2026-10-14.md`
 - Source repository/ref: starling-client/starling / starling; snapshot `5432370d573642041585c69b40fb045b27133488`.
-- Source SHA: `15a50e8ff7ece5a567909f18bd76d9ed5777793c`c`
+- Source SHA: `15a50e8ff7ece5a567909f18bd76d9ed5777793c`
 - Size: 69 logical lines; 3,671 bytes; full pinned source blob fetched and read.
 - Coverage: Complete; all 69 logical lines re-read from the corrected pinned blob; trailing LF not counted as an extra line.
 - Purpose: Benchmark report for reducing duplicate model-state JSON parsing with shared BTreeMap reuse.
@@ -3747,7 +3747,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
 - RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
 - 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
-- Decision: Reference; Adaptable methodology.
+- Decision: adaptable; reference; version-specific — methodology.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
 - RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
@@ -3764,7 +3764,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
 - RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
 - 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
-- Decision: Reference; Adaptable methodology.
+- Decision: adaptable; reference; version-specific — methodology.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
 - RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
@@ -3781,7 +3781,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
 - RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
 - 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
-- Decision: Reference; Adaptable methodology.
+- Decision: adaptable; reference; version-specific — methodology.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
 - RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
@@ -3798,7 +3798,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
 - RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
 - 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
-- Decision: Reference; Adaptable methodology.
+- Decision: adaptable; reference; version-specific — methodology.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
 - RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
@@ -3815,7 +3815,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Internal checks for this report series found three flights per scene; summary avg/1%/0.1% FPS values agree with means computed from raw flights within rounding; each frame histogram sums to its recorded frame count. This verifies JSON consistency only, not the original run or tested binary.
 - RustChunk relevance: Adaptable benchmark schema and controlled-scene method; desktop data are not an Android performance target.
 - 1.20.1 implications: All results are Minecraft 26.3. Mac data use Metal/offscreen and Windows data use high-end RTX/Vulkan; none predicts Mali-G52/Android 13 or proves 1.20.1 correctness.
-- Decision: Reference; Adaptable methodology.
+- Decision: adaptable; reference; version-specific — methodology.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Horizon control/fly API; 26.3 world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, with target-device scenes and matching settings; measure visible chunk arrival, raw frame times, RAM, temperature and battery. Keep platform/API datasets separate.
 - RustChunk implementation mapping: Future benchmark schema and instrumentation under RustChunk tools/native renderer; no current RustChunk frame loop or chunk-streaming engine exists.
@@ -3839,7 +3839,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Horizon uses Metal/offscreen on Mac or Vulkan on high-end Windows RTX hardware. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3856,7 +3856,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: The report explicitly says it is not a fair player comparison: system contention differs; vanilla draws 14% fewer pixels; the compare script rejects different window sizes but the table was manually produced with that guard skipped. The main value is its cautionary analysis.
 - RustChunk relevance: Reference-only for benchmark caveats; raw performance ranking should not guide RustChunk engine choices.
 - 1.20.1 implications: 26.3/M4 Pro/macOS offscreen results cannot infer 1.20.1 or Galaxy A22 performance.
-- Decision: Reference; Limited comparison
+- Decision: undetermined; Reference; Version-specific — Reference; Limited comparison
 - Dependencies / cross-references: Adjacent Mac perf JSONs; tools/perf_bench.py; docs/benchmark.md; macOS QoS/footprint measurements.
 - Follow-up checks: Keep these caveats tied to the associated JSONs. For a fair comparison, repeat with identical actual dimensions, controlled load and visible presentation.
 - RustChunk implementation mapping: Maps to future RustChunk benchmark report caveats; no runtime code component.
@@ -3873,7 +3873,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3890,7 +3890,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3907,7 +3907,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. 
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3924,7 +3924,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3941,7 +3941,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3958,7 +3958,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3975,7 +3975,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -3992,7 +3992,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each file has three raw flights per scene. Across the full 18-report set, FPS summaries agree with means of raw frame records within rounding, and each histogram totals to the recorded frame count. This validates JSON consistency, not original run execution or game correctness. The listed Fabric mods are for 26.3, not a Forge 1.20.1 mod set.
 - RustChunk relevance: Reference baseline and report schema only; useful to preserve raw frames, chunk-arrival, memory and hardware metadata.
 - 1.20.1 implications: Minecraft 26.3 only. Vanilla uses OpenGL on Mac/Windows and includes a Fabric benchmark driver. None predicts Mali-G52/Android 13 or validates 1.20.1.
-- Decision: Reference; Version-specific.
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific.
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; 26.3 client/driver and world data; OS/GPU memory samplers.
 - Follow-up checks: Re-run only after a playable RustChunk 1.20.1 build exists, using the target device and fixed scenes/settings; measure visible chunk arrival, raw frames, RAM, temperature and battery. Keep host/platform/API results separate.
 - RustChunk implementation mapping: Future performance benchmark tooling/instrumentation after a native client/renderer exists; current JNI installer has no frame loop or chunk streaming engine.
@@ -4016,7 +4016,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
 - RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
 - 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
-- Decision: Reference; Version-specific
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
 - Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
 - RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
@@ -4033,7 +4033,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
 - RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
 - 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
-- Decision: Reference; Version-specific
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
 - Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
 - RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
@@ -4050,7 +4050,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
 - RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
 - 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
-- Decision: Reference; Version-specific
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
 - Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
 - RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
@@ -4067,7 +4067,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Findings: Each report contains three raw flights per scene. Across all 18 files in this batch, FPS summary values match the raw frame means within rounding and histograms sum to the frame count. This proves report consistency only, not original execution or game correctness. Fabric benchmark driver is part of the run.
 - RustChunk relevance: Reference baseline and benchmark-report schema only; it is not code to integrate or a mobile performance target.
 - 1.20.1 implications: Minecraft 26.3/Java25 on Windows x86_64 with RTX5080/OpenGL is not a 1.20.1 or Galaxy A22/Mali result. The modded files are Fabric 26.3, not Forge 1.20.1.
-- Decision: Reference; Version-specific
+- Decision: undetermined; Reference; Version-specific — Reference; Version-specific
 - Dependencies / cross-references: tools/perf_bench.py; docs/benchmark.md; Fabric benchmark driver; 26.3 client/renderer; Windows working-set and NVIDIA metadata.
 - Follow-up checks: Use report #195's machine-load caveats; reproduce only after a playable RustChunk 1.20.1 build exists, with matching on-device scenes/settings. Measure raw frames, visible chunk arrival, RAM, temperature and battery separately.
 - RustChunk implementation mapping: Future RustChunk performance records after native gameplay/rendering exist; current JNI installer has no game frame loop or chunk stream.
@@ -6423,7 +6423,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Imports/tests 1,658 built-in item identities and selected components.
 - Findings: Import is 26.3-specific; other component codecs, inventory, enchantments and use effects remain unverified.
 - RustChunk relevance: Potential design/test input for registry/items; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference catalog only; rebuild from 1.20.1 registries".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference catalog only; rebuild from 1.20.1 registries".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: registry/items; no current game-runtime implementation is established by this file.
@@ -6474,7 +6474,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Tests JDK HashMap default construction and operations, collisions, tree bins and iterator behavior.
 - Findings: JDK collection parity is not game logic; JDK version/platform semantics must not be assumed.
 - RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference only; use Rust-native collections where justified".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference only; use Rust-native collections where justified".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
@@ -6491,7 +6491,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Uses Java map/cooldown behavior to check identity/hash and timing interactions.
 - Findings: This is a Java/JDK regression context, not a complete in-game cooldown lifecycle.
 - RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference regression; validate only required semantics".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference regression; validate only required semantics".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
@@ -6508,7 +6508,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Checks ordered identity-map/list/cursor behavior under Java collection operations.
 - Findings: It is a JDK implementation comparison, not Minecraft feature parity.
 - RustChunk relevance: Potential design/test input for runtime/collections; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference regression; avoid copying JDK internals blindly".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference regression; avoid copying JDK internals blindly".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/collections; no current game-runtime implementation is established by this file.
@@ -6916,7 +6916,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Imports movement coefficients/tags for registered blocks and verifies state lookups.
 - Findings: 26.3 coefficients/tags are not 1.20.1 data; does not prove live player movement.
 - RustChunk relevance: Potential design/test input for registry/movement; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference data schema; regenerate from 1.20.1 registries".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference data schema; regenerate from 1.20.1 registries".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: registry/movement; no current game-runtime implementation is established by this file.
@@ -6950,7 +6950,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Defines a controlled LocalPlayer sprint/crouch scene with source maps, inputs and client references.
 - Findings: No aggregate Rust output hash; scene manifest is an input description, not an acceptance result.
 - RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference input fixture; regenerate for 1.20.1".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference input fixture; regenerate for 1.20.1".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
@@ -6967,7 +6967,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Runs a resident native scene with walk/crouch/sprint controls and diagnostics; records 1,101 frames, 9 chunks and 10,919 scene blocks.
 - Findings: Linux x86_64 Vulkan llvmpipe CPU renderer; default actor/scene smoke only, not game, GPU performance or Android evidence.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only; not a performance benchmark".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only; not a performance benchmark".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7001,7 +7001,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Records startup/culling/model selection in 9 resident chunks, with 30-frame bounded run.
 - Findings: CPU llvmpipe scene only; startup snapshot cannot demonstrate playable game, Android FPS or native pixel parity.
 - RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
@@ -7035,7 +7035,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Inspects resident terrain and model gallery; visual run reports 81 chunks and 84,647 model blocks.
 - Findings: Linux llvmpipe and private screenshots; not Android GPU/frame pacing or whole-world loading evidence.
 - RustChunk relevance: Potential design/test input for render/chunk-models; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference rendering smoke only; no hardware performance claim".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference rendering smoke only; no hardware performance claim".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/chunk-models; no current game-runtime implementation is established by this file.
@@ -7052,7 +7052,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Defines LocalPlayer sprint and crouch order, input, pose-dependent dimensions and movement callbacks.
 - Findings: Controlled scene and query gates; full client/server tick, effects, vehicles and network are omitted.
 - RustChunk relevance: Potential design/test input for input/player-controls; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference input fixture; regenerate against 1.20.1".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference input fixture; regenerate against 1.20.1".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: input/player-controls; no current game-runtime implementation is established by this file.
@@ -7069,7 +7069,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Runs held/released crouch input in resident scene; records 1,232 frames and 9 chunks, pose change and grounded actor.
 - Findings: Linux llvmpipe; only 8 cm recorded walk, no fluid/other poses/full client lifecycle or Android device result.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7120,7 +7120,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Bounded startup and render snapshot with crouch scene assets and native model selection.
 - Findings: 30-frame CPU llvmpipe startup; no active movement, game lifecycle or hardware FPS claim.
 - RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
@@ -7137,7 +7137,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Walk/jump smoke scene applies one recorded 9-point landing hit; health reaches 11 and diagnostics show recovery state.
 - Findings: Linux llvmpipe resident scene; death/drop/respawn, full hunger and device performance are not tested.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference gameplay smoke only; not acceptance".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference gameplay smoke only; not acceptance".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7171,7 +7171,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Captures bounded startup/model scene plus selection and culling counts.
 - Findings: No player lifecycle or movement; Linux llvmpipe CPU renderer only.
 - RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
@@ -7188,7 +7188,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Resident scene checks health recovery, FoodData values and one landing request over 42 movement ticks.
 - Findings: Elapsed wall time is not simulation time; complete enclosing ticks, item use, death lifecycle and GPU/device evidence are absent.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7222,7 +7222,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Records grounded landing and a single 9-point damage request in resident scene.
 - Findings: Damage request is not applied to health; Linux CPU scene only, no full gameplay or device acceptance.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7256,7 +7256,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Inspects twelve gallery models and animation frames; includes image-difference bounds for lantern.
 - Findings: Pre-final interactive view differs from final fingerprints; CPU llvmpipe only, no gameplay or complete pixel parity.
 - RustChunk relevance: Potential design/test input for render/model-client; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference visual QA only; not device performance evidence".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference visual QA only; not device performance evidence".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/model-client; no current game-runtime implementation is established by this file.
@@ -7290,7 +7290,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Resident scene records walking, health, food and exhaustion; 3,770 frames over 82 movement ticks.
 - Findings: Linux llvmpipe; sprint/full gameplay and Android hardware FPS are not established.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7324,7 +7324,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Resident renderer smoke for collision scene with 4,065 frames and 9 chunks.
 - Findings: No gameplay simulation; Vulkan llvmpipe CPU adapter, not target GPU or Android FPS.
 - RustChunk relevance: Potential design/test input for render/scene-collision; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/scene-collision; no current game-runtime implementation is established by this file.
@@ -7358,7 +7358,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Captures scene culling/model-selection and bounded renderer startup.
 - Findings: 30-frame CPU llvmpipe snapshot; not a performance benchmark or playable game proof.
 - RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
@@ -7409,7 +7409,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Captures native model/terrain scene, selection and culling in bounded startup run.
 - Findings: Linux llvmpipe CPU renderer only; no visual pixel parity or Android device measurement.
 - RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.
@@ -7426,7 +7426,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Interactive resident-scene run verifies sprint toggling after double-tap, 1,373 cm sprint distance and 111 movement ticks.
 - Findings: Linux llvmpipe; focus pauses walking, and full pose/fluid/effect/item-use/network lifecycle is outside scope.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7477,7 +7477,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Resident scene smoke reports 5,773 frames, 173 movement ticks and 1,948 cm sprint distance.
 - Findings: Linux llvmpipe; no fluid/effect/item-use/client-server lifecycle, native pixel or A22 performance claim.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7511,7 +7511,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Resident scene records grounded movement and jump, 6,816 frames and 207 movement ticks.
 - Findings: Linux llvmpipe development scene; no full gameplay, native pixel parity or device acceptance.
 - RustChunk relevance: Potential design/test input for runtime/scene-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference smoke evidence only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: runtime/scene-smoke; no current game-runtime implementation is established by this file.
@@ -7562,7 +7562,7 @@ The active RustChunk target is Minecraft Java Edition **1.20.1 implemented throu
 - Implementation / logic: Captures bounded startup/model scene with native selection and culling; 30-frame run.
 - Findings: Linux llvmpipe CPU renderer only; no walking/game loop or hardware FPS evidence.
 - RustChunk relevance: Potential design/test input for render/startup-smoke; current rustchunk-engine is JNI-oriented and has no playable native game module.
-- Decision: **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
+- Decision: undetermined; Reference; Version-specific — **Reference; Version-specific.** Original assessment: "Reference renderer smoke only".
 - 1.20.1 implications: Upstream target is Minecraft 26.3; 1.20.1 codecs, registries, states, protocol and oracle must be rebuilt.
 - Follow-up checks: Identify the 1.20.1 owner/API, rebuild data and oracle, compare Java/Rust outputs, then test integration and ARM64.
 - RustChunk implementation mapping: Future RustChunk subsystem: render/startup-smoke; no current game-runtime implementation is established by this file.

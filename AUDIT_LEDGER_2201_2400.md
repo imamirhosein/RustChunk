@@ -536,7 +536,7 @@
 - Implementation / logic: Builds a registry, constructs up to 100,000 zombie attribute containers, optionally ensures four attributes per entity, emits a summary and holds allocations while waiting on stdin.
 - Findings: The entity count is bounded, but positional arguments are indexed without arity checks and unknown attribute ids/entities are unwrapped; malformed invocation panics. This is an external profiling workload, not an allocator contract or game runtime.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; profiling example only; do not ship in the client
+- Decision: undetermined; reference; profiling example only; do not ship in the client
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Differential-test landing rules, collision shapes, damage sources, sound and event order against Java 1.20.1; validate NBT resources and chunk/entity mutation.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -554,7 +554,7 @@
 - Implementation / logic: Loads the client registry, optionally selects a cache directory, loads behaviours three times and reports elapsed milliseconds.
 - Findings: Resource path is required with expect; the profile is a one-process timing sample and does not isolate disk cache, warm-up or device variance. It measures Horizon's resource loader, not Minecraft/Forge load time.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; benchmark harness only; repeat with controlled Android/1.20.1 resources before drawing performance conclusions
+- Decision: undetermined; reference; benchmark harness only; repeat with controlled Android/1.20.1 resources before drawing performance conclusions
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Differential-test landing rules, collision shapes, damage sources, sound and event order against Java 1.20.1; validate NBT resources and chunk/entity mutation.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -572,7 +572,7 @@
 - Implementation / logic: Runs seeded generation across configurable work, records NBT-like output/checksums and compares generated candidate output against expected fixture streams.
 - Findings: Verifier can accept truncated output: after EOF it may leave still-active candidates marked as matched rather than requiring every expected line to be consumed. This is a correctness flaw in the benchmark's oracle comparison. CLI size/thread/coordinate inputs also lack robust bounds and may cause zero-work, overflow, panic or excessive allocations.
 - RustChunk relevance: Benchmark harness only; no shipped runtime value and no verified Android/Minecraft performance measurement.
-- Decision: reference; do not trust its pass result until EOF completeness and argument validation are fixed
+- Decision: undetermined; reference; do not trust its pass result until EOF completeness and argument validation are fixed
 - 1.20.1 implications: No runtime compatibility claim; these examples consume Horizon-specific resource/registry formats and are not drop-in Forge 1.20.1 tooling.
 - Follow-up checks: Add truncated-output and missing-tail regression cases; require every expected line and stream EOF; validate CLI bounds/checked coordinate arithmetic and zero-thread behavior.
 - RustChunk implementation mapping: Keep benchmark/oracle code under tools or examples; never include it in the Android runtime dependency graph.
@@ -590,7 +590,7 @@
 - Implementation / logic: Loads overworld generator resources, warms a worker, samples tiles at selected levels and emits span/shape checksums with optional dump.
 - Findings: tiles is not validated: zero leads to division by zero in per-tile metrics; negative values produce misleading/empty work. Level shifts and tile-coordinate multiplication can overflow or panic for invalid levels/large values. The benchmark's 5-column coordinate formula assumes a bounded tile layout.
 - RustChunk relevance: Benchmark harness only; no shipped runtime value and no verified Android/Minecraft performance measurement.
-- Decision: reference; LOD benchmark idea only; validate parameters and do not treat numbers as Android or Minecraft client performance
+- Decision: undetermined; reference; LOD benchmark idea only; validate parameters and do not treat numbers as Android or Minecraft client performance
 - 1.20.1 implications: No runtime compatibility claim; these examples consume Horizon-specific resource/registry formats and are not drop-in Forge 1.20.1 tooling.
 - Follow-up checks: Reject tiles<=0 and invalid levels; checked shifts/coordinate math; add deterministic workload size checks and run device-separated benchmarks only after correctness.
 - RustChunk implementation mapping: Keep benchmark/oracle code under tools or examples; never include it in the Android runtime dependency graph.
@@ -608,7 +608,7 @@
 - Implementation / logic: Loads loot resources, iterates supplied table names and seeds, fills a 27-slot container and prints item/count/damage/enchantment records.
 - Findings: No cap on table/seed argument counts or generated output; missing positional arguments return usage errors but large input lists can create unbounded work/output. It is a CLI oracle, not loot implementation integration evidence.
 - RustChunk relevance: Loot-table oracle utility only; no evidence of Forge loot-mod compatibility.
-- Decision: reference; fixture/oracle utility only; do not ship
+- Decision: undetermined; reference; fixture/oracle utility only; do not ship
 - 1.20.1 implications: No runtime compatibility claim; these examples consume Horizon-specific resource/registry formats and are not drop-in Forge 1.20.1 tooling.
 - Follow-up checks: Bound table/seed arguments and output; validate table identifiers and test known Java 1.20.1 loot tables with the correct registry snapshot.
 - RustChunk implementation mapping: Keep benchmark/oracle code under tools or examples; never include it in the Android runtime dependency graph.
@@ -626,7 +626,7 @@
 - Implementation / logic: Models effect keys/instances, hidden effects, callback events/failures, storage mutation, tick and consume-effect operations; compares deterministic state/event output.
 - Findings: Key::tie_break returns Less when identity <= other.identity; if two distinct keys share identity this violates ordering consistency and can corrupt collision-bin ordering assumptions. Extensive unwrap/indexing relies on trusted generated JSON; side is incorporated into output filenames. No fixture corpus or oracle comparison was executed.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; useful behavioral test design only; repair comparator and validate fixture inputs before relying on results
+- Decision: undetermined; reference; useful behavioral test design only; repair comparator and validate fixture inputs before relying on results
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Make key comparator return Equal for equal identity (or enforce unique identity); fuzz malformed corpus schema; compare callback traces with Java oracle.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -644,7 +644,7 @@
 - Implementation / logic: Serializes effect map, object identity, hidden-chain data and callback events while exercising add/remove/force/blend/get operations.
 - Findings: Its JavaKey tie_break uses the same <= comparison; duplicate identity values can return Less in both directions. Input arrays and ids are trusted and indexed/unwrap-heavy; side-based input/output paths are not sandboxed. This is fixture harness behavior, not production collection implementation.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; test-only transport; comparator and input-contract limitations must be recorded
+- Decision: undetermined; reference; test-only transport; comparator and input-contract limitations must be recorded
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Make key comparator return Equal for equal identity (or enforce unique identity); fuzz malformed corpus schema; compare callback traces with Java oracle.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -662,7 +662,7 @@
 - Implementation / logic: Exercises bottom/top/sea-level and absolute/relative anchors against generation contexts, including JSON decoding and resolution outputs.
 - Findings: JSON values are unwrapped and narrowed from i64 to i32, so malformed/out-of-range fixture values panic or wrap. No production validation is implemented in this example; actual VerticalAnchor behavior lives in the library.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; use as an oracle shape only; validate numeric ranges in a RustChunk-owned fixture runner
+- Decision: undetermined; reference; use as an oracle shape only; validate numeric ranges in a RustChunk-owned fixture runner
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate i32 conversions/context ranges and JSON shape; differential-test anchor serialization against Java 1.20.1.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -680,7 +680,7 @@
 - Implementation / logic: Exercises base values, transient/permanent modifiers, operation grouping, pack/unpack, copying and observer callback errors for two attribute instances.
 - Findings: Fixture schema is trusted: it assumes two definitions, valid modifier indices and valid Operation::ALL indices. Numerous unwraps/indexes turn malformed corpus data into panics. No production Attribute implementation is included in this example.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; fixture-only coverage; use library code for behavior and add schema validation to any new oracle
+- Decision: undetermined; reference; fixture-only coverage; use library code for behavior and add schema validation to any new oracle
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate fixture schemas, handles and indexes; test callback failure/mutation order against Java reference implementation; keep examples unexecuted until authorized.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -698,7 +698,7 @@
 - Implementation / logic: Combines entity/live attribute implementations, health synchronization, absorption, food ticking, healing, starvation and injected observer errors.
 - Findings: The test adapter assumes catalog keys, two instances, valid operation/difficulty/attribute indexes and parseable bit strings. Invalid fixture data panics; comments explicitly state this fixture does not test cross-attribute hash order.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; useful integration matrix concept only; not a production health subsystem
+- Decision: undetermined; reference; useful integration matrix concept only; not a production health subsystem
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate fixture schemas, handles and indexes; test callback failure/mutation order against Java reference implementation; keep examples unexecuted until authorized.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -716,7 +716,7 @@
 - Implementation / logic: Includes a shared stored-effect fixture and implements query, lookup, instance edits, modifier notification, refresh and effect integration cases.
 - Findings: The fixture relies on generated handle/index invariants and unchecked references into instance/template/supplier arrays. Its key-order/comparator assumptions and input schema are not validated at runtime. The side argument forms fixture filenames directly. No production API behavior is proved by this transport alone.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; fixture coverage only; preserve its modeled call ordering but add bounded and validated inputs
+- Decision: undetermined; reference; fixture coverage only; preserve its modeled call ordering but add bounded and validated inputs
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate fixture schemas, handles and indexes; test callback failure/mutation order against Java reference implementation; keep examples unexecuted until authorized.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -734,7 +734,7 @@
 - Implementation / logic: Models pending update sets, health/absorption state, effect eligibility/add/update/remove, passenger packets and callback failure/mutation sequences.
 - Findings: Key::tie_break has the same <= ordering defect under duplicate identities. Many JSON arrays/indexes are trusted; side is interpolated into input/output paths. It tests callback ordering in a mock world, not live network packet compatibility with Minecraft 1.20.1.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; extract ordering scenarios only; validate comparator and fixture schema before oracle use
+- Decision: undetermined; reference; extract ordering scenarios only; validate comparator and fixture schema before oracle use
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Make key comparator return Equal for equal identity (or enforce unique identity); fuzz malformed corpus schema; compare callback traces with Java oracle.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -752,7 +752,7 @@
 - Implementation / logic: Decodes a basic feature and optional placement modifiers, then places repeatedly against an in-memory mock block world with deterministic pseudo-block lookup and injected read/write failures.
 - Findings: The mock height query always returns Unavailable; rem_euclid denominator is fixture-provided and can be zero, and malformed/negative repeat values produce panic or empty-loop behavior. Not a complete terrain/world integration.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; feature placement test harness only; do not treat it as a supported feature implementation
+- Decision: undetermined; reference; feature placement test harness only; do not treat it as a supported feature implementation
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Reject zero divisor, invalid coordinates and unbounded repeats; compare placement sequence and random draw count with Java oracle.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -770,7 +770,7 @@
 - Implementation / logic: Tests section filling, injected resolver failures, previous-biome retention and coordinate queries using deterministic mock biome ids.
 - Findings: Fixture height is narrowed/cast and later used as usize for section loops; negative or implausible dimensions can yield huge iteration. rem_euclid divisor comes from input and can be zero. It is a focused storage/fill fixture, not actual climate biome generation.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; retain section/retrogen scenario coverage only; validate dimensions and divisors
+- Decision: undetermined; reference; retain section/retrogen scenario coverage only; validate dimensions and divisors
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate min/height/divisors and cap section loops; test partial-fill failure and retrogen behavior across negative world heights.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -788,7 +788,7 @@
 - Implementation / logic: Loads noise/density/preset registry JSON, compiles a seeded density graph, resolves fixed/checkerboard/end/preset sources, fills biome chunks and queries block-to-quart zoom.
 - Findings: Uses min + height - 1 and height conversions without local bounds validation; invalid dimensions could overflow or create excessive loops. Data is loaded from a synthetic fixture bundle, so it is not by itself proof of exact vanilla 1.20.1 registry/codec parity.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; useful generator test design; pin registries and validate bounds before adoption
+- Decision: undetermined; reference; useful generator test design; pin registries and validate bounds before adoption
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Use exact versioned 1.20.1 noise/density/preset registries; validate height math and compare seeded samples to Java generator outputs.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -806,7 +806,7 @@
 - Implementation / logic: Exercises direct modifier invocation, contextual placement, top-feature identity, query/feature failures, nested placement and legacy/worldgen random streams.
 - Findings: When nested=true, the feature callback recursively invokes another biome placement with the same nested flag; if the biome predicate keeps accepting and no injected feature failure terminates it, recursion can grow without bound. Direct mode only invokes modifiers[0], explicitly relying on a unit-biome-filter corpus rather than arbitrary modifier chains.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; use only for controlled oracle scenarios; add recursion depth/cycle guard in any new test harness
+- Decision: undetermined; reference; use only for controlled oracle scenarios; add recursion depth/cycle guard in any new test harness
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Add nested-depth/cycle limit and exercise direct modifier chains beyond the single-filter corpus; compare random-consumption and biome query order.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -824,7 +824,7 @@
 - Implementation / logic: Builds biome and tag catalogues, decodes and re-encodes sources, lists possible biomes and samples deterministic resolver positions.
 - Findings: Normalization converts every JSON number through f64 before comparing bits; integer JSON values above 2^53 lose precision and distinct values may collapse. This is a differential-oracle blind spot if large integer fields enter the schema; `assert!` also assumes no tag names are missing.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; codec oracle only after preserving integer-vs-float JSON representation
+- Decision: undetermined; reference; codec oracle only after preserving integer-vs-float JSON representation
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Preserve integer JSON numbers exactly; avoid f64-normalizing all numeric values; add codec round-trip tests for large integers and missing tags.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -842,7 +842,7 @@
 - Implementation / logic: Samples source implementations at many positions, traces erosion sampler calls and tests sampler failure paths.
 - Findings: Fixture JSON and position/biome indexes are unwrapped; checkerboard scale and erosion bit patterns depend on trusted corpus. It isolates source algorithms but not registry codec or full generation parity.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; focused source oracle only; keep separate from full generator validation
+- Decision: undetermined; reference; focused source oracle only; keep separate from full generator validation
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate positions/scales and compare End erosion sampling/cache call order against Java implementation.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -860,7 +860,7 @@
 - Implementation / logic: Exercises temperature adjustment, precipitation decisions, warm/rain, cold/snow, frozen-iceberg checks, cache fills, cache dumps and thread-local worker recreation.
 - Findings: Input JSON/hex strings and operation indexes are unvalidated. Negative fill counts silently run no loop; thread operation creates a fresh worker, so it does not prove cross-thread cache sharing or parallel safety.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; temperature oracle scenarios only; distinguish thread recreation from concurrent worker behavior
+- Decision: undetermined; reference; temperature oracle scenarios only; distinguish thread recreation from concurrent worker behavior
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate hex float and operation schema; test cache semantics with genuine concurrent access rather than a fresh worker per nested thread operation.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -878,7 +878,7 @@
 - Implementation / logic: Supplies deterministic mock chunks/blocks/shapes, suffocation flags, injected errors, scan hit iteration and supporting-block search.
 - Findings: Palette/state indices and AABB bit inputs are trusted; a malformed fixture may panic. The one-million scan budget bounds the harness but does not establish production-world chunk loading, collision-shape correctness or target-version parity.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; useful collision scenario generator only; validate shape and chunk bounds against target 1.20.1
+- Decision: undetermined; reference; useful collision scenario generator only; validate shape and chunk bounds against target 1.20.1
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Validate palette indexes/AABBs and chunk-missing semantics; compare collision scan order and support search with Java 1.20.1 world collision results.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -896,7 +896,7 @@
 - Implementation / logic: Exercises chunk resets, pending/active positions, marker tags, mutation, save conversion, sorted dump and size counts.
 - Findings: Input::tag reads a value token before checking the kind; a `none` kind therefore still needs a placeholder token or it panics. `pending()` panics when marker is absent/not Long. split_whitespace cannot preserve arbitrary strings with spaces. This is a strict fixture line protocol, not a robust NBT reader.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; block-entity scenario harness only; do not reuse its parser for untrusted NBT
+- Decision: undetermined; reference; block-entity scenario harness only; do not reuse its parser for untrusted NBT
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Use a typed parser with explicit token counts and bounded NBT decoding; test malformed marker tags, `none` encoding and arbitrary string values.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.
@@ -914,7 +914,7 @@
 - Implementation / logic: Loads block/movement/collision registries from NBT, builds landing definitions and simulates collision queries, entity AABB pushes, teleportation, sound/damage/event and block mutation with injected failures.
 - Findings: The mock `collision_shape` expects registered cached shapes and panics if assumptions fail. Entity/world flags and binary NBT inputs are trusted; this harness is not a full game server nor a target-1.20.1 packet/event test. No example was executed.
 - RustChunk relevance: Fixture/oracle only: useful for designing differential tests against Java 1.20.1 semantics, but not itself a production subsystem.
-- Decision: reference; integration-oracle design only; independently validate entity collision and block effects against Java 1.20.1
+- Decision: undetermined; reference; integration-oracle design only; independently validate entity collision and block effects against Java 1.20.1
 - 1.20.1 implications: Potentially relevant to reconstructing 1.20.1 behavior, but fixture inputs and mock interfaces do not establish vanilla/Forge 47.x parity or Aternos connectivity.
 - Follow-up checks: Differential-test landing rules, collision shapes, damage sources, sound and event order against Java 1.20.1; validate NBT resources and chunk/entity mutation.
 - RustChunk implementation mapping: Translate the scenario matrix into RustChunk-owned version-pinned differential tests; implement actual behavior from Java 1.20.1/Forge evidence, not by copying the mock fixture.

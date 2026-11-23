@@ -1900,3 +1900,40 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Critical compatibility result: the inspected loader registry explicitly supports only Fabric and Quilt; the new-instance wizard offers only Fabric/Quilt. The native-mod pipeline compiles Rust mixins into Horizon-specific binaries and is not Java Forge/FML/ModLauncher. Modpack porting converts to Horizon-native mods and leaves unsupported CurseForge-only JARs aside. None of this establishes Forge 1.20.1 support.
 - No test/build/benchmark/live network operation was executed. No RustChunk application source changed; no APK, Android device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
 - The final checkpoint 2976–3000 is recorded. Exceptional authorization 2901–3000 is now fully consumed; stage 2801–3000 is CLOSED (200/200). **STOP at 3000**; 3001+ requires fresh explicit authorization.
+
+
+## Global structural/provenance QA — entries 1–3000 — 2026-11-23
+
+### Scope and authoritative inputs
+
+- Repository: `imamirhosein/RustChunk`; branch: `starling-1.20.1-port-audit`.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`.
+- The pinned recursive tree contains 5,749 entries (4,968 blobs) and is not truncated.
+- Re-read all 14 Ledger documents and the complete Index from the audit branch. No source entry was added or renumbered.
+
+### Global checks
+
+- Ledger: **3,000 entries**, sequential 1–3000 with no gaps; all 14 Ledgers have the expected stage partitions.
+- Index: **3,000 rows**, sequential 1–3000; no duplicate paths. All 3,000 Index paths match the corresponding Ledger paths.
+- Global path uniqueness: **3,000 unique paths** across the full Index.
+- Pinned-tree provenance: all 3,000 paths exist in the complete pinned tree. Source SHA and exact byte size match after correcting entry 174.
+- Ledger schema: all 3,000 entries contain each of the 15 required fields exactly once; no `undefined` placeholders remain in those fields.
+- Decision alignment: all Ledger Decision fields begin with an approved primary label; the first primary label and any additional primary labels now match the Index row for all 3,000 entries.
+- Coverage/Completion metadata: canonical logical-line counts and recorded Coverage/Completion ranges were cross-checked. The only actual recorded range gap was entry 2542; its missing 401–600 range was re-fetched from the pinned blob and inserted. Entry 1429's compressed range description was expanded into exact consecutive ranges. Empty EOF probes were treated as probes, not as source-content ranges.
+
+### Corrections applied
+
+1. Entry 174 — corrected the malformed Ledger SHA to `15a50e8ff7ece5a567909f18bd76d9ed5777793c`, matching the pinned source tree. The earlier QA note recorded the intended SHA, but the Ledger still contained an extra character.
+2. Decision taxonomy — normalized **208 Ledger Decision fields** that lacked an approved primary label; **151 Index rows** also lacked a primary label. A further set of narrative-first Decision fields was prefixed with the matching Index labels. The Index was reconciled against the final Ledger primary-label order across all 3,000 entries. Reference-only records were conservatively classified as `undetermined; reference` unless the existing evidence supported a more specific primary decision.
+3. Field alignment — corrected **28 records** (2557, 2566, 2576–2600 and 2968) where Decision/1.20.1 implications/Follow-up checks/implementation mapping/evidence values had shifted by one field. Their existing substantive text was retained in the appropriate fields.
+4. Completion/evidence alignment — corrected entry 1397, where the completion statement had been placed in Evidence and Completion state was `undefined`. The completion statement is restored to Completion state and the Evidence field now states the required 1.20.1 Panda/AI verification.
+5. Evidence — replaced the two `undefined` Evidence values in entries 2776–2777 with explicit test/evidence requirements.
+6. Coverage — re-fetched entry 2542 lines 401–600 and recorded the now-contiguous complete range. Expanded entry 1429's 400-line sequence into explicit ranges.
+
+### Verification boundary
+
+- This was a global structural/provenance and document-consistency QA pass, not a fresh semantic re-audit of all 3,000 source implementations.
+- The complete source tree's SHA/byte-size metadata was compared globally. Source content was fetched again for the missing entry 2542 range; existing per-checkpoint source-read records remain the evidence for the other files.
+- No embedded tests, Rust builds, benchmarks, APK builds, Android-device tests, renderer tests, Minecraft/Forge launches, multiplayer joins or Aternos checks were executed.
+- No application source code was changed. `main` and the two existing final backup refs remain unchanged.
+- Final snapshot branch: `backup/audit-3000-final-2026-11-23`, created from the verified global-QA commit after this transaction.

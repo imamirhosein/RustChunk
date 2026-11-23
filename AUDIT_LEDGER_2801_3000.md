@@ -2865,11 +2865,11 @@
 - Implementation / logic: Loads version/inheritance metadata, validates library rules, builds classpath, extracts native archives, resolves assets and fills JVM/game arguments including server host/port.
 - Findings: This is the strongest reusable Java launch foundation in this batch, but Forge requires installer-generated version JSON, extra libraries, tweakers/launch targets, argument merging and mod-loader handshake. Desktop process execution is not Android runtime integration.
 - RustChunk relevance: adaptable; reference; version-specific
-- Decision: Port version JSON/library/asset semantics, then add a real Forge 47.x installer and launch profile; run through Android Java runtime rather than desktop Command.
-- 1.20.1 implications: Test 1.20.1 inheritance, artifact/native classifiers, OS rules, checksum/size, classpath ordering, arg placeholders, Forge arguments, secure chat/login and Aternos join.
-- Follow-up checks: RustChunk Java launch resolver, library/asset downloader and Forge profile launch bridge.
-- RustChunk implementation mapping: Actual 1.20.1 Forge version JSON, Java 17 ARM64 runtime, classpath parity and real Forge multiplayer test.
-- Evidence required before adoption: undefined
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Port version JSON/library/asset semantics, then add a real Forge 47.x installer and launch profile; run through Android Java runtime rather than desktop Command.
+- Follow-up checks: Test 1.20.1 inheritance, artifact/native classifiers, OS rules, checksum/size, classpath ordering, arg placeholders, Forge arguments, secure chat/login and Aternos join.
+- RustChunk implementation mapping: RustChunk Java launch resolver, library/asset downloader and Forge profile launch bridge.
+- Evidence required before adoption: Actual 1.20.1 Forge version JSON, Java 17 ARM64 runtime, classpath parity and real Forge multiplayer test.
 - Completion state: COMPLETE — 489 logical lines through EOF; pinned source SHA and 18593 byte size match; reviewed, not modified; tests not executed.
 
 ### 2969. `launcher/src/java_launch/tests.rs`

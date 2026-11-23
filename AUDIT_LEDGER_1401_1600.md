@@ -489,7 +489,7 @@
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: `00c0c773f3169b9727a2b34f8a7df9ffac2a817a`
 - Size: 527,736 bytes; 12,042 logical lines
-- Coverage: 1–400 through 11601–12000 in consecutive 400-line chunks; 12001–12042 (contiguous to EOF)
+- Coverage: Complete through EOF: 12042 logical lines; exact consecutive ranges 1–400; 401–800; 801–1200; 1201–1600; 1601–2000; 2001–2400; 2401–2800; 2801–3200; 3201–3600; 3601–4000; 4001–4400; 4401–4800; 4801–5200; 5201–5600; 5601–6000; 6001–6400; 6401–6800; 6801–7200; 7201–7600; 7601–8000; 8001–8400; 8401–8800; 8801–9200; 9201–9600; 9601–10000; 10001–10400; 10401–10800; 10801–11200; 11201–11600; 11601–12000; 12001–12042; no gaps.
 - Purpose: Central remote multiplayer session implementation: consumes server play packets, updates client world/player/UI state and sends client actions and acknowledgements.
 - Dependencies / cross-references: Protocol play packet enums/codecs; connection/session lifecycle; chunk/light decoder; entities, players, inventories and menus; chat/signatures; scoreboard; resources, skins, commands, settings and renderer/game state.
 - Implementation / logic: Dispatches serverbound and clientbound play messages, updates authoritative snapshots and local predictions, routes inventory/menu/entity/chat/scoreboard updates, handles teleports/disconnects and queues relevant world/render work.

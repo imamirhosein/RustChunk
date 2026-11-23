@@ -768,7 +768,7 @@
 - Implementation / logic: Describes repository/file submissions, PRs, owner updates, ratings, rate limits, CSRF and deployment.
 - Findings: Documents 64MiB upload cap, rate limits, origin/CSRF and review workflow; service not run.
 - RustChunk relevance: May inform separate mod portal, not the game client.
-- Decision: reference; server-security; deployment-only
+- Decision: undetermined; reference; server-security; deployment-only
 - 1.20.1 implications: No 1.20.1 runtime integration; secrets must remain server-side.
 - Follow-up checks: Verify docs against implementation, scope, privacy, CSRF and operations before reuse.
 - RustChunk implementation mapping: Reference only for a separately threat-modeled backend.
@@ -802,7 +802,7 @@
 - Implementation / logic: Does OAuth profile lookup, reads entries, checks public repositories, uploads releases, manages branches/resets, commits files and opens PRs.
 - Findings: Upload reads whole file in memory; branch reset force-updates; raw OAuth state inserted by helper (caller uses random hex and signed-cookie check); token not zeroized explicitly.
 - RustChunk relevance: Reference for a separate mod portal only.
-- Decision: reference; server-tooling; security-sensitive
+- Decision: undetermined; reference; server-tooling; security-sensitive
 - 1.20.1 implications: Keep credentials server-side; never embed GitHub tokens in Android launcher.
 - Follow-up checks: Audit repo/path validation, OAuth, token scope/lifetime, reset authorization, memory limits and API rates.
 - RustChunk implementation mapping: Separate server-only registry if explicitly required.
@@ -1725,7 +1725,7 @@
 - Implementation / logic: Reads rule keys, expands variants and weighted alternatives, parses biome/height/health/name/profession/age/team/seed conditions and reports malformed or unsupported entries.
 - Findings: Rule interpretation is tied to OptiFine/ETF behavior and several selectors need parity checks. Dynamic entity state requires reevaluation; properties parsing is separate and has its own encoding/escape semantics.
 - RustChunk relevance: Potential optional resource-pack feature for entity variation; unrelated to base Minecraft networking or chunk loading.
-- Decision: reference; optional resource-pack feature; version-specific
+- Decision: undetermined; reference; optional resource-pack feature; version-specific
 - 1.20.1 implications: Rebuild against the exact 1.20.1 OptiFine/ETF properties contract and Mojmap entity fields; do not assume newer condition names or seed selection match.
 - Follow-up checks: Compare against 1.20.1 OptiFine/ETF fixtures for each condition, weighting, inheritance, malformed input and per-frame reevaluation.
 - RustChunk implementation mapping: RustChunk optional random-entity texture rules module, behind resource-pack feature gates.
@@ -1742,7 +1742,7 @@
 - Implementation / logic: Scans candidate folder layouts in priority order, collects variant texture files, resolves rule inheritance and produces deterministic atlas-facing variant names.
 - Findings: Folder precedence and naming are format-specific; scans rely on path containment and file filtering. Dynamic rules and texture atlas limits need explicit bounds.
 - RustChunk relevance: Optional resource-pack rendering feature; no core client or Forge protocol value.
-- Decision: reference; optional resource-pack feature; version-specific
+- Decision: undetermined; reference; optional resource-pack feature; version-specific
 - 1.20.1 implications: Implement only after 1.20.1 texture atlas and entity model integration exists; verify Android asset I/O and memory budgets.
 - Follow-up checks: Test precedence among ETF/OptiFine/MCPatcher, duplicate variant IDs, path traversal/symlinks, missing textures, atlas size and reload invalidation.
 - RustChunk implementation mapping: RustChunk resource-pack scanner feeding an optional entity texture resolver/atlas builder.
@@ -2286,7 +2286,7 @@
 - Implementation / logic: Stores one version/digest pair per line and instructs developers to append rather than edit history.
 - Findings: Historical data only; integrity depends on the separate generation workflow and human discipline.
 - RustChunk relevance: Useful release bookkeeping reference, not a game runtime component.
-- Decision: reference; build metadata only
+- Decision: undetermined; reference; build metadata only
 - 1.20.1 implications: RustChunk may keep independent prepared-data version history; values belong to this Horizon tree.
 - Follow-up checks: Verify generator, duplicate versions, digest format and release process if adopting a similar register.
 - RustChunk implementation mapping: RustChunk prepared artifact version/digest history file.
@@ -2456,7 +2456,7 @@
 - Implementation / logic: Builds stub java/javac executables and validates selection precedence, version rejection, symlinked paths and error messages in child processes.
 - Findings: Tests target only the preparer's selection behavior with simulated Java executables; they do not validate a real Minecraft 1.20.1 Forge JVM launch.
 - RustChunk relevance: Test strategy reference for Java runtime detection in a launcher.
-- Decision: reference; tests only; launcher-tooling
+- Decision: undetermined; reference; tests only; launcher-tooling
 - 1.20.1 implications: RustChunk needs actual supported Java 17 runtime discovery on Android and Forge 47.x, not the newer Horizon Java baseline.
 - Follow-up checks: Run with real Java 17 runtimes on Windows/Linux/Android, verify architecture/ABI and Forge library arguments.
 - RustChunk implementation mapping: RustChunk Java runtime detection integration test suite.
@@ -2490,7 +2490,7 @@
 - Implementation / logic: Decodes each stack, reports remaining bytes, added/removed/typed component IDs and whether encoding reproduces the original bytes.
 - Findings: Harness is tied to the newer component-based item wire protocol; odd/non-ASCII hex input currently returns None through string slicing but malformed records are skipped.
 - RustChunk relevance: Useful test-harness pattern for protocol parity, not player runtime.
-- Decision: reference; example only; version-specific
+- Decision: undetermined; reference; example only; version-specific
 - 1.20.1 implications: Minecraft 1.20.1 ItemStack wire/NBT fields differ from newer component-based encoding; adapt fixtures/codecs.
 - Follow-up checks: Reject odd-length/non-hex with explicit errors, add malformed stack fuzzing and compare against 1.20.1/Forge oracle bytes.
 - RustChunk implementation mapping: RustChunk protocol item-wire differential test tool.
@@ -2524,7 +2524,7 @@
 - Implementation / logic: Logs in with fixed offline profile, answers keepalive/ping/teleports/code-of-conduct, records packet counts/decode errors and parses chunk sections.
 - Findings: Uses the pinned newer protocol and does not negotiate Forge mod channels or mod list; offline login cannot demonstrate Microsoft online-mode/Aternos compatibility.
 - RustChunk relevance: Useful manual protocol diagnostic pattern, but not proof of 1.20.1 or modded server support.
-- Decision: reference; example only; protocol-specific
+- Decision: undetermined; reference; example only; protocol-specific
 - 1.20.1 implications: Replace packet IDs/handshake/config/registries with exact protocol 1.20.1 and Forge 47.x handshake/mod negotiation before use.
 - Follow-up checks: Test online and offline auth separately, Forge handshake, registry sync, tags, compression, encrypted transport and chunk section bit widths.
 - RustChunk implementation mapping: RustChunk 1.20.1 protocol diagnostic tool behind test builds only.
@@ -2541,7 +2541,7 @@
 - Implementation / logic: Reads hex strings, decodes StopSound, asserts no remaining bytes and exact byte-for-byte re-encoding; checks two malformed short packets fail.
 - Findings: Test harness only; `hex[i..i+2]` can panic for odd-length or non-ASCII hex input rather than returning a clean error.
 - RustChunk relevance: Useful packet codec test pattern; no runtime behavior.
-- Decision: reference; example only; test-harness
+- Decision: undetermined; reference; example only; test-harness
 - 1.20.1 implications: Packet layout/ID must be compared with 1.20.1 target protocol before reusing fixtures.
 - Follow-up checks: Validate even ASCII hex length and characters, add malformed/truncated fixtures and confirm 1.20.1 StopSound field semantics.
 - RustChunk implementation mapping: RustChunk StopSound wire codec regression tests.
@@ -2576,7 +2576,7 @@
 - Implementation / logic: Compiles `horizon-relay` in release mode, copies the executable into a minimal Debian image, exposes port 7000, and runs as `nobody`.
 - Findings: Separates build tools from runtime and uses a non-root runtime account; this is deployment packaging, not client code.
 - RustChunk relevance: No Forge 1.20.1 client, rendering or Aternos connectivity functionality.
-- Decision: reference; deployment-only; optional relay
+- Decision: undetermined; reference; deployment-only; optional relay
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Review base-image pinning, reproducible build, image scanning, runtime capabilities, CPU/memory limits and relay abuse protections.
 - RustChunk implementation mapping: Optional standalone RustChunk relay container, only if friend-hosting is an explicit product requirement.
@@ -2593,7 +2593,7 @@
 - Implementation / logic: Starts relay after network-online, uses DynamicUser, NoNewPrivileges, ProtectSystem=strict, ProtectHome and PrivateTmp, and restarts on failure.
 - Findings: Includes several useful systemd sandboxing controls; safe deployment still depends on trusted network/proxy configuration and configured resource limits.
 - RustChunk relevance: Server deployment configuration only; no Android launcher or Forge 1.20.1 behavior.
-- Decision: reference; deployment configuration; optional relay
+- Decision: undetermined; reference; deployment configuration; optional relay
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Check service filesystem needs, resource caps, trusted proxy boundaries, port exposure, and systemd compatibility on target distributions.
 - RustChunk implementation mapping: Template for a separate RustChunk relay service; not copied into Android app.
@@ -2661,7 +2661,7 @@
 - Implementation / logic: Exercises direct path, relay path, fallback, wrong secrets, unknown and ended codes, version mismatch, attach timeout, bandwidth cap, health/whoami and connection/first-line limits.
 - Findings: Provides broad end-to-end regression coverage for the optional relay. Tests were inspected only and not executed; no dedicated concurrent max_bridges race or malformed-rate config stress case was observed.
 - RustChunk relevance: No proof of Forge 1.20.1 protocol or Aternos compatibility.
-- Decision: reference; integration tests only; not executed
+- Decision: undetermined; reference; integration tests only; not executed
 - 1.20.1 implications: This optional relay subsystem does not implement Forge 1.20.1 client protocol or mod negotiation.
 - Follow-up checks: Add concurrency and invalid configuration tests plus fuzz malformed relay messages and shutdown races; run only in a dedicated test environment.
 - RustChunk implementation mapping: Regression suite for a separately implemented RustChunk relay; do not mix into Minecraft client protocol tests.
@@ -2678,7 +2678,7 @@
 - Implementation / logic: Defines the horizon-release-sign crate and its Ed25519/SHA-256 support dependencies.
 - Findings: Small host-side integrity tool dependency set; not part of Minecraft world or network runtime.
 - RustChunk relevance: Can inform secure updater architecture but does not provide game version/mod compatibility.
-- Decision: reference; release tooling; cryptographic dependency
+- Decision: undetermined; reference; release tooling; cryptographic dependency
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Confirm dependency policy, supported Rust toolchain and platform builds before adding analogous signing support.
 - RustChunk implementation mapping: RustChunk release-integrity crate or build tooling only.
@@ -2695,7 +2695,7 @@
 - Implementation / logic: Stores `<tag> <asset> <sha256>` records for historical releases and installer archives; changes require code-owner review.
 - Findings: The inspected 427-line file has 423 data rows. Both inspected ranges contained valid 64-hex SHA values and no repeated tag/asset keys; no malformed rows were found.
 - RustChunk relevance: Release metadata only; not a Minecraft runtime feature.
-- Decision: reference; release integrity data; legacy allowlist
+- Decision: undetermined; reference; release integrity data; legacy allowlist
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Recheck all rows as one dataset for global uniqueness and source provenance; ensure legacy hashes cannot be bypassed or silently replaced.
 - RustChunk implementation mapping: Optional pinned legacy digest table in RustChunk updater, if rollback support is needed.
@@ -2712,7 +2712,7 @@
 - Implementation / logic: Contains comments and one Base64-encoded public key; parser requires a 32-byte Ed25519 public key.
 - Findings: No private signing key is present in this file. Changes are designated for code-owner review.
 - RustChunk relevance: Potential trust-anchor pattern for RustChunk release verification, not game runtime.
-- Decision: reference; public key material; security-sensitive
+- Decision: undetermined; reference; public key material; security-sensitive
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Validate the decoded key length and key rotation process; document revocation/recovery and require protected review for trust-anchor changes.
 - RustChunk implementation mapping: RustChunk updater trust store or embedded public-key resource.
@@ -2763,7 +2763,7 @@
 - Implementation / logic: Creates archives/checksum manifests, signs with test keys or the signing shell script, verifies success, rejects tampering and checks secret output behavior.
 - Findings: Test cases cover the happy path and cryptographic tampering but do not exercise malicious checksum filenames/path traversal. Tests were inspected only, not run.
 - RustChunk relevance: Test-only release tooling reference; no Minecraft 1.20.1 runtime relevance.
-- Decision: reference; CLI integration tests only; not executed
+- Decision: undetermined; reference; CLI integration tests only; not executed
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Add absolute-path, parent-component, symlink, duplicate checksum and oversized manifest fixtures; run on Linux/macOS/Windows CI.
 - RustChunk implementation mapping: Tests for a future RustChunk release-integrity tool.
@@ -2797,7 +2797,7 @@
 - Implementation / logic: Writes default `eula=false`; reads EULA property case-insensitively; missing/unreadable files are replaced with default false and reported as errors.
 - Findings: Consent is explicit and defaults to not agreed; write failure is ignored when replacing an unreadable/missing file.
 - RustChunk relevance: Legal-consent pattern only; not launcher or Forge implementation.
-- Decision: reference; server legal-consent handling; version-specific
+- Decision: undetermined; reference; server legal-consent handling; version-specific
 - 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
 - Follow-up checks: Keep agreement explicit, avoid implying acceptance, and test missing, malformed, read-only and write-failure behavior.
 - RustChunk implementation mapping: No direct client module; use only as a legal-consent handling reference if required.
@@ -2865,7 +2865,7 @@
 - Implementation / logic: Looks up profile by name or UUID through discovered endpoints and decodes profilePropertyKeys/playerCertificateKeys into RSA public keys.
 - Findings: HTTP responses are read fully without explicit byte limits; discovery and returned endpoint URLs lack a visible host allowlist. Empty player name passes `valid_player_name`'s current length/ASCII predicate and needs comparison with the target Java behavior.
 - RustChunk relevance: Server account lookup and secure-chat trust data, not Forge client mod negotiation or Aternos routing.
-- Decision: reference; server account/profile lookup; network-sensitive
+- Decision: undetermined; reference; server account/profile lookup; network-sensitive
 - 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
 - Follow-up checks: Bound response sizes, enforce HTTPS and allowed service origins, validate redirects/endpoints and test player-name boundaries against vanilla.
 - RustChunk implementation mapping: Optional server-side profile resolver only; do not include in Android client runtime by default.
@@ -2882,7 +2882,7 @@
 - Implementation / logic: Reads defaults and values for online-mode, permissions, view/simulation distance, management server, world seed/generator, resource pack and other properties; normalizes them back to Properties.
 - Findings: Uses a /dev/urandom attempt then falls back to clock-seeded SplitMix64 for management secret generation, which is not a CSPRNG; its setting set is version-specific to the pinned newer server.
 - RustChunk relevance: Do not import settings as 1.20.1 truth; derive properties from Forge/Minecraft 1.20.1 target classes. Never reuse weak secret fallback.
-- Decision: reference; server settings schema; security-sensitive; version-specific
+- Decision: undetermined; reference; server settings schema; security-sensitive; version-specific
 - 1.20.1 implications: These files are dedicated-server support and modern server compatibility references; derive behavior from the exact 1.20.1 target instead of copying newer assumptions.
 - Follow-up checks: Replace with cross-platform OS CSPRNG that fails closed; validate bounds and compare every property/default/serializer with 1.20.1 server classes.
 - RustChunk implementation mapping: Version-specific server settings reference only; RustChunk client may only reuse unrelated parsing primitives after tests.
@@ -2950,7 +2950,7 @@
 - Implementation / logic: Defines status/actions, performance charts, player table, backup controls, console and signed-out/down states.
 - Findings: It is presentation markup; authentication and authorization must be enforced by the backend, not assumed from this file.
 - RustChunk relevance: Server dashboard only; no Android launcher or game-engine support.
-- Decision: reference; admin panel markup; server-only
+- Decision: undetermined; reference; admin panel markup; server-only
 - 1.20.1 implications: This file is not evidence of Minecraft 1.20.1 runtime or mod compatibility.
 - Follow-up checks: Review accessibility, CSRF/session design, safe linking and route authorization in associated backend handlers.
 - RustChunk implementation mapping: Optional admin companion UI only if RustChunk later needs remote server management.
@@ -3001,7 +3001,7 @@
 - Implementation / logic: Parses JSON actions, validates names/reasons/IP syntax at the route layer, serializes mutations, forwards vanilla console commands and emits response/metrics data.
 - Findings: The moderation API is server control-plane code, not a launcher or game client. Its player-name predicate accepts arbitrary non-ASCII non-space/control characters; confirm exact vanilla 26.3 constraints. Request handling depends on authenticated API routing.
 - RustChunk relevance: Shows structured moderation routing and metrics, but not Android launcher or Minecraft client functionality.
-- Decision: reference; dedicated-server admin API; server-only
+- Decision: undetermined; reference; dedicated-server admin API; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Test names against vanilla 26.3; enforce exact player/IP validation; test concurrent moderation and failure recovery; bound metric labels and all text fields.
 - RustChunk implementation mapping: No direct gameplay mapping; a separate optional RustChunk server-admin companion could adapt typed moderation routes.
@@ -3052,7 +3052,7 @@
 - Implementation / logic: Starts a detached supervisor, waits for status, issues API requests, tails or displays logs, asks for confirmation before restore and wraps player/config operations.
 - Findings: Startup wait timeout does not necessarily terminate the spawned server process; offline log display reads the complete latest.log into memory before selecting lines. CLI behavior is server administration and assumes the target Horizon version.
 - RustChunk relevance: Useful operational UX ideas, but not necessary for the RustChunk mobile launcher core.
-- Decision: reference; server CLI; server-only
+- Decision: undetermined; reference; server CLI; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Terminate or track child on timeout; tail logs with bounded memory and a maximum line count; test process orphaning, shutdown and terminal/nonterminal behavior.
 - RustChunk implementation mapping: Could inspire separate RustChunk CLI/diagnostic tool, not Android game runtime.
@@ -3069,7 +3069,7 @@
 - Implementation / logic: Provides default template, Config structs, typed property mapping, validation, config load/update/import and generation of server.properties before server start.
 - Findings: The template and fixed version assumptions target Minecraft Java 26.3, not 1.20.1. World-name validation rejects separators and `..` but permits `.`, which can resolve the world directory to the server root. Config reads and writes have no explicit file-size cap or atomic replacement.
 - RustChunk relevance: Useful validation design pattern but not suitable as a drop-in 1.20.1 configuration schema.
-- Decision: reference; version-specific server config; server-only
+- Decision: undetermined; reference; version-specific server config; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Reject dot/dot-dot and platform-reserved names; canonicalize world paths under server root; cap TOML size; use atomic writes; derive exact defaults and keys from vanilla/Forge 1.20.1.
 - RustChunk implementation mapping: No direct launcher config mapping; only generic typed-config/validation ideas after a new platform schema is defined.
@@ -3086,7 +3086,7 @@
 - Implementation / logic: Shows recent logs and periodically refreshed status, streams new events and sends typed console commands; Ctrl-D detaches without stopping the game.
 - Findings: Separation between detaching a console and stopping the server is clear. Multiple display/update sources may interleave terminal output; behavior is host CLI only.
 - RustChunk relevance: May inform developer diagnostics but does not address Minecraft 1.20.1 game performance or networking.
-- Decision: reference; terminal management UX; host-only
+- Decision: undetermined; reference; terminal management UX; host-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Test terminal resize, non-TTY input/output, concurrent events, dropped connections and graceful detach.
 - RustChunk implementation mapping: Optional desktop diagnostic console only; exclude from Android game runtime.
@@ -3120,7 +3120,7 @@
 - Implementation / logic: Finds executable and resources, verifies prepared manifests, starts game with server args and serves/uses a loopback control endpoint authenticated by a token.
 - Findings: Resource discovery hardcodes Minecraft 26.3 locations, not 1.20.1. `check_prepared` skips a manifest hash check when its key is absent, so incomplete manifests may pass some checks. Control metadata/replies lack visible size ceilings.
 - RustChunk relevance: The process/control patterns may inform tooling but the executable/resource assumptions cannot be ported directly.
-- Decision: reference; headless server engine; version-specific
+- Decision: undetermined; reference; headless server engine; version-specific
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Parameterize and version-pin resource layout; require all mandatory manifest hashes; bound control metadata, frame and reply sizes; test process exit, timeout and token handling.
 - RustChunk implementation mapping: Generic child-process supervision/control channel ideas only; create a distinct Android client/game launch path.
@@ -3171,7 +3171,7 @@
 - Implementation / logic: Supports command flags/environment variables or interactive prompts, imports existing server.properties, writes EULA false by default unless accepted, populates lists and writes server.toml.
 - Findings: Explicit EULA consent is a positive safeguard. Initialization mutates multiple files before final server.toml publication, so a later failure can leave partial state; world and port inputs should be validated before mutations.
 - RustChunk relevance: Useful consent and wizard sequencing ideas, but not a client-launcher implementation.
-- Decision: reference; dedicated-server init flow; server-only
+- Decision: undetermined; reference; dedicated-server init flow; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Prevalidate all answers and canonicalized world path; stage and atomically publish changes; test failure at every write/network/engine step; align profile validation with 1.20.1.
 - RustChunk implementation mapping: Not part of launcher; setup wizard patterns may inform future RustChunk instance setup.
@@ -3188,7 +3188,7 @@
 - Implementation / logic: Uses a lock to prevent the server starting during file edits; while running forwards commands, with a special offline whitelist add path that updates the JSON file and reloads it.
 - Findings: Clear separation between live server ownership and offline file mutation. Profile resolution and list format are tied to Horizon's newer server data; offline whitelist special case should be parity-tested.
 - RustChunk relevance: Potentially useful format/locking concepts, but not needed for joining Aternos or managing client accounts.
-- Decision: reference; dedicated-server access lists; server-only
+- Decision: undetermined; reference; dedicated-server access lists; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Compare offline UUID/profile behavior against vanilla 1.20.1; test lock races and partial writes; make user-list file updates atomic and bounded.
 - RustChunk implementation mapping: Optional account/list reference for server companion; do not confuse offline server UUID logic with launcher authentication.
@@ -3205,7 +3205,7 @@
 - Implementation / logic: Parses --dir, dispatches lifecycle, config, console, player moderation, backup/restore, service, panel, update and MCP commands.
 - Findings: Help text explicitly identifies Minecraft Java Edition 26.3. Several subcommands use permissive ad-hoc argument checks; port is parsed as u16 and zero remains accepted until later configuration validation.
 - RustChunk relevance: No direct launcher functionality; useful only as a command-line UX example.
-- Decision: reference; server command dispatcher; server-only
+- Decision: undetermined; reference; server command dispatcher; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Use a typed CLI parser or strict per-command arg validation; reject invalid port early; test unknown/duplicate/missing options.
 - RustChunk implementation mapping: Could inspire a separate RustChunk dev CLI, but not a dependency of the Android app.
@@ -3222,7 +3222,7 @@
 - Implementation / logic: Creates TLS/server settings and credentials, accepts WebSocket clients, authenticates with bearer or subprotocol secret plus Origin checks, dispatches RPC and broadcasts notifications/heartbeats.
 - Findings: TLS and Origin-aware authentication are useful security controls. Connection count is not capped and notification channel/outbox is unbounded; a slow client can stall the shared notifier. RPC behavior is explicitly pinned to Vanilla 26.3, not 1.20.1.
 - RustChunk relevance: Not a substitute for Minecraft 1.20.1 client networking; only administrative protocol patterns can transfer.
-- Decision: reference; server management WebSocket; version-specific
+- Decision: undetermined; reference; server management WebSocket; version-specific
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Cap simultaneous clients and queued notification bytes; disconnect slow consumers; validate complete WebSocket handshake headers/frame limits; use strong fail-closed entropy and version-specific protocol fixtures.
 - RustChunk implementation mapping: No direct client protocol mapping; optionally build a separate server-admin transport if RustChunk needs remote management.
@@ -3256,7 +3256,7 @@
 - Implementation / logic: Stores methods in vanilla order, builds JSON schema references and assembles the discover response with parameter/result descriptions.
 - Findings: Static schema generation makes capabilities discoverable, but advertised methods should be mechanically compared with actual handlers; the implementation file audited immediately before it does not appear to handle every incoming settings method.
 - RustChunk relevance: Schema-generation pattern only; all method names and DTOs need fresh 1.20.1 evidence before reuse.
-- Decision: reference; management protocol schema; version-specific
+- Decision: undetermined; reference; management protocol schema; version-specific
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Add exhaustive method/handler parity checks, schema validation for required/optional fields and compare generated output with the exact vanilla 26.3 reference.
 - RustChunk implementation mapping: Schema-first API design may be adapted for a separate management API; not for Minecraft game protocol.
@@ -3307,7 +3307,7 @@
 - Implementation / logic: Redeems expiring codes into sessions, limits sessions and failed logins, checks Host, requires X-Horizon for non-GET actions, sets SameSite/HttpOnly cookie and CSP/security headers.
 - Findings: One-time code and CSP/CSRF defenses are positive. Panel is served over HTTP and cookie lacks Secure; a non-loopback/public bind can expose login/session traffic. Login-link code list is only pruned on another link/login and can grow during repeated issuance.
 - RustChunk relevance: Some browser hardening patterns can transfer to a separate companion UI, not to the launcher runtime.
-- Decision: reference; web admin panel auth; server-only
+- Decision: undetermined; reference; web admin panel auth; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Require HTTPS for remote binds, Secure cookies on TLS, bound and prune pending codes at issuance, add session expiry, test DNS rebinding/Host behavior and CSRF/XSS.
 - RustChunk implementation mapping: Optional external admin web UI; keep separated from the Android launcher.
@@ -3341,7 +3341,7 @@
 - Implementation / logic: Binds query UDP port, issues per-source challenge tokens, caches full-stat bytes for five seconds, caches player info for one second and answers basic/full stat requests.
 - Findings: Packet-size cap and challenge protocol are present. Challenge map is keyed by source address but has no cardinality ceiling and can grow under many spoofed/source addresses until prune; full-stat response size depends on player names/count without a response cap. Uses 24-bit challenge token as vanilla-style behavior.
 - RustChunk relevance: Not required for the RustChunk launcher to join public/Aternos servers.
-- Decision: reference; GS4 query server; version-specific
+- Decision: undetermined; reference; GS4 query server; version-specific
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Cap challenge entries, bound full-stat bytes/player fields, add rate limits and UDP amplification tests; compare all wire bytes against vanilla 1.20.1 if implementing query.
 - RustChunk implementation mapping: Optional server query utility only, not client networking.
@@ -3358,7 +3358,7 @@
 - Implementation / logic: Parses little-endian RCON frames, limits request to 1460 bytes, allows 16 concurrent clients, closes connections that fail to log in within 30 seconds and chunks command output.
 - Findings: Connection cap, packet bound, deadline and constant-time password check are positive. Default server-ip empty binds 0.0.0.0; deployments need firewall/TLS/tailnet guidance. Reply chunk uses Unicode scalar count rather than vanilla's 4096 UTF-16 code units, so supplementary characters may differ.
 - RustChunk relevance: No role in launcher, chunk rendering, Forge mod loading or Aternos join protocol.
-- Decision: reference; RCON server; server-only
+- Decision: undetermined; reference; RCON server; server-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Require secure network exposure or TLS tunnel, compare exact UTF-16 chunk behavior, fuzz frame parsing and stress login/connection limits.
 - RustChunk implementation mapping: Separate optional server admin utility only; do not use as player connection implementation.
@@ -3392,7 +3392,7 @@
 - Implementation / logic: Builds service names/definitions, writes user/system systemd units, launchd agents or UTF-16 scheduled-task XML, then enables/starts or disables/removes them.
 - Findings: Uses least-privilege Windows task and explicit service restart behavior. systemd unit interpolates program and working-directory strings without escaping embedded newlines/control syntax; a crafted directory path could alter unit content. Windows temp XML name is predictable in temp directory and merits race/symlink-safe creation.
 - RustChunk relevance: Not applicable to Android launcher runtime.
-- Decision: reference; OS service integration; host-only
+- Decision: undetermined; reference; OS service integration; host-only
 - 1.20.1 implications: This file belongs to Horizon's dedicated-server management subsystem and is written against Minecraft Java 26.3 assumptions; it does not establish Minecraft 1.20.1 Forge client support, mod negotiation, Aternos compatibility or Android gameplay behavior.
 - Follow-up checks: Escape/reject systemd control chars and validate user field; use secure create_new temp files with owner-only permissions; test paths with quotes/newlines and permission boundaries.
 - RustChunk implementation mapping: No Android mapping; optional Linux desktop server service support only.

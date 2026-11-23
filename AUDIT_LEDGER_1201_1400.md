@@ -3358,8 +3358,8 @@
 - 1.20.1 implications: Verify food tags, age-up/eating timing, mob-griefing behavior, sneeze effects and love-mode event ordering.
 - Follow-up checks: Map to RustChunk panda AI/interaction and particles with 1.20.1 data.
 - RustChunk implementation mapping: 1.20.1 panda tags, deterministic AI tests and interaction/particle checks.
-- Evidence required before adoption: COMPLETE — all 185 lines read to EOF; SHA and 7154-byte size verified; tests inspected, not run.
-- Completion state: undefined
+- Evidence required before adoption: Java 1.20.1 Panda/PandaAi sources, exact food-tag registry, and differential AI/breeding/interaction/sneeze-particle traces; verify Forge event parity for any affected hooks.
+- Completion state: COMPLETE — all 185 lines read to EOF; SHA and 7154-byte size verified; tests inspected, not run.
 
 ### 1398. `crates/horizon-client/src/game/passengers.rs`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488

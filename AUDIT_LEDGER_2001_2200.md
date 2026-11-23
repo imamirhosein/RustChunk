@@ -444,7 +444,7 @@
 - Implementation / logic: The shader-pack check suite exercises valid packs, diagnostics, stage composition, texture-read budgets and material/vertex interfaces.
 - Findings: The budget case generates 70 textureLoad calls; no case exercises ImageGather, leaving the checker accounting gap unguarded. Tests are not a runtime proof.
 - RustChunk relevance: Useful as test design only; it exposes a missing texture-read budget regression case, not a runtime feature.
-- Decision: reference; WGSL checker test coverage; test-only
+- Decision: undetermined; reference; WGSL checker test coverage; test-only
 - 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
 - Follow-up checks: Add ImageGather/GatherCmp budget cases, malformed packs, oversized files, deep calls and helper-chain regression coverage; retain diagnostics assertions.
 - RustChunk implementation mapping: Do not port test code; copy the missing negative cases into RustChunk shader-checker tests after a checker exists.
@@ -461,7 +461,7 @@
 - Implementation / logic: Compiles representative stage preludes, compares Frame WGSL size/member offsets to Rust offsets, checks sample-stage composition and generated-doc freshness.
 - Findings: Layout checks size and offsets but not a complete field-type/interface contract; Naga validation does not establish Android backend correctness.
 - RustChunk relevance: Useful as a pattern for checking Rust/WGSL layout and source diagnostics; no renderer execution.
-- Decision: reference; Naga shader-layout tests; test-only
+- Decision: undetermined; reference; Naga shader-layout tests; test-only
 - 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
 - Follow-up checks: Assert every Frame member's WGSL type/alignment as well as offset/size; compare SPIR-V/Vulkan and Android backend output.
 - RustChunk implementation mapping: Use compile-time/host tests for Rust GPU structures, then device-specific backend and rendering comparisons.
@@ -495,7 +495,7 @@
 - Implementation / logic: Declares sample pack identity, shared WGSL, sky/material/post stages, options, reflection, shadow, tags and GPU budget.
 - Findings: Header claims every schema-1 key, but this fixture omits several optional schema features covered elsewhere by tests; it is not a complete conformance fixture.
 - RustChunk relevance: Useful as a sample fixture pattern, not as a Minecraft resource-pack schema.
-- Decision: reference; schema-1 manifest fixture; sample-only
+- Decision: undetermined; reference; schema-1 manifest fixture; sample-only
 - 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
 - Follow-up checks: Make the fixture genuinely complete or narrow its header claim; test every schema key and reject undocumented keys.
 - RustChunk implementation mapping: Use only as a test fixture after a separate RustChunk shader manifest is specified.
@@ -563,7 +563,7 @@
 - Implementation / logic: Identifies the schema-1 fixture as input to schema and stage-reference tests.
 - Findings: Documentation is one line and does not describe the broader schema or prove compatibility.
 - RustChunk relevance: Documentation fixture only.
-- Decision: reference; shader fixture documentation; test-only
+- Decision: undetermined; reference; shader fixture documentation; test-only
 - 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
 - Follow-up checks: Keep the README synchronized with the test fixture and actual schema.
 - RustChunk implementation mapping: Use as a reference for shader feature documentation.
@@ -597,7 +597,7 @@
 - Implementation / logic: Covers schema keys, validation failures, options, material/tag/light rules, pages, textures, PNG decoding, ZIP packaging and round-trip behavior.
 - Findings: Tests use PID-derived temporary directory names and remove them recursively; collision/isolation should be considered. No tests were run.
 - RustChunk relevance: Useful as validation-test ideas; tests do not establish cross-version compatibility.
-- Decision: reference; manifest and package validation tests; test-only
+- Decision: undetermined; reference; manifest and package validation tests; test-only
 - 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
 - Follow-up checks: Add isolation-safe temp dirs and package corruption/resource-limit cases; run only with separate authorization.
 - RustChunk implementation mapping: Translate selected parser edge cases into RustChunk tests; never import the fixture's Horizon schema as the game's resource format.
@@ -614,7 +614,7 @@
 - Implementation / logic: Exercises example pack validation, template generation, CLI check JSON and package round-trip through the built executable.
 - Findings: Subprocess output is captured without an explicit timeout or output cap; tests are host-only and were inspected, not executed.
 - RustChunk relevance: Useful as host-side CLI test organization, not Android app functionality.
-- Decision: reference; shader CLI integration tests; host-only
+- Decision: undetermined; reference; shader CLI integration tests; host-only
 - 1.20.1 implications: No direct Minecraft 1.20.1/Forge gameplay integration is demonstrated; sample and test contracts are Horizon-specific.
 - Follow-up checks: Add subprocess timeout, output bounds and deterministic locale/platform tests; inspect CLI failure cleanup.
 - RustChunk implementation mapping: Mirror host-tool integration tests in RustChunk's independent shader SDK, with controlled temp paths and process limits.
@@ -631,7 +631,7 @@
 - Implementation / logic: Declares the separate `horizon-shaders` crate with Naga GLSL/WGSL input, PNG and ZIP dependencies under Rust 1.85.
 - Findings: Naga 30.0.1 and this dependency graph are tied to the pinned Starling workspace, not automatically suitable for Android or Java 1.20.1.
 - RustChunk relevance: Dependency choices are research input only; build/size/Android support must be checked independently.
-- Decision: reference; GLSL shaderpack dependencies; version-specific
+- Decision: undetermined; reference; GLSL shaderpack dependencies; version-specific
 - 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
 - Follow-up checks: Check licenses, dependency graph, Naga backend support, native Android build footprint and ABI impact before adoption.
 - RustChunk implementation mapping: Choose versions only after Android ARM64 builds and dependency/licence audit; don't copy the manifest wholesale.
@@ -648,7 +648,7 @@
 - Implementation / logic: Discovers packs, loads programs for dimension folders, groups translation failures, optionally prints programs, stress variants and SPIR-V results.
 - Findings: `--example N` prints at most one sample per cause; invalid `--dims` tokens are silently dropped; backend check examines only the first entry point; synthetic game inputs approximate rather than prove actual pipeline compatibility.
 - RustChunk relevance: Useful for offline shader-pack diagnostics, not runtime proof of the Android Vulkan pipeline.
-- Decision: reference; shader-pack diagnostic report tool; host-only
+- Decision: undetermined; reference; shader-pack diagnostic report tool; host-only
 - 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
 - Follow-up checks: Make --example behavior match help, reject invalid dimensions/arguments, test all entry points and derive real pipeline inputs.
 - RustChunk implementation mapping: An offline troubleshooting utility could be designed later; not part of the Android render loop.
@@ -801,7 +801,7 @@
 - Implementation / logic: Exports pack, options, properties, GLSL translation, custom uniforms, textures, render-target settings, localization and post-program types.
 - Findings: The crate documentation states it knows nothing of wgpu and targets a Horizon clean-room shader-pack specification; this export surface is not a Minecraft client API.
 - RustChunk relevance: Useful architecture map for optional shader support only.
-- Decision: reference; shaderpack crate public API map; module-boundary only
+- Decision: undetermined; reference; shaderpack crate public API map; module-boundary only
 - 1.20.1 implications: This crate targets the pinned Starling shaderpack/renderer behavior around Minecraft 26.3 and Naga 30.0.1; no direct Java 1.20.1 or Forge compatibility is established.
 - Follow-up checks: Keep this module map synchronized when features are added; no independent implementation adoption is implied.
 - RustChunk implementation mapping: Treat exports as an index of optional Starling shaderpack components, not a RustChunk crate architecture.
@@ -1168,7 +1168,7 @@
 - Implementation / logic: Explains copying into shaderpacks and activating through HORIZON_SHADER_PACK=post-test.
 - Findings: Explicitly says it is written for Horizon, not another pack's code; it is not third-party compatibility evidence.
 - RustChunk relevance: Test fixture documentation only.
-- Decision: reference; Horizon post-processing test README; test fixture only
+- Decision: undetermined; reference; Horizon post-processing test README; test fixture only
 - 1.20.1 implications: No 1.20.1, OptiFine/Iris or Forge compatibility evidence.
 - Follow-up checks: Keep docs aligned with files and tests that consume this fixture.
 - RustChunk implementation mapping: No runtime port; use only as a test design reference.
@@ -1185,7 +1185,7 @@
 - Implementation / logic: Reconstructs view position from depth and emits color plus normalized distance.
 - Findings: Horizon-only; projection/depth/far and DRAWBUFFERS contracts are renderer-specific.
 - RustChunk relevance: Illustrates MRT post-processing only.
-- Decision: reference; Horizon composite fragment fixture; test-only
+- Decision: undetermined; reference; Horizon composite fragment fixture; test-only
 - 1.20.1 implications: Legacy GLSL 1.20 syntax; output targets and uniforms not 1.20.1 contracts.
 - Follow-up checks: Compare reconstruction near/far values and validate attachment mapping.
 - RustChunk implementation mapping: Use as concept only; define independent RustChunk shader ABI.
@@ -1202,7 +1202,7 @@
 - Implementation / logic: Transforms quad vertices and forwards transformed UVs.
 - Findings: Depends on compatibility built-ins and Horizon quad/matrix state; draw geometry and winding are not specified here.
 - RustChunk relevance: Fullscreen pass example only.
-- Decision: reference; Horizon fullscreen vertex fixture; test-only
+- Decision: undetermined; reference; Horizon fullscreen vertex fixture; test-only
 - 1.20.1 implications: Not directly portable; target renderer must provide these built-ins and UVs.
 - Follow-up checks: Test UV orientation/origin, viewport scaling and matrix values.
 - RustChunk implementation mapping: Use explicit fullscreen geometry/bindings after renderer conventions are fixed.
@@ -1219,7 +1219,7 @@
 - Implementation / logic: Samples color/depth/noise, blends fog on right half and writes output location zero.
 - Findings: Horizon-specific uniforms; fixed 256 noise scale may behave differently by resolution; GLSL 330 compatibility.
 - RustChunk relevance: Second post-process/diagnostic sample only.
-- Decision: reference; Horizon second composite fixture; test-only
+- Decision: undetermined; reference; Horizon second composite fixture; test-only
 - 1.20.1 implications: No direct mapping to Minecraft post-process chain.
 - Follow-up checks: Test noise tiling/resolution, UV origin and target binding.
 - RustChunk implementation mapping: Keep as renderer fixture concept, not code port.
@@ -1236,7 +1236,7 @@
 - Implementation / logic: Writes fullscreen position and passes untransformed UV.
 - Findings: Different UV path than composite.vsh without explaining why; runtime conventions decide correctness.
 - RustChunk relevance: Stage wiring fixture only.
-- Decision: reference; Horizon composite1 vertex fixture; test-only
+- Decision: undetermined; reference; Horizon composite1 vertex fixture; test-only
 - 1.20.1 implications: Renderer-specific; no 1.20.1 evidence.
 - Follow-up checks: Confirm UV-space convention and orientation with captures.
 - RustChunk implementation mapping: Use only for stage-interface tests.
@@ -1253,7 +1253,7 @@
 - Implementation / logic: Samples composed color, computes centered UV distance and multiplies by vignette.
 - Findings: Does not clamp the factor; if UV domain differs, color may become negative; legacy GLSL 1.20.
 - RustChunk relevance: Minimal final post-process fixture only.
-- Decision: reference; Horizon final vignette fragment fixture; test-only
+- Decision: undetermined; reference; Horizon final vignette fragment fixture; test-only
 - 1.20.1 implications: Color-space/alpha/output contract is Horizon-specific.
 - Follow-up checks: Check UV bounds, clamp policy, alpha preservation and linear/sRGB output.
 - RustChunk implementation mapping: Use only as a simple shader test after color space is defined.
@@ -1270,7 +1270,7 @@
 - Implementation / logic: Writes fullscreen position and matrix-transformed UVs.
 - Findings: Relies on Horizon matrix state; confirm identity/intended transform for this pass.
 - RustChunk relevance: Fullscreen fixture pattern only.
-- Decision: reference; Horizon final vertex fixture; test-only
+- Decision: undetermined; reference; Horizon final vertex fixture; test-only
 - 1.20.1 implications: No portable Minecraft/Forge shader contract.
 - Follow-up checks: Verify final-pass texture matrix and UV orientation.
 - RustChunk implementation mapping: No direct code reuse; concept only.
@@ -1287,7 +1287,7 @@
 - Implementation / logic: Contains one program enable rule: program.composite1.enabled = !NO_SPLIT.
 - Findings: Only a two-line fixture; does not test malformed directives, nested includes or profile resolution.
 - RustChunk relevance: Shader pass toggle example only.
-- Decision: reference; Horizon shader pass property fixture; test-only
+- Decision: undetermined; reference; Horizon shader pass property fixture; test-only
 - 1.20.1 implications: Horizon post-chain semantics, not Minecraft config.
 - Follow-up checks: Add enabled/disabled, missing option and malformed-expression cases.
 - RustChunk implementation mapping: Represent future pass enablement as typed boolean expression, separate from game settings.
@@ -1314,7 +1314,7 @@
 - Implementation / logic: Explains installation into shaderpacks and activation through HORIZON_SHADER_PACK.
 - Findings: Explicitly identifies the pack as Horizon's own code; not third-party compatibility evidence.
 - RustChunk relevance: Test fixture documentation only.
-- Decision: reference; Horizon terrain shaderpack README; test fixture only
+- Decision: undetermined; reference; Horizon terrain shaderpack README; test fixture only
 - 1.20.1 implications: No Minecraft 1.20.1, Forge or OptiFine/Iris compatibility demonstrated.
 - Follow-up checks: Keep description aligned with all stages and validate each documented visual cue.
 - RustChunk implementation mapping: Use only as an organization pattern for RustChunk renderer fixtures.
@@ -1331,7 +1331,7 @@
 - Implementation / logic: One block.1 rule lists leaf names across a continued line.
 - Findings: Static Horizon fixture mapping, not a stable vanilla numeric registry contract.
 - RustChunk relevance: Fixture data only.
-- Decision: reference; Horizon block-ID fixture; test-only
+- Decision: undetermined; reference; Horizon block-ID fixture; test-only
 - 1.20.1 implications: 1.20.1 block identities must come from versioned registries and block states.
 - Follow-up checks: Verify names in target registry and include modded namespace cases.
 - RustChunk implementation mapping: No direct port; use registry-derived IDs in a future adapter.
@@ -1348,7 +1348,7 @@
 - Implementation / logic: Reads color/depth, reconstructs view-space position and writes normalized depth.
 - Findings: Projection conventions, homogeneous division and output attachment are Horizon-specific.
 - RustChunk relevance: Renderer diagnostic fixture only.
-- Decision: reference; Horizon composite fragment fixture; test-only
+- Decision: undetermined; reference; Horizon composite fragment fixture; test-only
 - 1.20.1 implications: Legacy GLSL 120/Horizon uniforms; no vanilla 1.20.1 interface proof.
 - Follow-up checks: Test near/far clipping, depth=1, w edge cases and color behavior.
 - RustChunk implementation mapping: Conceptual depth-debug pass after RustChunk projection is specified.
@@ -1365,7 +1365,7 @@
 - Implementation / logic: Writes fullscreen position and forwards UV.
 - Findings: Requires Horizon compatibility-profile built-ins and quad state.
 - RustChunk relevance: Test-only fullscreen stage.
-- Decision: reference; Horizon fullscreen vertex fixture; test-only
+- Decision: undetermined; reference; Horizon fullscreen vertex fixture; test-only
 - 1.20.1 implications: No portable 1.20.1 render-stage ABI.
 - Follow-up checks: Confirm UV orientation and matrix assumptions on target renderer.
 - RustChunk implementation mapping: No direct reuse; retain only as pass-interface example.
@@ -1382,7 +1382,7 @@
 - Implementation / logic: Applies stage-specific magenta/red/green diagnostics and writes color.
 - Findings: Injected stage constants and vertex-color contract are Horizon-specific.
 - RustChunk relevance: Sky diagnostic fixture only.
-- Decision: reference; Horizon sky-basic fragment fixture; test-only
+- Decision: undetermined; reference; Horizon sky-basic fragment fixture; test-only
 - 1.20.1 implications: Stage IDs are not a Minecraft 1.20.1 public contract.
 - Follow-up checks: Compare stage identifiers with target renderer and verify fog/weather order.
 - RustChunk implementation mapping: Use as concept for sky pipeline tests only.
@@ -1399,7 +1399,7 @@
 - Implementation / logic: Transforms position and passes fixed-function vertex color.
 - Findings: Depends on Horizon fixed-function compatibility inputs.
 - RustChunk relevance: Simple stage interface fixture.
-- Decision: reference; Horizon sky-basic vertex fixture; test-only
+- Decision: undetermined; reference; Horizon sky-basic vertex fixture; test-only
 - 1.20.1 implications: Not a portable core-profile or Minecraft Java ABI.
 - Follow-up checks: Test interpolation and color-space on target backend.
 - RustChunk implementation mapping: No direct runtime port.
@@ -1416,7 +1416,7 @@
 - Implementation / logic: Combines texture and vertex color, discards low alpha, applies sky-light tint, highlights leaves and marks face centers.
 - Findings: Numeric block ID 1, atlas coordinates and Horizon stage/attribute semantics are test-only assumptions.
 - RustChunk relevance: Terrain shader input demonstration only.
-- Decision: reference; Horizon terrain fragment fixture; test-only
+- Decision: undetermined; reference; Horizon terrain fragment fixture; test-only
 - 1.20.1 implications: No target block ID, atlas or vertex ABI established for Minecraft 1.20.1.
 - Follow-up checks: Validate ID source, atlas transforms, cutout threshold, lightmap and translucent fallback.
 - RustChunk implementation mapping: Use only as diagnostic idea after RustChunk's vertex contract is fixed.
@@ -1433,7 +1433,7 @@
 - Implementation / logic: Transforms position/UVs and forwards face center, color and entity ID.
 - Findings: Relies on Horizon vertex attributes and compatibility built-ins; defaults must be defined by renderer.
 - RustChunk relevance: Terrain vertex interface fixture.
-- Decision: reference; Horizon terrain vertex fixture; test-only
+- Decision: undetermined; reference; Horizon terrain vertex fixture; test-only
 - 1.20.1 implications: No Forge or Minecraft 1.20.1 vertex contract.
 - Follow-up checks: Verify attribute layout, precision, UV transforms and face-center generation.
 - RustChunk implementation mapping: Create target-version vertex input only after mesher/renderer contract stabilizes.
@@ -1450,7 +1450,7 @@
 - Implementation / logic: Samples texture times vertex color and changes red/blue channels for moon stage.
 - Findings: Horizon render-stage constant and blend behavior are fixture-specific.
 - RustChunk relevance: Celestial diagnostic shader only.
-- Decision: reference; Horizon textured fragment fixture; test-only
+- Decision: undetermined; reference; Horizon textured fragment fixture; test-only
 - 1.20.1 implications: No vanilla 1.20.1 sky/celestial pipeline evidence.
 - Follow-up checks: Verify moon/sun identity, blend and alpha behavior against target renderer.
 - RustChunk implementation mapping: Use only as a renderer-test concept.
@@ -1467,7 +1467,7 @@
 - Implementation / logic: Transforms position/UV and forwards vertex color.
 - Findings: Fixed-function inputs are supplied by Horizon renderer.
 - RustChunk relevance: Simple vertex fixture.
-- Decision: reference; Horizon textured vertex fixture; test-only
+- Decision: undetermined; reference; Horizon textured vertex fixture; test-only
 - 1.20.1 implications: No portable 1.20.1 interface.
 - Follow-up checks: Verify matrices and color interpolation against target celestial renderer.
 - RustChunk implementation mapping: No direct port.
@@ -1484,7 +1484,7 @@
 - Implementation / logic: Requires HORIZON_TEST_SHADER_PACKS; walks base/dimension folders and reports parse/translation/backend results.
 - Findings: Marked ignored; external input, no timeout/output cap, read_dir errors flattened, origin indexing trusted. Synthetic GameInputs do not prove real draw ABI or MobileGlues.
 - RustChunk relevance: Validation-harness design only.
-- Decision: reference; ignored real shaderpack compatibility harness; test-only
+- Decision: undetermined; reference; ignored real shaderpack compatibility harness; test-only
 - 1.20.1 implications: Horizon renderer assumptions; no Minecraft 1.20.1, Forge, Aternos or Android evidence.
 - Follow-up checks: Use deterministic allowlisted pack corpus, bound time/output/resources and validate source origins.
 - RustChunk implementation mapping: Adopt harness pattern only after RustChunk has its own translator and versioned fixtures.
@@ -1501,7 +1501,7 @@
 - Implementation / logic: Ignores /target/.
 - Findings: No further generated-file exclusions are declared here.
 - RustChunk relevance: Repository hygiene only.
-- Decision: reference; telemetry server gitignore; hygiene
+- Decision: undetermined; reference; telemetry server gitignore; hygiene
 - 1.20.1 implications: No gameplay or launcher behavior.
 - Follow-up checks: Check where local DBs and generated artifacts are stored.
 - RustChunk implementation mapping: Mirror only needed build exclusions.
@@ -1518,7 +1518,7 @@
 - Implementation / logic: Cargo lockfile v4 includes axum, tokio, rusqlite, ureq, rustls, serde, compression and platform dependencies.
 - Findings: A lockfile is provenance, not an advisory/license audit; dependency set is host service, not Android client.
 - RustChunk relevance: Dependency provenance reference only.
-- Decision: reference; telemetry server lockfile; host-only
+- Decision: undetermined; reference; telemetry server lockfile; host-only
 - 1.20.1 implications: Do not import this lockfile wholesale into Android client; no target compatibility established.
 - Follow-up checks: Perform advisory/license/MSRV and reproducible build reviews separately before adoption.
 - RustChunk implementation mapping: Keep backend dependencies isolated from client workspace.
@@ -1535,7 +1535,7 @@
 - Implementation / logic: Separate workspace prevents launcher building server; uses bundled SQLite and network/async dependencies.
 - Findings: Rust 1.90, edition 2024 and bundled SQLite/native dependency footprint are host-service decisions, not Android client requirements.
 - RustChunk relevance: Good architectural boundary example only.
-- Decision: reference; standalone telemetry server manifest; host service
+- Decision: undetermined; reference; standalone telemetry server manifest; host service
 - 1.20.1 implications: No client/game protocol or Forge feature.
 - Follow-up checks: Review MSRV, feature sets, licenses and SQLite native build only if backend is planned.
 - RustChunk implementation mapping: Keep any telemetry service in separate workspace/crate.
@@ -1569,7 +1569,7 @@
 - Implementation / logic: Defines payload limits, retention, anonymization thresholds, export token, endpoints, caching and Railway deployment.
 - Findings: IP not stored persistently but used in-memory for rate limiting; rich hardware details and report text persist for documented periods. Token/proxy configuration governs sensitive surfaces; README isn't proof of deployed behavior.
 - RustChunk relevance: Useful product/privacy architecture reference, separate from game engine.
-- Decision: reference; opt-in telemetry server documentation; service policy
+- Decision: undetermined; reference; opt-in telemetry server documentation; service policy
 - 1.20.1 implications: No launcher/game support; telemetry must never be silently enabled in RustChunk.
 - Follow-up checks: Compare docs with handlers and DB paths; review consent, deletion, retention, export token and proxy threat model.
 - RustChunk implementation mapping: Any future telemetry must be explicit opt-in, minimal, disableable and separated.
@@ -1586,7 +1586,7 @@
 - Implementation / logic: Uses Dockerfile builder, /healthz and ON_FAILURE with up to five retries; one replica.
 - Findings: SQLite file motivates one replica; multi-instance scaling needs different storage/coordination; provider settings are external.
 - RustChunk relevance: Deployment artifact only.
-- Decision: reference; Railway deployment configuration; host service
+- Decision: undetermined; reference; Railway deployment configuration; host service
 - 1.20.1 implications: No Android client relevance.
 - Follow-up checks: Keep single writer or migrate storage before scaling; verify volume and provider config.
 - RustChunk implementation mapping: No game integration.
@@ -1671,7 +1671,7 @@
 - Implementation / logic: Checks item/voter shape, stores one vote per item/voter, caps item count at 1000, caches totals.
 - Findings: Voter is client-generated and only shape-checked, not authenticated; IDs can be minted. Missing/non-bool up defaults true; IDs not checked against roadmap catalogue.
 - RustChunk relevance: Website community feature only.
-- Decision: reference; roadmap voting; backend-only
+- Decision: undetermined; reference; roadmap voting; backend-only
 - 1.20.1 implications: No Minecraft client/game relationship.
 - Follow-up checks: Anti-abuse measures, strict up schema and roadmap membership validation.
 - RustChunk implementation mapping: Do not place hub voting in game client.
@@ -1800,7 +1800,7 @@
 - Implementation / logic: Uploads in-memory test reports/perf sessions, checks token-off/incorrect-token responses, pages raw benchmark results and hardware summaries and decompresses gzip responses.
 - Findings: Covers only small in-memory fixtures and successful/invalid token paths; does not stress unbounded hardware aggregation, huge responses, concurrent deletion/export, token rotation, malformed headers or timing properties.
 - RustChunk relevance: Host-side regression tests for a future telemetry service only.
-- Decision: reference; protected telemetry export HTTP tests; test-only
+- Decision: undetermined; reference; protected telemetry export HTTP tests; test-only
 - 1.20.1 implications: Does not test the Minecraft client, Android networking, Forge handshake or Aternos connectivity.
 - Follow-up checks: Add large-history/pagination limits, concurrent export/delete tests, authorization rotation, response-size caps and hostile header tests.
 - RustChunk implementation mapping: Do not put protected export credentials or endpoints in the Android client.
@@ -1817,7 +1817,7 @@
 - Implementation / logic: Explains a three-install GPU/CPU/render-distance group, excluded undersized groups, invalid runs and hardware-class breakdown rules.
 - Findings: Fixture copy must be changed in sync with the separate website repository; synthetic identifiers/metrics do not prove real-world benchmark comparability.
 - RustChunk relevance: Reference for a shared fixture discipline across client/server/web projects.
-- Decision: reference; benchmark fixture README; test documentation
+- Decision: undetermined; reference; benchmark fixture README; test documentation
 - 1.20.1 implications: Fixture data is Horizon benchmark schema; not Forge 1.20.1 evidence.
 - Follow-up checks: Keep copies synchronized with checksum or generated fixture workflow and add realistic 1.20.1 modded and vanilla runs.
 - RustChunk implementation mapping: Use as a testing pattern only; create RustChunk-owned fixtures and explicit consent coverage.
@@ -1834,7 +1834,7 @@
 - Implementation / logic: Defines the minimum install count and one expected RTX 4080/i7 group with medians and coarse hardware breakdowns.
 - Findings: One deterministic golden sample covers only a narrow valid result; it does not cover edge rounding, ties, invalid numbers, duplicates, missing metadata or version sort anomalies.
 - RustChunk relevance: Reference test data only.
-- Decision: reference; benchmark golden output; test-only
+- Decision: undetermined; reference; benchmark golden output; test-only
 - 1.20.1 implications: No relation to Minecraft 1.20.1 or Forge gameplay correctness.
 - Follow-up checks: Expand table-driven golden cases for numeric boundaries, repeated runs/install, missing data and stable ordering.
 - RustChunk implementation mapping: Use as a fixture pattern, not as an expected RustChunk performance target.
@@ -1851,7 +1851,7 @@
 - Implementation / logic: Contains valid Horizon runs across installs/versions plus deliberately rejected VSync-on, offscreen, capped, missing-scene, wrong-version and underspecified runs.
 - Findings: Records are synthetic; only one primary valid GPU group meets threshold. Secret-like fields are sentinel values and demonstrate redaction checks, not actual private data. Fixture does not represent Forge/mod-heavy workloads.
 - RustChunk relevance: Useful for designing negative benchmark/privacy tests only.
-- Decision: reference; benchmark item fixture corpus; test-only
+- Decision: undetermined; reference; benchmark item fixture corpus; test-only
 - 1.20.1 implications: All report values and app names use Horizon's schema and do not establish 1.20.1 compatibility.
 - Follow-up checks: Add corrupt JSON, duplicate phases, fractions/out-of-range values, modded profiles and multiple backend/device scenarios.
 - RustChunk implementation mapping: Create independent anonymized RustChunk fixture reports, including Forge 47.x with declared mod lists only when user opts in.
@@ -1868,7 +1868,7 @@
 - Implementation / logic: Checks mentions, issue references, HTML-like text, closing keywords, template body/title and labels.
 - Findings: Only a handful of crafted strings; Unicode normalization, nested Markdown, encoded URLs, control characters, long text and actual GitHub rendering are not covered.
 - RustChunk relevance: Support-service regression tests only.
-- Decision: reference; GitHub report neutralization tests; test-only
+- Decision: undetermined; reference; GitHub report neutralization tests; test-only
 - 1.20.1 implications: No Minecraft/Forge/client functionality.
 - Follow-up checks: Add adversarial Unicode/Markdown/link corpus and cap GitHub response sizes; test issue body as GitHub renders it.
 - RustChunk implementation mapping: Keep support intake separate from the Android client and require an explicit user action to submit reports.
@@ -1885,7 +1885,7 @@
 - Implementation / logic: Uses in-memory Store and fake GitHub to verify one-vote-per-browser, report template, one-day duplicate, bot honeypot, retries, limits and expiry.
 - Findings: Tests are sequential; no concurrent duplicate POST or concurrent file_pending/POST race is tested, nor crash after GitHub accepted but before filed state persisted. Voter identity is self-generated and shape-only.
 - RustChunk relevance: Useful server test patterns, not game client behavior.
-- Decision: reference; hub intake and retry tests; test-only
+- Decision: undetermined; reference; hub intake and retry tests; test-only
 - 1.20.1 implications: Community website functionality, not Minecraft multiplayer; report text retention requires consent/privacy policy.
 - Follow-up checks: Add atomic queue lease/idempotency, concurrent report retry tests, crash recovery, authenticated voting/anti-abuse and duplicate-field validation.
 - RustChunk implementation mapping: Do not embed community reporting/voting service into gameplay; optional support action remains explicit opt-in.
@@ -1902,7 +1902,7 @@
 - Implementation / logic: Tests periodic session refresh/expiry, invalid ping payloads, per-address throttling, max sessions, local HTTP client round-trip and official-server status records.
 - Findings: Tests validate the telemetry protocol only; the client/server sessions are not Minecraft multiplayer sessions. Fixed sleeps/timeouts can be timing-sensitive and proxy trust is set true in test config.
 - RustChunk relevance: Reference for a standalone optional presence counter only.
-- Decision: reference; live endpoint integration tests; test-only
+- Decision: undetermined; reference; live endpoint integration tests; test-only
 - 1.20.1 implications: Not evidence of actual Aternos join, server-list ping in game or Forge packet compatibility.
 - Follow-up checks: Add restart, burst/expiry boundary and proxy-spoofing tests; test the live ping only under an explicit opt-in policy if RustChunk adopts it.
 - RustChunk implementation mapping: Keep live telemetry IDs distinct from Minecraft server connection state and do not transmit without deliberate consent decision.
@@ -1919,7 +1919,7 @@
 - Implementation / logic: Creates synthetic telemetry batches, checks group privacy threshold, deletes install rows, expiry, IPv6/proxy rate limits and a 10,000-session storage test.
 - Findings: Coverage is broad but still sequential/synthetic; no concurrent daily-cap race, corrupted DB migration, malicious stored payload, server overload, real Android upload or network retry-under-process-death scenario is tested.
 - RustChunk relevance: Strong host-side design/test reference for optional telemetry persistence and privacy.
-- Decision: reference; telemetry server integration tests; test-only
+- Decision: undetermined; reference; telemetry server integration tests; test-only
 - 1.20.1 implications: Uploader HTTP end-to-end does not exercise Minecraft 1.20.1 gameplay, Forge mods, Aternos or Android ARM64.
 - Follow-up checks: Add race/failure injection around count_on+insert, process death during upload, concurrent delete/upload, migration rollback and hostile data sizes.
 - RustChunk implementation mapping: Keep telemetry separate from RustChunk's actual game connection and world persistence; user-configurable opt-in only.
@@ -1936,7 +1936,7 @@
 - Implementation / logic: Tests rejection reasons, per-install medians, rounding, client upload and site-compatible summary, then deletes an install to drop group below threshold.
 - Findings: Golden corpus is narrow and synthetic; no exact-one-phase rule, duplicate phase, non-finite/huge numeric, semver edge ordering or Forge mod identity tests.
 - RustChunk relevance: Reference for cross-repository fixture parity only.
-- Decision: reference; benchmark summary tests; test-only
+- Decision: undetermined; reference; benchmark summary tests; test-only
 - 1.20.1 implications: Does not establish 1.20.1 Forge client performance measurement validity.
 - Follow-up checks: Expand schema/range fuzzing and independent Java or Rust client report generation for actual target game.
 - RustChunk implementation mapping: Use testing method only; design RustChunk report schema separately.
@@ -2140,7 +2140,7 @@
 - Implementation / logic: Uses a mock server to count connections and verify disabled/withdrawn uploads make none; checks per-kind filtering, failure retry and preview/deletion.
 - Findings: Tests do not cover in-flight withdrawal during a multi-batch flush, concurrent producers, DNS/TLS/redirect behavior, permission failures or the separately documented no-consent live ping.
 - RustChunk relevance: Valuable privacy regression test pattern, but its scope excludes live presence.
-- Decision: reference; telemetry consent gating tests; test-only
+- Decision: undetermined; reference; telemetry consent gating tests; test-only
 - 1.20.1 implications: Only tests telemetry library behavior; it does not validate Minecraft 1.20.1/Forge gameplay.
 - Follow-up checks: Extend tests to live ping consent, concurrent toggle/flush, multi-process outbox, state-file write failures and TLS-only configuration.
 - RustChunk implementation mapping: RustChunk must make telemetry default-off and ensure every network call is covered by the consent state.
@@ -2182,7 +2182,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2199,7 +2199,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2216,7 +2216,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2233,7 +2233,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2250,7 +2250,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2267,7 +2267,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2284,7 +2284,7 @@
 - Implementation / logic: 15-table SFNT, 1,000 units/em, 703 glyphs/661 mappings; 403 simple, 285 composite and 15 empty glyphs; GSUB DFLT/latn 57 lookups, GPOS DFLT/latn 5; table and whole-font checksum 0xB1B0AFBA pass; static (no fvar), fsType 0.
 - Findings: No Arabic/Persian cmap coverage; shaping scripts DFLT/latn only. No malformed outline, out-of-bounds table or checksum mismatch. Bricolage's license says Cyrillic glyph material is merged from Geist, so both attributions matter.
 - RustChunk relevance: Optional Latin typography; file integrity is checked, but Android shaping/rendering and performance are not.
-- Decision: reference; optional Latin display/body typography; no Arabic/Persian support
+- Decision: undetermined; reference; optional Latin display/body typography; no Arabic/Persian support
 - 1.20.1 implications: Cannot be the only font for Persian menus. Requires a Persian-capable face, shaping, bidi and fallback; no Minecraft/Forge integration.
 - Follow-up checks: Test mixed-script fallback, punctuation, baselines, hinting, density, clipping and memory on Android; preserve both Bricolage and Geist notices.
 - RustChunk implementation mapping: Optional theme asset only; never use for Persian strings without a tested Persian-capable fallback.
@@ -2420,7 +2420,7 @@
 - Implementation / logic: 17-table SFNT, 1,000 units/em, 578 glyphs/577 mappings; GSUB DFLT/latn 21 lookups, GPOS DFLT/latn 3; 389 simple, 187 composite, 2 empty glyphs; all checksums pass; static, fsType 0.
 - Findings: No Arabic/Persian mappings. No malformed outline/checksum issues. Pixel design is decorative and may reduce small-text readability.
 - RustChunk relevance: Optional retro/pixel styling for short labels only.
-- Decision: reference; decorative Pixelify pixel typography; no Arabic/Persian support
+- Decision: undetermined; reference; decorative Pixelify pixel typography; no Arabic/Persian support
 - 1.20.1 implications: No Minecraft/Forge functionality; unsuitable as sole Persian or long-form UI face.
 - Follow-up checks: Test legibility at Android density/sizes, contrast/accessibility and Persian fallback; preserve OFL notice.
 - RustChunk implementation mapping: Optional theme-only asset; do not use for ordinary menus, help or long descriptions.
@@ -2437,7 +2437,7 @@
 - Implementation / logic: 17-table SFNT, 1,000 units/em, 578 glyphs/577 mappings; GSUB DFLT/latn 21 lookups, GPOS DFLT/latn 3; 389 simple, 187 composite, 2 empty glyphs; all checksums pass; static, fsType 0.
 - Findings: No Arabic/Persian mappings. No malformed outline/checksum issues. Pixel design is decorative and may reduce small-text readability.
 - RustChunk relevance: Optional retro/pixel styling for short labels only.
-- Decision: reference; decorative Pixelify pixel typography; no Arabic/Persian support
+- Decision: undetermined; reference; decorative Pixelify pixel typography; no Arabic/Persian support
 - 1.20.1 implications: No Minecraft/Forge functionality; unsuitable as sole Persian or long-form UI face.
 - Follow-up checks: Test legibility at Android density/sizes, contrast/accessibility and Persian fallback; preserve OFL notice.
 - RustChunk implementation mapping: Optional theme-only asset; do not use for ordinary menus, help or long descriptions.
@@ -2454,7 +2454,7 @@
 - Implementation / logic: 17-table SFNT, 1,000 units/em, 578 glyphs/577 mappings; GSUB DFLT/latn 21 lookups, GPOS DFLT/latn 3; 389 simple, 187 composite, 2 empty glyphs; all checksums pass; static, fsType 0.
 - Findings: No Arabic/Persian mappings. No malformed outline/checksum issues. Pixel design is decorative and may reduce small-text readability.
 - RustChunk relevance: Optional retro/pixel styling for short labels only.
-- Decision: reference; decorative Pixelify pixel typography; no Arabic/Persian support
+- Decision: undetermined; reference; decorative Pixelify pixel typography; no Arabic/Persian support
 - 1.20.1 implications: No Minecraft/Forge functionality; unsuitable as sole Persian or long-form UI face.
 - Follow-up checks: Test legibility at Android density/sizes, contrast/accessibility and Persian fallback; preserve OFL notice.
 - RustChunk implementation mapping: Optional theme-only asset; do not use for ordinary menus, help or long descriptions.
@@ -3169,7 +3169,7 @@
 - Implementation / logic: 64×64 pixels, 8-bit RGBA, compression/filter 0, non-interlaced; IHDR, bKGD, IDAT (722 bytes), IEND. All four chunk CRC32s valid; IEND ends exactly at byte 797.
 - Findings: Binary structure and CRC integrity are valid; image preview was checked. Ownership and redistribution permission are not established by the adjacent icon notices.
 - RustChunk relevance: Potential launcher branding/splash asset, not an Android adaptive-icon definition or a Minecraft texture.
-- Decision: reference; Horizon 64px bitmap branding asset; verify ownership before redistribution
+- Decision: undetermined; reference; Horizon 64px bitmap branding asset; verify ownership before redistribution
 - 1.20.1 implications: No Android density variants, adaptive mask or APK packaging behavior are defined; not a Forge resource by itself.
 - Follow-up checks: Confirm ownership and redistribution rights; verify brand intent, transparency/background, scaling and adaptive-icon rendering on Android.
 - RustChunk implementation mapping: Keep separate from third-party icon packs until ownership is verified; do not assign MIT from a neighboring directory.

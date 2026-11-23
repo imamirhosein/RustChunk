@@ -13,8 +13,16 @@ Branch: starling-1.20.1-port-audit
 - Active Ledger `AUDIT_LEDGER_2801_3000.md`: **200 records (2801–3000)**, each with exactly 15 fields. Index: **3,000 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
 - The complete recursive source tree is untruncated (5,749 entries). New paths were selected from the complete tree after excluding the full Index.
-- Source SHAs, byte sizes, canonical line counts and EOF coverage for the latest 25 are recorded and checked against the pinned tree.
-- Backup remains at entries 1–2000; next backup only after entry 3000 and global verification. Tests/examples were inspected only, not executed. No application source changes, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Global structural/provenance QA for entries 1–3000 is complete on 2026-11-23. All 3,000 source SHA/byte-size pairs match the pinned tree after the entry 174 correction; all 15 fields, primary Decision labels, Index alignment and recorded Coverage/Completion ranges were reconciled. Tests/examples were inspected only, not executed. No application source changes, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+
+## Global QA closeout — entries 1–3000 — COMPLETE (2026-11-23)
+
+- 3,000 sequential unique Index paths; all Ledger/Index paths align.
+- All 3,000 source paths exist in the complete pinned tree; all source SHA/byte-size pairs match after correcting entry 174.
+- All 3,000 Ledger entries have exactly 15 fields, with no undefined placeholders. Primary Decision labels are first and align with Index rows.
+- Entry 2542's missing 401–600 range was re-fetched; entry 1429's long-file coverage was expanded to explicit ranges.
+- 28 shifted records and the separate entry 1397 Evidence/Completion alignment were corrected; two undefined evidence values were filled.
+- No app source changed. No build, APK, Android-device, renderer, Minecraft/Forge or multiplayer validation was performed.
 
 ## Source pin and selection
 
@@ -63,11 +71,14 @@ Before each new chat continuation, re-fetch the latest branch head and read this
 
 ## Backup state
 
-- `backup/audit-1000-unique-2026-11-18` -> `9b3b697e3c80019025d857a5e3dd0b6e20d0a5c4`.
-- `backup/audit-1000-final-2026-11-19` -> `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`.
-- Both backup refs must remain untouched. They are procedurally read-only; GitHub currently reports branch protection disabled.
-- Next backup only after entries 1001–2000 are fully committed and globally verified. No backup after 25, 50, 100 or 200 entries.
-- Do not recreate or alter the deleted archive branch. Do not place audit files on main.
+- Global structural/provenance QA for entries **1–3000** is complete on 2026-11-23.
+- Current preserved backup refs, confirmed from the GitHub branch list:
+  - `backup/audit-1000-final-2026-11-19` -> `4ba78eba6ebc2c89bb455a68a3cb9ddfe5f30e23`.
+  - `backup/audit-2000-final-2026-11-21` -> `f0d7c32d0bdcf70fa30a88e54f049fe08dfca283`.
+- Historical `backup/audit-1000-unique-2026-11-18` is absent from the current branch list; do not recreate it.
+- The final 3,000-entry snapshot branch is `backup/audit-3000-final-2026-11-23`; it must point exactly to the verified global-QA commit.
+- Backup refs are procedurally read-only; GitHub reports branch protection disabled. Do not modify the existing 1,000- or 2,000-entry backup refs.
+- The next backup is due only after entries **3001–4000** are authorized, completed, committed and globally verified.
 
 ## Historical completed-work snapshot — entries 1–1800
 
