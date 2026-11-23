@@ -3300,3 +3300,34 @@
 | 2848 | `docs/material-rule-libraries.md` | rewrite required; reference; version-specific | Relevant as a worldgen resource graph design, not as target-version data. |
 | 2849 | `docs/material-surfaces.md` | rewrite required; reference; version-specific | Highly relevant to terrain surface generation, but requires a full 1.20.1 rewrite and integration with Forge worldgen. |
 | 2850 | `docs/media/brand/README.md` | unnecessary; reference | No direct RustChunk technical value beyond general source-vs-generated asset discipline. |
+
+
+## Part 115 — Entries 2851–2875
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2851 | `docs/media/entity-culling-benchmark.md` | adaptable; reference; version-specific | Useful as a benchmark design example for entity culling, but the result is hardware/workload-specific. |
+| 2852 | `docs/microsoft-account.md` | adaptable; reference; security-sensitive; version-specific | Essential reference for correctly distinguishing online authentication, offline profiles and offline-mode server access; do not copy the Horizon owner-gate policy automatically. |
+| 2853 | `docs/mod-browser.md` | adaptable; reference; version-specific | Safe download, dependency resolution and UI patterns transfer; its Java-to-native porting model is incompatible with RustChunk's goal of running Forge JARs. |
+| 2854 | `docs/modpacks.md` | adaptable; reference; version-specific | Pack manifest parsing, dependency ordering, local workspaces, licensing, coverage reporting and differential testing are useful. Its core porting strategy must not replace actual Forge support. |
+| 2855 | `docs/narrator.md` | adaptable; reference; version-specific | Accessibility concepts and nonblocking speech-thread design are valuable for Android launcher/game UI. |
+| 2856 | `docs/native-hooks-neoforge.md` | adaptable; reference; version-specific | A stable hook contract and explicit side/cancellation semantics are useful when designing compatibility bridges. |
+| 2857 | `docs/noise-aquifer-benchmark.md` | adaptable; reference; version-specific | Strong optimization methodology and candidate algorithms for worldgen, but no evidence of Android gains or 1.20.1 parity. |
+| 2858 | `docs/noise-generation.md` | rewrite required; reference; version-specific | Core worldgen math is relevant, but the target-version data and random streams must be rebuilt. |
+| 2859 | `docs/owners.md` | unnecessary; reference; version-specific | No direct value for the RustChunk Android launcher; generic config migration/validation is reusable. |
+| 2860 | `docs/parity/blocks.md` | rewrite required; reference; version-specific | High relevance to integrated-server/world simulation and Forge mod interactions, but not directly portable. |
+| 2861 | `docs/parity/meshing.md` | adaptable; reference; version-specific | Strong renderer-validation pattern for RustChunk's chunk mesh, fluids, lighting and resource-pack rendering. |
+| 2862 | `docs/performance/lighting-worker-results.md` | adaptable; reference | Potentially useful for RustChunk chunk/light worker ownership and reducing copies. |
+| 2863 | `docs/performance/paletted-container-access-results.md` | adaptable; reference | Directly relevant to chunk section storage and block lookup performance. |
+| 2864 | `docs/performance/server-vs-pumpkin.md` | unnecessary; reference; version-specific | No direct launcher/client implementation value; the benchmark discipline may inform future server compatibility testing. |
+| 2865 | `docs/performance/startup-stage-3.md` | adaptable; reference; version-specific | Relevant to Android startup responsiveness and not blocking the UI while resources/chunks load. |
+| 2866 | `docs/play-with-friends.md` | unnecessary; optional/future; security-sensitive | Optional social hosting feature only; not required for RustChunk to connect to external servers. |
+| 2867 | `docs/portal-scan-benchmark.md` | adaptable; reference | Potential future optimization for repeated portal/entity collision queries, but not a current bottleneck without profiling. |
+| 2868 | `docs/pregeneration.md` | adaptable; reference; version-specific | Bounded chunk scheduling and deterministic worker ordering are useful ideas for future worldgen; not a fix for client chunk arrival. |
+| 2869 | `docs/prepare-performance.md` | adaptable; reference | Useful for reducing repeated downloads/copies and protecting installed resources. |
+| 2870 | `docs/profiling.md` | adaptable; reference | The separation of profiling and timing runs and careful metric semantics are transferable. |
+| 2871 | `docs/random-tick-eligibility-benchmark.md` | adaptable; reference | Potentially useful for world simulation CPU reduction once RustChunk supports random ticks. |
+| 2872 | `docs/release-flow.md` | adaptable; reference; security-sensitive | Release governance, supply-chain separation and artifact signing are useful for RustChunk once builds are reproducible. |
+| 2873 | `docs/research-lab.md` | adaptable; reference; version-specific | Strongly relevant as a reproducible, source-pinned reverse-engineering and parity workflow for RustChunk. |
+| 2874 | `docs/resource-packs.md` | adaptable; reference; version-specific | Important reference for resource-pack compatibility and correct renderer reload behavior. |
+| 2875 | `docs/reuse-pack-overlays.md` | adaptable; reference | Useful for reducing resource-pack reload/startup cost after correctness and cache invalidation are established. |

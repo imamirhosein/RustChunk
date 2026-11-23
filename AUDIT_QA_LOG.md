@@ -1837,3 +1837,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The first post-commit structural scan treated a repeated stage header, placed between entries 2825 and 2826, as part of entry 2825 and therefore counted one extra `Source repository/ref` label in that entry's scan block. The entry itself had its required 15 fields; the stage header was outside the entry schema.
 - Corrective transaction removed the repeated header, moved the stage summary to the single file header, and updated the summary to 50/200. All 50 entry blocks now delimit cleanly and contain exactly 15 fields once each.
 - The six audit documents are recommitted together and read back before accepting the 50-file boundary.
+
+
+## Checkpoint QA — 2851–2875 — 2026-11-23
+
+- Entries **2851–2875 (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`, selected from the full untruncated tree after excluding all 2,850 prior Index paths.
+- Exact paths, source blob SHAs and byte sizes match the pinned recursive tree. Canonical logical line counts and complete EOF coverage are recorded in the active Ledger; large files were read in consecutive gap-free ranges no larger than 400 lines.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md` now contains **75 records (2801–2875)**, each with exactly 15 required fields. Index now contains **2,875 sequential unique paths** and matching new path/Decision rows.
+- Source review included documentation and embedded benchmark/test descriptions only; no test or benchmark was executed or independently reproduced.
+- No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
+- The same exceptional grant covers **2801–2900**. Checkpoint **2876–2900** remains authorized; continue without another permission request and **STOP at 2900**.
