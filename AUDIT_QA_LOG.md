@@ -1957,3 +1957,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Compatibility findings include: other-launcher import detects Forge metadata but the tested Horizon loader adapter returns no Forge loader; resource-pack tests use later pack format 69; Horizon's Rust native-mod compiler is not Java Forge; its server runtime/page host Horizon 26.3 rather than a standard Forge 1.20.1 server; several launcher modules are desktop GPUI/Windows-only.
 - Tests/examples were inspected only. No tests, builds, benchmarks, APK/device, Forge/Minecraft launch, multiplayer or Aternos validation was run. No RustChunk application source changed.
 - Exceptional authorization **3001–3100 remains ACTIVE**, with 25/100 files consumed. Continue **3026–3050** under the same grant; report at 3050, then continue the already-authorized 3051–3100. **STOP at 3100**.
+
+
+## Continuity resume-field correction — 2026-11-24
+
+- A read-back check after the 3001–3025 checkpoint commit found that the new checkpoint was appended correctly but the opening `Authoritative resume point` block had remained at the prior 1–3000 state.
+- Replaced that stale opening block with the verified 1–3025 resume state, active exceptional authorization 3001–3100, next checkpoint 3026–3050, and stop boundary 3100.
+- No source entries, Index rows, Ledger records, source SHAs, byte sizes or coverage were changed by this documentation correction.
+- The correction is committed as a six-document transaction and all six documents are re-read from GitHub. This is documentation consistency repair, not an additional source checkpoint.
