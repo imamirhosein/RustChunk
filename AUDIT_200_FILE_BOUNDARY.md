@@ -5,7 +5,7 @@
 - Entries 1–2000 globally verified/backed up; entries 2001–2825 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; active stage **2801–3000 is 25/200 complete**.
 - Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is active; checkpoint **2801–2825** is complete. Continue 2826–2850 and **STOP at 2850**.
 
-- Historical note: the 2401–2600 stage was fully QA-verified and closed after its lexical-order correction. The earlier 2601–2700 grant is also closed; the active 2601–2800 stage and current exceptional grant 2701–2800 are stated below.
+- Historical note: stages 2401–2600 and 2601–2800 are fully closed. The active stage and current exceptional grant 2801–2900 are stated above and in the latest stage section below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
 
 ## Stage partition
