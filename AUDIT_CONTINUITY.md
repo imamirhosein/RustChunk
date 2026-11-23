@@ -6,14 +6,14 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2825**.
-- Stage **2601–2800 is CLOSED (200/200)**; all four 50-file sections in that stage are closed.
-- Active 200-file stage **2801–3000** is **25/200 complete**. Section **2801–2850** is 25/50 complete; checkpoint **2801–2825** is committed and read-back verified.
-- The user explicitly authorized one-time exceptional range **2801–2900 (100 files)**. Continue checkpoint **2826–2850**, report that 50-file boundary, then continue **2851–2875** and **2876–2900** under the same 100-file grant without another permission request. **STOP at 2900**.
-- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **25 records (2801–2825)**, each with exactly 15 fields. Index: **2,825 sequential unique paths**, all paths unique and the new Ledger paths/Decisions aligned.
+- Completed entries: **1–2850**.
+- Stage **2601–2800 is CLOSED (200/200)**; active 200-file stage **2801–3000** is **50/200 complete**.
+- Reporting section **2801–2850 is CLOSED (50/50)**. Checkpoints **2801–2825** and **2826–2850** are committed and read-back verified.
+- The user explicitly authorized one-time exceptional range **2801–2900 (100 files)**. Continue **2851–2875** and **2876–2900** under the same grant without another permission request. **STOP at 2900**; 2901+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **50 records (2801–2850)**, each with exactly 15 fields. Index: **2,850 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
-- The full recursive source tree contains 5,749 entries and is untruncated. Candidate selection was recomputed from the complete tree after excluding all 2,800 prior Index paths; entries 2801–2825 are the first 25 eligible lexical paths.
-- All 25 new source SHA/byte-size pairs match the pinned tree; canonical logical line counts and EOF coverage are recorded. The commit is a documentation-only audit transaction, not an application change.
+- The complete recursive source tree is untruncated (5,749 entries). Both checkpoints were selected from the complete tree after excluding the full Index.
+- Source SHAs, byte sizes, canonical line counts and EOF coverage for the latest 25 are recorded and checked against the pinned tree.
 - Backup remains at entries 1–2000; next backup only after entry 3000 and global verification. Tests/examples were inspected only, not executed. No application source changes, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
@@ -815,3 +815,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - New Ledger `AUDIT_LEDGER_2801_3000.md`: 25 records, each with exactly 15 required fields. Index: 2,825 sequential unique paths; new paths and Decisions align.
 - Section **2801–2850** is 25/50 complete. Continue **2826–2850** and report at 2850, then continue **2851–2875** and **2876–2900** under the same exceptional authorization. **STOP at 2900**.
 - This was source/documentation review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation; no application source changes.
+
+
+## Latest verified checkpoint — 2826–2850 — 2026-11-23
+
+- Entries **2826–2850 inclusive (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Exact source paths, SHAs and byte sizes match the complete untruncated recursive tree. Large-file coverage is consecutive and gap-free in ranges no larger than 400 lines.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: 50 records, each with exactly 15 fields. Index: 2,850 sequential unique paths; new paths and Decisions align.
+- Section **2801–2850 is closed**. Continue **2851–2875** and **2876–2900** under the same explicit exceptional authorization; **STOP at 2900**.
+- Documentation/source review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation; no application source changes.

@@ -3269,3 +3269,34 @@
 | 2823 | `docs/block-state-codecs.md` | rewrite required; reference; version-specific | Codec architecture and explicit property validation are useful, but data must be rebuilt. |
 | 2824 | `docs/build-times.md` | adaptable; reference; version-specific | Measurement design can inform RustChunk CI and compile-time optimization. |
 | 2825 | `docs/carving.md` | rewrite required; reference; version-specific | Core worldgen algorithms and bounded traversal/error semantics are valuable research references. |
+
+
+## Part 114 — Entries 2826–2850
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2826 | `docs/chat-filter.md` | unnecessary; reference; version-specific | Low relevance to launcher/rendering; useful only for future moderation UX or preserving server-authoritative chat behavior. |
+| 2827 | `docs/ci-runners.md` | adaptable; reference | Useful for RustChunk CI design, especially reproducible cross-platform build jobs. |
+| 2828 | `docs/collision-geometry.md` | rewrite required; reference; version-specific | Highly relevant research for RustChunk physics and collision architecture, but it is documentation evidence, not portable implementation. |
+| 2829 | `docs/controllers.md` | adaptable; reference; version-specific | Relevant to Android external-controller support and accessible UI navigation; not a prerequisite for touch controls or Forge compatibility. |
+| 2830 | `docs/cosmetics.md` | unnecessary; optional/future; version-specific | Not needed for RustChunk's launcher, renderer stability or 1.20.1 Forge milestone. |
+| 2831 | `docs/datapack-upgrade.md` | unnecessary; reference; version-specific | No direct target value for RustChunk 1.20.1 except as an example of versioned datapack migration discipline. |
+| 2832 | `docs/density-functions.md` | rewrite required; reference; version-specific | Core world-generation architecture is relevant, especially deterministic noise and bounded bulk sampling. |
+| 2833 | `docs/design-system.md` | adaptable; reference | Useful as a UI-system reference, but RustChunk should retain its own identity and Android-native constraints. |
+| 2834 | `docs/design/compositor.md` | unnecessary; optional/future; version-specific | Future multi-instance/splitscreen research only; not relevant to initial single-player/multiplayer client. |
+| 2835 | `docs/design/shared-audio.md` | unnecessary; optional/future; version-specific | Optional splitscreen/multi-listener architecture, not needed for one-player client audio. |
+| 2836 | `docs/extras.md` | adaptable; reference; optional/future | Selective ideas may improve usability later, but extras must not distract from baseline Forge 1.20.1 support. |
+| 2837 | `docs/face-visibility.md` | rewrite required; reference; version-specific | Directly relevant to chunk mesh efficiency and correct visibility; must be rebuilt for 1.20.1 block states and Forge registries. |
+| 2838 | `docs/feature-placement.md` | rewrite required; reference; version-specific | Highly relevant to worldgen and seeded chunk population, but target version changes many codecs and feature registries. |
+| 2839 | `docs/generation-scan-benchmark.md` | adaptable; reference | Potentially relevant to avoiding redundant chunk scheduler work, but only after profiling RustChunk's actual bottleneck. |
+| 2840 | `docs/graphics.md` | adaptable; reference; version-specific | Relevant to renderer design and LOD research, but does not solve near-chunk loading or prove performance on Mali-G52. |
+| 2841 | `docs/heightmaps.md` | rewrite required; reference; version-specific | Heightmaps are fundamental to chunk generation, placement, world surface queries and rendering culling. |
+| 2842 | `docs/horizon-ctl-commands.md` | adaptable; reference; security-sensitive | Optional debugging and automated regression testing can benefit from a narrow subset. |
+| 2843 | `docs/hosting.md` | unnecessary; reference; version-specific | Useful to understand multiplayer compatibility boundaries and online/offline server behavior; RustChunk should connect to external servers, not host one initially. |
+| 2844 | `docs/known-issues.md` | unnecessary; reference; version-specific | Only useful as an example of concise release-note disclosure. |
+| 2845 | `docs/launcher-commands.md` | adaptable; reference; version-specific | Strong reference for launcher feature decomposition and offline profile semantics, but not code or a directly reusable command set. |
+| 2846 | `docs/launcher-preparation.md` | adaptable; reference; version-specific | Highly relevant as a resource-preparation and integrity model; Android prepare-kit separation is especially worth studying. |
+| 2847 | `docs/material-conditions.md` | rewrite required; reference; version-specific | Useful for the surface-rule evaluator and worker cache architecture once the correct 1.20.1 schemas are known. |
+| 2848 | `docs/material-rule-libraries.md` | rewrite required; reference; version-specific | Relevant as a worldgen resource graph design, not as target-version data. |
+| 2849 | `docs/material-surfaces.md` | rewrite required; reference; version-specific | Highly relevant to terrain surface generation, but requires a full 1.20.1 rewrite and integration with Forge worldgen. |
+| 2850 | `docs/media/brand/README.md` | unnecessary; reference | No direct RustChunk technical value beyond general source-vs-generated asset discipline. |

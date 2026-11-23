@@ -1820,3 +1820,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
 - The one-time exceptional authorization covers 2801–2900. Section 2801–2850 is halfway complete: checkpoint 2801–2825 is committed; continue 2826–2850 without another permission request. The same exceptional grant also covers 2851–2875 and 2876–2900; report at 2850, continue without another permission request, and STOP at 2900.
 - Six-document transaction committed as `97220567120637494c3573c5b195acbafa594626`; all six files were re-fetched. Structural read-back confirmed 25 sequential Ledger records with exactly 15 fields each, 2,825 sequential globally unique Index paths, and exact Ledger/Index path and Decision alignment. Pinned-tree SHA/size checks passed for all 25 sources; 20 were re-fetched during the repeat line-count pass before the tool call cap, and the remaining five were re-fetched separately; all five final checks passed. No unresolved source-provenance mismatch remains.
+
+
+## Checkpoint QA — 2826–2850 — 2026-11-23
+
+- Entries **2826–2850 (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`, selected from the full untruncated tree after excluding all 2,825 prior Index paths.
+- Exact paths, source blob SHAs and byte sizes match the pinned recursive tree. Canonical logical line counts and complete EOF coverage are recorded in the active Ledger; large files were read in consecutive gap-free ranges no larger than 400 lines.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md` now contains **50 records (2801–2850)**, each with exactly 15 required fields. Index now contains **2,850 sequential unique paths** and matching new path/Decision rows.
+- Source review included documentation and embedded benchmark/test descriptions only; no test or benchmark was executed or independently reproduced.
+- No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
+- Section **2801–2850 is CLOSED (50/50)**. The same exceptional grant still covers **2851–2900**; continue checkpoints 2851–2875 and 2876–2900 without another permission request. **STOP at 2900**.
