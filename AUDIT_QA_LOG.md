@@ -1830,3 +1830,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Source review included documentation and embedded benchmark/test descriptions only; no test or benchmark was executed or independently reproduced.
 - No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
 - Section **2801–2850 is CLOSED (50/50)**. The same exceptional grant still covers **2851–2900**; continue checkpoints 2851–2875 and 2876–2900 without another permission request. **STOP at 2900**.
+
+
+## Ledger structure correction — 2801–2850 — 2026-11-23
+
+- The first post-commit structural scan treated a repeated stage header, placed between entries 2825 and 2826, as part of entry 2825 and therefore counted one extra `Source repository/ref` label in that entry's scan block. The entry itself had its required 15 fields; the stage header was outside the entry schema.
+- Corrective transaction removed the repeated header, moved the stage summary to the single file header, and updated the summary to 50/200. All 50 entry blocks now delimit cleanly and contain exactly 15 fields once each.
+- The six audit documents are recommitted together and read back before accepting the 50-file boundary.

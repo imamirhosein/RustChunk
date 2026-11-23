@@ -2,9 +2,9 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **2801–3000**; completed **25/200 (2801–2825)**.
-- One-time exceptional authorization covers exactly **2801–2900**. The first checkpoint **2801–2825** is registered; continue through **2826–2850**, report that 50-file boundary, then continue **2851–2875** and **2876–2900** under the same explicit 100-file grant. **STOP at 2900**.
-- Source selection: first 25 eligible source/documentation blobs in strict raw lexical order from the complete pinned recursive tree after excluding all 2,800 paths in the Index. The tree is untruncated; all 25 selected paths, SHAs and byte sizes match the pin.
+- Active 200-file stage: **2801–3000**; completed **50/200 (2801–2850)**.
+- One-time exceptional authorization covers exactly **2801–2900**. Checkpoints **2801–2825** and **2826–2850** are complete; section **2801–2850** is closed. Continue **2851–2875** and **2876–2900** under the same explicit 100-file grant without another permission request. **STOP at 2900**.
+- Source selection: first 50 eligible source/documentation blobs in strict raw lexical order from the complete pinned recursive tree after excluding all 2,800 paths in the Index. The tree is untruncated; all 25 selected paths, SHAs and byte sizes match the pin.
 - Starling/Horizon documentation and implementation target Minecraft Java 26.3; this audit is compatibility research, not evidence of Minecraft 1.20.1 / Forge 47.x support.
 - No application source was modified. Documentation/tests were inspected only; no tests, builds, benchmarks, APK, device, Forge, Minecraft or server validation was run.
 
@@ -434,16 +434,6 @@
 - RustChunk implementation mapping: RustChunk 1.20.1 worldgen carvers and chunk generation pipeline.
 - Evidence required before adoption: 1.20.1 Mojang-mapped carver sources, data-driven worldgen fixtures, Forge registry integration and seeded differential tests.
 - Completion state: COMPLETE — 126 logical lines through EOF; pinned source SHA and 7669 byte size match; inspected, not modified; tests not executed.
-
-# RustChunk Starling Audit Ledger — Entries 2801–3000
-
-- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
-- Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **2801–3000**; completed **50/200 (2801–2850)**.
-- The user’s one-time exceptional authorization covers exactly **2801–2900**. Checkpoints **2801–2825** and **2826–2850** are complete; section **2801–2850** is closed. Continue **2851–2875** and **2876–2900** under the same grant without another permission request. **STOP at 2900**.
-- Source selection: entries 2826–2850 are the next 25 eligible paths in strict raw lexical order from the complete pinned recursive tree after excluding every path in the 2,825-row Index. The tree is untruncated.
-- Starling/Horizon documentation targets Minecraft 26.3; this is compatibility research, not proof of Minecraft 1.20.1 / Forge 47.x support.
-- No application source was modified. Documents and test descriptions were inspected only; no tests, builds, benchmarks, APK, device, Forge, Minecraft or server validation was run.
 
 ## Checkpoint 2826–2850 — COMPLETE
 
