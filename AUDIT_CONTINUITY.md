@@ -6,11 +6,11 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2875**.
-- Stage **2601–2800 is CLOSED (200/200)**; active 200-file stage **2801–3000** is **75/200 complete**.
-- Reporting section **2801–2850 is CLOSED (50/50)**. Section **2851–2900** is 25/50 complete; checkpoints **2851–2875** is committed and read-back verified.
-- The user explicitly authorized one-time exceptional range **2801–2900 (100 files)**. Continue **2876–2900** under the same grant without another permission request. **STOP at 2900**; 2901+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **75 records (2801–2875)**, each with exactly 15 fields. Index: **2,875 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Completed entries: **1–2900**.
+- Stage **2601–2800 is CLOSED (200/200)**. Active stage **2801–3000 is 100/200 complete**.
+- Sections **2801–2850** and **2851–2900** are both **CLOSED (50/50)**; all four 25-file checkpoints in the exceptional range are committed and read-back verified.
+- The user's one-time exceptional authorization **2801–2900 (100 files) is EXHAUSTED**. **STOP at 2900**; no entry 2901+ may be inspected, fetched for audit, drafted or registered without fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **100 records (2801–2900)**, each with exactly 15 fields. Index: **2,900 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
 - The complete recursive source tree is untruncated (5,749 entries). New paths were selected from the complete tree after excluding the full Index.
 - Source SHAs, byte sizes, canonical line counts and EOF coverage for the latest 25 are recorded and checked against the pinned tree.
@@ -833,3 +833,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Active Ledger `AUDIT_LEDGER_2801_3000.md`: 75 records, each with exactly 15 fields. Index: 2,875 sequential unique paths; new paths and Decisions align.
 - Continue **2876–2900** under the same explicit exceptional authorization; **STOP at 2900**.
 - Documentation/source review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation; no application source changes.
+
+
+## Final checkpoint under exceptional authorization — 2876–2900 — 2026-11-23
+
+- Entries **2876–2900 inclusive (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Exact source paths, SHAs and byte sizes match the complete untruncated recursive tree. Large-file coverage is consecutive and gap-free in ranges no larger than 400 lines.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: 100 records, each with exactly 15 fields. Index: 2,900 sequential unique paths; new paths and Decisions align.
+- The one-time exceptional authorization **2801–2900 is exhausted**. Stage 2801–3000 is 100/200 complete; both authorized 50-file sections are closed. **STOP at 2900**; 2901+ needs fresh explicit permission.
+- Documentation/Cargo-manifest source review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation; no application source changes.

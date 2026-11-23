@@ -2,8 +2,8 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **2801–3000**; completed **75/200 (2801–2875)**.
-- One-time exceptional authorization covers exactly **2801–2900**. Checkpoints **2801–2825**, **2826–2850** and **2851–2875** are complete; section **2801–2850** is closed and section **2851–2900** is 25/50 complete. Continue **2851–2875** and **2876–2900** under the same explicit 100-file grant without another permission request. **STOP at 2900**.
+- Active 200-file stage: **2801–3000**; completed **100/200 (2801–2900)**.
+- One-time exceptional authorization covers exactly **2801–2900**. Checkpoints **2801–2825**, **2826–2850**, **2851–2875** and **2876–2900** are complete; sections **2801–2850** and **2851–2900** are closed. Continue **2851–2875** and **2876–2900** under the same explicit 100-file grant without another permission request. **STOP at 2900**.
 - Source selection: first 50 eligible source/documentation blobs in strict raw lexical order from the complete pinned recursive tree after excluding all 2,800 paths in the Index. The tree is untruncated; all 25 selected paths, SHAs and byte sizes match the pin.
 - Starling/Horizon documentation and implementation target Minecraft Java 26.3; this audit is compatibility research, not evidence of Minecraft 1.20.1 / Forge 47.x support.
 - No application source was modified. Documentation/tests were inspected only; no tests, builds, benchmarks, APK, device, Forge, Minecraft or server validation was run.
@@ -1286,4 +1286,429 @@
 - RustChunk implementation mapping: RustChunk resource-pack overlay cache.
 - Evidence required before adoption: Android/Windows filesystem behavior, cryptographic input fingerprints, atomic publication and invalidation regression tests.
 - Completion state: COMPLETE — 46 logical lines through EOF; pinned source SHA and 4758 byte size match; inspected, not modified; tests not executed.
+
+### 2876. `docs/rust-parity.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e4db6a8a91adb32ae9f1354c60b36a27e0e149b4`
+- Size: 106605 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1595; complete EOF; 1595 canonical logical lines, no gaps.
+- Purpose: Large running inventory of Rust ports and differential tests against the actual vanilla client/server JARs.
+- Dependencies / cross-references: Cross-references nearly every world, gameplay, network, UI, rendering and persistence subsystem plus Python oracle tools and fixture reports.
+- Implementation / logic: Describes scoped adapters that execute native Java methods and compare Rust traces, state, NBT, packets and GUI calls; records exact covered cases and pending gaps.
+- Findings: The pinned snapshot is 26.3; many comparisons are fixture-scoped, controlled or incomplete. Passing harnesses are not proof of a playable client, Forge support or full gameplay parity.
+- RustChunk relevance: Very valuable as a parity-ledger model and a map of subsystem interactions; the actual APIs/data are version-specific.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Use its evidence discipline and target-JAR oracle approach, but rebuild each contract for 1.20.1/Forge 47.x and avoid assuming the 26.3 Rust code ports directly.
+- Follow-up checks: Prioritize login/registry, chunks, block states, worldgen, renderer, player movement, inventory, entities, saves and mod hooks; distinguish fixture coverage from end-to-end runtime tests.
+- RustChunk implementation mapping: RustChunk 1.20.1 compatibility matrix, Java oracle harnesses and per-subsystem acceptance gates.
+- Evidence required before adoption: Pinned 1.20.1 client/server/Forge artifacts, complete fixture corpus, deterministic parity outputs, real Forge mods and actual multiplayer/device tests.
+- Completion state: COMPLETE — 1595 logical lines through EOF; pinned source SHA and 106605 byte size match; inspected, not modified; tests not executed.
+
+### 2877. `docs/save-batch-entities.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `335867c84b0f431688c51ab166179aa529c2084e`
+- Size: 4927 bytes
+- Coverage: 1–90; complete EOF; 90 canonical logical lines, no gaps.
+- Purpose: Reports batching block-entity/name collection for multi-chunk save snapshots.
+- Dependencies / cross-references: References Game::with_entities, save::chunks_with_block_entities, chunk maps, async save queues and exact NBT serialization.
+- Implementation / logic: Groups borrowed entries for requested chunks in one pass, clones selected payloads chunk-by-chunk and retains original map/chunk state.
+- Findings: Synthetic populated fixtures on Ryzen/Linux; excludes writer queue, compression, region I/O and full save latency. Improvement is only 5–17% in multi-chunk snapshot stage.
+- RustChunk relevance: Relevant to chunk unload/save performance and avoiding repeated whole-map scans.
+- Decision: adaptable; reference
+- 1.20.1 implications: Use only if RustChunk has repeated per-chunk scans during batch saves; keep save snapshots isolated from unload cleanup.
+- Follow-up checks: Test duplicate chunks, negative coordinates, entity ordering, snapshot independence, NBT byte equality and asynchronous save failures.
+- RustChunk implementation mapping: RustChunk save pipeline and block-entity batch snapshot helper.
+- Evidence required before adoption: Real 1.20.1 world saves, Android storage, crash/reload tests, full NBT equality and realistic entity-heavy worlds.
+- Completion state: COMPLETE — 90 logical lines through EOF; pinned source SHA and 4927 byte size match; inspected, not modified; tests not executed.
+
+### 2878. `docs/scheduled-ticks.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e6faca658b9a55a06618e35e89cef749b70cc7a5`
+- Size: 7160 bytes
+- Coverage: 1–136; complete EOF; 136 canonical logical lines, no gaps.
+- Purpose: Documents block/fluid scheduled tick queues, ordering, persistence and callback lifecycle.
+- Dependencies / cross-references: References TickPriority, ScheduledTick, SavedTick, ChunkTicks, LevelTicks and vanilla tick codecs.
+- Implementation / logic: Preserves first-request deduplication, chunk-local heap order, cross-chunk priority competition, callback deferral, area operations and saved tick packing.
+- Findings: Targets 26.3; actual block/fluid behaviors, random ticks, neighbor updates, redstone and live world integration remain unimplemented. API adds Rust invariant errors not present in Java.
+- RustChunk relevance: Core simulation and chunk persistence are relevant; exact scheduler ordering affects Forge gameplay.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Rebuild 1.20.1 scheduled tick semantics and callback routing; preserve Java comparator, RNG/order and saved NBT semantics before optimizing.
+- Follow-up checks: Test duplicate requests, tie ordering across chunks, callback rescheduling, disabled/unloaded chunks, signed time overflow, saved tick codec and Forge block/fluid behavior.
+- RustChunk implementation mapping: RustChunk block/fluid tick scheduler and chunk save/load adapters.
+- Evidence required before adoption: 1.20.1 LevelTicks/ChunkTicks source oracle, Forge block/fluid callbacks, save/reload fixtures and deterministic world tests.
+- Completion state: COMPLETE — 136 logical lines through EOF; pinned source SHA and 7160 byte size match; inspected, not modified; tests not executed.
+
+### 2879. `docs/security.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `886f149d50e47388bc22cb4dac7cfa2f5a4587a5`
+- Size: 8734 bytes
+- Coverage: 1–109; complete EOF; 109 canonical logical lines, no gaps.
+- Purpose: Explains source-control, agent, CI, signed update and release security controls.
+- Dependencies / cross-references: References GitHub Actions, required checks, release environment, CODEOWNERS, GitHub App, Ed25519 signatures and update verification.
+- Implementation / logic: Separates untrusted issue/report data from instructions, makes required checks unconditional, isolates signing keys and verifies signed checksums before updates.
+- Findings: Several safeguards are marked not yet live in the snapshot; signed releases prove provenance, not benign code. First install still trusts GitHub checksum rather than signature.
+- RustChunk relevance: Highly relevant to safe launcher downloads, mod installation, APK release and future automation.
+- Decision: adaptable; reference; security-sensitive
+- 1.20.1 implications: Adopt least-privilege CI, immutable source pins, signed APK/update manifests, checksum validation and untrusted-content handling; do not copy Horizon's agent assumptions.
+- Follow-up checks: Verify workflow permissions, fork PR isolation, signing key custody, key rotation, downgrade/rollback policy, initial install trust and mod archive validation.
+- RustChunk implementation mapping: RustChunk CI/release pipeline, update verifier and mod download trust boundary.
+- Evidence required before adoption: Threat model, signed artifacts, independent verification, protected release environment, malicious archive tests and key recovery procedure.
+- Completion state: COMPLETE — 109 logical lines through EOF; pinned source SHA and 8734 byte size match; inspected, not modified; tests not executed.
+
+### 2880. `docs/server-levels.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `bba8048b33fc039e67bdd191e4fdd44176e8370f`
+- Size: 6268 bytes
+- Coverage: 1–95; complete EOF; 95 canonical logical lines, no gaps.
+- Purpose: Describes one ServerLevel per dimension and switching level state through a shared Game instance.
+- Dependencies / cross-references: References MinecraftServer.levels, Game fields, parked levels, server tick order, dimension travel, save folders and LAN hub.
+- Implementation / logic: Swaps per-level state into one active Game while preserving shared server state and ticking only levels with players; closes idle non-overworld levels.
+- Findings: Horizon-specific integrated/dedicated server architecture, 26.3 and incomplete cross-level entity/portal behavior.
+- RustChunk relevance: Useful for understanding dimension-scoped state, but not required to connect to external servers.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Do not add a server-side simulation architecture to RustChunk's Android client; ensure the client correctly handles server dimension changes and chunk bounds.
+- Follow-up checks: Check 1.20.1 Respawn/dimension registry packets, dimension-specific height, world border, player respawn and chunk cache invalidation.
+- RustChunk implementation mapping: RustChunk remote dimension transition and per-dimension client cache only.
+- Evidence required before adoption: 1.20.1 protocol oracle, multi-dimension server integration and cache/resource lifecycle tests.
+- Completion state: COMPLETE — 95 logical lines through EOF; pinned source SHA and 6268 byte size match; inspected, not modified; tests not executed.
+
+### 2881. `docs/server-next.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d4f90b143af2ed5f6a5e8492d379b2200d9b9311`
+- Size: 35995 bytes
+- Coverage: 1–400, 401–472; complete EOF; 472 canonical logical lines, no gaps.
+- Purpose: Proposes a high-performance dedicated server with parallel ticking, network I/O pools, chunk caches, memory/startup targets and a negotiated Horizon fast path.
+- Dependencies / cross-references: References Horizon server, Pumpkin/vanilla black-box benchmarks, level scheduler, LAN hub, packet encoding, worker pools and custom protocol capabilities.
+- Implementation / logic: Separates exact vanilla-order parallel work from opt-in region ticking; proposes per-player I/O queues, prepared login frames, cached chunk packets and negotiated chunk-zstd/entity-batch/far-terrain capabilities.
+- Findings: Dedicated-server roadmap, not client launcher; Horizon fast path is proprietary and only valid when negotiated. Benchmarks are on Mac mini/desktop and use offline bots.
+- RustChunk relevance: Useful for performance architecture and a critical reminder that non-vanilla packet extensions require explicit negotiation.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Do not implement a server engine or proprietary fast-path protocol in RustChunk baseline; interoperate with vanilla/Forge 1.20.1 packet flow and ignore unknown optional channels safely.
+- Follow-up checks: Verify 1.20.1 login/config/play ordering, chunk batching, movement checks, keepalives, compression and any server brand/custom payload behavior.
+- RustChunk implementation mapping: No server implementation; remote client networking and packet processing only.
+- Evidence required before adoption: Actual 1.20.1/Forge server packet captures, Aternos connections, negotiated capability tests and protocol compatibility matrix.
+- Completion state: COMPLETE — 472 logical lines through EOF; pinned source SHA and 35995 byte size match; inspected, not modified; tests not executed.
+
+### 2882. `docs/server.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7b90a75cf1a59a580ef25f7bd20eb57cfdc36ed1`
+- Size: 55382 bytes
+- Coverage: 1–400, 401–701; complete EOF; 701 canonical logical lines, no gaps.
+- Purpose: Documents Horizon's dedicated server engine, supervisor, install packages, config, CLI/TUI, web panel, backups, update and control APIs.
+- Dependencies / cross-references: References horizon-server, horizon-client --dedicated, server.properties, EULA, control socket, RCON, GS4 query, management WebSocket and release tooling.
+- Implementation / logic: Separates supervisor from headless game engine; imports vanilla config, manages process lifecycle, backups/rollback and exposes local authenticated APIs.
+- Findings: Targets Minecraft 26.3, is server hosting software and includes Horizon-specific APIs and assumptions; not a launcher for joining Aternos.
+- RustChunk relevance: Only server lifecycle/security patterns are reusable; client should not absorb server supervisor functionality.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Keep RustChunk as a client/launcher; don't bundle a server panel or supervisor unless explicitly scoped later.
+- Follow-up checks: For joining servers, validate vanilla 1.20.1 login, secure chat, compression, server list ping, keepalive and Forge handshake only.
+- RustChunk implementation mapping: No current implementation mapping beyond future optional local integrated-server process management.
+- Evidence required before adoption: Explicit product scope, 1.20.1 client-server integration tests and separate threat model if hosting is ever added.
+- Completion state: COMPLETE — 701 logical lines through EOF; pinned source SHA and 55382 byte size match; inspected, not modified; tests not executed.
+
+### 2883. `docs/shaders.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7174220c3bc3e55bf3e5a8c4a3266abe3830edb9`
+- Size: 11536 bytes
+- Coverage: 1–238; complete EOF; 238 canonical logical lines, no gaps.
+- Purpose: Guides authors of Horizon's own WGSL shader-pack format and shader stages.
+- Dependencies / cross-references: References horizon-shader-api, WGSL, naga, renderer stages, shader manifests, mod registry and pack validation.
+- Implementation / logic: Defines sky/material/weather/post stages, resource budgets, hot reload, typed inputs, sprite tags, material IDs and option overrides.
+- Findings: Horizon WGSL format is not Iris/OptiFine shader format; API is experimental and many features are distinct from Java 1.20.1 shader mod ecosystems.
+- RustChunk relevance: Optional graphics extension only; not needed for baseline rendering or Forge mod loading.
+- Decision: unnecessary; reference; optional/future
+- 1.20.1 implications: Prioritize vanilla 1.20.1 rendering and Forge shader-mod compatibility; do not substitute Horizon WGSL packs for OptiFine/Iris.
+- Follow-up checks: Check 1.20.1 shader-pack ecosystem, Android GLES/Vulkan capability, shader memory budgets and driver fallback only if a shader feature is later scoped.
+- RustChunk implementation mapping: No baseline mapping; future optional shader extension.
+- Evidence required before adoption: Working 1.20.1 renderer, Mali GPU shader support, target API design, compatibility and security tests.
+- Completion state: COMPLETE — 238 logical lines through EOF; pinned source SHA and 11536 byte size match; inspected, not modified; tests not executed.
+
+### 2884. `docs/shared-model-library-benchmark.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ee483574c2dd9665ee98c4c09701311d1b622574`
+- Size: 5588 bytes
+- Coverage: 1–106; complete EOF; 106 canonical logical lines, no gaps.
+- Purpose: Measures sharing a prepared model library between asset loading and item renderer setup.
+- Dependencies / cross-references: References Assets::load, ItemRenderer::load_with_library, block model baking, item definitions and real prepared resources.
+- Implementation / logic: Reuses immutable baked models to reduce duplicate item preparation; compares combined time, retained heap, peak RSS and parity hashes.
+- Findings: 26.3 Linux Ryzen benchmark; combined startup improves 3.47–4.83%, but asset-only consumers retain ~6 MiB extra memory; no Android data.
+- RustChunk relevance: Useful for avoiding duplicate model baking, but memory cost matters on low-RAM phones.
+- Decision: adaptable; reference
+- 1.20.1 implications: Consider shared immutable asset/model caches after measuring RustChunk's startup and RAM; do not assume speedup outweighs retained memory on Galaxy A22 class hardware.
+- Follow-up checks: Measure cold/warm preparation, peak and retained memory, reload invalidation, item-only errors and exact model/mesh parity on Android.
+- RustChunk implementation mapping: RustChunk asset preparation and model cache ownership.
+- Evidence required before adoption: Actual 1.20.1 resource set, Forge resource reload tests, Android memory profiling and repeatable device benchmarks.
+- Completion state: COMPLETE — 106 logical lines through EOF; pinned source SHA and 5588 byte size match; inspected, not modified; tests not executed.
+
+### 2885. `docs/smp.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `229b4bbc6b9b7ca0feed32edd2baf9cdef9099d4`
+- Size: 12492 bytes
+- Coverage: 1–178; complete EOF; 178 canonical logical lines, no gaps.
+- Purpose: Designs an optional server-only survival multiplayer mod with economy, trades, claims, teleports and native hooks.
+- Dependencies / cross-references: References horizon-mods, native hook API, server commands, player inventories, world folder and custom persistence.
+- Implementation / logic: Keeps rules in a server-only native mod; clients use vanilla menus/chat and server remains authoritative.
+- Findings: This is Horizon native server modding, not Java Forge modding; it is a server-specific feature design, not a client launcher API.
+- RustChunk relevance: Useful only as an example of server-authoritative feature separation and transactional persistence.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Do not add native SMP mods or server economies to RustChunk; Forge mods must execute through Forge's Java runtime and server channels.
+- Follow-up checks: If a future client UI interacts with server features, use vanilla protocol and never assume a server has this private mod.
+- RustChunk implementation mapping: No current implementation mapping.
+- Evidence required before adoption: Explicit server-side scope and 1.20.1 Forge protocol/mod integration evidence.
+- Completion state: COMPLETE — 178 logical lines through EOF; pinned source SHA and 12492 byte size match; inspected, not modified; tests not executed.
+
+### 2886. `docs/starling-catalog.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9247eaf3c17ea3636c11a5baab2f316bdad8e144`
+- Size: 2554 bytes
+- Coverage: 1–34; complete EOF; 34 canonical logical lines, no gaps.
+- Purpose: Describes an in-game catalog UI for mods, resource packs and shader packs, with paginated touch-friendly lists.
+- Dependencies / cross-references: References starling-catalog, launcher browser, Modrinth APIs, Horizon registry and game options screens.
+- Implementation / logic: Uses one scrollable finger-driven list, auto-fetches pages near the end and keeps rows on retry; install destinations vary by content type.
+- Findings: Catalog excludes Java mods and uses Horizon-native/content formats; shader pack compatibility is delegated to conversion and phone performance.
+- RustChunk relevance: Useful UI/UX and pagination model for a mobile mod/resource browser; package semantics are incompatible with Forge.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Reuse touch-list/pagination concepts but install original Forge 1.20.1 JARs and standard resource packs; never present Java mods as supported if they cannot load.
+- Follow-up checks: Test Modrinth metadata, Forge loader/version filters, paging failure/retry, SHA-512 verification, storage permissions and offline browsing.
+- RustChunk implementation mapping: RustChunk mobile mod catalog and resource-pack browser.
+- Evidence required before adoption: Forge 47.x mod files, Modrinth/CurseForge API behavior, Android storage tests and actual mod launch.
+- Completion state: COMPLETE — 34 logical lines through EOF; pinned source SHA and 2554 byte size match; inspected, not modified; tests not executed.
+
+### 2887. `docs/starling-performance.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `14fc5da9a138d3967ce9dbf84ac1286a5ca40b53`
+- Size: 8306 bytes
+- Coverage: 1–125; complete EOF; 125 canonical logical lines, no gaps.
+- Purpose: Records Android GPU/CPU measurements and ruled-out optimizations for Starling on a POCO F6 Pro.
+- Dependencies / cross-references: References Vulkan renderer, F3 metrics, GPU timestamps, culling, LOD, upload budgets, ADPF and Android APK profiles.
+- Implementation / logic: Finds resolution scaling affects pixel cost, LOD adds work rather than reducing near geometry, GPU occlusion culling can hide terrain, and chunk packet/mesh upload budgets can bound frame spikes.
+- Findings: Measurements are POCO F6 Pro/Adreno 740/Vulkan, not Galaxy A22/Mali-G52/OpenGL ES; some hypotheses are untested and results are specific to scenes/settings.
+- RustChunk relevance: Highly relevant performance methodology and caution: distant LOD cannot repair missing nearby chunks; near chunk readiness and bounded upload work must be measured first.
+- Decision: adaptable; reference; device-specific
+- 1.20.1 implications: Do not copy benchmark numbers. On RustChunk, prioritize timely nearby chunk arrival/mesh readiness, then profile upload budgets, CPU/GPU time and resolution on the actual Mali-G52 device; treat LOD as visual supplement only.
+- Follow-up checks: Compare same world/camera/settings, release profile, warmup, frame-time distribution, chunk-ready count, upload queue backlog, GPU timestamps where supported and thermal state.
+- RustChunk implementation mapping: RustChunk Android renderer telemetry, chunk streaming/mesh upload scheduler and performance regression suite.
+- Evidence required before adoption: Galaxy A22 ARM64/Mali-G52/Android 13 actual runs, GLES backend captures, stable frame-time traces, visible-ground correctness and memory/thermal measurements.
+- Completion state: COMPLETE — 125 logical lines through EOF; pinned source SHA and 8306 byte size match; inspected, not modified; tests not executed.
+
+### 2888. `docs/structure-density.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `448d462c9efb715d80b7f1639d4024f01bbf12e7`
+- Size: 2445 bytes
+- Coverage: 1–43; complete EOF; 43 canonical logical lines, no gaps.
+- Purpose: Documents structure terrain-adaptation density (Beardifier) for rigid pieces and jigsaw junctions.
+- Dependencies / cross-references: References horizon_core::density::Beardifier, WorldField, structure pieces, junctions and vanilla parity runner.
+- Implementation / logic: Computes beard adjustment kernels with ordered float accumulation, wrapped coordinates and scalar/bulk clipping semantics.
+- Findings: Targets 26.3; live structure discovery, selection, placement and complete terrain generation remain separate or pending.
+- RustChunk relevance: Relevant worldgen algorithm but dependent on 1.20.1 structure codecs and RNG.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Rebuild the structure density algorithm and bounds from 1.20.1 target classes; don't reuse 26.3 constants/structure registries.
+- Follow-up checks: Test all beard modes, kernel boundaries, accumulation order, scalar/bulk parity, extreme coordinates and full structure terrain.
+- RustChunk implementation mapping: RustChunk structure density and worldgen sampler.
+- Evidence required before adoption: 1.20.1 Beardifier oracle, structure piece fixtures, seeded full-chunk comparison and Forge structure registry tests.
+- Completion state: COMPLETE — 43 logical lines through EOF; pinned source SHA and 2445 byte size match; inspected, not modified; tests not executed.
+
+### 2889. `docs/surface-generation-benchmark.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `14a465402ebb6e224fc1c322e4a6d1471d23b504`
+- Size: 3483 bytes
+- Coverage: 1–15; complete EOF; 15 canonical logical lines, no gaps.
+- Purpose: Reports constant surface-rule specialization timing across dimensions, seeds and worker counts.
+- Dependencies / cross-references: References density bulk optimization, surface generation benchmark and complete terrain snapshots.
+- Implementation / logic: Uses predeclared workloads, alternating paired samples and separate terrain/decoration timings; reports median percentage changes.
+- Findings: Small desktop-only improvements, substantial paired noise and one End four-worker regression; historical incremental timings on Ryzen/Linux.
+- RustChunk relevance: Useful benchmark methodology for worldgen optimization, not transferable performance results.
+- Decision: adaptable; reference
+- 1.20.1 implications: Require measured gains across representative RustChunk 1.20.1 workloads; don't accept one best-case percentage as general improvement.
+- Follow-up checks: Use same seed/sites, worker count, full decorated snapshots, repeated alternating runs, warmups and per-dimension regressions.
+- RustChunk implementation mapping: RustChunk worldgen benchmark suite and optimization acceptance gate.
+- Evidence required before adoption: Actual Android/host ARM64 data, full 1.20.1 generated-chunk parity and statistically repeated workloads.
+- Completion state: COMPLETE — 15 logical lines through EOF; pinned source SHA and 3483 byte size match; inspected, not modified; tests not executed.
+
+### 2890. `docs/telemetry.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `69cda4d56477ba7eb73e1baa8b122b003c31b95d`
+- Size: 13860 bytes
+- Coverage: 1–129; complete EOF; 129 canonical logical lines, no gaps.
+- Purpose: Specifies opt-in performance/crash/bug/benchmark collection, data minimization, outbox, upload and an always-on player-count ping.
+- Dependencies / cross-references: References horizon-telemetry, consent.json, outbox, scrubber, telemetry server, benchmark report schema and launcher settings.
+- Implementation / logic: Uses independent consent switches, schema versioning, bounded queues, deletion by install ID and scrubbed reports; a separate always-on 'I'm playing' ping runs without the four consent switches.
+- Findings: The always-on ping is an exception to the stated 'nothing leaves without consent' principle; hardware/diagnostic fields and deletion/retention require careful user-facing disclosure.
+- RustChunk relevance: Privacy and consent design are highly relevant, but the always-on ping should not be copied into RustChunk.
+- Decision: adaptable; reference; privacy-sensitive
+- 1.20.1 implications: Default all telemetry/network reporting off, make every outbound item separately opt-in, provide exact preview, local-only mode and deletion; no hidden player-count ping.
+- Follow-up checks: Audit IP/server logs, install IDs, retention, crash stack scrubber, log attachments, consent versioning, deletion completeness and Android network background behavior.
+- RustChunk implementation mapping: RustChunk privacy/telemetry settings and diagnostics export.
+- Evidence required before adoption: Privacy threat model, data-flow inventory, opt-in UX, no-network tests when disabled, deletion verification and policy review.
+- Completion state: COMPLETE — 129 logical lines through EOF; pinned source SHA and 13860 byte size match; inspected, not modified; tests not executed.
+
+### 2891. `docs/terrain-filling.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8daf2804d30608c76ebab4ca82c32e691a6c7585`
+- Size: 5146 bytes
+- Coverage: 1–88; complete EOF; 88 canonical logical lines, no gaps.
+- Purpose: Describes noise-stage terrain filling, aquifer selection, resident block sections, heightmaps and fluid postprocessing.
+- Dependencies / cross-references: References TerrainChunk, density compiler, NoiseBasedAquifer, HeightmapState, section palettes and worldgen parity harness.
+- Implementation / logic: Samples final density before writes, traverses Z/X/decreasing Y, preserves prior blocks on default-air skips, updates heightmaps and ordered fluid postprocessing offsets.
+- Findings: 26.3; full biome assignment, structures, features, nonempty blending, lighting and chunk lifecycle remain pending. Scoped fixture parity is not complete world generation.
+- RustChunk relevance: Core worldgen pipeline is directly relevant but must be reconstructed for 1.20.1.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Implement only after 1.20.1 density/aquifer/heightmap semantics and Forge registry lifecycle are verified; preserve partial writes and traversal order.
+- Follow-up checks: Test seeded chunk snapshots, aquifer states, scheduled fluids, repeated fills, prefilled chunks, vertical subranges and Forge datapack overrides.
+- RustChunk implementation mapping: RustChunk terrain generator noise-fill stage.
+- Evidence required before adoption: 1.20.1 NoiseChunk/NoiseBasedChunkGenerator oracle, Forge datapacks, full chunk block/biome/entity/tick snapshots and live-world integration.
+- Completion state: COMPLETE — 88 logical lines through EOF; pinned source SHA and 5146 byte size match; inspected, not modified; tests not executed.
+
+### 2892. `docs/value-providers.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dfca9216fd14bb5327ee8ef2db1c94ed0f7b6bed`
+- Size: 3772 bytes
+- Coverage: 1–63; complete EOF; 63 canonical logical lines, no gaps.
+- Purpose: Documents FloatProvider, IntProvider and HeightProvider codecs and seeded sampling.
+- Dependencies / cross-references: References density/worldgen codecs, random sources, vertical anchors and vanilla Java provider classes.
+- Implementation / logic: Preserves numeric narrowing, codec defaults, float operation order, random draw count, weighted choices and anchored height sampling.
+- Findings: 26.3 provider kinds and bounds; Gaussian providers/canonical encoding remain pending, and host math differences are documented.
+- RustChunk relevance: Highly relevant to data-driven worldgen and deterministic RNG, but target schemas differ.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Rebuild provider types/codecs and exact random draw order from 1.20.1, including Forge-added provider types.
+- Follow-up checks: Test nested clamps, malformed definitions, zero/reversed ranges, signed zero, weighted lists, anchors and subsequent RNG state.
+- RustChunk implementation mapping: RustChunk worldgen value/height provider codecs.
+- Evidence required before adoption: 1.20.1 codec oracle, Forge registry extensions, seeded fixture corpus and deterministic chunk generation.
+- Completion state: COMPLETE — 63 logical lines through EOF; pinned source SHA and 3772 byte size match; inspected, not modified; tests not executed.
+
+### 2893. `docs/velocity-forwarding.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `17ac60a69cd215a9a466dcb5b768467450619d83`
+- Size: 2794 bytes
+- Coverage: 1–48; complete EOF; 48 canonical logical lines, no gaps.
+- Purpose: Documents Velocity modern player-information forwarding for Horizon dedicated servers behind a proxy.
+- Dependencies / cross-references: References login plugin messages, velocity:player_info, HMAC-SHA256, forwarding version and profile properties.
+- Implementation / logic: Captures a real Velocity 4.3.1 exchange and validates HMAC, address, UUID, name and profile properties; unsupported versions/addresses/trailing bytes are refused.
+- Findings: Server-side proxy forwarding only; version 1 observed and non-empty profile properties not observed. No vanilla reference parity.
+- RustChunk relevance: Optional for proxy-hosted servers; not needed for ordinary Aternos connection.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Do not implement Velocity forwarding as a client feature; it belongs on a backend server. Client only responds to normal login plugin requests according to 1.20.1.
+- Follow-up checks: If proxy compatibility issues arise, verify 1.20.1 login plugin request/response handling and do not leak or forge forwarding data.
+- RustChunk implementation mapping: No client implementation mapping beyond generic login plugin message handling.
+- Evidence required before adoption: Real 1.20.1 Forge client behind Velocity test, exact proxy version and authenticated packet captures.
+- Completion state: COMPLETE — 48 logical lines through EOF; pinned source SHA and 2794 byte size match; inspected, not modified; tests not executed.
+
+### 2894. `docs/vertical-anchors.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ce743463a634ad34be17ea603a7f0d42bb1c27fb`
+- Size: 1306 bytes
+- Coverage: 1–22; complete EOF; 22 canonical logical lines, no gaps.
+- Purpose: Documents absolute, above-bottom, below-top and sea-level-relative worldgen anchors.
+- Dependencies / cross-references: References WorldGenerationContext, HeightProvider and vanilla anchor codecs.
+- Implementation / logic: Preserves wrapped integer resolution, codec range/truncation and independent min/height intersection semantics.
+- Findings: 26.3 constants and codecs; this does not establish 1.20.1 height behavior.
+- RustChunk relevance: Relevant to data-driven worldgen height providers; target constants must be re-derived.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 anchor enum/codec and Java arithmetic exactly; connect to the target dimension type/height accessor.
+- Follow-up checks: Test all anchors, negative min Y, tall dimensions, overflow, decimal truncation and disjoint generator bounds.
+- RustChunk implementation mapping: RustChunk worldgen vertical anchor and height provider logic.
+- Evidence required before adoption: 1.20.1 DimensionType/HeightProvider source oracle and tall-datapack fixtures.
+- Completion state: COMPLETE — 22 logical lines through EOF; pinned source SHA and 1306 byte size match; inspected, not modified; tests not executed.
+
+### 2895. `docs/visibility-benchmark.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5fafea0b4da6d9850bd53a2f138c97b4e155551a`
+- Size: 4234 bytes
+- Coverage: 1–77; complete EOF; 77 canonical logical lines, no gaps.
+- Purpose: Benchmarks a section face-visibility flood-fill shortcut and stack allocation.
+- Dependencies / cross-references: References chunk mesher, section opacity, face-pair masks, traversal stack and synthetic full-sized sections.
+- Implementation / logic: Pre-resolves opacity, uses 4 KiB worker stack instead of heap allocation and early exits for fully open/closed or all-face-connected sections.
+- Findings: Desktop Ryzen synthetic microbenchmark; some 4–7% gains are noise-sensitive and no distribution-weighted real-world aggregate exists.
+- RustChunk relevance: Directly relevant to chunk meshing CPU cost and worker allocations.
+- Decision: adaptable; reference
+- 1.20.1 implications: Use only after proving exact 1.20.1/Forge face visibility; compare allocation reduction and actual mesh time on Mali device.
+- Follow-up checks: Test all 64 face subsets, opacity states, mixed sections, stack limits, worst-case traversal and output equality.
+- RustChunk implementation mapping: RustChunk chunk mesher visibility helper and worker stack policy.
+- Evidence required before adoption: 1.20.1 block occlusion oracle, Forge block shapes, realistic section corpus, ARM64 benchmarks and mesh correctness.
+- Completion state: COMPLETE — 77 logical lines through EOF; pinned source SHA and 4234 byte size match; inspected, not modified; tests not executed.
+
+### 2896. `docs/windows-allocators.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `229813589dec4fa5ee74f5bc88bcbc1d8e95e60a`
+- Size: 3826 bytes
+- Coverage: 1–69; complete EOF; 69 canonical logical lines, no gaps.
+- Purpose: Describes Windows Segment Heap experiments alongside an existing mimalloc allocator.
+- Dependencies / cross-references: References Rust allocator, Windows executable manifest, winresource and Windows SDK validation.
+- Implementation / logic: Adds optional Segment Heap manifest for Win32 heap allocations without replacing Rust mimalloc; requires rebuilding and measuring separate variants.
+- Findings: Windows 10 2004+ feature; no Android relevance and older Windows versions untested.
+- RustChunk relevance: Not relevant to Android target; may inform future Windows developer/launcher builds only.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Do not add Windows Segment Heap to Android build; keep allocator selection target-specific.
+- Follow-up checks: If Windows packaging is later scoped, test actual manifest in executable and compare same workload/profile.
+- RustChunk implementation mapping: No Android implementation mapping.
+- Evidence required before adoption: Supported Windows OS matrix, manifest extraction, native library compatibility and repeatable memory/frame tests.
+- Completion state: COMPLETE — 69 logical lines through EOF; pinned source SHA and 3826 byte size match; inspected, not modified; tests not executed.
+
+### 2897. `docs/world-generation.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `68ffddf6e9b81adabe0c3e5f429a63caa5efd479`
+- Size: 17614 bytes
+- Coverage: 1–251; complete EOF; 251 canonical logical lines, no gaps.
+- Purpose: Summarizes noise/density registry decoding, noise routers, aquifers, climate, biome source, tags and terrain generation parity.
+- Dependencies / cross-references: References horizon_world::worldgen, density graph, NoiseRouter, aquifers, biome sources, tags, terrain filling and whole-chunk harnesses.
+- Implementation / logic: Loads named immutable density graphs, compiles noise roots, samples climate and multi-noise biome tables, binds aquifers and compares many stages against actual JARs.
+- Findings: Targets 26.3; complete structures/features, nonempty blending, full datapack coverage and complete generated worlds remain pending. Several bounded Rust API limits are explicit.
+- RustChunk relevance: A major architectural map for worldgen; all IDs, codec schemas, seeds and constants require 1.20.1 reimplementation.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Build 1.20.1 worldgen from official target codecs and Forge registries in dependency order; do not copy 26.3 registries or import tables.
+- Follow-up checks: Test noise seeds, codec defaults, density graph cycles, climate quantization, biome tie behavior, aquifer caches, datapack overrides and full chunk output.
+- RustChunk implementation mapping: RustChunk worldgen architecture: noise, density, biome, aquifer, tags and terrain generation.
+- Evidence required before adoption: 1.20.1 client/server JAR oracle, Forge datapack/registry fixtures, deterministic chunk snapshots and actual integrated/server gameplay.
+- Completion state: COMPLETE — 251 logical lines through EOF; pinned source SHA and 17614 byte size match; inspected, not modified; tests not executed.
+
+### 2898. `docs/world-height.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `31d87f9f30527b95863cdd6935e770a5c5bca4eb`
+- Size: 5534 bytes
+- Coverage: 1–75; complete EOF; 75 canonical logical lines, no gaps.
+- Purpose: Describes per-dimension LevelShape, chunk columns, storage, lighting, meshing, saves and network height handling.
+- Dependencies / cross-references: References DimensionType codecs, LevelShape/LevelShapes, Chunk, SaveDir, LightWorld, renderer layout and protocol registry.
+- Implementation / logic: Carries shape with each world/chunk/save/light/mesh/network job rather than a process global; supports tall datapack dimensions and per-level registry data.
+- Findings: 26.3 implementation; tall-world upper bounds and exact storage/lighting border semantics differ by version and Forge registry additions.
+- RustChunk relevance: Important for chunk storage, remote dimension changes and correct render/lighting bounds.
+- Decision: rewrite required; reference; version-specific
+- 1.20.1 implications: Implement 1.20.1 dimension type height and per-dimension chunk layout; never assume a single global -64..320 range when Forge datapacks can alter dimensions.
+- Follow-up checks: Test 1.20.1 dimension codecs, tall dimensions, save/load, lighting borders, mesh rebuilds, chunk packets and dimension switch cache invalidation.
+- RustChunk implementation mapping: RustChunk per-dimension world/chunk layout and network chunk decoder.
+- Evidence required before adoption: 1.20.1 DimensionType registry oracle, Forge datapacks, tall-world save/lighting/render tests and server integration.
+- Completion state: COMPLETE — 75 logical lines through EOF; pinned source SHA and 5534 byte size match; inspected, not modified; tests not executed.
+
+### 2899. `launcher/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `227b93e11533082cade936c3db0099bf65334b58`
+- Size: 5441 bytes
+- Coverage: 1–105; complete EOF; 105 canonical logical lines, no gaps.
+- Purpose: Defines Horizon desktop launcher's separate Cargo workspace and platform dependencies.
+- Dependencies / cross-references: References GPUI Fast, keyring backends, HTTP/TLS, ZIP/tar, modpack porting, telemetry, release signing and Windows/macOS/Linux platform crates.
+- Implementation / logic: Keeps launcher separate from game build; uses platform-conditional secure stores, profile/config parsers, network and packaging dependencies.
+- Findings: GPUI desktop dependencies and OS keychain crates are not Android UI/storage APIs; horizon-port-pack is a native mod porting pipeline, not Forge execution.
+- RustChunk relevance: Useful as a dependency-boundary and separate-workspace reference, not as a RustChunk Android manifest.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Keep RustChunk launcher and client/core modules separated; select Android-compatible UI, secure storage, HTTP and filesystem crates rather than importing GPUI/keyring wholesale.
+- Follow-up checks: Audit transitive native dependencies, Android NDK support, APK size, license, TLS, key storage and cross-compilation.
+- RustChunk implementation mapping: RustChunk Cargo workspace, Android launcher crate and shared core dependency graph.
+- Evidence required before adoption: Successful ARM64 Android cross-build, dependency/license audit, APK size and runtime storage/keychain tests.
+- Completion state: COMPLETE — 105 logical lines through EOF; pinned source SHA and 5441 byte size match; inspected, not modified; tests not executed.
+
+### 2900. `launcher/README.md`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `381a2aeddafc4478da382eb49782134da683bddc`
+- Size: 42414 bytes
+- Coverage: 1–400, 401–538; complete EOF; 538 canonical logical lines, no gaps.
+- Purpose: Comprehensive desktop launcher guide covering installs, accounts, Java instances, modpacks, servers, updates, telemetry, MCP and settings.
+- Dependencies / cross-references: References launcher backend/CLI, horizon-prepare, mod browser, Forge-like Java instances, account services, signed releases, telemetry and server supervisor.
+- Implementation / logic: Separates launcher UI/CLI/MCP over shared backend; supports instances, profiles, offline names gated by owner account, Java runtime management, modpacks, packs, multiplayer, backups and launch options.
+- Findings: Desktop GPUI and Horizon 26.3 workflow; offline profiles still require an owning account for launch and do not authenticate online-mode servers. Java mods are ported, not run through Forge.
+- RustChunk relevance: Strong reference for launcher feature taxonomy, profile isolation, preparation, safe update and import/export flows; its mod/account model is not directly compatible with RustChunk goals.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Build Android-first profiles and instance isolation while running real Forge 1.20.1 JARs. Design offline mode transparently and lawfully; no false online authentication. Keep game data separate from launcher state.
+- Follow-up checks: Verify Forge installer/runtime selection, modpack imports, Java 17 runtime, offline/online mode, secure token storage, scoped storage, backup/restore and update rollback on Android.
+- RustChunk implementation mapping: RustChunk launcher screens, profile manager, resource preparation, Forge installer and account/session bridge.
+- Evidence required before adoption: Actual 1.20.1 Forge launch, Aternos join, Samsung Android lifecycle/storage, account compliance review and full modpack regression tests.
+- Completion state: COMPLETE — 538 logical lines through EOF; pinned source SHA and 42414 byte size match; inspected, not modified; tests not executed.
 

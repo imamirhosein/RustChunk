@@ -1853,3 +1853,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 
 - A provenance comparison found 11 Ledger Size values had used character counts rather than UTF-8 byte sizes. The source SHAs and canonical logical line counts were correct; the 11 byte-size transcriptions are corrected to the pinned recursive tree values.
 - All 25 entries 2851–2875 now have exact pinned SHA and byte-size matches. The six-document correction transaction is committed and read back; structural QA must pass before this checkpoint is accepted.
+
+
+## Checkpoint QA — 2876–2900 — 2026-11-23
+
+- Entries **2876–2900 (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`, selected from the full untruncated tree after excluding all 2,875 prior Index paths.
+- Exact paths, source blob SHAs and byte sizes match the pinned recursive tree. Canonical logical line counts and complete EOF coverage are recorded in the active Ledger; large files were read in consecutive gap-free ranges no larger than 400 lines.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md` now contains **100 records (2801–2900)**, each with exactly 15 required fields. Index now contains **2,900 sequential unique paths** and matching new path/Decision rows.
+- Source review included documentation, Cargo manifest and embedded test/benchmark descriptions only; no test or benchmark was executed or independently reproduced.
+- No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
+- Exceptional authorization **2801–2900 is fully consumed**. Both 50-file sections 2801–2850 and 2851–2900 are closed. **STOP at 2900**; 2901+ requires a fresh explicit authorization.

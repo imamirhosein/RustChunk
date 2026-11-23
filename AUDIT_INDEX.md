@@ -3331,3 +3331,34 @@
 | 2873 | `docs/research-lab.md` | adaptable; reference; version-specific | Strongly relevant as a reproducible, source-pinned reverse-engineering and parity workflow for RustChunk. |
 | 2874 | `docs/resource-packs.md` | adaptable; reference; version-specific | Important reference for resource-pack compatibility and correct renderer reload behavior. |
 | 2875 | `docs/reuse-pack-overlays.md` | adaptable; reference | Useful for reducing resource-pack reload/startup cost after correctness and cache invalidation are established. |
+
+
+## Part 116 — Entries 2876–2900
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2876 | `docs/rust-parity.md` | adaptable; reference; version-specific | Very valuable as a parity-ledger model and a map of subsystem interactions; the actual APIs/data are version-specific. |
+| 2877 | `docs/save-batch-entities.md` | adaptable; reference | Relevant to chunk unload/save performance and avoiding repeated whole-map scans. |
+| 2878 | `docs/scheduled-ticks.md` | rewrite required; reference; version-specific | Core simulation and chunk persistence are relevant; exact scheduler ordering affects Forge gameplay. |
+| 2879 | `docs/security.md` | adaptable; reference; security-sensitive | Highly relevant to safe launcher downloads, mod installation, APK release and future automation. |
+| 2880 | `docs/server-levels.md` | unnecessary; reference; version-specific | Useful for understanding dimension-scoped state, but not required to connect to external servers. |
+| 2881 | `docs/server-next.md` | unnecessary; reference; version-specific | Useful for performance architecture and a critical reminder that non-vanilla packet extensions require explicit negotiation. |
+| 2882 | `docs/server.md` | unnecessary; reference; version-specific | Only server lifecycle/security patterns are reusable; client should not absorb server supervisor functionality. |
+| 2883 | `docs/shaders.md` | unnecessary; reference; optional/future | Optional graphics extension only; not needed for baseline rendering or Forge mod loading. |
+| 2884 | `docs/shared-model-library-benchmark.md` | adaptable; reference | Useful for avoiding duplicate model baking, but memory cost matters on low-RAM phones. |
+| 2885 | `docs/smp.md` | unnecessary; reference; version-specific | Useful only as an example of server-authoritative feature separation and transactional persistence. |
+| 2886 | `docs/starling-catalog.md` | adaptable; reference; version-specific | Useful UI/UX and pagination model for a mobile mod/resource browser; package semantics are incompatible with Forge. |
+| 2887 | `docs/starling-performance.md` | adaptable; reference; device-specific | Highly relevant performance methodology and caution: distant LOD cannot repair missing nearby chunks; near chunk readiness and bounded upload work must be measured first. |
+| 2888 | `docs/structure-density.md` | rewrite required; reference; version-specific | Relevant worldgen algorithm but dependent on 1.20.1 structure codecs and RNG. |
+| 2889 | `docs/surface-generation-benchmark.md` | adaptable; reference | Useful benchmark methodology for worldgen optimization, not transferable performance results. |
+| 2890 | `docs/telemetry.md` | adaptable; reference; privacy-sensitive | Privacy and consent design are highly relevant, but the always-on ping should not be copied into RustChunk. |
+| 2891 | `docs/terrain-filling.md` | rewrite required; reference; version-specific | Core worldgen pipeline is directly relevant but must be reconstructed for 1.20.1. |
+| 2892 | `docs/value-providers.md` | rewrite required; reference; version-specific | Highly relevant to data-driven worldgen and deterministic RNG, but target schemas differ. |
+| 2893 | `docs/velocity-forwarding.md` | unnecessary; reference; version-specific | Optional for proxy-hosted servers; not needed for ordinary Aternos connection. |
+| 2894 | `docs/vertical-anchors.md` | rewrite required; reference; version-specific | Relevant to data-driven worldgen height providers; target constants must be re-derived. |
+| 2895 | `docs/visibility-benchmark.md` | adaptable; reference | Directly relevant to chunk meshing CPU cost and worker allocations. |
+| 2896 | `docs/windows-allocators.md` | unnecessary; reference; platform-specific | Not relevant to Android target; may inform future Windows developer/launcher builds only. |
+| 2897 | `docs/world-generation.md` | rewrite required; reference; version-specific | A major architectural map for worldgen; all IDs, codec schemas, seeds and constants require 1.20.1 reimplementation. |
+| 2898 | `docs/world-height.md` | rewrite required; reference; version-specific | Important for chunk storage, remote dimension changes and correct render/lighting bounds. |
+| 2899 | `launcher/Cargo.toml` | adaptable; reference; platform-specific | Useful as a dependency-boundary and separate-workspace reference, not as a RustChunk Android manifest. |
+| 2900 | `launcher/README.md` | adaptable; reference; version-specific | Strong reference for launcher feature taxonomy, profile isolation, preparation, safe update and import/export flows; its mod/account model is not directly compatible with RustChunk goals. |
