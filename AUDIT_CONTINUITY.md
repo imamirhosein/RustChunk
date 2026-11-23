@@ -892,3 +892,13 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Final compatibility finding: Starling's Java loader support is Fabric/Quilt only; its native-mod compiler/injector is a separate Horizon-specific Rust extension mechanism, not Forge. RustChunk must implement actual Forge 47.x and Java 17 support independently.
 - Exceptional authorization **2901–3000 is EXHAUSTED**. Stage **2801–3000 is CLOSED (200/200)**. Both sections 2901–2950 and 2951–3000 are closed. **STOP at 3000**; fresh authorization required for 3001+.
 - No application source changes, tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+
+
+## Checkpoint 3001–3025 — COMPLETE — 2026-11-24
+
+- Entries **3001–3025 (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; paths were selected from the complete untruncated tree after excluding all 3,000 prior Index paths.
+- Exact source SHA and byte size match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded. Long files were read in consecutive, gap-free ranges no larger than 400 lines.
+- Active stage Ledger `AUDIT_LEDGER_3001_3200.md` now contains **25 records (3001–3025)**, each with exactly 15 fields. Index contains **3,025 sequential unique paths** with matching Ledger paths and Decisions.
+- Compatibility findings reinforce that Starling's native-mod toolchain/server and desktop GPUI pages are not a Forge 1.20.1 Android client; its launcher import detects Forge metadata but its tested loader adapter does not return a Forge loader.
+- Exceptional authorization **3001–3100 remains ACTIVE**. Continue **3026–3050**, report at 3050, then continue 3051–3100 without another permission request. **STOP at 3100**.
+- Documentation/source review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server/Aternos validation; no application source changes.

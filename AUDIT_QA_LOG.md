@@ -1945,3 +1945,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Reconciled the authoritative backup statement in `AUDIT_PROTOCOL.md` with the preserved 3,000-entry snapshot. The backup ref was not modified; documentation corrections are committed only on the audit branch after that snapshot.
 - Revalidated all 3,000 records: exactly 15 required fields each; 3,000 Index rows; no duplicate paths; Ledger/Index path and primary Decision labels align; all source paths, SHA values and byte sizes match the pinned Starling tree.
 - No application source changed. No tests, builds, benchmarks, APK/device, Minecraft/Forge, multiplayer or Aternos validation were run.
+
+
+## Checkpoint QA — 3001–3025 — 2026-11-24
+
+- Entries **3001–3025 (25/25)** were selected from the complete, untruncated pinned Starling tree after excluding all 3,000 prior Index paths; all 25 source files were read through EOF.
+- The recursive tree contains 5,749 entries and is not truncated. All 25 selected paths are unique against the full Index and within this checkpoint.
+- All 25 source blob SHAs and exact byte sizes match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded in `AUDIT_LEDGER_3001_3200.md`.
+- Long files were inspected serially in consecutive, gap-free ranges no larger than 400 lines: `other_launchers.rs` (516), `perf.rs` (512), `rust_toolchain.rs` (933), `scene.rs` (1,311), `servers.rs` (1,019), `servers_page.rs` (3,201) and `setup_page.rs` (418).
+- Each new Ledger record contains exactly 15 required fields. New Index rows 3001–3025 align with Ledger numbering, paths and primary Decisions.
+- Compatibility findings include: other-launcher import detects Forge metadata but the tested Horizon loader adapter returns no Forge loader; resource-pack tests use later pack format 69; Horizon's Rust native-mod compiler is not Java Forge; its server runtime/page host Horizon 26.3 rather than a standard Forge 1.20.1 server; several launcher modules are desktop GPUI/Windows-only.
+- Tests/examples were inspected only. No tests, builds, benchmarks, APK/device, Forge/Minecraft launch, multiplayer or Aternos validation was run. No RustChunk application source changed.
+- Exceptional authorization **3001–3100 remains ACTIVE**, with 25/100 files consumed. Continue **3026–3050** under the same grant; report at 3050, then continue the already-authorized 3051–3100. **STOP at 3100**.

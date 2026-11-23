@@ -469,3 +469,21 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - All long files were fetched in consecutive, gap-free chunks <=400 lines, including main.rs (5,354 lines), native_mods.rs (3,857 lines), mods_page.rs (1,809 lines) and other >400-line sources.
 - Exceptional authorization 2901–3000 is exhausted. Stage 2801–3000 is CLOSED (200/200); sections 2901–2950 and 2951–3000 are CLOSED (50/50). **STOP at 3000**; 3001+ requires fresh explicit permission.
 - No application source changes, tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.
+
+
+## Active stage 3001–3200 — exceptional grant 3001–3100
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 3001–3050 | 3001–3025 — **COMPLETE** | 3026–3050 — **AUTHORIZED** | **25/50 — CONTINUE UNDER SAME GRANT** |
+| 3051–3100 | 3051–3075 — **AUTHORIZED** | 3076–3100 — **AUTHORIZED** | **0/50 — WITHIN ACTIVE 100-FILE GRANT** |
+| 3101–3150 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
+| 3151–3200 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
+
+## Checkpoint 3001–3025 — COMPLETE
+
+- 25 new source files were inspected serially through EOF from the pinned Starling commit `5432370d573642041585c69b40fb045b27133488`; selection used the complete untruncated recursive tree after excluding all 3,000 prior Index paths.
+- Exact source SHA and byte size match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded in the new stage Ledger. Long files use consecutive, gap-free chunks no larger than 400 lines.
+- Active Ledger has 25 entries (3001–3025), each with exactly 15 required fields; Index has 3,025 sequential unique paths and matching path/Decision rows.
+- The exceptional authorization 3001–3100 remains active. Continue 3026–3050 without another permission request; report at 3050, then continue 3051–3100. **STOP at 3100**.
+- No application source changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation was performed.
