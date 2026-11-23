@@ -864,3 +864,431 @@
 - RustChunk implementation mapping: No baseline mapping.
 - Evidence required before adoption: Android package integration tests and APK install/update validation.
 - Completion state: COMPLETE — 55 logical lines through EOF; pinned SHA and 2066-byte size match; test inspected, not run.
+
+
+## Checkpoint 3051–3075 — COMPLETE
+
+### 3051. `launcher/tests/fixtures/native-crate-demo/data/greeting.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `aa725498aa2b24d7573e8c58c7bae4021010f02a`
+- Size: 36 bytes
+- Coverage: 1–1; complete EOF; 1 canonical logical line, no gaps.
+- Purpose: Fixture data file for a Horizon native Rust-mod bundle demo.
+- Dependencies / cross-references: `horizon-mixin.toml`, `frame.rs`, `horizon_client::native_data!` and the native-mod bundle fixture.
+- Implementation / logic: Contains a short greeting string embedded into the demo mod and read by its injected frame hook.
+- Findings: Pure fixture content; its behavior depends on Horizon's native-mod compiler/bundle loader, not Minecraft's Java mod system.
+- RustChunk relevance: No direct RustChunk runtime value.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Do not treat this fixture as a Forge mod asset or standard Minecraft resource path.
+- Follow-up checks: If a native extension format is separately approved, test asset namespacing, bundle inclusion and path isolation.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Only an independently approved native plugin format and bundle-integrity tests.
+- Completion state: COMPLETE — 1 logical line through EOF; pinned SHA and 36-byte size match; fixture inspected, not executed.
+
+### 3052. `launcher/tests/fixtures/native-crate-demo/engine/Cargo.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e1bacb1fb8ef02fe68c574f7713240b49ba49eea`
+- Size: 183 bytes
+- Coverage: 1–9; complete EOF; 9 canonical logical lines, no gaps.
+- Purpose: Cargo manifest for the demo native Rust crate compiled separately from the Horizon game.
+- Dependencies / cross-references: Cargo workspace, Horizon Cargo.lock, `crc32fast` and `bake.rs` binary target.
+- Implementation / logic: Declares a non-publishable Rust 2024 crate with a single version-ranged dependency expected in Horizon's lockfile.
+- Findings: The manifest belongs to a demonstration native-mod crate; edition 2024 and host dependency resolution are not evidence of Android NDK/Forge compatibility.
+- RustChunk relevance: Separate Rust crate compilation can be a native-engine technique, but not a replacement for Java Forge loading.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: RustChunk's own native engine may use Cargo, but game mods for Forge 1.20.1 remain Java JARs with Forge metadata and lifecycle.
+- Follow-up checks: Check Android target triples, dependency versions, reproducible builds, ABI and license policy if a Rust subcrate is introduced.
+- RustChunk implementation mapping: No mod-loader mapping; optional Rust engine crate only.
+- Evidence required before adoption: Android ARM64 NDK build and integration tests for any separately scoped native engine.
+- Completion state: COMPLETE — 9 logical lines through EOF; pinned SHA and 183-byte size match; manifest inspected, no Cargo build run.
+
+### 3053. `launcher/tests/fixtures/native-crate-demo/engine/data/salt.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `06a710d47a022aa3500ad102c1f67e68f0d42e2f`
+- Size: 16 bytes
+- Coverage: 1–1; complete EOF; 1 canonical logical line, no gaps.
+- Purpose: Static input embedded into the demo native Rust crate checksum function.
+- Dependencies / cross-references: `include_bytes!`, `crate-demo-engine` and `bake.rs`.
+- Implementation / logic: Provides a small fixed salt that the demo crate compiles into its binary and includes in CRC-32 output.
+- Findings: A test fixture only; `include_bytes!` demonstrates compile-time resource embedding, not Minecraft mod resource packaging.
+- RustChunk relevance: No direct compatibility value.
+- Decision: unnecessary; reference
+- 1.20.1 implications: If RustChunk embeds engine data, use explicit asset/resource packaging and checksums rather than adopting the fixture value.
+- Follow-up checks: Test resource inclusion, deterministic hashes and cache invalidation if using compile-time assets.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Reproducible build and resource integrity tests.
+- Completion state: COMPLETE — 1 logical line through EOF; pinned SHA and 16-byte size match; fixture inspected, not executed.
+
+### 3054. `launcher/tests/fixtures/native-crate-demo/engine/src/bin/bake.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1529f15061ddf9efc53ce81eece355bc31b606bd`
+- Size: 962 bytes
+- Coverage: 1–22; complete EOF; 22 canonical logical lines, no gaps.
+- Purpose: Post-build executable for the native-mod demo; increments a persistent cache counter and writes a generated data file.
+- Dependencies / cross-references: Cargo binary target, `HORIZON_NATIVE_DATA_DIR`, `HORIZON_NATIVE_CACHE_DIR` and `crate_demo_engine::checksum`.
+- Implementation / logic: Reads/writes build cache, computes a deterministic checksum and emits a generated file into the new game build's native data directory.
+- Findings: This runs a separate native build step and writes to environment-provided paths; it is part of Horizon's proprietary native-mod pipeline, not Forge's Java installer lifecycle. Path trust and process sandboxing are not addressed by this fixture.
+- RustChunk relevance: Post-build artifact generation is a possible native-engine build pattern, but should not run untrusted mod code in RustChunk baseline.
+- Decision: unnecessary; reference; security-sensitive; version-specific
+- 1.20.1 implications: Keep Forge installation/launch separate from optional Rust engine compilation. Any build hook must be sandboxed and constrained to app-owned directories.
+- Follow-up checks: Threat-model executable provenance, environment path injection, cache isolation, concurrent builds, stale data and build failure cleanup.
+- RustChunk implementation mapping: No baseline mapping; optional signed native-engine build stage only.
+- Evidence required before adoption: Reproducible Android builds, sandbox design, path containment tests and signed toolchain verification.
+- Completion state: COMPLETE — 22 logical lines through EOF; pinned SHA and 962-byte size match; fixture inspected, not executed.
+
+### 3055. `launcher/tests/fixtures/native-crate-demo/engine/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4315ac5fd028cb53618de57c1431a16f3cf8f10d`
+- Size: 454 bytes
+- Coverage: 1–13; complete EOF; 13 canonical logical lines, no gaps.
+- Purpose: Demo Rust crate logic used by the native-mod build fixture.
+- Dependencies / cross-references: Cargo manifest, `include_bytes!` data and `crc32fast`.
+- Implementation / logic: Embeds salt at compile time and exposes a checksum function consumed by the post-build binary and injected frame hook.
+- Findings: This is a trivial native crate demonstration; it does not implement Minecraft APIs, Forge entrypoints or Java mod interoperability.
+- RustChunk relevance: No direct game/mod compatibility value.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: RustChunk may use Rust for its own engine modules, but must still load Java Forge mods through Forge 47.x.
+- Follow-up checks: If a native Rust module is planned, define a stable FFI boundary, panic strategy, ABI and memory ownership before porting patterns.
+- RustChunk implementation mapping: No Forge mapping; optional native engine library only.
+- Evidence required before adoption: ARM64 ABI/FFI tests and separation from Java Forge classloading.
+- Completion state: COMPLETE — 13 logical lines through EOF; pinned SHA and 454-byte size match; fixture inspected, not executed.
+
+### 3056. `launcher/tests/fixtures/native-crate-demo/frame.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8d5ed0305e1a27a01aaa8fc1b51bf54dc13b9b30`
+- Size: 1281 bytes
+- Coverage: 1–27; complete EOF; 27 canonical logical lines, no gaps.
+- Purpose: Demo native injection hook that runs once on the first client frame and records bundle data, generated data and checksum proof.
+- Dependencies / cross-references: Horizon hook registry (`frame`), native-data macros, `Game` APIs, demo engine crate and game log/filesystem.
+- Implementation / logic: Uses a static AtomicBool to execute once, reads bundled greeting and post-build output, writes a proof file in mod-private data directory.
+- Findings: The hook binds directly to Horizon's `crate::game::Game` internals and custom macro APIs; it is not a Fabric/Forge event or Mixin. The one-time flag is process-global, not per game instance.
+- RustChunk relevance: The idea of an early client-frame instrumentation hook is relevant to performance diagnostics, but API and loader are proprietary.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: For Forge 1.20.1 diagnostics, use supported Forge client events/Mixins and keep instrumentation out of release builds.
+- Follow-up checks: Verify hook timing, thread affinity, profile isolation, shutdown, multiple client instances and no filesystem writes outside app storage.
+- RustChunk implementation mapping: RustChunk benchmark/diagnostic hook implemented through a target-compatible Forge client mod or controlled Java instrumentation.
+- Evidence required before adoption: Real Forge 47.x hook ordering and Android client integration tests.
+- Completion state: COMPLETE — 27 logical lines through EOF; pinned SHA and 1281-byte size match; fixture inspected, not executed.
+
+### 3057. `launcher/tests/fixtures/native-crate-demo/horizon-mixin.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1885378a1ccba0667272b47143d1e1abf26f1293`
+- Size: 762 bytes
+- Coverage: 1–25; complete EOF; 25 canonical logical lines, no gaps.
+- Purpose: Manifest fixture exercising every part of Horizon's native-mod bundle: named injection, helper source, separate crate and post-build step.
+- Dependencies / cross-references: Horizon native-mod manifest parser, `native-hooks.json`, Rust crate build and `frame.rs`.
+- Implementation / logic: Declares a named `frame` hook, versioned binding to internal `Game`, an engine crate and post-build binary.
+- Findings: This TOML is not Forge `mods.toml`, `META-INF/mods.toml`, or a Java mod descriptor; its fields are Horizon-specific and do not create a Java Forge mod.
+- RustChunk relevance: Useful only as a reference for a separate Rust extension format; not suitable for Forge compatibility.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Do not present Horizon's native-mixin manifest as Forge support. Forge 47.x requires its own metadata, ModLauncher/FML lifecycle and Java 17 runtime.
+- Follow-up checks: Keep manifest namespaces unambiguous; test schema versioning, unknown fields, path containment and hook compatibility if an independent native extension format is approved.
+- RustChunk implementation mapping: No Forge mapping; native engine plugin schema only if separately approved.
+- Evidence required before adoption: Actual Forge metadata and loader tests, plus independent native-extension threat model.
+- Completion state: COMPLETE — 25 logical lines through EOF; pinned SHA and 762-byte size match; fixture inspected, not executed.
+
+### 3058. `launcher/tests/hidden_processes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c7da90ea9c7fa88a1e0d9d8ff2092e2b0ffbf7c2`
+- Size: 3813 bytes
+- Coverage: 1–116; complete EOF; 116 canonical logical lines, no gaps.
+- Purpose: Windows-only integration tests for hidden child processes, stdin/stdout/stderr capture, exit status, Java exporter logs, CLI streams and GUI subsystem.
+- Dependencies / cross-references: Windows process creation, console probe executable, backend job runner, Java JDK wrapper, MCP stdio and PE header parsing.
+- Implementation / logic: Builds a probe, runs it hidden, verifies stream capture and failure status, checks GUI subsystem and stdio transport.
+- Findings: Entire test module is `cfg(windows)` and validates Windows GUI/no-console behavior; no Android child-process or Java runtime restrictions are exercised.
+- RustChunk relevance: General process-test patterns are useful, but Windows console suppression is irrelevant to Android.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: RustChunk needs Android Java 17 process lifecycle and log piping, not Windows `CREATE_NO_WINDOW` behavior.
+- Follow-up checks: Test Android child process start/stop, stdout/stderr buffering, stdin, exit status, app background restrictions and crash cleanup.
+- RustChunk implementation mapping: No direct implementation mapping; Android process integration suite should be separate.
+- Evidence required before adoption: Target-device tests with the actual Java runtime and Android process limits.
+- Completion state: COMPLETE — 116 logical lines through EOF; pinned SHA and 3813-byte size match; tests inspected, not executed.
+
+### 3059. `launcher/tests/logs.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `57d660a7240d2070d3de8a857274bcff39b3cb48`
+- Size: 2292 bytes
+- Coverage: 1–62; complete EOF; 62 canonical logical lines, no gaps.
+- Purpose: CLI integration tests for reading the latest game log tail and newest crash report in text/JSON forms.
+- Dependencies / cross-references: Horizon launcher CLI, `HORIZON_HOME`, logs/latest.log, crash-reports and temp filesystem.
+- Implementation / logic: Checks missing-file errors, default 100-line tail, custom line count, JSON output path and newest crash report selection.
+- Findings: The file layout is generic Java Edition, but CLI binary and desktop test harness are Horizon-specific; tests do not exercise Android log access or redaction.
+- RustChunk relevance: Log-tail/crash-report behavior is useful for RustChunk diagnostics.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: Expose app-private Minecraft logs and crash reports through Android UI/share controls while preserving privacy and bounded reads.
+- Follow-up checks: Test large logs, UTF-8 boundaries, path traversal, permission changes, concurrent log writes, JSON stability and redaction.
+- RustChunk implementation mapping: RustChunk diagnostics/log repository and crash-report viewer.
+- Evidence required before adoption: Android filesystem tests, crash artifact integration and privacy review.
+- Completion state: COMPLETE — 62 logical lines through EOF; pinned SHA and 2292-byte size match; tests inspected, not executed.
+
+### 3060. `launcher/tests/owner_gate.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3a7869272cb721cb7e6768969b51d590a8ec6e01`
+- Size: 3620 bytes
+- Coverage: 1–89; complete EOF; 89 canonical logical lines, no gaps.
+- Purpose: End-to-end tests enforce a Microsoft Minecraft Java ownership gate for both CLI play and MCP play.
+- Dependencies / cross-references: Launcher binary, accounts.json offline identity, installed version fixture, owner gate and MCP JSON-RPC transport.
+- Implementation / logic: Creates a profile with only an offline name and asserts both play entrypoints refuse before creating a game session, preserving the offline account.
+- Findings: This is direct evidence that Starling deliberately blocks offline-name play without an owning Microsoft account. Porting this gate unchanged would violate RustChunk's offline-friendly requirement; bypassing online-mode authentication must not be confused with legitimate access to online-mode servers.
+- RustChunk relevance: Negative compatibility requirement: do not inherit this product gate, but keep online-mode server authentication honest and distinct from offline-mode server support.
+- Decision: rewrite required; reference; authentication-sensitive
+- 1.20.1 implications: RustChunk may allow offline profiles for offline-mode servers; normal online-mode/Aternos servers generally require valid Microsoft/Xbox/Minecraft authentication unless the server owner disables online mode.
+- Follow-up checks: Test no-owner offline launch policy, online-mode handshake failures, offline-mode server connection and no false promise that offline names join authenticated servers.
+- RustChunk implementation mapping: RustChunk account/profile policy and play preflight; no owner gate for offline local play, with explicit server-auth requirements.
+- Evidence required before adoption: Separate offline-mode and online-mode multiplayer integration tests and authentication security review.
+- Completion state: COMPLETE — 89 logical lines through EOF; pinned SHA and 3620-byte size match; tests inspected, not executed.
+
+### 3061. `launcher/tests/startup.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `776d8ef15de6426ed5186313252288a8c69e3ac4`
+- Size: 3565 bytes
+- Coverage: 1–88; complete EOF; 88 canonical logical lines, no gaps.
+- Purpose: Ignored Windows integration test measures that hardware probes run after first frame and do not open console windows.
+- Dependencies / cross-references: Windows launcher binary, PowerShell probe stand-in, startup timing JSON and environment-controlled telemetry/benchmark settings.
+- Implementation / logic: Starts the desktop launcher, waits for exit, verifies seven probes occur after first-frame timestamp and hidden-console flag is false.
+- Findings: Test is `cfg(windows)` and explicitly ignored unless an interactive Windows desktop/GPU is available; it does not measure Minecraft chunk loading or Android startup.
+- RustChunk relevance: The principle of moving expensive hardware probes off the critical startup path is useful; the implementation is Windows/GPUI-specific.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: For RustChunk, avoid blocking launcher/game startup with device probing; gather Android GPU/RAM/renderer info asynchronously and only when needed.
+- Follow-up checks: Benchmark Android cold/warm startup, probe scheduling, failure handling, permission restrictions and battery impact.
+- RustChunk implementation mapping: RustChunk startup coordinator and optional Android device-info probe service.
+- Evidence required before adoption: Measured Android startup traces and no-regression performance tests.
+- Completion state: COMPLETE — 88 logical lines through EOF; pinned SHA and 3565-byte size match; ignored test inspected, not run.
+
+### 3062. `launcher/tests/support/console_probe.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `1ff16a10ba4fc4bc3078a8b1177f87d12e862e40`
+- Size: 2338 bytes
+- Coverage: 1–73; complete EOF; 73 canonical logical lines, no gaps.
+- Purpose: Builds a Windows console probe executable to report window visibility and verify redirected streams or simulated hardware probes.
+- Dependencies / cross-references: Win32 kernel32/user32 APIs, environment variables, stdio, `rustc` test helper and process integration tests.
+- Implementation / logic: Queries console window visibility, writes optional probe timestamp, sleeps to expose blocking, emits stdout/stderr/stdin and optional failure exit code.
+- Findings: This helper uses Windows-specific APIs and is only test support; it is not safe or meaningful as an Android process probe.
+- RustChunk relevance: No direct implementation value.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use Android-specific instrumentation and process metrics for RustChunk.
+- Follow-up checks: No port; replace with Android instrumentation if equivalent startup/process tests are needed.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android process instrumentation tests.
+- Completion state: COMPLETE — 73 logical lines through EOF; pinned SHA and 2338-byte size match; helper inspected, not executed.
+
+### 3063. `launcher/tests/support/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b5a72d115ee813833413047a3bbbe8e5b2542d58`
+- Size: 873 bytes
+- Coverage: 1–29; complete EOF; 29 canonical logical lines, no gaps.
+- Purpose: Compiles and caches a Windows console-probe helper for integration tests.
+- Dependencies / cross-references: `rustc`, `OnceLock`, temp directory and `horizon_launcher::process`.
+- Implementation / logic: Builds console_probe.rs once per test process and returns its executable path.
+- Findings: Windows-specific test harness support; not application code or Android build tooling.
+- RustChunk relevance: No direct implementation value.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: RustChunk Android tests should use Gradle/NDK instrumentation rather than compiling a Windows executable at test runtime.
+- Follow-up checks: Ensure test helper artifacts are isolated and cleaned up in any future platform-specific test suite.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android CI instrumentation harness.
+- Completion state: COMPLETE — 29 logical lines through EOF; pinned SHA and 873-byte size match; helper inspected, not executed.
+
+### 3064. `licenses/create-MIT.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `e19475ba8e768134097e3fbb4cc518fb3bfb1825`
+- Size: 1445 bytes
+- Coverage: 1–26; complete EOF; 26 canonical logical lines, no gaps.
+- Purpose: Records MIT license and attribution for code portions ported from the Create Minecraft mod.
+- Dependencies / cross-references: Create upstream repository, `kinetic_machines.rs` and related kinetic shape/number code.
+- Implementation / logic: States that Create code outside assets is MIT-licensed and requires retaining notice; explicitly excludes Create assets, which are All Rights Reserved.
+- Findings: Legal boundary is material if RustChunk reuses kinetic code or assets: MIT code notice must be preserved, while Create assets cannot be copied under this license.
+- RustChunk relevance: No direct game implementation; legal provenance reference only.
+- Decision: adaptable; reference; legal-sensitive
+- 1.20.1 implications: Before porting any Create-derived code, verify exact source files and preserve required MIT notices; do not copy excluded textures/models/audio/assets.
+- Follow-up checks: Perform source-level provenance and license review for every reused code/asset; inspect upstream changes and third-party notices.
+- RustChunk implementation mapping: RustChunk third-party notices and source provenance register, only for independently approved reused code.
+- Evidence required before adoption: Legal review, license compatibility audit and asset-rights confirmation.
+- Completion state: COMPLETE — 26 logical lines through EOF; pinned SHA and 1445-byte size match; license text inspected, not modified.
+
+### 3065. `licenses/iris-features-MIT.txt`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `22147ae0bbc274869d3a51c55c01c2d2c4a8b58f`
+- Size: 1067 bytes
+- Coverage: 1–21; complete EOF; 21 canonical logical lines, no gaps.
+- Purpose: Contains the MIT license notice attributed to Riley-Neeb for Iris features.
+- Dependencies / cross-references: Iris feature code provenance elsewhere in Starling and third-party license inventory.
+- Implementation / logic: Provides standard MIT grant, copyright notice and warranty disclaimer.
+- Findings: The file alone does not identify which RustChunk-relevant files, if any, are derived from Iris; do not infer that every Iris feature or asset is covered by this license.
+- RustChunk relevance: Legal metadata only; no direct implementation value.
+- Decision: unnecessary; reference; legal-sensitive
+- 1.20.1 implications: Any reuse must be traced to the exact covered source files and preserve the copyright/license text; verify assets separately.
+- Follow-up checks: Map license to source files, verify upstream provenance and confirm no non-MIT assets are included.
+- RustChunk implementation mapping: RustChunk third-party license register only if a specific covered code portion is approved.
+- Evidence required before adoption: File-level provenance map and legal review before reuse.
+- Completion state: COMPLETE — 21 logical lines through EOF; pinned SHA and 1067-byte size match; license text inspected, not modified.
+
+### 3066. `mods/horizon/src/bench/java/dev/horizonlab/bench/VanillaBench.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `4b3bbf14b319c31656ca2edb7124ff540e46e484`
+- Size: 16175 bytes
+- Coverage: 1–371; complete EOF; 371 canonical logical lines, no gaps.
+- Purpose: Dev-only benchmark driver for vanilla Fabric client frame/tick timings and chunk-load readiness across repeatable scenes.
+- Dependencies / cross-references: Minecraft client API, Fabric `ClientModInitializer`, Mixin frame/tick hooks, script JSON, creative world, local/server connection and JSONL output.
+- Implementation / logic: Runs deterministic teleport/load/settle/flight phases, waits until nearby chunks exist and rendered sections are complete and stable for one second, records frame/tick durations, chunk counts and renderer metadata.
+- Findings: Benchmark is tied to Minecraft 26.3 and Fabric entrypoint/mixins; its `chunksAround` check measures a circular area inside render distance minus one and `hasRenderedAllSections`, then waits for loaded count stability. Because flight begins after chunks are ready, load latency is reported separately from steady-state frame time. Server mode requires operator permission for commands.
+- RustChunk relevance: Highly relevant benchmark methodology for distinguishing chunk-load latency from steady-state FPS, but code/API and fixtures must be retargeted.
+- Decision: adaptable; reference; version-specific; platform-specific
+- 1.20.1 implications: Build a dedicated Minecraft 1.20.1 Forge 47.x client benchmark mod/harness on Java 17, with Android frame pacing/GPU metrics and scene scripts; do not ship this Fabric 26.3 driver.
+- Follow-up checks: Add separate metrics for time-to-first-chunk, all-visible-chunks-ready, compiled/rendered sections, missing chunks during movement, frame-time percentiles, tick time, memory and renderer stalls; test both local and Aternos-like servers.
+- RustChunk implementation mapping: RustChunk benchmark specification and target-specific Forge instrumentation module, not launcher production code.
+- Evidence required before adoption: Reproducible 1.20.1 Forge scenes, validated chunk readiness definition, Android device traces and repeatable frame/tick reports.
+- Completion state: COMPLETE — 371 logical lines through EOF; pinned SHA and 16175-byte size match; benchmark code inspected, not executed.
+
+### 3067. `mods/horizon/src/bench/java/dev/horizonlab/bench/mixin/FrameHookMixin.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6c9ac676d10b96331411b6cc0a6115c8504d2e6c`
+- Size: 593 bytes
+- Coverage: 1–17; complete EOF; 17 canonical logical lines, no gaps.
+- Purpose: Injects the vanilla benchmark driver at the head of `Minecraft.runTick` to sample frame timing/state.
+- Dependencies / cross-references: Sponge Mixin, Minecraft 26.3 `Minecraft.runTick` and `VanillaBench.frame`.
+- Implementation / logic: Calls benchmark frame callback once per game run tick before the client tick work.
+- Findings: Mixin target and mapping are version-specific; this is not a Forge 1.20.1 patch target or Android renderer callback.
+- RustChunk relevance: A frame hook is relevant to a custom benchmark, but must use the correct 1.20.1 Forge mappings and avoid double-counting frame/tick callbacks.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Use a Forge 47.x-compatible Mixin/event hook on Java 17; confirm whether callback corresponds to rendered frame or game tick on target version.
+- Follow-up checks: Verify injection point, callback frequency, render thread safety, mod conflicts and instrumentation overhead.
+- RustChunk implementation mapping: RustChunk benchmark instrumentation hook in a dev-only Forge client mod.
+- Evidence required before adoption: Runtime validation against Forge 1.20.1 mappings and frame pacing traces.
+- Completion state: COMPLETE — 17 logical lines through EOF; pinned SHA and 593-byte size match; mixin inspected, not executed.
+
+### 3068. `mods/horizon/src/bench/java/dev/horizonlab/bench/mixin/TickHookMixin.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7d88a3fec1c5e6e601567b1decb0deab3ef9b080`
+- Size: 788 bytes
+- Coverage: 1–23; complete EOF; 23 canonical logical lines, no gaps.
+- Purpose: Times client tick duration around `Minecraft.tick` for benchmark reports.
+- Dependencies / cross-references: Sponge Mixin, Minecraft 26.3 tick method and `VanillaBench.tick`.
+- Implementation / logic: Records `System.nanoTime()` at method head and stores elapsed milliseconds at return while benchmark flight phase is active.
+- Findings: Method mapping and lifecycle are version-specific; tick duration is distinct from frame duration and must not be conflated with FPS.
+- RustChunk relevance: Useful benchmark metric separation, but hook must be ported to the exact Forge 1.20.1 client.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Record both render-frame time and client tick time in RustChunk diagnostics; use Forge-compatible mappings and avoid intrusive hooks in release builds.
+- Follow-up checks: Test tick callback pairing on exceptions, pauses, game screens, integrated server load and mixin conflicts.
+- RustChunk implementation mapping: RustChunk benchmark tick instrumentation.
+- Evidence required before adoption: Forge 47.x hook tests and Android traces with tick/frame distributions.
+- Completion state: COMPLETE — 23 logical lines through EOF; pinned SHA and 788-byte size match; mixin inspected, not executed.
+
+### 3069. `mods/horizon/src/bench/resources/fabric.mod.json`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `789d9cfacd728d1db4cb2c1cc01edf4150f2d314`
+- Size: 501 bytes
+- Coverage: 1–21; complete EOF; 21 canonical logical lines, no gaps.
+- Purpose: Declares the development benchmark mod as a client-only Fabric mod.
+- Dependencies / cross-references: Fabric Loader, `VanillaBench` client entrypoint, mixin config and Minecraft version metadata.
+- Implementation / logic: Registers benchmark entrypoint and mixins; dependency range pins Fabric Loader 0.19.5+ and Minecraft 26.3.
+- Findings: Explicitly Fabric-only, Minecraft 26.3; not a Forge `mods.toml` or NeoForge metadata file.
+- RustChunk relevance: No direct reuse for target Forge.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: RustChunk benchmark harness needs Forge 47.x metadata and Java 17; do not package this Fabric descriptor.
+- Follow-up checks: Validate mod metadata against Forge 47.4.5 and ensure dev-only benchmark artifacts are excluded from production APK.
+- RustChunk implementation mapping: No mapping; create independent Forge benchmark mod descriptor.
+- Evidence required before adoption: Forge loader discovery and production artifact exclusion tests.
+- Completion state: COMPLETE — 21 logical lines through EOF; pinned SHA and 501-byte size match; metadata inspected, not executed.
+
+### 3070. `mods/horizon/src/bench/resources/horizon_bench.mixins.json`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `96415ac5168add1b1ff691bdacdc392a4bcc7e54`
+- Size: 208 bytes
+- Coverage: 1–12; complete EOF; 12 canonical logical lines, no gaps.
+- Purpose: Registers the two benchmark Mixin hooks for the Fabric client benchmark mod.
+- Dependencies / cross-references: Sponge Mixin, `FrameHookMixin`, `TickHookMixin` and Java compatibility level.
+- Implementation / logic: Marks mixins required, sets package, `JAVA_25` compatibility and default injection requirement 1.
+- Findings: Java 25 and target Minecraft 26.3 are incompatible with RustChunk's Java 17 / Minecraft 1.20.1 target; required injection failures would abort loading.
+- RustChunk relevance: Only the concept of a minimal dev-only mixin manifest is reusable.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Create a new Forge 47.x/Java 17 benchmark manifest with mappings and injection points verified for 1.20.1.
+- Follow-up checks: Check target class/method names, injection count, optional-mod conflicts and Java 17 bytecode compatibility.
+- RustChunk implementation mapping: No direct mapping; new Forge benchmark manifest only.
+- Evidence required before adoption: Forge 1.20.1 runtime load tests and bytecode/version verification.
+- Completion state: COMPLETE — 12 logical lines through EOF; pinned SHA and 208-byte size match; metadata inspected, not executed.
+
+### 3071. `mods/horizon/src/neoforge-bench/java/dev/horizonlab/neoforgebench/NeoForgeBench.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5992ed27a9604dbc77857a7b3e9e91c651a5ea32`
+- Size: 11268 bytes
+- Coverage: 1–275; complete EOF; 275 canonical logical lines, no gaps.
+- Purpose: Dev-only NeoForge client benchmark driver using render-frame events for scripted chunk-load and steady-flight scenes.
+- Dependencies / cross-references: NeoForge `@Mod` client distribution, `RenderFrameEvent.Pre`, Minecraft 1.21.1 client API, script JSON and JSONL output.
+- Implementation / logic: Creates a creative world, teleports between scenes, waits for nearby chunks and compiled sections to stabilize, records frame times and renderer details, then stops the client.
+- Findings: Targets NeoForge 1.21.1, not Forge 1.20.1; unlike VanillaBench it omits tick timings, server mode, setup/cleanup commands and per-scene settle override. It shares the chunk readiness method and one-second stability window.
+- RustChunk relevance: The event-based benchmark structure is the closest loader-adjacent reference in this checkpoint, but cannot be assumed binary/source compatible with Forge 47.x.
+- Decision: adaptable; reference; version-specific
+- 1.20.1 implications: Use the benchmark state machine and chunk-ready metrics as a design reference; port to Forge 47.4.5, Minecraft 1.20.1 and Java 17, then add Android instrumentation.
+- Follow-up checks: Verify event timing and client thread, add tick timing, remote server scenes, per-scene setup/cleanup, failure timeout, and Android thermal/battery controls.
+- RustChunk implementation mapping: RustChunk dev-only Forge benchmark harness specification and implementation.
+- Evidence required before adoption: Actual Forge 47.4.5 build/run on Android and reproducible chunk/FPS traces.
+- Completion state: COMPLETE — 275 logical lines through EOF; pinned SHA and 11268-byte size match; benchmark inspected, not executed.
+
+### 3072. `mods/horizon/src/neoforge-bench/resources/META-INF/neoforge.mods.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0fb0c30292c9854f7a55881ea3d88a01f5c9ba7c`
+- Size: 402 bytes
+- Coverage: 1–11; complete EOF; 11 canonical logical lines, no gaps.
+- Purpose: NeoForge metadata for the dev-only benchmark driver.
+- Dependencies / cross-references: NeoForge JavaFML loader, benchmark mod id and build/test tooling.
+- Implementation / logic: Declares `javafml`, loaderVersion `[4,)`, MIT license and dev-only `horizon_bench` mod identity.
+- Findings: Metadata is a NeoForge development mod descriptor; it does not define Forge 47.x compatibility or target Minecraft version by itself.
+- RustChunk relevance: Useful descriptor concept only.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Create a dedicated Forge 47.x descriptor with correct `modLoader`, loader range and Minecraft dependency; never reuse this as-is.
+- Follow-up checks: Verify exact Forge 47.4.5 metadata syntax, dependency ranges and that benchmark JAR is excluded from production.
+- RustChunk implementation mapping: No direct mapping; new Forge-only dev descriptor.
+- Evidence required before adoption: Forge 47.4.5 mod discovery and packaging tests.
+- Completion state: COMPLETE — 11 logical lines through EOF; pinned SHA and 402-byte size match; metadata inspected, not executed.
+
+### 3073. `mods/horizon/src/neoforge-oracle/java/dev/horizonlab/neoforge/FactsExporter.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8bd9e28e4c5dcb3456f22a778870590bdf866e58`
+- Size: 23682 bytes
+- Coverage: 1–400, 401–496; consecutive, gap-free; 496 logical lines through EOF.
+- Purpose: Dev-only NeoForge server oracle exporting block/item/recipe/tag facts for mod-port parity research.
+- Dependencies / cross-references: NeoForge `ServerStartedEvent`, Minecraft 1.21.1 registries/NBT/data components, loot engine, block states/shapes, JSON writer and namespace allowlist.
+- Implementation / logic: Enumerates vanilla blocks and selected mod namespaces, records state properties/physics/shape/sounds/drops/placement, item components/armor, recipes and tags, then halts the server.
+- Findings: Targets NeoForge 1.21.1 and its data-component APIs; not a client renderer/chunk benchmark. Uses reflection to inspect private BlockSetType/WoodType fields, catches broad Throwable and exits process on export failure; exports may be very large and server-mutating (places temporary blocks).
+- RustChunk relevance: Could serve as a reference for a dev-only parity oracle when porting specific mods, but is not part of RustChunk launcher/runtime or Forge client loader.
+- Decision: adaptable; reference; version-specific; security-sensitive
+- 1.20.1 implications: For 1.20.1 mod compatibility, build a target-version oracle around Forge 47.x server registries and the 1.20.1 item/NBT model; do not copy 1.21.1 component assumptions.
+- Follow-up checks: Bound output size, run in isolated disposable world, avoid private reflection where possible, record incomplete exports, compare version-specific schemas and ensure world state is restored.
+- RustChunk implementation mapping: Separate RustChunk mod-compatibility research harness only if mod-port/parity work is approved.
+- Evidence required before adoption: Disposable Forge 1.20.1 server tests, deterministic exports, output limits and reflection/security review.
+- Completion state: COMPLETE — 496 logical lines read in 1–400 and 401–496; pinned SHA and 23682-byte size match; exporter inspected, not executed.
+
+### 3074. `mods/horizon/src/neoforge-oracle/resources/META-INF/neoforge.mods.toml`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `006875e950c4f1ab01433bd947ecbfb1c6ff9db4`
+- Size: 394 bytes
+- Coverage: 1–11; complete EOF; 11 canonical logical lines, no gaps.
+- Purpose: NeoForge metadata for the dev-only mod parity facts exporter.
+- Dependencies / cross-references: NeoForge JavaFML loader, `horizon_oracle` mod id and oracle build script.
+- Implementation / logic: Declares JavaFML, loader range `[4,)`, Apache-2.0 license and development-only exporter identity.
+- Findings: This is a NeoForge dev descriptor, not Forge 47.x metadata and not part of the client APK.
+- RustChunk relevance: No direct runtime value.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: If parity research is approved, create a Forge 47.x-specific dev-only descriptor and keep it out of the shipped launcher/client.
+- Follow-up checks: Verify mod metadata, licensing of exporter dependencies and no accidental production inclusion.
+- RustChunk implementation mapping: No baseline mapping; optional dev oracle packaging only.
+- Evidence required before adoption: Forge 1.20.1 discovery and release-artifact exclusion tests.
+- Completion state: COMPLETE — 11 logical lines through EOF; pinned SHA and 394-byte size match; metadata inspected, not executed.
+
+### 3075. `mods/horizon/src/test/java/dev/horizonlab/parity/EntityTranscript.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `09c343f165d31b27dfaab8009535ed564efb7133`
+- Size: 8884 bytes
+- Coverage: 1–181; complete EOF; 181 canonical logical lines, no gaps.
+- Purpose: Builds a deterministic transcript of server-tracked non-player entities by replaying clientbound entity packets into a lightweight state model.
+- Dependencies / cross-references: Minecraft 26.3 protocol packet classes, entity registries, `VecDeltaCodec`, attributes, metadata serializers, equipment, passengers and `VanillaProtocolClient` helpers.
+- Implementation / logic: Tracks spawn/remove, entity data, equipment, attributes, passenger lists, position/rotation/motion/teleport and projectile power; names entities by type and spawn block instead of unstable server entity IDs.
+- Findings: Uses 26.3 packet/API types and switch-pattern syntax; players are excluded from tracked entities, while self attributes are separate. This is a protocol/parity test helper, not production networking or Forge event handling.
+- RustChunk relevance: Entity packet transcript is a strong reference for validating server-client protocol state and multiplayer entity synchronization, but needs a 1.20.1 protocol-763 rewrite.
+- Decision: adaptable; reference; version-specific; network-sensitive
+- 1.20.1 implications: For Minecraft 1.20.1, build packet transcript tests against protocol 763 and actual Forge/vanilla clientbound packets; keep entity IDs and player identity handling faithful to protocol semantics.
+- Follow-up checks: Test spawn metadata pairing, relative movement codec, teleport, removal/reuse of entity IDs, passengers, attributes, players, modded entity data and packet ordering.
+- RustChunk implementation mapping: RustChunk protocol/network test harness for entity synchronization, not launcher source.
+- Evidence required before adoption: Protocol-763 fixtures, real 1.20.1 server packet captures and deterministic replay tests.
+- Completion state: COMPLETE — 181 logical lines through EOF; pinned SHA and 8884-byte size match; test helper inspected, not executed.

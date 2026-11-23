@@ -6,13 +6,13 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3050**.
-- Stage **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (50/200)**.
-- Section **3001–3050 is CLOSED (50/50)**. Checkpoints 3001–3025 and 3026–3050 are committed and read-back verified.
-- Exceptional authorization **3001–3100 is ACTIVE (50/100 consumed)** and covers sections 3001–3050 and 3051–3100. Continue 3051–3075 and 3076–3100 without another permission request. **STOP at 3100**; 3101+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **50 records (3001–3050)**, each with exactly 15 required fields. Index: **3,050 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Completed entries: **1–3075**.
+- Stage **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (75/200)**.
+- Section **3001–3050 is CLOSED (50/50)**. Section **3051–3100 is 25/50 complete**; checkpoints 3051–3075 is committed and read-back verified, and 3076–3100 remains authorized.
+- Exceptional authorization **3001–3100 is ACTIVE (75/100 consumed)**. Continue **3076–3100** without another permission request. **STOP at 3100**; 3101+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **75 records (3001–3075)**, each with exactly 15 required fields. Index: **3,075 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3050 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned source. Global QA remains complete for entries 1–3000.
+- Entries 3001–3075 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned source. Global QA remains complete for entries 1–3000.
 - No RustChunk application source changed. Embedded tests were inspected only, not executed. No builds, benchmarks, APK/device, Forge/Minecraft, multiplayer or Aternos validation.
 
 

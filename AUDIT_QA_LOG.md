@@ -1984,3 +1984,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Replaced the opening summary with the verified 1–3050 state, closed section 3001–3050, active 3001–3100 exceptional grant and stop boundary 3100.
 - The active-stage table already correctly records 3001–3050 as CLOSED (50/50) and 3051–3100 as authorized; no source records or Index rows changed.
 - This correction is included in a six-document atomic transaction and read-back verification.
+
+
+## Checkpoint QA — 3051–3075 — 2026-11-24
+
+- Entries **3051–3075 (25/25)** were selected from the complete pinned recursive tree after excluding all 3,050 prior Index paths; every file was read through EOF.
+- All 25 paths are unique. Exact source SHA and byte size match the pinned tree; canonical logical line counts and EOF coverage are recorded in the active Ledger.
+- The only source file over 400 logical lines, `FactsExporter.java` (496), was read in consecutive, gap-free ranges 1–400 and 401–496.
+- Each new Ledger record contains exactly 15 required fields. Index entries 3051–3075 align with Ledger numbering, paths and primary Decisions.
+- Major compatibility findings: the Starling native-crate fixture is a proprietary Rust hook/build pipeline, not Forge; the owner-gate integration tests explicitly block offline profiles from starting; the vanilla benchmark is Fabric/Minecraft 26.3, while the adjacent NeoForge benchmark targets 1.21.1; both are not Forge 47.x/1.20.1. The benchmark readiness model (visible chunks present, all sections rendered, loaded count stable for one second) is a useful design reference for separating chunk-load latency from steady-state FPS. Entity transcript tooling is 26.3-specific and requires protocol-763 adaptation.
+- Create-derived code notice says Create code portions are MIT but Create assets are All Rights Reserved; exact file provenance and asset rights must be checked before reuse.
+- No tests/builds/benchmarks/APK/device/Forge/Minecraft/multiplayer/Aternos validation was run. Test sources were inspected only; no RustChunk application source changed.
+- Exceptional authorization **3001–3100 remains ACTIVE (75/100 consumed)**. Section **3051–3100 is 25/50 complete**. Continue **3076–3100** under the same grant; **STOP at 3100**.
