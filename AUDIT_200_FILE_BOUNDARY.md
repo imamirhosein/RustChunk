@@ -475,10 +475,11 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
-| 3001–3050 | 3001–3025 — **COMPLETE** | 3026–3050 — **AUTHORIZED** | **25/50 — CONTINUE UNDER SAME GRANT** |
+| 3001–3050 | 3001–3025 — **COMPLETE** | 3026–3050 — **COMPLETE** | **CLOSED — 50/50** |
 | 3051–3100 | 3051–3075 — **AUTHORIZED** | 3076–3100 — **AUTHORIZED** | **0/50 — WITHIN ACTIVE 100-FILE GRANT** |
 | 3101–3150 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
 | 3151–3200 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
+
 
 ## Checkpoint 3001–3025 — COMPLETE
 
@@ -487,3 +488,12 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Active Ledger has 25 entries (3001–3025), each with exactly 15 required fields; Index has 3,025 sequential unique paths and matching path/Decision rows.
 - The exceptional authorization 3001–3100 remains active. Continue 3026–3050 without another permission request; report at 3050, then continue 3051–3100. **STOP at 3100**.
 - No application source changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation was performed.
+
+
+## Checkpoint 3026–3050 — COMPLETE
+
+- 25 files inspected through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; all paths were selected from the complete tree after excluding 3,025 prior Index paths.
+- Exact source SHA and byte size match the pinned tree. Canonical logical line counts and complete EOF coverage are recorded; long files were read in consecutive chunks no larger than 400 lines.
+- Active Ledger has 50 records (3001–3050), exactly 15 fields each; Index has 3,050 sequential unique paths and matching path/Decision rows.
+- Section **3001–3050 is CLOSED (50/50)**. The exceptional grant **3001–3100 remains active**; continue 3051–3075 and 3076–3100 without another permission request. **STOP at 3100**.
+- No application source changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.

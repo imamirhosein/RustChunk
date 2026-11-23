@@ -141,16 +141,16 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - The next backup is due only after entries **3001–4000** are authorized, completed, committed and globally verified.
 - Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-24; after checkpoint 3001–3025)
+## 12. Current authoritative resume state (2026-11-24; after checkpoint 3026–3050)
 
 - Repository `imamirhosein/RustChunk`; audit branch `starling-1.20.1-port-audit`. Do not modify `main` or existing backup refs.
-- Completed entries **1–3025**. Stage **2601–2800 is CLOSED (200/200)**; stage **2801–3000 is CLOSED (200/200)**; stage **3001–3200 is IN PROGRESS (25/200)**.
-- Section **3001–3050 is 25/50 complete**; checkpoint **3001–3025 is committed and read-back verified**.
-- Exceptional authorization **3001–3100 is ACTIVE (25/100 consumed)**. It covers sections 3001–3050 and 3051–3100. Continue 3026–3050, report at 3050, then 3051–3075 and 3076–3100 under the same grant. **STOP at 3100**; entry 3101+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **25 records (3001–3025)** with exactly 15 fields each. Index: **3,025 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
+- Completed entries **1–3050**. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (50/200)**.
+- Section **3001–3050 is CLOSED (50/50)**; checkpoints **3001–3025** and **3026–3050** are committed and read-back verified.
+- Exceptional authorization **3001–3100 is ACTIVE (50/100 consumed)**. Continue **3051–3075** and **3076–3100** under the same grant. **STOP at 3100**; entry 3101+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **50 records (3001–3050)** with exactly 15 fields each. Index: **3,050 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3025 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree.
-- Global structural/provenance QA remains complete for entries 1–3000. The 3,000-entry snapshot remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. Next backup is due only after entries 3001–4000 are completed and globally verified.
+- Entries 3001–3050 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global structural/provenance QA for entries 1–3000 remains complete.
+- The 3,000-entry snapshot remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. Next backup only after entries 3001–4000 are completed and globally verified.
 - No application source changes, tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 
@@ -918,3 +918,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The new stage Ledger is `AUDIT_LEDGER_3001_3200.md`; do not append to the closed 2801–3000 Ledger. Keep audit-only changes on `starling-1.20.1-port-audit`; leave `main` and backup refs untouched.
 - At entry **3100**, close the exceptional grant and **STOP**. Entry 3101+ requires fresh explicit authorization.
 - Preserve exact 25-file six-document atomic commits, 50-file reporting boundaries, global Index uniqueness, pinned-tree SHA/size provenance, canonical EOF coverage and exactly 15 Ledger fields.
+
+
+## 58. Progress under exceptional authorization 3001–3100 — 2026-11-24
+
+- Checkpoints **3001–3025** and **3026–3050** are complete and read-back verified. Section **3001–3050 is CLOSED (50/50)**.
+- Stage 3001–3200 has 50/200 entries; exceptional grant **3001–3100 remains ACTIVE** with 50 files remaining.
+- Continue **3051–3075** and **3076–3100** without requesting another authorization. At entry 3100 close the grant and STOP; 3101+ requires fresh explicit authorization.
+- Active Ledger has 50 records (3001–3050), Index has 3,050 sequential unique paths. Keep six-document atomic commits and all 15 Ledger fields.

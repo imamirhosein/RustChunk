@@ -436,3 +436,431 @@
 - RustChunk implementation mapping: No baseline source mapping; visual design reference only.
 - Evidence required before adoption: Android design-system implementation and accessibility/RTL review.
 - Completion state: COMPLETE — 314 logical lines through EOF; pinned SHA and 9515-byte size match; reviewed, not modified; tests not run.
+
+
+## Checkpoint 3026–3050 — COMPLETE
+
+### 3026. `launcher/src/shortcut.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `74c09f67507df3c87a535da9a66991442271439f`
+- Size: 16487 bytes
+- Coverage: 1–400, 401–473; consecutive, gap-free; 473 logical lines through EOF.
+- Purpose: Creates and removes per-instance desktop shortcuts for Linux, macOS and Windows.
+- Dependencies / cross-references: Desktop folder discovery, GPUI/OS desktop seams, Linux .desktop format, macOS app bundle, Windows Shell Link/COM.
+- Implementation / logic: Sanitizes display names, embeds instance ID, writes desktop/menu entries, locates old shortcuts and moves them to trash; Windows uses IShellLinkW while a portable LNK serializer supports tests.
+- Findings: All behavior targets desktop OS integration. `make_in` trashes old shortcuts before checking whether the target filename belongs to another file, so a collision error can occur after an old shortcut has already been moved. The fixed `.horizon-tmp` name can collide under concurrent writes. Portable LNK output is explicitly not a working Explorer target; Windows COM writer is required.
+- RustChunk relevance: No Android desktop shortcut feature is needed for the core launcher; only per-profile launch command semantics are conceptually reusable.
+- Decision: unnecessary; reference; platform-specific; security-sensitive
+- 1.20.1 implications: Use Android launcher shortcuts/app shortcuts only if separately approved; do not port Linux/macOS/Windows shell formats.
+- Follow-up checks: Test collision rollback ordering, concurrent writes, reserved Windows names, stale shortcut rename, partial write failure and Android app-shortcut permissions.
+- RustChunk implementation mapping: No baseline mapping; optional Android App Shortcuts integration.
+- Evidence required before adoption: Android launcher API behavior, atomic update/collision tests and explicit product requirement.
+- Completion state: COMPLETE — 473 logical lines read in 1–400 and 401–473; pinned SHA and 16487-byte size match; embedded tests inspected, not run.
+
+### 3027. `launcher/src/shortcut/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `87f270f71fd03be6ae1ea9234069fc36b598178b`
+- Size: 8114 bytes
+- Coverage: 1–225; complete EOF; 225 canonical logical lines, no gaps.
+- Purpose: Tests desktop shortcut naming, Linux .desktop quoting, macOS bundle plist/script generation, Windows LNK structure and lifecycle.
+- Dependencies / cross-references: Parent `shortcut.rs`, temporary filesystem, platform cfg and desktop trash seam.
+- Implementation / logic: Checks sanitization, quoting, plist XML escaping, Shell Link binary offsets, shortcut create/find/rename/remove and collision refusal.
+- Findings: These are desktop-format and filesystem tests; the Windows COM path is compiled/tested only on Windows. The test comments explicitly distinguish the portable LNK bytes from the shell-written shortcut used by Explorer.
+- RustChunk relevance: Test organization and collision/rename cases are useful patterns, but not Android evidence.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: If Android app shortcuts are added, create a new test suite for Android shortcut intents and profile identity; do not reuse desktop fixtures as validation.
+- Follow-up checks: Add tests for Android shortcut permission/launcher behavior, profile deletion, app update and duplicate labels.
+- RustChunk implementation mapping: RustChunk optional Android shortcut test suite.
+- Evidence required before adoption: Passing Android launcher integration tests on supported OS versions.
+- Completion state: COMPLETE — 225 logical lines through EOF; pinned SHA and 8114-byte size match; tests inspected, not executed.
+
+### 3028. `launcher/src/shortcut_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `8f15deaaa1d3e37a7281064b64f4fcaa0c444706`
+- Size: 2775 bytes
+- Coverage: 1–73; complete EOF; 73 canonical logical lines, no gaps.
+- Purpose: Adds a button and status message for making/removing an instance desktop shortcut.
+- Dependencies / cross-references: GPUI Instance row, Horizon shortcut service, desktop executable path and localized strings.
+- Implementation / logic: Caches whether selected instance has a shortcut and toggles make/remove while displaying success/error feedback.
+- Findings: The page is a tiny GPUI desktop UI; it does not use Android pinned shortcuts or package-manager integration.
+- RustChunk relevance: No direct implementation value for Android core.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Keep profile shortcut UI out of baseline unless Android App Shortcuts are explicitly required.
+- Follow-up checks: If implemented, test selected profile changes, deletion, stale cache and Android launcher compatibility.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android launcher integration and UX approval.
+- Completion state: COMPLETE — 73 logical lines through EOF; pinned SHA and 2775-byte size match; reviewed, not modified; tests not run.
+
+### 3029. `launcher/src/signed.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9f2b439ca2319a38fec701346f3b6d42cee6ce07`
+- Size: 6742 bytes
+- Coverage: 1–148; complete EOF; 148 canonical logical lines, no gaps.
+- Purpose: Verifies release asset digests against signed SHA256SUMS and built-in release keys, with pinned legacy hashes for pre-signature releases.
+- Dependencies / cross-references: `horizon_release_sign`, release repository constant, GitHub release asset URLs, key list and legacy release manifest.
+- Implementation / logic: Fetches checksum/signature assets, delegates signature and tag binding to the release-sign crate, refuses unsigned/unknown assets and separates Nightly signing domain from stable releases.
+- Findings: Security architecture is useful, but trust roots, release repo, asset names and legacy pins are Horizon-specific. Full correctness depends on the separately audited signature crate/key-rotation policy; this file alone is not proof of secure RustChunk updates.
+- RustChunk relevance: Strong reference for signed update manifests and fail-closed download verification.
+- Decision: adaptable; reference; security-sensitive
+- 1.20.1 implications: RustChunk APK/native-engine updates should use independent trusted keys, signed manifests, version/channel binding and rollback protection; Minecraft game libraries follow Mojang's own hashes and Forge installer metadata.
+- Follow-up checks: Audit release-sign crate, key rotation/revocation, canonical manifest parsing, URL/tag binding, downgrade policy and Android package signature chain.
+- RustChunk implementation mapping: RustChunk secure update verifier and signed release metadata, separate from Minecraft artifact resolver.
+- Evidence required before adoption: Independent cryptographic review, key lifecycle documentation and tamper/rollback tests.
+- Completion state: COMPLETE — 148 logical lines through EOF; pinned SHA and 6742-byte size match; embedded tests inspected, not run.
+
+### 3030. `launcher/src/skin_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `b23b90a0acd13a365e6993b7e7194ea576c253ad`
+- Size: 9161 bytes
+- Coverage: 1–244; complete EOF; 244 canonical logical lines, no gaps.
+- Purpose: Renders a desktop settings panel to select offline-name skin/cape PNGs and choose Classic/Slim arms.
+- Dependencies / cross-references: GPUI file picker, `accounts`, `skins` service, image baking and settings persistence.
+- Implementation / logic: Validates the offline account still exists after file picker returns, stores skin/cape selection, caches scaled previews and offers reset controls.
+- Findings: UI and file picker are GPUI desktop-specific. Skin/cape variables are Horizon's custom game integration, not a built-in Minecraft 1.20.1 Forge setting.
+- RustChunk relevance: Offline skin editing could be an optional feature, but UI and game integration must be rebuilt.
+- Decision: unnecessary; reference; platform-specific; version-specific
+- 1.20.1 implications: If offline skins are supported, add an explicit compatible client-side implementation for Forge 1.20.1; vanilla/Forge will not automatically honor Horizon's private environment variables.
+- Follow-up checks: Test stale account after dialog, large/invalid PNG, cancellation, Android SAF URI permission and actual in-game skin rendering.
+- RustChunk implementation mapping: Optional RustChunk skin editor calling a bounded image-validation service and a separate game-side feature.
+- Evidence required before adoption: Actual Forge 1.20.1 in-game skin rendering and Android document-picker tests.
+- Completion state: COMPLETE — 244 logical lines through EOF; pinned SHA and 9161-byte size match; reviewed, not modified; tests not run.
+
+### 3031. `launcher/src/skins.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `a70933aa86677d6aeed079d6fb5a5fe2fe7ef0fd`
+- Size: 6636 bytes
+- Coverage: 1–183; complete EOF; 183 canonical logical lines, no gaps.
+- Purpose: Validates, stores and projects custom offline-name skin/cape PNGs into Horizon's game process through environment variables.
+- Dependencies / cross-references: Image crate PNG decoder, app data directory, offline account names, `HORIZON_OFFLINE_SKIN*` variables and local-player renderer hooks.
+- Implementation / logic: Accepts skin dimensions 64×64/64×32 and cape 64×32/22×17, extracts front texels, stores per-name files and returns environment variables only when enabled files exist.
+- Findings: The game-side contract is proprietary and requires Horizon game code to read the variables; it is not Minecraft/Forge standard behavior. `keep` reads the entire source file without a size cap and writes directly to destination. `files` lowercases the supplied name but does not itself validate path-safe names, so callers must enforce account-name constraints.
+- RustChunk relevance: Skin image validation and per-profile selection are useful ideas, but implementation cannot be adopted without a game-side Forge integration and hardened file handling.
+- Decision: rewrite required; reference; security-sensitive; version-specific
+- 1.20.1 implications: Do not assume a Forge 1.20.1 client will render these environment-provided skins. Treat offline skin support as a separate mod/renderer feature.
+- Follow-up checks: Add input byte/dimension limits, canonical offline-name validation, atomic writes, PNG decompression-bomb limits, stale-file cleanup and in-game Forge validation.
+- RustChunk implementation mapping: Optional RustChunk skin asset store plus a separate Forge-compatible local-player skin feature.
+- Evidence required before adoption: Security tests for untrusted PNGs/path names and real 1.20.1 Forge rendering proof.
+- Completion state: COMPLETE — 183 logical lines through EOF; pinned SHA and 6636-byte size match; embedded tests inspected, not run.
+
+### 3032. `launcher/src/skins/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `69f957b74f7de6ddd05134fd56bc6b89757016d7`
+- Size: 4667 bytes
+- Coverage: 1–124; complete EOF; 124 canonical logical lines, no gaps.
+- Purpose: Tests skin/cape dimension validation, front-view pixel extraction, old-skin limb mirroring, environment-variable generation and forgotten-file cleanup.
+- Dependencies / cross-references: Parent `skins.rs`, image PNG encoder and temporary filesystem.
+- Implementation / logic: Uses coordinate-coded 64x64/64x32 fixtures to assert UV mapping and validates accepted/rejected image sizes and environment output.
+- Findings: Tests validate Horizon's helper logic only; they do not load a real Minecraft 1.20.1 Forge renderer or prove offline skins appear in-game. No size-abuse or path traversal fixtures are present.
+- RustChunk relevance: Good deterministic pixel-mapping test pattern for any separately implemented RustChunk skin feature.
+- Decision: adaptable; reference; security-sensitive; version-specific
+- 1.20.1 implications: Add actual target-version integration tests and adversarial image/path cases before adopting any skin pipeline.
+- Follow-up checks: Test huge compressed PNG, invalid names, duplicate case names, corrupt file, atomic replacement and real Forge client rendering.
+- RustChunk implementation mapping: RustChunk optional skin feature test suite.
+- Evidence required before adoption: Passing image-security tests and Forge 1.20.1 in-game verification.
+- Completion state: COMPLETE — 124 logical lines through EOF; pinned SHA and 4667-byte size match; tests inspected, not executed.
+
+### 3033. `launcher/src/sky.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cd9b252e9a8c60fe6b2c85d8e292671f6e0a3a9f`
+- Size: 24128 bytes
+- Coverage: 1–400, 401–704; consecutive, gap-free; 704 logical lines through EOF.
+- Purpose: Draws an animated pixel-art night/dawn sky behind Horizon's desktop launcher window.
+- Dependencies / cross-references: GPUI canvas/images, Horizon theme tokens, baked cloud/skyline sprites, animation clock and accessibility reduced-motion state.
+- Implementation / logic: Bakes fixed sprite layers by theme/scale, animates cloud strips and star brightness on timed beats, stops after focus loss or reduced-motion preference.
+- Findings: This is decorative launcher artwork, not Minecraft's sky renderer, world renderer or chunk engine. It uses GPUI and small image atlases; the low-idle-cost claim applies only to this UI feature.
+- RustChunk relevance: No relevance to chunk loading/FPS optimization; only a visual reference.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Keep launcher background animation independent from Minecraft rendering and avoid using its timings as game performance evidence.
+- Follow-up checks: If recreating on Android, profile GPU/CPU/battery, honor system reduced-motion and test lifecycle pause/resume.
+- RustChunk implementation mapping: No baseline game-engine mapping.
+- Evidence required before adoption: Android UI performance and accessibility tests only if the decoration is explicitly requested.
+- Completion state: COMPLETE — 704 logical lines read in 1–400 and 401–704; pinned SHA and 24128-byte size match; embedded tests inspected, not run.
+
+### 3034. `launcher/src/sources.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `5c2d31b0cdf6dbf406bbcf21880e0df9f29bd742`
+- Size: 20657 bytes
+- Coverage: 1–400, 401–543; consecutive, gap-free; 543 logical lines through EOF.
+- Purpose: Finds a pinned Minecraft client JAR/version manifest in official or third-party launcher folders and links assets/libraries into Horizon's expected official layout.
+- Dependencies / cross-references: Mojang version pins, SHA-1, Prism/MultiMC/Modrinth/ATLauncher/GDLauncher folder formats, filesystem symlinks/junctions, download callback and `horizon-prepare`.
+- Implementation / logic: Resolves candidate folders, checks client JAR and version JSON SHA-1, fetches the pinned Mojang manifest if needed, then links client/libraries/assets into a normalized game directory.
+- Findings: Pins and fixtures are for Minecraft 26.3. Loader JAR discovery only scans `<version>-*` names and tests document Fabric-profile cases; this does not install or configure Forge. Uses Unix symlinks/Windows junctions/hard links, not Android SAF; fixed `.partial` file replacement and symlink handling need Android-specific review.
+- RustChunk relevance: The source-resolution model and verified artifact reuse are valuable, but must be version-aware and Android-storage-safe.
+- Decision: adaptable; reference; security-sensitive; version-specific; platform-specific
+- 1.20.1 implications: Implement a dedicated 1.20.1 resolver using Mojang's exact version metadata, Java 17, Forge 47.x installer-generated libraries and profile JSON. Do not infer Forge support from generic loader JAR search.
+- Follow-up checks: Test Mojang manifest/client hashes, republished manifests, path/symlink attacks, partial download recovery, shared-library reuse, SAF and actual Forge profile launch.
+- RustChunk implementation mapping: RustChunk artifact resolver and normalized game-directory preparation service, rewritten for Android and Forge.
+- Evidence required before adoption: Pinned 1.20.1 manifest fixtures, Forge 47.4.5 install outputs, secure filesystem tests and Android launch evidence.
+- Completion state: COMPLETE — 543 logical lines read in 1–400 and 401–543; pinned SHA and 20657-byte size match; tests inspected, not run.
+
+### 3035. `launcher/src/sources_tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `396f50881bb07d133d7dcd4226645dc599febd5b`
+- Size: 20617 bytes
+- Coverage: 1–400, 401–552; consecutive, gap-free; 552 logical lines through EOF.
+- Purpose: Tests client-JAR discovery, Maven coordinate conversion, known launcher folders, symlink/hardlink normalization, manifest pinning and fallback downloads.
+- Dependencies / cross-references: Parent `sources.rs`, temporary folders, fake client bytes, SHA-1, local fake Mojang fetch and platform filesystem links.
+- Implementation / logic: Creates Prism/MultiMC/Modrinth/ATLauncher/GDLauncher fixtures and verifies pinned 26.3 client/manifest selection and linked library/assets behavior.
+- Findings: Every fake manifest and client fixture is explicitly Minecraft 26.3. Tests cover desktop symlink/junction semantics and no actual Forge installer or Android SAF behavior.
+- RustChunk relevance: Fixture-driven source-resolution tests are a useful pattern; all target-version metadata and platform assumptions must be replaced.
+- Decision: rewrite required; reference; security-sensitive; version-specific
+- 1.20.1 implications: Create exact Minecraft 1.20.1 fixtures and Forge 47.x install layout tests; preserve strict checksum verification while adapting storage.
+- Follow-up checks: Add forged manifest/client, malicious symlink, interrupted copy, unsupported loader, SAF permission and Forge library-resolution cases.
+- RustChunk implementation mapping: RustChunk artifact resolver integration test suite.
+- Evidence required before adoption: Passing tests against official 1.20.1 metadata, real Forge installer outputs and Android storage.
+- Completion state: COMPLETE — 552 logical lines read in 1–400 and 401–552; pinned SHA and 20617-byte size match; tests inspected, not executed.
+
+### 3036. `launcher/src/specimen.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `ac7a49a99a82d12d246dbec36058907f9498d684`
+- Size: 10725 bytes
+- Coverage: 1–310; complete EOF; 310 canonical logical lines, no gaps.
+- Purpose: Provides an internal-only design specimen page for checking Horizon's theme colors, typography, controls and contrast.
+- Dependencies / cross-references: GPUI, Horizon theme, sky, plate/icon components and internal environment page selector.
+- Implementation / logic: Renders sample text, controls, color swatches and contrast ratios for dark/light palettes; intentionally not reachable as a normal player page.
+- Findings: This is a desktop design QA page, not a launcher feature or game rendering component. Text examples hardcode Horizon's 26.3/Fabric/Java 21 copy.
+- RustChunk relevance: No baseline value beyond a possible design-system test concept.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Do not port the specimen page into RustChunk runtime; if a theme system is built, test its tokens independently.
+- Follow-up checks: Add Persian/RTL and Android density/accessibility contrast cases only if RustChunk creates its own design system.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android design-system QA and RTL review if a UI theme is adopted.
+- Completion state: COMPLETE — 310 logical lines through EOF; pinned SHA and 10725-byte size match; reviewed, not modified; tests not run.
+
+### 3037. `launcher/src/switch_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `11547f37ecd243a954f771b296fd2238e415f021`
+- Size: 11040 bytes
+- Coverage: 1–293; complete EOF; 293 canonical logical lines, no gaps.
+- Purpose: Implements account chip quick-switch and Settings rows for Microsoft accounts, offline names and the generated game name.
+- Dependencies / cross-references: Account persistence, `Player` enum, Microsoft sign-in state, skin panel, GPUI menu and offline-name field.
+- Implementation / logic: Switches selected player, lists Microsoft/offline identities, creates/forgets offline names and opens skin editor; shows account type and current identity.
+- Findings: Offline names are explicitly described as not accepted by online servers. An offline identity is not a substitute for Microsoft/Xbox/Minecraft authentication on online-mode servers; the UI is desktop GPUI and depends on Horizon account semantics.
+- RustChunk relevance: The separation of offline and authenticated identities is critical; its UX can be adapted, but online-server access must remain honest and protocol-compliant.
+- Decision: adaptable; reference; authentication-sensitive; platform-specific
+- 1.20.1 implications: RustChunk offline profile mode may support offline-mode servers only; joining ordinary online-mode/Aternos servers generally requires valid online authentication unless the server owner disables online mode.
+- Follow-up checks: Test offline/online profile separation, UUID/name collision, server authentication errors, token lifecycle and account switching while game runs.
+- RustChunk implementation mapping: RustChunk profile identity/authentication state machine and Android account UI.
+- Evidence required before adoption: Real Microsoft authentication and multiplayer handshake tests; offline-mode server test kept separate.
+- Completion state: COMPLETE — 293 logical lines through EOF; pinned SHA and 11040-byte size match; reviewed, not modified; tests not run.
+
+### 3038. `launcher/src/tailscale.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `c78be54a5714fed504b20a31cc3178132a48ba19`
+- Size: 18734 bytes
+- Coverage: 1–400, 401–507; consecutive, gap-free; 507 logical lines through EOF.
+- Purpose: Integrates Tailscale CLI and API to share a hosted Horizon server with friends and restrict shared-device access to one port.
+- Dependencies / cross-references: Tailscale CLI, API access token, system keychain seam, HTTP API, proxy agent, tailnet ACL/grants and local server address.
+- Implementation / logic: Reads Tailscale status, builds MagicDNS/IP address, creates/revokes one-use device invitations and rewrites only recognized default ACL policy shapes using ETag concurrency.
+- Findings: This is optional remote-hosting infrastructure, not Minecraft client multiplayer. It requires installed Tailscale CLI/API token and desktop keychain; ACL changes are high-impact network policy. `Node::address` falls back to IPv4 only when MagicDNS is disabled; no IPv6 fallback.
+- RustChunk relevance: No baseline requirement: RustChunk must join public/private servers directly, not require Tailscale or host a server.
+- Decision: unnecessary; reference; security-sensitive; platform-specific
+- 1.20.1 implications: Do not make Tailscale a prerequisite for Aternos or ordinary multiplayer. Any optional VPN integration must never silently alter a user's ACL policy.
+- Follow-up checks: Threat-model token storage, device invitation scope, ETag races, custom ACL preservation, API error redaction, IPv6-only tailnet and Android Tailscale integration.
+- RustChunk implementation mapping: No baseline mapping; optional separately scoped private-network feature only.
+- Evidence required before adoption: Security review, Android VPN integration approval and network interoperability tests.
+- Completion state: COMPLETE — 507 logical lines read in 1–400 and 401–507; pinned SHA and 18734-byte size match; tests inspected, not run.
+
+### 3039. `launcher/src/tailscale/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `98078ddbc8f7ed287d038a4ff1763aac31ae799b`
+- Size: 10832 bytes
+- Coverage: 1–270; complete EOF; 270 canonical logical lines, no gaps.
+- Purpose: Tests Tailscale CLI status parsing, MagicDNS/IP formatting, invitation API, ETag handling and ACL policy rewrite safety.
+- Dependencies / cross-references: Parent `tailscale.rs`, fake local TCP API, JSON fixtures and stand-in CLI script.
+- Implementation / logic: Asserts read-only status command, invite lifecycle, token header, custom policy preservation, ACL/grants support and compare-and-swap `If-Match`.
+- Findings: The tests use local stand-ins and do not call live Tailscale or test Android VPN behavior. They validate Horizon's optional server-sharing flow, not public Minecraft server joining.
+- RustChunk relevance: Good API-mocking and policy-preservation test patterns if an optional network feature is approved.
+- Decision: adaptable; reference; security-sensitive
+- 1.20.1 implications: Keep multiplayer core independent; if adding VPN, retain the rule that custom ACL policies are never overwritten.
+- Follow-up checks: Add IPv6-only, malformed response, token leakage, ACL race, revoked device and Android VPN lifecycle tests.
+- RustChunk implementation mapping: Optional RustChunk VPN integration test suite.
+- Evidence required before adoption: Security review and Android VPN/device tests.
+- Completion state: COMPLETE — 270 logical lines through EOF; pinned SHA and 10832-byte size match; tests inspected, not executed.
+
+### 3040. `launcher/src/telemetry.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `06f9fee3e84f028a0616524e95e8f6968a10f9ec`
+- Size: 17983 bytes
+- Coverage: 1–400, 401–469; consecutive, gap-free; 469 logical lines through EOF.
+- Purpose: Coordinates opt-in performance/crash/bug/benchmark telemetry, preview/delete actions, report scrubbing and live player-count pings.
+- Dependencies / cross-references: `horizon_telemetry`, consent/outbox/upload, account/world scrubbing, backend logs, official server status and background threads.
+- Implementation / logic: Persists choices, prunes disallowed queued items, previews exact payloads, scrubs names/worlds from reports, submits only allowed report kinds and deletes remote install-ID data when possible.
+- Findings: The anonymous `I'm playing` ping is explicitly sent once per minute regardless of telemetry switches; live official-server player counts are also polled when endpoint exists. The declared never-sent list is a product assertion, not independently verified here. `delete_my_data` resets local ID without remote deletion when endpoint is off. Privacy-sensitive behavior must not be copied implicitly.
+- RustChunk relevance: Telemetry is not required for RustChunk functionality; explicit opt-in, transparent preview and data deletion patterns are references only.
+- Decision: unnecessary; reference; privacy-sensitive
+- 1.20.1 implications: Default RustChunk telemetry should be absent or strictly opt-in; never add background pings outside consent. Do not send usernames, UUIDs, server addresses, chat, worlds or device identifiers without clear permission.
+- Follow-up checks: Audit telemetry crate/server retention, consent migration, queue pruning, log scrubbing, background thread shutdown, deletion retry and endpoint-off semantics.
+- RustChunk implementation mapping: No baseline mapping; optional privacy-reviewed telemetry subsystem only.
+- Evidence required before adoption: Independent privacy/security review, data-flow inventory, consent tests and server-side deletion evidence.
+- Completion state: COMPLETE — 469 logical lines read in 1–400 and 401–469; pinned SHA and 17983-byte size match; tests inspected, not run.
+
+### 3041. `launcher/src/theme.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `093df3331d2bdd27f69bb0140eb7d8240eefc6f2`
+- Size: 6988 bytes
+- Coverage: 1–187; complete EOF; 187 canonical logical lines, no gaps.
+- Purpose: Maps Horizon theme tokens and dark/light appearance into the desktop launcher's GPUI theme.
+- Dependencies / cross-references: GPUI Hsla/WindowAppearance, Horizon theme crate, accent settings and design tokens.
+- Implementation / logic: Builds color palette and spacing/motion constants from shared tokens and chooses system/pinned appearance.
+- Findings: The adapter is GPUI-specific, but the idea of one semantic token source and contrast-checked states is generic.
+- RustChunk relevance: Visual design architecture is a reference, not game-engine code.
+- Decision: adaptable; reference; platform-specific
+- 1.20.1 implications: If RustChunk builds a launcher UI, define platform-neutral semantic tokens then adapt them to Android components; keep Minecraft renderer settings separate.
+- Follow-up checks: Test light/dark, high contrast, color-blind states, dynamic type, RTL and Android system appearance.
+- RustChunk implementation mapping: RustChunk UI design-token module, only if UI architecture chooses it.
+- Evidence required before adoption: Android accessibility/contrast and visual regression tests.
+- Completion state: COMPLETE — 187 logical lines through EOF; pinned SHA and 6988-byte size match; embedded tests inspected, not run.
+
+### 3042. `launcher/src/themes.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `cb761aaace091cd88fa15762544de02d24a552d3`
+- Size: 8260 bytes
+- Coverage: 1–232; complete EOF; 232 canonical logical lines, no gaps.
+- Purpose: Stores accent hue and validates/copies a custom Home background picture.
+- Dependencies / cross-references: Horizon theme color math, serde settings, image crate, filesystem data directory and SHA-1 naming.
+- Implementation / logic: Maps named/custom hue through HSL while preserving contrast thresholds; accepts PNG/JPEG/WebP up to 40 MiB and at least 64x64, stores content-derived filename and removes older background.
+- Findings: Generic accent color math and bounded image selection can be reused conceptually. Home background is desktop UI; validation checks dimensions but does not fully decode pixels, and filesystem replacement/removal semantics need Android storage design.
+- RustChunk relevance: Optional launcher UI feature; no Minecraft runtime relevance.
+- Decision: adaptable; reference; platform-specific; security-sensitive
+- 1.20.1 implications: Use Android content URIs/scoped storage and explicit image decode limits if adding a custom launcher background; no effect on Forge rendering.
+- Follow-up checks: Test malformed image headers, huge dimensions with small compressed body, race during replacement, duplicate hash, storage permission loss and image decoder limits.
+- RustChunk implementation mapping: Optional RustChunk theme settings and Android image asset repository.
+- Evidence required before adoption: Android image-security tests, accessibility contrast checks and SAF integration.
+- Completion state: COMPLETE — 232 logical lines through EOF; pinned SHA and 8260-byte size match; embedded tests inspected, not run.
+
+### 3043. `launcher/src/themes/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `31f192f59570a46951c8a917281a93d138edf6bf`
+- Size: 4783 bytes
+- Coverage: 1–124; complete EOF; 124 canonical logical lines, no gaps.
+- Purpose: Tests contrast preservation for accent hues and custom background image acceptance/rejection.
+- Dependencies / cross-references: Parent `themes.rs`, Horizon theme palettes, image encoder and temp filesystem.
+- Implementation / logic: Sweeps 720 custom hues across dark/light palettes, checks text/focus contrast, HSL round-trip, picture type/size, stale background removal and path traversal rejection.
+- Findings: Tests cover Horizon's theme and image helper only; they do not test Android content URIs, image decoder resource limits or Persian/RTL rendering.
+- RustChunk relevance: The contrast sweep and adversarial file-selection patterns are useful test references.
+- Decision: adaptable; reference; security-sensitive
+- 1.20.1 implications: Port test intent only; use Android-specific storage and bounded decode fixtures.
+- Follow-up checks: Add image bomb/oversized-dimension, malformed metadata, SAF revocation, Persian/RTL and accessibility contrast cases.
+- RustChunk implementation mapping: RustChunk theme/image utility test suite.
+- Evidence required before adoption: Passing Android storage/security and accessibility tests.
+- Completion state: COMPLETE — 124 logical lines through EOF; pinned SHA and 4783-byte size match; tests inspected, not executed.
+
+### 3044. `launcher/src/themes_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `6bd99a13cb28abb63e0bd8126d08920963609a38`
+- Size: 9973 bytes
+- Coverage: 1–275; complete EOF; 275 canonical logical lines, no gaps.
+- Purpose: Renders desktop Settings rows for accent swatches, draggable hue strip and custom Home background picker.
+- Dependencies / cross-references: GPUI mouse events/canvas, Horizon themes, desktop file dialog and settings persistence.
+- Implementation / logic: Updates preview theme during hue drag and saves once on release; selects/removes background through desktop path picker.
+- Findings: Mouse drag and desktop file picker are not Android touch/SAF APIs; implementation is tightly coupled to GPUI state.
+- RustChunk relevance: Only workflow concepts can be adapted.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use Android-native color picker and document picker if the feature is included; avoid implementing a desktop-like window.
+- Follow-up checks: Test touch drag cancellation, rotation, state restore, permission revocation, RTL and large-screen layouts.
+- RustChunk implementation mapping: No baseline mapping; optional Android settings screen.
+- Evidence required before adoption: Android UI/SAF tests and accessibility review.
+- Completion state: COMPLETE — 275 logical lines through EOF; pinned SHA and 9973-byte size match; reviewed, not modified; tests not run.
+
+### 3045. `launcher/src/titlebar.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `dbf0f966e7bba613ebbe6bdf43d887b0105419ff`
+- Size: 13732 bytes
+- Coverage: 1–400, 401–422; consecutive, gap-free; 422 logical lines through EOF.
+- Purpose: Implements native/custom desktop window title bars, controls, resize handles and appearance bridging for Linux/macOS/Windows.
+- Dependencies / cross-references: GPUI window handles, Linux client-side decorations, Windows window-control hit tests, macOS AppKit/Objective-C and raw-window-handle.
+- Implementation / logic: Selects system decoration mode, draws Linux/Windows controls, applies macOS appearance and adds resize edges.
+- Findings: All code is desktop window chrome; OS-specific unsafe AppKit handle access and CSD hit tests have no Android activity/window equivalent.
+- RustChunk relevance: No code-level value for Android launcher or Minecraft rendering.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use Android activity/system bars and edge-to-edge APIs; do not port desktop titlebar behavior.
+- Follow-up checks: If a desktop RustChunk port is later scoped, test window decorations per compositor/OS and review unsafe AppKit lifetimes.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android system-bar and edge-to-edge UI tests only if a custom desktop port is planned.
+- Completion state: COMPLETE — 422 logical lines read in 1–400 and 401–422; pinned SHA and 13732-byte size match; reviewed, not modified; tests not run.
+
+### 3046. `launcher/src/while_playing.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `d47d20ac40a2b625e558e135ceaf80d1f9115819`
+- Size: 3377 bytes
+- Coverage: 1–95; complete EOF; 95 canonical logical lines, no gaps.
+- Purpose: Minimizes/hides the desktop launcher while a game runs and restores it after game exit.
+- Dependencies / cross-references: GPUI window handle, launcher settings and desktop `WhilePlaying` mode.
+- Implementation / logic: Reads current preference at launch, defers hide/minimize action and activates launcher window when game process closes.
+- Findings: Window hide/minimize and reactivation are desktop-only; Android activity backgrounding and process lifecycle differ and are controlled by the OS.
+- RustChunk relevance: Only the user preference concept is reusable.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Use Android activity/task lifecycle and foreground-service rules where applicable; never assume launcher can force itself to foreground on game exit.
+- Follow-up checks: Test activity recreation, process death, return from game, multi-window and Android background restrictions.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android lifecycle and task-stack integration tests.
+- Completion state: COMPLETE — 95 logical lines through EOF; pinned SHA and 3377-byte size match; reviewed, not modified; tests not run.
+
+### 3047. `launcher/src/worlds.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `3317ab1b82126d910830b66eca1a000cf73dc537`
+- Size: 9656 bytes
+- Coverage: 1–260; complete EOF; 260 canonical logical lines, no gaps.
+- Purpose: Lists Minecraft single-player worlds from level.dat and backs up, copies, renames or deletes world folders.
+- Dependencies / cross-references: Gzip/NBT codec, filesystem recursion, ZIP writer, chrono timestamps and desktop trash seam.
+- Implementation / logic: Reads gzip/plain NBT, extracts mode/version/time/name/icon, creates vanilla-style backup ZIP excluding session.lock, copies world folder and rewrites LevelName.
+- Findings: The metadata reader contains 26.3-specific `difficulty_settings.hardcore` handling plus legacy Data.hardcore. Backup/copy traversal treats symlinks as non-directories then `File::open`/`fs::copy` follows them, so a crafted symlink inside a world may pull data from outside the world into a backup/copy; requires explicit symlink rejection. Initial `fs::read(level.dat)` is unbounded before the 64 MiB decompression cap. Delete is desktop trash only.
+- RustChunk relevance: World NBT/backup concepts are valuable for an optional single-player manager, but storage traversal and version schema need hardening.
+- Decision: adaptable; reference; security-sensitive; version-specific
+- 1.20.1 implications: Support 1.20.1 level.dat fields and Android app-private/SAF world directories; preserve vanilla backup format and reject symlinks/special files.
+- Follow-up checks: Add symlink/special-file tests, bounded compressed input, malformed NBT, interrupted ZIP cleanup, world lock/running checks, path validation and 1.20.1 fixtures.
+- RustChunk implementation mapping: RustChunk optional world repository and backup service, rewritten for Android storage and safe traversal.
+- Evidence required before adoption: Security review of recursive file operations, NBT compatibility tests and Android world backup/restore tests.
+- Completion state: COMPLETE — 260 logical lines through EOF; pinned SHA and 9656-byte size match; embedded tests inspected, not run.
+
+### 3048. `launcher/src/worlds/tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `7949b8c83cf6c4d0eb34384f0510f7963a17dbdc`
+- Size: 5345 bytes
+- Coverage: 1–160; complete EOF; 160 canonical logical lines, no gaps.
+- Purpose: Tests world listing, NBT metadata extraction, vanilla-style backup ZIP and copy naming/lock exclusion.
+- Dependencies / cross-references: Parent `worlds.rs`, NBT encoder/decoder, gzip, ZIP reader and temporary filesystem.
+- Implementation / logic: Builds synthetic gzip level.dat fixtures, checks mode/date/name/icon, verifies backup entry paths omit session.lock and copied worlds receive unique LevelName.
+- Findings: Fixtures use Version.Name `26.3`; no 1.20.1-specific fixtures, symlink traversal, oversized level.dat or real-world lock behavior are covered.
+- RustChunk relevance: Good deterministic world-backup test structure; needs target-version and filesystem-security coverage.
+- Decision: adaptable; reference; security-sensitive; version-specific
+- 1.20.1 implications: Replace/add fixtures from real Minecraft 1.20.1 worlds and test Android storage operations.
+- Follow-up checks: Add symlink-to-outside, special file, corrupt/huge level.dat, active session.lock, interrupted backup and restore verification.
+- RustChunk implementation mapping: RustChunk optional world-service tests.
+- Evidence required before adoption: Passing tests against actual 1.20.1 world fixtures and Android storage.
+- Completion state: COMPLETE — 160 logical lines through EOF; pinned SHA and 5345-byte size match; tests inspected, not executed.
+
+### 3049. `launcher/src/worlds_page.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `9a78fab218cfb48a5cd51e1719c206a0403a45a7`
+- Size: 13312 bytes
+- Coverage: 1–340; complete EOF; 340 canonical logical lines, no gaps.
+- Purpose: Renders selected instance's worlds, Play/Backup/Copy/Delete/Data packs/Open folder actions and background loading.
+- Dependencies / cross-references: GPUI, `worlds` service, async background executor, instance selection, desktop open-folder action and packs panel.
+- Implementation / logic: Loads world list asynchronously, guards against instance switches, serializes one busy action and confirms deletion before trashing.
+- Findings: Desktop GPUI presentation and file-open/trash APIs; async state patterns may inform a mobile UI but data operations need a safe core service.
+- RustChunk relevance: Optional world-management UI, not required for Minecraft launch or multiplayer.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: If adding worlds UI, call a separately hardened world service and use Android storage/document APIs.
+- Follow-up checks: Test instance switch during load, process recreation, action cancellation, large lists, busy state and confirmation persistence.
+- RustChunk implementation mapping: No baseline mapping; optional Android worlds screen.
+- Evidence required before adoption: Android UI/storage tests and hardened world-service integration.
+- Completion state: COMPLETE — 340 logical lines through EOF; pinned SHA and 13312-byte size match; reviewed, not modified; tests not run.
+
+### 3050. `launcher/tests/desktop.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: `0a9f33ff19320b6235ba09c1e14b4a06fdc390d7`
+- Size: 2066 bytes
+- Coverage: 1–55; complete EOF; 55 canonical logical lines, no gaps.
+- Purpose: Linux-only integration test for preserving a distributor's desktop-entry executable wrapper across menu registration and removal.
+- Dependencies / cross-references: Cargo-built launcher binary, Linux .desktop file, XDG_DATA_HOME and temporary filesystem.
+- Implementation / logic: Invokes CLI desktop-entry command with and without wrapper override and checks generated/removal behavior.
+- Findings: Compiled only on Linux and tests desktop package integration; no Android, Minecraft, Forge or client runtime coverage.
+- RustChunk relevance: No direct value for Android launcher.
+- Decision: unnecessary; reference; platform-specific
+- 1.20.1 implications: Android package identity, app shortcuts and update flows need separate tests.
+- Follow-up checks: Test Android package update, app link, install/uninstall and data preservation only if packaging changes.
+- RustChunk implementation mapping: No baseline mapping.
+- Evidence required before adoption: Android package integration tests and APK install/update validation.
+- Completion state: COMPLETE — 55 logical lines through EOF; pinned SHA and 2066-byte size match; test inspected, not run.

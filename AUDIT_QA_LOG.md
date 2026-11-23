@@ -1965,3 +1965,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Replaced that stale opening block with the verified 1–3025 resume state, active exceptional authorization 3001–3100, next checkpoint 3026–3050, and stop boundary 3100.
 - No source entries, Index rows, Ledger records, source SHAs, byte sizes or coverage were changed by this documentation correction.
 - The correction is committed as a six-document transaction and all six documents are re-read from GitHub. This is documentation consistency repair, not an additional source checkpoint.
+
+
+## Checkpoint QA — 3026–3050 — 2026-11-24
+
+- Entries **3026–3050 (25/25)** were selected from the complete pinned recursive tree after excluding all 3,025 prior Index paths; every source file was read through EOF.
+- All 25 paths are unique. Source SHA and exact byte size match the pinned tree; canonical logical line counts and complete EOF coverage are recorded in the active Ledger.
+- Files over 400 logical lines were read in consecutive, gap-free ranges no larger than 400 lines: `shortcut.rs` (473), `sky.rs` (704), `sources.rs` (543), `sources_tests.rs` (552), `tailscale.rs` (507), `telemetry.rs` (469) and `titlebar.rs` (422).
+- All 25 Ledger records contain exactly 15 required fields. Index entries 3026–3050 align with Ledger numbers, paths and primary Decisions.
+- Important findings: launcher source resolution and fixtures are pinned to Minecraft 26.3 and do not establish Forge 1.20.1 support; Horizon's offline skin environment variables are proprietary; offline identities are explicitly not accepted by online-mode servers; Tailscale sharing is optional hosting infrastructure rather than ordinary multiplayer; telemetry sends a periodic play ping independently of the four opt-in switches; world backup/copy traversal follows symlink targets and needs hardening.
+- No tests/builds/benchmarks/APK/device/Forge/Minecraft/multiplayer/Aternos validation was run. Tests were inspected only; no RustChunk application source changed.
+- Exceptional authorization **3001–3100 remains ACTIVE (50/100 consumed)**. Section **3001–3050 is CLOSED (50/50)**. Continue **3051–3075** and **3076–3100** under the same grant; **STOP at 3100**.
