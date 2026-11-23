@@ -2,8 +2,8 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries 1–2000 globally verified/backed up; entries 2001–2800 are inspected and committed. Active 200-file stage **2601–2800 is CLOSED (200/200)**.
-- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are all closed (50/50). The one-time grant 2701–2800 is exhausted; **STOP at 2800**.
+- Entries 1–2000 globally verified/backed up; entries 2001–2825 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; active stage **2801–3000 is 25/200 complete**.
+- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is active; checkpoint **2801–2825** is complete. Continue 2826–2850 and **STOP at 2850**.
 
 - Historical note: the 2401–2600 stage was fully QA-verified and closed after its lexical-order correction. The earlier 2601–2700 grant is also closed; the active 2601–2800 stage and current exceptional grant 2701–2800 are stated below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
@@ -388,3 +388,21 @@ This table supersedes earlier in-file OPEN/AUTHORIZED snapshots for the same sta
 - Entry 2764 SHA was corrected to `688daea45e4cc257ee582d7c6f25ec2b32684e50`.
 - Section 2751–2800 is closed (50/50); stage 2601–2800 is closed (200/200). The one-time authorization is exhausted. **STOP at 2800; obtain a fresh explicit grant before 2801.**
 - No tests/examples were executed, no application source changed, and no build/APK/device/Forge/Minecraft/server validation was performed.
+
+
+## Active stage 2801–3000 — exceptional grant 2801–2900
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 2801–2850 | 2801–2825 — **COMPLETE** | 2826–2850 — **AUTHORIZED** | **25/50 — STOP AT 2850** |
+| 2851–2900 | 2851–2875 — **NOT AUTHORIZED** | 2876–2900 — **NOT AUTHORIZED** | **WAIT FOR FRESH GRANT AT 2850** |
+| 2901–2950 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
+| 2951–3000 | NOT AUTHORIZED | NOT AUTHORIZED | **NOT AUTHORIZED** |
+
+## Checkpoint 2801–2825 — COMPLETE
+
+- 25 new files inspected individually through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; paths, SHAs and byte sizes match the complete untruncated tree.
+- Ledger `AUDIT_LEDGER_2801_3000.md` has 25 records with exactly 15 fields; Index has 2,825 sequential unique paths and matching path/Decision rows.
+- Long files were read fully; all selected files are <=400 logical lines, so each was read in one complete retrieval.
+- Continue 2826–2850 under the one-time 2801–2900 authorization. **STOP at 2850**; fresh authorization required before 2851.
+- No source/app code changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.

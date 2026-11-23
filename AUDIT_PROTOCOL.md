@@ -134,18 +134,19 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - Never modify an existing backup branch. Existing backup refs are procedurally read-only; GitHub currently reports branch protection disabled, so do not describe them as technically locked.
 - Do not recreate or alter a user-deleted archive branch. Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-23; after checkpoint 2776–2800)
+## 12. Current authoritative resume state (2026-11-23; after checkpoint 2801–2825)
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`. Do not modify `main` or backup refs.
-- Completed entries **1–2800**.
-- Active 200-file stage **2601–2800 is CLOSED (200/200)**. Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are all closed (50/50 each).
-- The one-time exceptional grant covered exactly **2701–2800** and is exhausted. Checkpoint **2776–2800** is complete; **STOP at 2800**. Entry 2801+ requires fresh explicit user authorization.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **200 records (2601–2800)**, each with exactly 15 fields. Index: **2,800 sequential unique paths**, with Ledger paths and Decisions aligned.
+- Completed entries **1–2825**.
+- Stage **2601–2800 is CLOSED (200/200)**. The new active 200-file stage **2801–3000** is **25/200 complete**.
+- Reporting section **2801–2850** is 25/50 complete. Checkpoint **2801–2825** is complete, committed and read-back verified.
+- The user explicitly authorized the one-time exceptional window **2801–2900**. Continue **2826–2850** without another permission request; **STOP at 2850**. Entries 2851–2900 need a fresh explicit grant after that report.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **25 records (2801–2825)** with exactly 15 fields each. Index: **2,825 sequential unique paths**; path/Decision alignment verified.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot.
-- The full recursive source tree is complete and untruncated. Entries 2701–2775 exhaust all 75 earlier-lexical unindexed Rust paths. No source path was duplicated or renumbered.
-- Checkpoint 2776–2800 passed a second structural/provenance check: all 25 pinned SHA/byte-size pairs and canonical EOF counts match; every new Ledger entry contains exactly 15 fields; Index path/Decision values align. Entry 2764's SHA transcription was corrected to the pinned blob SHA.
-- Long files were read in consecutive, gap-free ranges no larger than 400 logical lines. The final repeat check was structural/provenance QA, not a fresh semantic re-audit.
-- Backup only after 3000 and global verification. No product source changes, tests, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- The recursive tree is complete and untruncated (5,749 entries). The first 25 eligible paths were selected from the full remaining set after excluding all 2,800 indexed paths.
+- All 25 source SHA/byte-size pairs match the pinned tree; canonical EOF counts and full-file coverage are recorded.
+- Backup remains at entries 1–2000; next backup only after 3000 and global verification.
+- No application source changes, tests, builds, benchmarks, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
@@ -836,3 +837,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The 2751–2775 field-alignment correction is superseded by the completed closeout transaction: all six audit documents are synchronized at the 2800 boundary and will be read back after commit.
 - The 2776–2800 candidate set was derived from the complete untruncated pinned tree after excluding every path in the existing Index. Five previously indexed paths were excluded rather than duplicated.
 - Stage 2601–2800 is closed at 200/200. The user grant is exhausted; stop at 2800 and obtain fresh explicit authorization before 2801.
+
+
+## 52. One-time exceptional authorization — 2801–2900 — 2026-11-23
+
+- The user explicitly authorized exactly **100 new source files: entries 2801–2900**, as a one-time exceptional extension across two 50-file reporting sections. This does not change the standard 200 / 50 / 25 cadence.
+- The new stage Ledger is `AUDIT_LEDGER_2801_3000.md`; do not append to the closed 2601–2800 Ledger. Keep all audit-only changes on `starling-1.20.1-port-audit`; leave `main` and backup refs untouched.
+- Checkpoint **2801–2825** is complete and verified. Continue **2826–2850** under the same grant without asking at 2825. Report and **STOP at 2850**; do not inspect 2851–2900 until a fresh explicit authorization is received.
+- The remaining 50-file section 2851–2900 is not pre-authorized by this grant at the 2850 boundary. The 2901–3000 section is also not authorized.
+- Preserve exact 25-file commits, six-document atomic transactions, full Index uniqueness, pinned-tree provenance, EOF coverage and the 15-field Ledger schema.

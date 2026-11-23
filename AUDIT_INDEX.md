@@ -3239,3 +3239,33 @@
 | 2798 | `launcher/src/browser/installed/tests.rs` | unnecessary; reference; optional/future | Test-only Horizon install fixtures for dependencies, Java-port behavior and data packs. |
 | 2799 | `launcher/src/browser/java.rs` | rewrite required; reference; version-specific | Ports Java mod content into Horizon native pack; it does not load Forge JARs. |
 | 2800 | `launcher/src/browser/java_instance.rs` | adaptable; reference; version-specific | Per-instance version/loader filters and disabled-mod preservation are useful concepts; current installer needs Forge rewrite. |
+
+## Part 113 — Entries 2801–2825
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2801 | `docs/README.md` | adaptable; reference; version-specific | Useful only as a documentation taxonomy and subsystem map. |
+| 2802 | `docs/agent-control.md` | adaptable; reference; version-specific | Control architecture is a useful optional developer/automation concept, not required for initial Android game operation. |
+| 2803 | `docs/animated-sprite-mips-benchmark.md` | adaptable; reference; version-specific | Potential renderer optimization hypothesis; Android memory/cache pressure differs substantially. |
+| 2804 | `docs/anticheat.md` | unnecessary; reference; optional/future | Not a client performance feature; server-side design may inform compatibility diagnostics only. |
+| 2805 | `docs/api/README.md` | adaptable; reference | Useful as a model for documenting stable internal interfaces, but not a reusable API implementation. |
+| 2806 | `docs/api/agent-control.md` | adaptable; reference; version-specific | Could guide optional automation API documentation, not the Android game core. |
+| 2807 | `docs/api/data-formats.md` | adaptable; reference | Versioning and robust-reader principles transfer to RustChunk metadata and caches. |
+| 2808 | `docs/api/launch-guide.md` | adaptable; reference; version-specific | Resource provenance, prepare/check separation and safe secret transfer are useful launcher concepts. |
+| 2809 | `docs/api/launch-reference.md` | adaptable; reference; version-specific | Useful as a model for a machine-readable launcher/game contract. |
+| 2810 | `docs/api/launch.md` | adaptable; reference; version-specific | Architectural separation of preparation and launch is adaptable; its account/resource assumptions are not. |
+| 2811 | `docs/api/launcher.md` | adaptable; reference; version-specific | Command taxonomy and explicit confirmation patterns can inform RustChunk settings/diagnostics. |
+| 2812 | `docs/api/mod-files.md` | adaptable; reference; version-specific | Archive validation and strict path/size constraints are reusable security principles; package formats are not. |
+| 2813 | `docs/api/mod-index.md` | adaptable; reference; version-specific | Signed manifests, revocation and hash pinning are useful for RustChunk artifact distribution. |
+| 2814 | `docs/api/server-reference.md` | unnecessary; reference; version-specific | Useful for identifying generic server-management concepts and safe API documentation. |
+| 2815 | `docs/api/server.md` | unnecessary; reference; version-specific | General monitoring, backup and API security concepts may be retained as future server-side reference. |
+| 2816 | `docs/api/shaders-reference.md` | unnecessary; reference; version-specific | Typed shader contracts and generated reference/testing are useful design ideas only. |
+| 2817 | `docs/api/shaders.md` | unnecessary; reference; optional/future | Optional architecture reference for a future Rust-owned shader extension. |
+| 2818 | `docs/api/stability.md` | adaptable; reference | Good governance model for RustChunk-owned APIs and metadata formats. |
+| 2819 | `docs/benchmark-report.md` | adaptable; reference | Strongly adaptable for reproducible FPS, frame pacing, chunk-load and memory measurements. |
+| 2820 | `docs/benchmark.md` | adaptable; reference; version-specific | Methodology transfers well to controlled RustChunk comparisons, but its measurements are not evidence about Android. |
+| 2821 | `docs/biome-lookup.md` | rewrite required; reference; version-specific | Biome math, cache/state boundaries and differential-test methodology are highly relevant references. |
+| 2822 | `docs/biome-temperatures.md` | rewrite required; reference; version-specific | Climate calculations and cache semantics are useful references, not portable target data. |
+| 2823 | `docs/block-state-codecs.md` | rewrite required; reference; version-specific | Codec architecture and explicit property validation are useful, but data must be rebuilt. |
+| 2824 | `docs/build-times.md` | adaptable; reference; version-specific | Measurement design can inform RustChunk CI and compile-time optimization. |
+| 2825 | `docs/carving.md` | rewrite required; reference; version-specific | Core worldgen algorithms and bounded traversal/error semantics are valuable research references. |

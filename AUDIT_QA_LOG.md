@@ -1809,3 +1809,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Corrected entry **2764** source SHA to the pinned value `688daea45e4cc257ee582d7c6f25ec2b32684e50`; its 3,032-byte size and 89-line EOF coverage were already correct.
 - Scope of the final second pass is structural/provenance verification, not a second semantic re-audit of every source file. Embedded tests were inspected only; none were executed. No application source changed and no build, APK, device, Forge, Minecraft or server validation was performed.
 - Section **2751–2800 is CLOSED (50/50)**. Stage **2601–2800 is CLOSED (200/200)**. The one-time authorization is exhausted; **STOP at 2800**. Entry 2801+ requires fresh explicit authorization.
+
+
+## Checkpoint QA — 2801–2825 — 2026-11-23
+
+- Inspected 25 new files individually and completely through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`, selected from the full untruncated recursive tree after excluding all 2,800 existing Index paths.
+- Verified all 25 source paths, blob SHAs and byte sizes against the pinned tree; canonical logical line counts are recorded in the new Ledger and Coverage ends at EOF for every file.
+- Ledger `AUDIT_LEDGER_2801_3000.md` now contains 25 records, each with exactly 15 required fields. Index now contains 2,825 sequential entries and 2,825 unique paths; the 25 new path/Decision pairs align.
+- Scope was documentation/source review. Embedded test commands and historical benchmark claims were read as source evidence only; none were executed or independently reproduced.
+- No RustChunk application source changed. No build, unit test, benchmark, APK, Android device, renderer, Minecraft 1.20.1, Forge 47.x, multiplayer or Aternos validation was performed.
+- The one-time exceptional authorization covers 2801–2900. Section 2801–2850 is halfway complete: checkpoint 2801–2825 is committed; continue 2826–2850 without another permission request. Stop at 2850 and obtain fresh authorization for 2851–2900.
+- Six-document transaction commit and GitHub read-back verification are recorded in the checkpoint closeout below once complete.

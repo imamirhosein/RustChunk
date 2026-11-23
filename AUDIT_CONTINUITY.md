@@ -6,16 +6,15 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–2800**.
-- Active 200-file stage **2601–2800 is CLOSED (200/200)**.
-- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are all closed (50/50 each).
-- The one-time exceptional authorization covered exactly **2701–2800** and is exhausted. **STOP after 2800**; entry 2801+ requires fresh explicit user authorization.
-- Active Ledger `AUDIT_LEDGER_2601_2800.md`: **200 records (2601–2800)**, each with exactly 15 fields. Index: **2,800 sequential unique paths**, with all new Ledger paths and Decisions aligned.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488` at `upstream/starling`; use the immutable source pin only.
-- The full recursive source tree is complete and untruncated. Entries 2701–2775 exhaust all 75 earlier-lexical unindexed Rust paths; no historical entries were renumbered.
-- Entries 2776–2800 passed a second structural/provenance check: all 25 source SHAs, byte sizes and canonical EOF line counts match the pinned blobs; every new Ledger record has 15 fields; Index paths and Decisions align. Entry 2764's SHA transcription was corrected.
-- Long-file reads in the final checkpoint are recorded as contiguous, gap-free ranges no larger than 400 lines. The final repeat check was structural/provenance QA, not a second semantic re-audit.
-- Backup remains at 1–2000 only; next backup after 3000 and global verification. Tests/examples were inspected only, not executed. No application source changes, build, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
+- Completed entries: **1–2825**.
+- Stage **2601–2800 is CLOSED (200/200)**; all four 50-file sections in that stage are closed.
+- Active 200-file stage **2801–3000** is **25/200 complete**. Section **2801–2850** is 25/50 complete; checkpoint **2801–2825** is committed and read-back verified.
+- The user explicitly authorized one-time exceptional range **2801–2900 (100 files)**. Continue checkpoint **2826–2850** under the same grant; report and **STOP at 2850**. The remaining 2851–2900 requires a fresh explicit authorization after that boundary.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **25 records (2801–2825)**, each with exactly 15 fields. Index: **2,825 sequential unique paths**, all paths unique and the new Ledger paths/Decisions aligned.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
+- The full recursive source tree contains 5,749 entries and is untruncated. Candidate selection was recomputed from the complete tree after excluding all 2,800 prior Index paths; entries 2801–2825 are the first 25 eligible lexical paths.
+- All 25 new source SHA/byte-size pairs match the pinned tree; canonical logical line counts and EOF coverage are recorded. The commit is a documentation-only audit transaction, not an application change.
+- Backup remains at entries 1–2000; next backup only after entry 3000 and global verification. Tests/examples were inspected only, not executed. No application source changes, builds, APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
 ## Source pin and selection
 
@@ -807,3 +806,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - The 2776–2800 checkpoint passed a second structural/provenance check for all source SHA/size/EOF counts, all 15 Ledger fields and Index path/Decision alignment. Entry 2764's SHA transcription was corrected.
 - Stage **2601–2800 is CLOSED (200/200)**. The exceptional grant is exhausted. **STOP at 2800; 2801+ requires fresh explicit authorization.**
 - No tests/builds/APK/device/Forge/Minecraft/server validation; no product source changed.
+
+
+## Latest verified checkpoint — 2801–2825 — 2026-11-23
+
+- Entries **2801–2825 inclusive (25/25)** were inspected individually through EOF from pinned Starling commit `5432370d573642041585c69b40fb045b27133488`.
+- Exact source paths, SHAs and byte sizes match the complete untruncated recursive tree. Canonical logical line counts and EOF coverage are recorded in the Ledger.
+- New Ledger `AUDIT_LEDGER_2801_3000.md`: 25 records, each with exactly 15 required fields. Index: 2,825 sequential unique paths; new paths and Decisions align.
+- Section **2801–2850** is 25/50 complete. Continue **2826–2850** under the same exceptional authorization; **STOP at 2850**. Do not inspect 2851+ without fresh permission.
+- This was source/documentation review only. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation; no application source changes.
