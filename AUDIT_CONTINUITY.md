@@ -7,10 +7,10 @@ Branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Completed entries: **1–2925**.
-- Stage **2601–2800 is CLOSED (200/200)**. Active stage **2801–3000 is 100/200 complete**.
-- Sections **2801–2850** and **2851–2900** are **CLOSED (50/50)**; section **2901–2950** is 25/50 complete. Checkpoint 2901–2925 is committed and read-back verified.
+- Stage **2601–2800 is CLOSED (200/200)**. Active stage **2801–3000 is 150/200 complete**.
+- Sections **2801–2850** and **2851–2900** are **CLOSED (50/50)**; section **2901–2950 is CLOSED (50/50)**. Checkpoints 2901–2925 and 2926–2950 are committed and read-back verified. Section 2951–3000 is 0/50 complete.
 - The user's new one-time exceptional authorization **2901–3000 (100 files) is ACTIVE**. Continue without asking through 3000; stop at 3000 and require fresh authorization for 3001+.
-- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **125 records (2801–2925)**, each with exactly 15 fields. Index: **2,925 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Active Ledger `AUDIT_LEDGER_2801_3000.md`: **150 records (2801–2950)**, each with exactly 15 fields. Index: **2,950 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only.
 - The complete recursive source tree is untruncated (5,749 entries). New paths were selected from the complete tree after excluding the full Index.
 - Source SHAs, byte sizes, canonical line counts and EOF coverage for the latest 25 are recorded and checked against the pinned tree.
@@ -852,3 +852,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Locale JSON consistency check: 10 locales, 914 shared keys each, valid JSON, placeholders aligned; English-identical entries noted per locale in findings.
 - The user's exceptional authorization 2901–3000 remains active; next checkpoint is 2926–2950. Continue without asking for another grant.
 - No app source modifications, tests/builds/benchmarks/APK/device/Forge/Minecraft/server/Aternos validation.
+
+
+## Checkpoint 2926–2950 — COMPLETE — 2026-11-23
+
+- 25 files 2926–2950 inspected through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; selected from full untruncated tree after excluding 2,925 prior Index paths.
+- Exact SHA/size provenance checked against the pinned tree; canonical logical line counts and complete contiguous EOF coverage recorded. Long files used consecutive <=400-line chunks.
+- Active stage Ledger now contains 150 records (2801–2950), exactly 15 fields each; Index contains 2,950 sequential unique paths. Section 2901–2950 is closed (50/50).
+- The exceptional authorization 2901–3000 remains active. Continue 2951–2975 then 2976–3000 without asking; stop at 3000.
+- No application source changes, tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.

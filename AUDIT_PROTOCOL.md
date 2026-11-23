@@ -879,3 +879,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Active Ledger remains `AUDIT_LEDGER_2801_3000.md`; do not create a new Ledger or append to the closed 2601–2800 Ledger. Keep audit-only changes on `starling-1.20.1-port-audit`; leave `main` and backup refs untouched.
 - Checkpoint **2901–2925** is complete and verified. Continue **2926–2950**, then **2951–2975**, **2976–3000**. At 3000 close the 200-file stage and **STOP**; 3001+ requires fresh explicit authorization.
 - Current counts: Ledger 125 records (2801–2925), Index 2,925 sequential unique paths. Maintain exactly 15 fields per Ledger record, full pinned-tree provenance, SHA/size, canonical line counts and EOF coverage.
+
+
+## 54. Progress under exceptional authorization 2901–3000 — 2026-11-23
+
+- Checkpoints **2901–2925** and **2926–2950** are complete and read-back verified. Section **2901–2950 is CLOSED (50/50)**.
+- Active stage 2801–3000 now has 150/200 entries; the user's exceptional grant **2901–3000 remains ACTIVE** with 50 entries remaining.
+- Continue **2951–2975** and **2976–3000** without requesting another authorization. At entry 3000, close the stage and STOP; 3001+ requires a new explicit grant.
+- Active Ledger has 150 records (2801–2950), Index has 2,950 sequential unique paths. Keep six-document atomic commits and all 15 Ledger fields.

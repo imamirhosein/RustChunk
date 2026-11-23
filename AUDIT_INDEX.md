@@ -3393,3 +3393,34 @@
 | 2923 | `launcher/src/datapacks.rs` | adaptable; reference; version-specific | World datapack management is relevant to RustChunk profile/world tooling; not central to Forge JAR loading. |
 | 2924 | `launcher/src/datapacks/tests.rs` | rewrite required; reference; version-specific | Useful testing pattern, but fixtures need replacement with actual 1.20.1 formats. |
 | 2925 | `launcher/src/datapacks_page.rs` | adaptable; reference; platform-specific | Useful interaction flow and confirmation pattern; needs Android SAF picker and explicit partial-failure reporting. |
+
+
+## Part 118 — Entries 2926–2950
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2926 | `launcher/src/desktop.rs` | unnecessary; reference; platform-specific | No Android implementation; useful only if RustChunk later ships a Linux desktop launcher. |
+| 2927 | `launcher/src/desktop_seams.rs` | adaptable; reference; platform-specific | Potentially useful abstraction for safe file deletion and blocking work; not directly portable. |
+| 2928 | `launcher/src/dev_options.rs` | unnecessary; reference; development-only | Low-value UI reference; release channel separation may be useful. |
+| 2929 | `launcher/src/export.rs` | adaptable; reference; privacy-sensitive | Useful export/import architecture and privacy-by-default rules; requires Forge 1.20.1 file list and robust NBT privacy guarantees. |
+| 2930 | `launcher/src/export/tests.rs` | rewrite required; reference; version-specific | Useful privacy and archive test pattern; adapt fixtures to Forge and 1.20.1. |
+| 2931 | `launcher/src/export_page.rs` | adaptable; reference; platform-specific | Workflow concept is reusable, presentation code is not. |
+| 2932 | `launcher/src/frame.rs` | unnecessary; reference; platform-specific | Can inform information architecture but should not be transplanted as UI source. |
+| 2933 | `launcher/src/game_app.rs` | unnecessary; reference; platform-specific | No Android implementation; packaging separation is conceptually useful. |
+| 2934 | `launcher/src/game_log.rs` | adaptable; reference; privacy-sensitive | Privacy-sensitive feature; log viewer useful, third-party upload should remain explicit opt-in and local-only default. |
+| 2935 | `launcher/src/game_log/tests.rs` | adaptable; reference; security-sensitive | Useful baseline for RustChunk diagnostics tests; needs much broader sensitive-data fixtures. |
+| 2936 | `launcher/src/game_tools.rs` | unnecessary; reference; security-sensitive | Optional automation interface only; not required for Minecraft 1.20.1 Forge launcher functionality. |
+| 2937 | `launcher/src/github.rs` | adaptable; reference; security-sensitive | HTTP caching/rate-limit logic is useful, but mirror and token assumptions must not be reused blindly. |
+| 2938 | `launcher/src/github/tests.rs` | adaptable; reference; security-sensitive | Useful adversarial HTTP/cache tests for RustChunk update system. |
+| 2939 | `launcher/src/github_mods.rs` | unnecessary; reference; security-sensitive; version-specific | Concepts such as pinned provenance, source review, checksums and bounded archives are reusable; plugin runtime is not. |
+| 2940 | `launcher/src/github_mods/tests.rs` | unnecessary; reference; security-sensitive | Useful tests for trusted source pinning and archive validation, but native-mod model is not RustChunk's mod architecture. |
+| 2941 | `launcher/src/github_mods_page.rs` | unnecessary; reference; platform-specific | May inform source-review UX for a future plugin manager; not part of baseline. |
+| 2942 | `launcher/src/glass.rs` | unnecessary; reference; platform-specific | Pure presentation reference; no reason to import this graphics layer. |
+| 2943 | `launcher/src/glass_home.rs` | adaptable; reference; platform-specific | Useful as product-flow reference, not portable code. |
+| 2944 | `launcher/src/glass_home_lists.rs` | adaptable; reference; platform-specific | List UX and confirmation patterns reusable; implementation is platform-specific. |
+| 2945 | `launcher/src/glass_home_mods.rs` | unnecessary; reference; version-specific | Not a source for Forge mod listing; only generic row UX reusable. |
+| 2946 | `launcher/src/glass_home_packs.rs` | adaptable; reference; version-specific | Pack management UX may be adapted; format support must remain Minecraft 1.20.1-compatible. |
+| 2947 | `launcher/src/glass_home_tabs.rs` | unnecessary; reference; platform-specific | Optional UX reference only. |
+| 2948 | `launcher/src/glass_instance.rs` | rewrite required; reference; version-specific; platform-specific | Instance isolation and wizard flow are reusable concepts; loader selection and UI require a new Forge-aware implementation. |
+| 2949 | `launcher/src/glass_instance_java.rs` | rewrite required; reference; version-specific | Only version-picker UX concept is reusable. |
+| 2950 | `launcher/src/glass_ui.rs` | unnecessary; reference; platform-specific | Design-system concepts reusable, source code is not. |

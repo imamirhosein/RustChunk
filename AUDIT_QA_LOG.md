@@ -1873,3 +1873,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Browser test fixtures explicitly assert that Java mods for Minecraft 1.20.1 are not installable in the inspected Horizon workflow; the current catalog/port model is not evidence of Forge 1.20.1 support.
 - No test, benchmark or live network check was executed. No RustChunk application source changed; no build, APK, Android device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
 - Checkpoint 2901–2925 is recorded; continue 2926–2950 under the user's active exceptional grant, without requesting another authorization.
+
+
+## Checkpoint QA — 2926–2950 — 2026-11-23
+
+- Entries **2926–2950 (25/25)** were selected from the complete, untruncated pinned tree after excluding all 2,925 prior Index paths; all 25 source blobs were fetched through EOF.
+- Exact source SHAs and byte sizes match the pinned tree. Canonical logical line counts and full EOF coverage are recorded in the active Ledger. Files exceeding 400 lines were inspected in consecutive, gap-free ranges no larger than 400 lines.
+- Findings emphasize desktop-only GPUI/Linux/macOS integration and Horizon-native Rust mods: none demonstrates Android UI, Samsung Gaming Hub classification or Java Forge 1.20.1 support. GitHub native mods are explicitly privileged native code and are not a substitute for Forge JARs.
+- No test/build/benchmark was executed. No RustChunk application source changed; no APK, Android device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- Checkpoint 2926–2950 is recorded and the 50-file section 2901–2950 is closed. Continue 2951–2975 under the same active exceptional grant without requesting permission.
