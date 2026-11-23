@@ -2,8 +2,8 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries 1–2000 globally verified/backed up; entries 2001–2975 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; active stage **2801–3000 is 175/200 complete**.
-- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is exhausted. New exceptional grant **2901–3000** is active; section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is 25/50 complete**. Continue 2976–3000 and **STOP at 3000**.
+- Entries 1–2000 globally verified/backed up; entries 2001–3000 are inspected and committed. Stage **2601–2800 is CLOSED (200/200)**; stage **2801–3000 is CLOSED (200/200)**.
+- Sections **2601–2650**, **2651–2700**, **2701–2750** and **2751–2800** are closed (50/50). Exceptional grant **2801–2900** is exhausted. New exceptional grant **2901–3000** is active; section **2901–2950 is CLOSED (50/50)**; section **2951–3000 is CLOSED (50/50)**. Both 50-file sections under the 2901–3000 grant are closed. **STOP at 3000**.
 
 - Historical note: stages 2401–2600 and 2601–2800 are fully closed. The current exceptional grant 2901–3000 is stated in the latest stage section below.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No source changes; next backup after 3000/global verification.
@@ -459,3 +459,12 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Active Ledger has 175 records (2801–2975) with exactly 15 fields; Index has 2,975 sequential unique paths and matching path/Decision rows.
 - Section 2951–3000 is 25/50 complete. Exceptional authorization 2901–3000 remains active for final checkpoint 2976–3000; no new permission request is needed.
 - No source/app changes, tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.
+
+
+## Final checkpoint 2976–3000 — COMPLETE — 2026-11-23
+
+- 25 files inspected through EOF from pinned Starling `5432370d573642041585c69b40fb045b27133488`; exact paths, SHAs and byte sizes match the complete untruncated tree.
+- Active Ledger has **200 records (2801–3000)** with exactly 15 fields; Index has **3,000 sequential unique paths** and matching path/Decision rows.
+- All long files were fetched in consecutive, gap-free chunks <=400 lines, including main.rs (5,354 lines), native_mods.rs (3,857 lines), mods_page.rs (1,809 lines) and other >400-line sources.
+- Exceptional authorization 2901–3000 is exhausted. Stage 2801–3000 is CLOSED (200/200); sections 2901–2950 and 2951–3000 are CLOSED (50/50). **STOP at 3000**; 3001+ requires fresh explicit permission.
+- No application source changes, tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.

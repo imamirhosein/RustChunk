@@ -3455,3 +3455,34 @@
 | 2973 | `launcher/src/launch_page.rs` | adaptable; reference; platform-specific | Memory settings UX may be adapted to mobile. |
 | 2974 | `launcher/src/lib.rs` | adaptable; reference; platform-specific | Useful only as module organization reference. |
 | 2975 | `launcher/src/line_edit.rs` | unnecessary; reference; platform-specific | Text-editing invariants may inform future custom widget, but native Android text fields are safer. |
+
+
+## Part 120 — Entries 2976–3000
+
+| No. | Source path | Decision | One-line reason |
+|---:|---|---|---|
+| 2976 | `launcher/src/loaders.rs` | rewrite required; reference; version-specific | Critical incompatibility for RustChunk's Forge requirement; only the general loader-profile pattern is reusable. |
+| 2977 | `launcher/src/loaders/tests.rs` | rewrite required; reference; version-specific | Useful loader metadata/checksum test style, not proof of target loader compatibility. |
+| 2978 | `launcher/src/mac_update.rs` | unnecessary; reference; platform-specific | Only staged replacement/rollback principle is generic. |
+| 2979 | `launcher/src/mac_update/tests.rs` | adaptable; reference; platform-specific | Rollback test strategy can inspire Android update tests; implementation cannot be reused. |
+| 2980 | `launcher/src/main.rs` | rewrite required; reference; platform-specific; version-specific | Useful to map user workflows and identify subsystem boundaries; not suitable as RustChunk architecture source code. |
+| 2981 | `launcher/src/markdown.rs` | adaptable; reference; platform-specific | Markdown parsing idea reusable, GPUI renderer is not. |
+| 2982 | `launcher/src/mcp.rs` | unnecessary; reference; security-sensitive | Do not add to baseline; permission/allowlist architecture is a future optional idea. |
+| 2983 | `launcher/src/microsoft.rs` | unnecessary; reference; branding-sensitive | No direct compatibility value beyond branding asset licensing. |
+| 2984 | `launcher/src/minecraft_versions.rs` | adaptable; reference | Useful version metadata component for RustChunk. |
+| 2985 | `launcher/src/modpacks.rs` | rewrite required; reference; version-specific | Modpack manifest parsing/profile isolation ideas are useful, but porting pipeline is incompatible with user's Forge requirement. |
+| 2986 | `launcher/src/modpacks_page.rs` | adaptable; reference; platform-specific | Only progress/report presentation is reusable. |
+| 2987 | `launcher/src/mods_page.rs` | rewrite required; reference; version-specific; platform-specific | Feature inventory and async state patterns useful, but implementation and compatibility logic require replacement. |
+| 2988 | `launcher/src/mods_project.rs` | adaptable; reference; platform-specific | Project detail UX can be adapted, not source code. |
+| 2989 | `launcher/src/mojang.rs` | adaptable; reference; platform-specific | Core resource download and verification design is valuable for RustChunk. |
+| 2990 | `launcher/src/mojang_tests.rs` | adaptable; reference; security-sensitive | Strong security/download test pattern, but add Android target fixtures. |
+| 2991 | `launcher/src/multiplayer_page.rs` | adaptable; reference; platform-specific | UX pattern for saved servers only. |
+| 2992 | `launcher/src/native_log_page.rs` | unnecessary; reference; platform-specific | General async log snapshot pattern can be reused. |
+| 2993 | `launcher/src/native_mods.rs` | unnecessary; reference; version-specific; security-sensitive | Useful only as an example of a separately scoped native extension pipeline and deterministic build cache; incompatible with target mod ecosystem. |
+| 2994 | `launcher/src/native_mods/api.rs` | unnecessary; reference; version-specific | No direct compatibility value for Forge. |
+| 2995 | `launcher/src/native_mods/crates.rs` | unnecessary; reference; security-sensitive | Security validation patterns for any future code plugin pipeline, not Forge mod loading. |
+| 2996 | `launcher/src/native_mods/dependencies.rs` | adaptable; reference; version-specific | Generic graph resolution can inform Forge dependency diagnostics, not direct reuse. |
+| 2997 | `launcher/src/native_mods/inject.rs` | unnecessary; reference; version-specific | Potentially instructive about deterministic injection and hook validation only; technology is incompatible. |
+| 2998 | `launcher/src/native_mods/inject_cache.rs` | unnecessary; reference; version-specific | No direct compatibility value. |
+| 2999 | `launcher/src/native_status.rs` | adaptable; reference; version-specific | Build-state fingerprint idea is reusable for RustChunk profiles, but current semantics are proprietary. |
+| 3000 | `launcher/src/new_instance.rs` | rewrite required; reference; version-specific; platform-specific | Profile wizard UX can be adapted; loader choices need replacement. |

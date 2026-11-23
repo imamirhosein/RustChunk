@@ -1891,3 +1891,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Critical target findings: Java runtime selection and launch command resolution are useful foundations, but Android ARM64 Java 17 runtime and Forge 47.x installation/argument merging remain unimplemented in these inspected desktop modules. Tailscale, Windows installer and GPUI controls are platform-specific/nonessential.
 - No test/build/benchmark was executed. No RustChunk application source changed; no APK, Android device, Minecraft, Forge, multiplayer or Aternos validation was performed.
 - Checkpoint 2951–2975 is complete; continue 2976–3000 under the same active exceptional grant without asking.
+
+
+## Checkpoint QA — 2976–3000 — 2026-11-23
+
+- Entries **2976–3000 (25/25)** were selected from the complete, untruncated pinned tree after excluding all 2,975 prior Index paths; all 25 source blobs were fetched through EOF.
+- Exact source SHAs and byte sizes match the pinned tree. Canonical logical line counts and full EOF coverage are recorded in Ledger. Every file over 400 lines was fetched in consecutive, gap-free ranges no larger than 400 lines, including the 5,354-line desktop main module and 3,857-line native-mod system.
+- Critical compatibility result: the inspected loader registry explicitly supports only Fabric and Quilt; the new-instance wizard offers only Fabric/Quilt. The native-mod pipeline compiles Rust mixins into Horizon-specific binaries and is not Java Forge/FML/ModLauncher. Modpack porting converts to Horizon-native mods and leaves unsupported CurseForge-only JARs aside. None of this establishes Forge 1.20.1 support.
+- No test/build/benchmark/live network operation was executed. No RustChunk application source changed; no APK, Android device, renderer, Minecraft, Forge, multiplayer or Aternos validation was performed.
+- The final checkpoint 2976–3000 is recorded. Exceptional authorization 2901–3000 is now fully consumed; stage 2801–3000 is CLOSED (200/200). **STOP at 3000**; 3001+ requires fresh explicit authorization.
