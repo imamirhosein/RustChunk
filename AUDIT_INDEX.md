@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3175 are complete** across the stage Ledgers. Index: **3,175 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is IN PROGRESS (175/200), with sections 3001–3050, 3051–3100 and 3101–3150 CLOSED (50/50 each), and section 3151–3200 IN PROGRESS (25/50). Exceptional authorization 3101–3200 remains ACTIVE. Checkpoints through 3151–3175 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
+- Source ledgers: entries **1–3200 are complete** across the stage Ledgers. Index: **3,200 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is CLOSED (200/200). Sections 3001–3050, 3051–3100, 3101–3150 and 3151–3200 are all CLOSED (50/50 each). Exceptional authorization 3101–3200 is COMPLETE/CONSUMED. Checkpoints through 3176–3200 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
 
 ## Part 1 — Entries 1–25
 
@@ -3679,3 +3679,28 @@
 | 3173 | `third_party/naga/src/diagnostic_filter.rs` | adaptable; reference; diagnostic-policy | Diagnostic filter precedence/conflict model. |
 | 3174 | `third_party/naga/src/error.rs` | adaptable; reference; error-reporting | Shader error formatting; Error::source appears to skip the immediate inner error. |
 | 3175 | `third_party/naga/src/front/atomic_upgrade.rs` | adaptable; reference; SPIR-V-front-end-specific; correctness-sensitive | SPIR-V atomic type upgrade; is_empty ignores field-only upgrades. |
+| 3176 | `third_party/naga/src/front/glsl/ast.rs` | adaptable; reference; GLSL-front-end-architecture | GLSL AST structure is reusable only as part of the pinned frontend. |
+| 3177 | `third_party/naga/src/front/glsl/builtins.rs` | rewrite required; reference; semantic-correctness-critical | GLSL imageAtomic* returns a pre-load value rather than the actual atomic old value; correctness fix required. |
+| 3178 | `third_party/naga/src/front/glsl/context.rs` | adaptable; reference; GLSL-front-end-specific; correctness-sensitive | Large GLSL context lowering layer; version and extension sensitive. |
+| 3179 | `third_party/naga/src/front/glsl/error.rs` | adaptable; reference; parser-diagnostics | GLSL parser/lowering error taxonomy and source spans. |
+| 3180 | `third_party/naga/src/front/glsl/functions.rs` | adaptable; reference; overload-resolution-sensitive | GLSL overload and in/out parameter lowering; needs exact shader fixtures. |
+| 3181 | `third_party/naga/src/front/glsl/lex.rs` | adaptable; reference; GLSL-lexer | GLSL tokenization for legacy and extension dialects. |
+| 3182 | `third_party/naga/src/front/glsl/mod.rs` | adaptable; reference; GLSL-frontend-specific | Public GLSL parser API and supported-version profile. |
+| 3183 | `third_party/naga/src/front/glsl/offset.rs` | adaptable; reference; buffer-layout-critical | std140/std430 layout calculator; row-major/unsupported layout cases need validation. |
+| 3184 | `third_party/naga/src/front/glsl/parser.rs` | adaptable; reference; parser | Main GLSL grammar parser and parser state. |
+| 3185 | `third_party/naga/src/front/glsl/parser/declarations.rs` | adaptable; reference; declaration-lowering | GLSL declaration, qualifier and binding lowering. |
+| 3186 | `third_party/naga/src/front/glsl/parser/expressions.rs` | adaptable; reference; expression-semantics-sensitive | GLSL expression precedence and AST lowering. |
+| 3187 | `third_party/naga/src/front/glsl/parser/functions.rs` | adaptable; reference; function-control-flow | GLSL function/statement/control-flow parser. |
+| 3188 | `third_party/naga/src/front/glsl/parser/types.rs` | adaptable; reference; GLSL-type-compatibility | GLSL type-name and image/sampler type parser. |
+| 3189 | `third_party/naga/src/front/glsl/parser_tests.rs` | adaptable; reference; test-suite | Upstream GLSL parser regression tests; tests were inspected, not run. |
+| 3190 | `third_party/naga/src/front/glsl/token.rs` | adaptable; reference; lexer-token-model | GLSL token enum model. |
+| 3191 | `third_party/naga/src/front/glsl/types.rs` | adaptable; reference; GLSL-type-model | GLSL source-level type descriptors. |
+| 3192 | `third_party/naga/src/front/glsl/variables.rs` | adaptable; reference; variable-lowering | GLSL global/local variable and resource-binding lowering. |
+| 3193 | `third_party/naga/src/front/interpolator.rs` | adaptable; reference; interpolation | Interpolation qualifier mapping shared by shader frontends. |
+| 3194 | `third_party/naga/src/front/mod.rs` | adaptable; reference; frontend-core | Shared frontend typifier, symbol table and context helpers. |
+| 3195 | `third_party/naga/src/front/spv/convert.rs` | rewrite required; reference; SPIR-V-semantic-correctness | SPIR-V unordered float comparisons appear to lose NaN semantics when mapped to ordinary comparisons. |
+| 3196 | `third_party/naga/src/front/spv/error.rs` | adaptable; reference; SPIR-V-diagnostics | SPIR-V parser error model. |
+| 3197 | `third_party/naga/src/front/spv/function.rs` | adaptable; reference; SPIR-V-function-lowering | SPIR-V function and entry-point lowering. |
+| 3198 | `third_party/naga/src/front/spv/image.rs` | adaptable; reference; SPIR-V-image-frontend | SPIR-V image type/operation frontend. |
+| 3199 | `third_party/naga/src/front/spv/mod.rs` | adaptable; reference; SPIR-V-frontend; validation-critical | SPIR-V top-level module parser and capability orchestration. |
+| 3200 | `third_party/naga/src/front/spv/next_block.rs` | rewrite required; reference; SPIR-V-synchronization-semantics | SPIR-V block parser discards CopyMemory flags and atomic/barrier scope/semantics. |

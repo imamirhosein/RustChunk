@@ -6,15 +6,16 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3175**.
-- Stages **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (175/200)**.
-- Sections **3001–3050**, **3051–3100** and **3101–3150** are CLOSED (50/50 each). Section **3151–3200** is IN PROGRESS (25/50).
-- Checkpoints through **3151–3175** are committed and read-back verified.
-- Exceptional authorization **3101–3200 is ACTIVE (75/100 completed)**. Continue 3176–3200 without another permission request; report and **STOP at 3200**.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **175 records (3001–3175)**, exactly 15 fields each. Index: **3,175 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Completed entries: **1–3200**.
+- Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED (200/200 each).
+- Sections **3001–3050**, **3051–3100**, **3101–3150** and **3151–3200** are CLOSED (50/50 each).
+- Checkpoints through **3176–3200** are committed and read-back verified.
+- Exceptional authorization **3101–3200 is COMPLETE/CONSUMED**. **STOP at 3200**; entries 3201+ require a new explicit user grant.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **200 records (3001–3200)**, exactly 15 fields each. Index: **3,200 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3175 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA remains complete for entries 1–3000.
+- Entries 3001–3200 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA remains complete for entries 1–3000.
 - No RustChunk application source changed. Embedded tests were inspected only, not executed. No builds, benchmarks, APK/device, Vulkan, Forge/Minecraft, multiplayer or Aternos validation.
+- The 3,000-entry backup remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. A new backup is deferred until entries 3001–4000 are completed and globally verified.
 
 
 ## Global QA closeout — entries 1–3000 — COMPLETE (2026-11-23)
@@ -931,3 +932,11 @@ Keep progress updates extremely short. Report only the current range and the nex
 - 25 files reviewed in strict lexical order from the pinned tree, one at a time, through EOF; long files used consecutive ranges no larger than 400 lines.
 - SHA/byte-size, 15-field Ledger records, Index uniqueness and Ledger/Index alignment passed.
 - Continue at 3176. Explicit authorization covers 3101–3200; do not request new permission. Report and stop after 3200.
+
+
+## Checkpoint 3176–3200 — COMPLETE — 2026-11-24
+
+- 25 files reviewed in strict lexical order from the pinned tree, one at a time, through EOF; long files used consecutive ranges no larger than 400 lines.
+- Source SHA/byte-size, 15-field Ledger records, Index uniqueness and Ledger/Index alignment passed.
+- Stage 3001–3200 is CLOSED (200/200), with all four 50-file sections closed and all eight 25-file checkpoints committed/read-back verified.
+- Authorization 3101–3200 is consumed. **STOP at 3200. Do not inspect or modify 3201+ until the user explicitly authorizes the next range.**

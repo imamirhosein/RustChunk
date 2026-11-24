@@ -3020,3 +3020,436 @@
 - Long files were read in consecutive, gap-free ranges no larger than 400 lines: 3151 (1,624), 3155 (4,000), 3158 (2,186), 3166 (490), 3167 (481), 3170 (1,300) and 3171 (461).
 - Every new entry has exactly 15 required fields. Static concerns include SPIR-V Writer option updates, reclaimable buffer capacity retention, ShaderError error-chain behavior and atomic-upgrade emptiness tracking; none was reproduced by tests.
 - No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation was run. No RustChunk application source was changed.
+
+### 3176. `third_party/naga/src/front/glsl/ast.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 5e1033944a1ee3a2ca9c474088bd666bb38e4a14
+- Size: 12109 bytes
+- Coverage: 1–400; EOF; 401–800 confirmed empty.
+- Purpose: Defines the GLSL front-end AST and source-span-bearing syntax nodes.
+- Dependencies / cross-references: GLSL lexer tokens, parser and AST visitor/context lowering.
+- Implementation / logic: Represents declarations, expressions, statements, functions, types and control-flow constructs before lowering to Naga IR.
+- Findings: AST correctness is only one stage; unsupported GLSL grammar/extension constructs are rejected by parser/lowering layers.
+- RustChunk relevance: Useful reference if RustChunk needs to import GLSL shader packs through Naga.
+- Decision: adaptable; reference; GLSL-front-end-architecture
+- 1.20.1 implications: Minecraft 1.20.1 shader packs may use GLSL extensions beyond this front end's supported profile.
+- Follow-up checks: Test source spans and every grammar node against representative 1.20.1 shader packs.
+- RustChunk implementation mapping: Optional GLSL AST/parser integration in shader import pipeline.
+- Evidence required before adoption: Parser fixtures, source-span checks and Naga validation.
+- Completion state: COMPLETE — 400 logical lines through EOF; pinned SHA and 12,109-byte size match; inspected only.
+
+### 3177. `third_party/naga/src/front/glsl/builtins.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 3b6a7e1018121b00ad46ea43f604ba6775d52b86
+- Size: 112521 bytes
+- Coverage: 1–400 through 2401–2800 in seven consecutive 400-line chunks, then 2801–2913; EOF; 3201–3600 confirmed empty.
+- Purpose: Lowers GLSL builtin functions/macros, texture operations, atomics and image calls into Naga IR.
+- Dependencies / cross-references: GLSL parser/context, builtin signatures, Naga expressions/statements, texture/image types and atomic upgrade tracking.
+- Implementation / logic: Resolves overloads and constructs IR for math, geometric, relational, texture, image and atomic builtins.
+- Findings: Image atomic builtins load the texel before emitting a separate atomic statement and return that earlier load as the old value; another invocation can write between the load and atomic, so the returned old value is not atomic. The source comment acknowledges the race. Correctness defect for concurrent image atomics.
+- RustChunk relevance: Directly relevant to GLSL shader-pack compatibility; this semantic mismatch can break modded shaders using imageAtomic* under contention.
+- Decision: rewrite required; reference; semantic-correctness-critical
+- 1.20.1 implications: Do not adopt this path unchanged for 1.20.1 shader packs that use image atomics; implement an IR atomic result that returns the actual old value.
+- Follow-up checks: Create concurrent imageAtomicAdd/Min/CompSwap fixtures and compare returned values against GLSL/Vulkan reference behavior.
+- RustChunk implementation mapping: GLSL builtin lowering only after atomic return semantics are fixed; separate from chunk streaming.
+- Evidence required before adoption: GPU concurrency tests with multiple invocations updating the same texel and validating returned old values.
+- Completion state: COMPLETE — 2,913 logical lines through EOF in seven 400-line chunks plus 113 lines; pinned SHA and 112,521-byte size match; not compiled.
+
+### 3178. `third_party/naga/src/front/glsl/context.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 87603a1f65bacfc6aef379f92a4da4d841f1886b
+- Size: 61257 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600; consecutive; EOF; 1601–2000 confirmed empty.
+- Purpose: Provides GLSL parser context, symbol/type resolution, expression lowering and statement construction.
+- Dependencies / cross-references: GLSL AST, Type/Function/Variable declarations, Naga arenas, typifier and source spans.
+- Implementation / logic: Maintains scopes, resolves symbols/types, creates local/global variables and lowers high-level expressions/statements into Naga IR.
+- Findings: Large semantic bridge with many version/extension-specific assumptions; error recovery and type inference must remain aligned with parser/validator.
+- RustChunk relevance: Central reference for importing GLSL shader packs into a Rust shader pipeline.
+- Decision: adaptable; reference; GLSL-front-end-specific; correctness-sensitive
+- 1.20.1 implications: Pin the exact Naga revision and test all GLSL extensions used by the selected Minecraft shader packs.
+- Follow-up checks: Test scope shadowing, lvalues, swizzles, image/atomic access, precision qualifiers and invalid type paths.
+- RustChunk implementation mapping: Optional GLSL-to-Naga IR frontend; no direct world/chunk runtime mapping.
+- Evidence required before adoption: Shader corpus parse/lower/validate tests and source-span diagnostics.
+- Completion state: COMPLETE — 1,600 logical lines through EOF in four consecutive 400-line chunks; pinned SHA and 61,257-byte size match; not compiled.
+
+### 3179. `third_party/naga/src/front/glsl/error.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8f5d573089781de619b6cdb2241d97a81ee71526
+- Size: 9139 bytes
+- Coverage: 1–248; EOF.
+- Purpose: Defines GLSL parser/lowering error variants and source-location context.
+- Dependencies / cross-references: GLSL parser, lexer, AST spans and Naga diagnostic reporting.
+- Implementation / logic: Represents unsupported versions/extensions, invalid operands/types, parse failures and source spans.
+- Findings: Errors are frontend-specific; some unsupported cases may be reported at lowering rather than lexical parsing.
+- RustChunk relevance: Useful for clear shader-pack import diagnostics.
+- Decision: adaptable; reference; parser-diagnostics
+- 1.20.1 implications: Preserve original GLSL source and version in 1.20.1 shader error reports.
+- Follow-up checks: Test malformed tokens, unsupported extensions, invalid overloads and precise source spans.
+- RustChunk implementation mapping: RustChunk shader import error type and diagnostics adapter.
+- Evidence required before adoption: Golden diagnostic tests for real shader-pack failures.
+- Completion state: COMPLETE — 248 logical lines through EOF; pinned SHA and 9,139-byte size match; inspected only.
+
+### 3180. `third_party/naga/src/front/glsl/functions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a4480236529c581ac32f4e110a721525c0c3a70d
+- Size: 65569 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1713; consecutive; EOF; 2001–2400 confirmed empty.
+- Purpose: Handles GLSL function declarations/calls, overload selection, constructors, parameter modes and atomic access discovery.
+- Dependencies / cross-references: GLSL context/types, function AST, Naga Function/Expression/Statement arenas and atomic upgrade map.
+- Implementation / logic: Resolves overload candidates/conversions, builds function IR, handles in/out/inout arguments and tracks atomic pointer paths.
+- Findings: Overload/constructor logic depends on exact GLSL conversion ranking; unsupported or ambiguous signatures must fail deterministically.
+- RustChunk relevance: Relevant to modded GLSL shader-pack import and function-heavy shaders.
+- Decision: adaptable; reference; overload-resolution-sensitive
+- 1.20.1 implications: Use only with a pinned GLSL/Naga version and compatibility fixtures for actual 1.20.1 shader packs.
+- Follow-up checks: Test ambiguous overloads, matrix/vector constructors, out/inout swizzles, recursion, atomic struct fields and extension functions.
+- RustChunk implementation mapping: Optional GLSL function lowering layer.
+- Evidence required before adoption: Overload resolution fixtures, Naga validation and shader output equivalence.
+- Completion state: COMPLETE — 1,713 logical lines through EOF in four 400-line chunks plus 113 lines; pinned SHA and 65,569-byte size match; not compiled.
+
+### 3181. `third_party/naga/src/front/glsl/lex.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 9337491b5dae57490f8122b0bb72ce302ec9595f
+- Size: 11660 bytes
+- Coverage: 1–306; EOF.
+- Purpose: Tokenizes GLSL source into identifiers, literals, operators, punctuation and preprocessor/version markers.
+- Dependencies / cross-references: GLSL source text, spans, numeric parsing and token enum.
+- Implementation / logic: Scans characters, recognizes numeric/string/identifier forms and attaches source spans for parser diagnostics.
+- Findings: Lexical support is profile-specific; extensions, numeric suffixes and preprocessor behavior need shader corpus coverage.
+- RustChunk relevance: Useful if RustChunk imports GLSL shader packs directly.
+- Decision: adaptable; reference; GLSL-lexer
+- 1.20.1 implications: 1.20.1 packs may depend on legacy GLSL versions and vendor extensions.
+- Follow-up checks: Test numeric edge cases, comments, escapes, line directives, malformed exponents and non-ASCII identifiers.
+- RustChunk implementation mapping: Optional GLSL lexer if Naga frontend is selected.
+- Evidence required before adoption: Lexer fuzzing and corpus token/span snapshots.
+- Completion state: COMPLETE — 306 logical lines through EOF; pinned SHA and 11,660-byte size match; inspected only.
+
+### 3182. `third_party/naga/src/front/glsl/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 2b6c278d89d5d5cabfd604686d0543fbeb19a75d
+- Size: 7745 bytes
+- Coverage: 1–248; EOF.
+- Purpose: Public GLSL frontend API, options, version/profile selection and parse orchestration.
+- Dependencies / cross-references: GLSL lexer/parser/context/errors, Naga module/entry point and validation capabilities.
+- Implementation / logic: Configures shader stage/version, parses source and returns Naga IR or frontend diagnostics.
+- Findings: Supported GLSL versions/extensions are explicit and do not guarantee support for every Minecraft shader-pack dialect.
+- RustChunk relevance: Useful frontend entry point if RustChunk needs GLSL shader import.
+- Decision: adaptable; reference; GLSL-frontend-specific
+- 1.20.1 implications: Pin a version compatible with shader packs used alongside Minecraft 1.20.1 and validate extension support.
+- Follow-up checks: Parse a representative shader-pack corpus across vertex/fragment/compute stages and legacy versions.
+- RustChunk implementation mapping: Optional Naga GLSL frontend in shader import pipeline.
+- Evidence required before adoption: Corpus parse+validate tests and target backend compile tests.
+- Completion state: COMPLETE — 248 logical lines through EOF; pinned SHA and 7,745-byte size match; not compiled.
+
+### 3183. `third_party/naga/src/front/glsl/offset.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1a2d909be1cd1db151d230bf51909a7cb0ba585d
+- Size: 7004 bytes
+- Coverage: 1–190; EOF.
+- Purpose: Calculates GLSL std140/std430 memory layout, member offsets, alignment and array/matrix stride.
+- Dependencies / cross-references: GLSL layout qualifiers, Naga TypeInner, scalar/vector/matrix/array/struct types.
+- Implementation / logic: Recursively computes alignment/size and builds explicit member/array/matrix layout metadata.
+- Findings: Row-major matrix layout and unsupported layout combinations require explicit rejection or validation; silent fallback would corrupt uniform/storage data.
+- RustChunk relevance: Important for shader uniform/storage buffer compatibility across GLSL shader packs.
+- Decision: adaptable; reference; buffer-layout-critical
+- 1.20.1 implications: Use exact std140/std430 rules for 1.20.1 shader packs and keep uniform/storage layouts distinct.
+- Follow-up checks: Test vec3 padding, nested structs, arrays, matrices, row-major qualifiers and overflow boundaries against driver reflection.
+- RustChunk implementation mapping: RustChunk shader uniform/storage layout calculator if Naga is adopted.
+- Evidence required before adoption: Compare calculated offsets/strides with GL/Vulkan reflection and known layout fixtures.
+- Completion state: COMPLETE — 190 logical lines through EOF; pinned SHA and 7,004-byte size match; inspected only.
+
+### 3184. `third_party/naga/src/front/glsl/parser.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 959a9b8e60d57203a2fc5d778d6b4682e604ac1e
+- Size: 16222 bytes
+- Coverage: 1–400, 401–446; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Implements the main GLSL parser for translation units, declarations and statements.
+- Dependencies / cross-references: Lexer/token stream, AST, declarations/expressions/functions parsers, context and error types.
+- Implementation / logic: Consumes tokens, manages parser state/scopes and dispatches grammar productions into AST/context lowering.
+- Findings: Grammar support is intentionally bounded by Naga's GLSL profile; unsupported constructs need precise errors rather than silent acceptance.
+- RustChunk relevance: Useful if RustChunk needs direct GLSL shader-pack import.
+- Decision: adaptable; reference; parser
+- 1.20.1 implications: Test against the GLSL dialects and extension directives actually used by 1.20.1 modpacks.
+- Follow-up checks: Fuzz nested expressions/statements, malformed declarations, version directives and recovery after parse errors.
+- RustChunk implementation mapping: Optional GLSL parser frontend.
+- Evidence required before adoption: Parser corpus tests, fuzzing and source-span verification.
+- Completion state: COMPLETE — 446 logical lines through EOF in 400/46 ranges; pinned SHA and 16,222-byte size match; not compiled.
+
+### 3185. `third_party/naga/src/front/glsl/parser/declarations.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e3cb321c94426838470a212e2102cbadebebc0cc
+- Size: 26483 bytes
+- Coverage: 1–400, 401–684; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Parses GLSL declarations, qualifiers, layout attributes, structs, interfaces and variables.
+- Dependencies / cross-references: GLSL AST/parser, type constructors, storage/interpolation qualifiers and context symbol table.
+- Implementation / logic: Builds type/variable declarations, applies layout/binding/access qualifiers and inserts declarations into the frontend context.
+- Findings: Unsupported qualifier/layout combinations and extension-specific declarations must be rejected; layout defaults can affect GPU memory correctness.
+- RustChunk relevance: Relevant to shader packs with UBO/SSBO/image declarations and modded resources.
+- Decision: adaptable; reference; declaration-lowering
+- 1.20.1 implications: Match GLSL 1.20.1 shader-pack dialects and ensure descriptor/binding semantics are preserved.
+- Follow-up checks: Test std140/std430, binding/location, readonly/writeonly, interface blocks, structs and duplicate declarations.
+- RustChunk implementation mapping: Optional GLSL declaration lowering layer.
+- Evidence required before adoption: Parser fixtures and GL/Vulkan reflection comparison.
+- Completion state: COMPLETE — 684 logical lines through EOF in 400/284 ranges; pinned SHA and 26,483-byte size match; not compiled.
+
+### 3186. `third_party/naga/src/front/glsl/parser/expressions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8fdb989d6d292c33ee19b974c2cc277e054368fd
+- Size: 21027 bytes
+- Coverage: 1–400, 401–568; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Parses GLSL expressions with precedence, constructors, assignments, ternaries, calls and access chains.
+- Dependencies / cross-references: Lexer/parser, AST expression nodes, function overload resolution and context lowering.
+- Implementation / logic: Uses precedence-aware parsing and produces AST expressions for unary/binary/conditional/index/member/swizzle/call operations.
+- Findings: Operator semantics and associativity are critical; malformed/ambiguous expressions must not be accepted with altered precedence.
+- RustChunk relevance: Relevant for importing real GLSL shader packs.
+- Decision: adaptable; reference; expression-semantics-sensitive
+- 1.20.1 implications: Verify GLSL operator precedence and assignment behavior against 1.20.1 pack shaders.
+- Follow-up checks: Differentially test precedence, short-circuit, ternary, comma, increment/decrement and compound assignment expressions.
+- RustChunk implementation mapping: Optional GLSL expression parser.
+- Evidence required before adoption: Parser fixtures plus Naga validation and shader output parity.
+- Completion state: COMPLETE — 568 logical lines through EOF in 400/168 ranges; pinned SHA and 21,027-byte size match; not compiled.
+
+### 3187. `third_party/naga/src/front/glsl/parser/functions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 441e99130a0ba9e4a0ac0b86e6dd5cf40f55a5d7
+- Size: 25710 bytes
+- Coverage: 1–400, 401–661; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Parses GLSL function prototypes/definitions, compound statements, loops, branches and switch cases.
+- Dependencies / cross-references: GLSL parser/AST, context scopes, function overload resolution and Naga control-flow IR.
+- Implementation / logic: Builds function bodies and nested control flow, tracks loop/switch terminators and parses parameter qualifiers.
+- Findings: Control-flow parsing must preserve break/continue/return and switch fallthrough semantics; unsupported fallthrough paths can limit backend output.
+- RustChunk relevance: Relevant for shader-pack function and control-flow compatibility.
+- Decision: adaptable; reference; function-control-flow
+- 1.20.1 implications: Test GLSL control flow from the selected 1.20.1 shader packs; do not assume every valid GLSL switch maps to all backends.
+- Follow-up checks: Test nested loops/switches, break/continue, early return, do/while and out/inout parameters.
+- RustChunk implementation mapping: Optional GLSL function/control-flow parser.
+- Evidence required before adoption: Differential parse/validate tests and backend output comparison.
+- Completion state: COMPLETE — 661 logical lines through EOF in 400/261 ranges; pinned SHA and 25,710-byte size match; not compiled.
+
+### 3188. `third_party/naga/src/front/glsl/parser/types.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1499845a8620f9e494789cd9b37342eb36d4e2c0
+- Size: 17163 bytes
+- Coverage: 1–400, 401–456; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Parses GLSL type names, scalar/vector/matrix/image/sampler and array type constructors.
+- Dependencies / cross-references: GLSL token/type grammar, Naga TypeInner, image classes and type arena.
+- Implementation / logic: Maps built-in GLSL type spellings and dimensions into Naga types, including extension-specific numeric types.
+- Findings: Image format and extension types require qualifier/profile context; placeholder defaults must be finalized by declarations.
+- RustChunk relevance: Relevant to GLSL shader-pack type import.
+- Decision: adaptable; reference; GLSL-type-compatibility
+- 1.20.1 implications: Use only with exact supported GLSL version and image/storage qualifier handling.
+- Follow-up checks: Test every scalar/vector/matrix/image/sampler spelling and invalid dimension/format combinations.
+- RustChunk implementation mapping: Optional GLSL type parser.
+- Evidence required before adoption: Exhaustive type-name fixtures and Naga validator tests.
+- Completion state: COMPLETE — 456 logical lines through EOF in 400/56 ranges; pinned SHA and 17,163-byte size match; not compiled.
+
+### 3189. `third_party/naga/src/front/glsl/parser_tests.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 6fdd1e39715df030b32db43599e7f8d1feaa52a9
+- Size: 18556 bytes
+- Coverage: 1–400, 401–800, 801–862; consecutive; EOF; 1201–1600 confirmed empty.
+- Purpose: Contains GLSL parser/frontend regression fixtures and unit tests.
+- Dependencies / cross-references: GLSL lexer/parser/context, expected Naga IR and diagnostic assertions.
+- Implementation / logic: Exercises declarations, expressions, types, builtins, control flow and parser error cases.
+- Findings: Tests are evidence of intended behavior only; they were inspected but not executed in this audit.
+- RustChunk relevance: Useful as a future regression-test source when integrating Naga's GLSL frontend.
+- Decision: adaptable; reference; test-suite
+- 1.20.1 implications: Run the upstream test suite only after selecting the exact Naga revision/toolchain; add Minecraft shader-pack fixtures.
+- Follow-up checks: Execute all parser tests plus real shader-pack corpus on the chosen host/Android build.
+- RustChunk implementation mapping: RustChunk GLSL frontend regression suite.
+- Evidence required before adoption: Passing CI tests and shader-pack parse/compile fixtures.
+- Completion state: COMPLETE — 862 logical lines through EOF in two 400-line chunks plus 62 lines; pinned SHA and 18,556-byte size match; tests not run.
+
+### 3190. `third_party/naga/src/front/glsl/token.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 78c23c56c29a0cb170755b967dca1043495aac68
+- Size: 2379 bytes
+- Coverage: 1–139; EOF.
+- Purpose: Defines GLSL token kinds and token value/span structures.
+- Dependencies / cross-references: GLSL lexer and parser.
+- Implementation / logic: Enumerates identifiers, numeric literals, operators, punctuation and keyword tokens.
+- Findings: Token enum completeness must match lexer/parser version and extension grammar.
+- RustChunk relevance: Useful only as part of a pinned GLSL frontend.
+- Decision: adaptable; reference; lexer-token-model
+- 1.20.1 implications: Keep token kinds synchronized with supported GLSL versions and extensions.
+- Follow-up checks: Exhaustive tokenization tests and unreachable token match checks.
+- RustChunk implementation mapping: Optional GLSL lexer/parser token model.
+- Evidence required before adoption: Compile-time exhaustive matches and lexer corpus tests.
+- Completion state: COMPLETE — 139 logical lines through EOF; pinned SHA and 2,379-byte size match; inspected only.
+
+### 3191. `third_party/naga/src/front/glsl/types.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: dffdf96e6ddf047d6067b55de3418598e5c3fa15
+- Size: 12845 bytes
+- Coverage: 1–372; EOF.
+- Purpose: Defines GLSL frontend type descriptors for images, samplers and source-level types.
+- Dependencies / cross-references: GLSL parser/type constructors, Naga scalar/vector/matrix/image types and storage formats.
+- Implementation / logic: Stores source-language type information and maps it to Naga TypeInner representations.
+- Findings: Source-level GLSL distinctions may be lost during conversion; preserve format/access/profile metadata until declarations are resolved.
+- RustChunk relevance: Relevant to shader-pack import and resource reflection.
+- Decision: adaptable; reference; GLSL-type-model
+- 1.20.1 implications: Keep source GLSL type qualifiers available until Naga validation and backend binding generation.
+- Follow-up checks: Test image dimensionality, multisample/array/shadow flags, storage format and scalar width.
+- RustChunk implementation mapping: Optional GLSL source type model.
+- Evidence required before adoption: Type mapping fixtures and backend reflection checks.
+- Completion state: COMPLETE — 372 logical lines through EOF; pinned SHA and 12,845-byte size match; inspected only.
+
+### 3192. `third_party/naga/src/front/glsl/variables.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 143af99dda55245c6967fce6aaaf89dec108a926
+- Size: 27368 bytes
+- Coverage: 1–400, 401–718; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Lowers GLSL global/local variables, storage classes, initializers, interface locations and resource bindings.
+- Dependencies / cross-references: GLSL context/type/qualifier data, Naga global/local variables and binding metadata.
+- Implementation / logic: Creates global/local variables, maps storage/interpolation/access qualifiers and handles initializers/entry-point IO.
+- Findings: Binding/location defaults and storage access must match GLSL and target API; silent fallback risks resource mismatch.
+- RustChunk relevance: Important for shader-pack resource and stage-interface compatibility.
+- Decision: adaptable; reference; variable-lowering
+- 1.20.1 implications: Validate UBO/SSBO/image/sampler bindings against the selected 1.20.1 shader pack and target GLES/Vulkan API.
+- Follow-up checks: Test duplicate bindings, explicit locations, interface blocks, readonly/writeonly and initializer restrictions.
+- RustChunk implementation mapping: Optional GLSL variable/resource lowering.
+- Evidence required before adoption: GL/Vulkan reflection comparison and parser/validator tests.
+- Completion state: COMPLETE — 718 logical lines through EOF in 400/318 ranges; pinned SHA and 27,368-byte size match; not compiled.
+
+### 3193. `third_party/naga/src/front/interpolator.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 3fce4339bd409829b7d26690b0d5df5096b33931
+- Size: 2299 bytes
+- Coverage: 1–54; EOF.
+- Purpose: Maps interpolation and sampling qualifiers to Naga interpolation metadata.
+- Dependencies / cross-references: GLSL/WGSL frontends, interpolation/sampling enums and stage IO.
+- Implementation / logic: Converts flat/linear/perspective and centroid/sample qualifiers into Naga interpolation/sampling values.
+- Findings: Cross-language interpolation defaults differ; callers must supply correct source-language defaults.
+- RustChunk relevance: Useful for preserving shader stage IO semantics.
+- Decision: adaptable; reference; interpolation
+- 1.20.1 implications: Check vertex/fragment interface interpolation for Minecraft shader packs.
+- Follow-up checks: Test flat/noperspective/smooth, centroid/sample and integer varying defaults.
+- RustChunk implementation mapping: RustChunk shader stage-interface mapping.
+- Evidence required before adoption: Shader interface validation and GPU render tests.
+- Completion state: COMPLETE — 54 logical lines through EOF; pinned SHA and 2,299-byte size match; inspected only.
+
+### 3194. `third_party/naga/src/front/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ee59429ed359ca7fc3c29c5356ee70cfc879dbf8
+- Size: 13832 bytes
+- Coverage: 1–400; EOF.
+- Purpose: Defines shared frontend context, typifier, symbol table and type-resolution utilities.
+- Dependencies / cross-references: Naga IR arenas, TypeResolution, GlobalCtx and frontend-specific parsers.
+- Implementation / logic: Provides scope-aware symbol lookup, expression type resolution and invalidation helpers shared by GLSL/SPIR-V/WGSL frontends.
+- Findings: Typifier invalidation is caller-sensitive after IR mutation; downstream dependent expressions must be recomputed when source types change.
+- RustChunk relevance: Useful shared frontend architecture if RustChunk adopts Naga parsing/IR.
+- Decision: adaptable; reference; frontend-core
+- 1.20.1 implications: Keep the exact Naga validation/typifier lifecycle and invalidate dependent expressions after mutation.
+- Follow-up checks: Test nested scope shadowing, symbol reuse, expression invalidation and type resolution after IR edits.
+- RustChunk implementation mapping: RustChunk shader frontend context and symbol table if Naga is selected.
+- Evidence required before adoption: Mutation/typifier consistency tests and parser integration tests.
+- Completion state: COMPLETE — 400 logical lines through EOF; pinned SHA and 13,832-byte size match; inspected only.
+
+### 3195. `third_party/naga/src/front/spv/convert.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f44029320da0c37f405ae6d478aedf6ff8ff196b
+- Size: 9753 bytes
+- Coverage: 1–189; EOF.
+- Purpose: Maps SPIR-V opcode/type enums to Naga IR operators and scalar/type metadata.
+- Dependencies / cross-references: SPIR-V opcodes, Naga BinaryOperator/UnaryOperator/ScalarKind and conversion errors.
+- Implementation / logic: Converts arithmetic, comparison, logical and scalar type instructions into Naga equivalents.
+- Findings: `FOrd*` and `FUnord*` comparison opcodes appear to map to the same Naga comparison operator; unordered comparisons have different NaN truth behavior, so this may lose SPIR-V semantics. Several remainder/modulo opcodes also need explicit coverage review.
+- RustChunk relevance: Critical if RustChunk imports SPIR-V shaders; incorrect comparison semantics can cause shader output differences.
+- Decision: rewrite required; reference; SPIR-V-semantic-correctness
+- 1.20.1 implications: Do not rely on this conversion unchanged for shader code that uses unordered float comparisons or remainder variants.
+- Follow-up checks: Add NaN fixtures for every ordered/unordered comparison and signed/unsigned remainder/modulo opcode; compare against SPIR-V reference execution.
+- RustChunk implementation mapping: SPIR-V frontend opcode conversion after semantic fixes.
+- Evidence required before adoption: Differential SPIR-V execution tests and Naga IR validator tests.
+- Completion state: COMPLETE — 189 logical lines through EOF; pinned SHA and 9,753-byte size match; not compiled.
+
+### 3196. `third_party/naga/src/front/spv/error.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c0c525d363285642db8683638b02ace0a3e7a91b
+- Size: 7496 bytes
+- Coverage: 1–198; EOF.
+- Purpose: Defines SPIR-V frontend parse/translation error variants.
+- Dependencies / cross-references: SPIR-V instruction parser, ID/type/constant lookup and source spans.
+- Implementation / logic: Represents malformed modules, invalid operands, unsupported instructions/capabilities and type conversion failures.
+- Findings: Some errors depend on validation being enabled; distinguish parser rejection from post-parse Naga validation.
+- RustChunk relevance: Useful for robust SPIR-V shader import diagnostics.
+- Decision: adaptable; reference; SPIR-V-diagnostics
+- 1.20.1 implications: Keep malformed SPIR-V errors separate from Vulkan runtime/pipeline failures.
+- Follow-up checks: Test invalid IDs, operand counts, unsupported opcodes/capabilities and byte-offset reporting.
+- RustChunk implementation mapping: RustChunk SPIR-V import error model.
+- Evidence required before adoption: Malformed-module corpus and source offset tests.
+- Completion state: COMPLETE — 198 logical lines through EOF; pinned SHA and 7,496-byte size match; inspected only.
+
+### 3197. `third_party/naga/src/front/spv/function.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: df96dc460d9f2493ee06a40d243c174fe16971c9
+- Size: 30523 bytes
+- Coverage: 1–400, 401–800; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Parses SPIR-V functions, entry points, function variables and function-level metadata into Naga IR.
+- Dependencies / cross-references: SPIR-V module/type/constant lookup, Naga Function/EntryPoint, BlockContext and atomic upgrade tracking.
+- Implementation / logic: Creates Naga functions, maps arguments/results/local variables, translates entry-point interfaces and normalizes coordinate/output behavior.
+- Findings: Function and entry-point lowering relies on valid ID/type references and later Naga validation; no execution evidence from static review.
+- RustChunk relevance: Relevant if RustChunk uses SPIR-V as shader input or Vulkan pipeline source.
+- Decision: adaptable; reference; SPIR-V-function-lowering
+- 1.20.1 implications: Pin the SPIR-V frontend version and validate every imported module before backend generation.
+- Follow-up checks: Test entry-point IO, function calls, local variables, return values, builtins and atomic pointer upgrades.
+- RustChunk implementation mapping: Optional SPIR-V frontend function lowering.
+- Evidence required before adoption: SPIR-V Tools validation, Naga validation and Vulkan pipeline tests.
+- Completion state: COMPLETE — 800 logical lines through EOF in two consecutive 400-line chunks; pinned SHA and 30,523-byte size match; not compiled.
+
+### 3198. `third_party/naga/src/front/spv/image.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 591590be024b088f20f1b9320ecc7f33e2c6e5b8
+- Size: 35363 bytes
+- Coverage: 1–400, 401–800, 801–932; consecutive; EOF; 1201–1600 confirmed empty.
+- Purpose: Translates SPIR-V image types, sampled images, image operations and image operands into Naga IR.
+- Dependencies / cross-references: SPIR-V image opcodes, image type/format metadata, Naga ImageClass/StorageFormat and expression arena.
+- Implementation / logic: Resolves dimensions, array/multisample/depth/storage formats, sampling/load/store/query and image operand masks.
+- Findings: SPIR-V image operands/extensions and format capabilities are version-specific; unsupported operand combinations must return explicit errors.
+- RustChunk relevance: Important for importing Minecraft shader modules with textures, storage images and sampler operations.
+- Decision: adaptable; reference; SPIR-V-image-frontend
+- 1.20.1 implications: Validate storage/image format and sampling semantics against the exact Vulkan target and shader pack.
+- Follow-up checks: Test all dimensions, depth, multisample, array, gather, offsets, LOD, storage formats and image operand masks.
+- RustChunk implementation mapping: Optional SPIR-V image frontend.
+- Evidence required before adoption: SPIR-V Tools validation, Naga validation and GPU image read/write tests.
+- Completion state: COMPLETE — 932 logical lines through EOF in two 400-line chunks plus 132 lines; pinned SHA and 35,363-byte size match; not compiled.
+
+### 3199. `third_party/naga/src/front/spv/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: cd3e07b05ae3141e242b19537bdbbed9c0101721
+- Size: 119189 bytes
+- Coverage: 1–400 through 2801–3200 in eight consecutive 400-line chunks, then 3201–3275; EOF; 3601–4000 confirmed empty.
+- Purpose: Top-level SPIR-V module parser and Naga frontend orchestration.
+- Dependencies / cross-references: SPIR-V grammar/instructions, types/constants/decorations/capabilities, function/image/next_block modules, Naga IR and validation.
+- Implementation / logic: Reads SPIR-V words, resolves IDs, constructs module types/constants/globals/entry points/functions and dispatches function block parsing.
+- Findings: Capability and memory model handling are version-sensitive; parser acceptance is not proof that a Vulkan device supports emitted capabilities or semantics.
+- RustChunk relevance: Major candidate for importing SPIR-V and building a Vulkan shader path on Android.
+- Decision: adaptable; reference; SPIR-V-frontend; validation-critical
+- 1.20.1 implications: Require strict capability validation and SPIR-V Tools validation; query Vulkan device extensions before pipeline creation.
+- Follow-up checks: Test SPIR-V 1.0–1.6 modules, malformed IDs, capabilities, decorations, specialization constants, mesh/ray/subgroup and memory model cases.
+- RustChunk implementation mapping: Optional Naga SPIR-V frontend in a Vulkan renderer pipeline.
+- Evidence required before adoption: SPIR-V Tools validation, Naga validation and real Mali Vulkan pipeline creation.
+- Completion state: COMPLETE — 3,275 logical lines through EOF in eight 400-line chunks plus 75 lines; pinned SHA and 119,189-byte size match; not compiled.
+
+### 3200. `third_party/naga/src/front/spv/next_block.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 698ed37e89499a2ae7c34816ac815e84c246e7b1
+- Size: 143572 bytes
+- Coverage: 1–400 through 2401–2800 in seven consecutive 400-line chunks, then 2801–3129; EOF; 3201–3600 confirmed empty.
+- Purpose: Parses SPIR-V basic blocks, structured control flow, barriers, subgroup and atomic instructions into Naga statements.
+- Dependencies / cross-references: SPIR-V opcode stream, block/body maps, merge/loop metadata, expression emitter, Naga Statement/Expression and atomic upgrade.
+- Implementation / logic: Builds nested if/switch/loop bodies, handles merge/continue labels, emits loads/stores/barriers/subgroup operations and atomic statements.
+- Findings: `Op::CopyMemory` discards memory-access flags and lowers to plain load/store; atomic scope/memory-semantics operands are consumed but not represented; `ControlBarrier` ignores memory scope and unsupported execution scopes are only warned/dropped. These can lose synchronization/volatile semantics and require explicit validation.
+- RustChunk relevance: Critical if RustChunk imports SPIR-V shaders or executes Vulkan compute workloads; synchronization correctness affects parallel rendering/compute.
+- Decision: rewrite required; reference; SPIR-V-synchronization-semantics
+- 1.20.1 implications: Do not use unchanged for concurrent GPU workloads until memory scopes, semantics and CopyMemory flags are preserved or proven safely representable by Naga IR.
+- Follow-up checks: Create SPIR-V fixtures for volatile/copy memory, acquire/release, device/workgroup/subgroup scopes, atomic ordering and unsupported barrier scopes; compare execution.
+- RustChunk implementation mapping: SPIR-V block parser after synchronization semantic review/fixes.
+- Evidence required before adoption: SPIR-V Tools validation and Vulkan GPU concurrency/readback tests.
+- Completion state: COMPLETE — 3,129 logical lines through EOF in seven 400-line chunks plus 329 lines; pinned SHA and 143,572-byte size match; not compiled.
+
+## Checkpoint 3176–3200 — COMPLETE
+
+- 25 source files inspected one at a time from the pinned Starling snapshot after excluding all 3,175 prior Index paths.
+- All 25 source blob SHAs and byte sizes match the complete pinned tree (5,749 entries; untruncated). Canonical logical line counts and complete EOF coverage are recorded.
+- Long files were read in consecutive, gap-free ranges no larger than 400 lines: 3177 (2,913), 3178 (1,600), 3180 (1,713), 3185 (684), 3186 (568), 3187 (661), 3189 (862), 3192 (718), 3197 (800), 3198 (932), 3199 (3,275) and 3200 (3,129).
+- Every new entry has exactly 15 required fields. Major static concerns: GLSL image-atomic return value is a non-atomic pre-load; SPIR-V ordered/unordered float comparisons appear conflated; SPIR-V block lowering drops memory-access/synchronization operands. These are not reproduced by tests.
+- No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation was run. No RustChunk application source was changed.

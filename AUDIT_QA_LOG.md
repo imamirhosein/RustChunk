@@ -2045,3 +2045,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Static concerns: SPIR-V Writer option updates may omit several settings on reuse; reclaimable Vec capacity does not shrink as documented; ShaderError::source may skip the wrapped error; Upgrades::is_empty ignores field set. None was reproduced by tests.
 - No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation; no application source changes.
 - Stage 3001–3200 is 175/200 complete. Continue 3176–3200 under the same explicit authorization, then report and STOP at 3200.
+
+
+## Checkpoint QA 3176–3200 — COMPLETE — 2026-11-24
+
+- Re-fetched the complete pinned recursive tree: 5,749 entries, `truncated=false`. Recomputed candidates after excluding all 3,175 prior Index paths; the next 25 strict lexical paths match Ledger entries 3176–3200 exactly and are unique.
+- Verified all 25 source blob SHAs and byte sizes against the pinned tree. Complete EOF coverage and consecutive ranges were recorded for every long file; no range exceeded 400 lines.
+- Verified 25 Ledger headings, exactly 15 required fields per record, Index numbering through 3,200, global path uniqueness and new Ledger/Index path/Decision alignment.
+- Stage 3001–3200 closeout: all 200 entries and all four 50-file sections are complete. Static findings include GLSL image atomic old-value mismatch, SPIR-V unordered comparison semantic loss and SPIR-V synchronization/memory-access operand loss. These require targeted regression tests before adopting affected frontend paths.
+- No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation; no application source changes. No backup beyond the immutable 3,000-entry backup was created.
+- Exceptional user authorization 3101–3200 is complete/consumed. **STOP at 3200. Entries 3201+ require new explicit authorization.**
