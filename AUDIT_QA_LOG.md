@@ -2016,3 +2016,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Independent structural/provenance reconciliation found 100 Ledger headings (3001–3100), exactly 15 required fields per record, 3,100 sequential unique Index paths, zero Ledger/Index path or Decision mismatches, and zero pinned-tree SHA/byte-size mismatches for the 100 new records. The pinned recursive tree is complete (5,749 entries; not truncated).
 - The Ledger and Index opening summaries still described intermediate states. Their status text was corrected to the already committed 100/200 stage state, both closed 50-file sections and exhausted 3001–3100 authorization. No source file, source finding, record number, Index path or Decision was changed.
 - This was a documentation/state reconciliation, not a repeated source-file review. Earlier checkpoint logs record complete EOF inspections; this reconciliation did not repeat those content reads. No tests, builds, benchmarks, APK/device, Forge/Minecraft, multiplayer or Aternos validation was run.
+
+
+## Checkpoint QA 3101–3125 — COMPLETE — 2026-11-24
+
+- Re-fetched the complete pinned recursive tree: 5,749 entries, `truncated=false`. Recomputed candidates after excluding all 3,100 prior Index paths; the next 25 strict lexical paths match entries 3101–3125 exactly and are unique.
+- Verified all 25 source blob SHAs and byte sizes against the pinned tree. Complete EOF coverage and consecutive ranges were recorded for every long file; no range exceeded 400 lines.
+- Verified 25 Ledger headings, exactly 15 required fields per record, Index numbering through 3,125, global path uniqueness and new Ledger/Index path/Decision alignment.
+- Static concerns in arena span/bound bookkeeping and DOT function-call handling were not reproduced. HLSL entries are not part of the Android GLES baseline. No tests/builds/benchmarks/APK/device/Forge/Minecraft/server/Aternos validation; no application source changes.
+- Stage 3001–3200 is 125/200 complete. Continue 3126–3150, report at 3150, then continue 3151–3200 under the same explicit grant.

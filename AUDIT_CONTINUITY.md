@@ -6,13 +6,14 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3100**.
-- Stages **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (100/200)**.
-- Sections **3001–3050** and **3051–3100 are CLOSED (50/50 each)**. All four checkpoints 3001–3025, 3026–3050, 3051–3075 and 3076–3100 are committed and read-back verified.
-- Exceptional authorization **3001–3100 is EXHAUSTED (100/100)**. **STOP at 3100**; entry 3101+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **100 records (3001–3100)**, each with exactly 15 required fields. Index: **3,100 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Completed entries: **1–3125**.
+- Stages **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (125/200)**.
+- Sections **3001–3050** and **3051–3100** are CLOSED (50/50). Section **3101–3150** is IN PROGRESS (25/50); **3151–3200** is covered by the same explicit grant.
+- Checkpoints through **3101–3125** are committed and read-back verified.
+- Exceptional authorization **3101–3200 is ACTIVE (25/100 completed)**. Continue 3126–3150 without another permission request; report at 3150 and continue 3151–3200 under this grant. **STOP at 3200**.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **125 records (3001–3125)**, exactly 15 fields each. Index: **3,125 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3100 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned source. Global QA remains complete for entries 1–3000.
+- Entries 3001–3125 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA remains complete for entries 1–3000.
 - No RustChunk application source changed. Embedded tests were inspected only, not executed. No builds, benchmarks, APK/device, Forge/Minecraft, multiplayer or Aternos validation.
 
 
@@ -909,3 +910,10 @@ Keep progress updates extremely short. Report only the current range and the nex
 
 - The 3001–3100 source audit was already complete and committed before this continuation request. Independent structural/provenance checks reconfirmed 100 Ledger records with exactly 15 fields each, Index coverage through 3,100 with unique paths, complete pinned-tree availability, and matching source SHA/byte-size metadata.
 - Corrected stale opening status text in `AUDIT_LEDGER_3001_3200.md` and `AUDIT_INDEX.md`. The current resume point remains 3,100; authorization 3001–3100 is exhausted. No new source records or code changes were made, and no tests/builds/benchmarks/runtime validation were performed.
+
+
+## Checkpoint 3101–3125 — COMPLETE — 2026-11-24
+
+- 25 files re-reviewed from entry 3101, one at a time, through EOF; long files used consecutive ranges no larger than 400 lines.
+- Exact next-25 lexical selection, source SHA/size, 15-field count, Index uniqueness and Ledger/Index alignment passed.
+- Continue at 3126. Explicit authorization covers 3101–3200; report after 3150 and continue 3151–3200 without another permission request. Stop at 3200.

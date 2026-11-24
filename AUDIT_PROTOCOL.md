@@ -141,15 +141,16 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - The next backup is due only after entries **3001–4000** are authorized, completed, committed and globally verified.
 - Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-24; exceptional authorization 3001–3100 exhausted)
+## 12. Current authoritative resume state (2026-11-24; exceptional authorization 3101–3200 active)
 
 - Repository `imamirhosein/RustChunk`; audit branch `starling-1.20.1-port-audit`. Do not modify `main` or existing backup refs.
-- Completed entries **1–3100**. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (100/200)**.
-- Sections **3001–3050** and **3051–3100** are CLOSED (50/50 each). Checkpoints 3001–3025, 3026–3050, 3051–3075 and 3076–3100 are committed and read-back verified.
-- Exceptional authorization **3001–3100 is EXHAUSTED (100/100)**. **STOP at 3100**; entry 3101+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **100 records (3001–3100)** with exactly 15 fields each. Index: **3,100 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
+- Completed entries **1–3125**. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (125/200)**.
+- Sections **3001–3050** and **3051–3100** are CLOSED (50/50). Section **3101–3150** is IN PROGRESS (25/50); section **3151–3200** is covered by the same explicit authorization.
+- Checkpoints through **3101–3125** are complete and read-back verified.
+- Exceptional authorization **3101–3200 is ACTIVE (25/100 completed)**. Continue 3126–3150 without another permission request; report at 3150 and continue 3151–3200 under this grant. **STOP at 3200**.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **125 records (3001–3125)** with exactly 15 fields each. Index: **3,125 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3100 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global structural/provenance QA for entries 1–3000 remains complete.
+- Entries 3001–3125 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA for entries 1–3000 remains complete.
 - The 3,000-entry snapshot remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. Next backup only after entries 3001–4000 are completed and globally verified.
 - No application source changes, tests/builds/benchmarks/APK/device/renderer/Minecraft/Forge/server/Aternos validation.
 
@@ -938,3 +939,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Entries 3076–3100 are complete and read-back verified. Active Ledger: 100 records (3001–3100); Index: 3,100 unique sequential paths.
 - Sections 3001–3050 and 3051–3100 are closed. The one-time exceptional grant 3001–3100 is exhausted.
 - **STOP at 3100**. Do not inspect or register 3101+ until fresh explicit authorization is granted.
+
+
+## 61. Checkpoint 3101–3125 — COMPLETE — 2026-11-24
+
+- User explicitly authorized **3101–3200**. This grant covers both 50-file sections 3101–3150 and 3151–3200; do not ask again at 3150.
+- Entries 3101–3125 were re-reviewed from the beginning, one source file at a time and through EOF. Long files were read in consecutive, gap-free ranges of at most 400 lines.
+- The checkpoint contains exactly 25 new unique paths selected from the complete pinned tree after excluding prior Index paths. SHA, byte size, canonical line count and EOF coverage are recorded for every entry.
+- All six audit documents are updated together in one checkpoint transaction; durability requires successful GitHub read-back and branch-head verification.
+- Continue 3126–3150, commit and verify the next 25, report at 3150, then continue 3151–3200 under the existing grant. **STOP at 3200**.

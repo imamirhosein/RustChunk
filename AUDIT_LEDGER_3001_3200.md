@@ -1720,3 +1720,436 @@
 - RustChunk implementation mapping: RustChunk dev-only biome source codec parity harness.
 - Evidence required before adoption: 1.20.1 codec fixtures, Forge registry integration and deterministic sample comparisons.
 - Completion state: COMPLETE — 47 logical lines through EOF; pinned SHA and 4293-byte size match; oracle inspected, not executed.
+
+### 3101. `native-mods/wrench/mixins/wrench/click.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bb369892710f30646c0d4b99c06f68dc6f7d3f4a
+- Size: 301 bytes
+- Coverage: 1–7; EOF.
+- Purpose: Wrench click-hook glue.
+- Dependencies / cross-references: Wrench mixin declarations and native callback API.
+- Implementation / logic: Forwards click handling to the Wrench native implementation.
+- Findings: Starling native-mod hook, not Forge item/event registration.
+- RustChunk relevance: Only the general dispatch pattern is relevant.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Implement any similar behavior through Forge 47.x APIs, not this hook.
+- Follow-up checks: Test event order, cancellation and server authority if recreated.
+- RustChunk implementation mapping: No direct mapping; optional input-event adapter.
+- Evidence required before adoption: Forge 1.20.1 event integration tests.
+- Completion state: COMPLETE — 7 lines through EOF; pinned SHA/301-byte size match; inspected only.
+
+### 3102. `native-mods/wrench/mixins/wrench/list.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 485ef8f278cd26edfb915d5ed6477f5128d14228
+- Size: 406 bytes
+- Coverage: 1–10; EOF.
+- Purpose: Central Wrench mixin registration list.
+- Dependencies / cross-references: Wrench mixin modules and Starling bootstrap.
+- Implementation / logic: Registers the feature's mixin hooks.
+- Findings: Horizon-specific wiring, not Forge mod metadata.
+- RustChunk relevance: Only centralized registration is a generic pattern.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Use the matching Forge/mixin bootstrap for 1.20.1.
+- Follow-up checks: Verify mixin config and conflict behavior on Forge.
+- RustChunk implementation mapping: No direct mapping.
+- Evidence required before adoption: Forge 47.x launch with exact mixin configuration.
+- Completion state: COMPLETE — 10 lines through EOF; pinned SHA/406-byte size match; inspected only.
+
+### 3103. `native-mods/wrench/mixins/wrench/native.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 73d1a59752c9e38372c9cc2ad7f1fcd9353589ca
+- Size: 8415 bytes
+- Coverage: 1–210; EOF.
+- Purpose: Server-side Wrench turn/take-apart interaction.
+- Dependencies / cross-references: Starling world/player/block APIs, runtime rules and mixin hooks.
+- Implementation / logic: Checks interaction context and mutates supported block states through the authoritative world path.
+- Findings: Coupled to Starling native-mod APIs; rejects unsupported remote contexts; not a Forge feature implementation.
+- RustChunk relevance: Server-authoritative mutation pattern is conceptually useful; concrete behavior is not portable.
+- Decision: unnecessary; reference; server-authoritative; version-specific
+- 1.20.1 implications: Forge implementation must use server-side events, protection checks and 1.20.1 block APIs.
+- Follow-up checks: Test multiplayer, protections, reach, borders, unloaded chunks, drops and cancellation.
+- RustChunk implementation mapping: Separate Forge-side feature or explicit server API; not renderer core.
+- Evidence required before adoption: Dedicated-server Forge 47.x tests with protections and multiplayer.
+- Completion state: COMPLETE — 210 lines through EOF; pinned SHA/8,415-byte size match; no tests run.
+
+### 3104. `native-mods/wrench/mixins/wrench/runtime.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 45ecadef8071b9f4520bb5b9773378f1ad136840
+- Size: 11897 bytes
+- Coverage: 1–335; EOF.
+- Purpose: Wrench block-state rotation and dismantling rules.
+- Dependencies / cross-references: Minecraft block-state properties, directions and Wrench logic.
+- Implementation / logic: Maps block properties/state variants to supported turns and take-apart operations.
+- Findings: Rules are upstream-version and block-family specific, not a general Forge transform engine.
+- RustChunk relevance: Could inspire a data-driven rule registry only.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: 1.20.1 and modded blocks require registry-aware state/property handling.
+- Follow-up checks: Test directional, multipart, inventory and block-entity cases.
+- RustChunk implementation mapping: No direct mapping; optional separate gameplay integration.
+- Evidence required before adoption: Forge block-state fixture matrix and server behavior tests.
+- Completion state: COMPLETE — 335 lines through EOF; pinned SHA/11,897-byte size match; inspected only.
+
+### 3105. `native-mods/wrench/mixins/wrench/settings.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 54f314f44b2e285d2aff8f54e7d455d112315138
+- Size: 274 bytes
+- Coverage: 1–6; EOF.
+- Purpose: Wrench feature settings bridge.
+- Dependencies / cross-references: Wrench mixin and upstream settings/configuration types.
+- Implementation / logic: Small feature-scoped configuration declaration.
+- Findings: Does not define launcher or renderer preferences.
+- RustChunk relevance: No direct value beyond feature-scoped configuration separation.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: RustChunk settings need an independent persisted schema.
+- Follow-up checks: Test defaults, migration and client/server authority if recreated.
+- RustChunk implementation mapping: No direct mapping.
+- Evidence required before adoption: Versioned schema and migration tests.
+- Completion state: COMPLETE — 6 lines through EOF; pinned SHA/274-byte size match; inspected only.
+
+### 3106. `native-mods/wrench/mixins/wrench/use.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ad9dde8244d48878a2609d096b16ecc97333b319
+- Size: 470 bytes
+- Coverage: 1–9; EOF.
+- Purpose: Wrench use-interaction mixin hook.
+- Dependencies / cross-references: Wrench mixins and Starling interaction callbacks.
+- Implementation / logic: Thin hook forwards use interaction to Wrench behavior.
+- Findings: Starling-specific lifecycle; not Forge's item-use event ordering.
+- RustChunk relevance: Only separation of hook and behavior is reusable.
+- Decision: unnecessary; reference; version-specific
+- 1.20.1 implications: Implement through Forge 1.20.1 interaction APIs if needed.
+- Follow-up checks: Test hand/offhand, cancellation, event order and remote server behavior.
+- RustChunk implementation mapping: No direct mapping; optional Forge feature adapter.
+- Evidence required before adoption: Dedicated-server Forge 47.x interaction tests.
+- Completion state: COMPLETE — 9 lines through EOF; pinned SHA/470-byte size match; inspected only.
+
+### 3107. `third_party/libmimalloc-sys/build.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 9206d04e17ab49cc98d5fc6fdd799aa10d0ac3be
+- Size: 5125 bytes
+- Coverage: 1–138; EOF.
+- Purpose: Builds and configures bundled mimalloc native allocator.
+- Dependencies / cross-references: Cargo features, cc, C sources, target OS/architecture and TLS model.
+- Implementation / logic: Selects allocator options and target-specific C/link directives, including Android handling.
+- Findings: Static allocator override/TLS affect process-wide allocation and may interact with embedded JVM/native libraries.
+- RustChunk relevance: Only consider after profiling; allocator choice is not a direct FPS fix.
+- Decision: adaptable; reference; platform-sensitive; allocator-sensitive
+- 1.20.1 implications: Validate Android ARM64 NDK, TLS, shared-library loading and JVM coexistence.
+- Follow-up checks: Benchmark allocation-heavy paths; test JNI, symbol collisions, OOM and shutdown.
+- RustChunk implementation mapping: Optional allocator backend behind a build feature.
+- Evidence required before adoption: Reproducible Android build, stress tests and JVM/JNI compatibility evidence.
+- Completion state: COMPLETE — 138 lines through EOF; pinned SHA/5,125-byte size match; not built.
+
+### 3108. `third_party/libmimalloc-sys/src/extended.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 90a767fcd476f9c3190c26923308772f8ee3c09d
+- Size: 45143 bytes
+- Coverage: 1–400, 401–800, 801–1200; EOF; 1201–1600 empty.
+- Purpose: Extended mimalloc v3 C APIs.
+- Dependencies / cross-references: mimalloc ABI, core FFI, cfg gates and raw pointers.
+- Implementation / logic: Declares unsafe heap, arena, option, callback and statistics interfaces.
+- Findings: Broad unsafe FFI; ABI/version and caller lifetime/thread-safety obligations are critical.
+- RustChunk relevance: Relevant only if mimalloc is deliberately adopted; not a chunk engine.
+- Decision: adaptable; reference; unsafe-ffi; allocator-sensitive
+- 1.20.1 implications: Hide behind a narrow safe Rust facade and verify exact Android ABI/version.
+- Follow-up checks: Audit pointer ownership, callbacks, threading, symbols and failure paths.
+- RustChunk implementation mapping: Optional allocator subsystem; no game-engine mapping.
+- Evidence required before adoption: Header/binding ABI comparison and Android ARM64 allocator stress tests.
+- Completion state: COMPLETE — 1,200 lines in three consecutive 400-line chunks through EOF; pinned SHA/45,143-byte size match; not compiled.
+
+### 3109. `third_party/libmimalloc-sys/src/lib.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ebd069b44110e06c877c7f48c6298310c4572983
+- Size: 5610 bytes
+- Coverage: 1–139; EOF.
+- Purpose: Base Rust mimalloc FFI crate surface.
+- Dependencies / cross-references: C ABI, allocator symbols, feature flags and extended module.
+- Implementation / logic: Exposes no_std-compatible bindings and conditional allocator override symbols.
+- Findings: Global override can affect JVM/native process allocations; bindings do not prove safety or speed.
+- RustChunk relevance: Optional allocator dependency only after measured evidence.
+- Decision: adaptable; reference; allocator-sensitive
+- 1.20.1 implications: Do not make it default until shared-process/JVM and linker behavior is validated.
+- Follow-up checks: Test symbol resolution, threads, JNI allocations and memory pressure.
+- RustChunk implementation mapping: Optional Rust allocator facade behind feature gate.
+- Evidence required before adoption: Target-device profiling and JVM/JNI integration tests.
+- Completion state: COMPLETE — 139 lines through EOF; pinned SHA/5,610-byte size match; not built.
+
+### 3110. `third_party/naga/build.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 30af3c964be7a7441c2b6f52dcd8e3f9ec74859d
+- Size: 549 bytes
+- Coverage: 1–12; EOF.
+- Purpose: Declares Naga Cargo cfg aliases.
+- Dependencies / cross-references: Cargo features and cfg_aliases build dependency.
+- Implementation / logic: Maps feature combinations into conditional compilation aliases.
+- Findings: Tied to this Naga manifest/revision; copying alone can break cfg consistency.
+- RustChunk relevance: Useful build-configuration reference.
+- Decision: adaptable; reference; build-configuration; version-specific
+- 1.20.1 implications: Pin Naga and preserve its feature graph/Android cfg matrix.
+- Follow-up checks: Compare manifest features and target-specific modules.
+- RustChunk implementation mapping: RustChunk graphics dependency build configuration.
+- Evidence required before adoption: Reproducible Android ARM64 Cargo build.
+- Completion state: COMPLETE — 12 lines through EOF; pinned SHA/549-byte size match; not built.
+
+### 3111. `third_party/naga/src/arena/handle.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 5b9c2441e449c95d2c6f0ba577128c40ec1232ae
+- Size: 3241 bytes
+- Coverage: 1–121; EOF.
+- Purpose: Defines typed compact arena handles.
+- Dependencies / cross-references: NonMaxU32, typed generics, arena and serde features.
+- Implementation / logic: Wraps compact indices in typed handles with indexing/debug/serialization helpers.
+- Findings: Handle validity belongs to its source arena; stale handles must not cross arena rebuilds.
+- RustChunk relevance: Useful typed-ID pattern for chunks, meshes and GPU resources.
+- Decision: adaptable; reference; handle-indexing
+- 1.20.1 implications: Use distinct typed IDs and explicit lifecycle/generation boundaries.
+- Follow-up checks: Test stale handles, reset, remapping and index exhaustion.
+- RustChunk implementation mapping: RustChunk typed-ID/arena primitives.
+- Evidence required before adoption: Property tests for invalidation and remapping.
+- Completion state: COMPLETE — 121 lines through EOF; pinned SHA/3,241-byte size match; not tested.
+
+### 3112. `third_party/naga/src/arena/handle_set.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 27f6630ec45be0098127378dc3aa5956534c2f57
+- Size: 3689 bytes
+- Coverage: 1–132; EOF.
+- Purpose: Bitset-backed typed handle set.
+- Dependencies / cross-references: Handle, bitset storage and arena size metadata.
+- Implementation / logic: Supports insertion/removal/contains and iteration over possible handles.
+- Findings: `clear_for_arena` clears members/reserves capacity but leaves the stored iteration bound unchanged; may stale `all_possible` after arena resize. Static suspicion, not reproduced.
+- RustChunk relevance: Compact sets may help resource deduplication after fixing/testing the invariant.
+- Decision: adaptable; reference; correctness-sensitive
+- 1.20.1 implications: Define whether bounds follow a fixed arena or current generation.
+- Follow-up checks: Test clear with larger/smaller arenas and iteration completeness.
+- RustChunk implementation mapping: Potential bitset resource set with explicit arena-generation semantics.
+- Evidence required before adoption: Property tests for resize, clear, insert/remove and iteration.
+- Completion state: COMPLETE — 132 lines through EOF; pinned SHA/3,689-byte size match; suspected issue not reproduced.
+
+### 3113. `third_party/naga/src/arena/handlevec.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a25a82c934ccb75067392cf4ea12cdc2877bbb70
+- Size: 2837 bytes
+- Coverage: 1–106; EOF.
+- Purpose: Typed-handle-indexed vector.
+- Dependencies / cross-references: Handle and Vec arena iteration APIs.
+- Implementation / logic: Wraps vector access/iteration with typed handles.
+- Findings: Ordinary Vec behavior remains; handle-to-arena identity is caller invariant.
+- RustChunk relevance: Useful dense metadata for fixed chunk slots or mesh handles.
+- Decision: adaptable; reference; arena-storage
+- 1.20.1 implications: Use only with guaranteed dense/stable index mapping.
+- Follow-up checks: Test alignment, bounds, retain/clone and arena rebuild.
+- RustChunk implementation mapping: RustChunk dense metadata arrays.
+- Evidence required before adoption: Property tests for index alignment and lifecycle.
+- Completion state: COMPLETE — 106 lines through EOF; pinned SHA/2,837-byte size match; not tested.
+
+### 3114. `third_party/naga/src/arena/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4f1f6b6a3e809d56470f6aa7a3c337d3a0bfe57f
+- Size: 10666 bytes
+- Coverage: 1–342; EOF.
+- Purpose: Typed arena and span-aware storage primitives.
+- Dependencies / cross-references: Handle/index types, Vec storage and source spans.
+- Implementation / logic: Supports append/insert/index/retain/drain and span-aware iteration.
+- Findings: `clear` empties data but appears not to clear parallel span metadata; later inserts may see stale spans. Static suspicion, not reproduced.
+- RustChunk relevance: Potential arena foundation for transient meshes/IR, subject to metadata correctness.
+- Decision: adaptable; reference; correctness-sensitive
+- 1.20.1 implications: Reset semantics must keep data and metadata aligned when chunk slots are reused.
+- Follow-up checks: Test clear-then-append, span lookup/iteration, retain and drain.
+- RustChunk implementation mapping: RustChunk arena with explicit reset/generation invariants.
+- Evidence required before adoption: Unit/property tests for data/span alignment after mutations.
+- Completion state: COMPLETE — 342 lines through EOF; pinned SHA/10,666-byte size match; suspected issue not reproduced.
+
+### 3115. `third_party/naga/src/arena/range.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 64a14c561f0f32f440470ac82288f49764e52330
+- Size: 4208 bytes
+- Coverage: 1–139; EOF.
+- Purpose: Compact typed handle ranges.
+- Dependencies / cross-references: Handle, non-max indices and arena iteration.
+- Implementation / logic: Constructs and iterates handle ranges from bounds or arena sizes.
+- Findings: Boundary construction depends on valid non-max indices and assertions.
+- RustChunk relevance: Useful for contiguous chunk-section/resource batches.
+- Decision: adaptable; reference; range-boundaries
+- 1.20.1 implications: Use checked bounds and explicit inclusive/exclusive semantics.
+- Follow-up checks: Test empty, max-valid, reversed and overflow-adjacent bounds.
+- RustChunk implementation mapping: RustChunk range type for contiguous batches.
+- Evidence required before adoption: Boundary/property tests.
+- Completion state: COMPLETE — 139 lines through EOF; pinned SHA/4,208-byte size match; not tested.
+
+### 3116. `third_party/naga/src/arena/unique_arena.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d66684c7fc3846c559dfb5afaea50e8fb257844f
+- Size: 8299 bytes
+- Coverage: 1–265; EOF.
+- Purpose: Deduplicating arena with span metadata.
+- Dependencies / cross-references: Underlying arena/set, hashing/equality, handles and spans.
+- Implementation / logic: Looks up/inserts unique values and supports replacement/removal.
+- Findings: `replace` inserts then swap-removes while spans are separately stored; value/span association may stale. Static suspicion, not reproduced.
+- RustChunk relevance: Could deduplicate immutable GPU state/descriptors after validation.
+- Decision: adaptable; reference; correctness-sensitive
+- 1.20.1 implications: Do not use replacement for long-lived IDs until metadata relocation is proven.
+- Follow-up checks: Test replacing first/middle/last entries and span lookup after swap removal.
+- RustChunk implementation mapping: Optional unique resource/descriptor arena.
+- Evidence required before adoption: Property tests comparing values, handles and spans.
+- Completion state: COMPLETE — 265 lines through EOF; pinned SHA/8,299-byte size match; suspected issue not reproduced.
+
+### 3117. `third_party/naga/src/back/continue_forward.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e25d9cf3b2225c4421385de432687c5c0db95b44
+- Size: 12801 bytes
+- Coverage: 1–313; EOF.
+- Purpose: Forwards break/continue when switch is lowered to a synthetic loop.
+- Dependencies / cross-references: Naga statement IR and nested loop/switch traversal.
+- Implementation / logic: Tracks control-flow contexts and emits flags/exit actions to preserve intended outer-loop behavior.
+- Findings: Targeted shader backend lowering workaround, not a general game scheduler.
+- RustChunk relevance: Useful only if RustChunk adopts a shader IR needing the same lowering.
+- Decision: adaptable; reference; control-flow-lowering
+- 1.20.1 implications: Keep shader control flow separate from game/chunk scheduling.
+- Follow-up checks: Test nested loops/switches and break/continue combinations against source IR.
+- RustChunk implementation mapping: Optional shader IR lowering utility.
+- Evidence required before adoption: Differential control-flow tests.
+- Completion state: COMPLETE — 313 lines through EOF; pinned SHA/12,801-byte size match; not tested.
+
+### 3118. `third_party/naga/src/back/dot/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4cb3ef817db817d829ab157188042f14dc40312a
+- Size: 34517 bytes
+- Coverage: 1–400, 401–800, 801–897; EOF; 1201–1600 empty.
+- Purpose: Graphviz DOT exporter for Naga module/IR/control flow.
+- Dependencies / cross-references: Naga arenas, module/function validation info and Graphviz.
+- Implementation / logic: Builds statement nodes/edges and expression dependency graphs.
+- Findings: Calls are recorded, but `write_fun` asserts the call list is empty before the following edge-writing loop; function-call statements appear to panic. Not reproduced.
+- RustChunk relevance: Potential dev-only shader/resource graph diagnostics.
+- Decision: adaptable; reference; developer-tooling
+- 1.20.1 implications: Keep diagnostics off Android render hot path and fix/verify call handling before reliance.
+- Follow-up checks: Export a shader with function calls plus nested branch/loop fixtures.
+- RustChunk implementation mapping: Optional developer graph exporter.
+- Evidence required before adoption: Passing call-graph fixture and deterministic DOT snapshots.
+- Completion state: COMPLETE — 897 lines in 400/400/97 chunks through EOF; pinned SHA/34,517-byte size match; not executed.
+
+### 3119. `third_party/naga/src/back/glsl/conv.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ebbc1df99e5c2b995be55669618d7180b14d31a4
+- Size: 8819 bytes
+- Coverage: 1–274; EOF.
+- Purpose: Maps Naga scalar, builtin, storage qualifier, interpolation and image formats to GLSL.
+- Dependencies / cross-references: Naga IR enums, GLSL options and backend errors.
+- Implementation / logic: Small conversion helpers with explicit unsupported/error paths.
+- Findings: Mesh/ray builtins include unimplemented paths; BGRA8 storage format returns unsupported error.
+- RustChunk relevance: Relevant reference for GLES shader conversion, not a full renderer.
+- Decision: adaptable; reference; GLES-sensitive; version-specific
+- 1.20.1 implications: Use a tested GLSL ES profile and explicit feature rejection/fallback.
+- Follow-up checks: Test all scalar widths, builtins, interpolation and storage formats on Mali.
+- RustChunk implementation mapping: Naga GLSL conversion only if compatible revision is selected.
+- Evidence required before adoption: Target Mali shader compile/link corpus.
+- Completion state: COMPLETE — 274 lines through EOF; pinned SHA/8,819-byte size match; not compiled.
+
+### 3120. `third_party/naga/src/back/glsl/features.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 366405c579f41b49e2e27c69bde6920fb67b8f05
+- Size: 30681 bytes
+- Coverage: 1–400, 401–670; EOF; 801–1200 empty.
+- Purpose: Collects required GLSL features, checks version availability and emits extensions.
+- Dependencies / cross-references: Naga IR/type analysis, GLSL options/version and extension rules.
+- Implementation / logic: Scans IO, types, globals, images, subgroup ops and atomics into feature flags.
+- Findings: Profile/extension availability is driver-specific; passing static checks does not guarantee a driver compile.
+- RustChunk relevance: Strong reference for GLES capability negotiation.
+- Decision: adaptable; reference; GLES-sensitive; version-specific
+- 1.20.1 implications: Base capabilities on actual Android GLES extensions, not version labels alone.
+- Follow-up checks: Test storage images, atomics, subgroup, multiview, multisampling, queries and early depth.
+- RustChunk implementation mapping: RustChunk shader capability negotiation/precompile validation.
+- Evidence required before adoption: Device extension enumeration and per-feature shader compile tests.
+- Completion state: COMPLETE — 670 lines in 400/270 chunks through EOF; pinned SHA/30,681-byte size match; not compiled.
+
+### 3121. `third_party/naga/src/back/glsl/keywords.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: aeaec5b03c060e81144120e573c6453a38892261
+- Size: 13745 bytes
+- Coverage: 1–400, 401–502; EOF.
+- Purpose: GLSL 4.6/ES 3.2 reserved keywords and builtin names.
+- Dependencies / cross-references: Naga KeywordSet/RacyLock and cited GLSL specs.
+- Implementation / logic: Stores reserved identifiers and a lazily cached keyword set for name generation.
+- Findings: Keyword corpus is tied to specification revisions; profile/compiler quirks still need validation.
+- RustChunk relevance: Useful for preventing invalid generated shader identifiers.
+- Decision: adaptable; reference; GLSL-version-specific
+- 1.20.1 implications: Align reserved names with emitted GLSL ES profile and RustChunk internals.
+- Follow-up checks: Test builtins, reserved words, case sensitivity and generated identifiers on target compiler.
+- RustChunk implementation mapping: RustChunk shader identifier sanitizer or matching Naga revision.
+- Evidence required before adoption: Automated keyword corpus and target-driver compile tests.
+- Completion state: COMPLETE — 502 lines in 400/102 chunks through EOF; pinned SHA/13,745-byte size match; not compiled.
+
+### 3122. `third_party/naga/src/back/glsl/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d0bf71a336efd4f9e5526aea1b602300f513004e
+- Size: 18520 bytes
+- Coverage: 1–400, 401–505; EOF; 801–1200 empty.
+- Purpose: Defines public GLSL backend API, options, reflection, errors and capabilities.
+- Dependencies / cross-references: Naga backend traits, GLSL conv/features/keywords/writer and validation.
+- Implementation / logic: Exposes writer/config, binding maps, pipeline options, reflection and supported profile metadata.
+- Findings: Documents desktop 330–450 and ES 300/310; advanced capabilities can still be rejected or unimplemented.
+- RustChunk relevance: Strong shader-backend reference; exact revision/profile must match target.
+- Decision: adaptable; reference; GLES-sensitive; version-specific
+- 1.20.1 implications: Select and test a concrete ES profile against Mali GLES 3.2 and required renderer shaders.
+- Follow-up checks: Compile representative shaders and verify resource reflection/bindings.
+- RustChunk implementation mapping: Optional Naga GLSL backend in graphics layer, separate from Forge logic.
+- Evidence required before adoption: Mali-G52 GLES 3.2 compile/link and render parity.
+- Completion state: COMPLETE — 505 lines in 400/105 chunks through EOF; pinned SHA/18,520-byte size match; not compiled.
+
+### 3123. `third_party/naga/src/back/glsl/writer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ff2174eeec88991809c3a625730fe8fa5f188c01
+- Size: 203165 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2400, 2401–2800, 2801–3200, 3201–3600, 3601–4000, 4001–4400, 4401–4634; EOF; 4801–5200 empty.
+- Purpose: Naga GLSL code generator for types, globals, entry points, expressions, statements, images, barriers and reflection.
+- Dependencies / cross-references: Naga IR/validation, GLSL feature/conversion modules, continue forwarding, bounds policies and reflection.
+- Implementation / logic: Writes desktop GLSL/ES; handles resources, varyings, workgroup init, math, image ops, atomics, subgroup and control flow.
+- Findings: Ray-query/ray-pipeline and cooperative operations have unsupported paths; external images unimplemented; F16/64-bit integer literals error; `clamp_to_edge` remains TODO.
+- RustChunk relevance: Highly relevant GLSL backend reference, but not chunk decode/scheduling/meshing or Forge execution.
+- Decision: adaptable; reference; GLES-sensitive; version-specific
+- 1.20.1 implications: Adopt only with pinned Naga/wgpu compatibility and a shader corpus covering Minecraft 1.20.1 renderer needs.
+- Follow-up checks: Compile/link on Mali; exercise image bounds, barriers, atomics, subgroup and unsupported-feature diagnostics.
+- RustChunk implementation mapping: Potential GLSL backend in graphics abstraction; keep Forge/Java compatibility separate.
+- Evidence required before adoption: Target-device shader compile/link/render parity and dependency audit.
+- Completion state: COMPLETE — 4,634 lines in eleven 400-line chunks plus 234 lines through EOF; pinned SHA/203,165-byte size match; not compiled.
+
+### 3124. `third_party/naga/src/back/hlsl/conv.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 6b3abc625882d14319358bcd58c46a60026034fa
+- Size: 9866 bytes
+- Coverage: 1–257; EOF.
+- Purpose: Maps Naga types, builtins, interpolation, atomics and formats to HLSL.
+- Dependencies / cross-references: Naga IR, HLSL errors, type layout and name mapping.
+- Implementation / logic: Converts scalar widths, matrices, storage formats and builtins to HLSL declarations.
+- Findings: The mapping appears to swap `Rg32Uint`/`Rg32Sint` signedness (`int4`/`uint4`); likely issue, not reproduced.
+- RustChunk relevance: Not needed for Android GLES; reference only for future D3D.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Keep out of Android GLES baseline.
+- Follow-up checks: If D3D is ever targeted, verify all storage formats with DXC/UAV tests.
+- RustChunk implementation mapping: No current mapping; optional Windows/D3D backend.
+- Evidence required before adoption: DXC tests for Rg32Uint/Rg32Sint and all format mappings.
+- Completion state: COMPLETE — 257 lines through EOF; pinned SHA/9,866-byte size match; not compiled.
+
+### 3125. `third_party/naga/src/back/hlsl/help.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 10631331a52e18cbe4a9d53f0812c96821db3881
+- Size: 98541 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2356; EOF; 2401–2800 empty.
+- Purpose: Generates HLSL helper wrappers for image query/load/sample, external YUV textures, constructors, matrix access and math.
+- Dependencies / cross-references: Naga HLSL Writer, WrappedType registry, IR types, sampler heaps and texture metadata.
+- Implementation / logic: Emits wrappers for GetDimensions, YUV conversion, clamping, matrix layout and numeric edge cases.
+- Findings: D3D/HLSL-specific assumptions; not an Android GLES shader implementation.
+- RustChunk relevance: No direct mobile GLES value; future D3D reference only.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Keep out of Android GLES renderer; select backend explicitly by platform.
+- Follow-up checks: If D3D is added, test DXC wrappers, texture dimensions, YUV, samplers and matrix access.
+- RustChunk implementation mapping: No current mapping; optional future HLSL backend.
+- Evidence required before adoption: DXC compilation, D3D resource binding and cross-backend shader parity.
+- Completion state: COMPLETE — 2,356 lines in five 400-line chunks plus 356 lines through EOF; pinned SHA/98,541-byte size match; not compiled.
+
+## Checkpoint 3101–3125 — COMPLETE
+
+- 25 new source files inspected one at a time from the pinned snapshot after excluding all 3,100 prior Index paths.
+- All source SHAs and byte sizes match the complete pinned tree (5,749 entries; untruncated). Canonical logical line counts and complete EOF coverage are recorded.
+- Long files were read in consecutive, gap-free ranges no larger than 400 lines: 3108 (1,200), 3118 (897), 3120 (670), 3121 (502), 3122 (505), 3123 (4,634) and 3125 (2,356).
+- All entries have exactly 15 required fields. Static concerns in HandleSet/Arena/UniqueArena and the DOT call assertion were not reproduced. HLSL entries 3124–3125 are not part of the Android GLES baseline.
+- No tests/builds/benchmarks/APK/device/Forge/Minecraft/server/Aternos validation was run. No application source was changed.
