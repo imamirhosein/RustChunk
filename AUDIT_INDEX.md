@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3150 are complete** across the stage Ledgers. Index: **3,150 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is IN PROGRESS (150/200), with sections 3001–3050, 3051–3100 and 3101–3150 CLOSED (50/50 each). Exceptional authorization 3101–3200 remains ACTIVE; section 3151–3200 is authorized. Checkpoints through 3126–3150 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
+- Source ledgers: entries **1–3175 are complete** across the stage Ledgers. Index: **3,175 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is IN PROGRESS (175/200), with sections 3001–3050, 3051–3100 and 3101–3150 CLOSED (50/50 each), and section 3151–3200 IN PROGRESS (25/50). Exceptional authorization 3101–3200 remains ACTIVE. Checkpoints through 3151–3175 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
 
 ## Part 1 — Entries 1–25
 
@@ -3654,3 +3654,28 @@
 | 3148 | `third_party/naga/src/back/spv/mod.rs` | adaptable; reference; Vulkan-specific; configuration-critical | SPIR-V Writer options expose risky defaults and an unimplemented mesh clamp.  |
 | 3149 | `third_party/naga/src/back/spv/ray/mod.rs` | unnecessary; reference; Vulkan-specific; ray-tracing-only | SPIR-V ray descriptor validation and flag checking; ray feature is optional.  |
 | 3150 | `third_party/naga/src/back/spv/ray/pipeline.rs` | unnecessary; reference; Vulkan-specific; ray-tracing-only | SPIR-V trace-ray wrapper hard-codes SBT offset/stride/miss index to zero.  |
+| 3151 | `third_party/naga/src/back/spv/ray/query.rs` | unnecessary; reference; Vulkan-ray-query-only | SPIR-V ray-query lowering is optional and needs a Vulkan ray-query extension. |
+| 3152 | `third_party/naga/src/back/spv/reclaimable.rs` | adaptable; reference; memory-management-sensitive | Reclaimable buffers clear without shrinking oversized capacity; memory retention needs measurement. |
+| 3153 | `third_party/naga/src/back/spv/selection.rs` | adaptable; reference; Vulkan-specific; control-flow-sensitive | SPIR-V selection merge helper; shader control-flow reference. |
+| 3154 | `third_party/naga/src/back/spv/subgroup.rs` | adaptable; reference; Vulkan-subgroup-sensitive | Subgroup operations require per-device Vulkan support and fallbacks. |
+| 3155 | `third_party/naga/src/back/spv/writer.rs` | adaptable; reference; Vulkan-specific; configuration-critical | SPIR-V Writer set_options appears to leave several option fields stale on reuse. |
+| 3156 | `third_party/naga/src/back/wgsl/mod.rs` | adaptable; reference; WGSL-backend-specific | WGSL backend API; not a direct Minecraft GLSL replacement. |
+| 3157 | `third_party/naga/src/back/wgsl/polyfill/mod.rs` | adaptable; reference; shader-polyfill | WGSL inverse-matrix polyfill; numerical parity must be tested. |
+| 3158 | `third_party/naga/src/back/wgsl/writer.rs` | adaptable; reference; WGSL-backend-specific; feature-limited | WGSL writer has unsupported IR paths that can panic or return unimplemented. |
+| 3159 | `third_party/naga/src/common/diagnostic_debug.rs` | adaptable; reference; developer-diagnostics | Contextual Debug formatting for shader IR. |
+| 3160 | `third_party/naga/src/common/diagnostic_display.rs` | adaptable; reference; developer-diagnostics | User-facing shader type/rule diagnostics; currently WGSL-language-centric. |
+| 3161 | `third_party/naga/src/common/mod.rs` | adaptable; reference; module-organization | Shared diagnostic module wiring. |
+| 3162 | `third_party/naga/src/common/predeclared.rs` | adaptable; reference; WGSL-name-generation | Stable names for predeclared WGSL result structs. |
+| 3163 | `third_party/naga/src/common/wgsl/diagnostics.rs` | adaptable; reference; WGSL-diagnostics | WGSL severity/filter identifier mapping; lesser severities not fully implemented. |
+| 3164 | `third_party/naga/src/common/wgsl/mod.rs` | adaptable; reference; module-organization | WGSL common module exports. |
+| 3165 | `third_party/naga/src/common/wgsl/to_wgsl.rs` | adaptable; reference; WGSL-language-mapping | WGSL builtin/type/address-space spelling conversion. |
+| 3166 | `third_party/naga/src/common/wgsl/types.rs` | adaptable; reference; WGSL-type-formatting | WGSL type formatter; diagnostic context can emit invalid WGSL in documented cases. |
+| 3167 | `third_party/naga/src/compact/expressions.rs` | adaptable; reference; IR-compaction-critical | Expression liveness and handle adjustment for Naga IR compaction. |
+| 3168 | `third_party/naga/src/compact/functions.rs` | adaptable; reference; IR-compaction-critical | Function reachability and local-expression compaction. |
+| 3169 | `third_party/naga/src/compact/handle_set_map.rs` | adaptable; reference; handle-remapping | Old-to-new handle map and contiguous range adjustment. |
+| 3170 | `third_party/naga/src/compact/mod.rs` | adaptable; reference; IR-compaction-critical | Module-wide dead-object removal and handle remapping. |
+| 3171 | `third_party/naga/src/compact/statements.rs` | adaptable; reference; IR-compaction-critical | Statement dependency tracing and handle rewriting. |
+| 3172 | `third_party/naga/src/compact/types.rs` | adaptable; reference; IR-compaction | Nested type/override dependency tracing for compaction. |
+| 3173 | `third_party/naga/src/diagnostic_filter.rs` | adaptable; reference; diagnostic-policy | Diagnostic filter precedence/conflict model. |
+| 3174 | `third_party/naga/src/error.rs` | adaptable; reference; error-reporting | Shader error formatting; Error::source appears to skip the immediate inner error. |
+| 3175 | `third_party/naga/src/front/atomic_upgrade.rs` | adaptable; reference; SPIR-V-front-end-specific; correctness-sensitive | SPIR-V atomic type upgrade; is_empty ignores field-only upgrades. |

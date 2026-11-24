@@ -144,13 +144,13 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-24; exceptional authorization 3101–3200 active)
 
 - Repository `imamirhosein/RustChunk`; audit branch `starling-1.20.1-port-audit`. Do not modify `main` or existing backup refs.
-- Completed entries **1–3150**. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (150/200)**.
-- Sections **3001–3050**, **3051–3100** and **3101–3150** are CLOSED (50/50 each). Section **3151–3200** is covered by the same explicit authorization.
-- Checkpoints through **3126–3150** are complete and read-back verified.
-- Exceptional authorization **3101–3200 is ACTIVE (50/100 completed)**. Continue 3151–3175 without another permission request; report at 3200 and **STOP at 3200**.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **150 records (3001–3150)** with exactly 15 fields each. Index: **3,150 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
+- Completed entries **1–3175**. Stages **2601–2800** and **2801–3000** are CLOSED (200/200); stage **3001–3200 is IN PROGRESS (175/200)**.
+- Sections **3001–3050**, **3051–3100** and **3101–3150** are CLOSED (50/50 each). Section **3151–3200** is IN PROGRESS (25/50).
+- Checkpoints through **3151–3175** are complete and read-back verified.
+- Exceptional authorization **3101–3200 is ACTIVE (75/100 completed)**. Continue 3176–3200 without another permission request; report and **STOP at 3200**.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **175 records (3001–3175)** with exactly 15 fields each. Index: **3,175 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3150 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA for entries 1–3000 remains complete.
+- Entries 3001–3175 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA for entries 1–3000 remains complete.
 - The 3,000-entry snapshot remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. Next backup only after entries 3001–4000 are completed and globally verified.
 - No application source changes, tests/builds/benchmarks/APK/device/renderer/Vulkan/Minecraft/Forge/server/Aternos validation.
 
@@ -957,3 +957,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Exact next-25 lexical selection, source SHA/byte-size, canonical line counts, EOF coverage, 15-field Ledger schema, Index uniqueness and Ledger/Index alignment passed.
 - All six audit documents are committed together as one 25-file checkpoint and must be read back from GitHub before considered durable.
 - Continue 3151–3175, commit/verify the next 25, continue 3176–3200 under the same grant, report at 3200 and **STOP at 3200**.
+
+
+## 63. Checkpoint 3151–3175 — COMPLETE — 2026-11-24
+
+- User's explicit authorization for **3101–3200** remains active and covers the remaining 3176–3200 files. Do not ask for another permission.
+- Entries 3151–3175 were inspected one source file at a time through EOF. Long files were read in consecutive, gap-free ranges no larger than 400 lines.
+- Exact next-25 lexical selection, source SHA/byte-size, canonical line counts, EOF coverage, 15-field Ledger schema, Index uniqueness and Ledger/Index alignment passed.
+- All six audit documents are committed together as one 25-file checkpoint and must be read back from GitHub before considered durable.
+- Continue 3176–3200, commit/verify the final 25 under the same grant, report completion and **STOP at 3200**.

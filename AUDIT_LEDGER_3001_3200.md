@@ -2587,3 +2587,436 @@
 - Every new entry has exactly 15 required fields. The checkpoint covers HLSL, MSL and SPIR-V backends; HLSL/MSL are platform-specific, while SPIR-V is a possible Vulkan path subject to actual device capability and driver tests.
 - Static concerns include MSL external-YUV plane clamping and SPIR-V default fake bindings / unimplemented mesh primitive-index clamp; none was reproduced by tests.
 - No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation was run. No RustChunk application source was changed.
+
+### 3151. `third_party/naga/src/back/spv/ray/query.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 673c240797831d99458885ca15d4a25a614d4a3c
+- Size: 55936 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–1624; consecutive; EOF; 2001–2400 confirmed empty.
+- Purpose: Lowers SPIR-V ray-query operations and tracks candidate/committed intersection state.
+- Dependencies / cross-references: Naga RayQuery IR, SPIR-V writer, ray descriptor helpers and query initialization tracking.
+- Implementation / logic: Emits initialize/proceed/confirm/terminate and intersection-property instructions, including candidate-vs-committed selection.
+- Findings: Ray query requires Vulkan ray-query extension/device support; tracking and validation options affect emitted state handling. No runtime validation was performed.
+- RustChunk relevance: Only a future optional Vulkan ray-query path; not required for Minecraft chunk rendering.
+- Decision: unnecessary; reference; Vulkan-ray-query-only
+- 1.20.1 implications: Do not make ray queries a baseline dependency for Android or Forge 1.20.1.
+- Follow-up checks: Test candidate/committed triangle/AABB paths, proceed exhaustion, terminate-before-proceed and initialization tracking on supported Vulkan devices.
+- RustChunk implementation mapping: No current mapping; optional future Vulkan ray-query backend.
+- Evidence required before adoption: SPIR-V validation and real-device ray-query tests on an extension-capable GPU.
+- Completion state: COMPLETE — 1,624 logical lines through EOF in four 400-line chunks plus 24 lines; pinned SHA and 55,936-byte size match; not compiled.
+
+### 3152. `third_party/naga/src/back/spv/reclaimable.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f0c799eb1f652df1114b0100cb0b24c5bd20894f
+- Size: 2412 bytes
+- Coverage: 1–76; EOF.
+- Purpose: Defines reusable/reclaimable allocation storage for SPIR-V writer internals.
+- Dependencies / cross-references: Vec buffers and SPIR-V writer lifecycle/reset code.
+- Implementation / logic: Provides a reclaim trait and implementations intended to clear/reuse allocations between writer runs.
+- Findings: The trait documentation says large buffers should shrink when much larger than current use, but the Vec implementation only calls `clear()`; capacity is retained. Static doc/implementation mismatch with possible memory retention after unusually large shaders.
+- RustChunk relevance: Memory reuse matters for repeated shader compilation on a 6GB Android device, but retained peak capacity may increase memory pressure.
+- Decision: adaptable; reference; memory-management-sensitive
+- 1.20.1 implications: If adapted, set explicit capacity-retention thresholds for repeated shader compilation and release oversized buffers under memory pressure.
+- Follow-up checks: Benchmark repeated large/small shader workloads and measure retained capacities after reset.
+- RustChunk implementation mapping: RustChunk shader compilation buffer pool/reclaim policy.
+- Evidence required before adoption: Allocation/capacity tests and Android memory-pressure profiling.
+- Completion state: COMPLETE — 76 logical lines through EOF; pinned SHA and 2,412-byte size match; not tested.
+
+### 3153. `third_party/naga/src/back/spv/selection.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b217db637c37967e57a0eff4d46423dd9652629d
+- Size: 9972 bytes
+- Coverage: 1–260; EOF.
+- Purpose: Builds SPIR-V structured selection/if-else control-flow blocks and merge handling.
+- Dependencies / cross-references: SPIR-V Writer block state, labels, conditional branches and expression IDs.
+- Implementation / logic: Creates selection merge blocks, conditional branches, tracks branch-local values and emits merge/phi behavior.
+- Findings: Correctness depends on structured-control-flow invariants and all incoming values being represented; the helper is backend-internal.
+- RustChunk relevance: Useful reference for shader compiler control flow, not game tick or chunk task scheduling.
+- Decision: adaptable; reference; Vulkan-specific; control-flow-sensitive
+- 1.20.1 implications: Only reuse as part of a pinned SPIR-V backend; do not transplant into RustChunk's job scheduler.
+- Follow-up checks: Test nested if/else, empty branches, early exits and value merges with SPIR-V Tools validation.
+- RustChunk implementation mapping: Optional shader backend control-flow helper.
+- Evidence required before adoption: Differential tests against Naga IR and SPIR-V validation.
+- Completion state: COMPLETE — 260 logical lines through EOF; pinned SHA and 9,972-byte size match; not executed.
+
+### 3154. `third_party/naga/src/back/spv/subgroup.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a0c35f1d64895909ee6742f929f50c39b1746bda
+- Size: 9211 bytes
+- Coverage: 1–223; EOF.
+- Purpose: Lowers subgroup ballot, collective and gather operations to SPIR-V group-nonuniform instructions.
+- Dependencies / cross-references: Naga subgroup IR, SPIR-V capabilities, scope IDs and instruction builder.
+- Implementation / logic: Maps all/any, reductions/scans, broadcast/shuffle and quad operations to SPIR-V opcodes and capabilities.
+- Findings: Some combinations are explicitly unimplemented; subgroup availability/size and operation support vary by Vulkan device and extension.
+- RustChunk relevance: Potential GPU optimization for parallel chunk/mesh work only if target device supports the required subgroup operations.
+- Decision: adaptable; reference; Vulkan-subgroup-sensitive
+- 1.20.1 implications: Query subgroup size/stages/operations on the actual Mali Vulkan driver; always retain a fallback path.
+- Follow-up checks: Test each subgroup op and type across supported stages, subgroup sizes and fallback behavior.
+- RustChunk implementation mapping: Optional subgroup acceleration in Vulkan compute/mesh pipeline.
+- Evidence required before adoption: Device feature queries, SPIR-V validation and GPU correctness/performance comparisons.
+- Completion state: COMPLETE — 223 logical lines through EOF; pinned SHA and 9,211-byte size match; not compiled.
+
+### 3155. `third_party/naga/src/back/spv/writer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ea6a9530fa8632850c5ef11b449e4a1d09b0f926
+- Size: 170102 bytes
+- Coverage: 1–400 through 3601–4000 in ten consecutive 400-line chunks; EOF; 4001–4400 confirmed empty.
+- Purpose: Top-level SPIR-V Writer lifecycle, module emission, types/constants/resources, options and output assembly.
+- Dependencies / cross-references: SPIR-V block/image/index/instruction/layout/ray/mesh/subgroup helpers, Naga IR and Vulkan capability structures.
+- Implementation / logic: Owns module IDs, capability/declaration sections, functions, entry points, binding decorations, options, reset/reuse and final binary emission.
+- Findings: `set_options` appears not to update `fake_missing_bindings`, `ray_query_initialization_tracking`, `trace_ray_argument_validation` and `emit_int_div_checks`; changing these on a reused Writer may leave stale settings. Static concern, not reproduced.
+- RustChunk relevance: Strong Vulkan backend reference; option reuse and memory behavior are important for repeated shader reloads on Android.
+- Decision: adaptable; reference; Vulkan-specific; configuration-critical
+- 1.20.1 implications: Use a pinned Naga revision, construct strict Options per pipeline, provide complete bindings and avoid relying on incomplete `set_options` until fixed/tested.
+- Follow-up checks: Add tests that change each omitted option between writes on the same Writer; validate resulting SPIR-V and reset behavior.
+- RustChunk implementation mapping: Potential Naga SPIR-V Writer inside an Android Vulkan renderer abstraction.
+- Evidence required before adoption: SPIR-V Tools validation, option-transition tests and target Mali pipeline creation.
+- Completion state: COMPLETE — 4,000 logical lines through EOF in ten consecutive 400-line chunks; pinned SHA and 170,102-byte size match; not compiled.
+
+### 3156. `third_party/naga/src/back/wgsl/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 74c438aa8ffa7b952edfdbdb1c69204e6b1a3bd3
+- Size: 2565 bytes
+- Coverage: 1–96; EOF.
+- Purpose: Public WGSL backend API and error/capability definitions.
+- Dependencies / cross-references: Naga IR, WGSL writer, WGSL type formatting and enabled-feature analysis.
+- Implementation / logic: Exposes WGSL source generation entry points, writer options and backend error variants.
+- Findings: WGSL output support is not equivalent to WebGPU runtime availability; some Naga IR constructs are explicitly unsupported by the writer.
+- RustChunk relevance: WGSL is a portable shader representation but not the existing Minecraft GLSL pipeline format.
+- Decision: adaptable; reference; WGSL-backend-specific
+- 1.20.1 implications: Only adopt if RustChunk intentionally uses a WGSL/WebGPU path; Android GLES/Vulkan renderer still needs a compiled backend.
+- Follow-up checks: Test WGSL output against the selected WGSL parser/validator and target WebGPU implementation.
+- RustChunk implementation mapping: Optional WGSL export/diagnostic backend; not Forge integration.
+- Evidence required before adoption: Round-trip parse/validate tests and actual runtime shader compilation.
+- Completion state: COMPLETE — 96 logical lines through EOF; pinned SHA and 2,565-byte size match; not compiled.
+
+### 3157. `third_party/naga/src/back/wgsl/polyfill/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 970a83a53ce783a945dcf82aa44cf1f74e3cd106
+- Size: 2320 bytes
+- Coverage: 1–66; EOF.
+- Purpose: Declares WGSL polyfill generation for operations not directly available in WGSL.
+- Dependencies / cross-references: WGSL writer, Naga MathFunction/IR and helper generation.
+- Implementation / logic: Provides inverse-matrix polyfill generation hooks for matrix sizes/types that need synthesized WGSL code.
+- Findings: Polyfills change generated shader text and must preserve numerical behavior/precision; this module is a helper, not a full backend.
+- RustChunk relevance: Potential reference for shader compatibility work if WGSL is used.
+- Decision: adaptable; reference; shader-polyfill
+- 1.20.1 implications: Minecraft 1.20.1 renderer shaders are not automatically WGSL-compatible; only use with a validated WGSL translation pipeline.
+- Follow-up checks: Compare inverse results for 2x2/3x3/4x4 matrices, singular inputs and precision edge cases.
+- RustChunk implementation mapping: Optional WGSL shader polyfill module.
+- Evidence required before adoption: Numerical GPU tests against CPU reference and WGSL compiler validation.
+- Completion state: COMPLETE — 66 logical lines through EOF; pinned SHA and 2,320-byte size match; not executed.
+
+### 3158. `third_party/naga/src/back/wgsl/writer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 643a8a01ffbf1c970df8d157aa96ce4858310269
+- Size: 86042 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1600, 1601–2000, 2001–2186; consecutive; EOF; 2401–2800 confirmed empty.
+- Purpose: Generates WGSL source from Naga IR, including declarations, types, expressions, statements, entry points and enables.
+- Dependencies / cross-references: Naga IR/validation, common WGSL type formatting, name sanitization, polyfills, image and subgroup operations.
+- Implementation / logic: Emits WGSL module source, resources, bindings, entry-point IO, functions, overrides and generated helper code.
+- Findings: Several valid Naga IR paths outside the WGSL subset use `unimplemented!()`/`unreachable!()` (notably subgroup/ray/cooperative combinations); switch fallthrough is explicitly unimplemented. Also the ray-pipeline enable scan appears duplicated, a harmless redundancy.
+- RustChunk relevance: WGSL is useful for portable shader tooling but not a direct replacement for Minecraft's GLSL shader packs.
+- Decision: adaptable; reference; WGSL-backend-specific; feature-limited
+- 1.20.1 implications: Use only after deciding on WGSL/WebGPU and constraining input IR to the supported WGSL subset.
+- Follow-up checks: Test every enabled IR feature, subgroup combinations, ray/cooperative constructs, switch fallthrough and generated extension directives.
+- RustChunk implementation mapping: Optional WGSL export/backend separated from Android GLES/Vulkan runtime.
+- Evidence required before adoption: WGSL parser/validator round-trip and target runtime shader tests.
+- Completion state: COMPLETE — 2,186 logical lines through EOF in five 400-line chunks plus 186 lines; pinned SHA and 86,042-byte size match; not compiled.
+
+### 3159. `third_party/naga/src/common/diagnostic_debug.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: efa3ec548b3db486f1a310e6237adf035e4b4606
+- Size: 3985 bytes
+- Coverage: 1–126; EOF.
+- Purpose: Formats Naga IR types/scalars for debug logging.
+- Dependencies / cross-references: Naga TypeContext, type arenas, handles and Debug formatting.
+- Implementation / logic: Wraps IR values in `DiagnosticDebug` and implements contextual `Debug` output with WGSL-aware formatting when enabled.
+- Findings: Lower fidelity by design; anonymous types/overrides may be represented by handles or placeholders.
+- RustChunk relevance: Useful for RustChunk diagnostics around shader IR and resource types.
+- Decision: adaptable; reference; developer-diagnostics
+- 1.20.1 implications: No Minecraft 1.20.1 runtime dependency; keep logging feature-gated to avoid hot-path formatting.
+- Follow-up checks: Test output with WGSL features enabled/disabled and anonymous types/overrides.
+- RustChunk implementation mapping: RustChunk shader compiler debug formatting.
+- Evidence required before adoption: Feature-matrix compile tests and diagnostic snapshot tests.
+- Completion state: COMPLETE — 126 logical lines through EOF; pinned SHA and 3,985-byte size match; inspected only.
+
+### 3160. `third_party/naga/src/common/diagnostic_display.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d5ee7c07dc4fd39e9e9b273608fd733cdd11f9c0
+- Size: 4262 bytes
+- Coverage: 1–124; EOF.
+- Purpose: Formats Naga IR types and validation rules for user-facing diagnostics.
+- Dependencies / cross-references: GlobalCtx, TypeResolution, Rule, WGSL TypeContext and fmt::Display.
+- Implementation / logic: Provides contextual display wrappers for types, scalars and type rules.
+- Findings: Documentation states language-sensitive diagnostics are currently WGSL-only; GLSL-origin diagnostics may not use source-language notation.
+- RustChunk relevance: Useful for readable shader errors, but source-language tagging is needed for multi-front-end correctness.
+- Decision: adaptable; reference; developer-diagnostics
+- 1.20.1 implications: RustChunk should preserve shader source language/label through parse, validation and compilation errors.
+- Follow-up checks: Test GLSL/WGSL/SPIR-V source diagnostics and verify type notation matches originating language.
+- RustChunk implementation mapping: RustChunk shader error reporting layer.
+- Evidence required before adoption: Golden diagnostic tests per source language.
+- Completion state: COMPLETE — 124 logical lines through EOF; pinned SHA and 4,262-byte size match; inspected only.
+
+### 3161. `third_party/naga/src/common/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e1fe06d5c0ad7c458890f340fb2aa17beb285f72
+- Size: 357 bytes
+- Coverage: 1–12; EOF.
+- Purpose: Declares and re-exports shared language-specific diagnostic and WGSL utilities.
+- Dependencies / cross-references: diagnostic_debug, diagnostic_display, predeclared and wgsl modules.
+- Implementation / logic: Small module wiring for shared front/back-end helpers.
+- Findings: No independent runtime logic; feature availability follows submodules.
+- RustChunk relevance: Useful organizational pattern only.
+- Decision: adaptable; reference; module-organization
+- 1.20.1 implications: Keep feature gates consistent with Cargo features selected for Android.
+- Follow-up checks: Compile with minimal and full shader feature sets.
+- RustChunk implementation mapping: RustChunk shader-common module organization.
+- Evidence required before adoption: Cargo feature-matrix builds.
+- Completion state: COMPLETE — 12 logical lines through EOF; pinned SHA and 357-byte size match; inspected only.
+
+### 3162. `third_party/naga/src/common/predeclared.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0c2004f7fd36cbeec63ddadb65f49524c05022f2
+- Size: 1002 bytes
+- Coverage: 1–33; EOF.
+- Purpose: Generates stable names for predeclared WGSL result struct types.
+- Dependencies / cross-references: Naga PredeclaredType, scalar kind/width and vector size.
+- Implementation / logic: Formats names for atomic compare-exchange, modf and frexp result structures.
+- Findings: Generated names are internal WGSL identifiers; name collision/hygiene must be handled by the caller's Namer.
+- RustChunk relevance: Useful if RustChunk uses Naga WGSL diagnostics or backend.
+- Decision: adaptable; reference; WGSL-name-generation
+- 1.20.1 implications: No direct Forge or Android renderer behavior.
+- Follow-up checks: Test name stability across scalar widths and vector sizes, and collisions with user identifiers.
+- RustChunk implementation mapping: Optional internal WGSL type-name generator.
+- Evidence required before adoption: Name hygiene and WGSL parser tests.
+- Completion state: COMPLETE — 33 logical lines through EOF; pinned SHA and 1,002-byte size match; inspected only.
+
+### 3163. `third_party/naga/src/common/wgsl/diagnostics.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a78343b60ab23b74e96a720224788b61d4d27984
+- Size: 2397 bytes
+- Coverage: 1–73; EOF.
+- Purpose: Maps WGSL diagnostic severity/filtering rules to WGSL identifiers and Display output.
+- Dependencies / cross-references: DiagnosticFilter, Severity and StandardFilterableTriggeringRule.
+- Implementation / logic: Parses sentinel identifiers for error/warning/info/off and formats standard/user triggering rules.
+- Findings: Only derivative_uniformity is represented as a standard rule here; lesser severities are not fully reported by Naga yet.
+- RustChunk relevance: Useful only if RustChunk accepts or emits WGSL diagnostics.
+- Decision: adaptable; reference; WGSL-diagnostics
+- 1.20.1 implications: No direct Forge integration; feature-gate WGSL diagnostics.
+- Follow-up checks: Test unknown/user rules, duplicate filters, severity precedence and parser spans.
+- RustChunk implementation mapping: Optional WGSL diagnostic filter support.
+- Evidence required before adoption: Parser tests and severity/reporting tests.
+- Completion state: COMPLETE — 73 logical lines through EOF; pinned SHA and 2,397-byte size match; inspected only.
+
+### 3164. `third_party/naga/src/common/wgsl/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: fe4cfac9d4cdb0275f9f19bbabe8859dcb915080
+- Size: 236 bytes
+- Coverage: 1–9; EOF.
+- Purpose: Declares and re-exports WGSL type/source formatting helpers.
+- Dependencies / cross-references: diagnostics, to_wgsl and types modules.
+- Implementation / logic: Small module wiring for WGSL shared front/back functionality.
+- Findings: No independent logic; availability depends on WGSL feature flags.
+- RustChunk relevance: Only relevant if WGSL parsing/output is enabled.
+- Decision: adaptable; reference; module-organization
+- 1.20.1 implications: No direct Minecraft 1.20.1 runtime mapping.
+- Follow-up checks: Compile with WGSL features both enabled and disabled.
+- RustChunk implementation mapping: RustChunk shader-language common module.
+- Evidence required before adoption: Cargo feature-matrix compile tests.
+- Completion state: COMPLETE — 9 logical lines through EOF; pinned SHA and 236-byte size match; inspected only.
+
+### 3165. `third_party/naga/src/common/wgsl/to_wgsl.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c3fa20832c9a44898a109ca7691ffd7c27697f34
+- Size: 14572 bytes
+- Coverage: 1–398; EOF.
+- Purpose: Maps Naga IR enums, builtins, scalar types, storage formats and address spaces to WGSL spellings.
+- Dependencies / cross-references: MathFunction, BuiltIn, Scalar, StorageFormat, AddressSpace and WGSL grammar.
+- Implementation / logic: Implements `ToWgsl`/`TryToWgsl` conversions and address-space/access string mapping.
+- Findings: Naga-only builtins/types return None or extension spellings; output is not guaranteed standard WGSL for every IR variant.
+- RustChunk relevance: Useful for WGSL shader translation/diagnostics, but not for GLSL shader pack execution.
+- Decision: adaptable; reference; WGSL-language-mapping
+- 1.20.1 implications: Keep WGSL extension support explicit and do not assume every Minecraft shader IR feature maps to WGSL.
+- Follow-up checks: Test every enum mapping against a WGSL parser and target runtime.
+- RustChunk implementation mapping: RustChunk WGSL type/builtin formatter if WGSL path is selected.
+- Evidence required before adoption: Exhaustive mapping tests and WGSL parser validation.
+- Completion state: COMPLETE — 398 logical lines through EOF; pinned SHA and 14,572-byte size match; inspected only.
+
+### 3166. `third_party/naga/src/common/wgsl/types.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a678a617f76744988ade3eb9bd921c884002799c
+- Size: 17602 bytes
+- Coverage: 1–400, 401–490; consecutive; EOF.
+- Purpose: Formats Naga TypeInner/TypeResolution structures as WGSL type declarations and diagnostics.
+- Dependencies / cross-references: TypeContext, GlobalCtx, UniqueArena, TypeResolution, predeclared types and scalar/address-space mappings.
+- Implementation / logic: Formats vectors, matrices, arrays, binding arrays, pointers, images, samplers, atomics, structs and Naga extensions.
+- Findings: Diagnostic TypeContext implementations explicitly may emit invalid WGSL for anonymous structs and override-sized arrays; backend implementation assumes validated modules.
+- RustChunk relevance: Useful for shader diagnostics and WGSL generation, but requires Namer/hygiene and validation.
+- Decision: adaptable; reference; WGSL-type-formatting
+- 1.20.1 implications: Use only with validated 1.20.1 shader IR and a matching WGSL feature set.
+- Follow-up checks: Test anonymous/named structs, override-sized arrays, storage access modes and non-WGSL extensions.
+- RustChunk implementation mapping: RustChunk shader diagnostic/type formatter.
+- Evidence required before adoption: WGSL parser tests and type-formatting snapshots.
+- Completion state: COMPLETE — 490 logical lines through EOF in 400/90 ranges; pinned SHA and 17,602-byte size match; inspected only.
+
+### 3167. `third_party/naga/src/compact/expressions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 021401d00ef9d33a7a83d348f905929812cee66a
+- Size: 17278 bytes
+- Coverage: 1–400, 401–481; consecutive; EOF.
+- Purpose: Traces expression dependencies and adjusts expression handles after Naga IR compaction.
+- Dependencies / cross-references: Expression arenas, HandleSet/HandleMap, constants, overrides, types and module/function maps.
+- Implementation / logic: Walks expression operands in reverse arena order, marks referenced constants/types/globals and rewrites handles after compaction.
+- Findings: Correctness relies on Naga's invariant that expressions refer only to earlier arena entries; missed handle variants could silently remove dependencies.
+- RustChunk relevance: Useful model for pruning unused shader IR and reducing compile/cache memory.
+- Decision: adaptable; reference; IR-compaction-critical
+- 1.20.1 implications: Only compact validated modules and preserve exact arena ordering/handle remapping.
+- Follow-up checks: Add coverage for every Expression variant, constants/overrides, image/ray/cooperative expressions and stale handles.
+- RustChunk implementation mapping: RustChunk shader IR compaction stage if Naga IR is adopted.
+- Evidence required before adoption: Property tests comparing module behavior before/after compaction and revalidation.
+- Completion state: COMPLETE — 481 logical lines through EOF in 400/81 ranges; pinned SHA and 17,278-byte size match; not tested.
+
+### 3168. `third_party/naga/src/compact/functions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 21d6a95ae07c9c265b81f05def6411ec4ea9db7c
+- Size: 4242 bytes
+- Coverage: 1–121; EOF.
+- Purpose: Traces function calls and compacts function-local expressions/handles.
+- Dependencies / cross-references: FunctionTracer, ExpressionTracer, FunctionMap, module maps and named expressions.
+- Implementation / logic: Tracks called functions, arguments/results/local initializers, retains live expressions and adjusts statements after arena compaction.
+- Findings: Uses assertions that temporary named-expression reuse storage is empty; correctness depends on call graph order and no recursion.
+- RustChunk relevance: Useful reference for eliminating unused shader functions and reducing shader compilation work.
+- Decision: adaptable; reference; IR-compaction-critical
+- 1.20.1 implications: Only run after validation and maintain the upstream no-recursion/function ordering invariants.
+- Follow-up checks: Test nested call graphs, unused functions, local initializers, named expressions and entry-point reachability.
+- RustChunk implementation mapping: RustChunk shader module optimizer/compactor if Naga IR is adopted.
+- Evidence required before adoption: Before/after validation and shader output equivalence tests.
+- Completion state: COMPLETE — 121 logical lines through EOF; pinned SHA and 4,242-byte size match; inspected only.
+
+### 3169. `third_party/naga/src/compact/handle_set_map.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b3cbb909eedc6fd0504ce1e7729553d9ab2fc756
+- Size: 4917 bytes
+- Coverage: 1–132; EOF.
+- Purpose: Maps old arena handles to compacted indices and adjusts contiguous ranges.
+- Dependencies / cross-references: HandleSet, Handle, Range, Arena and NonMaxU32.
+- Implementation / logic: Builds dense old-to-new maps, remaps handles/options and shrinks ranges to retained endpoints.
+- Findings: `used`/`try_adjust` index directly and assume handles belong to the source arena; invalid/stale handles panic by design.
+- RustChunk relevance: Potential reusable primitive for compact chunk/mesh/resource arenas if generation invariants are explicit.
+- Decision: adaptable; reference; handle-remapping
+- 1.20.1 implications: Do not use raw stale handles across asynchronous chunk unload/reload cycles.
+- Follow-up checks: Test holes, empty ranges, removed endpoints, max indices and stale/out-of-arena handles.
+- RustChunk implementation mapping: RustChunk arena remapping/compaction utility.
+- Evidence required before adoption: Property tests comparing all retained old/new handle mappings.
+- Completion state: COMPLETE — 132 logical lines through EOF; pinned SHA and 4,917-byte size match; inspected only.
+
+### 3170. `third_party/naga/src/compact/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4974cea96bdd6c83c541e5c17da46b6a5d36af93
+- Size: 46647 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1300; consecutive; EOF; 1601–2000 confirmed empty.
+- Purpose: Orchestrates removal of unused Naga module objects and remapping of all surviving handles.
+- Dependencies / cross-references: ModuleTracer, FunctionTracer, TypeTracer, expression/statement tracers, HandleMap and arena retain/drain APIs.
+- Implementation / logic: Marks entry-point reachability, traces calls/types/constants/overrides, compacts arenas, updates docs and rewrites handles.
+- Findings: Panics are documented for invalid modules; the tandem type/expression pass depends on strict arena ordering and override dependency invariants.
+- RustChunk relevance: Strong reference for shader IR dead-code elimination and memory reduction; not world/chunk data compaction.
+- Decision: adaptable; reference; IR-compaction-critical
+- 1.20.1 implications: Only compact validated shader modules and revalidate after mutation; keep compaction off live world-state data.
+- Follow-up checks: Run all included compaction tests plus fuzzed modules with arrays/overrides/calls/mesh/ray and compare emitted shaders.
+- RustChunk implementation mapping: Optional Naga IR compaction stage, not chunk storage compaction.
+- Evidence required before adoption: Before/after validator and backend output equivalence; fuzz/property tests.
+- Completion state: COMPLETE — 1,300 logical lines through EOF in three 400-line chunks plus 100 lines; pinned SHA and 46,647-byte size match; tests inspected, not run.
+
+### 3171. `third_party/naga/src/compact/statements.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4b9dd13c899a5a2f365557aff823b4a7a230698a
+- Size: 18290 bytes
+- Coverage: 1–400, 401–461; consecutive; EOF.
+- Purpose: Traces expression/function dependencies from Naga statements and rewrites statement handles.
+- Dependencies / cross-references: FunctionTracer, HandleMap, FunctionMap, Statement, RayQuery, subgroup and atomic IR.
+- Implementation / logic: Walks nested blocks/branches/loops iteratively, marks used expressions/calls and adjusts all statement references after compaction.
+- Findings: Every Statement variant must be handled in both tracing and adjustment; omission could retain/remove wrong expressions or leave stale handles.
+- RustChunk relevance: Useful reference for safe shader IR graph traversal and handle remapping.
+- Decision: adaptable; reference; IR-compaction-critical
+- 1.20.1 implications: Keep the statement-variant match exhaustive when adopting a newer Naga revision.
+- Follow-up checks: Add a test for every Statement variant, nested branches/loops, calls, ray/subgroup/cooperative operations and range adjustments.
+- RustChunk implementation mapping: RustChunk shader IR liveness/compaction if Naga is adopted.
+- Evidence required before adoption: Property tests and post-compaction validation for every statement family.
+- Completion state: COMPLETE — 461 logical lines through EOF in 400/61 ranges; pinned SHA and 18,290-byte size match; not tested.
+
+### 3172. `third_party/naga/src/compact/types.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d06558b182c31deb39478faa0973b027b51d729f
+- Size: 3575 bytes
+- Coverage: 1–110; EOF.
+- Purpose: Traces type dependencies and adjusts nested type handles during module compaction.
+- Dependencies / cross-references: TypeTracer, HandleSet, ModuleMap, overrides and type arenas.
+- Implementation / logic: Marks array bases, pending override lengths, pointer bases and struct member types; rewrites corresponding handles.
+- Findings: Assumes all referenced types/overrides remain reachable and source module passed validation.
+- RustChunk relevance: Reusable as part of Naga IR compaction, not general game data storage.
+- Decision: adaptable; reference; IR-compaction
+- 1.20.1 implications: Preserve type dependency ordering and override initialization references.
+- Follow-up checks: Test nested arrays/structs/pointers/binding arrays and pending override sizes.
+- RustChunk implementation mapping: RustChunk shader IR type compaction.
+- Evidence required before adoption: Post-compaction validation and type graph equivalence tests.
+- Completion state: COMPLETE — 110 logical lines through EOF; pinned SHA and 3,575-byte size match; inspected only.
+
+### 3173. `third_party/naga/src/diagnostic_filter.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 16b8de6699de3f23f3b4aed96845491d99160e4f
+- Size: 9517 bytes
+- Coverage: 1–274; EOF.
+- Purpose: Defines diagnostic severities, filter rules, conflict detection and parent-linked filter lookup.
+- Dependencies / cross-references: WGSL front end, DiagnosticFilter arena, spans, severity and standard/user triggering rules.
+- Implementation / logic: Stores module/construct-scoped filters, rejects conflicting duplicates and searches most-specific parent rules.
+- Findings: Info/warning are logged but Naga notes lesser-severity diagnostics are not fully supported/reported yet; only derivative_uniformity is a standard rule here.
+- RustChunk relevance: Useful if RustChunk accepts WGSL shader diagnostics; not part of Minecraft gameplay.
+- Decision: adaptable; reference; diagnostic-policy
+- 1.20.1 implications: Keep diagnostic filters language-scoped and don't silently treat warnings as fully implemented.
+- Follow-up checks: Test nested filters, duplicate conflicts, unknown/user rules and severity overrides.
+- RustChunk implementation mapping: RustChunk shader diagnostics configuration.
+- Evidence required before adoption: Parser/validator tests for precedence, spans and reporting.
+- Completion state: COMPLETE — 274 logical lines through EOF; pinned SHA and 9,517-byte size match; inspected only.
+
+### 3174. `third_party/naga/src/error.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 43e0b0b50446904009312abc49da860cd37ac6f6
+- Size: 6480 bytes
+- Coverage: 1–196; EOF.
+- Purpose: Wraps shader source, labels and parser/validation errors into displayable error diagnostics.
+- Dependencies / cross-references: WGSL/GLSL/SPIR-V front ends, codespan-reporting, ShaderError and diagnostic buffers.
+- Implementation / logic: Formats source-located parse/validation errors, supports color/no-color/stdout feature configurations and replaces control characters.
+- Findings: `Error::source` for ShaderError returns `self.inner.source()` rather than `Some(self.inner.as_ref())`; this appears to skip the immediate wrapped parser/validation error in the standard error chain. Static concern, not tested.
+- RustChunk relevance: Useful for RustChunk shader error reporting; error-chain visibility matters for logs and support.
+- Decision: adaptable; reference; error-reporting
+- 1.20.1 implications: Preserve original shader source/label and expose the underlying error correctly through `std::error::Error`.
+- Follow-up checks: Test error-chain traversal, color feature combinations, malformed UTF-8/control chars and source spans.
+- RustChunk implementation mapping: RustChunk shader compilation error wrapper.
+- Evidence required before adoption: Error source-chain tests and golden diagnostic output.
+- Completion state: COMPLETE — 196 logical lines through EOF; pinned SHA and 6,480-byte size match; inspected only.
+
+### 3175. `third_party/naga/src/front/atomic_upgrade.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 549fcf69abd561fd831551a377ef4c56d68dd72f
+- Size: 9774 bytes
+- Coverage: 1–273; EOF.
+- Purpose: Upgrades SPIR-V scalar globals/struct fields accessed atomically into Naga Atomic types.
+- Dependencies / cross-references: SPIR-V front end, global/struct types, atomic operations, Upgrades sets and type arena.
+- Implementation / logic: Tracks atomic global/field accesses, recursively rebuilds pointer/array/struct types and replaces global variable types.
+- Findings: `Upgrades::is_empty` checks only `globals.is_empty()` and ignores `fields`; field-only upgrade sets are reported empty. This may be safe only if callers always insert the owning global too; static invariant needs verification.
+- RustChunk relevance: Relevant if RustChunk imports SPIR-V shaders and needs Naga's atomic IR normalization.
+- Decision: adaptable; reference; SPIR-V-front-end-specific; correctness-sensitive
+- 1.20.1 implications: Use only with the matching SPIR-V front end; ensure field access tracking always marks its owning global or correct `is_empty`.
+- Follow-up checks: Test atomic accesses to direct globals, nested struct fields, arrays, repeated fields and field-only Upgrades state.
+- RustChunk implementation mapping: Optional SPIR-V atomic normalization stage if Naga front end is adopted.
+- Evidence required before adoption: SPIR-V input corpus, type validation and unit tests for Upgrades::is_empty.
+- Completion state: COMPLETE — 273 logical lines through EOF; pinned SHA and 9,774-byte size match; inspected, not tested.
+
+## Checkpoint 3151–3175 — COMPLETE
+
+- 25 source files inspected one at a time from the pinned Starling snapshot after excluding all 3,150 prior Index paths.
+- All 25 source blob SHAs and byte sizes match the complete pinned tree (5,749 entries; untruncated). Canonical logical line counts and complete EOF coverage are recorded.
+- Long files were read in consecutive, gap-free ranges no larger than 400 lines: 3151 (1,624), 3155 (4,000), 3158 (2,186), 3166 (490), 3167 (481), 3170 (1,300) and 3171 (461).
+- Every new entry has exactly 15 required fields. Static concerns include SPIR-V Writer option updates, reclaimable buffer capacity retention, ShaderError error-chain behavior and atomic-upgrade emptiness tracking; none was reproduced by tests.
+- No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation was run. No RustChunk application source was changed.

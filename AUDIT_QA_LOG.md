@@ -2035,3 +2035,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Static concerns: MSL external-YUV plane clamp uses the first plane's half-texel in the second-plane upper bound; SPIR-V default fake bindings can emit invalid output; mesh primitive-index clamp is documented unimplemented; none reproduced by tests. HLSL/MSL are not Android baseline backends; SPIR-V remains conditional on Vulkan support.
 - No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation; no application source changes.
 - Stage 3001–3200 is 150/200 complete. Section 3101–3150 is CLOSED (50/50). Continue 3151–3175 under the existing 3101–3200 grant; report at 3200 and stop.
+
+
+## Checkpoint QA 3151–3175 — COMPLETE — 2026-11-24
+
+- Re-fetched the complete pinned recursive tree: 5,749 entries, `truncated=false`. Recomputed candidates after excluding all 3,150 prior Index paths; the next 25 strict lexical paths match Ledger entries 3151–3175 exactly and are unique.
+- Verified all 25 source blob SHAs and byte sizes against the pinned tree. Complete EOF coverage and consecutive ranges were recorded for every long file; no range exceeded 400 lines.
+- Verified 25 Ledger headings, exactly 15 required fields per record, Index numbering through 3,175, global path uniqueness and new Ledger/Index path/Decision alignment.
+- Static concerns: SPIR-V Writer option updates may omit several settings on reuse; reclaimable Vec capacity does not shrink as documented; ShaderError::source may skip the wrapped error; Upgrades::is_empty ignores field set. None was reproduced by tests.
+- No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation; no application source changes.
+- Stage 3001–3200 is 175/200 complete. Continue 3176–3200 under the same explicit authorization, then report and STOP at 3200.
