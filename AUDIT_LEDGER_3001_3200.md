@@ -2,9 +2,9 @@
 
 - Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
 - Audit branch: `starling-1.20.1-port-audit`
-- Active 200-file stage: **3001–3200 — IN PROGRESS (25/200)**.
-- One-time exceptional authorization **3001–3100 — ACTIVE (25/100 consumed)**; it covers sections 3001–3050 and 3051–3100, with 25-file commits and 50-file reports.
-- Checkpoint **3001–3025 is complete**. Checkpoint 3026–3050 remains authorized under the same grant. Stop at 3100; entries 3101+ require fresh explicit authorization.
+- Active 200-file stage: **3001–3200 — IN PROGRESS (100/200)**.
+- Exceptional authorization **3001–3100 — EXHAUSTED (100/100)**; sections 3001–3050 and 3051–3100 are CLOSED (50/50 each).
+- Checkpoints **3001–3025, 3026–3050, 3051–3075 and 3076–3100** are COMPLETE and read-back verified. **STOP at 3100**; entries 3101+ require fresh explicit authorization.
 - Source selection: strict raw lexical path order from the complete pinned recursive tree after excluding every path already in the full Index. All selected paths are unique.
 - Every source SHA and byte size matches the pinned tree. Canonical line counts and full EOF coverage are recorded. Long files were read in consecutive, gap-free ranges no larger than 400 lines.
 - Starling/Horizon targets Minecraft 26.3 desktop behavior; this is compatibility research, not evidence of Minecraft 1.20.1 / Forge 47.x support.

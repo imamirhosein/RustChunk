@@ -2008,3 +2008,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Raw socket test clients trust peer-controlled frame/decompression lengths and are not production-ready network parsers. The offline LAN host disables authentication only for isolated local tests; this must not be generalized to public online-mode servers. Several oracles use Unsafe/private reflection and are test-only.
 - No tests/builds/benchmarks/APK/device/Forge/Minecraft/multiplayer/Aternos validation was run. Test sources were inspected only; no RustChunk application source changed.
 - Exceptional authorization **3001–3100 is EXHAUSTED**. Stage section **3051–3100 is CLOSED (50/50)**; stage **3001–3200 is 100/200 complete**. **STOP at 3100**; 3101+ requires fresh explicit authorization.
+
+
+## Cross-chat audit-state reconciliation — 2026-11-24
+
+- The active audit branch already contained committed checkpoints 3001–3025, 3026–3050, 3051–3075 and 3076–3100 before this continuation request. The branch head at reconciliation was `0148e42bd887fde2bd43b0b25539a7a8061e3bf6`; no source entries were re-audited or duplicated.
+- Independent structural/provenance reconciliation found 100 Ledger headings (3001–3100), exactly 15 required fields per record, 3,100 sequential unique Index paths, zero Ledger/Index path or Decision mismatches, and zero pinned-tree SHA/byte-size mismatches for the 100 new records. The pinned recursive tree is complete (5,749 entries; not truncated).
+- The Ledger and Index opening summaries still described intermediate states. Their status text was corrected to the already committed 100/200 stage state, both closed 50-file sections and exhausted 3001–3100 authorization. No source file, source finding, record number, Index path or Decision was changed.
+- This was a documentation/state reconciliation, not a repeated source-file review. Earlier checkpoint logs record complete EOF inspections; this reconciliation did not repeat those content reads. No tests, builds, benchmarks, APK/device, Forge/Minecraft, multiplayer or Aternos validation was run.
