@@ -6,15 +6,15 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3125**.
-- Stages **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (125/200)**.
-- Sections **3001–3050** and **3051–3100** are CLOSED (50/50). Section **3101–3150** is IN PROGRESS (25/50); **3151–3200** is covered by the same explicit grant.
-- Checkpoints through **3101–3125** are committed and read-back verified.
-- Exceptional authorization **3101–3200 is ACTIVE (25/100 completed)**. Continue 3126–3150 without another permission request; report at 3150 and continue 3151–3200 under this grant. **STOP at 3200**.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **125 records (3001–3125)**, exactly 15 fields each. Index: **3,125 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Completed entries: **1–3150**.
+- Stages **2601–2800** and **2801–3000** are CLOSED (200/200). Stage **3001–3200 is IN PROGRESS (150/200)**.
+- Sections **3001–3050**, **3051–3100** and **3101–3150** are CLOSED (50/50 each). Section **3151–3200** is covered by the same explicit grant.
+- Checkpoints through **3126–3150** are committed and read-back verified.
+- Exceptional authorization **3101–3200 is ACTIVE (50/100 completed)**. Continue 3151–3175 without another permission request; report at 3200 and **STOP at 3200**.
+- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **150 records (3001–3150)**, exactly 15 fields each. Index: **3,150 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3125 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA remains complete for entries 1–3000.
-- No RustChunk application source changed. Embedded tests were inspected only, not executed. No builds, benchmarks, APK/device, Forge/Minecraft, multiplayer or Aternos validation.
+- Entries 3001–3150 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA remains complete for entries 1–3000.
+- No RustChunk application source changed. Embedded tests were inspected only, not executed. No builds, benchmarks, APK/device, Vulkan, Forge/Minecraft, multiplayer or Aternos validation.
 
 
 ## Global QA closeout — entries 1–3000 — COMPLETE (2026-11-23)
@@ -917,3 +917,10 @@ Keep progress updates extremely short. Report only the current range and the nex
 - 25 files re-reviewed from entry 3101, one at a time, through EOF; long files used consecutive ranges no larger than 400 lines.
 - Exact next-25 lexical selection, source SHA/size, 15-field count, Index uniqueness and Ledger/Index alignment passed.
 - Continue at 3126. Explicit authorization covers 3101–3200; report after 3150 and continue 3151–3200 without another permission request. Stop at 3200.
+
+
+## Checkpoint 3126–3150 — COMPLETE — 2026-11-24
+
+- 25 files re-reviewed in strict lexical order from the pinned tree, one at a time, through EOF; long files used consecutive ranges no larger than 400 lines.
+- SHA/byte-size, 15-field Ledger records, Index uniqueness and Ledger/Index alignment passed.
+- Continue at 3151. The explicit authorization covers 3101–3200; do not request new permission. Report after 3200 and stop at 3200.

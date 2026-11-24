@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3125 are complete** across the stage Ledgers. Index: **3,125 sequential unique paths**, with no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is IN PROGRESS (125/200), with sections 3001–3050 and 3051–3100 CLOSED and section 3101–3150 IN PROGRESS (25/50). Exceptional authorization 3101–3200 is ACTIVE. Checkpoints through 3101–3125 are committed and read-back verified. The preserved 3,000-entry final backup remains `backup/audit-3000-final-2026-11-23`.
+- Source ledgers: entries **1–3150 are complete** across the stage Ledgers. Index: **3,150 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is IN PROGRESS (150/200), with sections 3001–3050, 3051–3100 and 3101–3150 CLOSED (50/50 each). Exceptional authorization 3101–3200 remains ACTIVE; section 3151–3200 is authorized. Checkpoints through 3126–3150 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
 
 ## Part 1 — Entries 1–25
 
@@ -3629,3 +3629,28 @@
 | 3123 | `third_party/naga/src/back/glsl/writer.rs` | adaptable; reference; GLES-sensitive; version-specific | GLSL writer is a strong backend reference with explicit unsupported paths.  |
 | 3124 | `third_party/naga/src/back/hlsl/conv.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL/D3D conversion is not part of Android GLES; verify suspected signedness if reused.  |
 | 3125 | `third_party/naga/src/back/hlsl/help.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL wrappers are D3D-specific, not part of Android GLES.  |
+| 3126 | `third_party/naga/src/back/hlsl/keywords.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL reserved-name table; not used by Android GLES.  |
+| 3127 | `third_party/naga/src/back/hlsl/mesh_shader.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL mesh/task output lowering; D3D-only.  |
+| 3128 | `third_party/naga/src/back/hlsl/mod.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL backend API/options; D3D-only.  |
+| 3129 | `third_party/naga/src/back/hlsl/ray.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL ray-query/ray-pipeline helpers; D3D-only.  |
+| 3130 | `third_party/naga/src/back/hlsl/storage.rs` | unnecessary; reference; HLSL-only; D3D-specific | HLSL storage resource declarations; D3D-only.  |
+| 3131 | `third_party/naga/src/back/hlsl/writer.rs` | unnecessary; reference; HLSL-only; D3D-specific | Full HLSL writer; not part of Android GLES baseline.  |
+| 3132 | `third_party/naga/src/back/mod.rs` | adaptable; reference; graphics-architecture | Backend-neutral graphics abstractions and task limits can inform architecture.  |
+| 3133 | `third_party/naga/src/back/msl/keywords.rs` | unnecessary; reference; MSL-only; Apple-specific | MSL reserved-name table; Apple/Metal only.  |
+| 3134 | `third_party/naga/src/back/msl/mesh_shader.rs` | unnecessary; reference; MSL-only; Apple-specific | Metal mesh/task output lowering; Apple-only.  |
+| 3135 | `third_party/naga/src/back/msl/mod.rs` | unnecessary; reference; MSL-only; Apple-specific | MSL backend API/options; Apple-only.  |
+| 3136 | `third_party/naga/src/back/msl/ray.rs` | unnecessary; reference; MSL-only; Apple-specific | Metal ray helpers; Apple-only.  |
+| 3137 | `third_party/naga/src/back/msl/sampler.rs` | unnecessary; reference; MSL-only; Apple-specific | Metal sampler mapping; not an Android sampler backend.  |
+| 3138 | `third_party/naga/src/back/msl/writer.rs` | unnecessary; reference; MSL-only; Apple-specific | Full MSL writer; includes a suspected external-YUV plane clamp issue.  |
+| 3139 | `third_party/naga/src/back/pipeline_constants.rs` | adaptable; reference; pipeline-specialization | Pipeline override/specialization resolution is useful for shader variants.  |
+| 3140 | `third_party/naga/src/back/spv/block.rs` | adaptable; reference; Vulkan-specific; correctness-critical | SPIR-V block lowering is a possible Vulkan shader backend foundation.  |
+| 3141 | `third_party/naga/src/back/spv/f16_polyfill.rs` | adaptable; reference; Vulkan-specific; precision-sensitive | F16 I/O polyfill is useful only when Vulkan 16-bit storage is unavailable.  |
+| 3142 | `third_party/naga/src/back/spv/helpers.rs` | adaptable; reference; Vulkan-specific | SPIR-V binding, storage-class and serialization helpers.  |
+| 3143 | `third_party/naga/src/back/spv/image.rs` | adaptable; reference; Vulkan-specific; image-capability-sensitive | SPIR-V image operations with explicit format/atomic capability limits.  |
+| 3144 | `third_party/naga/src/back/spv/index.rs` | adaptable; reference; Vulkan-specific; bounds-safety-critical | SPIR-V runtime-array and index bounds-check policy implementation.  |
+| 3145 | `third_party/naga/src/back/spv/instructions.rs` | adaptable; reference; Vulkan-specific | SPIR-V low-level instruction constructors; branch weights remain TODO.  |
+| 3146 | `third_party/naga/src/back/spv/layout.rs` | adaptable; reference; Vulkan-specific | SPIR-V module header and logical section serialization.  |
+| 3147 | `third_party/naga/src/back/spv/mesh_shader.rs` | adaptable; reference; Vulkan-specific; advanced-feature | SPIR-V mesh/task output wrapper; device extension support is uncertain.  |
+| 3148 | `third_party/naga/src/back/spv/mod.rs` | adaptable; reference; Vulkan-specific; configuration-critical | SPIR-V Writer options expose risky defaults and an unimplemented mesh clamp.  |
+| 3149 | `third_party/naga/src/back/spv/ray/mod.rs` | unnecessary; reference; Vulkan-specific; ray-tracing-only | SPIR-V ray descriptor validation and flag checking; ray feature is optional.  |
+| 3150 | `third_party/naga/src/back/spv/ray/pipeline.rs` | unnecessary; reference; Vulkan-specific; ray-tracing-only | SPIR-V trace-ray wrapper hard-codes SBT offset/stride/miss index to zero.  |

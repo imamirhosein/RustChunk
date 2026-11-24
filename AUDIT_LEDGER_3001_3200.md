@@ -2153,3 +2153,437 @@
 - Long files were read in consecutive, gap-free ranges no larger than 400 lines: 3108 (1,200), 3118 (897), 3120 (670), 3121 (502), 3122 (505), 3123 (4,634) and 3125 (2,356).
 - All entries have exactly 15 required fields. Static concerns in HandleSet/Arena/UniqueArena and the DOT call assertion were not reproduced. HLSL entries 3124–3125 are not part of the Android GLES baseline.
 - No tests/builds/benchmarks/APK/device/Forge/Minecraft/server/Aternos validation was run. No application source was changed.
+
+### 3126. `third_party/naga/src/back/hlsl/keywords.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a5ae4085af5059d017bab63e179fe1a3c0b550a6
+- Size: 20941 bytes
+- Coverage: 1–400, 401–800, 801–940; EOF; 1201–1600 confirmed empty.
+- Purpose: Reserved HLSL keywords and builtin identifiers for name sanitization.
+- Dependencies / cross-references: HLSL language/Shader Model reserved names and Naga identifier generation.
+- Implementation / logic: Builds the keyword set used to avoid emitting reserved or colliding HLSL identifiers.
+- Findings: Version/profile-specific reserved names; target compiler and Shader Model still need validation.
+- RustChunk relevance: Reference only if a separate D3D/HLSL backend is intentionally added.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Android GLES does not consume HLSL source.
+- Follow-up checks: Compile generated identifiers with DXC for each targeted Shader Model if D3D is ever supported.
+- RustChunk implementation mapping: No current mapping; optional future D3D shader-name sanitizer.
+- Evidence required before adoption: DXC keyword corpus and generated shader compile tests.
+- Completion state: COMPLETE — 940 logical lines through EOF; pinned SHA and 20,941-byte size match; not compiled.
+
+### 3127. `third_party/naga/src/back/hlsl/mesh_shader.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f0f72370e069599b9915ae1380f360d87bcd1e23
+- Size: 17384 bytes
+- Coverage: 1–400, 401–468; consecutive, gap-free; EOF; 801–1200 confirmed empty.
+- Purpose: Generates HLSL mesh/task shader output and wrapper logic.
+- Dependencies / cross-references: Naga mesh entry-point IR, HLSL writer, output bindings and Shader Model capabilities.
+- Implementation / logic: Maps per-vertex/per-primitive outputs and task dispatch into HLSL mesh shader constructs and helper wrappers.
+- Findings: Requires mesh-shader-capable D3D Shader Model/runtime; not available in the Android GLES baseline.
+- RustChunk relevance: Only a platform-specific reference for a future Windows renderer.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Forge 1.20.1 compatibility does not require HLSL mesh shaders; Android renderer must use GLES/Vulkan path.
+- Follow-up checks: If D3D is added, test output limits, primitive indices, task dispatch and per-primitive semantics on DXC/runtime.
+- RustChunk implementation mapping: No current mapping; future Windows/D3D renderer only.
+- Evidence required before adoption: DXC compile and D3D mesh/task shader execution tests.
+- Completion state: COMPLETE — 468 logical lines through EOF in 400/68 ranges; pinned SHA and 17,384-byte size match; not compiled.
+
+### 3128. `third_party/naga/src/back/hlsl/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 3222c24a1922b02380da7cbe2d01f83bc553fdb3
+- Size: 31234 bytes
+- Coverage: 1–400, 401–800, 801–833; EOF; 1201–1600 confirmed empty.
+- Purpose: Public HLSL backend API, options, errors, capabilities and pipeline configuration.
+- Dependencies / cross-references: Naga IR, HLSL writer/helpers/keywords/mesh/ray/storage modules and Shader Model selection.
+- Implementation / logic: Defines HLSL output options, binding/resource behavior, version capabilities and writer entry points.
+- Findings: Capability declarations are not equivalent to runtime driver support; HLSL profile and DXC version must match.
+- RustChunk relevance: Useful only for a future D3D backend; not a mobile renderer component.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: No Android GLES integration; keep backend selection platform-specific.
+- Follow-up checks: If Windows support is added, validate each advertised capability against DXC and D3D device feature queries.
+- RustChunk implementation mapping: No current mapping; future D3D graphics backend.
+- Evidence required before adoption: DXC compile/link and D3D capability matrix.
+- Completion state: COMPLETE — 833 logical lines through EOF in 400/400/33 ranges; pinned SHA and 31,234-byte size match; not compiled.
+
+### 3129. `third_party/naga/src/back/hlsl/ray.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0d69756362d0a09af73bbd8d373925d1ae11b883
+- Size: 22831 bytes
+- Coverage: 1–400, 401–564; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Implements HLSL ray-query and ray-tracing pipeline helper functions.
+- Dependencies / cross-references: Naga ray query/pipeline IR, HLSL writer, acceleration structures and payload globals.
+- Implementation / logic: Builds wrapper functions for ray initialization, proceed/confirm/terminate, intersection queries and trace operations.
+- Findings: Ray tracing requires D3D ray-tracing-capable hardware/runtime and exact Shader Model support; wrappers are not portable to GLES.
+- RustChunk relevance: No current mobile GLES use; conceptual reference for future ray features only.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Do not couple Forge gameplay or Android renderer to this D3D backend.
+- Follow-up checks: If D3D is targeted, validate ray flags, payload layout, query lifecycle and DXR runtime semantics.
+- RustChunk implementation mapping: No current mapping; optional future D3D ray backend.
+- Evidence required before adoption: DXC and DXR execution tests with invalid and valid ray descriptors.
+- Completion state: COMPLETE — 564 logical lines through EOF in 400/164 ranges; pinned SHA and 22,831-byte size match; not compiled.
+
+### 3130. `third_party/naga/src/back/hlsl/storage.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 5d66af00087313a9892dde1f801b1a9c99a377e0
+- Size: 27904 bytes
+- Coverage: 1–400, 401–647; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Generates HLSL storage-buffer and storage-image declarations/access helpers.
+- Dependencies / cross-references: Naga global/resource binding model, HLSL writer, image formats and binding arrays.
+- Implementation / logic: Maps storage resources to HLSL register/space and typed/raw buffer/image access patterns.
+- Findings: Resource binding arrays and typed UAV formats depend on D3D feature levels and DXC behavior; no Android GLES relevance.
+- RustChunk relevance: Reference only for a separate D3D backend.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Android uses GLES/Vulkan resource binding; do not reuse HLSL register mapping.
+- Follow-up checks: If D3D is added, test storage formats, binding arrays, access modes, offsets and resource register collisions.
+- RustChunk implementation mapping: No current mapping; future D3D resource backend.
+- Evidence required before adoption: DXC reflection plus D3D resource-binding and UAV tests.
+- Completion state: COMPLETE — 647 logical lines through EOF in 400/247 ranges; pinned SHA and 27,904-byte size match; not compiled.
+
+### 3131. `third_party/naga/src/back/hlsl/writer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: af3736ff11f386532d4b930c67482cb12cfd782c
+- Size: 216427 bytes
+- Coverage: 1–400 through 4401–4800 in consecutive 400-line chunks, then 4801–5106; EOF; 5201–5600 confirmed empty.
+- Purpose: Full HLSL shader code generator for types, resources, entry points, expressions, statements, images, atomics, mesh and ray operations.
+- Dependencies / cross-references: Naga IR/validation, HLSL options, conv/features/keywords, helper wrappers, mesh/ray/storage modules.
+- Implementation / logic: Emits HLSL translation units, resource declarations, helper functions and stage-specific control flow/operations.
+- Findings: Backend-only unsupported paths and profile limits remain; successful source emission is not DXC/device validation. It is D3D-specific.
+- RustChunk relevance: Not part of Android GLES baseline; may be reused only for future Windows renderer.
+- Decision: unnecessary; reference; HLSL-only; D3D-specific
+- 1.20.1 implications: Keep out of Android APK graphics path; Minecraft Forge Java compatibility is independent of this backend.
+- Follow-up checks: If D3D is added, compile a representative shader corpus with pinned DXC and test every enabled Shader Model feature.
+- RustChunk implementation mapping: No current mapping; optional Windows/D3D shader backend.
+- Evidence required before adoption: DXC compile/link, reflection and D3D render parity across required shaders.
+- Completion state: COMPLETE — 5,106 logical lines through EOF in twelve 400-line chunks plus 306 lines; pinned SHA and 216,427-byte size match; not compiled.
+
+### 3132. `third_party/naga/src/back/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: fa67879226f37b584792e06cb0db59dc39e8ad43
+- Size: 13959 bytes
+- Coverage: 1–400; EOF; 401–800 confirmed empty.
+- Purpose: Defines shared backend abstractions and task-dispatch limit metadata.
+- Dependencies / cross-references: Naga backend modules, ShaderStage, TaskDispatchLimits and backend capability structures.
+- Implementation / logic: Provides common backend-facing types used by GLSL/HLSL/MSL/SPIR-V implementations.
+- Findings: Backend-neutral abstractions still carry version-specific semantics; task dispatch limits must be supplied by the selected GPU API/device.
+- RustChunk relevance: Useful as a reference for a clean graphics-backend interface and explicit capability/limit separation.
+- Decision: adaptable; reference; graphics-architecture
+- 1.20.1 implications: RustChunk should derive limits from Android GLES/Vulkan device queries rather than hard-code desktop defaults.
+- Follow-up checks: Map backend limits to queried device limits and validate dispatch dimensions/overflow.
+- RustChunk implementation mapping: RustChunk graphics capability/limit interface shared across renderer backends.
+- Evidence required before adoption: Device capability capture and per-backend limit tests.
+- Completion state: COMPLETE — 400 logical lines through EOF; pinned SHA and 13,959-byte size match; inspected only.
+
+### 3133. `third_party/naga/src/back/msl/keywords.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0f35b424bf88c4c73aa73912681eb04fa475af56
+- Size: 8477 bytes
+- Coverage: 1–395; EOF.
+- Purpose: Reserved Metal Shading Language identifiers and builtin names.
+- Dependencies / cross-references: MSL specification names and Naga identifier generation.
+- Implementation / logic: Defines reserved identifier list and cached keyword set for MSL code generation.
+- Findings: The set is MSL-version-specific; compiler acceptance must be checked against the selected Metal toolchain.
+- RustChunk relevance: Reference only for an Apple/Metal renderer.
+- Decision: unnecessary; reference; MSL-only; Apple-specific
+- 1.20.1 implications: Android Mali does not use Metal/Objective-C.
+- Follow-up checks: If Apple support is added, test reserved names against the target Metal compiler.
+- RustChunk implementation mapping: No current mapping; future Apple/Metal shader sanitizer.
+- Evidence required before adoption: Metal compiler keyword corpus and shader compile tests.
+- Completion state: COMPLETE — 395 logical lines through EOF; pinned SHA and 8,477-byte size match; not compiled.
+
+### 3134. `third_party/naga/src/back/msl/mesh_shader.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a172bde802d058dcac90632505cec7aeafb82ea7
+- Size: 18432 bytes
+- Coverage: 1–400, 401–438; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Builds Metal mesh/task shader output wrappers and output copy logic.
+- Dependencies / cross-references: Naga mesh/task IR, MSL writer, output structures and Metal stage limits.
+- Implementation / logic: Maps vertex/primitive output data into Metal mesh shader output structures and dispatch wrappers.
+- Findings: Requires Metal mesh shader support and Apple-specific limits; not a mobile Android path.
+- RustChunk relevance: No current Android use; future Apple backend reference only.
+- Decision: unnecessary; reference; MSL-only; Apple-specific
+- 1.20.1 implications: Do not use for Android GLES/Vulkan or Forge mod compatibility.
+- Follow-up checks: If Apple target is added, validate max vertices/primitives, task dispatch and per-primitive output semantics.
+- RustChunk implementation mapping: No current mapping; optional Apple renderer.
+- Evidence required before adoption: Metal compile and runtime mesh/task output tests.
+- Completion state: COMPLETE — 438 logical lines through EOF in 400/38 ranges; pinned SHA and 18,432-byte size match; not compiled.
+
+### 3135. `third_party/naga/src/back/msl/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 45a3a8ac4ac3aba2d4751e2f2d2190f39b981a77
+- Size: 34859 bytes
+- Coverage: 1–400, 401–800, 801–883; consecutive; EOF; 1201–1600 confirmed empty.
+- Purpose: Public MSL backend API, options, capabilities, resource mapping and pipeline configuration.
+- Dependencies / cross-references: Naga IR, MSL writer, sampler/ray/mesh helpers, Metal language version and binding maps.
+- Implementation / logic: Defines MSL writer options, binding maps, stage support and generated source entry points.
+- Findings: Metal capability declarations and language versions must match actual Apple GPU/runtime; not portable to Android.
+- RustChunk relevance: Reference only for a future Apple/Metal target.
+- Decision: unnecessary; reference; MSL-only; Apple-specific
+- 1.20.1 implications: No Android renderer integration; keep MSL separate from GLES/Vulkan backend selection.
+- Follow-up checks: If Apple support is added, verify Metal language version, argument buffers, resource limits and stage features.
+- RustChunk implementation mapping: No current mapping; future Apple graphics backend.
+- Evidence required before adoption: Metal compile/link and runtime capability tests.
+- Completion state: COMPLETE — 883 logical lines through EOF in 400/400/83 ranges; pinned SHA and 34,859-byte size match; not compiled.
+
+### 3136. `third_party/naga/src/back/msl/ray.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 05ae6fc8c152b3a1dbd2daf144ec7732bae00f41
+- Size: 24021 bytes
+- Coverage: 1–400, 401–533; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Generates Metal ray-query and ray-tracing pipeline wrappers.
+- Dependencies / cross-references: Naga ray IR, MSL writer, acceleration structures and Metal intersection query API.
+- Implementation / logic: Maps ray query initialization/proceed/confirm and ray tracing operations to Metal-specific constructs.
+- Findings: Ray support is Metal-runtime/device specific; behavior and available query APIs vary by Metal version.
+- RustChunk relevance: No Android use; Apple-only reference.
+- Decision: unnecessary; reference; MSL-only; Apple-specific
+- 1.20.1 implications: Keep out of Android GLES/Vulkan baseline.
+- Follow-up checks: If Apple is targeted, validate ray query lifecycle, flags, payload and acceleration-structure APIs.
+- RustChunk implementation mapping: No current mapping; future Apple ray backend.
+- Evidence required before adoption: Metal compile/runtime ray tracing tests.
+- Completion state: COMPLETE — 533 logical lines through EOF in 400/133 ranges; pinned SHA and 24,021-byte size match; not compiled.
+
+### 3137. `third_party/naga/src/back/msl/sampler.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 5dc5afdb0069c54874dbf0da179e3d3b4ca40b7c
+- Size: 3986 bytes
+- Coverage: 1–148; EOF.
+- Purpose: Maps Naga sampler descriptions and inline sampler properties to Metal sampler syntax/objects.
+- Dependencies / cross-references: Naga sampler descriptors, MSL writer and Metal filtering/addressing enums.
+- Implementation / logic: Converts address modes, filters, comparison and sampler property combinations into MSL representation.
+- Findings: Metal inline sampler restrictions and unsupported property combinations must be handled explicitly; not a GLES sampler implementation.
+- RustChunk relevance: Conceptual sampler mapping only; Android must use GLES/Vulkan sampler APIs.
+- Decision: unnecessary; reference; MSL-only; Apple-specific
+- 1.20.1 implications: No direct 1.20.1 Forge or Android renderer reuse.
+- Follow-up checks: If Apple support is added, test every address/filter/compare combination against Metal validation.
+- RustChunk implementation mapping: No current mapping; optional Apple sampler adapter.
+- Evidence required before adoption: Metal compile and sampler behavior tests.
+- Completion state: COMPLETE — 148 logical lines through EOF; pinned SHA and 3,986-byte size match; not compiled.
+
+### 3138. `third_party/naga/src/back/msl/writer.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 119b41edb81acbdc05ea1de4b820dca56eafc776
+- Size: 368991 bytes
+- Coverage: 1–400 through 8001–8400 in consecutive 400-line chunks, then 8401–8588; EOF; 8801–9200 confirmed empty.
+- Purpose: Full Metal Shading Language code generator for types, resources, entry points, expressions, images, atomics, mesh and ray operations.
+- Dependencies / cross-references: Naga IR/validation, MSL options, helper/sampler/ray/mesh modules and Metal resource model.
+- Implementation / logic: Emits MSL source, resource/argument-buffer declarations, shader-stage wrappers and helper/polyfill code.
+- Findings: In external YUV wrapper, `plane2_coords` upper clamp appears to subtract `plane1_half_texel` rather than `plane2_half_texel`; suspected copy/paste bug, not reproduced. Some sampler properties are explicitly TODO/unsupported.
+- RustChunk relevance: No Android use; large Apple-only backend. The suspected YUV issue matters only if MSL is adopted.
+- Decision: unnecessary; reference; MSL-only; Apple-specific
+- 1.20.1 implications: Keep out of Android GLES/Vulkan renderer.
+- Follow-up checks: If Apple support is added, test external YUV crop bounds with differing plane dimensions and every sampler property.
+- RustChunk implementation mapping: No current mapping; future Apple/Metal backend only.
+- Evidence required before adoption: Metal compiler/runtime YUV fixtures with non-identical plane sizes and sampler matrix.
+- Completion state: COMPLETE — 8,588 logical lines through EOF in twenty-one 400-line chunks plus 188 lines; pinned SHA and 368,991-byte size match; not compiled.
+
+### 3139. `third_party/naga/src/back/pipeline_constants.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b9e429cf32a03bab1cbc3e6175f7dc681d0a2f0a
+- Size: 42155 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1217; consecutive; EOF; 1601–2000 confirmed empty.
+- Purpose: Resolves pipeline overrides/specialization constants and compacts the module for a selected entry point.
+- Dependencies / cross-references: Naga Module overrides, constant expressions, entry-point selection and type/value conversion.
+- Implementation / logic: Evaluates supplied pipeline constants, substitutes defaults where appropriate, removes resolved overrides and prepares per-pipeline IR.
+- Findings: Requires correct override IDs/types/defaults and entry-point reachability; malformed or missing values return validation errors.
+- RustChunk relevance: Highly relevant to compiling shader variants/pipelines without rebuilding unrelated game data.
+- Decision: adaptable; reference; pipeline-specialization
+- 1.20.1 implications: Use pipeline constants for renderer variants only; Minecraft 1.20.1 mod shader packs may require exact compatibility with upstream Naga version.
+- Follow-up checks: Test named/ID overrides, defaults, type mismatches, missing values, unused overrides and entry-point filtering.
+- RustChunk implementation mapping: RustChunk shader pipeline cache key and specialization stage.
+- Evidence required before adoption: Deterministic tests proving distinct override sets produce correct distinct shader modules.
+- Completion state: COMPLETE — 1,217 logical lines through EOF in three 400-line chunks plus 17 lines; pinned SHA and 42,155-byte size match; not executed.
+
+### 3140. `third_party/naga/src/back/spv/block.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bb977e81fcaadd8bdbb18f4dcd7f318123f4f444
+- Size: 188584 bytes
+- Coverage: 1–400 through 4001–4400 in eleven consecutive 400-line chunks; EOF; 4401–4800 confirmed empty.
+- Purpose: Core SPIR-V block/function lowering for expressions, statements, control flow, memory and shader operations.
+- Dependencies / cross-references: Naga IR/validation, SPIR-V Writer, Instruction builder, image/index helpers, ray/mesh/subgroup modules and bounds policies.
+- Implementation / logic: Lowers Naga function blocks into SPIR-V instructions, manages block/merge labels, locals, loads/stores, access chains, calls and structured control flow.
+- Findings: Complex lowering depends on prior validation and exact Vulkan/SPIR-V capabilities; unsupported IR paths return errors or panic paths. No runtime Vulkan evidence from static review.
+- RustChunk relevance: Strong candidate reference if RustChunk chooses Vulkan on Android; not a Minecraft chunk scheduler or Forge runtime.
+- Decision: adaptable; reference; Vulkan-specific; correctness-critical
+- 1.20.1 implications: Mali-G52 Vulkan support and driver extensions must be queried; choose Vulkan only after actual device tests.
+- Follow-up checks: Compile/validate representative Minecraft shaders with SPIR-V Tools and run on target Mali driver; test bounds policies and control flow.
+- RustChunk implementation mapping: Potential Naga SPIR-V backend within a Vulkan renderer abstraction.
+- Evidence required before adoption: SPIR-V validation, Vulkan pipeline creation and render parity on target device.
+- Completion state: COMPLETE — 4,400 logical lines through EOF in eleven consecutive 400-line chunks; pinned SHA and 188,584-byte size match; not compiled.
+
+### 3141. `third_party/naga/src/back/spv/f16_polyfill.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bd788592fa0ce2d08ae32bf006bd79e27000a4ad
+- Size: 3181 bytes
+- Coverage: 1–104; EOF.
+- Purpose: Polyfills 16-bit float shader input/output when native SPIR-V storage capability is unavailable.
+- Dependencies / cross-references: SPIR-V Writer, f16 types, input/output interface variables and conversion instructions.
+- Implementation / logic: Creates f32-compatible interface values and conversion logic for f16 data paths.
+- Findings: Polyfill changes precision/representation and must match Vulkan capability and shader interface rules.
+- RustChunk relevance: Useful only for a Vulkan backend on devices lacking required 16-bit storage features.
+- Decision: adaptable; reference; Vulkan-specific; precision-sensitive
+- 1.20.1 implications: Query `StorageInputOutput16` and float16 features on the Android driver; don't assume Mali support from GPU name alone.
+- Follow-up checks: Test f16 input/output round trips, NaN/subnormal behavior and interface layout with/without native capability.
+- RustChunk implementation mapping: Optional f16 I/O fallback in Vulkan shader backend.
+- Evidence required before adoption: SPIR-V validation and GPU readback precision tests.
+- Completion state: COMPLETE — 104 logical lines through EOF; pinned SHA and 3,181-byte size match; not compiled.
+
+### 3142. `third_party/naga/src/back/spv/helpers.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d3de254918a11586357925b7188785d7279812bd
+- Size: 7467 bytes
+- Coverage: 1–213; EOF.
+- Purpose: Provides SPIR-V binding/storage/image helpers and string/word packing utilities.
+- Dependencies / cross-references: SPIR-V enums, Naga resource bindings, instruction layout and type metadata.
+- Implementation / logic: Maps address spaces/storage classes, formats and decorations; packs strings into SPIR-V words and handles wrapped globals.
+- Findings: String chunk helper assumes a positive chunk limit; internal callers pass a fixed positive limit. Resource mapping must align with Vulkan descriptor rules.
+- RustChunk relevance: Useful low-level reference if Naga SPIR-V backend is adopted.
+- Decision: adaptable; reference; Vulkan-specific
+- 1.20.1 implications: Use Vulkan descriptor layout and Android driver capability data; do not reuse raw mapping for GLES.
+- Follow-up checks: Test string packing at empty, aligned, unaligned and >64KiB boundaries; verify all storage class/format mappings.
+- RustChunk implementation mapping: Optional SPIR-V helper layer only with pinned Naga revision.
+- Evidence required before adoption: SPIR-V Tools validation and mapping unit tests.
+- Completion state: COMPLETE — 213 logical lines through EOF; pinned SHA and 7,467-byte size match; inspected only.
+
+### 3143. `third_party/naga/src/back/spv/image.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c185806cd33eab341f8ee7bed58ad346047e7380
+- Size: 51731 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1383; consecutive; EOF; 1601–2000 confirmed empty.
+- Purpose: Lowers SPIR-V image load/sample/query/store and storage-image atomic operations.
+- Dependencies / cross-references: Naga image IR, SPIR-V Instruction builder, bounds-check policies, image formats and capability tracking.
+- Implementation / logic: Builds sampled-image ops, LOD/gather, clamp-to-edge, dimension queries, bounds-restricted loads, stores and supported atomics.
+- Findings: Storage-image atomic `Exchange` explicitly errors; BGRA8 writes require `StorageImageWriteWithoutFormat`; clamp-to-edge is restricted to level zero and validation assumptions.
+- RustChunk relevance: Relevant to Vulkan texture/storage-image implementation, with explicit capability/format limits.
+- Decision: adaptable; reference; Vulkan-specific; image-capability-sensitive
+- 1.20.1 implications: Use only after target Vulkan format/atomic/extension queries; GLES renderer requires a separate backend.
+- Follow-up checks: Test every image dimension/class, LOD, array/sample index, bounds policy, BGRA8 and atomic operation on target driver.
+- RustChunk implementation mapping: Potential Vulkan image backend; not chunk streaming or Forge mod loading.
+- Evidence required before adoption: SPIR-V validation plus Vulkan image read/write/sample/atomic GPU tests.
+- Completion state: COMPLETE — 1,383 logical lines through EOF in three 400-line chunks plus 183 lines; pinned SHA and 51,731-byte size match; not compiled.
+
+### 3144. `third_party/naga/src/back/spv/index.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b61b645d44288a06e065ad7f065d69e3bac4f514
+- Size: 26059 bytes
+- Coverage: 1–400, 401–800; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Implements SPIR-V array/vector/matrix/runtime-array index bounds checks.
+- Dependencies / cross-references: Naga GuardedIndex, runtime array length, resource binding maps, SPIR-V selection blocks and bounds policies.
+- Implementation / logic: Resolves known indices statically; emits UMin restrictions or conditional loads for runtime checks; computes runtime array lengths.
+- Findings: Restrict policy intentionally maps invalid indices to an arbitrary in-bounds element (not conventional signed clamp); zero-length sequences rely on validation invariants.
+- RustChunk relevance: Important safety reference for GPU buffer/index access; policy semantics must be explicit.
+- Decision: adaptable; reference; Vulkan-specific; bounds-safety-critical
+- 1.20.1 implications: Renderer resource indexing must use the selected backend's exact bounds policy and validated lengths.
+- Follow-up checks: Test negative/out-of-range, runtime arrays, binding arrays, zero-length validation and ReadZeroSkipWrite branches.
+- RustChunk implementation mapping: RustChunk GPU buffer/array access validation in Vulkan backend.
+- Evidence required before adoption: Property tests plus SPIR-V Tools and runtime GPU validation.
+- Completion state: COMPLETE — 800 logical lines through EOF in two consecutive 400-line chunks; pinned SHA and 26,059-byte size match; not tested.
+
+### 3145. `third_party/naga/src/back/spv/instructions.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0a22bc3dbfea0a18c5c5584a6342f41327fdcf15
+- Size: 42471 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1410; consecutive; EOF; 1601–2000 confirmed empty.
+- Purpose: Constructs low-level SPIR-V instruction objects for declarations, constants, memory, image, ray, arithmetic and control flow.
+- Dependencies / cross-references: SPIR-V Op enum, Word operands, instruction layout serializer and backend modules.
+- Implementation / logic: Provides typed constructors that assemble opcode, result/type IDs and operands before serialization.
+- Findings: Branch weights are explicitly TODO; constructors rely on callers to supply operands in spec-defined order and valid IDs.
+- RustChunk relevance: Useful as the low-level instruction-emission layer if using Naga SPIR-V backend, not as a standalone renderer.
+- Decision: adaptable; reference; Vulkan-specific
+- 1.20.1 implications: Pin SPIR-V/Naga versions and validate emitted module against the Vulkan target environment.
+- Follow-up checks: Run SPIR-V Tools validation and constructor serialization tests for each opcode family used.
+- RustChunk implementation mapping: Optional SPIR-V instruction builder only with the matching backend revision.
+- Evidence required before adoption: Opcode/operand fixtures, SPIR-V validation and Vulkan pipeline creation.
+- Completion state: COMPLETE — 1,410 logical lines through EOF in three 400-line chunks plus 210 lines; pinned SHA and 42,471-byte size match; not compiled.
+
+### 3146. `third_party/naga/src/back/spv/layout.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1bd1f43754e1f11ac284d7ad56805d656f66d4d1
+- Size: 7273 bytes
+- Coverage: 1–225; EOF.
+- Purpose: Serializes SPIR-V physical header and logical instruction sections.
+- Dependencies / cross-references: SPIR-V instruction vectors, physical/logical layout and reclaimable vectors.
+- Implementation / logic: Writes magic/version/generator/bound/schema header and emits capabilities, extensions, entry points, declarations and function sections in required order.
+- Findings: Correctness depends on the ID bound and instruction section ordering; `Instruction::to_words` serializes word count/opcode/type/result/operands.
+- RustChunk relevance: Useful low-level module serialization reference for Vulkan backend.
+- Decision: adaptable; reference; Vulkan-specific
+- 1.20.1 implications: Keep the emitted SPIR-V version and generator metadata aligned with selected Vulkan environment.
+- Follow-up checks: Validate word counts, ID bound, section ordering and header with SPIR-V Tools.
+- RustChunk implementation mapping: Optional SPIR-V module serializer with pinned instruction model.
+- Evidence required before adoption: Golden word streams and SPIR-V validation.
+- Completion state: COMPLETE — 225 logical lines through EOF; pinned SHA and 7,273-byte size match; inspected only.
+
+### 3147. `third_party/naga/src/back/spv/mesh_shader.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c49f944eba59b766dffba50596f11f7a21fc2ef3
+- Size: 41490 bytes
+- Coverage: 1–400, 401–800, 801–1027; consecutive; EOF; 1201–1600 confirmed empty.
+- Purpose: Generates SPIR-V mesh/task shader output variables and wrapper loops.
+- Dependencies / cross-references: Naga mesh/task IR, SPIR-V Writer, output bindings, workgroup barriers and dispatch limits.
+- Implementation / logic: Creates per-vertex/per-primitive output blocks, emits SetMeshOutputs, copies workgroup outputs and bounds task dispatch products.
+- Findings: `mesh_shader_primitive_indices_clamp` option is documented as unimplemented; output handling assumes validated builtins/bindings and uses unwraps.
+- RustChunk relevance: Potential Vulkan mesh/task shader reference only; feature support on Android Mali is uncertain and not baseline.
+- Decision: adaptable; reference; Vulkan-specific; advanced-feature
+- 1.20.1 implications: Query Vulkan mesh-shader extension/device support; don't assume GLES or Mali model name implies it.
+- Follow-up checks: Validate output limits, primitive indices, task dispatch overflow and synchronization on actual hardware.
+- RustChunk implementation mapping: Optional Vulkan mesh/task stage only if device extension exists.
+- Evidence required before adoption: SPIR-V validation and Vulkan mesh/task execution tests.
+- Completion state: COMPLETE — 1,027 logical lines through EOF in two 400-line chunks plus 227 lines; pinned SHA and 41,490-byte size match; not compiled.
+
+### 3148. `third_party/naga/src/back/spv/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c5c817fcdebbe7aee2d05df27961bd4401325c0a
+- Size: 44420 bytes
+- Coverage: 1–400, 401–800, 801–1200, 1201–1229; consecutive; EOF; 1601–2000 confirmed empty.
+- Purpose: Public SPIR-V backend API, Writer/Options, type model, capability declarations and module orchestration.
+- Dependencies / cross-references: SPIR-V block/image/index/instruction/layout/mesh/ray/subgroup modules, Naga IR and Vulkan capability types.
+- Implementation / logic: Defines Writer state, type deduplication, binding maps, shader options, capability checks and output assembly.
+- Findings: `fake_missing_bindings` defaults to true although docs warn it may produce invalid SPIR-V; `mesh_shader_primitive_indices_clamp` is documented unimplemented despite default true. `supported_capabilities` is a static superset, not device detection.
+- RustChunk relevance: Highly relevant if RustChunk chooses Vulkan; default options must be hardened and capabilities constrained to queried device support.
+- Decision: adaptable; reference; Vulkan-specific; configuration-critical
+- 1.20.1 implications: For production, provide complete binding maps, disable fake bindings, set explicit capabilities and validate on target Vulkan driver.
+- Follow-up checks: Test missing bindings, exact capabilities, SPIR-V versions, workgroup zero-init, integer division checks and mesh index clamp behavior.
+- RustChunk implementation mapping: Potential Naga SPIR-V backend integration behind Vulkan renderer; separate from Forge Java runtime.
+- Evidence required before adoption: SPIR-V Tools validation and real Mali Vulkan pipeline tests with strict options.
+- Completion state: COMPLETE — 1,229 logical lines through EOF in three 400-line chunks plus 29 lines; pinned SHA and 44,420-byte size match; not compiled.
+
+### 3149. `third_party/naga/src/back/spv/ray/mod.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a7f672e6485c03d1b6d09ab79fbcf57e2de9c302
+- Size: 16307 bytes
+- Coverage: 1–400, 401–470; consecutive; EOF; 801–1200 confirmed empty.
+- Purpose: Shared SPIR-V ray-query and ray-pipeline descriptor extraction/validation helpers.
+- Dependencies / cross-references: Naga ray descriptor, RayFlag bits, SPIR-V writer and ray query/pipeline wrappers.
+- Implementation / logic: Extracts ray flags, origin/direction and t ranges; optionally validates finite values, range order and mutually exclusive flag combinations.
+- Findings: Invalid descriptors are guarded only when validation option is enabled; debug printf depends on non-semantic extension availability.
+- RustChunk relevance: Only relevant if RustChunk Vulkan renderer deliberately supports ray queries/pipelines; not a Minecraft chunk renderer requirement.
+- Decision: unnecessary; reference; Vulkan-specific; ray-tracing-only
+- 1.20.1 implications: Do not require ray tracing for Android baseline; query optional Vulkan extension/device support first.
+- Follow-up checks: Test NaN/Inf, negative tmin, tmin>tmax and conflicting ray flags with validation on/off.
+- RustChunk implementation mapping: No current mapping; optional future Vulkan ray backend.
+- Evidence required before adoption: SPIR-V validation and GPU ray-query tests on supported devices.
+- Completion state: COMPLETE — 470 logical lines through EOF in 400/70 ranges; pinned SHA and 16,307-byte size match; not compiled.
+
+### 3150. `third_party/naga/src/back/spv/ray/pipeline.rs`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 57c67ac1191c347837f993dc450fe9b67a860dbe
+- Size: 5050 bytes
+- Coverage: 1–125; EOF; 401–800 confirmed empty.
+- Purpose: Emits SPIR-V trace-ray wrapper functions for ray-tracing pipeline calls.
+- Dependencies / cross-references: Naga RayPipelineFunction, acceleration structures, payload globals, shared ray descriptor validation and SPIR-V instructions.
+- Implementation / logic: Builds a cached trace-ray function, validates descriptor when enabled, emits TraceRayKHR and skips invalid calls.
+- Findings: SBT offset, stride and miss index are hard-coded to zero in this wrapper; this matches the limited current IR surface but is a pipeline capability constraint to verify.
+- RustChunk relevance: No Android baseline value; ray tracing is optional and device-specific.
+- Decision: unnecessary; reference; Vulkan-specific; ray-tracing-only
+- 1.20.1 implications: Do not include ray tracing in initial Android renderer unless actual device/driver and shader requirements demand it.
+- Follow-up checks: Test payload layout, SBT assumptions, validation branches and runtime trace behavior on a supported Vulkan device.
+- RustChunk implementation mapping: No current mapping; optional future Vulkan ray-tracing module.
+- Evidence required before adoption: SPIR-V validation plus Vulkan ray-tracing pipeline execution tests.
+- Completion state: COMPLETE — 125 logical lines through EOF; pinned SHA and 5,050-byte size match; not compiled.
+
+## Checkpoint 3126–3150 — COMPLETE
+
+- 25 new source files inspected one at a time from the pinned Starling snapshot after excluding all 3,125 prior Index paths.
+- All 25 source blob SHAs and byte sizes match the complete pinned tree (5,749 entries; untruncated). Canonical logical line counts and complete EOF coverage are recorded.
+- Long files were read in consecutive, gap-free ranges no larger than 400 lines: 3126 (940), 3127 (468), 3128 (833), 3129 (564), 3130 (647), 3131 (5,106), 3134 (438), 3135 (883), 3136 (533), 3138 (8,588), 3139 (1,217), 3140 (4,400), 3143 (1,383), 3145 (1,410), 3147 (1,027), 3148 (1,229) and 3149 (470).
+- Every new entry has exactly 15 required fields. The checkpoint covers HLSL, MSL and SPIR-V backends; HLSL/MSL are platform-specific, while SPIR-V is a possible Vulkan path subject to actual device capability and driver tests.
+- Static concerns include MSL external-YUV plane clamping and SPIR-V default fake bindings / unimplemented mesh primitive-index clamp; none was reproduced by tests.
+- No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation was run. No RustChunk application source was changed.

@@ -2,10 +2,10 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3125** are committed. Stages **2601–2800** and **2801–3000** are CLOSED; stage **3001–3200 is IN PROGRESS (125/200)**.
-- Sections **3001–3050** and **3051–3100** are CLOSED. Section **3101–3150** is IN PROGRESS (25/50); section **3151–3200** is covered by the same explicit grant.
-- Checkpoints through **3101–3125** are complete and read-back verified. Exceptional authorization **3101–3200 is ACTIVE (25/100 completed)**. Report at 3150, continue under the same grant, and **STOP at 3200**.
-- Active Ledger contains **125 records**, exactly 15 fields each. Index contains **3,125 sequential unique paths** with no duplicates and Ledger/Index alignment.
+- Entries **1–3150** are committed. Stages **2601–2800** and **2801–3000** are CLOSED; stage **3001–3200 is IN PROGRESS (150/200)**.
+- Sections **3001–3050**, **3051–3100** and **3101–3150** are CLOSED (50/50 each); section **3151–3200** is covered by the same explicit grant.
+- Checkpoints through **3126–3150** are complete and read-back verified. Exceptional authorization **3101–3200 is ACTIVE (50/100 completed)**. Continue under the same grant and **STOP at 3200**.
+- Active Ledger contains **150 records**, exactly 15 fields each. Index contains **3,150 sequential unique paths** with no duplicates and Ledger/Index alignment.
 - Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No application source changes or runtime validation.
 
 
@@ -524,3 +524,12 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Active Ledger contains 125 entries (3001–3125), exactly 15 fields each; Index contains 3,125 sequential unique paths with matching Ledger path/Decision rows.
 - Exceptional authorization 3101–3200 remains active. Continue 3126–3150, report at 3150, continue 3151–3200 under the same grant, and **STOP at 3200**.
 - No application source changed; no tests/builds/benchmarks/APK/device/Forge/Minecraft/server validation.
+
+
+## Checkpoint 3126–3150 — COMPLETE — 2026-11-24
+
+- 25 source files inspected one at a time through EOF after excluding all 3,125 prior Index paths.
+- SHA/byte-size match the complete pinned tree; canonical line counts and complete EOF coverage are recorded. Long files use consecutive, gap-free chunks no larger than 400 lines.
+- Active Ledger contains 150 entries (3001–3150), exactly 15 fields each; Index contains 3,150 sequential unique paths with matching Ledger path/Decision rows.
+- Exceptional authorization 3101–3200 remains active. Continue 3151–3175, then 3176–3200 under the same grant; report and **STOP at 3200**.
+- No application source changed; no tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server validation.
