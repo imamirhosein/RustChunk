@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3200 are complete** across the stage Ledgers. Index: **3,200 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is CLOSED (200/200). Sections 3001–3050, 3051–3100, 3101–3150 and 3151–3200 are all CLOSED (50/50 each). Exceptional authorization 3101–3200 is COMPLETE/CONSUMED. Checkpoints through 3176–3200 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
+- Source ledgers: entries **1–3200 are complete** across the stage Ledgers. Index: **3,225 sequential unique paths**, no duplicates and full Ledger/Index path alignment. Stages 2601–2800 and 2801–3000 are closed; stage 3001–3200 is CLOSED (200/200). Sections 3001–3050, 3051–3100, 3101–3150 and 3151–3200 are all CLOSED (50/50 each). Exceptional authorization 3101–3200 is COMPLETE/CONSUMED. Checkpoints through 3176–3200 are committed and read-back verified. The preserved 3,000-entry backup remains `backup/audit-3000-final-2026-11-23`.
 
 ## Part 1 — Entries 1–25
 
@@ -3704,3 +3704,28 @@
 | 3198 | `third_party/naga/src/front/spv/image.rs` | adaptable; reference; SPIR-V-image-frontend | SPIR-V image type/operation frontend. |
 | 3199 | `third_party/naga/src/front/spv/mod.rs` | adaptable; reference; SPIR-V-frontend; validation-critical | SPIR-V top-level module parser and capability orchestration. |
 | 3200 | `third_party/naga/src/front/spv/next_block.rs` | rewrite required; reference; SPIR-V-synchronization-semantics | SPIR-V block parser discards CopyMemory flags and atomic/barrier scope/semantics. |
+| 3201 | `docs/media/accessibility-settings.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3202 | `docs/media/banner.webp` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3203 | `docs/media/brand/avatar.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3204 | `docs/media/brand/candidates/a-sun-slices.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3205 | `docs/media/brand/candidates/b-horizon-h.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3206 | `docs/media/brand/candidates/c-sunrise.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3207 | `docs/media/brand/icon-1024.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3208 | `docs/media/brand/icon-macos-1024.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3209 | `docs/media/brand/icon-macos.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3210 | `docs/media/brand/icon.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3211 | `docs/media/brand/mark-dark.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3212 | `docs/media/brand/mark.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3213 | `docs/media/brand/social/card.html` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3214 | `docs/media/brand/social/github-avatar-500.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3215 | `docs/media/brand/social/github-social-1280x640.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3216 | `docs/media/brand/web/apple-touch-icon.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3217 | `docs/media/brand/web/favicon-32.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3218 | `docs/media/brand/web/favicon.svg` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3219 | `docs/media/command-suggestions/after.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3220 | `docs/media/command-suggestions/before.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3221 | `docs/media/entity-culling-async.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3222 | `docs/media/entity-culling-off.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3223 | `docs/media/entity-culling-sync.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3224 | `docs/media/hand-fov-after.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |
+| 3225 | `docs/media/hand-fov-before.png` | unnecessary; reference; documentation-assets | Documentation/branding media; no 1.20.1 runtime implementation evidence. |

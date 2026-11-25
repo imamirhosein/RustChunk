@@ -2055,3 +2055,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Stage 3001–3200 closeout: all 200 entries and all four 50-file sections are complete. Static findings include GLSL image atomic old-value mismatch, SPIR-V unordered comparison semantic loss and SPIR-V synchronization/memory-access operand loss. These require targeted regression tests before adopting affected frontend paths.
 - No tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server/Aternos validation; no application source changes. No backup beyond the immutable 3,000-entry backup was created.
 - Exceptional user authorization 3101–3200 is complete/consumed. **STOP at 3200. Entries 3201+ require new explicit authorization.**
+
+
+## Checkpoint 3201–3225 — COMPLETE (25/25) — 2026-11-25
+
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; recursive tree 4,968 blobs, complete/untruncated.
+- 25 new sequential unique paths were selected from the full lexical remaining set after excluding the 3,200-entry Index; source blob SHAs and sizes match the pinned tree.
+- SVG/HTML sources read through EOF; raster assets fetched and rendered. Ledger records exact source SHAs/sizes and text/binary coverage. Every record has 15 fields.
+- New active Ledger: AUDIT_LEDGER_3201_3400.md (25 records). Index: 3,225 sequential unique paths; Ledger/Index paths and Decisions aligned.
+- These are documentation/branding assets; no runtime/performance/Forge compatibility proof. Redistribution review remains pending.
+- No app source, build, tests, benchmark, APK/device or game/server validation.
+- Section 3201–3250 is authorized; next checkpoint 3226–3250. STOP at 3250.

@@ -552,3 +552,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Active Ledger contains 200 entries (3001–3200), exactly 15 fields each; Index contains 3,200 sequential unique paths with matching Ledger path/Decision rows.
 - Stage 3001–3200 and all four 50-file sections are CLOSED. Exceptional grant 3101–3200 is consumed. **STOP at 3200; 3201+ requires new explicit authorization.**
 - No application source changed; no tests/builds/benchmarks/APK/device/Vulkan/Forge/Minecraft/server validation.
+
+
+## Stage 3201–3400 — current authorization
+
+- Stage 3201–3400 is active. Section 3201–3250 is authorized; 3251–3300, 3301–3350 and 3351–3400 are locked pending explicit authorization.
+- Checkpoint 3201–3225 COMPLETE and verified; 3226–3250 AUTHORIZED under same one-time grant. STOP at 3250.
+- Active Ledger AUDIT_LEDGER_3201_3400.md: 25 records. Index 3,225 sequential unique paths. No app source changes or runtime checks.

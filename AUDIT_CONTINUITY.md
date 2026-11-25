@@ -940,3 +940,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Source SHA/byte-size, 15-field Ledger records, Index uniqueness and Ledger/Index alignment passed.
 - Stage 3001–3200 is CLOSED (200/200), with all four 50-file sections closed and all eight 25-file checkpoints committed/read-back verified.
 - Authorization 3101–3200 is consumed. **STOP at 3200. Do not inspect or modify 3201+ until the user explicitly authorizes the next range.**
+
+
+## Latest authoritative resume — checkpoint 3201–3225 (2026-11-25)
+
+- Audit branch HEAD checkpoint: 3201–3225 committed/read-back verified; total Index entries 3,225 unique paths.
+- Stage 3201–3400 is active. Reporting section 3201–3250 is authorized by the user's exceptional grant. Checkpoint 3201–3225 closed; next 3226–3250 is covered by the same grant.
+- Active Ledger AUDIT_LEDGER_3201_3400.md: 25 records, each 15 fields. Index and Ledger path/Decision alignment verified.
+- Pinned source 5432370d573642041585c69b40fb045b27133488; complete recursive tree 4,968 blobs, not truncated. Entries 3201–3225 are documentation images/SVG/HTML. Binary assets rendered; text sources read EOF. SHAs/sizes recorded.
+- STOP at 3250; do not inspect 3251+ without new explicit authorization. No application source/build/test/device/game/server validation. main and backups unchanged.

@@ -976,3 +976,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The six audit documents are updated in the final 3176–3200 checkpoint commit and must be read back from GitHub before this closeout is considered durable.
 - Static findings requiring follow-up before reuse include GLSL image-atomic return semantics, SPIR-V unordered floating comparisons, SPIR-V synchronization/memory-access operand preservation and prior recorded backend-specific concerns. No tests/builds/benchmarks/device validation were run.
 - **STOP at 3200. No work on 3201+ without a new explicit user grant.**
+
+
+## Latest resume update — 2026-11-25 — checkpoint 3201–3225
+
+- Completed entries 1–3225. Stage 3201–3400 active; section 3201–3250 authorized under a one-time exceptional user grant.
+- Checkpoint 3201–3225 complete and verified; checkpoint 3226–3250 is already authorized. STOP at 3250; 3251+ requires fresh explicit permission.
+- Active Ledger AUDIT_LEDGER_3201_3400.md contains 25 entries with 15 fields each. Index has 3,225 sequential unique paths.
+- Keep 25-file commits and six-document read-back transaction, serial source review and max 400-line chunks. Binary coverage is recorded as visual inspection, not logical line ranges. No app source or runtime validation.
