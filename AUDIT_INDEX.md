@@ -3984,28 +3984,28 @@
 | 3473 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingHurtOracle.java` | adaptable; reference; parity-test-oracle | outer hurtServer damage lifecycle, cooldown, tags, shield and effects |
 | 3474 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingLandingOracle.java` | adaptable; reference; parity-test-oracle | landing checkFallDamage, fluid/block transitions and ground event |
 | 3475 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingMotionOracle.java` | adaptable; reference; parity-test-oracle | jump/gravity/air-drag and water movement parameter methods |
-| 3476 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLocalInputOracle.java` | Recheck 1.20.1 diagonal, crouch, sprint, flight and use slowdown. | InputKeyboard/LocalPlayer vector generation. |
-| 3477 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLoomScreenOracle.java` | Modern graphics extraction differs from 1.20.1 Forge screens. | Loom/Crafter background and disabled-slot draw calls. |
-| 3478 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLootFillOracle.java` | Regenerate from 1.20.1 and its Forge loot modifiers. | Seeded loot table generation and 27-slot container fill. |
-| 3479 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLoreTooltipOracle.java` | 1.20.1 uses legacy display Lore path. | ItemLore tooltip component display. |
-| 3480 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMarkerParticlesOracle.java` | Compare target marker logic; unrelated to terrain chunks. | Marker particle target and ambient animateTick. |
-| 3481 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialConditionOracle.java` | Not 1.20.1 SurfaceRules; no direct data/code port. | Material condition/rule codec and evaluator harness. |
-| 3482 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialExtensionOracle.java` | Target 1.20.1 surface rules differ. | Badlands and frozen ocean surface column helpers. |
-| 3483 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialStageOracle.java` | Current system differs from 1.20.1 SurfaceRules/pipeline. | ProtoChunk material surface, fill, aquifer and carving. |
-| 3484 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialSurfaceOracle.java` | Rebuild against 1.20.1 badlands logic. | Seeded clay bands and surface depth/noise lookup. |
-| 3485 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMenuOracle.java` | Modern ContainerInput differs from 1.20.1 ClickType/Forge. | Vanilla AbstractContainerMenu clicks across many screen/container classes. |
-| 3486 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMipmapOracle.java` | Target 1.20.1 alpha/mipmap behavior differs. | Texture PNG/mcmeta mip-level generation. |
-| 3487 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobAiOracle.java` | Current mob AI differs from 1.20.1; server authoritative. | Headless server mob Brain/GoalSelector/navigation/gossip/bee AI. |
-| 3488 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobAttributesOracle.java` | Regenerate from 1.20.1 Forge including mods. | Export entity dimensions, eye height, attributes, baby size and XP. |
-| 3489 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobDataExporter.java` | Regenerate for target 1.20.1 Forge/JAR. | Export block pathfinding data, spawn placement and entity animation frames. |
-| 3490 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelBakingOracle.java` | Map to 1.20.1 Forge model loaders. | Cuboid model baking and quad vertex/UV outputs. |
-| 3491 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelChoiceOracle.java` | Target blockstate JSON/seed rules govern. | WeightedVariants and MultiPartModel choice. |
-| 3492 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelResolutionOracle.java` | 1.20.1 BlockModel/ModelBakery differs. | ModelDiscovery parent/texture slot/display transform resolution. |
-| 3493 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementEmissionOracle.java` | Recheck 1.20.1 and Forge sound/event hooks. | Movement sound, step and vibration callback order. |
-| 3494 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementRegistryOracle.java` | Regenerate with 1.20.1 blocks/mods. | Export friction/speed/jump/bounce/fall state properties. |
-| 3495 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementSupportOracle.java` | Compare 1.20.1 rounding and bounds. | Entity support position and jump-factor queries. |
-| 3496 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMover.java` | Not portable to RustChunk Android. | Interactive desktop vanilla client input and position driver. |
-| 3497 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMusicOracle.java` | Map to 1.20.1 sound APIs; Android audio separate. | MusicManager/SoundEngine transitions. |
-| 3498 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNaturalSpawnOracle.java` | Recreate NaturalSpawner for 1.20.1; trial/vault later-only systems not equivalents. | NaturalSpawner and spawner/trial/vault native ticks. |
-| 3499 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNoiseOracle.java` | Target noise and random implementations may differ. | Seeded Perlin/Simplex/Smeared/Normal noise and density raw bits. |
-| 3500 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaObjectOpenMapOracle.java` | Do not assume Rust HashMap matches fastutil behavior. | fastutil Object2ObjectOpenHashMap mutation/iteration/live entries. |
+| 3476 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLocalInputOracle.java` | adaptable; reference; parity-test-oracle | InputKeyboard/LocalPlayer vector generation. |
+| 3477 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLoomScreenOracle.java` | adaptable; reference; parity-test-oracle | Loom/Crafter background and disabled-slot draw calls. |
+| 3478 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLootFillOracle.java` | adaptable; reference; parity-test-oracle | Seeded loot table generation and 27-slot container fill. |
+| 3479 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLoreTooltipOracle.java` | adaptable; reference; parity-test-oracle | ItemLore tooltip component display. |
+| 3480 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMarkerParticlesOracle.java` | adaptable; reference; parity-test-oracle | Marker particle target and ambient animateTick. |
+| 3481 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialConditionOracle.java` | adaptable; reference; parity-test-oracle; version-specific | Material condition/rule codec and evaluator harness. |
+| 3482 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialExtensionOracle.java` | adaptable; reference; parity-test-oracle | Badlands and frozen ocean surface column helpers. |
+| 3483 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialStageOracle.java` | adaptable; reference; parity-test-oracle; version-specific | ProtoChunk material surface, fill, aquifer and carving. |
+| 3484 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialSurfaceOracle.java` | adaptable; reference; parity-test-oracle | Seeded clay bands and surface depth/noise lookup. |
+| 3485 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMenuOracle.java` | adaptable; reference; parity-test-oracle | Vanilla AbstractContainerMenu clicks across many screen/container classes. |
+| 3486 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMipmapOracle.java` | adaptable; reference; parity-test-oracle | Texture PNG/mcmeta mip-level generation. |
+| 3487 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobAiOracle.java` | adaptable; reference; parity-test-oracle; version-specific | Headless server mob Brain/GoalSelector/navigation/gossip/bee AI. |
+| 3488 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobAttributesOracle.java` | adaptable; reference; parity-data-exporter | Export entity dimensions, eye height, attributes, baby size and XP. |
+| 3489 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobDataExporter.java` | adaptable; reference; parity-data-exporter | Export block pathfinding data, spawn placement and entity animation frames. |
+| 3490 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelBakingOracle.java` | adaptable; reference; parity-test-oracle | Cuboid model baking and quad vertex/UV outputs. |
+| 3491 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelChoiceOracle.java` | adaptable; reference; parity-test-oracle | WeightedVariants and MultiPartModel choice. |
+| 3492 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelResolutionOracle.java` | adaptable; reference; parity-test-oracle | ModelDiscovery parent/texture slot/display transform resolution. |
+| 3493 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementEmissionOracle.java` | adaptable; reference; parity-test-oracle | Movement sound, step and vibration callback order. |
+| 3494 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementRegistryOracle.java` | adaptable; reference; parity-data-exporter; parity-test-oracle | Export friction/speed/jump/bounce/fall state properties. |
+| 3495 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementSupportOracle.java` | adaptable; reference; parity-test-oracle | Entity support position and jump-factor queries. |
+| 3496 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMover.java` | reference; runtime-driver; parity-test-oracle | Interactive desktop vanilla client input and position driver. |
+| 3497 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMusicOracle.java` | adaptable; reference; parity-test-oracle | MusicManager/SoundEngine transitions. |
+| 3498 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNaturalSpawnOracle.java` | adaptable; reference; parity-test-oracle; version-specific | NaturalSpawner and spawner/trial/vault native ticks. |
+| 3499 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNoiseOracle.java` | adaptable; reference; parity-test-oracle | Seeded Perlin/Simplex/Smeared/Normal noise and density raw bits. |
+| 3500 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaObjectOpenMapOracle.java` | reference; runtime-specific; parity-test-oracle | fastutil Object2ObjectOpenHashMap mutation/iteration/live entries. |

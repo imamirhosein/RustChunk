@@ -1043,3 +1043,9 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - 25 files read through EOF; pinned SHA/size confirmed. Long files 3485 (403), 3487 (1206), 3498 (889) covered in contiguous gap-free ranges no larger than 400 lines.
 - Stage Ledger has 100 records with exactly 15 fields; Index 3,500 sequential unique paths with aligned Decisions.
 - Continue 3501–3525 under same one-time authorization; no stop at 3550. Planned final stop 3600.
+
+
+### Schema reconciliation — checkpoint 3476–3500 — 2026-11-26
+
+- Post-commit schema inspection detected shifted field values in stage Ledger entries 3476–3500. No source inspection or authorization scope changed; the checkpoint was held pending repair.
+- Ledger values and matching Index Decision cells have been corrected in a follow-up commit. Verify all 25 records have the exact 15-field semantic alignment, then continue at 3501.

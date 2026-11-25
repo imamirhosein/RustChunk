@@ -2182,3 +2182,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Scope: input, UI, loot/lore/particles, material/surface generation, menus, mipmaps, mob AI/attributes, model baking/choice, movement, music, natural spawn, noise and fastutil maps.
 - Current Starling APIs/data are later than target 1.20.1. AI/spawn tests use a controlled headless fixture; finalizeSpawn RNG neutralized. VanillaMover is not run. Model/mipmap output is not device GPU output.
 - No RustChunk app changes or build/test/APK/device/renderer/Forge/Minecraft/dedicated server/multiplayer/Aternos validation.
+
+
+## Post-commit schema correction — checkpoint 3476–3500 — 2026-11-26
+
+- A post-commit read-back found that the required 15 Ledger field labels existed but the values from RustChunk relevance onward were shifted by one field, leaving Completion state undefined. The checkpoint was not accepted as verified while this was present.
+- Corrected all 25 entries 3476–3500 by restoring explicit RustChunk relevance, moving each Decision/1.20.1 implication/follow-up/mapping/evidence value back to its intended field, and setting Completion state correctly.
+- Corrected matching Index Decision cells for entries 3476–3500. Source paths, SHAs, sizes, coverage and source findings remain unchanged.
+- Follow-up commit and full six-document read-back verification required before resuming the next checkpoint.

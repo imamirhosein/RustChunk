@@ -1292,14 +1292,13 @@
 - Dependencies / cross-references: Native tick/modifyInput; scripted keys; captures vectors and flags.
 - Implementation / logic: Synthetic input/player and later UseEffects branch; not touch/network.
 - Findings: Android movement input reference.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Recheck 1.20.1 diagonal, crouch, sprint, flight and use slowdown.
-- 1.20.1 implications: Golden vectors plus Android touch integration.
-- Follow-up checks: Use as input-state regression cases.
-- RustChunk implementation mapping: Require 1.20.1 vectors and device tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for key-state handling and player movement input.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Recheck 1.20.1 diagonal, crouch, sprint, flight and use slowdown.
+- Follow-up checks: Golden vectors plus Android touch integration.
+- RustChunk implementation mapping: Use as input-state regression cases.
+- Evidence required before adoption: Require 1.20.1 vectors and device tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3477. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLoomScreenOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 105329c1d30a522569d06ceb65b3929ecf3c2e74
@@ -1309,14 +1308,13 @@
 - Dependencies / cross-references: Native screen extraction with recording GuiGraphicsExtractor.
 - Implementation / logic: Synthetic GUI internals/atlas; no framebuffer, pixels or GPU.
 - Findings: GUI state/draw order.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Modern graphics extraction differs from 1.20.1 Forge screens.
-- 1.20.1 implications: Compare textures, slots, recipe states and scale.
-- Follow-up checks: UI tests for Rust widgets.
-- RustChunk implementation mapping: Require 1.20.1 and Android screenshots.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for native container-screen visual parity.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Modern graphics extraction differs from 1.20.1 Forge screens.
+- Follow-up checks: Compare textures, slots, recipe states and scale.
+- RustChunk implementation mapping: UI tests for Rust widgets.
+- Evidence required before adoption: Require 1.20.1 and Android screenshots.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3478. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLootFillOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: b52bb1b7d6b1b9f85ba08b9450516b631deec8ce
@@ -1326,14 +1324,13 @@
 - Dependencies / cross-references: Registry/data pack, LootTable/LootParams, RandomSource, Container.
 - Implementation / logic: Actual loot generation over reduced server/player/location fixture; newer context/components.
 - Findings: Loot/chest contents.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Regenerate from 1.20.1 and its Forge loot modifiers.
-- 1.20.1 implications: Test luck, conditions, stack split, full slots, RNG.
-- Follow-up checks: Target loot golden tests.
-- RustChunk implementation mapping: Require 1.20.1 loot corpus.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for deterministic loot and inventory population.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Regenerate from 1.20.1 and its Forge loot modifiers.
+- Follow-up checks: Test luck, conditions, stack split, full slots, RNG.
+- RustChunk implementation mapping: Target loot golden tests.
+- Evidence required before adoption: Require 1.20.1 loot corpus.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3479. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLoreTooltipOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 462a8016a9fc890f8ac862434b2b70119b531cc5
@@ -1343,14 +1340,13 @@
 - Dependencies / cross-references: ItemLore provider, modern tooltip components/styles.
 - Implementation / logic: Lore only; no full tooltip, localization, font wrap or render; modern component.
 - Findings: Item lore UI.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: 1.20.1 uses legacy display Lore path.
-- 1.20.1 implications: Check flags, styles, localization and legacy NBT.
-- Follow-up checks: Target tooltip fixtures.
-- RustChunk implementation mapping: Require target tooltip and rendering tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for item lore and tooltip compatibility.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: 1.20.1 uses legacy display Lore path.
+- Follow-up checks: Check flags, styles, localization and legacy NBT.
+- RustChunk implementation mapping: Target tooltip fixtures.
+- Evidence required before adoption: Require target tooltip and rendering tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3480. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMarkerParticlesOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: efcdaf18801d569937c9e0857b1a32c1e1072a6e
@@ -1360,14 +1356,13 @@
 - Dependencies / cross-references: ClientLevel marker helpers, Player, ParticleOptions, RandomSource.
 - Implementation / logic: Synthetic client level; only marker particles, no GPU; global prototype mutation.
 - Findings: Debug particle feedback.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Compare target marker logic; unrelated to terrain chunks.
-- 1.20.1 implications: Test game mode, range and seeded positions.
-- Follow-up checks: Narrow particle test reference.
-- RustChunk implementation mapping: Require 1.20.1 and device renderer results.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for marker targeting and debug particle effects.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Compare target marker logic; unrelated to terrain chunks.
+- Follow-up checks: Test game mode, range and seeded positions.
+- RustChunk implementation mapping: Narrow particle test reference.
+- Evidence required before adoption: Require 1.20.1 and device renderer results.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3481. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialConditionOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: d5efa48bcbd8df2f91ccf4812bdbd00a5012b0fe
@@ -1377,14 +1372,13 @@
 - Dependencies / cross-references: MaterialSystem codecs, biome/noise/density registries and context.
 - Implementation / logic: 251 lines; private reflection, synthetic density/ore, global buffer arena; current-generation API.
 - Findings: Surface rule test design.
-- RustChunk relevance: adaptable; reference; parity-test-oracle; version-specific
-- Decision: Not 1.20.1 SurfaceRules; no direct data/code port.
-- 1.20.1 implications: Compare target conditions, tags, anchors, caches and rule order.
-- Follow-up checks: Port oracle concept only.
-- RustChunk implementation mapping: Require target column goldens.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful as a reference model for conditional surface generation.
+- Decision: adaptable; reference; parity-test-oracle; version-specific
+- 1.20.1 implications: Not 1.20.1 SurfaceRules; no direct data/code port.
+- Follow-up checks: Compare target conditions, tags, anchors, caches and rule order.
+- RustChunk implementation mapping: Port oracle concept only.
+- Evidence required before adoption: Require target column goldens.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3482. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialExtensionOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 2204fa6e08f73e81e222b9316b5e5f542bb521b7
@@ -1394,14 +1388,13 @@
 - Dependencies / cross-references: MaterialSystem private extensions, six noises, BlockColumn.
 - Implementation / logic: Private reflective calls and limited mutable column fixture; no chunk pipeline.
 - Findings: Surface extension behavior.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Target 1.20.1 surface rules differ.
-- 1.20.1 implications: Compare noise coordinates, bounds and writes.
-- Follow-up checks: Target surface-rule cases.
-- RustChunk implementation mapping: Require source-equivalent target outputs.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for badlands and frozen-ocean material algorithm analysis.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Target 1.20.1 surface rules differ.
+- Follow-up checks: Compare noise coordinates, bounds and writes.
+- RustChunk implementation mapping: Target surface-rule cases.
+- Evidence required before adoption: Require source-equivalent target outputs.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3483. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialStageOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 8a2e81a713a53f56d878fe39d14f995e4dd8585f
@@ -1411,14 +1404,13 @@
 - Dependencies / cross-references: MaterialSystem, NoiseChunk, RandomState, ProtoChunk, BiomeSource, Aquifer, CarvingMask.
 - Implementation / logic: 3x3 fixture chunks and real native methods; no world scheduler/light/persistence.
 - Findings: World generation/chunk correctness.
-- RustChunk relevance: adaptable; reference; parity-test-oracle; version-specific
-- Decision: Current system differs from 1.20.1 SurfaceRules/pipeline.
-- 1.20.1 implications: Compare negative Y, palettes, heightmaps, carvers, fluids.
-- Follow-up checks: Blueprint target worldgen harness.
-- RustChunk implementation mapping: Require 1.20.1 generated columns.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Highly relevant to chunk surface, aquifer and carving behavior.
+- Decision: adaptable; reference; parity-test-oracle; version-specific
+- 1.20.1 implications: Current system differs from 1.20.1 SurfaceRules/pipeline.
+- Follow-up checks: Compare negative Y, palettes, heightmaps, carvers, fluids.
+- RustChunk implementation mapping: Blueprint target worldgen harness.
+- Evidence required before adoption: Require 1.20.1 generated columns.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3484. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMaterialSurfaceOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: e3a7bb28739b30f197d219c9b67a9ffddffd8d57
@@ -1428,14 +1420,13 @@
 - Dependencies / cross-references: MaterialSystem bands, positional RandomSource and noises.
 - Implementation / logic: Private fields; limited terracotta palette and no full terrain.
 - Findings: Badlands palette determinism.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Rebuild against 1.20.1 badlands logic.
-- 1.20.1 implications: Test seed, RNG, coordinate and palette edges.
-- Follow-up checks: Target band tests.
-- RustChunk implementation mapping: Require 1.20.1 seeded vectors.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for deterministic surface palette generation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Rebuild against 1.20.1 badlands logic.
+- Follow-up checks: Test seed, RNG, coordinate and palette edges.
+- RustChunk implementation mapping: Target band tests.
+- Evidence required before adoption: Require 1.20.1 seeded vectors.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3485. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMenuOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 3c7de61efcbb37db090b223f56953d9c52df414d
@@ -1445,14 +1436,13 @@
 - Dependencies / cross-references: Real menu subclasses, Inventory, RecipeManager, synthetic ServerPlayer/Level.
 - Implementation / logic: 403 lines in ranges 1–200 and 201–403; Unsafe fake level/player; packets/world effects stubbed.
 - Findings: Container/inventory operation reference.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Modern ContainerInput differs from 1.20.1 ClickType/Forge.
-- 1.20.1 implications: Test all click modes, quick-move, output, limits, craft and resync.
-- Follow-up checks: Target menu operation tests.
-- RustChunk implementation mapping: Require 1.20.1 Forge menu/network tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Highly relevant to menu input and container transfer behavior.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Modern ContainerInput differs from 1.20.1 ClickType/Forge.
+- Follow-up checks: Test all click modes, quick-move, output, limits, craft and resync.
+- RustChunk implementation mapping: Target menu operation tests.
+- Evidence required before adoption: Require 1.20.1 Forge menu/network tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3486. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMipmapOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 2ecc3c4853333dda933a64f30249179044ba0870
@@ -1462,14 +1452,13 @@
 - Dependencies / cross-references: NativeImage, MipmapGenerator and strategy.
 - Implementation / logic: Outputs mip RGBA; no GPU upload; review image close lifecycle and non-power-of-two cases.
 - Findings: Texture preprocessing.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Target 1.20.1 alpha/mipmap behavior differs.
-- 1.20.1 implications: Test rectangular/transparent/animated and resource cleanup.
-- Follow-up checks: Offline mip golden tests.
-- RustChunk implementation mapping: Require target mip bytes and GPU sampling.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Directly relevant to texture filtering and mipmap preprocessing.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Target 1.20.1 alpha/mipmap behavior differs.
+- Follow-up checks: Test rectangular/transparent/animated and resource cleanup.
+- RustChunk implementation mapping: Offline mip golden tests.
+- Evidence required before adoption: Require target mip bytes and GPU sampling.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3487. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobAiOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: e959bc7b1b906cffccd8ded097c7c290be243edf
@@ -1479,14 +1468,13 @@
 - Dependencies / cross-references: Real Mob/Brain/GoalSelector, ServerLevel, registries, paths and AI callbacks.
 - Implementation / logic: 1206 lines in six ranges 1–300,301–500,501–700,701–900,901–1100,1101–1206; fixture world/time/light/biome; neutral finalizeSpawn RNG; Unsafe.
 - Findings: AI behavior and tick test oracle.
-- RustChunk relevance: adaptable; reference; parity-test-oracle; version-specific
-- Decision: Current mob AI differs from 1.20.1; server authoritative.
-- 1.20.1 implications: Compare deterministic goals/memories/pathfinding; profile actual server separately.
-- Follow-up checks: Target mob AI traces/profile.
-- RustChunk implementation mapping: Require 1.20.1 tick goldens and server data.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Highly relevant to server-side mob behavior and tick simulation.
+- Decision: adaptable; reference; parity-test-oracle; version-specific
+- 1.20.1 implications: Current mob AI differs from 1.20.1; server authoritative.
+- Follow-up checks: Compare deterministic goals/memories/pathfinding; profile actual server separately.
+- RustChunk implementation mapping: Target mob AI traces/profile.
+- Evidence required before adoption: Require 1.20.1 tick goldens and server data.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3488. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobAttributesOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: c9d4362c40fd6b04d9b0886e11bcb65234ade817
@@ -1496,14 +1484,13 @@
 - Dependencies / cross-references: EntityType/Attribute registries, actual constructors on detached server fixture.
 - Implementation / logic: Unsafe detached level, type-specific creation errors recorded; modern entity catalog.
 - Findings: Entity metadata exporter.
-- RustChunk relevance: adaptable; reference; parity-data-exporter
-- Decision: Regenerate from 1.20.1 Forge including mods.
-- 1.20.1 implications: Audit completeness, baby/adult, hitboxes and defaults.
-- Follow-up checks: Target entity catalog.
-- RustChunk implementation mapping: Require full 1.20.1 export.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful to regenerate entity metadata and collision/render bounds.
+- Decision: adaptable; reference; parity-data-exporter
+- 1.20.1 implications: Regenerate from 1.20.1 Forge including mods.
+- Follow-up checks: Audit completeness, baby/adult, hitboxes and defaults.
+- RustChunk implementation mapping: Target entity catalog.
+- Evidence required before adoption: Require full 1.20.1 export.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3489. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMobDataExporter.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 2163d8d3c91f24d32da2f3296c009338b065051c
@@ -1513,14 +1500,13 @@
 - Dependencies / cross-references: WalkNodeEvaluator, SpawnPlacements, registries and client JAR animation classes.
 - Implementation / logic: Private reflection; exact client JAR needed; current DataVersion.
 - Findings: Pathfinding/spawn/animation data.
-- RustChunk relevance: adaptable; reference; parity-data-exporter
-- Decision: Regenerate for target 1.20.1 Forge/JAR.
-- 1.20.1 implications: Verify JAR version, tags, entity coverage and clips.
-- Follow-up checks: Target data exporters.
-- RustChunk implementation mapping: Require version-locked data and playback tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for spawn placement and mob navigation data.
+- Decision: adaptable; reference; parity-data-exporter
+- 1.20.1 implications: Regenerate for target 1.20.1 Forge/JAR.
+- Follow-up checks: Verify JAR version, tags, entity coverage and clips.
+- RustChunk implementation mapping: Target data exporters.
+- Evidence required before adoption: Require version-locked data and playback tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3490. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelBakingOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 96ecc8b46d5209765f76701ddcd9b405fb869da5
@@ -1530,14 +1516,13 @@
 - Dependencies / cross-references: ModelDiscovery/ModelBaker, FaceBakery and synthetic atlas.
 - Implementation / logic: Fixture models/sprite; no resource pack, GPU or raster.
 - Findings: Block/item mesh geometry.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Map to 1.20.1 Forge model loaders.
-- 1.20.1 implications: Test rotations, winding, UV lock, tint and missing texture.
-- Follow-up checks: Mesh-baker geometry oracle.
-- RustChunk implementation mapping: Require target assets/pixel comparisons.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Highly relevant to mesh geometry and texture coordinates.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Map to 1.20.1 Forge model loaders.
+- Follow-up checks: Test rotations, winding, UV lock, tint and missing texture.
+- RustChunk implementation mapping: Mesh-baker geometry oracle.
+- Evidence required before adoption: Require target assets/pixel comparisons.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3491. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelChoiceOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 4cf8cb3297c7308dc7469f86f4d983c8225f9da3
@@ -1547,14 +1532,13 @@
 - Dependencies / cross-references: Variant/multipart model classes and seeded RandomSource.
 - Implementation / logic: Dummy geometry leaves and limited properties; no rendering.
 - Findings: Deterministic model choice.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Target blockstate JSON/seed rules govern.
-- 1.20.1 implications: Test weights, predicates and missing properties.
-- Follow-up checks: Target resolver cases.
-- RustChunk implementation mapping: Require target JSON goldens.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for deterministic blockstate model selection.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Target blockstate JSON/seed rules govern.
+- Follow-up checks: Test weights, predicates and missing properties.
+- RustChunk implementation mapping: Target resolver cases.
+- Evidence required before adoption: Require target JSON goldens.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3492. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaModelResolutionOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: b198a1882d79dd76a32ea68c01f27f5af7794ef1
@@ -1564,14 +1548,13 @@
 - Dependencies / cross-references: ResolvedModel, TextureSlots and ItemDisplayContext.
 - Implementation / logic: Synthetic model graph only; no actual resource manager/atlas.
 - Findings: Resource graph reference.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: 1.20.1 BlockModel/ModelBakery differs.
-- 1.20.1 implications: Test parent cycle, missing slots, inheritance and context.
-- Follow-up checks: Rust resource resolver tests.
-- RustChunk implementation mapping: Require 1.20.1 assets.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for model resource graph and display transforms.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: 1.20.1 BlockModel/ModelBakery differs.
+- Follow-up checks: Test parent cycle, missing slots, inheritance and context.
+- RustChunk implementation mapping: Rust resource resolver tests.
+- Evidence required before adoption: Require 1.20.1 assets.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3493. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementEmissionOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 6ad610cc7278bd9371cdc4cb32afe3ba77b46feb
@@ -1581,14 +1564,13 @@
 - Dependencies / cross-references: Entity movement-emission helpers, BlockState, Level.
 - Implementation / logic: Unsafe entity and fake world; no full tick/audio playback.
 - Findings: Footstep/surface events.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Recheck 1.20.1 and Forge sound/event hooks.
-- 1.20.1 implications: Test silent block, threshold, water, climb and event order.
-- Follow-up checks: Movement/audio test vectors.
-- RustChunk implementation mapping: Require target traces and sound tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for entity movement feedback and sound events.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Recheck 1.20.1 and Forge sound/event hooks.
+- Follow-up checks: Test silent block, threshold, water, climb and event order.
+- RustChunk implementation mapping: Movement/audio test vectors.
+- Evidence required before adoption: Require target traces and sound tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3494. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementRegistryOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: d25ff5d3657d431fead0bb2eed51e74c1a33be8c
@@ -1598,14 +1580,13 @@
 - Dependencies / cross-references: BlockState registry, NBT codec and block/fluid tags.
 - Implementation / logic: Global tag bind; current IDs/DataVersion; no full physics.
 - Findings: Movement coefficient catalog.
-- RustChunk relevance: adaptable; reference; parity-data-exporter; parity-test-oracle
-- Decision: Regenerate with 1.20.1 blocks/mods.
-- 1.20.1 implications: Check every state and contextual override.
-- Follow-up checks: Target physics exporter.
-- RustChunk implementation mapping: Require 1.20.1 registry tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for surface-specific movement physics.
+- Decision: adaptable; reference; parity-data-exporter; parity-test-oracle
+- 1.20.1 implications: Regenerate with 1.20.1 blocks/mods.
+- Follow-up checks: Check every state and contextual override.
+- RustChunk implementation mapping: Target physics exporter.
+- Evidence required before adoption: Require 1.20.1 registry tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3495. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMovementSupportOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: fe55429c214b8d3b969f38ae8a92e6cefad7de87
@@ -1615,14 +1596,13 @@
 - Dependencies / cross-references: Entity getOnPos/movementPos/jump factor, fake Level/BlockState.
 - Implementation / logic: Private AABB/position and scripted world; not collision resolution.
 - Findings: Feet/support coordinate math.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Compare 1.20.1 rounding and bounds.
-- 1.20.1 implications: Test negative/border coords, slabs, fences, missing support.
-- Follow-up checks: Physics coordinate tests.
-- RustChunk implementation mapping: Require target integration.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for support-block detection and movement coordinates.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Compare 1.20.1 rounding and bounds.
+- Follow-up checks: Test negative/border coords, slabs, fences, missing support.
+- RustChunk implementation mapping: Physics coordinate tests.
+- Evidence required before adoption: Require target integration.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3496. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMover.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 0b0d0ee14682472f9ceca3ddc261974ee041c98e
@@ -1632,14 +1612,13 @@
 - Dependencies / cross-references: Minecraft main, client executor, LocalPlayer and stdin commands.
 - Implementation / logic: Starts live desktop client and sends movement/look/attack commands; not run, not production launcher.
 - Findings: Manual vanilla baseline.
-- RustChunk relevance: reference; runtime-driver; parity-test-oracle
-- Decision: Not portable to RustChunk Android.
-- 1.20.1 implications: Manual controlled 1.20.1 baseline; check server correction.
-- Follow-up checks: Keep as optional desktop test tool.
-- RustChunk implementation mapping: No execution; require manual run.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful as a desktop baseline input harness, not code to integrate.
+- Decision: reference; runtime-driver; parity-test-oracle
+- 1.20.1 implications: Not portable to RustChunk Android.
+- Follow-up checks: Manual controlled 1.20.1 baseline; check server correction.
+- RustChunk implementation mapping: Keep as optional desktop test tool.
+- Evidence required before adoption: No execution; require manual run.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3497. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaMusicOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 19af845e50e2eb2a632a203bccdabbcc95890534
@@ -1649,14 +1628,13 @@
 - Dependencies / cross-references: MusicManager, SoundEngine, MusicInfo and test sound rig.
 - Implementation / logic: Real manager on scripted rig; no Android speaker, focus or latency tests.
 - Findings: Background music policy.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Map to 1.20.1 sound APIs; Android audio separate.
-- 1.20.1 implications: Test pause, volume, end, delay and teardown.
-- Follow-up checks: Rust audio state tests.
-- RustChunk implementation mapping: Require 1.20.1 and device audio.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Useful for music scheduling behavior and audio lifecycle.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Map to 1.20.1 sound APIs; Android audio separate.
+- Follow-up checks: Test pause, volume, end, delay and teardown.
+- RustChunk implementation mapping: Rust audio state tests.
+- Evidence required before adoption: Require 1.20.1 and device audio.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3498. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNaturalSpawnOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: 8bb0129f28956f021f1bd8050ac46c9917b97dd0
@@ -1666,14 +1644,13 @@
 - Dependencies / cross-references: NaturalSpawner, SpawnState, ServerLevel, chunk map, spawner, trial/vault and registries.
 - Implementation / logic: 889 lines in 4 ranges 1–220,221–440,441–660,661–889; controlled blocks/biomes/players/chunks; neutral finalizeSpawn RNG; no normal scheduler/network.
 - Findings: Strong server spawn/mob-cap oracle blueprint.
-- RustChunk relevance: adaptable; reference; parity-test-oracle; version-specific
-- Decision: Recreate NaturalSpawner for 1.20.1; trial/vault later-only systems not equivalents.
-- 1.20.1 implications: Compare caps, player radius, placement, structures, spawner NBT and RNG.
-- Follow-up checks: Target Forge server spawn tests.
-- RustChunk implementation mapping: Require 1.20.1 spawn traces and real server metrics.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Highly relevant to authoritative mob spawning and per-chunk caps.
+- Decision: adaptable; reference; parity-test-oracle; version-specific
+- 1.20.1 implications: Recreate NaturalSpawner for 1.20.1; trial/vault later-only systems not equivalents.
+- Follow-up checks: Compare caps, player radius, placement, structures, spawner NBT and RNG.
+- RustChunk implementation mapping: Target Forge server spawn tests.
+- Evidence required before adoption: Require 1.20.1 spawn traces and real server metrics.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3499. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNoiseOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: cf0cfb7d903c3fd96a8908dab1b961b4b204737f
@@ -1683,14 +1660,13 @@
 - Dependencies / cross-references: Noise classes, RandomSource, DensityFunction and buffers.
 - Implementation / logic: 149 lines; command parser/volume limits need hardening; current noise/RNG.
 - Findings: Terrain determinism.
-- RustChunk relevance: adaptable; reference; parity-test-oracle
-- Decision: Target noise and random implementations may differ.
-- 1.20.1 implications: Test negative coords, NaN, signed zero, volume and cache.
-- Follow-up checks: Target noise oracle design.
-- RustChunk implementation mapping: Require target raw-bit outputs.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
-
+- RustChunk relevance: Highly relevant to deterministic terrain noise and density.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Target noise and random implementations may differ.
+- Follow-up checks: Test negative coords, NaN, signed zero, volume and cache.
+- RustChunk implementation mapping: Target noise oracle design.
+- Evidence required before adoption: Require target raw-bit outputs.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
 ### 3500. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaObjectOpenMapOracle.java`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
 - Source SHA: af075584f0d2df542383f107bac9674e1ee8c251
@@ -1700,10 +1676,10 @@
 - Dependencies / cross-references: fastutil map, custom key equals/hashCode, iterator and Map.Entry.
 - Implementation / logic: Actual fastutil collection; order/probing dependency-specific; key equality is value-based not identity.
 - Findings: Collection compatibility reference.
-- RustChunk relevance: reference; runtime-specific; parity-test-oracle
-- Decision: Do not assume Rust HashMap matches fastutil behavior.
-- 1.20.1 implications: Check dependency version, collisions, resize and entry mutation.
-- Follow-up checks: Only port exposed semantic requirements.
-- RustChunk implementation mapping: Require dependency/runtime tests.
-- Evidence required before adoption: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
-- Completion state: undefined
+- RustChunk relevance: Only useful where exact fastutil map semantics are observable.
+- Decision: reference; runtime-specific; parity-test-oracle
+- 1.20.1 implications: Do not assume Rust HashMap matches fastutil behavior.
+- Follow-up checks: Check dependency version, collisions, resize and entry mutation.
+- RustChunk implementation mapping: Only port exposed semantic requirements.
+- Evidence required before adoption: Require dependency/runtime tests.
+- Completion state: COMPLETE — pinned SHA/size verified; full stated coverage read through EOF; static inspection only; not executed.
