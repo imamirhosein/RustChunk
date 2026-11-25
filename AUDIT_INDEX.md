@@ -3959,3 +3959,28 @@
 | 3448 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemAfterUseOracle.java` | adaptable; reference; parity-test-oracle | finishUsingItem plus remainder-template and cooldown composition |
 | 3449 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemBlockingOracle.java` | adaptable; reference; parity-test-oracle | BlocksAttacks reduction, bypass/projectile tags and shield blocking |
 | 3450 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemCooldownsOracle.java` | adaptable; reference; parity-test-oracle | ItemCooldowns group storage, expiry and UseCooldown application |
+| 3451 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemDurabilityOracle.java` | adaptable; reference; parity-test-oracle | ItemStack damage/break durability, unbreakable and break callback order |
+| 3452 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemModelOracle.java` | adaptable; reference; parity-test-oracle; renderer-reference | native ClientItem/model discovery/baking, item layers and quad capture |
+| 3453 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemParticlesOracle.java` | adaptable; reference; parity-test-oracle | LivingEntity item particle spawn positions, stack data and RNG |
+| 3454 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemStackStorageOracle.java` | adaptable; reference; parity-test-oracle | ItemStack storage, copy/split/consume, component patches and EMPTY identity |
+| 3455 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemTemplateOracle.java` | adaptable; reference; parity-test-oracle | ItemStackTemplate construction, merge precedence, patch and validation |
+| 3456 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemUseCatalogOracle.java` | adaptable; reference; parity-data-exporter; parity-test-oracle | registered item-use defaults, durations and component catalog exporter |
+| 3457 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemUseLifecycleOracle.java` | adaptable; reference; parity-test-oracle | LivingEntity use tick, finish, release and stop lifecycle |
+| 3458 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemUseOracle.java` | adaptable; reference; parity-test-oracle | item blocking selection and use-progress timers |
+| 3459 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemUseStartOracle.java` | adaptable; reference; parity-test-oracle | startUsingItem flags, hands, equipment tracking packet and event |
+| 3460 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemWireOracle.java` | reference; parity-test-oracle; version-specific | ItemStack optional stream codec bytes and DataComponentPatch IDs |
+| 3461 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaJavaHashMapOracle.java` | reference; runtime-specific; parity-test-oracle | JDK HashMap iterator and collision semantics |
+| 3462 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaJavaIdentityMapOracle.java` | reference; runtime-specific; parity-test-oracle | HashMap collision-bin behavior and identityHashCode metadata (not IdentityHashMap) |
+| 3463 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLanAuthOracle.java` | reference; parity-test-oracle; authentication-boundary | LAN-only failed session-authentication exception branch |
+| 3464 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLanOracle.java` | adaptable; reference; parity-test-oracle | LAN ping string parsing, discovery and dirty server-list updates |
+| 3465 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLevelShapeOracle.java` | adaptable; reference; parity-test-oracle | BlockState updateShape/canSurvive and scheduled neighbor ticks |
+| 3466 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLiveAttributeUpdatesOracle.java` | adaptable; reference; parity-test-oracle | live entity attribute/effect/health and waypoint update callbacks |
+| 3467 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLiveAttributesOracle.java` | adaptable; reference; parity-test-oracle | registered attribute suppliers, modifiers, cached values and sync sets |
+| 3468 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingAirOracle.java` | adaptable; reference; parity-test-oracle | air movement, relative friction, climb and input vector calculations |
+| 3469 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingDamageOracle.java` | adaptable; reference; parity-test-oracle | actuallyHurt absorption, armor/magic, tracker and player exhaustion |
+| 3470 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingFallOracle.java` | adaptable; reference; parity-test-oracle | fall damage calculation and impulse grace context |
+| 3471 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingFluidOracle.java` | adaptable; reference; parity-test-oracle | water/lava travel, fluid height and ridden float movement |
+| 3472 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingHealthOracle.java` | adaptable; reference; parity-test-oracle | health/heal/absorption and SynchedEntityData health callbacks |
+| 3473 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingHurtOracle.java` | adaptable; reference; parity-test-oracle | outer hurtServer damage lifecycle, cooldown, tags, shield and effects |
+| 3474 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingLandingOracle.java` | adaptable; reference; parity-test-oracle | landing checkFallDamage, fluid/block transitions and ground event |
+| 3475 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaLivingMotionOracle.java` | adaptable; reference; parity-test-oracle | jump/gravity/air-drag and water movement parameter methods |

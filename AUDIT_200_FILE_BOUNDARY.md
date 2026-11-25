@@ -17,14 +17,14 @@
 |---|---:|---|
 | 1 | 3401–3425 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 2 | 3426–3450 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
-| 3 | 3451–3475 | AUTHORIZED — NOT STARTED |
+| 3 | 3451–3475 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 4 | 3476–3500 | AUTHORIZED — NOT STARTED |
 | 5 | 3501–3525 | AUTHORIZED — NOT STARTED |
 | 6 | 3526–3550 | AUTHORIZED — NOT STARTED |
 | 7 | 3551–3575 | AUTHORIZED — NOT STARTED |
 | 8 | 3576–3600 | AUTHORIZED — NOT STARTED |
 
-All eight checkpoints are covered by one explicit user grant. The first checkpoint 3401–3425 is complete; the next is 3451–3475. The 50-file marks are internal accounting only; proceed without intermediate permission requests. The only planned stop is after the final verification at 3600, unless a genuine blocker occurs.
+All eight checkpoints are covered by one explicit user grant. The first checkpoint 3401–3425 is complete; the next is 3476–3500. The 50-file marks are internal accounting only; proceed without intermediate permission requests. The only planned stop is after the final verification at 3600, unless a genuine blocker occurs.
 
 ## Stage partition
 
@@ -651,3 +651,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - 25 files read serially through EOF; pinned SHA/size match; 3440 HUD source was 630 logical lines and read as 1–400 and 401–630.
 - Stage Ledger has 50 records through 3450, each exactly 15 fields; Index has 3,450 sequential unique paths with matching new rows.
 - Continue 3451–3475 under the same 200-file authorization; no permission gate at the 3450 milestone.
+
+
+### Checkpoint 3451–3475 — COMPLETE — 2026-11-26
+
+- 25 globally lexical source files read to EOF; pinned SHA/byte sizes match. File 3452 was 464 lines and covered consecutively 1–400 and 401–464.
+- Stage Ledger contains 75 records through 3475, all with exactly 15 fields; Index has 3,475 sequential unique paths, aligned with Ledger.
+- Continue 3476–3500 under same full 200-file grant. No reauthorization gate at the 3500 or 3550 accounting marks.

@@ -2162,3 +2162,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Every new Ledger entry has exactly 15 fields. Ledger 3401–3600 now contains 50 records (3401–3450); Index contains 3,450 sequential unique paths, and new Index paths align with the Ledger decisions.
 - Scope covered FoodData persistence, frame/tick/input loops, model/geometry/HUD/font, recipe book, heightmaps/worldgen ticks, hotbar/drop handling, Inventory/Equipment, item-use lifecycles, blocking and cooldowns. These are later-version test oracles/exporters; most require 1.20.1 remapping and isolated harnesses due Unsafe/reflection/global state.
 - No tests/builds/APK/device, renderer runtime, Forge/Minecraft launch, multiplayer/server validation or RustChunk application code was executed or changed.
+
+
+## Checkpoint 3451–3475 — COMPLETE — 2026-11-26
+
+- 25 next lexical sources after the 3,450-entry Index were read through EOF from pinned source. Recursive tree remained complete/untruncated; SHA and byte size for every file match the pinned tree; canonical logical line counts recorded.
+- File 3452 (VanillaItemModelOracle.java, 464 logical lines) was inspected in consecutive, gap-free ranges 1–400 and 401–464; the remaining 24 files are under 400 lines and were inspected whole.
+- Ledger now contains 75 records (3401–3475), exactly 15 fields each; Index contains 3,475 sequential unique paths and each new path/Decision aligns with the Ledger.
+- Areas: item durability, native item models/particles/storage/templates/use lifecycle and wire data; Java map semantics; LAN discovery/authentication; neighbor block-state updates; entity attributes/health/damage/fall/fluid/movement. The LAN auth oracle is strictly a LAN-only authentication-failure exception test, not general offline authentication or public-server access.
+- Important review cautions: modern DataComponent/ClientItem/BlocksAttacks/attribute/gravity APIs are later-version; global registry/default/EMPTY mutation and Unsafe/reflection are test harness only; JDK HashMap order is runtime-specific; item model captures layers/quads but not GPU pixels; LAN oracle does not open real sockets; movement/damage oracles use scripted worlds and callbacks.
+- No RustChunk application source changed; no test/build/APK/device, Forge/Minecraft launch, renderer runtime, multiplayer/server or Aternos validation was performed.
