@@ -141,19 +141,14 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 - The next backup is due only after entries **3001–4000** are authorized, completed, committed and globally verified.
 - Do not copy audit ledgers onto `main`.
 
-## 12. Current authoritative resume state (2026-11-24; stage 3001–3200 closed)
+## 12. Current authoritative resume state (2026-11-25; stage 3201–3400 active)
 
 - Repository `imamirhosein/RustChunk`; audit branch `starling-1.20.1-port-audit`. Do not modify `main` or existing backup refs.
-- Completed entries **1–3200**. Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED (200/200 each).
-- Sections **3001–3050**, **3051–3100**, **3101–3150** and **3151–3200** are CLOSED (50/50 each).
-- Checkpoints through **3176–3200** are complete and read-back verified.
-- Exceptional authorization **3101–3200 is COMPLETE/CONSUMED**. **STOP at 3200**; entries 3201+ require new explicit user authorization.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **200 records (3001–3200)** with exactly 15 fields each. Index: **3,200 sequential unique paths**, no duplicates, Ledger/Index paths and Decisions aligned.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; inspect only this immutable snapshot. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3200 source paths, SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA for entries 1–3000 remains complete.
-- The 3,000-entry snapshot remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. Next backup only after entries 3001–4000 are completed and globally verified.
-- No application source changes, tests/builds/benchmarks/APK/device/renderer/Vulkan/Minecraft/Forge/server/Aternos validation.
-
+- Completed entries **1–3225**. Stages 2601–2800, 2801–3000 and 3001–3200 CLOSED; stage 3201–3400 active.
+- Reporting sections through **3151–3200** closed. Section **3201–3250** is authorized; checkpoint **3201–3225** complete and checkpoint **3226–3250** covered by the same grant. **STOP at 3250**; 3251+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **25 records (3201–3225)**, each with exactly 15 fields. Index: **3,225 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree: 4,968 blobs, complete and untruncated. New paths, SHAs, sizes and text/binary coverage verified.
+- No application source changes, builds/tests/benchmarks/APK/device/game/server validation. Backup 3000 remains untouched; next backup only after entries 3001–4000 are complete and globally verified.
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 

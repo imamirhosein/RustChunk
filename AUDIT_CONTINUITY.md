@@ -6,17 +6,13 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3200**.
-- Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED (200/200 each).
-- Sections **3001–3050**, **3051–3100**, **3101–3150** and **3151–3200** are CLOSED (50/50 each).
-- Checkpoints through **3176–3200** are committed and read-back verified.
-- Exceptional authorization **3101–3200 is COMPLETE/CONSUMED**. **STOP at 3200**; entries 3201+ require a new explicit user grant.
-- Active Ledger `AUDIT_LEDGER_3001_3200.md`: **200 records (3001–3200)**, exactly 15 fields each. Index: **3,200 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; use this immutable snapshot only. Recursive tree: 5,749 entries, complete and untruncated.
-- Entries 3001–3200 source SHAs, byte sizes, canonical logical line counts and EOF coverage match the pinned tree. Global QA remains complete for entries 1–3000.
-- No RustChunk application source changed. Embedded tests were inspected only, not executed. No builds, benchmarks, APK/device, Vulkan, Forge/Minecraft, multiplayer or Aternos validation.
-- The 3,000-entry backup remains preserved at `backup/audit-3000-final-2026-11-23`; do not modify it. A new backup is deferred until entries 3001–4000 are completed and globally verified.
-
+- Completed entries: **1–3225**.
+- Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED; stage **3201–3400** is active (25/200).
+- Reporting sections through **3151–3200** are CLOSED. Section **3201–3250** is authorized under a one-time exceptional grant; checkpoint **3201–3225** complete, **3226–3250** authorized. STOP at **3250**.
+- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **25 records (3201–3225)**, exactly 15 fields each. Index: **3,225 sequential unique paths**, no duplicates and path/Decision alignment.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree 4,968 blobs, complete and untruncated. Entries 3201–3225 source SHAs/sizes match the pinned tree; binary assets rendered, text assets EOF inspected.
+- No RustChunk application source changed. No builds, tests, benchmarks, APK/device, Vulkan, Forge/Minecraft or multiplayer validation.
+- Backup `backup/audit-3000-final-2026-11-23` remains preserved; new backup due only after entries 3001–4000 are complete and globally verified.
 
 ## Global QA closeout — entries 1–3000 — COMPLETE (2026-11-23)
 
