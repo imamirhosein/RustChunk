@@ -577,3 +577,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Ledger entries 3201–3300: 100 records with 15 fields each; Index has 3,300 sequential unique paths; paths/Decisions align.
 - The modpack list is not 1.20.1 Forge compatibility evidence; benchmark CSV/screenshots are not validated mobile benchmark evidence; desktop-heavy lockfile does not prove Android UI support.
 - **STOP at 3300.** Do not inspect 3301–3350 until explicit user authorization.
+
+
+## Permanent media archive / backup 4000 requirement (2026-11-25)
+
+- `AUDIT_MEDIA_ARCHIVE.md` is a permanent continuous media-only archive, not split by 200-file stage. Images/videos are recorded both in their ordinary Ledger and the archive, using the original entry number; normal files are omitted from the media archive.
+- Historical media 1–3300 are not yet backfilled; the 70–80-image estimate in entries 1–1000 is unverified. At backup milestone 4000, complete and verify historical media backfill for the backup scope before backup closeout.
+- Images need visual inspection and detailed analysis, or NEEDS USER REVIEW. Videos are logged for user watching later unless actually reviewed.
