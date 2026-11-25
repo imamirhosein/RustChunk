@@ -965,3 +965,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Branch head after archive/docs registration: `11d3694b47661f3e0a8f876ee3d300bd67d3307a`.
 - New `AUDIT_MEDIA_ARCHIVE.md` created. Entry 3301 is logged as video `launcher/docs/opening.webm`, NEEDS USER WATCH. Media backfill for 1–3300 is outstanding; 70–80 first-1000 image estimate is unverified.
 - Before starting source audit, reconcile old contradictory resume/stop text in historic sections, re-fetch current branch head and verify current docs. Then follow 25-file checkpoints, 50-file reports and the existing grant to 3400; report at 3350 and 3400 and stop at the authorized limit.
+
+
+## Start authorization — entries 3301–3400 — 2026-11-25
+
+- User explicitly confirmed starting the exceptional grant **3301–3400**. Source audit begins at 3301; stage 3201–3400 is 100/200 complete as of 3300.
+- Section **3301–3350** is authorized: complete checkpoints 3301–3325 and 3326–3350, report at 3350. Section **3351–3400** is also covered by the same grant: complete 3351–3375 and 3376–3400, report at 3400 and stop.
+- This latest resume supersedes historic STOP/LOCKED entries. Source review serially, 25-file checkpoint commits and read-back verification, six-document transactions, no file >400 lines per read chunk.
+- Media entry 3301 is video `launcher/docs/opening.webm`; keep NEEDS USER WATCH in archive and Ledger. Historical media backfill 1–3300 is still pending; 70–80 first-1000 image estimate unverified.
+- Static audit only. No tests/build/runtime/Android/Forge/Minecraft/server validation.
