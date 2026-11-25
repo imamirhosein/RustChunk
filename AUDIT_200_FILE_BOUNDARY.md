@@ -584,3 +584,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - `AUDIT_MEDIA_ARCHIVE.md` is a permanent continuous media-only archive, not split by 200-file stage. Images/videos are recorded both in their ordinary Ledger and the archive, using the original entry number; normal files are omitted from the media archive.
 - Historical media 1–3300 are not yet backfilled; the 70–80-image estimate in entries 1–1000 is unverified. At backup milestone 4000, complete and verify historical media backfill for the backup scope before backup closeout.
 - Images need visual inspection and detailed analysis, or NEEDS USER REVIEW. Videos are logged for user watching later unless actually reviewed.
+
+
+## Current status reconciliation — 2026-11-25
+
+- Reconciled current checkpoint: source audit is complete through **3300**; sections 3201–3250 and 3251–3300 closed. Stage 3201–3400 is 100/200.
+- Exceptional user grant **3301–3400** is active, but source review has **not started**. Archive/documentation registration does not consume it. User confirmation is required before audit starts.
+- Media archive backfill 1–3300 is pending; backup milestone 4000 requires completion/verification of the media archive.
