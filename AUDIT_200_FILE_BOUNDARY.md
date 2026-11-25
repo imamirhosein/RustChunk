@@ -586,8 +586,9 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Images need visual inspection and detailed analysis, or NEEDS USER REVIEW. Videos are logged for user watching later unless actually reviewed.
 
 
-## Current status reconciliation — 2026-11-25
+## Current status reconciliation — start authorized — 2026-11-25
 
-- Reconciled current checkpoint: source audit is complete through **3300**; sections 3201–3250 and 3251–3300 closed. Stage 3201–3400 is 100/200.
-- Exceptional user grant **3301–3400** is active, but source review has **not started**. Archive/documentation registration does not consume it. User confirmation is required before audit starts.
-- Media archive backfill 1–3300 is pending; backup milestone 4000 requires completion/verification of the media archive.
+- Source audit is complete through **3300**; sections 3201–3250 and 3251–3300 closed. Stage 3201–3400 is 100/200.
+- User explicitly confirmed start of exceptional grant **3301–3400**. Section 3301–3350 is authorized: checkpoints 3301–3325 and 3326–3350; report at 3350. Section 3351–3400 is also covered by the same grant: checkpoints 3351–3375 and 3376–3400; report and stop at 3400.
+- Older lock/stop statements above are historical and superseded by this latest reconciliation.
+- Media archive backfill 1–3300 remains pending; backup milestone 4000 requires completion/verification of the archive.
