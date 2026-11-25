@@ -2153,3 +2153,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The 25 Ledger entries each contain exactly 15 required fields. Index now contains 3,425 sequential unique paths; new Ledger has 25 records and Ledger/Index path and Decision alignment is verified.
 - The entries are test oracles/exporters for later-version entity, environment, item-use, shape/collision, worldgen/chunk, fluid, first-person input and food mechanics. They are adaptable as target-version test references only, not production/runtime implementations. Global Unsafe/reflection, static registry/cache mutation, restricted stand-ins and MC26.3 API drift require isolation and 1.20.1 revalidation.
 - No tests, builds, benchmarks, APK/device, renderer, Forge/Minecraft launch, multiplayer or server validation was run. No RustChunk application source was changed.
+
+
+## Checkpoint 3426–3450 — COMPLETE — 2026-11-26
+
+- 25 next globally lexical files after the 3,425-entry Index were inspected from pinned Starling commit. Full source SHA/byte sizes match the complete recursive tree; canonical logical line counts and EOF coverage are recorded.
+- All source files were read serially to EOF. The 630-line HUD oracle (3440) was inspected in consecutive ranges 1–400 and 401–630; the remaining 24 files are all below 400 lines and were read in one complete range.
+- Every new Ledger entry has exactly 15 fields. Ledger 3401–3600 now contains 50 records (3401–3450); Index contains 3,450 sequential unique paths, and new Index paths align with the Ledger decisions.
+- Scope covered FoodData persistence, frame/tick/input loops, model/geometry/HUD/font, recipe book, heightmaps/worldgen ticks, hotbar/drop handling, Inventory/Equipment, item-use lifecycles, blocking and cooldowns. These are later-version test oracles/exporters; most require 1.20.1 remapping and isolated harnesses due Unsafe/reflection/global state.
+- No tests/builds/APK/device, renderer runtime, Forge/Minecraft launch, multiplayer/server validation or RustChunk application code was executed or changed.

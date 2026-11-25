@@ -1024,3 +1024,9 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 - First 25 of the one-time full 200-file grant are complete and committed/read-back verified. Ledger 3401–3600 contains 25 records; Index has 3,425 sequential unique paths.
 - Next: 3426–3450. Continue under the same grant without a stop at 3450, 3500 or 3550; planned final stop 3600.
+
+
+### Progress — checkpoint 3426–3450 — 2026-11-26
+
+- Checkpoints 3401–3425 and 3426–3450 are complete and read-back verified. Stage Ledger has 50 source records; Index has 3,450 sequential unique paths.
+- Continue 3451–3475 under the same one-time full 200-file grant. The 50-file mark at 3450 is not a permission stop; continue through 3600.

@@ -3934,3 +3934,28 @@
 | 3423 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFluidShapeOracle.java` | adaptable; reference; parity-test-oracle | fluid VoxelShape cache identity and neighbor-sensitive shapes |
 | 3424 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFoodOracle.java` | adaptable; reference; parity-test-oracle | FoodData arithmetic, exhaustion, healing and starvation callbacks |
 | 3425 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFoodPropertiesOracle.java` | adaptable; reference; parity-test-oracle | FoodProperties consumption, player/non-player food and sound/RNG trace |
+| 3426 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFoodStorageOracle.java` | adaptable; reference; parity-test-oracle | FoodData numeric NBT persistence and round-trip coercions |
+| 3427 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFrameLimiterOracle.java` | adaptable; reference; parity-test-oracle; JDK-specific | frame pacing with virtual clock and rewritten limiter calls |
+| 3428 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGallerySelectionOracle.java` | adaptable; reference; parity-test-oracle | blockstate gallery model dispatch, transforms and face totals |
+| 3429 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGameLoopOracle.java` | adaptable; reference; parity-test-oracle | timer, tick rate, window scale, mouse and key state transitions |
+| 3430 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGameplayFactsExporter.java` | adaptable; reference; parity-data-exporter | complete blockstate gameplay/outline/sound fact exporter |
+| 3431 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGenerationTickOracle.java` | adaptable; reference; parity-test-oracle | per-chunk worldgen tick storage, snapshots and promotion |
+| 3432 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGeometryOracle.java` | adaptable; reference; parity-test-oracle | voxel/AABB/vector geometry, traversal and collision oracle |
+| 3433 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGhostRecipeOracle.java` | adaptable; reference; parity-test-oracle | recipe-book crafting/furnace ghost-slot population |
+| 3434 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaGroundStateOracle.java` | adaptable; reference; parity-test-oracle | ground/support state transitions and support-block query order |
+| 3435 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaHeightProviderOracle.java` | adaptable; reference; parity-test-oracle | height-provider codecs, sampling and RNG consumption |
+| 3436 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaHeightmapOracle.java` | adaptable; reference; parity-test-oracle | ProtoChunk heightmaps, palettes, tags and raw packed data |
+| 3437 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaHeldDropOracle.java` | adaptable; reference; parity-test-oracle | native drop key path, drop packet and inventory count behavior |
+| 3438 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaHeldItemStackOracle.java` | adaptable; reference; parity-test-oracle | main/offhand held-stack extraction for armed render state |
+| 3439 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaHotbarOracle.java` | adaptable; reference; parity-test-oracle | creative hotbar NBT load through DataFixer |
+| 3440 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaHudOracle.java` | adaptable; reference; parity-test-oracle | HUD draw-call oracle for overlays, chat, hotbar and widgets |
+| 3441 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInlineObjectOracle.java` | adaptable; reference; parity-test-oracle | font atlas glyph color/shadow and inline object vertices |
+| 3442 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInteractionInputOracle.java` | adaptable; reference; parity-test-oracle | Minecraft attack/use/pick key dispatch and held-button transitions |
+| 3443 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInteractionShapeOracle.java` | adaptable; reference; parity-test-oracle | block interaction-shape registry and ray clipping |
+| 3444 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInventoryPickupOracle.java` | adaptable; reference; parity-test-oracle | Inventory/Equipment storage, pickup, aliases and component patches |
+| 3445 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInventoryTickOracle.java` | adaptable; reference; parity-test-oracle | inventory/equipment itemTick routing and server/client branch |
+| 3446 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInventoryUseOracle.java` | adaptable; reference; parity-test-oracle | LivingEntity item-use tick, completion, release and sync state |
+| 3447 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaInventoryUseStartOracle.java` | adaptable; reference; parity-test-oracle | startUsingItem duration, hand flags, tracking equipment packets |
+| 3448 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemAfterUseOracle.java` | adaptable; reference; parity-test-oracle | finishUsingItem plus remainder-template and cooldown composition |
+| 3449 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemBlockingOracle.java` | adaptable; reference; parity-test-oracle | BlocksAttacks reduction, bypass/projectile tags and shield blocking |
+| 3450 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaItemCooldownsOracle.java` | adaptable; reference; parity-test-oracle | ItemCooldowns group storage, expiry and UseCooldown application |

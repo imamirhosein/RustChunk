@@ -16,7 +16,7 @@
 | Checkpoint | Range | State |
 |---|---:|---|
 | 1 | 3401–3425 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
-| 2 | 3426–3450 | AUTHORIZED — NOT STARTED |
+| 2 | 3426–3450 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 3 | 3451–3475 | AUTHORIZED — NOT STARTED |
 | 4 | 3476–3500 | AUTHORIZED — NOT STARTED |
 | 5 | 3501–3525 | AUTHORIZED — NOT STARTED |
@@ -24,7 +24,7 @@
 | 7 | 3551–3575 | AUTHORIZED — NOT STARTED |
 | 8 | 3576–3600 | AUTHORIZED — NOT STARTED |
 
-All eight checkpoints are covered by one explicit user grant. The first checkpoint 3401–3425 is complete; the next is 3426–3450. The 50-file marks are internal accounting only; proceed without intermediate permission requests. The only planned stop is after the final verification at 3600, unless a genuine blocker occurs.
+All eight checkpoints are covered by one explicit user grant. The first checkpoint 3401–3425 is complete; the next is 3451–3475. The 50-file marks are internal accounting only; proceed without intermediate permission requests. The only planned stop is after the final verification at 3600, unless a genuine blocker occurs.
 
 ## Stage partition
 
@@ -644,3 +644,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - 25 globally lexical unique files inspected individually through EOF; pinned SHA/size verified. Entry 3414 read as 1–400 and 401–527; remaining sources each fit one range under 400 lines.
 - Ledger 3401–3600 has 25 entries (3401–3425), exactly 15 fields each; Index now 3,425 sequential unique paths.
 - Checkpoint commit/read-back verified. Continue 3426–3450 under the same full-boundary grant; no permission gate at 3450.
+
+
+### Checkpoint 3426–3450 — COMPLETE — 2026-11-26
+
+- 25 files read serially through EOF; pinned SHA/size match; 3440 HUD source was 630 logical lines and read as 1–400 and 401–630.
+- Stage Ledger has 50 records through 3450, each exactly 15 fields; Index has 3,450 sequential unique paths with matching new rows.
+- Continue 3451–3475 under the same 200-file authorization; no permission gate at the 3450 milestone.
