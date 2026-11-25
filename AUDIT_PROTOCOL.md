@@ -994,8 +994,17 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Preserve chronological order by original audit number; gaps represent ordinary files only after the respective range has been verified.
 
 
-## 66. Current state after media archive registration — 2026-11-25
+## 66. Current state after media archive registration — 2026-11-25 (superseded by Section 67)
 
-- Verified branch head before changes was checkpoint 3300; current Index/Ledger status is 3,300 completed entries. Prior 3225/3275 summary text in historical snapshots is stale and superseded by the latest reconciliation and boundary status.
-- The user granted an exceptional **100-entry window 3301–3400**. It remains **not started**; archive registration/documentation changes are not source-file audit work and do not consume the grant. Continue only after the user separately authorizes starting the audit.
-- Before audit begins, reread the latest protocol, continuity, boundary, media archive and branch HEAD; reconcile stale contradictory checkpoint summaries before inspecting any upstream source.
+- Verified branch head before changes was checkpoint 3300; current Index/Ledger status is 3,300 completed entries. Prior 3225/3275 summary text in historical snapshots is stale and superseded by latest reconciliation and boundary status.
+- The exceptional 100-entry window 3301–3400 was awaiting a separate start confirmation. Archive registration/documentation changes did not consume the grant.
+- This section is historical; current authorization and resume point are governed by Section 67 below.
+
+
+## 67. Start authorization and reconciled resume — 2026-11-25
+
+- User explicitly confirmed **start** for the active exceptional grant covering source entries **3301–3400**. The grant is active, not consumed, and source audit begins at 3301.
+- Completed through **3300**. Reporting section **3301–3350** is authorized; checkpoint **3301–3325** then **3326–3350**. Continue without intermediate permission; report at 3350. The second reporting section **3351–3400** is also covered by the same exceptional grant; checkpoints 3351–3375 and 3376–3400; report at 3400 and stop.
+- Before the first source inspection, current docs/head were reread and stale conflicting lock/stop summaries in Continuity and Boundary were reconciled by this latest status. Historical entries remain preserved; this latest status governs.
+- Media entry 3301 is video `launcher/docs/opening.webm`; log it in both Ledger and permanent media archive as NEEDS USER WATCH, without claiming video review. Image entries must be rendered/inspected and detailed notes archived; ordinary source files omitted from media archive.
+- Source review remains static only. No builds, tests, Android/Forge/Minecraft runtime or server validation are implied.
