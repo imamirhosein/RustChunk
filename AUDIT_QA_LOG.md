@@ -2096,3 +2096,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Key cautions: ATM10 CSV predominantly identifies 1.21.x/NeoForge metadata and is not a 1.20.1 Forge install manifest; save-batch CSV is reported benchmark data without validated environment/methodology; Cargo.lock is a desktop/GPUI-heavy dependency snapshot and does not prove Android UI support; loader logos, marketing art and screenshots are not functional tests or proof of runtime claims.
 - No RustChunk application source was changed. No build, tests, benchmarks, APK, Android-device, Forge, Minecraft, multiplayer or Aternos validation was performed.
 - Section 3251–3300 CLOSED (50/50). **STOP at 3300; 3301–3350 requires fresh explicit user authorization.**
+
+
+## Permanent media archive policy and pending historical backfill — 2026-11-25
+
+- Created the required permanent media-only archive file `AUDIT_MEDIA_ARCHIVE.md` (not stage/200-file split). It records media only, in original audit-number order.
+- Double-recording rule: every image/video appears in its normal source Ledger and the media archive, using the same original entry number. Normal files are excluded from media archive.
+- Images: visual analysis if rendering is available; otherwise NEEDS USER REVIEW. Videos are identified/logged for user watching; unseen content is not described.
+- Historical media 1–3300 are not yet backfilled. First-1000 image estimate (70–80) remains unverified.
+- Backup milestone 4000 must include full media archive backfill/verification for the backup scope; backup closeout cannot be called complete while this remains outstanding.
+- Entry 3301 `launcher/docs/opening.webm` recorded as video, pending user watch. No source audit of 3301+ has started under this archive-registration task.
