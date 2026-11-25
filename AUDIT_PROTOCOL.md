@@ -1036,3 +1036,10 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 - Third 25-file checkpoint complete and read-back verification pending in commit; prior commits 3401–3425 and 3426–3450 remain closed. Ledger now has 75 source entries; Index 3,475 unique sequential paths.
 - Continue 3476–3500 under the single full-boundary grant without a permission stop at 3500/3550. Final planned stop is 3600.
+
+
+### Progress — checkpoint 3476–3500 — 2026-11-26
+
+- 25 files read through EOF; pinned SHA/size confirmed. Long files 3485 (403), 3487 (1206), 3498 (889) covered in contiguous gap-free ranges no larger than 400 lines.
+- Stage Ledger has 100 records with exactly 15 fields; Index 3,500 sequential unique paths with aligned Decisions.
+- Continue 3501–3525 under same one-time authorization; no stop at 3550. Planned final stop 3600.

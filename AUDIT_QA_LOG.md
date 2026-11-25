@@ -2172,3 +2172,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Areas: item durability, native item models/particles/storage/templates/use lifecycle and wire data; Java map semantics; LAN discovery/authentication; neighbor block-state updates; entity attributes/health/damage/fall/fluid/movement. The LAN auth oracle is strictly a LAN-only authentication-failure exception test, not general offline authentication or public-server access.
 - Important review cautions: modern DataComponent/ClientItem/BlocksAttacks/attribute/gravity APIs are later-version; global registry/default/EMPTY mutation and Unsafe/reflection are test harness only; JDK HashMap order is runtime-specific; item model captures layers/quads but not GPU pixels; LAN oracle does not open real sockets; movement/damage oracles use scripted worlds and callbacks.
 - No RustChunk application source changed; no test/build/APK/device, Forge/Minecraft launch, renderer runtime, multiplayer/server or Aternos validation was performed.
+
+
+## Checkpoint 3476–3500 — COMPLETE — 2026-11-26
+
+- 25 globally lexical sources after Index 3475 read serially through EOF. SHA/size match the complete untruncated 4,968-blob pinned tree; canonical line counts recorded.
+- Long files: 3485 (403 lines), ranges 1–200 and 201–403; 3487 (1206), ranges 1–300, 301–500, 501–700, 701–900, 901–1100, 1101–1206; 3498 (889), ranges 1–220, 221–440, 441–660, 661–889. Remaining 22 files are no more than 400 lines and read whole. Entry 3481 coverage includes contiguous 1–150 and 151–251.
+- Ledger has 100 records through 3500, exactly 15 fields each (1,500 fields); Index 3,500 sequential unique paths and aligned Decisions.
+- Scope: input, UI, loot/lore/particles, material/surface generation, menus, mipmaps, mob AI/attributes, model baking/choice, movement, music, natural spawn, noise and fastutil maps.
+- Current Starling APIs/data are later than target 1.20.1. AI/spawn tests use a controlled headless fixture; finalizeSpawn RNG neutralized. VanillaMover is not run. Model/mipmap output is not device GPU output.
+- No RustChunk app changes or build/test/APK/device/renderer/Forge/Minecraft/dedicated server/multiplayer/Aternos validation.
