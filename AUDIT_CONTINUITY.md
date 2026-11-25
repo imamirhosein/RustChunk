@@ -6,11 +6,11 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3225**.
-- Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED; stage **3201–3400** is active (25/200).
-- Reporting sections through **3151–3200** are CLOSED. Section **3201–3250** is authorized under a one-time exceptional grant; checkpoint **3201–3225** complete, **3226–3250** authorized. STOP at **3250**.
-- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **25 records (3201–3225)**, exactly 15 fields each. Index: **3,225 sequential unique paths**, no duplicates and path/Decision alignment.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree 4,968 blobs, complete and untruncated. Entries 3201–3225 source SHAs/sizes match the pinned tree; binary assets rendered, text assets EOF inspected.
+- Completed entries: **1–3250**.
+- Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED; stage **3201–3400** is active (50/200).
+- Reporting sections through **3151–3200** are CLOSED. Section **3201–3250** is authorized under a one-time exceptional grant; checkpoints **3201–3225** and **3226–3250** complete; section **3201–3250 CLOSED**. STOP at **3250**.
+- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **50 records (3201–3250)**, exactly 15 fields each. Index: **3,250 sequential unique paths**, no duplicates and path/Decision alignment.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree 4,968 blobs, complete and untruncated. Entries 3201–3250 source SHAs/sizes match the pinned tree; binary assets rendered, text assets EOF inspected.
 - No RustChunk application source changed. No builds, tests, benchmarks, APK/device, Vulkan, Forge/Minecraft or multiplayer validation.
 - Backup `backup/audit-3000-final-2026-11-23` remains preserved; new backup due only after entries 3001–4000 are complete and globally verified.
 

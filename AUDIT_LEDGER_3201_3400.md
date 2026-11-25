@@ -427,3 +427,428 @@ Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b2713
 - Evidence required before adoption: Pinned tree SHA/size verified; image rendered; redistribution review pending.
 - Completion state: COMPLETE — pinned blob fetched; SHA/size verified; rendered/inspected; no tests.
 
+### 3226. `docs/media/icon-256.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 9635be7fd40b588f2c4be715b242cf6d7f6e2b23
+- Size: 18546 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Horizon branding icon/logo media.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Branding art only; unrelated to game-engine implementation.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3227. `docs/media/issue563-outline-after.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ac1041b9669b375fbce63e497290ea9ddcb0dff9
+- Size: 154050 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Block outline rendering issue before-after screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Visual comparison of block-outline behavior; no executable regression fixture or reproduction procedure included.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3228. `docs/media/issue563-outline-before.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: aea7743f1eee17e35991b93be6699d453ff25c96
+- Size: 237583 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Block outline rendering issue before-after screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Visual comparison of block-outline behavior; no executable regression fixture or reproduction procedure included.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3229. `docs/media/launcher-play.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d9f305daa0068e4061628c809c77f0bb86ab8aec
+- Size: 61976 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Horizon launcher UI screenshot (play/home/settings) for documentation.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Shows Horizon desktop launcher and its Microsoft/offline account options, game version 26.3, and UI state; desktop screenshots do not establish Android launcher compatibility.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3230. `docs/media/launcher-play.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 81466c7799d233669d55e3ffd9b38b6bff8707b2
+- Size: 50378 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Horizon launcher UI screenshot (play/home/settings) for documentation.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Shows Horizon desktop launcher and its Microsoft/offline account options, game version 26.3, and UI state; desktop screenshots do not establish Android launcher compatibility.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3231. `docs/media/launcher-settings.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8d23b22fb856f8786836e2b436e48cce14538a30
+- Size: 65170 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Horizon launcher UI screenshot (play/home/settings) for documentation.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Shows Horizon desktop launcher and its Microsoft/offline account options, game version 26.3, and UI state; desktop screenshots do not establish Android launcher compatibility.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3232. `docs/media/leaf-culling-hollow.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 7bf96f76b69be9acc4efd29e889f68b0eb9eee77
+- Size: 104455 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Leaf-culling feature comparison screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Screenshots show different foliage occlusion/culling visual states and overlay FPS figures. Captured FPS is contextual image content, not controlled benchmark data.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3233. `docs/media/leaf-culling-off.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f02fba82f6fd19f34805e50f59a4b1ba47dcaaa1
+- Size: 134576 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Leaf-culling feature comparison screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Screenshots show different foliage occlusion/culling visual states and overlay FPS figures. Captured FPS is contextual image content, not controlled benchmark data.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3234. `docs/media/leaf-culling-solid.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 64f0be9711d455805a5b4a7326bd56b43da5a1de
+- Size: 120468 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Leaf-culling feature comparison screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Screenshots show different foliage occlusion/culling visual states and overlay FPS figures. Captured FPS is contextual image content, not controlled benchmark data.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3235. `docs/media/leaf-culling-solid_aggressive.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 964dafb268a1421c234591467b29662984fefaeb
+- Size: 61227 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Leaf-culling feature comparison screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Screenshots show different foliage occlusion/culling visual states and overlay FPS figures. Captured FPS is contextual image content, not controlled benchmark data.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3236. `docs/media/leaf-cutout-after.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 08a82d14c4695bfa0f52d44826087466d3c8cbf2
+- Size: 461607 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Leaf cutout/foliage visibility before-after screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Before/after imagery demonstrates foliage cutout/visibility differences only; no test conditions or quantitative proof supplied.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3237. `docs/media/leaf-cutout-before.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 919e515d870dc1c0ccd41d4d0540e565933f0b31
+- Size: 461012 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Leaf cutout/foliage visibility before-after screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Before/after imagery demonstrates foliage cutout/visibility differences only; no test conditions or quantitative proof supplied.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3238. `docs/media/logo.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 57b2451b4eccc521716afb731c8d1d85cd029099
+- Size: 156537 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Horizon branding icon/logo media.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Branding art only; unrelated to game-engine implementation.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3239. `docs/media/logo.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 2ef5c91a41b7bbda8a792a7f287065da4239b624
+- Size: 3228 bytes
+- Coverage: 1–62; EOF; canonical logical line count 62.
+- Purpose: Horizon branding icon/logo media.
+- Dependencies / cross-references: SVG gradients, clip paths, shapes/text; no active/external resource observed.
+- Implementation / logic: Static vector with XML title/aria-label, geometry and color fills.
+- Findings: Branding art only; unrelated to game-engine implementation.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Text inspected through EOF; pinned SHA/size verified; licensing/rendering review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; text read through EOF; no tests.
+
+### 3240. `docs/media/multiplayer-pause.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1a09fc3dadaacc4cb6ff12211611505086a7fc38
+- Size: 107711 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Multiplayer pause/world-options UI screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Screenshots depict pause/world-option UI states; not a test of server/network implementation.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3241. `docs/media/multiplayer-world-options.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: cc9b0295874d4c6e5adaeb8277c165bd330ad2fd
+- Size: 307963 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Multiplayer pause/world-options UI screenshot.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Screenshots depict pause/world-option UI states; not a test of server/network implementation.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3242. `docs/media/nether.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 7450f1072d856efabe869c9cb6083bb91ea45f4d
+- Size: 275418 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Minecraft environment screenshot used as media/background.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Scene/background media only; JPG and WebP variants depict the same environment and are not rendering tests.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3243. `docs/media/nether.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 2f9cdc5c1b1c31b8b97a83598c9633bb9a1938d8
+- Size: 115484 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Minecraft environment screenshot used as media/background.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Scene/background media only; JPG and WebP variants depict the same environment and are not rendering tests.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3244. `docs/media/night.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 3484e6c83102dc5d5c728c1b87aa8fc85456839b
+- Size: 113097 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Minecraft environment screenshot used as media/background.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Scene/background media only; JPG and WebP variants depict the same environment and are not rendering tests.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3245. `docs/media/night.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: fac8958da0873fb56ee2216b51eb2c05ed2deba2
+- Size: 36558 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Minecraft environment screenshot used as media/background.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Scene/background media only; JPG and WebP variants depict the same environment and are not rendering tests.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3246. `docs/media/piglin-offspring-after.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1db5c3bc07b3713231d6e0b75aa21e4d88e04b2e
+- Size: 758261 bytes
+- Coverage: Binary image; logical line count N/A; visual render inspected.
+- Purpose: Horizon branding icon/logo media.
+- Dependencies / cross-references: Raster image asset; image decoder required.
+- Implementation / logic: Static raster image visually rendered.
+- Findings: Branding art only; unrelated to game-engine implementation.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Pinned source SHA/size verified from recursive tree and visual render inspected; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; visual render inspected; no tests.
+
+### 3247. `docs/media/progress/0.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a70927c67ac65521d957b19fa813b512df185825
+- Size: 380 bytes
+- Coverage: 1–5; EOF; canonical logical line count 5.
+- Purpose: Static SVG progress indicator for documented progress percentages.
+- Dependencies / cross-references: SVG gradients, clip paths, shapes/text; no active/external resource observed.
+- Implementation / logic: Static vector with XML title/aria-label, geometry and color fills.
+- Findings: Simple progress bar with percentage label and state color; static asset only, no logic/accessibility behavior.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Text inspected through EOF; pinned SHA/size verified; licensing/rendering review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; text read through EOF; no tests.
+
+### 3248. `docs/media/progress/10.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4077c2f240ce718a23b49010885860db83964010
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress indicator for documented progress percentages.
+- Dependencies / cross-references: SVG gradients, clip paths, shapes/text; no active/external resource observed.
+- Implementation / logic: Static vector with XML title/aria-label, geometry and color fills.
+- Findings: Simple progress bar with percentage label and state color; static asset only, no logic/accessibility behavior.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Text inspected through EOF; pinned SHA/size verified; licensing/rendering review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; text read through EOF; no tests.
+
+### 3249. `docs/media/progress/100.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 96d10ac587b6c17866ab5395e69b336f75cef7f8
+- Size: 454 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress indicator for documented progress percentages.
+- Dependencies / cross-references: SVG gradients, clip paths, shapes/text; no active/external resource observed.
+- Implementation / logic: Static vector with XML title/aria-label, geometry and color fills.
+- Findings: Simple progress bar with percentage label and state color; static asset only, no logic/accessibility behavior.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Text inspected through EOF; pinned SHA/size verified; licensing/rendering review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; text read through EOF; no tests.
+
+### 3250. `docs/media/progress/15.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ad4e7563bdb5ac37aefdc53664b2b6a9f58c4b49
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress indicator for documented progress percentages.
+- Dependencies / cross-references: SVG gradients, clip paths, shapes/text; no active/external resource observed.
+- Implementation / logic: Static vector with XML title/aria-label, geometry and color fills.
+- Findings: Simple progress bar with percentage label and state color; static asset only, no logic/accessibility behavior.
+- RustChunk relevance: Documentation-only or optional launcher branding; no engine mapping.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No 1.20.1/Forge implementation evidence; these are documentation assets.
+- Follow-up checks: Check license/provenance and intended reuse before redistribution; no target renderer/device compatibility tested.
+- RustChunk implementation mapping: Documentation or optional launcher brand assets only; no engine module mapping.
+- Evidence required before adoption: Text inspected through EOF; pinned SHA/size verified; licensing/rendering review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/size verified; text read through EOF; no tests.
+

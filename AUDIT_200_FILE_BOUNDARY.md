@@ -2,7 +2,7 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3225** committed. Stages 2601–2800, 2801–3000 and 3001–3200 CLOSED; stage 3201–3400 active (25/200).
+- Entries **1–3225** committed. Stages 2601–2800, 2801–3000 and 3001–3200 CLOSED; stage 3201–3400 active (50/200).
 - Sections **3001–3050**, **3051–3100**, **3101–3150** and **3151–3200** are CLOSED (50/50 each).
 - Checkpoints through **3176–3200** are complete and read-back verified. Exceptional authorization **3101–3200 is COMPLETE/CONSUMED**.
 - Active Ledger contains **200 records**, exactly 15 fields each. Index contains **3,200 sequential unique paths** with no duplicates and Ledger/Index alignment.
@@ -558,4 +558,4 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 
 - Stage 3201–3400 is active. Section 3201–3250 is authorized; 3251–3300, 3301–3350 and 3351–3400 are locked pending explicit authorization.
 - Checkpoint 3201–3225 COMPLETE and verified; 3226–3250 AUTHORIZED under same one-time grant. STOP at 3250.
-- Active Ledger AUDIT_LEDGER_3201_3400.md: 25 records. Index 3,225 sequential unique paths. No app source changes or runtime checks.
+- Active Ledger AUDIT_LEDGER_3201_3400.md: 50 records. Index 3,250 sequential unique paths. No app source changes or runtime checks.

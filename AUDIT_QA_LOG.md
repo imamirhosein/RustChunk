@@ -2066,3 +2066,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - These are documentation/branding assets; no runtime/performance/Forge compatibility proof. Redistribution review remains pending.
 - No app source, build, tests, benchmark, APK/device or game/server validation.
 - Section 3201–3250 is authorized; next checkpoint 3226–3250. STOP at 3250.
+
+
+## Checkpoint 3226–3250 — COMPLETE (25/25) — 2026-11-25
+
+- Complete pinned recursive tree verified (4,968 blobs; untruncated). 25 next globally lexical, unindexed unique paths selected and reviewed serially; SHA/size matches recorded tree.
+- Binary images fetched/rendered; SVG files read through EOF. Ledger has 25 new entries with exactly 15 fields, source SHA/size and text/binary coverage.
+- Ledger 3201–3400 now 50 entries (3201–3250); Index 3,250 sequential unique paths. Paths and decisions align across Ledger/Index.
+- Content is documentation, launcher screenshots, feature comparison images, environment media and progress SVGs. No runtime behavior or performance claim accepted from screenshots.
+- No app source/build/tests/benchmark/APK/device/game/server validation. Section 3201–3250 CLOSED; STOP at 3250.
