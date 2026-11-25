@@ -989,3 +989,10 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Ledger 150 entries; Index 3,350 unique sequential paths; six-doc checkpoint transaction/read-back verified.
 - Section 3301–3350 CLOSED. Grant 3301–3400 covers 3351–3400; report at 3400 and stop.
 - Static review only; no runtime/tests/build/Android/Forge/Minecraft/server validation. Media backfill pending.
+
+
+## Checkpoint 3351–3375 — COMPLETE — 2026-11-25
+- 3351–3375 sequentially inspected; SHA/size match pinned tree. Long files 3356=452 and 3357=426 inspected gap-free chunks ≤400.
+- Ledger now 175 records (3201–3375); Index 3,375 unique sequential paths. Six-doc checkpoint commit/read-back verified.
+- Grant 3301–3400 active; final checkpoint 3376–3400 is authorized; report and stop at 3400.
+- Static review only; no tests/build/runtime/Android/Forge/Minecraft/server validation. Media archive backfill pending.

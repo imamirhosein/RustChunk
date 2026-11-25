@@ -1,6 +1,6 @@
 # RustChunk Starling Audit Ledger — stage 3201–3400
 
-Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Stage entries 3201–3350 include documentation media and parity test-oracle sources; static audit only. Binary assets were visually rendered; text assets were read through EOF. This is documentation-only audit, not engine/runtime evidence.
+Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Stage entries 3201–3375 include documentation media and parity test-oracle sources; static audit only. Binary assets were visually rendered; text assets were read through EOF. This is documentation-only audit, not engine/runtime evidence.
 
 ### 3201. `docs/media/accessibility-settings.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2552,3 +2552,428 @@ Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b2713
 - RustChunk implementation mapping: Test-only oracle or metadata tool; production behavior separately designed.
 - Evidence required before adoption: SHA/size verified, source complete; target tests/review pending.
 - Completion state: COMPLETE — SHA/size match pinned tree, EOF inspected; no runtime validation.
+
+### 3351. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaClimbingOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b0eeb53991509ad616272961338e10cdcafcc8dd
+- Size: 6005 bytes
+- Coverage: Text through EOF (35 logical lines).
+- Purpose: Climbing/trapdoor predicate oracle; exports block registry and tag memberships; scripted entity state, failure and mutation traces.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Climbing/trapdoor predicate oracle; exports block registry and tag memberships; scripted entity state, failure and mutation traces.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3352. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCloudRenderOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e27bf819a8b97aeb1e3c9487363d2a3fa4456674
+- Size: 3212 bytes
+- Coverage: Text through EOF (56 logical lines).
+- Purpose: Cloud mesh/cell builder invoked without GPU resources; controlled camera relative-position and texture bit inputs, CPU byte buffer mesh capture.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Cloud mesh/cell builder invoked without GPU resources; controlled camera relative-position and texture bit inputs, CPU byte buffer mesh capture.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3353. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCollisionContextOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b9a9b3a93e72b4b15701b0588d3a6f9496a6d1da
+- Size: 14628 bytes
+- Coverage: Text through EOF (174 logical lines).
+- Purpose: CollisionContext factory and queries with Player/Marker/FallingBlock snapshots, fluid/powder/scaffolding/above and context shape scenarios.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: CollisionContext factory and queries with Player/Marker/FallingBlock snapshots, fluid/powder/scaffolding/above and context shape scenarios.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3354. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCollisionOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 29ffa39a3bf9c11f353403dbc4786cf653bcf912
+- Size: 13967 bytes
+- Coverage: Text through EOF (179 logical lines).
+- Purpose: Exports vanilla cached voxel shapes and registry mapping; verifies cache identity, shape geometry, collide/clip/closest/index queries.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Exports vanilla cached voxel shapes and registry mapping; verifies cache identity, shape geometry, collide/clip/closest/index queries.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3355. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCombatRulesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c77de3c11b49e2d8e1cab9eddc97fd4fda964ce4
+- Size: 3466 bytes
+- Coverage: Text through EOF (21 logical lines).
+- Purpose: Native CombatRules damage-after-magic and armor absorb with scripted source/player and armor/toughness, failure/mutation traces.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Native CombatRules damage-after-magic and armor absorb with scripted source/player and armor/toughness, failure/mutation traces.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3356. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCommandExecOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8201775a1c17b4b4fc6ccbb97b88fd98ec6071d3
+- Size: 23946 bytes
+- Coverage: Text through EOF (452 logical lines; gap-free consecutive ≤400-line chunks).
+- Purpose: Integrated-server command executor with generated world, fake offline player, scripted commands/ticks/portal/falling-block probes; records messages/results.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Integrated-server command executor with generated world, fake offline player, scripted commands/ticks/portal/falling-block probes; records messages/results.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3357. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCommandParseOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 59678e648f15791985e243b3f2f350f14d53f42c
+- Size: 25550 bytes
+- Coverage: Text through EOF (426 logical lines; gap-free consecutive ≤400-line chunks).
+- Purpose: Full Brigadier command tree parse and completion oracle; exports registries/tags/recipe/advancement/component/item/block/entity data.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Full Brigadier command tree parse and completion oracle; exports registries/tags/recipe/advancement/component/item/block/entity data.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3358. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCommandSuggestionsExporter.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 34f085642aa2270439cb9229b33d79fcfd796b59
+- Size: 1877 bytes
+- Coverage: Text through EOF (39 logical lines).
+- Purpose: Exporter lists custom suggestion-provider nodes and network provider IDs from full command tree.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Exporter lists custom suggestion-provider nodes and network provider IDs from full command tree.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3359. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaComponentDurabilityOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8d73686f78017d5b4c3b8c0977ebbbdd3b0ef708
+- Size: 6234 bytes
+- Coverage: Text through EOF (26 logical lines).
+- Purpose: ItemStack durability/component mutations with prototype/patch state, break callbacks, infinite materials, advancement/stat observations.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: ItemStack durability/component mutations with prototype/patch state, break callbacks, infinite materials, advancement/stat observations.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3360. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaComponentPatchOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 724b81ab5028a565f6ffb71c780e272f402ec529
+- Size: 4570 bytes
+- Coverage: Text through EOF (25 logical lines).
+- Purpose: PatchedDataComponentMap prototype, copy, apply/restore/clear/save/build/from patch operations and canonical snapshots.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: PatchedDataComponentMap prototype, copy, apply/restore/clear/save/build/from patch operations and canonical snapshots.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3361. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaConsumableEmissionOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 22a37b905eb99fa9ff4d183007a1c132924629d2
+- Size: 6589 bytes
+- Coverage: Text through EOF (38 logical lines).
+- Purpose: Consumable particle/sound emission, item particles, RNG and actor callbacks with scripted mutation/failure.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Consumable particle/sound emission, item particles, RNG and actor callbacks with scripted mutation/failure.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3362. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaConsumableOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0bb5eb6d2d532abf76c03b1db0b21c29da1be8ae
+- Size: 13261 bytes
+- Coverage: Text through EOF (78 logical lines).
+- Purpose: Consumable canConsume/start/onConsume, food data, effects, game events, sounds, particles, random and stats on synthetic actors.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Consumable canConsume/start/onConsume, food data, effects, game events, sounds, particles, random and stats on synthetic actors.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3363. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaConsumeEffectOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a8faf7556eba47f71e90b34092caef986ece6e4f
+- Size: 7497 bytes
+- Coverage: Text through EOF (38 logical lines).
+- Purpose: Apply/remove/clear status and play-sound ConsumeEffect native operations, effect instances/hidden chain, RNG and event tracing.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Apply/remove/clear status and play-sound ConsumeEffect native operations, effect instances/hidden chain, RNG and event tracing.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3364. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaContainerScreenOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 5daa2676f0a1ed35a62a195c1af2a9b56e1ac536
+- Size: 9123 bytes
+- Coverage: Text through EOF (170 logical lines).
+- Purpose: Real container screen mouse press/release and hasClickedOutside/hovered-slot behavior; click calls captured for chest/hopper/shulker/beacon.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Real container screen mouse press/release and hasClickedOutside/hovered-slot behavior; click calls captured for chest/hopper/shulker/beacon.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3365. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaContainerTitleOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 62f64685fc97b754ae6bed010e6b81110125a3ef
+- Size: 4279 bytes
+- Coverage: Text through EOF (86 logical lines).
+- Purpose: Container menu display title from block entity NBT/item component patches and paired chest combine.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Container menu display title from block entity NBT/item component patches and paired chest combine.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3366. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaContextualCollisionAudit.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8a71a9b761cc8ce3599b66f00f41c2040e6151f1
+- Size: 4503 bytes
+- Coverage: Text through EOF (64 logical lines).
+- Purpose: Audit cached contextual collision dispatch for independent/fluid families; reject context/world queries and assert exact cache-shape identity.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Audit cached contextual collision dispatch for independent/fluid families; reject context/world queries and assert exact cache-shape identity.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3367. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCoreOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a2e66cee715878044c902e21e430032f4633e345
+- Size: 10328 bytes
+- Coverage: Text through EOF (161 logical lines).
+- Purpose: Vanilla core adapter probes RNG helpers/factories, BlockPos/SectionPos/ChunkPos packing, SimpleBitStorage storage/import/fill/errors.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Vanilla core adapter probes RNG helpers/factories, BlockPos/SectionPos/ChunkPos packing, SimpleBitStorage storage/import/fill/errors.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3368. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCreativeMiningOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 7d1d5f6e37956905f42f135ed9adeffb1666e3ea
+- Size: 3432 bytes
+- Coverage: Text through EOF (64 logical lines).
+- Purpose: Creative item canDestroyBlock predicate using native item tool components and creative abilities.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Creative item canDestroyBlock predicate using native item tool components and creative abilities.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3369. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCreativeSearchOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: aa728961db051ab5691bd714668eeda914aa45f5
+- Size: 5381 bytes
+- Coverage: Text through EOF (104 logical lines).
+- Purpose: Creative search screen/tabs, full-text tooltip/item-ID and tag search queries; indices into search tab results.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Creative search screen/tabs, full-text tooltip/item-ID and tag search queries; indices into search tab results.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3370. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCreativeTabsExporter.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 89c9c4c9d14f3ef001862efdf72a265b16308c03
+- Size: 5564 bytes
+- Coverage: Text through EOF (119 logical lines).
+- Purpose: Creative tabs exporter contents, permissions-only items, tooltips/tags and SNBT stack codec.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Creative tabs exporter contents, permissions-only items, tooltips/tags and SNBT stack codec.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3371. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCushionPlacementOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 212a415c1ab4426e3f579b35e2e2759ec629aa95
+- Size: 5210 bytes
+- Coverage: Text through EOF (91 logical lines).
+- Purpose: Cushion placement/survival geometry against scripted collision shapes and suffocation cells.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Cushion placement/survival geometry against scripted collision shapes and suffocation cells.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3372. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDamageImmunityOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a70a289c52dbf154bc13fa4f61f12669a4c33e33
+- Size: 5928 bytes
+- Coverage: Text through EOF (35 logical lines).
+- Purpose: Living/player damage immunity layering: damage tags, game rules, invulnerability, connection loading, changing dimension, equipment and base override.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Living/player damage immunity layering: damage tags, game rules, invulnerability, connection loading, changing dimension, equipment and base override.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3373. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDamageReductionOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 78c749562efb808805db8d1dc79fa10e9054d068
+- Size: 7435 bytes
+- Coverage: Text through EOF (53 logical lines).
+- Purpose: Armor/resistance/protection damage dispatch with source tags, attributes, effects, attacker and stat callbacks.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Armor/resistance/protection damage dispatch with source tags, attributes, effects, attacker and stat callbacks.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3374. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDamageSourceOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 49558dd2ac5f16f16ad164be68b266fc64d4ddc7
+- Size: 8948 bytes
+- Coverage: Text through EOF (52 logical lines).
+- Purpose: Damage type catalog/tag resolution and DamageSource constructor/entity/weapon/position/type query behavior.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Damage type catalog/tag resolution and DamageSource constructor/entity/weapon/position/type query behavior.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3375. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDragonContactsOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a6351f4d7b191ae4645eeb7b454c23765c064b20
+- Size: 3972 bytes
+- Coverage: Text through EOF (76 logical lines).
+- Purpose: Dragon wing/head contact native knockback/hurt with Enderman cases for phase, repeat wings, team friendly-fire and recent victim; no entity physics ticks.
+- Dependencies / cross-references: Minecraft 26.3 vanilla registries, command/data-pack/client/server APIs and test harness helpers.
+- Implementation / logic: Dragon wing/head contact native knockback/hurt with Enderman cases for phase, repeat wings, team friendly-fire and recent victim; no entity physics ticks.
+- Findings: Scripted/synthetic fixture and oracle; reflective/Unsafe use is test-only. No actual test execution performed.
+- RustChunk relevance: Differential test/reference only, not runtime implementation.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: Version-specific API, behavior and registry context; compare/port to 1.20.1 and account for Forge/client Android separately.
+- Follow-up checks: Target-version parity tests, platform/security/licensing review; keep test-only scaffolding out runtime.
+- RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
+- Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
+- Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.

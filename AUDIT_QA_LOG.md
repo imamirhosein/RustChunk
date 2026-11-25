@@ -2121,3 +2121,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger/index unique and sequential; six-document read-back transaction verified.
 - Test oracles cover blockstate/behavior, client camera/chat/rendering, carver and chunk-generation/status; adaptable/reference, not production. No tests/build/runtime.
 - Section 3301–3350 CLOSED; grant covers 3351–3400, continue checkpoints 3351–3375 and 3376–3400, report at 3400 and stop.
+
+
+## Checkpoint 3351–3375 — COMPLETE — 2026-11-25
+- 25 next lexical unique paths inspected through EOF from pinned full tree; SHAs/byte sizes verified. Long files 3356 (452) and 3357 (426) read in consecutive 1–400 and 401–EOF chunks.
+- Ledger/Index sequential unique and aligned; six-document transaction read-back verified.
+- Oracles cover climbing, collision contexts/shapes, combat, command server/parser/suggestions, components/consumables, containers, creative inventory, damage and dragon contact. Test-only, adaptable/reference. No tests/build/runtime performed.
+- Grant 3301–3400 remains active; continue 3376–3400 and report at 3400, then STOP.
