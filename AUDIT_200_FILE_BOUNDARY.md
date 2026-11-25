@@ -2,12 +2,14 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3300** committed. Stages **2601–2800**, **2801–3000** and **3001–3200** closed; stage **3201–3400** active (**100/200**).
-- Sections **3201–3250** and **3251–3300** CLOSED (50/50 each). Both checkpoints in 3251–3300 are complete and verified.
-- **STOP at 3300.** Section **3301–3350** is not authorized; require explicit user permission before inspecting it.
-- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **100 records**, exactly 15 fields each. Index: **3,300 sequential unique paths**, no duplicates and Ledger/Index alignment.
-- Keep 25-file commits, 50-file reports, serial file inspection and max 400-line contiguous chunks. Binary media coverage is visual inspection, not line coverage.
-- No application source changes or runtime validation; do not modify `main` or backup refs.
+- Entries **1–3400** are committed. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED; stage **3201–3400 is complete (200/200)**.
+- Sections **3201–3250**, **3251–3300**, **3301–3350** and **3351–3400** are CLOSED (50/50 each). The four 25-file checkpoints in grant 3301–3400 are complete and verified.
+- **STOP at 3400.** Grant **3301–3400 is fully consumed and closed**. There is no active authorization for **3401 onward**; require a new explicit user grant before any further source audit.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records**, exactly 15 fields each. Index: **3,400 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Keep the 25-file checkpoint commit/read-back, 50-file user report/authorization boundary, serial source inspection and consecutive chunks of no more than 400 lines. Binary media coverage is visual inspection, not line coverage.
+- Permanent media archive `AUDIT_MEDIA_ARCHIVE.md` records entries 3301–3310. Historical media 1–3300 remains to be backfilled; the 70–80-image estimate in entries 1–1000 is unverified. The 4000-entry backup/verification milestone must not close until the archive is backfilled and reconciled with the Ledgers.
+- No RustChunk application-source implementation, tests/builds/benchmarks, APK/device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by this static audit. Do not modify `main` or backup refs.
+- Current authoritative stop/resume status is also recorded at the top of `AUDIT_CONTINUITY.md` and in the final section of `AUDIT_PROTOCOL.md`.
 
 ## Stage partition
 

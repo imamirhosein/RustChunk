@@ -1,19 +1,23 @@
 # RustChunk Audit Continuity
 
-Last reconciled: 2026-11-24
+Last reconciled: 2026-11-26
 Repository: imamirhosein/RustChunk
 Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3300**.
-- Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED; stage **3201–3400** is active (**100/200**).
-- Reporting sections through **3201–3250** are CLOSED. Section **3251–3300** is now CLOSED (50/50); both checkpoints **3251–3275** and **3276–3300** are committed and read-back verified.
-- **STOP at 3300.** Section **3301–3350** is not authorized and requires a fresh explicit user grant before any source inspection.
-- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **100 records (3201–3300)**, exactly 15 fields each. Index: **3,300 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree contains 4,968 blobs, complete and untruncated. New entries 3276–3300 paths, SHAs, byte sizes and EOF/visual coverage verified against the pin.
-- No RustChunk application source changed. No build, tests, benchmark, APK/device, Vulkan, Forge/Minecraft, multiplayer or Aternos validation.
+- Completed entries: **1–3400**.
+- Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED; the current 200-file stage **3201–3400 is complete (200/200)**.
+- Reporting sections **3201–3250**, **3251–3300**, **3301–3350** and **3351–3400** are all CLOSED (50/50). All four 25-file checkpoints in the exceptional 3301–3400 grant are committed and read-back verified.
+- **STOP at 3400.** The exceptional grant **3301–3400 is fully consumed and closed**. No source-audit authorization is currently active for entry **3401 onward**; a new explicit user grant is required.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. Index: **3,400 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. The 3301–3400 checkpoint records state sequential source inspection through EOF, pinned SHA/size checks, and the documented special handling of long files; see the checkpoint records below and in the Protocol/QA Log.
+- Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains the media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; the estimate of 70–80 images in entries 1–1000 is unverified and must be counted from the Ledgers/Index.
+- At backup/verification milestone **4000**, complete and verify the historical media backfill for the full backup scope (entries 1–3999, as applicable), synchronize it with the Ledgers, and do not call the backup complete while backfill remains outstanding.
+- Static source audit only. No RustChunk application-source implementation, build, tests, benchmark, APK, device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by the 3301–3400 audit.
 - Backup `backup/audit-3000-final-2026-11-23` remains preserved. The next backup is deferred until entries 3001–4000 are complete and globally verified.
+
+The historical checkpoint notes below are append-only evidence. Older intermediate resume/STOP statements are historical and are superseded by this current authoritative block and the final closeout in Section 67 of `AUDIT_PROTOCOL.md`.
 
 ## Global QA closeout — entries 1–3000 — COMPLETE (2026-11-23)
 
