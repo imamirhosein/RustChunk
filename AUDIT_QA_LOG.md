@@ -2106,3 +2106,11 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Historical media 1–3300 are not yet backfilled. First-1000 image estimate (70–80) remains unverified.
 - Backup milestone 4000 must include full media archive backfill/verification for the backup scope; backup closeout cannot be called complete while this remains outstanding.
 - Entry 3301 `launcher/docs/opening.webm` recorded as video, pending user watch. No source audit of 3301+ has started under this archive-registration task.
+
+
+## Checkpoint 3301–3325 — COMPLETE — 2026-11-25
+- 25 globally lexical unique files 3301–3325 inspected from complete pinned tree; text through EOF. Long entries 3317 (408) and 3318 (492) in consecutive 1–400/401–EOF ranges.
+- SHA/size verified; paths unique; Ledger/Index align.
+- Media 3301 video NEEDS USER WATCH; images 3302–3310 rendered and notes synchronized; 3311–3325 text full inspection.
+- 3312–3325 adaptable test oracles/exporters, not production code. Screenshots are claims/UI, no runtime proof.
+- Continue 3326–3350 under grant; report at 3350.

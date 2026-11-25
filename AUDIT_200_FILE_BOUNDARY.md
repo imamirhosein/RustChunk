@@ -592,3 +592,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - User explicitly confirmed start of exceptional grant **3301–3400**. Section 3301–3350 is authorized: checkpoints 3301–3325 and 3326–3350; report at 3350. Section 3351–3400 is also covered by the same grant: checkpoints 3351–3375 and 3376–3400; report and stop at 3400.
 - Older lock/stop statements above are historical and superseded by this latest reconciliation.
 - Media archive backfill 1–3300 remains pending; backup milestone 4000 requires completion/verification of the archive.
+
+
+### Checkpoint 3301–3325 — COMPLETE — 2026-11-25
+- 25 unique sequential files audited through EOF; SHAs/sizes match; images 3302–3310 archive sync, 3301 video NEEDS USER WATCH.
+- Ledger 125 entries; Index 3,325 unique paths aligned. Six-document transaction/read-back complete.
+- Continue 3326–3350/report 3350; grant covers 3351–3400, report and stop at 3400.
+- No runtime/build/test/device/Forge/Minecraft/server validation.

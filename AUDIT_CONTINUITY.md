@@ -974,3 +974,11 @@ Keep progress updates extremely short. Report only the current range and the nex
 - This latest resume supersedes historic STOP/LOCKED entries. Source review serially, 25-file checkpoint commits and read-back verification, six-document transactions, no file >400 lines per read chunk.
 - Media entry 3301 is video `launcher/docs/opening.webm`; keep NEEDS USER WATCH in archive and Ledger. Historical media backfill 1–3300 is still pending; 70–80 first-1000 image estimate unverified.
 - Static audit only. No tests/build/runtime/Android/Forge/Minecraft/server validation.
+
+
+## Checkpoint 3301–3325 — COMPLETE — 2026-11-25
+- Sequentially audited 3301–3325 after excluding 3,300 Index paths; SHA/size verified, EOF text. 3317=408 and 3318=492 lines in consecutive ≤400 chunks.
+- 3301–3310 media double-recorded: video watch later; images visually inspected. Text 3311–3325 fully read.
+- Ledger 125 records; Index 3,325 unique sequential. Six-document transaction/read-back verified.
+- Grant 3301–3400 active; continue 3326–3350/report 3350, then 3351–3400/report and stop 3400.
+- Static review only; no builds/tests/runtime. Historical media backfill pending.

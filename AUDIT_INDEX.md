@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3300** complete across stage Ledgers. Index: **3,300 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800, 2801–3000 and 3001–3200 are closed; stage 3201–3400 is active (100/200). Sections 3201–3250 and 3251–3300 are closed. Backup 3000 remains preserved. The new permanent media archive is pending historical backfill for entries 1–3300; see AUDIT_MEDIA_ARCHIVE.md.
+- Source ledgers: entries **1–3325** complete across stage Ledgers. Index: **3,325 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800, 2801–3000 and 3001–3200 are closed; stage 3201–3400 is active (125/200). Sections 3201–3250 and 3251–3300 are closed; 3301–3350 authorized and checkpoint 3301–3325 closed. Backup 3000 remains preserved. The permanent media archive is pending historical backfill for entries 1–3300; see AUDIT_MEDIA_ARCHIVE.md.
 
 ## Part 1 — Entries 1–25
 
@@ -3804,3 +3804,29 @@
 | 3298 | `launcher/docs/opening-1.png` | unnecessary; reference; launcher-visuals | Splash/opening background image with Horizon wordmark. |
 | 3299 | `launcher/docs/opening-2.png` | unnecessary; reference; launcher-screenshot | Screenshot of launcher opening transition over Horizon splash background. |
 | 3300 | `launcher/docs/opening-3.png` | unnecessary; reference; launcher-screenshot | Screenshot of Horizon launcher home/play screen after opening transition. |
+
+| 3301 | `launcher/docs/opening.webm` | unnecessary; reference; launcher-video | Opening video; not played |
+| 3302 | `launcher/docs/patch-notes.png` | unnecessary; reference; documentation-screenshot | Patch notes image claims MC26.3 100%/281 harness parity and feature list |
+| 3303 | `launcher/docs/play.png` | unnecessary; reference; documentation-screenshot | Play screen: MC26.3, 88%/270 harnesses, client/server, version, prep/folder states |
+| 3304 | `launcher/docs/preview.png` | unnecessary; reference; documentation-screenshot | Play flow: Client/Server, version, Play, Prepare resources, Choose folder |
+| 3305 | `launcher/docs/servers-tailscale.png` | unnecessary; reference; networking-ui | Tailscale sharing, example invite/host, 25565-only and router-forwarding instructions |
+| 3306 | `launcher/docs/servers.png` | unnecessary; reference; server-ui | Server overview metrics 20TPS/0.6ms/0.57GB, 0/10, actions/tabs and addresses |
+| 3307 | `launcher/docs/settings-012.png` | unnecessary; reference; launcher-settings | Older settings auto install/opening/menu/update, temp Linux path, CLI/MCP command |
+| 3308 | `launcher/docs/settings.png` | unnecessary; reference; launcher-settings | Settings auth unconfigured, Stable/Nightly, install/opening/menu/game args |
+| 3309 | `launcher/docs/versions.png` | unnecessary; reference; version-ui | Versions page installs/removes, per-version folders, 15/14MB and parity labels |
+| 3310 | `launcher/docs/whats-next.png` | unnecessary; reference; roadmap-ui | Roadmap parity/desktop launch checks and known online-mode/skin/icon/hotbar issues |
+| 3311 | `launcher/shell.nix` | unnecessary; reference; linux-build-environment | Linux Nix shell dependency environment and libclang/LD_LIBRARY_PATH |
+| 3312 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeSourceOracle.java` | adaptable; reference; parity-harness | Synthetic biome holders and fixed/checkerboard/End resolver test fixtures |
+| 3313 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeTemperatureOracle.java` | adaptable; reference; parity-harness | Climate codec and biome temperature/cache/weather, dump/thread fixture |
+| 3314 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeZoomOracle.java` | adaptable; reference; parity-harness | Biome seed obfuscation and resolver-coordinate trace |
+| 3315 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockBehaviourExporter.java` | adaptable; reference; metadata-exporter | Reflective block metadata/state exporter for class chain, properties and support/redstone/fluid/occlusion |
+| 3316 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockCollisionScanOracle.java` | adaptable; reference; collision-parity-harness | Scripted collision world/shapes tracing BlockCollisions/support query/errors |
+| 3317 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityAnimOracle.java` | adaptable; reference; blockentity-animation-harness | Block entity animation/tick/event/render-state oracle for chest/enchant/shulker/bell/conduit/skull/pot/gateway |
+| 3318 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityRenderOracle.java` | adaptable; reference; blockentity-render-parity | Render oracle records submitted models/vertices/textures/matrices/text/items and special cases |
+| 3319 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityStorageOracle.java` | adaptable; reference; storage-parity-harness | ProtoChunk storage NBT/position/pending/active/save/remove/mutate/loot seed probe |
+| 3320 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityTickerOracle.java` | adaptable; reference; ticker-parity-harness | Ticker registration/order lifecycle probe for chunk load/place/replace/remove/unload/tick |
+| 3321 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockLandingOracle.java` | adaptable; reference; landing-parity-harness | FallOn/bounceOn with fake worlds/entities/rules/RNG/damage side effects |
+| 3322 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockParticlesOracle.java` | adaptable; reference; particle-parity-harness | Native client breaking/destroy particle calls; positions captured, sprite/tint stub, RNG/velocity excluded |
+| 3323 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockPlacementOracle.java` | adaptable; reference; placement-parity-harness | BlockItem placement context and selected state/position with fake world/player, no writes |
+| 3324 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockPropertiesOracle.java` | adaptable; reference; block-properties-parity | State solidity/occlusion exporter and reflective cache/flag/shape mutation test |
+| 3325 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockPushOracle.java` | adaptable; reference; collision-parity-harness | Block.pushEntitiesUp with shapes, scripted actors, teleports/mutation and trace |

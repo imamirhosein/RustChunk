@@ -31,3 +31,40 @@ Neither record replaces the other. Archive entries must not use a separate media
 - **Source size:** 84,132 bytes
 - **Review status:** Video identified from file type; visual playback/review unavailable in this session.
 - **Action:** User to watch later. Do not claim video content was analyzed.
+
+
+### Audit entry 3302 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/patch-notes.png`; SHA `05c7bc7eb687427b781b03c1d42ccaafa26fcdac`; 361182 bytes.
+- Notes: Horizon dark sidebar and Patch notes; support banner. 2026-10-13 note claims 100% parity/281 harnesses for MC26.3; lists server, worlds, mob AI, gear/enchantments and UI/render-distance features. Claims unverified.
+
+### Audit entry 3303 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/play.png`; SHA `1d85a6f24ed255af0acb987d8b3b76ca7429580e`; 309912 bytes.
+- Notes: MC26.3, Horizon v2026.10.12, 88%/270 harnesses, update available, Client/Server/version/Play, resources/folder missing. UI only.
+
+### Audit entry 3304 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/preview.png`; SHA `17d673874f1b0a0306ee88ef3e20f8ba97c5167b`; 35559 bytes.
+- Notes: Play, client/server, version, Prepare resources, Choose folder; not prepared/not found.
+
+### Audit entry 3305 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/servers-tailscale.png`; SHA `ce040f1e9f377ebe9ceead98a0c20b87ca65a605`; 106464 bytes.
+- Notes: Tailscale sharing/invites, sample host/address/email, same-Wi-Fi/router port forwarding, port 25565-only and no Funnel statement. Examples/security claims unverified.
+
+### Audit entry 3306 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/servers.png`; SHA `bb644f4c0a8c37b1f9625c5b1eb9cf458e77d7e1`; 92934 bytes.
+- Notes: running server, 0/10, 20 TPS, 0.6ms, 0.57GB, Stop/Restart, panel/folder, tabs, LAN/Tailscale addresses. Metrics screenshot-only.
+
+### Audit entry 3307 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/settings-012.png`; SHA `99b7064a95a167ba627566616cdeb4875e8e641e`; 417567 bytes.
+- Notes: older auto-install/opening/menu/update settings, temporary Linux path, CLI/MCP command. Desktop path/command not portable or reviewed.
+
+### Audit entry 3308 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/settings.png`; SHA `455f8bf276618f3c01f829a6d4801d6e835e0d1f`; 96710 bytes.
+- Notes: sign-in unconfigured/no client ID, Stable/Nightly, auto-install, opening/menu, extra args. UI not auth/update implementation proof.
+
+### Audit entry 3309 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/versions.png`; SHA `786866f8443856531f20cf74dd6ea5d8f22d2733`; 234595 bytes.
+- Notes: install/remove/in-use versions, per-folder statement, 15/14MB and parity labels; displayed claims unverified.
+
+### Audit entry 3310 — IMAGE — VISUALLY REVIEWED
+- `launcher/docs/whats-next.png`; SHA `ad9d9a4416dc75d67e371c97977ae61371ff8e56`; 59064 bytes.
+- Notes: roadmap parity and packaged desktop checks, online-mode/skin/icon/hotbar limitations. Unverified and 26.3-specific.

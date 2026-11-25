@@ -1,6 +1,6 @@
 # RustChunk Starling Audit Ledger — stage 3201–3400
 
-Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Stage entries 3201–3225 are documentation media and branding. Binary assets were visually rendered; text assets were read through EOF. This is documentation-only audit, not engine/runtime evidence.
+Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Stage entries 3201–3325 include documentation media and parity test-oracle sources; static audit only. Binary assets were visually rendered; text assets were read through EOF. This is documentation-only audit, not engine/runtime evidence.
 
 ### 3201. `docs/media/accessibility-settings.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -1702,3 +1702,428 @@ Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b2713
 - Evidence required before adoption: Pinned SHA/size verified and screenshot rendered; no runtime test or parity claim independently verified.
 - Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
 
+
+### 3301. `launcher/docs/opening.webm`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ed57ee24af542a8091d1c2fdfe9f08ec7104a703
+- Size: 84132 bytes
+- Coverage: Binary video identified, not played; line coverage N/A.
+- Purpose: Opening video; not played
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Opening video; not played
+- Findings: Video content unknown; user watch.
+- RustChunk relevance: No content conclusions; watch later.
+- Decision: unnecessary; reference; launcher-video
+- 1.20.1 implications: Video content unknown.
+- Follow-up checks: User watch later.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3302. `launcher/docs/patch-notes.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 05c7bc7eb687427b781b03c1d42ccaafa26fcdac
+- Size: 361182 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Patch notes image claims MC26.3 100%/281 harness parity and feature list
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Patch notes image claims MC26.3 100%/281 harness parity and feature list
+- Findings: Screenshot claims unverified; not target evidence.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; documentation-screenshot
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3303. `launcher/docs/play.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1d85a6f24ed255af0acb987d8b3b76ca7429580e
+- Size: 309912 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Play screen: MC26.3, 88%/270 harnesses, client/server, version, prep/folder states
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Play screen: MC26.3, 88%/270 harnesses, client/server, version, prep/folder states
+- Findings: UI/metrics screenshot-only.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; documentation-screenshot
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3304. `launcher/docs/preview.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 17d673874f1b0a0306ee88ef3e20f8ba97c5167b
+- Size: 35559 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Play flow: Client/Server, version, Play, Prepare resources, Choose folder
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Play flow: Client/Server, version, Play, Prepare resources, Choose folder
+- Findings: Static workflow only.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; documentation-screenshot
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3305. `launcher/docs/servers-tailscale.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ce040f1e9f377ebe9ceead98a0c20b87ca65a605
+- Size: 106464 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Tailscale sharing, example invite/host, 25565-only and router-forwarding instructions
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Tailscale sharing, example invite/host, 25565-only and router-forwarding instructions
+- Findings: Example/network security claims not verified.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; networking-ui
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3306. `launcher/docs/servers.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bb644f4c0a8c37b1f9625c5b1eb9cf458e77d7e1
+- Size: 92934 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Server overview metrics 20TPS/0.6ms/0.57GB, 0/10, actions/tabs and addresses
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Server overview metrics 20TPS/0.6ms/0.57GB, 0/10, actions/tabs and addresses
+- Findings: Screenshot numbers/addresses not live proof.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; server-ui
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3307. `launcher/docs/settings-012.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 99b7064a95a167ba627566616cdeb4875e8e641e
+- Size: 417567 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Older settings auto install/opening/menu/update, temp Linux path, CLI/MCP command
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Older settings auto install/opening/menu/update, temp Linux path, CLI/MCP command
+- Findings: Desktop path and command not portable/reviewed.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; launcher-settings
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3308. `launcher/docs/settings.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 455f8bf276618f3c01f829a6d4801d6e835e0d1f
+- Size: 96710 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Settings auth unconfigured, Stable/Nightly, install/opening/menu/game args
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Settings auth unconfigured, Stable/Nightly, install/opening/menu/game args
+- Findings: UI does not prove auth/update/arg behavior.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; launcher-settings
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3309. `launcher/docs/versions.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 786866f8443856531f20cf74dd6ea5d8f22d2733
+- Size: 234595 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Versions page installs/removes, per-version folders, 15/14MB and parity labels
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Versions page installs/removes, per-version folders, 15/14MB and parity labels
+- Findings: Displayed values are unverified.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; version-ui
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3310. `launcher/docs/whats-next.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ad9d9a4416dc75d67e371c97977ae61371ff8e56
+- Size: 59064 bytes
+- Coverage: Binary image rendered/inspected; line coverage N/A.
+- Purpose: Roadmap parity/desktop launch checks and known online-mode/skin/icon/hotbar issues
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Roadmap parity/desktop launch checks and known online-mode/skin/icon/hotbar issues
+- Findings: Unverified roadmap; Starling target.
+- RustChunk relevance: UI reference only, not runtime proof.
+- Decision: unnecessary; reference; roadmap-ui
+- 1.20.1 implications: Static screenshot does not prove Android/Forge/1.20.1 compatibility.
+- Follow-up checks: Recreate desired UI and test separately.
+- RustChunk implementation mapping: Optional visual inspiration; recreate and check licensing.
+- Evidence required before adoption: Pinned SHA/size verified; image inspected or video status documented; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; media review status recorded; no runtime validation.
+
+### 3311. `launcher/shell.nix`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8dbd68c3f2e603732d79bb448690fc9a8892084c
+- Size: 758 bytes
+- Coverage: Text EOF (13 logical lines).
+- Purpose: Linux Nix shell dependency environment and libclang/LD_LIBRARY_PATH
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Linux Nix shell dependency environment and libclang/LD_LIBRARY_PATH
+- Findings: Desktop Linux recipe, not Android.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: unnecessary; reference; linux-build-environment
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3312. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeSourceOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0432f22bb429b71478a79c034a7fd970604a1747
+- Size: 3106 bytes
+- Coverage: Text EOF (39 logical lines).
+- Purpose: Synthetic biome holders and fixed/checkerboard/End resolver test fixtures
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Synthetic biome holders and fixed/checkerboard/End resolver test fixtures
+- Findings: Oracle/test only; reflective version-bound API.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3313. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeTemperatureOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bfe972b19642030466518e43ac73b0a76e882dd8
+- Size: 5089 bytes
+- Coverage: Text EOF (69 logical lines).
+- Purpose: Climate codec and biome temperature/cache/weather, dump/thread fixture
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Climate codec and biome temperature/cache/weather, dump/thread fixture
+- Findings: Internal cache fixture; not runtime implementation.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3314. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBiomeZoomOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e130df20fd3fab80bf20486706c683e076e96cb2
+- Size: 2034 bytes
+- Coverage: Text EOF (36 logical lines).
+- Purpose: Biome seed obfuscation and resolver-coordinate trace
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Biome seed obfuscation and resolver-coordinate trace
+- Findings: Coordinate oracle, not full biome algorithm.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3315. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockBehaviourExporter.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4a475133bb989efdc9d8dc58934d40cdcddbee22
+- Size: 11222 bytes
+- Coverage: Text EOF (255 logical lines).
+- Purpose: Reflective block metadata/state exporter for class chain, properties and support/redstone/fluid/occlusion
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Reflective block metadata/state exporter for class chain, properties and support/redstone/fluid/occlusion
+- Findings: Static exporter, behavior not executed.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; metadata-exporter
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3316. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockCollisionScanOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 53002e6f0a8f63b5b51f8c694bddc701646ccdd2
+- Size: 7263 bytes
+- Coverage: Text EOF (85 logical lines).
+- Purpose: Scripted collision world/shapes tracing BlockCollisions/support query/errors
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Scripted collision world/shapes tracing BlockCollisions/support query/errors
+- Findings: Proxy/Unsafe fixture only.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; collision-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3317. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityAnimOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a85bce1b4e27381eec6d2eadcd9e686ba4b2648c
+- Size: 26661 bytes
+- Coverage: Text EOF (408 logical lines; chunks 1–400 then 401–EOF).
+- Purpose: Block entity animation/tick/event/render-state oracle for chest/enchant/shulker/bell/conduit/skull/pot/gateway
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Block entity animation/tick/event/render-state oracle for chest/enchant/shulker/bell/conduit/skull/pot/gateway
+- Findings: Unsafe/reflection; CPU states, not GPU.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; blockentity-animation-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3318. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityRenderOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1de892a29c0dfa16ff81732184f78a2e4e8d0e69
+- Size: 31515 bytes
+- Coverage: Text EOF (492 logical lines; chunks 1–400 then 401–EOF).
+- Purpose: Render oracle records submitted models/vertices/textures/matrices/text/items and special cases
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Render oracle records submitted models/vertices/textures/matrices/text/items and special cases
+- Findings: Synthetic level/font/sprite; CPU capture only.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; blockentity-render-parity
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3319. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityStorageOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 50cab96f35d9711c63c38a448d8f0a8dbcebc26b
+- Size: 5624 bytes
+- Coverage: Text EOF (62 logical lines).
+- Purpose: ProtoChunk storage NBT/position/pending/active/save/remove/mutate/loot seed probe
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: ProtoChunk storage NBT/position/pending/active/save/remove/mutate/loot seed probe
+- Findings: Internal chunk storage fixture.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; storage-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3320. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockEntityTickerOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 75330c4fe54e0a2879da3e8fcdc1e7842faa9b73
+- Size: 10307 bytes
+- Coverage: Text EOF (217 logical lines).
+- Purpose: Ticker registration/order lifecycle probe for chunk load/place/replace/remove/unload/tick
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Ticker registration/order lifecycle probe for chunk load/place/replace/remove/unload/tick
+- Findings: Unsafe/reflection; frozen tick fixture.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; ticker-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3321. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockLandingOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 250a8bf3dff8ffd7b196313a656a45b9481848a9
+- Size: 24862 bytes
+- Coverage: Text EOF (218 logical lines).
+- Purpose: FallOn/bounceOn with fake worlds/entities/rules/RNG/damage side effects
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: FallOn/bounceOn with fake worlds/entities/rules/RNG/damage side effects
+- Findings: Controlled test fixture, not simulation.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; landing-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3322. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockParticlesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 47d6ceffe8060b61a0d3121cf518ae31778468f5
+- Size: 5320 bytes
+- Coverage: Text EOF (85 logical lines).
+- Purpose: Native client breaking/destroy particle calls; positions captured, sprite/tint stub, RNG/velocity excluded
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Native client breaking/destroy particle calls; positions captured, sprite/tint stub, RNG/velocity excluded
+- Findings: Partial oracle by design.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; particle-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3323. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockPlacementOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e204d3cc0ccf2f35a2bd53ada9d48122ffe49a6d
+- Size: 9222 bytes
+- Coverage: Text EOF (162 logical lines).
+- Purpose: BlockItem placement context and selected state/position with fake world/player, no writes
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: BlockItem placement context and selected state/position with fake world/player, no writes
+- Findings: Vanilla fixture; Forge hooks absent.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; placement-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3324. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockPropertiesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f3508e4764a75d728fbb773c96a1e836ca478088
+- Size: 5366 bytes
+- Coverage: Text EOF (59 logical lines).
+- Purpose: State solidity/occlusion exporter and reflective cache/flag/shape mutation test
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: State solidity/occlusion exporter and reflective cache/flag/shape mutation test
+- Findings: Version-specific cache internals.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; block-properties-parity
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
+
+### 3325. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaBlockPushOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 2e10246b710c76985297e16f67f04a6febf19a16
+- Size: 4239 bytes
+- Coverage: Text EOF (41 logical lines).
+- Purpose: Block.pushEntitiesUp with shapes, scripted actors, teleports/mutation and trace
+- Dependencies / cross-references: Starling/Horizon documentation or MC26.3 oracle context; version-specific APIs/registries/fixtures.
+- Implementation / logic: Block.pushEntitiesUp with shapes, scripted actors, teleports/mutation and trace
+- Findings: Fixture only; target behavior needs comparison.
+- RustChunk relevance: Parity test/exporter concept only, not production code.
+- Decision: adaptable; reference; collision-parity-harness
+- 1.20.1 implications: Version-specific; compare/port to MC1.20.1 and account for Forge separately.
+- Follow-up checks: Target-version differential tests; keep Unsafe/reflection out of runtime.
+- RustChunk implementation mapping: Possible target-version test fixture/tool only; production implementation separate.
+- Evidence required before adoption: Pinned SHA/size verified; source read EOF; target tests/security/license review pending.
+- Completion state: COMPLETE — SHA/size verified; EOF inspection; no runtime validation.
