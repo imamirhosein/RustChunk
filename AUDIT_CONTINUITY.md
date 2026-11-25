@@ -946,3 +946,13 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Active Ledger AUDIT_LEDGER_3201_3400.md: 25 records, each 15 fields. Index and Ledger path/Decision alignment verified.
 - Pinned source 5432370d573642041585c69b40fb045b27133488; complete recursive tree 4,968 blobs, not truncated. Entries 3201–3225 are documentation images/SVG/HTML. Binary assets rendered; text sources read EOF. SHAs/sizes recorded.
 - STOP at 3250; do not inspect 3251+ without new explicit authorization. No application source/build/test/device/game/server validation. main and backups unchanged.
+
+
+## Permanent media archive requirement — 2026-11-25
+
+- New permanent media-only archive: `AUDIT_MEDIA_ARCHIVE.md`; it is continuous across audit stages and is not split into 200-file files.
+- Images/videos must be recorded in both the source Ledger and this archive, with the same original audit number. Normal files are omitted from media archive.
+- Images require visual rendering/inspection and detailed notes when possible; otherwise mark NEEDS USER REVIEW. Videos are logged for later user watching; never claim unseen visual review.
+- Historical media entries 1–3300 are not yet backfilled. The estimate of 70–80 images in the first 1000 entries is unverified and must be counted from Index/Ledgers.
+- At backup/verification milestone 4000, complete and verify historical media backfill through the backup scope before declaring backup closeout complete.
+- Entry 3301 video `launcher/docs/opening.webm` is listed in the new archive as NEEDS USER WATCH; it was not visually played/reviewed.
