@@ -2,13 +2,11 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3225** committed. Stages 2601–2800, 2801–3000 and 3001–3200 CLOSED; stage 3201–3400 active (50/200).
-- Sections **3001–3050**, **3051–3100**, **3101–3150** and **3151–3200** are CLOSED (50/50 each).
-- Checkpoints through **3176–3200** are complete and read-back verified. Exceptional authorization **3101–3200 is COMPLETE/CONSUMED**.
-- Active Ledger contains **200 records**, exactly 15 fields each. Index contains **3,200 sequential unique paths** with no duplicates and Ledger/Index alignment.
-- Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. No application source changes or runtime validation.
-- **STOP at 3200. Entries 3201+ are not authorized until the user explicitly grants the next range.**
-
+- Entries **1–3275** committed. Stage 3201–3400 is active (75/200); earlier stages 2601–2800, 2801–3000 and 3001–3200 are closed.
+- Sections through 3201–3250 are closed. Section **3251–3300** is authorized; checkpoint **3251–3275 COMPLETE**, checkpoint **3276–3300 AUTHORIZED**. **STOP at 3300**.
+- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **75 records**, exactly 15 fields each. Index: **3,275 sequential unique paths**, no duplicates and Ledger/Index alignment.
+- Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. Binary media coverage must be described as visual inspection, never logical line coverage.
+- No application source changes or runtime validation; do not modify `main` or existing backups.
 
 ## Stage partition
 
@@ -559,3 +557,21 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Stage 3201–3400 is active. Section 3201–3250 is authorized; 3251–3300, 3301–3350 and 3351–3400 are locked pending explicit authorization.
 - Checkpoint 3201–3225 COMPLETE and verified; 3226–3250 AUTHORIZED under same one-time grant. STOP at 3250.
 - Active Ledger AUDIT_LEDGER_3201_3400.md: 50 records. Index 3,250 sequential unique paths. No app source changes or runtime checks.
+
+
+## Stage 3201–3400 — current partition and authorization
+
+| 50-file section | Checkpoint 1 | Checkpoint 2 | State |
+|---|---|---|---|
+| 3201–3250 | 3201–3225 — COMPLETE | 3226–3250 — COMPLETE | CLOSED — 50/50 |
+| 3251–3300 | 3251–3275 — COMPLETE | 3276–3300 — AUTHORIZED | IN PROGRESS — 25/50 |
+| 3301–3350 | NOT AUTHORIZED | NOT AUTHORIZED | LOCKED |
+| 3351–3400 | NOT AUTHORIZED | NOT AUTHORIZED | LOCKED |
+
+### Checkpoint 3251–3275 — COMPLETE
+
+- 25 paths selected from the complete pinned tree after excluding all 3,250 prior Index entries; paths are unique and raw lexical order is verified.
+- 17 SVG progress files read through EOF; eight raster assets rendered and visually inspected. Source SHA/byte-size pairs match the pinned tree.
+- Ledger contains 75 records (3201–3275), each with 15 fields; Index contains 3,275 unique sequential paths; paths/Decisions align.
+- Screenshots are not benchmarks or proof of runtime compatibility. No tests/builds/device/Forge validation.
+- Continue with 3276–3300 under existing authorization; **STOP at 3300**.

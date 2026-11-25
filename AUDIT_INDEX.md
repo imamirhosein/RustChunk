@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3225** complete across stage Ledgers. Index: **3,225 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800 and 2801–3000 closed; 3001–3200 closed; stage 3201–3400 active (25/200). Sections through 3151–3200 closed; section 3201–3250 authorized (25/50 complete). Exceptional authorization 3101–3200 consumed; new authorization 3201–3250 active. Checkpoint 3201–3225 committed/read-back verified. Backup 3000 remains preserved.
+- Source ledgers: entries **1–3275** complete across stage Ledgers. Index: **3,275 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800, 2801–3000 and 3001–3200 are closed; stage 3201–3400 is active (75/200). Sections through 3201–3250 are closed; section 3251–3300 is authorized (25/50 complete). Checkpoint 3251–3275 committed/read-back verified. Backup 3000 remains preserved.
 
 ## Part 1 — Entries 1–25
 
@@ -3754,3 +3754,28 @@
 | 3248 | `docs/media/progress/10.svg` | unnecessary; reference; documentation-assets | Documentation screenshots/branding/progress indicators; no game runtime evidence. |
 | 3249 | `docs/media/progress/100.svg` | unnecessary; reference; documentation-assets | Documentation screenshots/branding/progress indicators; no game runtime evidence. |
 | 3250 | `docs/media/progress/15.svg` | unnecessary; reference; documentation-assets | Documentation screenshots/branding/progress indicators; no game runtime evidence. |
+| 3251 | `docs/media/progress/20.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3252 | `docs/media/progress/25.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3253 | `docs/media/progress/30.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3254 | `docs/media/progress/35.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3255 | `docs/media/progress/40.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3256 | `docs/media/progress/45.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3257 | `docs/media/progress/5.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3258 | `docs/media/progress/50.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3259 | `docs/media/progress/55.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3260 | `docs/media/progress/60.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3261 | `docs/media/progress/65.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3262 | `docs/media/progress/70.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3263 | `docs/media/progress/75.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3264 | `docs/media/progress/80.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3265 | `docs/media/progress/85.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3266 | `docs/media/progress/90.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3267 | `docs/media/progress/95.svg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3268 | `docs/media/settings-graphics.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3269 | `docs/media/settings-simple.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3270 | `docs/media/settings.webp` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3271 | `docs/media/social-preview.jpg` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3272 | `docs/media/spawner-data/after-pig.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3273 | `docs/media/spawner-data/after-zombie.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3274 | `docs/media/spawner-data/before.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3275 | `docs/media/static-block-entity-batching-off.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |

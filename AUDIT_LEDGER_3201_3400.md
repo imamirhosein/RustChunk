@@ -852,3 +852,428 @@ Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b2713
 - Evidence required before adoption: Text inspected through EOF; pinned SHA/size verified; licensing/rendering review pending.
 - Completion state: COMPLETE — pinned source fetched; SHA/size verified; text read through EOF; no tests.
 
+### 3251. `docs/media/progress/20.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: c87cf4bf5d009819620f1b4fd59fbc3fa58dd773
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 20%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 20; fixed 20% text label; foreground color #db6d28; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3252. `docs/media/progress/25.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 68bbdff4cedd95b8a2cc2a0cb44fb944648341d0
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 25%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 25; fixed 25% text label; foreground color #db6d28; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3253. `docs/media/progress/30.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 16f89a5761b0fc6e171280eb3e5e8852ccbd6166
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 30%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 30; fixed 30% text label; foreground color #db6d28; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3254. `docs/media/progress/35.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 24cd9029f201169131961140671256238d157121
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 35%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 35; fixed 35% text label; foreground color #db6d28; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3255. `docs/media/progress/40.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 6e4900e0ead9d00b338196f7e27eba1f568c7883
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 40%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 40; fixed 40% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3256. `docs/media/progress/45.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 26dd3079b3667a86fa1d4a534509222bcc9046df
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 45%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 45; fixed 45% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3257. `docs/media/progress/5.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: def175eec8d399128dc360323aa786dd529346e6
+- Size: 446 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 5%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 5; fixed 5% text label; foreground color #f85149; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3258. `docs/media/progress/50.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a45b538b3228fb3b6bff8429b8332d9c48da5edc
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 50%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 50; fixed 50% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3259. `docs/media/progress/55.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0c9898f9efa781fc1f5e88dcbd59169933904459
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 55%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 55; fixed 55% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3260. `docs/media/progress/60.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a4a56ac4166ec47c02a350f75e99fd87193b6b21
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 60%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 60; fixed 60% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3261. `docs/media/progress/65.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 14bc3c1daaa145e2997fb3ebcd43189500d6e493
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 65%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 65; fixed 65% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3262. `docs/media/progress/70.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 1c240da9c2ac7d4cb0352833cfd8cfbe70b02b77
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 70%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 70; fixed 70% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3263. `docs/media/progress/75.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: e37874523118091895e45189efd4d9b5878cfa56
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 75%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 75; fixed 75% text label; foreground color #d29922; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3264. `docs/media/progress/80.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 38f8019ed2daa144cdb98e0259eb8fd5b43d268d
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 80%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 80; fixed 80% text label; foreground color #3fb950; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3265. `docs/media/progress/85.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 7b8518b7211aa11863c4a0fd535bdb9207231b8f
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 85%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 85; fixed 85% text label; foreground color #3fb950; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3266. `docs/media/progress/90.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 870c887a70e5f463be098cd21b3a2a9656513ff0
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 90%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 90; fixed 90% text label; foreground color #3fb950; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3267. `docs/media/progress/95.svg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 26e7464c88f5f3f28af7f23e994a147aa8a35b3f
+- Size: 450 bytes
+- Coverage: 1–6; EOF; canonical logical line count 6.
+- Purpose: Static SVG progress-bar variant labelled 95%.
+- Dependencies / cross-references: SVG renderer and embedded text/font fallback; no runtime or network dependency.
+- Implementation / logic: 140×16 viewBox; rounded 100-unit neutral track; filled rounded rectangle width 95; fixed 95% text label; foreground color #3fb950; role=img, aria-label and title.
+- Findings: Each file is a hard-coded visual state, not a dynamic progress component. The label, aria-label and fill width are duplicated literals; color is manually selected by percentage band. Reuse as visual reference, not as a set of separately shipped states when dynamic rendering is available.
+- RustChunk relevance: Optional UI/documentation reference only; no Minecraft engine relevance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check SVG support/accessibility on Android and implement a dynamic progress widget with bounds 0–100, RTL/Persian label handling and contrast tests.
+- RustChunk implementation mapping: Could inform an accessible progress component in RustChunk settings/installer UI; generate width/label/color from one value instead of copying static variants.
+- Evidence required before adoption: Source read through EOF; SHA/byte size match pinned tree. UI scale, font fallback and screen-reader behavior remain untested.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; text read through EOF; no runtime tests.
+
+### 3268. `docs/media/settings-graphics.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 99c681248923965107ccac0632a05e4a6ea28fb1
+- Size: 372171 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Screenshot of Horizon's custom Graphics settings page.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Shows Render Distance 12 Chunks, LOD Distance Off, Far Detail Full and Find BlueMap. Warning text labels Render Distance as high cost and says LOD can extend local worlds farther. This is descriptive UI content, not proof that LOD works or performs as shown.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Trace each displayed option to its settings model/runtime implementation; verify LOD availability and cost on target Android GPU.
+- RustChunk implementation mapping: Potential reference for separating near render distance from far/LOD distance in a future RustChunk settings UI; architecture and implementation must be audited separately.
+- Evidence required before adoption: Pinned SHA/byte size verified and image rendered; no benchmark/test provenance supplied.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3269. `docs/media/settings-simple.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d81db46f1018111c0f8d84aedaffc4374874cc3f
+- Size: 284745 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Screenshot of the standard Video Settings page.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Shows max framerate Unlimited, VSync ON, Reduce FPS when AFK, GUI Scale Auto, Fullscreen OFF and Brightness Default. The two files are visually near-duplicate representations in PNG and WebP; no setting behavior is demonstrated.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check whether both formats are referenced and needed; test Android UI scaling and input behavior before recreating the layout.
+- RustChunk implementation mapping: Optional visual reference for grouping display and performance options; not implementation code.
+- Evidence required before adoption: Pinned SHA/byte size verified and image rendered; no benchmark/test provenance supplied.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3270. `docs/media/settings.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 09e0ad8b42ebd04e254d197bc39817f82275162b
+- Size: 40646 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Screenshot of the standard Video Settings page.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Shows max framerate Unlimited, VSync ON, Reduce FPS when AFK, GUI Scale Auto, Fullscreen OFF and Brightness Default. The two files are visually near-duplicate representations in PNG and WebP; no setting behavior is demonstrated.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Check whether both formats are referenced and needed; test Android UI scaling and input behavior before recreating the layout.
+- RustChunk implementation mapping: Optional visual reference for grouping display and performance options; not implementation code.
+- Evidence required before adoption: Pinned SHA/byte size verified and image rendered; no benchmark/test provenance supplied.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3271. `docs/media/social-preview.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 6775b1fb3147c872495eaa0c5f1e92474cd4b857
+- Size: 158756 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Horizon social-preview promotional image.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Image advertises Minecraft Java Edition 26.3 rewritten in Rust, native Linux client, wgpu renderer, 232 differential tests and 80% Java parity. These are promotional claims embedded in an image, not independently verifiable test evidence; do not treat them as compatibility results.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Verify the actual differential test suite, denominators, test coverage and date/version before citing parity or quality claims.
+- RustChunk implementation mapping: No implementation mapping. Claims can be used only as audit leads for locating test harnesses and parity reports.
+- Evidence required before adoption: Visual content captured; source data for 232 tests and 80% parity not established by this asset.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3272. `docs/media/spawner-data/after-pig.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f132f2f1b016022a662fb479b0ab5b347bd13b49
+- Size: 209915 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Spawner-data feature demonstration screenshot.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Three images form a before/after-named group; the two after images visibly show pig and zombie entities within a spawner cage, while the before image shows the cage without a clearly visible mob. Filenames and still images do not prove the underlying spawner-data mutation or persistence semantics.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Locate the associated implementation/commit and verify exact NBT/entity data, persistence, spawn timing and vanilla parity.
+- RustChunk implementation mapping: At most a test/documentation reference for entity preview/spawner data; no Java 1.20.1 NBT or spawner semantics may be inferred.
+- Evidence required before adoption: Pinned SHA/byte size verified and image rendered; no benchmark/test provenance supplied.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3273. `docs/media/spawner-data/after-zombie.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4da61b0f8b53d131758043979397a7c7897b08b1
+- Size: 216091 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Spawner-data feature demonstration screenshot.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Three images form a before/after-named group; the two after images visibly show pig and zombie entities within a spawner cage, while the before image shows the cage without a clearly visible mob. Filenames and still images do not prove the underlying spawner-data mutation or persistence semantics.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Locate the associated implementation/commit and verify exact NBT/entity data, persistence, spawn timing and vanilla parity.
+- RustChunk implementation mapping: At most a test/documentation reference for entity preview/spawner data; no Java 1.20.1 NBT or spawner semantics may be inferred.
+- Evidence required before adoption: Pinned SHA/byte size verified and image rendered; no benchmark/test provenance supplied.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3274. `docs/media/spawner-data/before.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: dd9adb4b53d50b8a5ac42c56b7f101cc76f979b8
+- Size: 214198 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Spawner-data feature demonstration screenshot.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Three images form a before/after-named group; the two after images visibly show pig and zombie entities within a spawner cage, while the before image shows the cage without a clearly visible mob. Filenames and still images do not prove the underlying spawner-data mutation or persistence semantics.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Locate the associated implementation/commit and verify exact NBT/entity data, persistence, spawn timing and vanilla parity.
+- RustChunk implementation mapping: At most a test/documentation reference for entity preview/spawner data; no Java 1.20.1 NBT or spawner semantics may be inferred.
+- Evidence required before adoption: Pinned SHA/byte size verified and image rendered; no benchmark/test provenance supplied.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+
+### 3275. `docs/media/static-block-entity-batching-off.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 6e035a8a206112ff2e333f51ece0a8a6b5403059
+- Size: 280771 bytes
+- Coverage: Binary image; line coverage N/A; visually rendered and inspected.
+- Purpose: Screenshot of a large chest/block-entity scene with performance overlay, labelled batching off.
+- Dependencies / cross-references: Static media; image decoder only. No code path can be inferred from the screenshot.
+- Implementation / logic: Raster screenshot visually rendered from pinned blob.
+- Findings: Static image shows a dense chest scene and an overlay reading approximately 63 fps, 15.9 ms frame time, max 42.6 ms and CPU 15.9/GPU 0.0 ms. It is only a single captured state; no controlled workload, device specification, repeatability or paired on/off comparison is present in this checkpoint.
+- RustChunk relevance: Documentation/visual reference only; not evidence of runtime functionality or performance.
+- Decision: unnecessary; reference; documentation-assets
+- 1.20.1 implications: No direct 1.20.1/Forge implementation or parity proof; any UI concept must be reconstructed and validated for the target.
+- Follow-up checks: Inspect paired batching-on image and underlying benchmark code; compare identical camera, scene, hardware, warmup and frame-time distributions.
+- RustChunk implementation mapping: Potential visual reference for block-entity batching performance tests; not proof of a batching optimization or measured RustChunk performance.
+- Evidence required before adoption: Pinned SHA/size verified and screenshot rendered; performance methodology and paired control not established.
+- Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
+

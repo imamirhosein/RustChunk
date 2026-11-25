@@ -2075,3 +2075,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger 3201–3400 now 50 entries (3201–3250); Index 3,250 sequential unique paths. Paths and decisions align across Ledger/Index.
 - Content is documentation, launcher screenshots, feature comparison images, environment media and progress SVGs. No runtime behavior or performance claim accepted from screenshots.
 - No app source/build/tests/benchmark/APK/device/game/server validation. Section 3201–3250 CLOSED; STOP at 3250.
+
+
+## Checkpoint 3251–3275 — COMPLETE (25/25) — 2026-11-25
+
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488; complete recursive tree 4,968 blobs, not truncated.
+- 25 new globally lexical unindexed paths selected after excluding the complete 3,250-entry Index; every blob SHA/byte size matches the pinned tree.
+- 17 progress SVGs were read through EOF (six logical lines each). Eight raster screenshots/images were fetched and visually rendered. Binary coverage is explicitly marked visual; no synthetic line coverage assigned.
+- New Ledger has 25 records (3251–3275), each with exactly 15 fields. Index has 3,275 sequential unique paths; Ledger/Index path and Decision alignment verified.
+- Important evidence cautions: social-preview.jpg contains claims of 232 differential tests and 80% Java parity, but the image itself does not substantiate them. Batching-off screenshot has no controlled paired comparison in this checkpoint. Spawner images do not prove NBT/persistence semantics. Progress SVGs are static hard-coded states.
+- No application source changed; no tests/build/benchmark/APK/device/Forge/game/server validation performed.
+- Section 3251–3300 remains authorized; next checkpoint 3276–3300. STOP at 3300.

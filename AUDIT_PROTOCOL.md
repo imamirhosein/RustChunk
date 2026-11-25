@@ -144,11 +144,12 @@ Commit the six-document checkpoint as one Git commit. Re-fetch all six documents
 ## 12. Current authoritative resume state (2026-11-25; stage 3201–3400 active)
 
 - Repository `imamirhosein/RustChunk`; audit branch `starling-1.20.1-port-audit`. Do not modify `main` or existing backup refs.
-- Completed entries **1–3225**. Stages 2601–2800, 2801–3000 and 3001–3200 CLOSED; stage 3201–3400 active (50/200).
-- Reporting sections through **3151–3200** closed. Section **3201–3250** is authorized; checkpoint **3201–3225** complete and checkpoint **3226–3250** covered by the same grant. **STOP at 3250**; 3251+ requires fresh explicit authorization.
-- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **50 records (3201–3250)**, each with exactly 15 fields. Index: **3,250 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
-- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree: 4,968 blobs, complete and untruncated. Entries 3201–3250 paths, SHAs, sizes and text/binary coverage verified.
-- No application source changes, builds/tests/benchmarks/APK/device/game/server validation. Backup 3000 remains untouched; next backup only after entries 3001–4000 are complete and globally verified.
+- Completed entries **1–3275**. Stages **2601–2800**, **2801–3000** and **3001–3200** are CLOSED; stage **3201–3400** is active (**75/200**).
+- Reporting sections through **3201–3250** are closed. Section **3251–3300** is authorized; checkpoint **3251–3275** is complete and **3276–3300** is already covered by the same grant. **STOP at 3300**; 3301+ requires fresh explicit authorization.
+- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **75 records (3201–3275)**, each with exactly 15 fields. Index: **3,275 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree 4,968 blobs, complete and untruncated. Entries 3251–3275 have matching source SHAs, byte sizes and full text/binary inspection coverage.
+- No application source changes, builds, tests, benchmarks, APK/device/Forge/Minecraft/server validation. Backup 3000 remains untouched; next backup only after entries 3001–4000 are complete and globally verified.
+
 
 ## 13. One-time expanded authorization — 2001–2100 — 2026-11-21
 
