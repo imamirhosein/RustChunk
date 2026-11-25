@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3275** complete across stage Ledgers. Index: **3,275 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800, 2801–3000 and 3001–3200 are closed; stage 3201–3400 is active (75/200). Sections through 3201–3250 are closed; section 3251–3300 is authorized (25/50 complete). Checkpoint 3251–3275 committed/read-back verified. Backup 3000 remains preserved.
+- Source ledgers: entries **1–3300** complete across stage Ledgers. Index: **3,300 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800, 2801–3000 and 3001–3200 are closed; stage 3201–3400 is active (100/200). Sections 3201–3250 and 3251–3300 are closed. Backup 3000 remains preserved. The new permanent media archive is pending historical backfill for entries 1–3300; see AUDIT_MEDIA_ARCHIVE.md.
 
 ## Part 1 — Entries 1–25
 
