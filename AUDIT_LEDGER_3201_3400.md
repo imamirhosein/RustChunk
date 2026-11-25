@@ -1,6 +1,6 @@
 # RustChunk Starling Audit Ledger — stage 3201–3400
 
-Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Stage entries 3201–3375 include documentation media and parity test-oracle sources; static audit only. Binary assets were visually rendered; text assets were read through EOF. This is documentation-only audit, not engine/runtime evidence.
+Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Stage entries 3201–3400 include documentation media and parity test-oracle sources; static audit only. Binary assets were visually rendered; text assets were read through EOF. This is documentation-only audit, not engine/runtime evidence.
 
 ### 3201. `docs/media/accessibility-settings.png`
 - Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
@@ -2977,3 +2977,428 @@ Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b2713
 - RustChunk implementation mapping: Candidate test fixture/exporter only; production code separate.
 - Evidence required before adoption: Pinned SHA/size verified, source complete; target tests/review pending.
 - Completion state: COMPLETE — fetched, SHA/size verified, EOF inspection done; no runtime validation.
+
+### 3376. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaCuboidModelOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f06fb088fae64fd750f97855e5d5f02082c0e17c
+- Size: 5734 bytes
+- Coverage: Text through EOF (96 lines).
+- Purpose: Cuboid model geometry/tree, UV/normal/pose exporter.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Cuboid model geometry/tree, UV/normal/pose exporter.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3377. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDataFixOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a489ccbe65bc3c78c8d46315db77e34cf42ef496
+- Size: 18205 bytes
+- Coverage: Text through EOF (341 lines).
+- Purpose: DataFixer version transformation cases for serialized data.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: DataFixer version transformation cases for serialized data.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3378. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDecorationOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 2af6d76273c5db0e9e75a95b1de89acef0da5d55
+- Size: 8923 bytes
+- Coverage: Text through EOF (102 lines).
+- Purpose: Decoration placement oracle with controlled biome/feature/random contexts.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Decoration placement oracle with controlled biome/feature/random contexts.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3379. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDecorationRegionOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 093d6eeed9f80c339dd17c64f90c9402ceeffdee
+- Size: 12331 bytes
+- Coverage: Text through EOF (125 lines).
+- Purpose: Decoration region storage/position mapping fixture.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Decoration region storage/position mapping fixture.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3380. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDensityOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 15eb4c424a5fac23b89976486951a76ee9b7ce1c
+- Size: 43463 bytes
+- Coverage: Text through EOF (471 lines; gap-free consecutive ≤400-line chunks).
+- Purpose: Density functions/operators/cache/noise inputs and output oracle.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Density functions/operators/cache/noise inputs and output oracle.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3381. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDispenserOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 560f2717030efcca5f894b5357f3108102f37f93
+- Size: 53126 bytes
+- Coverage: Text through EOF (862 lines; gap-free consecutive ≤400-line chunks).
+- Purpose: Dispenser registry and operation selection/execution with scripted item/block/entity contexts.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Dispenser registry and operation selection/execution with scripted item/block/entity contexts.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3382. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDragonRenderOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a2aa0cd905a5c36fb935b3a96e3d02a78dc85c9f
+- Size: 2218 bytes
+- Coverage: Text through EOF (48 lines).
+- Purpose: Captures EnderDragon death-ray triangle vertices at eight time values through CPU VertexConsumer; no GPU.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Captures EnderDragon death-ray triangle vertices at eight time values through CPU VertexConsumer; no GPU.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3383. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaDynamicSupportOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 26619a5b3ce65947693dc5eb2c63c7063514a149
+- Size: 5369 bytes
+- Coverage: Text through EOF (55 lines).
+- Purpose: Dynamic support shape selection with synthetic piston/shulker state and face support traces.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Dynamic support shape selection with synthetic piston/shulker state and face support traces.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3384. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEdgeBackoffOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a3c116891bf00fbead3032ce92f149efaf264cf7
+- Size: 3907 bytes
+- Coverage: Text through EOF (43 lines).
+- Purpose: Player edge-backoff with scripted collision/ground/flying/step inputs.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Player edge-backoff with scripted collision/ground/flying/step inputs.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3385. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEffectAttributeModifiersOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: cf890698e75664ffc22d3ae905f1b36818d202ca
+- Size: 10381 bytes
+- Coverage: Text through EOF (165 lines).
+- Purpose: MobEffect modifier template/add/remove/create and AttributeInstance dirty/cache/callback/duplicate behavior.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: MobEffect modifier template/add/remove/create and AttributeInstance dirty/cache/callback/duplicate behavior.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3386. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEffectNotificationsOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 06cc75d00548c73fcbebdb6c1f339ef1479ff117
+- Size: 14042 bytes
+- Coverage: Text through EOF (55 lines).
+- Purpose: Effect eligibility/add/update/remove, packets/passenger notifications, pending attributes and hidden chains.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Effect eligibility/add/update/remove, packets/passenger notifications, pending attributes and hidden chains.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3387. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEffectParticlesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a20d01f85716286ced84967456d7f4268fd5098d
+- Size: 4490 bytes
+- Coverage: Text through EOF (70 lines).
+- Purpose: Exports MobEffect particle factories/color/constants and verifies ambient/amplifier cases.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Exports MobEffect particle factories/color/constants and verifies ambient/amplifier cases.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3388. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEffectSyncOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: fd0f5ebbe9a984be1f0072d0df6ebeb17824e33a
+- Size: 13574 bytes
+- Coverage: Text through EOF (159 lines).
+- Purpose: Effect synchronization and entity-data flags/ambient/particle packet payload, dirty items/state.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Effect synchronization and entity-data flags/ambient/particle packet payload, dirty items/state.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3389. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEmitterParticlesOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 47c7cde16b7ceea03603a4ef8afc30c2e5606707
+- Size: 4736 bytes
+- Coverage: Text through EOF (82 lines).
+- Purpose: ParticleUtils block-face/axis and LivingEntity item particles with captured particle events/RNG.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: ParticleUtils block-face/axis and LivingEntity item particles with captured particle events/RNG.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3390. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEnchantingOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 7bd1b8db375571e24827728e12f9a5142981d61e
+- Size: 4979 bytes
+- Coverage: Text through EOF (92 lines).
+- Purpose: Vanilla enchanting-table costs/clues/applied enchantments with vanilla data pack registry.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Vanilla enchanting-table costs/clues/applied enchantments with vanilla data pack registry.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3391. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEnchantmentComponentsOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 778befbb28ab2318bf2141587646cf23c17ea60e
+- Size: 2368 bytes
+- Coverage: Text through EOF (48 lines).
+- Purpose: Persistent ItemEnchantments decode and translated names; partial invalid-entry handling.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Persistent ItemEnchantments decode and translated names; partial invalid-entry handling.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3392. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityAnimOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bf9b536e95ec662aa53154b5fd48a0c9cc952318
+- Size: 20507 bytes
+- Coverage: Text through EOF (368 lines).
+- Purpose: Entity model animation setup and CPU capture of part tree, polygons, normals, vertices.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Entity model animation setup and CPU capture of part tree, polygons, normals, vertices.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3393. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityAttributeOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d86f73f7805651bf4dded561efed614a86b84e6e
+- Size: 6011 bytes
+- Coverage: Text through EOF (54 lines).
+- Purpose: Entity attribute registry/default/range/sync and per-type defaults; lazy instances/modifier/reset/update probes.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Entity attribute registry/default/range/sync and per-type defaults; lazy instances/modifier/reset/update probes.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3394. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityCollisionOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d313bd4b4a7e96bfdb8bf44d2debffe18c058021
+- Size: 4602 bytes
+- Coverage: Text through EOF (55 lines).
+- Purpose: EntityGetter collision selection with synthetic entities, policies/bounds/failure trace.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: EntityGetter collision selection with synthetic entities, policies/bounds/failure trace.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3395. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityComponentsOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d27a4c80ea8898a73ff012c801a2107debde0f8d
+- Size: 6916 bytes
+- Coverage: Text through EOF (116 lines).
+- Purpose: EntityPredicate variant/component matching with created entities and registry ops.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: EntityPredicate variant/component matching with created entities and registry ops.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3396. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityDeathLootOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f66361b6b6502a32b09d02fe58b0650a0377624d
+- Size: 20651 bytes
+- Coverage: Text through EOF (321 lines).
+- Purpose: Entity death loot/XP with real entities, vanilla loot tables, equipment/killer/damage/RNG in stand-in level.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Entity death loot/XP with real entities, vanilla loot tables, equipment/killer/damage/RNG in stand-in level.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3397. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityFluidOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 10e24407e2189aae141a51eea1bff3f1c2135291
+- Size: 13128 bytes
+- Coverage: Text through EOF (82 lines).
+- Purpose: Entity fluid immersion/current/tick state with scripted cells/tags/chunks/velocity/query failures.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Entity fluid immersion/current/tick state with scripted cells/tags/chunks/velocity/query failures.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3398. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityModelExporter.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8a38d76458e8a403a37a040e0000a07e796693ca
+- Size: 3056 bytes
+- Coverage: Text through EOF (74 lines).
+- Purpose: Baked entity model layer exporter: poses, polygons, normals and children.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Baked entity model layer exporter: poses, polygons, normals and children.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3399. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityMoveOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8c40f26c467dd006dd396e44f036969e164244d7
+- Size: 10865 bytes
+- Coverage: Text through EOF (92 lines).
+- Purpose: Entity.move collision resolution with scripted shapes/border/authority/edge/fall/lifecycle.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: Entity.move collision resolution with scripted shapes/border/authority/edge/fall/lifecycle.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.
+
+### 3400. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityObstructionOracle.java`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 71e34902119fcc09d857b60f6b5f255298300d0a
+- Size: 4484 bytes
+- Coverage: Text through EOF (58 lines).
+- Purpose: EntityGetter unobstructed default method with snapshots, vehicles/removal/spectator and scripted voxel shapes.
+- Dependencies / cross-references: Starling MC26.3 parity harness, vanilla registries/resources and version-specific APIs.
+- Implementation / logic: EntityGetter unobstructed default method with snapshots, vehicles/removal/spectator and scripted voxel shapes.
+- Findings: Static oracle/exporter with scripted/synthetic fixtures and unsafe/reflection where applicable; no test execution.
+- RustChunk relevance: Differential test/data exporter reference only.
+- Decision: adaptable; reference; parity-test-oracle
+- 1.20.1 implications: APIs/registry semantics version-specific; target comparison required and Forge/Android separate.
+- Follow-up checks: Target-version fixture/tests and security/license review; keep test scaffolding out runtime.
+- RustChunk implementation mapping: Oracle/exporter test reference only; production code separately designed.
+- Evidence required before adoption: Pinned SHA/size verified, source inspected fully; target tests/review pending.
+- Completion state: COMPLETE — SHA/size match, EOF inspected; no runtime validation.

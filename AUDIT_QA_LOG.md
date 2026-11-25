@@ -2128,3 +2128,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger/Index sequential unique and aligned; six-document transaction read-back verified.
 - Oracles cover climbing, collision contexts/shapes, combat, command server/parser/suggestions, components/consumables, containers, creative inventory, damage and dragon contact. Test-only, adaptable/reference. No tests/build/runtime performed.
 - Grant 3301–3400 remains active; continue 3376–3400 and report at 3400, then STOP.
+
+
+## Checkpoint 3376–3400 — COMPLETE — 2026-11-25
+- Final 25 paths inspected sequentially through EOF; SHAs/sizes verified. Large files 3380 (471 lines) and 3381 (862 lines) read in consecutive ranges 1–400, 401–800, 801–EOF.
+- Ledger/Index sequential unique and aligned; six-document transaction read-back verified.
+- Oracles cover models/datafix/decoration/density/dispenser, dragon/effects/enchantments, entity animation/attributes/collision/components/loot/fluid/model/move/obstruction. Adaptable/reference only; no tests/build/runtime executed.
+- Exceptional grant 3301–3400 fully complete and closed.
