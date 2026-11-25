@@ -956,3 +956,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Historical media entries 1–3300 are not yet backfilled. The estimate of 70–80 images in the first 1000 entries is unverified and must be counted from Index/Ledgers.
 - At backup/verification milestone 4000, complete and verify historical media backfill through the backup scope before declaring backup closeout complete.
 - Entry 3301 video `launcher/docs/opening.webm` is listed in the new archive as NEEDS USER WATCH; it was not visually played/reviewed.
+
+
+## Current resume status — reconciled 2026-11-25
+
+- Completed and committed audit source entries: **1–3300**. Stage 3201–3400 active, 100/200 completed as of 3300; sections 3201–3250 and 3251–3300 closed.
+- User's exceptional grant for **3301–3400** is active but **not started**. This media archive policy/docs registration does not consume source-audit authorization. Wait for user confirmation to begin.
+- Branch head after archive/docs registration: `11d3694b47661f3e0a8f876ee3d300bd67d3307a`.
+- New `AUDIT_MEDIA_ARCHIVE.md` created. Entry 3301 is logged as video `launcher/docs/opening.webm`, NEEDS USER WATCH. Media backfill for 1–3300 is outstanding; 70–80 first-1000 image estimate is unverified.
+- Before starting source audit, reconcile old contradictory resume/stop text in historic sections, re-fetch current branch head and verify current docs. Then follow 25-file checkpoints, 50-file reports and the existing grant to 3400; report at 3350 and 3400 and stop at the authorized limit.
