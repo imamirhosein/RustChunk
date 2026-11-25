@@ -599,3 +599,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Ledger 125 entries; Index 3,325 unique paths aligned. Six-document transaction/read-back complete.
 - Continue 3326–3350/report 3350; grant covers 3351–3400, report and stop at 3400.
 - No runtime/build/test/device/Forge/Minecraft/server validation.
+
+
+### Checkpoint 3326–3350 — COMPLETE — 2026-11-25
+- 25 sequential paths through EOF; pinned SHA/size verified; large sources consecutive ≤400-line ranges; Index/Ledger alignment.
+- Ledger 150 records, Index 3,350 unique paths. Six-doc checkpoint verified.
+- Section 3301–3350 closed; continue 3351–3375 then 3376–3400; report and stop at 3400 under existing grant.
+- No tests/build/runtime/device/Forge/Minecraft/server validation.

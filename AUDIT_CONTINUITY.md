@@ -982,3 +982,10 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Ledger 125 records; Index 3,325 unique sequential. Six-document transaction/read-back verified.
 - Grant 3301–3400 active; continue 3326–3350/report 3350, then 3351–3400/report and stop 3400.
 - Static review only; no builds/tests/runtime. Historical media backfill pending.
+
+
+## Checkpoint 3326–3350 — COMPLETE — 2026-11-25
+- 3326–3350 sequential source audit complete; SHAs/sizes verified; long sources 3333=726, 3340=434, 3346=389, 3348=575, chunks ≤400 consecutive.
+- Ledger 150 entries; Index 3,350 unique sequential paths; six-doc checkpoint transaction/read-back verified.
+- Section 3301–3350 CLOSED. Grant 3301–3400 covers 3351–3400; report at 3400 and stop.
+- Static review only; no runtime/tests/build/Android/Forge/Minecraft/server validation. Media backfill pending.

@@ -2114,3 +2114,10 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Media 3301 video NEEDS USER WATCH; images 3302–3310 rendered and notes synchronized; 3311–3325 text full inspection.
 - 3312–3325 adaptable test oracles/exporters, not production code. Screenshots are claims/UI, no runtime proof.
 - Continue 3326–3350 under grant; report at 3350.
+
+
+## Checkpoint 3326–3350 — COMPLETE — 2026-11-25
+- 25 next lexical paths inspected through EOF; SHA/size verified. Large entries 3333 (726), 3340 (434), 3346 (389), 3348 (575) read in gap-free ≤400-line chunks.
+- Ledger/index unique and sequential; six-document read-back transaction verified.
+- Test oracles cover blockstate/behavior, client camera/chat/rendering, carver and chunk-generation/status; adaptable/reference, not production. No tests/build/runtime.
+- Section 3301–3350 CLOSED; grant covers 3351–3400, continue checkpoints 3351–3375 and 3376–3400, report at 3400 and stop.

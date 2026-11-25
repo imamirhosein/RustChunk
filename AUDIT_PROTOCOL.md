@@ -1001,9 +1001,8 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - This section is historical; current authorization and resume point are governed by Section 67 below.
 
 
-## 67. Start authorization and reconciled resume — 2026-11-25 — checkpoint 3301–3325 COMPLETE
-- User confirmed start of grant 3301–3400; 25 entries completed, stage 3201–3400 now 125/200.
-- Section 3301–3350 authorized; 3301–3325 verified, continue 3326–3350 without asking and report at 3350.
-- Same grant covers 3351–3400; report and STOP at 3400.
-- 3301 video in Ledger/archive NEEDS USER WATCH; images 3302–3310 visually inspected and notes synchronized; historical media backfill pending.
-- Static audit only; no runtime/build/test/Android/Forge/Minecraft/server validation.
+## 67. Start authorization and reconciled resume — 2026-11-25 — checkpoint 3326–3350 COMPLETE
+- Start confirmed; grant 3301–3400 active. Entries 3326–3350 completed; stage 3201–3400 is 150/200.
+- Section 3301–3350 CLOSED; checkpoint 3326–3350 committed/read-back verified.
+- Grant covers 3351–3400: complete 3351–3375 and 3376–3400; report and STOP at 3400.
+- Static audit only; no builds/tests/runtime/device/Android/Forge/Minecraft/server validation. Media backfill pending.
