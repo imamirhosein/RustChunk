@@ -1277,3 +1277,428 @@ Pinned upstream: starling-client/starling @ 5432370d573642041585c69b40fb045b2713
 - Evidence required before adoption: Pinned SHA/size verified and screenshot rendered; performance methodology and paired control not established.
 - Completion state: COMPLETE — pinned blob fetched and SHA/size matched; image rendered and visually inspected; no runtime tests.
 
+### 3276. `docs/media/static-block-entity-batching-on.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: f64ddc2d071d35a9b615c9b7aea39314abc8f758
+- Size: 279162 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Screenshot of a chest/block-entity scene with the batching option labelled on.
+- Dependencies / cross-references: Static raster image paired with the batching-off screenshot at entry 3275.
+- Implementation / logic: Raster capture of a chest-grid scene with a performance overlay.
+- Findings: Overlay reads about 56 fps, 17.8 ms frame time, max 21.8 ms and CPU 17.6/GPU 0.0 ms. Entry 3275's OFF image reads about 63 fps and 15.9 ms. These isolated captures are not a controlled A/B benchmark: hardware, warmup, camera, repetitions and workload equality are unknown. The ON capture is not faster by displayed average FPS.
+- RustChunk relevance: Potential lead for a future batching test; screenshots are not performance proof.
+- Decision: unnecessary; reference; benchmark-imagery
+- 1.20.1 implications: No Minecraft 1.20.1/Forge behavior or Android GPU performance is established.
+- Follow-up checks: Locate implementation and benchmark harness; compare same scene, camera, device, warmup and repeated frame-time distributions.
+- RustChunk implementation mapping: Visual test-case reference only; no implementation mapping.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; methodology absent.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3277. `docs/media/sunset.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ff67883c20c89ef2a6d5838c2f20f09f6d852724
+- Size: 195577 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Minecraft sunset landscape screenshot used as documentation/background media.
+- Dependencies / cross-references: Static raster image; paired with WebP variant at entry 3278.
+- Implementation / logic: JPEG landscape screenshot, visually rendered.
+- Findings: Depicts a Minecraft savanna/village landscape near sunset; contains no launcher or engine implementation evidence.
+- RustChunk relevance: Optional visual placeholder only; does not advance RustChunk runtime.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No 1.20.1/Forge compatibility evidence.
+- Follow-up checks: Check source provenance and whether JPEG is needed alongside WebP before redistribution.
+- RustChunk implementation mapping: Optional documentation or launcher background asset only.
+- Evidence required before adoption: Pinned blob SHA/size verified and rendered; licensing review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3278. `docs/media/sunset.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 0a8b8276242f0813207ff8b984b77e4410bd3f46
+- Size: 78340 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: WebP variant of Minecraft sunset landscape media.
+- Dependencies / cross-references: Visually paired with entry 3277 (JPEG variant).
+- Implementation / logic: Static WebP landscape screenshot, visually rendered.
+- Findings: Visually near-identical to entry 3277 at a smaller byte size; duplicates content rather than implementing runtime behavior.
+- RustChunk relevance: Optional documentation/background asset; no engine relevance.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No 1.20.1/Forge compatibility evidence.
+- Follow-up checks: Verify format support on intended Android/UI surface and avoid shipping duplicate encodings unless both consumers need them.
+- RustChunk implementation mapping: Optional docs/background media only.
+- Evidence required before adoption: Pinned blob SHA/size verified and image rendered; renderer/device tests and redistribution review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3279. `docs/media/survival.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b01017b6c922e00f4c895c608c37f4cca271cf6c
+- Size: 175810 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Minecraft survival gameplay screenshot for documentation.
+- Dependencies / cross-references: Static raster asset; paired with WebP version at entry 3280.
+- Implementation / logic: JPEG screenshot of a player encounter with a hostile mob, with HUD/hotbar visible.
+- Findings: Illustrates a survival gameplay scene only; does not demonstrate combat logic, network behavior, tick correctness or an actual benchmark.
+- RustChunk relevance: Optional visual documentation asset only.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No Forge 1.20.1 gameplay compatibility proof.
+- Follow-up checks: Check source/licensing and whether WebP duplicate is sufficient for delivery.
+- RustChunk implementation mapping: Docs or illustrative launcher media only.
+- Evidence required before adoption: Pinned SHA/size verified and visual render inspected; provenance review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3280. `docs/media/survival.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: a53713eb0d69d68e28f2cabe15ae1f62284acc80
+- Size: 71260 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: WebP version of the survival gameplay screenshot.
+- Dependencies / cross-references: Near-duplicate of entry 3279 JPEG.
+- Implementation / logic: Static WebP screenshot, visually rendered.
+- Findings: Represents the same general survival scene as entry 3279 at a smaller byte size; no runtime behavior is demonstrated.
+- RustChunk relevance: Optional documentation/background content only.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No Minecraft 1.20.1/Forge proof.
+- Follow-up checks: Confirm WebP decoder availability for each target UI surface and avoid duplicate files when not needed.
+- RustChunk implementation mapping: Optional documentation media.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; device decoding and licensing not tested.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3281. `docs/media/underwater.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 9c8ee88f53515b1cc30f5905f4032e1660c478b2
+- Size: 195128 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Underwater Minecraft scene screenshot used as environment media.
+- Dependencies / cross-references: Static raster asset; paired with WebP variant entry 3282.
+- Implementation / logic: JPEG screenshot of underwater scenery with aquatic environment details.
+- Findings: Illustrative scene only; not a renderer test or proof of underwater rendering parity.
+- RustChunk relevance: Optional screenshot/background material.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No target-version rendering behavior established.
+- Follow-up checks: Check image provenance and format need before packaging.
+- RustChunk implementation mapping: Optional documentation asset.
+- Evidence required before adoption: Pinned source SHA/size verified and image rendered; renderer/provenance review pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3282. `docs/media/underwater.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 55aa643c8dddf51a66fab0421da9ebd33b0845e4
+- Size: 75120 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: WebP variant of the underwater Minecraft scene.
+- Dependencies / cross-references: Near-duplicate JPEG at entry 3281.
+- Implementation / logic: Static WebP screenshot, visually rendered.
+- Findings: Provides a smaller encoding of the same underwater scene; no code or renderer behavior is represented.
+- RustChunk relevance: Optional docs/background asset only.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No 1.20.1/Forge compatibility proof.
+- Follow-up checks: Validate WebP decoding on the intended UI surface; avoid retaining both formats without demonstrated need.
+- RustChunk implementation mapping: Optional docs media only.
+- Evidence required before adoption: Pinned SHA/size verified and rendered; no Android decode test or licensing check.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3283. `docs/media/village.jpg`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 63df8c04d7b8f561dd4e07cd8fb2489725178b2a
+- Size: 376934 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Minecraft village landscape screenshot for documentation.
+- Dependencies / cross-references: Paired WebP variant entry 3284.
+- Implementation / logic: JPEG screenshot of a village and surrounding terrain.
+- Findings: Static environment art only; it does not evidence world generation, chunk loading, terrain correctness or distance rendering.
+- RustChunk relevance: Optional visual reference for docs/screenshots.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No 1.20.1 generation or Forge behavior proven.
+- Follow-up checks: Keep only with verified asset rights and a defined documentation use.
+- RustChunk implementation mapping: Optional docs/background media.
+- Evidence required before adoption: Pinned SHA/size verified and visual render inspected; no runtime/test validation.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3284. `docs/media/village.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 40864e50700b83d60079ffa384e64734969143da
+- Size: 219600 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: WebP variant of the Minecraft village landscape.
+- Dependencies / cross-references: Near-duplicate JPEG at entry 3283.
+- Implementation / logic: Static WebP landscape screenshot, visually rendered.
+- Findings: WebP provides the same general village view with a smaller file size; it is visual media, not terrain-generation evidence.
+- RustChunk relevance: Optional docs/background media.
+- Decision: unnecessary; reference; documentation-media
+- 1.20.1 implications: No target-version or renderer compatibility evidence.
+- Follow-up checks: Check actual consumer format requirements and avoid redundant delivery.
+- RustChunk implementation mapping: Optional screenshot/background asset.
+- Evidence required before adoption: Pinned SHA/size verified and rendered; license/renderer testing pending.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3285. `docs/modpacks/atm10-mods.csv`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: ceee3e5d7ad797fc992f396de822ba7c36cbd850
+- Size: 55481 bytes
+- Coverage: 1–496; EOF; canonical logical line count 496.
+- Purpose: CSV inventory of modpack contents with mod IDs, names, versions, classes, tier/category, confidence, source, license and client/server flags.
+- Dependencies / cross-references: Modpack import/catalogue tooling, loader/version detection, license metadata and artifact provenance.
+- Implementation / logic: 496-row metadata table containing mod identity/version, classification and client/server support/status fields.
+- Findings: Catalogue largely targets Minecraft 1.21/1.21.1 and NeoForge; entries include explicit 1.21.1-NeoForge versions and 1.21.x client mods. It mixes category/name/guess confidence, blank or unknown loader-side fields and unverified/custom LicenseRef values. Useful as schema reference, not a 1.20.1 Forge install manifest. A row does not prove an available compatible artifact or redistribution permission.
+- RustChunk relevance: Schema can inform a future pack importer/catalogue; dataset is not an approved RustChunk mod list.
+- Decision: adaptable; reference; modpack-metadata-schema
+- 1.20.1 implications: Resolve exact 1.20.1 Forge artifact, dependency graph, side requirements and license per mod; reject 1.21.x/NeoForge-only matches.
+- Follow-up checks: Trace parser/importer; validate IDs, versions, loader, side, dependencies, hashes and license evidence against actual mod metadata; test malformed/duplicate rows.
+- RustChunk implementation mapping: Optional pack-manifest model with target Minecraft version, loader/version, artifact hash, side, dependencies, source and license evidence.
+- Evidence required before adoption: Entire 496-line CSV read through EOF; pinned SHA/byte size verified. No import execution or artifact/license verification.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; text read through EOF; no runtime tests.
+
+### 3286. `docs/save-batch-entities.csv`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: bf6b885edb2e8854597ca9e9770467809242edb5
+- Size: 799 bytes
+- Coverage: 1–11; EOF; canonical logical line count 11.
+- Purpose: Small CSV containing recorded entity-save batch benchmark cases for village/storage fixtures.
+- Dependencies / cross-references: Save-batch implementation, fixture generator and benchmark harness are not contained in this CSV itself.
+- Implementation / logic: Rows encode stage, fixture, chunk count, world entities/names, saved entities, bytes, before/after microseconds, speedup, sample count and repetitions.
+- Findings: The file records 21 samples per case and variable repetitions (10,000 down to 1); reported speedup values range approximately 0.998–1.314. These are stored measurements only. The CSV gives no hardware, OS, build, warmup, timer, distribution or controlled mobile conditions, so it cannot establish RustChunk performance gains or Android suitability.
+- RustChunk relevance: Fields are a useful starting point for a reproducible benchmark-result schema; values are not directly portable to target devices.
+- Decision: adaptable; reference; benchmark-data-schema
+- 1.20.1 implications: No 1.20.1 or mobile performance guarantee; independently benchmark target-side serialization/storage workloads.
+- Follow-up checks: Inspect benchmark generator/save path; record target device, compiler flags, warmup, repetitions, distribution/variance, payload integrity and baseline equivalence.
+- RustChunk implementation mapping: Optional benchmark report schema for entity serialization/save throughput and allocation/bytes metrics.
+- Evidence required before adoption: All 11 lines read through EOF; pinned SHA/size verified. Benchmark code and measurement environment not validated.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; text read through EOF; no runtime tests.
+
+### 3287. `launcher/.gitignore`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 2f7896d1d1365eafb0da03d9fe456fac81408487
+- Size: 8 bytes
+- Coverage: 1–1; EOF; canonical logical line count 1.
+- Purpose: Launcher-scoped Git ignore rule for the Rust build output directory.
+- Dependencies / cross-references: Git ignore semantics and the launcher crate directory.
+- Implementation / logic: One-line pattern `target/`, scoped by the file's location under launcher/.
+- Findings: Pattern ignores launcher-local target output but is intentionally narrow; it does not express repository-wide build, IDE, signing, keystore or generated-artifact exclusions.
+- RustChunk relevance: Minimal ignore-pattern reference only; RustChunk needs its own complete secret/build-output policy.
+- Decision: adaptable; reference; build-output-ignore
+- 1.20.1 implications: No runtime compatibility implications.
+- Follow-up checks: Review root/module ignore rules together; ensure APKs, Gradle/Cargo outputs, credentials, signing keys and private logs are excluded without hiding source inputs.
+- RustChunk implementation mapping: Could add equivalent launcher-local Cargo target ignore to RustChunk's own .gitignore.
+- Evidence required before adoption: One logical line read through EOF; pinned SHA and exact byte size verified.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; text read through EOF; no runtime tests.
+
+### 3288. `launcher/Cargo.lock`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 4611916692307fba3760a5a742877e6c484a5dc1
+- Size: 190402 bytes
+- Coverage: 1–7797; EOF; canonical logical line count 7797.
+- Purpose: Generated Cargo lockfile pinning dependencies for the Starling/Horizon launcher crate.
+- Dependencies / cross-references: launcher/Cargo.toml, workspace manifests, target-specific Cargo resolution and crates.io package checksums.
+- Implementation / logic: Cargo lock format version 4; records exact package versions, sources, checksums and transitive dependencies for launcher build graph.
+- Findings: The 7,797-line graph is strongly desktop/GPUI-oriented: GPUI platform crates, AppKit/Metal, Wayland/X11, Windows APIs, keyring and desktop system integrations are prominent. It pins WGPU/Naga 30.0.1 and includes ndk-sys through WGPU Android-capable HAL, but this alone does not prove an Android launcher/UI target: the observed GPUI platform package graph is not an Android frontend. Lockfile entries may be target-gated; this file alone cannot prove each dependency builds on every target.
+- RustChunk relevance: Useful only as a dependency/version inventory when tracing a specific subsystem; do not import this lockfile wholesale into RustChunk.
+- Decision: unnecessary; reference; desktop-dependency-snapshot
+- 1.20.1 implications: Starling 26.3/desktop dependency graph is not evidence of Minecraft 1.20.1 Forge support or Android ARM64 viability. RustChunk needs independently selected Android-compatible versions and target-specific resolution.
+- Follow-up checks: Audit launcher/workspace manifests, target cfg/feature gates, JNI/NDK setup and actual Android target build; measure binary size and verify licenses before adopting individual crates.
+- RustChunk implementation mapping: Dependency-audit checklist only; create a separate RustChunk Cargo.lock from its own manifests and Android target.
+- Evidence required before adoption: All 7,797 logical lines read in consecutive, gap-free chunks ≤400 through EOF; SHA/size match pinned tree. No Cargo build or Android cross-compile executed.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; text read through EOF; no runtime tests.
+
+### 3289. `launcher/assets/logos/fabric.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 387008b8fc704a5fbda89dd2bff512c8dc2113cd
+- Size: 587 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Fabric loader logo asset for launcher UI.
+- Dependencies / cross-references: Static PNG used by launcher presentation; no loader code dependency is present in the image.
+- Implementation / logic: Small raster logo, visually rendered.
+- Findings: Presence of a Fabric logo does not prove Fabric installation, launch or compatibility support.
+- RustChunk relevance: Brand/UI reference only; not a Forge implementation.
+- Decision: unnecessary; reference; loader-branding
+- 1.20.1 implications: No evidence for Forge 1.20.1 support.
+- Follow-up checks: Verify trademark/asset rights and trace loader-selection backend separately before claiming loader support.
+- RustChunk implementation mapping: Optional loader icon slot in a RustChunk UI only.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; no loader functionality tested.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3290. `launcher/assets/logos/forge.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 6384d3dca3ee6eb693ae6990864e22a37591b74e
+- Size: 11951 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Forge loader logo asset for launcher UI.
+- Dependencies / cross-references: Static PNG presentation resource.
+- Implementation / logic: Raster Forge anvil logo, visually rendered.
+- Findings: Forge mark is branding only; it does not establish installer, patching, classpath, mod discovery or Forge 47.x runtime support.
+- RustChunk relevance: Potential icon reference for a future Forge profile selector; no executable compatibility evidence.
+- Decision: unnecessary; reference; loader-branding
+- 1.20.1 implications: Forge 1.20.1/47.x must be validated through actual metadata, libraries, launch arguments and runtime tests.
+- Follow-up checks: Trace loader ID to installer/version backend and verify exact 1.20.1 Forge implementation separately; check asset terms.
+- RustChunk implementation mapping: Optional Forge profile icon only.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; no loader install or launch executed.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3291. `launcher/assets/logos/neoforge.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 69a1a9d22b06d53d4f5d4b6c988c705ed9815821
+- Size: 953 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: NeoForge loader icon for launcher UI.
+- Dependencies / cross-references: Static PNG only.
+- Implementation / logic: Small pixel-art NeoForge icon, visually rendered.
+- Findings: Icon in assets is not evidence NeoForge is installed or supported.
+- RustChunk relevance: Brand/UI reference only.
+- Decision: unnecessary; reference; loader-branding
+- 1.20.1 implications: NeoForge must not be conflated with Forge 47.x; separate loader/version handling is required.
+- Follow-up checks: Verify exact loader enum/backend and supported versions independently; review asset provenance.
+- RustChunk implementation mapping: Optional NeoForge label/icon if RustChunk ever supports that loader separately.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; no loader tests.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3292. `launcher/assets/logos/quilt.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 329f9668e54f97df464d8322b10ae06b6791058d
+- Size: 3078 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Quilt loader icon for launcher UI.
+- Dependencies / cross-references: Static PNG only.
+- Implementation / logic: Raster Quilt logo, visually rendered.
+- Findings: Branding asset alone does not demonstrate Quilt installer or launch support.
+- RustChunk relevance: UI reference only; outside current Forge 1.20.1 goal.
+- Decision: unnecessary; reference; loader-branding
+- 1.20.1 implications: No 1.20.1 Forge implication.
+- Follow-up checks: Check asset rights and keep loader branding separate from loader capability claims.
+- RustChunk implementation mapping: Optional icon slot only.
+- Evidence required before adoption: Pinned SHA/size verified and rendered; functionality not tested.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3293. `launcher/assets/sculk-banner.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 3ed94727635b17d3e266a9fd96b41e4aebd0401b
+- Size: 50554 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Sculk-branded server-hosting advertisement banner bundled with launcher assets.
+- Dependencies / cross-references: Static WebP media; includes Sculk branding, Minecraft-character artwork, promotional CTA and discount code.
+- Implementation / logic: Promotional banner image; no executable logic.
+- Findings: Advertises a third-party server host with uptime/rapid-setup claims and promo code. Marketing statements are not verified service guarantees or launcher functionality. Not RustChunk gameplay content.
+- RustChunk relevance: No engine relevance; potential UI-advertising example only.
+- Decision: unnecessary; reference; third-party-marketing-art
+- 1.20.1 implications: No 1.20.1/Forge compatibility evidence.
+- Follow-up checks: Do not redistribute/display without explicit asset, brand and advertising authorization; exclude from a minimal RustChunk client unless a legitimate partnership is intended.
+- RustChunk implementation mapping: No engine mapping; optional external sponsor area only with explicit product/legal decision.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; ownership/advertising permissions unverified.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3294. `launcher/assets/sculk-card-art.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 13b9e10e441e9fff40006be94b837c07f954dbe0
+- Size: 20598 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Sculk server-hosting promotional card artwork.
+- Dependencies / cross-references: Static WebP artwork paired with Sculk banner/logo.
+- Implementation / logic: Promotional raster card showing Minecraft characters and companion animal artwork.
+- Findings: Marketing artwork only; does not implement game entities or launcher functionality. Rights to characters/artwork and use in another project are not established.
+- RustChunk relevance: No engine relevance.
+- Decision: unnecessary; reference; third-party-marketing-art
+- 1.20.1 implications: No 1.20.1/Forge implications.
+- Follow-up checks: Verify content/brand usage rights before redistribution; otherwise exclude from RustChunk.
+- RustChunk implementation mapping: No implementation mapping.
+- Evidence required before adoption: Pinned SHA/size verified and visually rendered; provenance/licensing not reviewed.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3295. `launcher/assets/sculk-logo.webp`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 8877cd1d9638e2ebaf55aa2f4f8e1698bc9786ba
+- Size: 5140 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Sculk third-party brand logo for launcher promotional UI.
+- Dependencies / cross-references: Static WebP resource.
+- Implementation / logic: Raster brand wordmark, visually rendered.
+- Findings: Third-party logo only; not part of launcher or game runtime. Use in RustChunk would imply a commercial/brand relationship and requires authorization.
+- RustChunk relevance: No engine or launcher-core relevance.
+- Decision: unnecessary; reference; third-party-branding
+- 1.20.1 implications: No target compatibility evidence.
+- Follow-up checks: Exclude unless a documented, authorized integration exists; review trademark and redistribution rights.
+- RustChunk implementation mapping: No engine mapping.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; permissions unverified.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3296. `launcher/docs/discord-link.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: d882cda273e4e09ecbb49213b7e45edac049cfb6
+- Size: 510214 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Launcher screenshot showing Horizon play page and a Discord navigation item.
+- Dependencies / cross-references: Static UI capture; no live Discord URL or click behavior is represented.
+- Implementation / logic: Raster screenshot of desktop launcher state labelled Minecraft 26.3 and version 2026.10.13.
+- Findings: Screenshot describes Horizon as Rust reimplementation of Java Edition 26.3 checked against differential harnesses. This is not independent parity evidence, and the Discord item does not reveal or verify a functional link.
+- RustChunk relevance: UI composition reference only; no Android interaction or launcher behavior proven.
+- Decision: unnecessary; reference; launcher-screenshot
+- 1.20.1 implications: Horizon 26.3 screenshot does not demonstrate 1.20.1 Forge compatibility.
+- Follow-up checks: Trace actual navigation action and verify target URL/security; inspect source/test evidence behind parity claim separately.
+- RustChunk implementation mapping: Optional launcher navigation/help-page visual reference.
+- Evidence required before adoption: Pinned SHA/size verified and screenshot rendered; navigation and parity assertions not executed.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3297. `launcher/docs/modpacks.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 9abe41c64a59ff5e837c8768f56eb4aa2671a38a
+- Size: 113972 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Launcher screenshot illustrating modpack import, per-mod porting status and pack-level summary.
+- Dependencies / cross-references: Static UI capture; actual import logic and mod compatibility resolver are outside the image.
+- Implementation / logic: Shows import controls for .mrpack/.zip/Prism/MultiMC/CurseForge and selected All the Mods 10 profile at Minecraft 1.21.1 / NeoForge 21.1.259, with displayed counts 0 ported, 42 partial, 333 not yet and 121 not needed.
+- Findings: Useful as a UI/workflow example, but counts/statuses are only text in a still image. The visible pack is 1.21.1 NeoForge, not 1.20.1 Forge. It does not prove accurate per-mod classification or that 42 mods can launch.
+- RustChunk relevance: Pack import plus explicit per-mod porting/compatibility status may inform a future RustChunk modpack manager.
+- Decision: adaptable; reference; modpack-ui-workflow
+- 1.20.1 implications: Must filter by exact Minecraft version and Forge loader; do not infer target compatibility from 1.21.1 NeoForge classifications.
+- Follow-up checks: Inspect pack importer, metadata model and compatibility evaluator; verify each item by version, loader, side, dependency and license; test UI on Android.
+- RustChunk implementation mapping: Optional pack management UI concept with explicit Unknown/Partial/Compatible/Blocked states and evidence links.
+- Evidence required before adoption: Pinned SHA/size verified and screenshot rendered. No UI execution, pack import or mod launch tests.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3298. `launcher/docs/opening-1.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 77e5f9c4330b76915741021df8a54edd3ef7326a
+- Size: 677177 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Splash/opening background image with Horizon wordmark.
+- Dependencies / cross-references: Static PNG used as launcher intro/presentation media.
+- Implementation / logic: Full-screen gradient abstract background and centered Horizon title.
+- Findings: Visual splash state only; no rendering pipeline, app lifecycle or performance behavior is established.
+- RustChunk relevance: Optional design inspiration only.
+- Decision: unnecessary; reference; launcher-visuals
+- 1.20.1 implications: No 1.20.1 or Android compatibility evidence.
+- Follow-up checks: Review image rights and decode/memory cost on low-RAM Android before recreating a similar splash.
+- RustChunk implementation mapping: Optional splash-screen art; do not import desktop UI implementation.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; Android decode/memory behavior untested.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3299. `launcher/docs/opening-2.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: 3be632b3c68cf5ef743d45f55f7c02258c6f6d01
+- Size: 470917 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Screenshot of launcher opening transition over Horizon splash background.
+- Dependencies / cross-references: Static UI capture; follows opening-1 artwork and precedes home state.
+- Implementation / logic: Raster image showing sidebar navigation fading in over splash/title background.
+- Findings: Illustrates a transition state only. Still image cannot establish animation timing, focus order, input readiness or startup performance.
+- RustChunk relevance: Optional visual reference for a staged startup sequence.
+- Decision: unnecessary; reference; launcher-screenshot
+- 1.20.1 implications: No 1.20.1 runtime or Android lifecycle proof.
+- Follow-up checks: Inspect actual transition code and test cold/warm startup, focus and touch accessibility on Android before adopting.
+- RustChunk implementation mapping: Optional launcher startup design reference.
+- Evidence required before adoption: Pinned SHA/size verified and image rendered; transition itself not executed.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+
+### 3300. `launcher/docs/opening-3.png`
+- Source repository/ref: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488
+- Source SHA: b5d64dde773a9aa837cc9582a740afd987f9b48f
+- Size: 309868 bytes
+- Coverage: Binary asset; logical line coverage N/A; fetched and visually rendered/inspected.
+- Purpose: Screenshot of Horizon launcher home/play screen after opening transition.
+- Dependencies / cross-references: Static UI capture showing desktop launcher state.
+- Implementation / logic: Raster screen with sidebar, version selector, Client/Server toggle and resource/Minecraft-folder status.
+- Findings: Image text states Minecraft 26.3, version v2026.10.12 and Java parity 88% with 270 differential harnesses (wording is truncated). It also shows Resources not prepared and Minecraft folder not found. These are claims/state in a screenshot, not proof of parity or a successful launch; desktop capture is not an Android application test.
+- RustChunk relevance: Possible high-level launcher layout reference only.
+- Decision: unnecessary; reference; launcher-screenshot
+- 1.20.1 implications: Does not satisfy RustChunk's Minecraft 1.20.1 Forge or Android requirements; parity denominator and harness evidence require separate inspection.
+- Follow-up checks: Verify test suite/denominator and game launch independently; trace version/resource flow and validate touch/UI lifecycle on Android.
+- RustChunk implementation mapping: Optional launcher home-screen design reference; rebuild with Android-native surfaces and RustChunk-specific states.
+- Evidence required before adoption: Pinned SHA/size verified and screenshot rendered; no runtime test or parity claim independently verified.
+- Completion state: COMPLETE — pinned source fetched; SHA/byte size match recursive tree; image rendered and visually inspected; no runtime tests.
+

@@ -2086,3 +2086,13 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Important evidence cautions: social-preview.jpg contains claims of 232 differential tests and 80% Java parity, but the image itself does not substantiate them. Batching-off screenshot has no controlled paired comparison in this checkpoint. Spawner images do not prove NBT/persistence semantics. Progress SVGs are static hard-coded states.
 - No application source changed; no tests/build/benchmark/APK/device/Forge/game/server validation performed.
 - Section 3251–3300 remains authorized; next checkpoint 3276–3300. STOP at 3300.
+
+
+## Checkpoint 3276–3300 — COMPLETE (25/25) — 2026-11-25
+
+- Pinned source: starling-client/starling @ 5432370d573642041585c69b40fb045b27133488. Complete recursive tree verified: 4,968 blobs, not truncated. The next 25 paths were recomputed in raw lexical order after excluding all 3,275 Index entries; paths are unique.
+- 25 sources were read individually through EOF. `launcher/Cargo.lock` (7,797 logical lines) was read in consecutive, gap-free chunks ≤400 lines. CSV/text files were read through EOF; raster images were visually rendered. Every source SHA and byte size matches the pinned tree.
+- Ledger stage 3201–3400 now has 100 entries (3201–3300), each with 15 required fields. Index has 3,300 sequential unique paths; paths and Decision fields align.
+- Key cautions: ATM10 CSV predominantly identifies 1.21.x/NeoForge metadata and is not a 1.20.1 Forge install manifest; save-batch CSV is reported benchmark data without validated environment/methodology; Cargo.lock is a desktop/GPUI-heavy dependency snapshot and does not prove Android UI support; loader logos, marketing art and screenshots are not functional tests or proof of runtime claims.
+- No RustChunk application source was changed. No build, tests, benchmarks, APK, Android-device, Forge, Minecraft, multiplayer or Aternos validation was performed.
+- Section 3251–3300 CLOSED (50/50). **STOP at 3300; 3301–3350 requires fresh explicit user authorization.**

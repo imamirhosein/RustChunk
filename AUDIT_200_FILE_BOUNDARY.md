@@ -2,11 +2,12 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3275** committed. Stage 3201–3400 is active (75/200); earlier stages 2601–2800, 2801–3000 and 3001–3200 are closed.
-- Sections through 3201–3250 are closed. Section **3251–3300** is authorized; checkpoint **3251–3275 COMPLETE**, checkpoint **3276–3300 AUTHORIZED**. **STOP at 3300**.
-- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **75 records**, exactly 15 fields each. Index: **3,275 sequential unique paths**, no duplicates and Ledger/Index alignment.
-- Keep 25-file commits, 50-file reports, max 400-line chunks and one source file at a time. Binary media coverage must be described as visual inspection, never logical line coverage.
-- No application source changes or runtime validation; do not modify `main` or existing backups.
+- Entries **1–3300** committed. Stages **2601–2800**, **2801–3000** and **3001–3200** closed; stage **3201–3400** active (**100/200**).
+- Sections **3201–3250** and **3251–3300** CLOSED (50/50 each). Both checkpoints in 3251–3300 are complete and verified.
+- **STOP at 3300.** Section **3301–3350** is not authorized; require explicit user permission before inspecting it.
+- Active Ledger `AUDIT_LEDGER_3201_3400.md`: **100 records**, exactly 15 fields each. Index: **3,300 sequential unique paths**, no duplicates and Ledger/Index alignment.
+- Keep 25-file commits, 50-file reports, serial file inspection and max 400-line contiguous chunks. Binary media coverage is visual inspection, not line coverage.
+- No application source changes or runtime validation; do not modify `main` or backup refs.
 
 ## Stage partition
 
@@ -559,19 +560,20 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Active Ledger AUDIT_LEDGER_3201_3400.md: 50 records. Index 3,250 sequential unique paths. No app source changes or runtime checks.
 
 
+
 ## Stage 3201–3400 — current partition and authorization
 
 | 50-file section | Checkpoint 1 | Checkpoint 2 | State |
 |---|---|---|---|
 | 3201–3250 | 3201–3225 — COMPLETE | 3226–3250 — COMPLETE | CLOSED — 50/50 |
-| 3251–3300 | 3251–3275 — COMPLETE | 3276–3300 — AUTHORIZED | IN PROGRESS — 25/50 |
-| 3301–3350 | NOT AUTHORIZED | NOT AUTHORIZED | LOCKED |
-| 3351–3400 | NOT AUTHORIZED | NOT AUTHORIZED | LOCKED |
+| 3251–3300 | 3251–3275 — COMPLETE | 3276–3300 — COMPLETE | CLOSED — 50/50 |
+| 3301–3350 | NOT AUTHORIZED | NOT AUTHORIZED | LOCKED — WAIT FOR EXPLICIT GRANT |
+| 3351–3400 | NOT AUTHORIZED | NOT AUTHORIZED | LOCKED — WAIT FOR EXPLICIT GRANT |
 
-### Checkpoint 3251–3275 — COMPLETE
+### Checkpoint 3276–3300 — COMPLETE
 
-- 25 paths selected from the complete pinned tree after excluding all 3,250 prior Index entries; paths are unique and raw lexical order is verified.
-- 17 SVG progress files read through EOF; eight raster assets rendered and visually inspected. Source SHA/byte-size pairs match the pinned tree.
-- Ledger contains 75 records (3201–3275), each with 15 fields; Index contains 3,275 unique sequential paths; paths/Decisions align.
-- Screenshots are not benchmarks or proof of runtime compatibility. No tests/builds/device/Forge validation.
-- Continue with 3276–3300 under existing authorization; **STOP at 3300**.
+- All 25 paths are the globally lexical next unindexed paths after the 3,275-entry Index. Paths are unique; pinned SHAs and sizes match the complete tree.
+- Full EOF text coverage: modpack CSV 496 lines, save-batch CSV 11 lines, launcher ignore 1 line and launcher Cargo lock 7,797 lines in sequential chunks no longer than 400. Raster assets rendered and inspected.
+- Ledger entries 3201–3300: 100 records with 15 fields each; Index has 3,300 sequential unique paths; paths/Decisions align.
+- The modpack list is not 1.20.1 Forge compatibility evidence; benchmark CSV/screenshots are not validated mobile benchmark evidence; desktop-heavy lockfile does not prove Android UI support.
+- **STOP at 3300.** Do not inspect 3301–3350 until explicit user authorization.

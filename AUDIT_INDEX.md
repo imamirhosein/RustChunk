@@ -3779,3 +3779,28 @@
 | 3273 | `docs/media/spawner-data/after-zombie.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
 | 3274 | `docs/media/spawner-data/before.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
 | 3275 | `docs/media/static-block-entity-batching-off.png` | unnecessary; reference; documentation-assets | Static progress UI, settings/media or performance/spawner illustration; no direct engine evidence. |
+| 3276 | `docs/media/static-block-entity-batching-on.png` | unnecessary; reference; benchmark-imagery | Screenshot of a chest/block-entity scene with the batching option labelled on. |
+| 3277 | `docs/media/sunset.jpg` | unnecessary; reference; documentation-media | Minecraft sunset landscape screenshot used as documentation/background media. |
+| 3278 | `docs/media/sunset.webp` | unnecessary; reference; documentation-media | WebP variant of Minecraft sunset landscape media. |
+| 3279 | `docs/media/survival.jpg` | unnecessary; reference; documentation-media | Minecraft survival gameplay screenshot for documentation. |
+| 3280 | `docs/media/survival.webp` | unnecessary; reference; documentation-media | WebP version of the survival gameplay screenshot. |
+| 3281 | `docs/media/underwater.jpg` | unnecessary; reference; documentation-media | Underwater Minecraft scene screenshot used as environment media. |
+| 3282 | `docs/media/underwater.webp` | unnecessary; reference; documentation-media | WebP variant of the underwater Minecraft scene. |
+| 3283 | `docs/media/village.jpg` | unnecessary; reference; documentation-media | Minecraft village landscape screenshot for documentation. |
+| 3284 | `docs/media/village.webp` | unnecessary; reference; documentation-media | WebP variant of the Minecraft village landscape. |
+| 3285 | `docs/modpacks/atm10-mods.csv` | adaptable; reference; modpack-metadata-schema | CSV inventory of modpack contents with mod IDs, names, versions, classes, tier/category, confidence, source, license and client/server flags. |
+| 3286 | `docs/save-batch-entities.csv` | adaptable; reference; benchmark-data-schema | Small CSV containing recorded entity-save batch benchmark cases for village/storage fixtures. |
+| 3287 | `launcher/.gitignore` | adaptable; reference; build-output-ignore | Launcher-scoped Git ignore rule for the Rust build output directory. |
+| 3288 | `launcher/Cargo.lock` | unnecessary; reference; desktop-dependency-snapshot | Generated Cargo lockfile pinning dependencies for the Starling/Horizon launcher crate. |
+| 3289 | `launcher/assets/logos/fabric.png` | unnecessary; reference; loader-branding | Fabric loader logo asset for launcher UI. |
+| 3290 | `launcher/assets/logos/forge.png` | unnecessary; reference; loader-branding | Forge loader logo asset for launcher UI. |
+| 3291 | `launcher/assets/logos/neoforge.png` | unnecessary; reference; loader-branding | NeoForge loader icon for launcher UI. |
+| 3292 | `launcher/assets/logos/quilt.png` | unnecessary; reference; loader-branding | Quilt loader icon for launcher UI. |
+| 3293 | `launcher/assets/sculk-banner.webp` | unnecessary; reference; third-party-marketing-art | Sculk-branded server-hosting advertisement banner bundled with launcher assets. |
+| 3294 | `launcher/assets/sculk-card-art.webp` | unnecessary; reference; third-party-marketing-art | Sculk server-hosting promotional card artwork. |
+| 3295 | `launcher/assets/sculk-logo.webp` | unnecessary; reference; third-party-branding | Sculk third-party brand logo for launcher promotional UI. |
+| 3296 | `launcher/docs/discord-link.png` | unnecessary; reference; launcher-screenshot | Launcher screenshot showing Horizon play page and a Discord navigation item. |
+| 3297 | `launcher/docs/modpacks.png` | adaptable; reference; modpack-ui-workflow | Launcher screenshot illustrating modpack import, per-mod porting status and pack-level summary. |
+| 3298 | `launcher/docs/opening-1.png` | unnecessary; reference; launcher-visuals | Splash/opening background image with Horizon wordmark. |
+| 3299 | `launcher/docs/opening-2.png` | unnecessary; reference; launcher-screenshot | Screenshot of launcher opening transition over Horizon splash background. |
+| 3300 | `launcher/docs/opening-3.png` | unnecessary; reference; launcher-screenshot | Screenshot of Horizon launcher home/play screen after opening transition. |
