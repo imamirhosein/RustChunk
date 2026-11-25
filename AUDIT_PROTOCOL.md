@@ -981,3 +981,14 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Checkpoint 3201–3225 complete and verified; checkpoint 3226–3250 is already authorized. STOP at 3250; 3251+ requires fresh explicit permission.
 - Active Ledger AUDIT_LEDGER_3201_3400.md contains 25 entries with 15 fields each. Index has 3,225 sequential unique paths.
 - Keep 25-file commits and six-document read-back transaction, serial source review and max 400-line chunks. Binary coverage is recorded as visual inspection, not logical line ranges. No app source or runtime validation.
+
+
+## 65. Permanent image/video archive and backup-4000 requirement — 2026-11-25
+
+- Maintain one permanent archive file, `AUDIT_MEDIA_ARCHIVE.md`, at the audit documentation root. It is media-only and continuous across all audit stages; **do not split it into 200-file/stage archives**.
+- Every image and video must be recorded twice: (1) its normal audit Ledger/Index/QA record and (2) the permanent media archive. Both records use the same original audit entry number and source path; never create separate media numbering. Ordinary non-media files are not listed in the media archive.
+- Images: render and visually inspect when tools permit; archive detailed visible-content/UI/text/element/context/findings notes. If rendering/inspection is unavailable, mark **NEEDS USER REVIEW** and do not claim visual inspection.
+- Videos: record the original audit number, path, verified metadata as available, and mark for later user watching. Do not claim visual review unless actually performed.
+- The media archive is currently newly created; historical media entries **1–3300 are missing and require backfill**. Prior estimate of 70–80 images in entries 1–1000 is unverified and must be checked against Index/Ledgers.
+- At the **4000-entry backup/verification milestone**, explicitly backfill and verify the permanent media archive for all historical media through the backup scope (including pre-3300 entries), synchronize archive entries with the source Ledgers, and do not mark backup closeout complete while the media backfill remains outstanding.
+- Preserve chronological order by original audit number; gaps represent ordinary files only after the respective range has been verified.
