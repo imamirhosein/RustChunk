@@ -992,3 +992,10 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - The media archive is currently newly created; historical media entries **1–3300 are missing and require backfill**. Prior estimate of 70–80 images in entries 1–1000 is unverified and must be checked against Index/Ledgers.
 - At the **4000-entry backup/verification milestone**, explicitly backfill and verify the permanent media archive for all historical media through the backup scope (including pre-3300 entries), synchronize archive entries with the source Ledgers, and do not mark backup closeout complete while the media backfill remains outstanding.
 - Preserve chronological order by original audit number; gaps represent ordinary files only after the respective range has been verified.
+
+
+## 66. Current state after media archive registration — 2026-11-25
+
+- Verified branch head before changes was checkpoint 3300; current Index/Ledger status is 3,300 completed entries. Prior 3225/3275 summary text in historical snapshots is stale and superseded by the latest reconciliation and boundary status.
+- The user granted an exceptional **100-entry window 3301–3400**. It remains **not started**; archive registration/documentation changes are not source-file audit work and do not consume the grant. Continue only after the user separately authorizes starting the audit.
+- Before audit begins, reread the latest protocol, continuity, boundary, media archive and branch HEAD; reconcile stale contradictory checkpoint summaries before inspecting any upstream source.
