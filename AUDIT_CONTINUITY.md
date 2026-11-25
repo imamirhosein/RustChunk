@@ -7,15 +7,17 @@ Branch: starling-1.20.1-port-audit
 ## Authoritative resume point
 
 - Completed entries: **1–3400**.
-- Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED; the current 200-file stage **3201–3400 is complete (200/200)**.
-- Reporting sections **3201–3250**, **3251–3300**, **3301–3350** and **3351–3400** are all CLOSED (50/50). All four 25-file checkpoints in the exceptional 3301–3400 grant are committed and read-back verified.
-- **STOP at 3400.** The exceptional grant **3301–3400 is fully consumed and closed**. No source-audit authorization is currently active for entry **3401 onward**; a new explicit user grant is required.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. Index: **3,400 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. The 3301–3400 checkpoint records state sequential source inspection through EOF, pinned SHA/size checks, and the documented special handling of long files; see the checkpoint records below and in the Protocol/QA Log.
-- Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains the media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; the estimate of 70–80 images in entries 1–1000 is unverified and must be counted from the Ledgers/Index.
-- At backup/verification milestone **4000**, complete and verify the historical media backfill for the full backup scope (entries 1–3999, as applicable), synchronize it with the Ledgers, and do not call the backup complete while backfill remains outstanding.
-- Static source audit only. No RustChunk application-source implementation, build, tests, benchmark, APK, device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by the 3301–3400 audit.
-- Backup `backup/audit-3000-final-2026-11-23` remains preserved. The next backup is deferred until entries 3001–4000 are complete and globally verified.
+- Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is ACTIVE (0/200)**.
+- The user has issued one continuous, one-time grant for **all entries 3401–3600**. This is a full 200-file authorization, not an ordinary 50-file or exceptional 100-file window.
+- **Do not stop at 3450, 3500 or 3550.** Those are not authorization boundaries for this grant. Continue through all eight exact 25-file checkpoints and STOP only at **3600**, unless a real source-access/read/provenance blocker requires stopping earlier.
+- Next entry: **3401**. Exact selected source path: `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityParticlesOracle.java`. The 200-path selection is from the complete pinned recursive tree after excluding the 3,400 unique existing Index paths.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md` is registered and currently has **0 source records**. Index: **3,400 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,400 Index paths are unique and all exist in this tree; 1,568 remaining blobs are unindexed. The first 200 are the authorized 3401–3600 selection; the next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- Keep the durable 25-file checkpoint commits/read-back and serial full-file inspection. For this one-time grant, the four 50-file slices are internal bookkeeping only and do not require intermediate reports or permission.
+- Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; first-1000 image estimate remains unverified.
+- At backup/verification milestone **4000**, complete and verify the historical media backfill for the backup scope (entries 1–3999, as applicable); do not call backup closeout complete while backfill remains outstanding.
+- Static source audit only. No RustChunk application-source implementation, build, tests, benchmark, APK, device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by this grant.
+- Backup `backup/audit-3000-final-2026-11-23` remains preserved. Do not modify `main` or any backup ref.
 
 The historical checkpoint notes below are append-only evidence. Older intermediate resume/STOP statements are historical and are superseded by this current authoritative block and the final closeout in Section 67 of `AUDIT_PROTOCOL.md`.
 

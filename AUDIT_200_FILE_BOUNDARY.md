@@ -2,14 +2,29 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3400** are committed. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED; stage **3201–3400 is complete (200/200)**.
-- Sections **3201–3250**, **3251–3300**, **3301–3350** and **3351–3400** are CLOSED (50/50 each). The four 25-file checkpoints in grant 3301–3400 are complete and verified.
-- **STOP at 3400.** Grant **3301–3400 is fully consumed and closed**. There is no active authorization for **3401 onward**; require a new explicit user grant before any further source audit.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records**, exactly 15 fields each. Index: **3,400 sequential unique paths**, no duplicates and Ledger/Index path/Decision alignment.
-- Keep the 25-file checkpoint commit/read-back, 50-file user report/authorization boundary, serial source inspection and consecutive chunks of no more than 400 lines. Binary media coverage is visual inspection, not line coverage.
-- Permanent media archive `AUDIT_MEDIA_ARCHIVE.md` records entries 3301–3310. Historical media 1–3300 remains to be backfilled; the 70–80-image estimate in entries 1–1000 is unverified. The 4000-entry backup/verification milestone must not close until the archive is backfilled and reconciled with the Ledgers.
+- Entries **1–3400** are committed. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED.
+- New stage **3401–3600** is ACTIVE and fully authorized as one continuous 200-file boundary (**0/200 inspected at registration**).
+- **One-time full-boundary grant:** complete all 200 entries 3401–3600. Do not stop/request permission at 3450, 3500 or 3550. Maintain eight 25-file checkpoint commits and read-back verifications. STOP at **3600**; no authorization for 3601+.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: 200 records, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md`: registered, 0 records. Index: 3,400 unique sequential paths.
+- Pinned tree: 4,968 blobs, complete/untruncated. All 3,400 indexed paths are unique and present. First 200 globally lexical unindexed paths define the new boundary; next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- Standard 25-file commit/read-back, serial source inspection and consecutive chunks no larger than 400 lines remain in force. The four 50-file subdivisions are not authorization/reporting stops for this one-time grant.
+- Permanent media archive `AUDIT_MEDIA_ARCHIVE.md` remains continuous; historical media 1–3300 backfill is pending and required before 4000 backup closeout.
 - No RustChunk application-source implementation, tests/builds/benchmarks, APK/device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by this static audit. Do not modify `main` or backup refs.
-- Current authoritative stop/resume status is also recorded at the top of `AUDIT_CONTINUITY.md` and in the final section of `AUDIT_PROTOCOL.md`.
+ 
+## Current stage 3401–3600 — single authorized 200-file boundary
+
+| Checkpoint | Range | State |
+|---|---:|---|
+| 1 | 3401–3425 | AUTHORIZED — NOT STARTED |
+| 2 | 3426–3450 | AUTHORIZED — NOT STARTED |
+| 3 | 3451–3475 | AUTHORIZED — NOT STARTED |
+| 4 | 3476–3500 | AUTHORIZED — NOT STARTED |
+| 5 | 3501–3525 | AUTHORIZED — NOT STARTED |
+| 6 | 3526–3550 | AUTHORIZED — NOT STARTED |
+| 7 | 3551–3575 | AUTHORIZED — NOT STARTED |
+| 8 | 3576–3600 | AUTHORIZED — NOT STARTED |
+
+All eight checkpoints are covered by one explicit user grant. The 50-file marks are internal accounting only; proceed without intermediate permission requests. The only planned stop is after the final verification at 3600, unless a genuine blocker occurs.
 
 ## Stage partition
 

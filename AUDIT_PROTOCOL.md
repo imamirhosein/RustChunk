@@ -1006,3 +1006,15 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Reports delivered at 3350 and 3400. Stage 3201–3400 closed at 200/200; grant consumed, no continuation without new authorization.
 - Ledger 3201–3400 has 200 entries; Index 3,400 unique sequential paths. Media entries 3301–3310 double-recorded; historical media backfill 1–3300 remains pending.
 - Static review only; no builds/tests/runtime/device/Android/Forge/Minecraft/server validation.
+
+
+## 68. One-time blanket authorization — complete 200-file boundary 3401–3600 — 2026-11-26
+
+- The user explicitly granted one continuous, full-boundary authorization for **all 200 entries 3401–3600**. This is broader than the prior ordinary 50-file and exceptional 100-file windows. It is a one-time authorization only; it does not permanently change the standard cadence.
+- For this grant only, the 50-file reporting/authorization stops are suspended. The four internal 50-file slices are accounting aids, not permission gates. **Do not stop or ask for renewed permission at 3450, 3500 or 3550. Continue through 3600 under this same explicit grant.**
+- Keep the durable 25-file checkpoint transaction: inspect files serially, complete each file through EOF, then update the stage Ledger, Index, QA Log, Continuity, Protocol and Boundary Register together; commit as one checkpoint commit, re-fetch all six, and verify before inspecting the next checkpoint.
+- Exact authorized checkpoints: 3401–3425, 3426–3450, 3451–3475, 3476–3500, 3501–3525, 3526–3550, 3551–3575 and 3576–3600. They are all pre-authorized as part of the same 200-file grant.
+- Source selection must be recomputed from the complete pinned recursive tree, strictly lexically, excluding the entire existing Index. Never use a truncated tree or assume all remaining paths follow the last entry.
+- Read every source through EOF. For files over 400 logical lines, read consecutive, gap-free ranges of at most 400 lines. Preserve exact SHA, byte size, canonical line count and coverage. Exactly 15 Ledger fields per entry; Index decisions must align.
+- This remains a static source audit only. Do not run tests/builds or claim runtime, Android, Forge, Minecraft, renderer, multiplayer or server validation unless separately executed.
+- At **3600**, close the 200-file stage, verify the full stage and stop. **No authorization is granted for 3601 or later.** If a genuine access/read/provenance blocker prevents completion, stop at the exact blocked item, record it honestly and leave the grant unconsumed only to the extent justified by completed entries.

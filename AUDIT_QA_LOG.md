@@ -2135,3 +2135,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Ledger/Index sequential unique and aligned; six-document transaction read-back verified.
 - Oracles cover models/datafix/decoration/density/dispenser, dragon/effects/enchantments, entity animation/attributes/collision/components/loot/fluid/model/move/obstruction. Adaptable/reference only; no tests/build/runtime executed.
 - Exceptional grant 3301–3400 fully complete and closed.
+
+
+## Authorization registration — full 200-file boundary 3401–3600 — 2026-11-26
+
+- The user explicitly granted one continuous authorization for the entire 200-entry stage **3401–3600**. This is a single 200-file boundary, not a 50-file ordinary grant or 100-file exceptional grant.
+- Complete all eight 25-file checkpoints serially, each through EOF with pinned source SHA/byte-size and complete coverage. Keep the six-document atomic commit/read-back process.
+- The 50-file subdivisions at 3450, 3500 and 3550 are internal bookkeeping only for this grant; do not stop or request permission there. Final planned stop is 3600.
+- Selection independently recomputed from the complete pinned recursive tree (4,968 blobs; `truncated=false`) after excluding the full 3,400-entry Index. Index is sequential and globally unique; all indexed paths exist in the pinned tree. The next 200 unique lexical candidates are entries 3401–3600; the next excluded candidate is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- This is authorization and selection registration only, **not** a source checkpoint. At registration, no source in 3401–3600 had been inspected and the new Ledger contained no entries.

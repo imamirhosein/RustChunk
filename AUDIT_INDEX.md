@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3400** complete across stage Ledgers. Index: **3,400 sequential unique paths**, no duplicates and Ledger/Index alignment. Stages 2601–2800, 2801–3000, 3001–3200 and 3201–3400 closed; current 200-file stage complete. Sections 3201–3250, 3251–3300, 3301–3350 and 3351–3400 closed. Exceptional grant 3301–3400 fully consumed and closed. Backup 3000 preserved; historical media backfill 1–3300 pending.
+- Source ledgers: entries **1–3400** complete; entries **3401–3600 authorized and not yet inspected**. Current new Ledger `AUDIT_LEDGER_3401_3600.md` starts at 0/200. Index: **3,400 sequential unique paths**, no duplicates and prior Ledger/Index alignment. Prior stage 3201–3400 closed. A one-time blanket grant covers the entire next 200-file boundary; do not stop at intermediate 50-file marks. Keep eight 25-file checkpoint commits and STOP at 3600. Backup 3000 preserved; historical media backfill 1–3300 pending.
 
 ## Part 1 — Entries 1–25
 
