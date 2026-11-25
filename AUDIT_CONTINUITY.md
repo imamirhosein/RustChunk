@@ -6,12 +6,13 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3400**.
+- Completed entries: **1–3425**.
+- Stage **3401–3600 is ACTIVE (25/200)**; checkpoint **3401–3425 COMPLETE** and committed/read-back verified. Next checkpoint 3426–3450 is already covered by the single 200-file grant.
 - Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is ACTIVE (0/200)**.
 - The user has issued one continuous, one-time grant for **all entries 3401–3600**. This is a full 200-file authorization, not an ordinary 50-file or exceptional 100-file window.
 - **Do not stop at 3450, 3500 or 3550.** Those are not authorization boundaries for this grant. Continue through all eight exact 25-file checkpoints and STOP only at **3600**, unless a real source-access/read/provenance blocker requires stopping earlier.
-- Next entry: **3401**. Exact selected source path: `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityParticlesOracle.java`. The 200-path selection is from the complete pinned recursive tree after excluding the 3,400 unique existing Index paths.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md` is registered and currently has **0 source records**. Index: **3,400 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
+- Next entry: **3426**. The 3401–3425 checkpoint is complete. Remaining authorized checkpoints: 3426–3450, 3451–3475, 3476–3500, 3501–3525, 3526–3550, 3551–3575 and 3576–3600. The one-time grant still covers all of them.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md` has **25 records (3401–3425)**, each with 15 fields. Index: **3,425 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
 - Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,400 Index paths are unique and all exist in this tree; 1,568 remaining blobs are unindexed. The first 200 are the authorized 3401–3600 selection; the next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - Keep the durable 25-file checkpoint commits/read-back and serial full-file inspection. For this one-time grant, the four 50-file slices are internal bookkeeping only and do not require intermediate reports or permission.
 - Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; first-1000 image estimate remains unverified.
@@ -1009,3 +1010,11 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Active Ledger 200 records (3201–3400); Index 3,400 unique sequential paths. Six-doc transaction/read-back verified.
 - Grant 3301–3400 COMPLETE and CLOSED; reports at 3350 and 3400. No further audit authorization.
 - Static source review only; no tests/build/runtime/Android/Forge/Minecraft/server validation. Historical media backfill pending.
+
+
+## Checkpoint 3401–3425 — COMPLETE — 2026-11-26
+
+- 25 sources reviewed through EOF from pinned tree; SHAs/byte sizes match. Logical line counts and EOF coverage are recorded in the new stage Ledger. Long file 3414 (527 lines) covered in consecutive ranges 1–400 and 401–527.
+- Ledger 3401–3600 has 25 entries, 15 fields each; Index has 3,425 sequential unique paths and the new path/Decision rows align.
+- The checkpoint covers later-version Java vanilla parity oracles/exporters for entity particles/types/spawning, environment attributes, item consumption, voxel support/visibility, fall damage, features/chunk region, fluid/shape and food behavior. These are test/reference material, not production implementations.
+- Continue 3426–3450 under the same one-time 200-file grant; do not stop at 3450/3500/3550. Stop only at 3600 or a genuine blocker. No runtime/tests/build/device/Forge/Minecraft/server validation.

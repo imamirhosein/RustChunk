@@ -1018,3 +1018,9 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Read every source through EOF. For files over 400 logical lines, read consecutive, gap-free ranges of at most 400 lines. Preserve exact SHA, byte size, canonical line count and coverage. Exactly 15 Ledger fields per entry; Index decisions must align.
 - This remains a static source audit only. Do not run tests/builds or claim runtime, Android, Forge, Minecraft, renderer, multiplayer or server validation unless separately executed.
 - At **3600**, close the 200-file stage, verify the full stage and stop. **No authorization is granted for 3601 or later.** If a genuine access/read/provenance blocker prevents completion, stop at the exact blocked item, record it honestly and leave the grant unconsumed only to the extent justified by completed entries.
+
+
+### Progress — checkpoint 3401–3425 — 2026-11-26
+
+- First 25 of the one-time full 200-file grant are complete and committed/read-back verified. Ledger 3401–3600 contains 25 records; Index has 3,425 sequential unique paths.
+- Next: 3426–3450. Continue under the same grant without a stop at 3450, 3500 or 3550; planned final stop 3600.

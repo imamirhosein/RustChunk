@@ -3908,3 +3908,29 @@
 | 3398 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityModelExporter.java` | adaptable; reference; parity-test-oracle | Baked entity model layer exporter: poses, polygons, normals and children. |
 | 3399 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityMoveOracle.java` | adaptable; reference; parity-test-oracle | Entity.move collision resolution with scripted shapes/border/authority/edge/fall/lifecycle. |
 | 3400 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityObstructionOracle.java` | adaptable; reference; parity-test-oracle | EntityGetter unobstructed default method with snapshots, vehicles/removal/spectator and scripted voxel shapes. |
+
+| 3401 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityParticlesOracle.java` | adaptable; reference; parity-test-oracle | entity event particle burst capture; later-version entity set and RNG trace |
+| 3402 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEntityTypesExporter.java` | adaptable; reference; parity-data-exporter | registered entity dimensions, categories, fire immunity and default attributes |
+| 3403 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaEnvironmentOracle.java` | adaptable; reference; version-specific; parity-test-oracle | later-version dimension/biome/weather environment-attribute layering |
+| 3404 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaExtraItemsOracle.java` | adaptable; reference; parity-test-oracle | item finish-use remainder, cooldown, inventory and aliasing oracle |
+| 3405 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFaceSupportOracle.java` | adaptable; reference; parity-test-oracle | voxel face extraction and FULL/CENTER/RIGID support queries |
+| 3406 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFaceVisibilityOracle.java` | adaptable; reference; parity-test-oracle | block face skip/visibility and occlusion metadata exporter |
+| 3407 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFallDamageOracle.java` | adaptable; reference; parity-test-oracle | fall-distance callback, support position and landing event trace |
+| 3408 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFeatureCatalogOracle.java` | adaptable; reference; parity-test-oracle | feature/placed-feature catalog loader and observable placement harness |
+| 3409 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFeatureGraphOracle.java` | adaptable; reference; parity-test-oracle | native feature codec/placement with synthetic world and RNG trace |
+| 3410 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFeaturePlacementOracle.java` | adaptable; reference; parity-test-oracle | placement modifier order, feature visits and random consumption |
+| 3411 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFeatureRegionOracle.java` | adaptable; reference; parity-test-oracle | ProtoChunk/WorldGenRegion writes, retrogen, ticks and heightmaps |
+| 3412 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFeatureSortOracle.java` | adaptable; reference; parity-test-oracle | identity-based FeatureSorter step and biome feature ordering |
+| 3413 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFillLayerOracle.java` | adaptable; reference; parity-test-oracle | fill-layer feature and world minimum-height behavior |
+| 3414 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFinalizeSpawnOracle.java` | adaptable; reference; parity-test-oracle | full mob finalizeSpawn state, group data and entity RNG oracle |
+| 3415 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFireStarterSoundOracle.java` | adaptable; reference; parity-test-oracle | FireChargeItem private sound selection and RNG consumption |
+| 3416 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFireworkTooltipOracle.java` | adaptable; reference; parity-test-oracle | firework component tooltip-provider visibility and text |
+| 3417 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFirstPersonOracle.java` | adaptable; reference; parity-test-oracle | first-person attack/use/swing and hand animation input-state harness |
+| 3418 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFloatLogOracle.java` | adaptable; reference; parity-test-oracle | compiled density logarithm binary float-bit oracle |
+| 3419 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFluidBoxOracle.java` | adaptable; reference; parity-test-oracle | entity and boat passenger fluid-interaction AABB behavior |
+| 3420 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFluidFlowOracle.java` | adaptable; reference; parity-test-oracle | flowing fluid neighbor current vector and solid-face tests |
+| 3421 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFluidOccupancyOracle.java` | adaptable; reference; parity-test-oracle | ProtoChunk palette-backed LevelReader liquid-occupancy query |
+| 3422 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFluidOracle.java` | adaptable; reference; parity-test-oracle | fluid family/registry, block-state codec and fluid height oracle |
+| 3423 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFluidShapeOracle.java` | adaptable; reference; parity-test-oracle | fluid VoxelShape cache identity and neighbor-sensitive shapes |
+| 3424 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFoodOracle.java` | adaptable; reference; parity-test-oracle | FoodData arithmetic, exhaustion, healing and starvation callbacks |
+| 3425 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaFoodPropertiesOracle.java` | adaptable; reference; parity-test-oracle | FoodProperties consumption, player/non-player food and sound/RNG trace |

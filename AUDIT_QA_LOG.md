@@ -2144,3 +2144,12 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The 50-file subdivisions at 3450, 3500 and 3550 are internal bookkeeping only for this grant; do not stop or request permission there. Final planned stop is 3600.
 - Selection independently recomputed from the complete pinned recursive tree (4,968 blobs; `truncated=false`) after excluding the full 3,400-entry Index. Index is sequential and globally unique; all indexed paths exist in the pinned tree. The next 200 unique lexical candidates are entries 3401–3600; the next excluded candidate is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - This is authorization and selection registration only, **not** a source checkpoint. At registration, no source in 3401–3600 had been inspected and the new Ledger contained no entries.
+
+
+## Checkpoint 3401–3425 — COMPLETE — 2026-11-26
+
+- 25 globally lexical unique sources selected from the complete pinned tree after excluding all 3,400 prior Index paths. Exact pinned SHAs and byte sizes match; canonical line counts and EOF coverage recorded.
+- Every source was read serially through EOF. Entry 3414 (527 lines) was read in consecutive, gap-free ranges 1–400 and 401–527; all other files were each below 400 lines and read in one complete range.
+- The 25 Ledger entries each contain exactly 15 required fields. Index now contains 3,425 sequential unique paths; new Ledger has 25 records and Ledger/Index path and Decision alignment is verified.
+- The entries are test oracles/exporters for later-version entity, environment, item-use, shape/collision, worldgen/chunk, fluid, first-person input and food mechanics. They are adaptable as target-version test references only, not production/runtime implementations. Global Unsafe/reflection, static registry/cache mutation, restricted stand-ins and MC26.3 API drift require isolation and 1.20.1 revalidation.
+- No tests, builds, benchmarks, APK/device, renderer, Forge/Minecraft launch, multiplayer or server validation was run. No RustChunk application source was changed.
