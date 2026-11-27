@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3700** complete; exceptional 100-file stage **3601–3700 CLOSED (100/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **100 records (3601–3700)**, each with exactly 15 fields. Index: **3,700 sequential unique paths**; all four 25-file checkpoints committed and read-back verified. The one-time grant is exhausted; 3701+ requires fresh explicit authorization. Media Archive includes reviewed assets through 3699; historical media backfill 1–4000 remains mandatory before backup.
+- **Historical baseline index:** entries 1–3700 were audited against the earlier Starling snapshot `5432370d573642041585c69b40fb045b27133488`. This index preserves original numbering and prior paths/decisions; it is not a completed audit of the fixed v0.9.0 source. The v0.9.0 re-review begins at entry 1 and updates existing records without renumbering. New paths are inventoried separately and queued; do not insert them into historical numbering.
 
 ## Part 1 — Entries 1–25
 
