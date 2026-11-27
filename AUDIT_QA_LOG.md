@@ -2214,3 +2214,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - These sources are later-version Java test oracles, not portable RustChunk implementation. No Forge 1.20.1 behavior is inferred from their source version.
 - No RustChunk application source changed. No build/test/benchmark/APK/device/GPU/Forge/Minecraft/server/multiplayer/Aternos validation was run.
 - Continue with 3551–3575 under the same one-time 200-file grant. Do not stop or request permission at 3550; final stop remains 3600.
+
+
+## Checkpoint 3551–3575 — COMPLETE — 2026-11-27
+
+- Recomputed the next 25 paths by strict raw lexical path order across the complete, untruncated pinned recursive tree after excluding all 3,550 indexed paths. All 25 paths/SHA/byte-size pairs match the pinned snapshot; every file was read through EOF.
+- Exact order: SimpleBlock, SimpleContainer, SituationalMusic, SkinImage, SlotHover, SoundEngine, SoundEvent, SoundRig, SpawnRules, SprintInput, SpriteAnimation, SquidClient, StateProvider, StatusEffect, StatusTick, SteppedInterpolation, StopSoundWire, StorageMenu, StoredConsume, StoredEffectAttributes, StoredEffectNotifications, StructureBlockExporter, StructureDensity, StructurePlacement and StructureStart.
+- Longest file is 3574 StructurePlacement (261 lines); every source is no more than 400 lines and was read whole.
+- Ledger now has 175 entries (3401–3575), exactly 15 fields each. Index has 3,575 sequential unique paths; matching decision values are being committed with the Ledger. The six-document read-back is the final checkpoint gate.
+- Findings: container oracle mutates global item prototypes and ItemStack.EMPTY; skin-image converter can leak NativeImage on failure and lacks decode-size caps; SoundEngine/SoundRig use silent OpenAL No Output and synchronous execution (no real audio playback); spawn oracle tests only spawn predicates in a synthetic one-column world; sprint oracle stops before riding/movement; effect oracles separate instance/tick/notification layers rather than a full live entity cycle; structure-placement oracle manually generates structure pieces with entities disabled and temporary storage not deleted.
+- These later-version Java oracles are not 1.20.1 Forge implementation or runtime proof. No RustChunk application source changed; no build/test/benchmark/APK/device/renderer/Forge/Minecraft/server/multiplayer/Aternos validation was run.
+- Continue with **3576–3600** under the same one-time 200-file authorization. Do not stop or request permission at 3575; final stop is 3600.

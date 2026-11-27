@@ -2534,3 +2534,428 @@
 - RustChunk implementation mapping: Use only as an isolated test oracle for the damage-application stage after explicit eligibility handling.
 - Evidence required before adoption: Require paired 1.20.1 outer/inner damage tests and Forge event/side-effect coverage.
 - Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3551. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSimpleBlockOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 5d82bbc8f23bf1b9587afd2d109cc93d7e4c36e1
+- Size: 15612 bytes
+- Coverage: Complete EOF coverage (178 logical lines).
+- Purpose: Exercises native SimpleBlockFeature/Feature/PlacedFeature codecs and placement, including weather snow/freeze behavior.
+- Dependencies / cross-references: SimpleBlockFeature, Feature/PlacedFeature codecs, BlockStateProvider registries, ProtoChunk, WorldGenLevel, biome/heightmap/fluid tags and VanillaPlacementOracle.
+- Implementation / logic: Decodes selected feature forms and executes place against a proxy world backed by controlled state maps and synthetic chunks; captures reads/writes, scheduled ticks, block entities, post-processing and RNG.
+- Findings: WorldGenLevel is a fixture proxy with synthetic fallback states and limited methods; generated chunks are minimal ProtoChunks, not a running server worldgen pipeline. Biome temperature caches are cleared, but tag/registry state is global to the process.
+- RustChunk relevance: Useful native feature-codec and simple-block placement parity reference; not production worldgen.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 feature codecs, state providers, registry setup, world bounds, and Forge configured/placed features must be re-established.
+- Follow-up checks: Test target-version map/feature/placed codecs, weather edge conditions, chest/gateway block entities, post-processing, write rejection and random continuation.
+- RustChunk implementation mapping: Use fixture semantics to create 1.20.1 feature tests; keep world storage, generation scheduling and modded registrations in target runtime.
+- Evidence required before adoption: Require 1.20.1/Forge generation on actual chunks with controlled seeds and block-entity checks.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3552. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSimpleContainerOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: e26350caa1246ff26cec3340a98af9fa19b6a000
+- Size: 6355 bytes
+- Coverage: Complete EOF coverage (28 logical lines).
+- Purpose: Exercises native SimpleContainer mutation, removal, querying, aliasing and component-aware ItemStack behavior.
+- Dependencies / cross-references: SimpleContainer, ItemStack, PatchedDataComponentMap, DataComponentPatch, global Items prototypes and setChanged callback.
+- Implementation / logic: Creates aliased/copy stacks and slots, applies scripted set/add/remove/remove-type/remove-no-update/clear/component/count operations, and dumps identities, component patches and callbacks.
+- Findings: Fixture mutates global AIR/STICK/SHIELD prototype components and ItemStack.EMPTY internals; safe only in an isolated JVM. Callback and container setup are synthetic and bounds/null cases are limited.
+- RustChunk relevance: Useful reference for inventory container semantics and alias-sensitive stack tests.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 ItemStack components differ from the pinned modern component model; Forge item capabilities/handlers are additional behavior.
+- Follow-up checks: Verify setChanged timing, empty-stack handling, stack limits, alias/copy behavior and component inheritance on 1.20.1; isolate any global fixture mutation.
+- RustChunk implementation mapping: Translate operations into target-version inventory tests; never port global prototype or ItemStack.EMPTY mutation into production.
+- Evidence required before adoption: Require 1.20.1 vanilla and Forge inventory tests, including capability-backed containers and persistence.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3553. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSituationalMusicOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: e3bf5e6df4b392dc5d1934106d3bb81c7b875680
+- Size: 7498 bytes
+- Coverage: Complete EOF coverage (130 logical lines).
+- Purpose: Calls native Minecraft.getSituationalMusic/getMusicVolume for screen, boss-bar, dimension, biome and player states.
+- Dependencies / cross-references: Minecraft, Gui/Hud/BossHealthOverlay, WinScreen, LocalPlayer, EnvironmentAttributeSystem, world/dimension/biome registries and VanillaSoundRig.
+- Implementation / logic: Loads the vanilla trusted server data pack, builds a shell client and camera attribute probe, sets screen/boss/player/biome/dimension conditions and records selected Music and volume.
+- Findings: Uses vanilla-only registries and synthetic client/player/camera state; random UUIDs identify boss bars. It selects music but does not test queueing, playback, real client lifecycle or modded resource packs.
+- RustChunk relevance: Useful reference for situational music selection and volume rules.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 music selection and biome/dimension/player APIs differ; Forge music events and modded dimensions need independent coverage.
+- Follow-up checks: Compare title/credits, boss music/darken, underwater, creative/flying, dimension and biome overrides in 1.20.1.
+- RustChunk implementation mapping: Keep selection policy separate from sound engine; use cases to test RustChunk's target-version music selector.
+- Evidence required before adoption: Require 1.20.1 vanilla/Forge selection traces and actual Android audio integration.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3554. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSkinImageOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 0ecdfe0475b4b77c8d6c5b2dc1ea3e85495fe1bc
+- Size: 2092 bytes
+- Coverage: Complete EOF coverage (47 logical lines).
+- Purpose: Decodes PNG skin images with NativeImage and applies vanilla processLegacySkin layout/alpha conversion.
+- Dependencies / cross-references: NativeImage.read and SkinTextureDownloader.processLegacySkin; Base64 line input and RGBA output.
+- Implementation / logic: Reads base64 PNGs, invokes the native legacy-skin conversion, exports RGBA pixel bytes, and labels invocation failures as refused.
+- Findings: The NativeImage is closed only on the success path; invocation failure can leak native memory. There are no encoded-size or decoded-dimension caps, and only InvocationTargetException is converted to refused.
+- RustChunk relevance: Useful for legacy skin dimension/alpha parity, but not safe as an unbounded image-ingestion layer.
+- Decision: adaptable; reference; security-sensitive; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 skin processing and NativeImage behavior must be checked; mobile memory limits require strict compressed and decoded image bounds.
+- Follow-up checks: Add size/dimension limits, close image in finally/try-with-resources, test malformed PNGs, oversized payloads, 64x32 conversion and rejection.
+- RustChunk implementation mapping: Use semantic cases only; implement bounded image decode/cleanup in RustChunk's Android asset pipeline.
+- Evidence required before adoption: Require fuzzed malformed-image tests, memory-leak checks and 1.20.1 skin conversion comparisons.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3555. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSlotHoverOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 381adb9a6e5b0b9611d363b9edcc27169c2d8ca1
+- Size: 2375 bytes
+- Coverage: Complete EOF coverage (45 logical lines).
+- Purpose: Calls AbstractContainerScreen.getHoveredSlot against supplied slot geometry to test hover boundaries.
+- Dependencies / cross-references: AbstractContainerScreen, AbstractContainerMenu, ChestMenu, Slot, NonNullList, SimpleContainer and Unsafe allocation helper.
+- Implementation / logic: Builds a shell screen/menu, injects slots and evaluates the native hovered-slot method for points, emitting slot indices or -1.
+- Findings: Only hit-testing geometry is exercised; no screen init, mouse event routing, menu synchronization, touch gestures, scaling or renderer is involved.
+- RustChunk relevance: Useful compact reference for inventory slot hitbox semantics.
+- Decision: adaptable; reference; platform-specific; version-specific; parity-test-oracle
+- 1.20.1 implications: Rebuild hit-testing for 1.20.1 UI APIs and map it to touch coordinates, density scaling and safe-area offsets.
+- Follow-up checks: Test exact inclusive/exclusive padded edges, overlapping slots, scaled GUI and touch accessibility on Android.
+- RustChunk implementation mapping: Retain expected hitbox cases in RustChunk UI tests; implement Android touch dispatch separately.
+- Evidence required before adoption: Require 1.20.1 slot geometry plus on-device touch-coordinate tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3556. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSoundEngineOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 7454a36fb9e45c6a4e9c58add838af25592fde2b
+- Size: 8238 bytes
+- Coverage: Complete EOF coverage (154 logical lines).
+- Purpose: Drives SoundManager/SoundEngine through scripted play/stop/fade/volume/pause/tick and minecart/underwater state transitions.
+- Dependencies / cross-references: VanillaSoundRig, SoundManager, SoundEngine, SoundInstance subclasses, OpenAL Channel/ChannelAccess, TickRateManager, LocalPlayer and Minecart.
+- Implementation / logic: Replays commands against native sound engine and logs active instances, channel pool counts, AL source state/parameters and subtitle notifications.
+- Findings: Rig uses OpenAL Soft No Output, silent buffers/streams, an inline executor and synthetic actor/cart states. It tests engine bookkeeping/source state, not real audio decoding, output latency, device behavior or Android compatibility.
+- RustChunk relevance: Strong source-level oracle for sound lifecycle and channel allocation, not proof of mobile audio performance.
+- Decision: adaptable; reference; platform-specific; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 SoundEngine internals and LWJGL/OpenAL backend differ; Android may need another audio backend or API bridge.
+- Follow-up checks: Test real OGG decode, asynchronous executor races, channel exhaustion, pause/resume, looping, stream lifecycle, device loss and audio focus.
+- RustChunk implementation mapping: Use scenarios as lifecycle expectations; implement the audio backend independently and keep game sound policy separate.
+- Evidence required before adoption: Require 1.20.1 sound traces plus actual Galaxy A22 playback, latency, memory and device-loss tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3557. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSoundEventOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: b02ef2783baa87b309109139da3ebf1e9d3d8b5f
+- Size: 5870 bytes
+- Coverage: Complete EOF coverage (111 logical lines).
+- Purpose: Loads sounds.json using SoundManager.prepare and resolves seeded SimpleSoundInstance event variants.
+- Dependencies / cross-references: PathPackResources, MultiPackResourceManager, SoundManager.prepare/apply, WeighedSoundEvents, Sound, Options, asset OGG paths and VanillaSoundRig.
+- Implementation / logic: Builds native sound registry from an asset root, emits sorted available sound IDs, resolves event selection and records weighted sound, subtitle, volume, pitch, stream/preload flags and RNG continuation.
+- Findings: It exercises resource preparation and event resolution but not channel playback; the asset root is a test path and parser uses whitespace-split rows. The pinned resource/schema version is later than 1.20.1.
+- RustChunk relevance: Useful reference for sound-event resource parsing and deterministic weighted selection.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 sounds.json fields, sound identifiers and weighted selection behavior must be verified against target version and Forge resource packs.
+- Follow-up checks: Test missing/invalid OGGs, optional/required sounds, subtitle keys, weights, seed order, resource reload and modded packs.
+- RustChunk implementation mapping: Use as event-registry tests; connect selected sounds to a separately implemented Android audio backend.
+- Evidence required before adoption: Require 1.20.1 vanilla/Forge asset packs and resolved sound selection comparisons.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3558. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSoundRig.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 8edef932531eacdfe8aac0d8442c72a87d9a8fe5
+- Size: 8873 bytes
+- Coverage: Complete EOF coverage (204 logical lines).
+- Purpose: Provides a shared test rig around native SoundManager/SoundEngine and OpenAL source inspection for sound oracles.
+- Dependencies / cross-references: SoundManager, SoundEngine, SoundEngineExecutor, SoundBufferLibrary, OpenAL DeviceList/Library/AL10, audio stream interfaces and VanillaSoundEventOracle.
+- Implementation / logic: Creates native engine with inline executor, replaces buffers/streams by silence, starts OpenAL No Output, injects options and listeners, inspects channel/source state and debug counts.
+- Findings: The backend runs silent data, uses synchronous task execution and artificial hour-long buffers/endless streams. It creates direct audio buffers and one-minute silent chunks; async concurrency, actual decode/output and mobile integration are excluded.
+- RustChunk relevance: Useful architecture reference for instrumentation and deterministic sound-engine tests only.
+- Decision: rewrite required; reference; platform-specific; version-specific; parity-test-oracle
+- 1.20.1 implications: The rig depends on desktop LWJGL/OpenAL and test-only reflection; RustChunk Android audio must use a mobile-compatible backend and 1.20.1 sound contracts.
+- Follow-up checks: Measure real memory allocation, stream refill, executor ordering, audio focus, Bluetooth/device changes, sample rate and lifecycle on Android.
+- RustChunk implementation mapping: Do not port rig implementation; port only test scenarios and observability concepts to an Android audio test harness.
+- Evidence required before adoption: Require a selected Android audio backend, actual audio playback tests and measured latency/memory on target hardware.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3559. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSpawnRulesOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: c02da47a666b183461ec7e1eb99f1cd851e8ca82
+- Size: 12550 bytes
+- Coverage: Complete EOF coverage (204 logical lines).
+- Purpose: Calls native SpawnPlacements.isSpawnPositionOk and checkSpawnRules for entity types against controlled columns.
+- Dependencies / cross-references: SpawnPlacements, EntityType spawn metadata, ServerLevel, biomes/dimensions/data-pack registries, light/heightmap/world border, player and RandomSource.
+- Implementation / logic: Loads vanilla world registries and tags, constructs a scripted one-column ServerLevel shell, checks position and entity spawn predicates and records RNG continuation.
+- Findings: The world is a single synthetic column with uniform lighting, controlled biome and optional player. No mob cap, chunk eligibility, natural-spawn scheduler, finalizeSpawn, insertion or entity ticking is run; broad case errors are caught.
+- RustChunk relevance: Useful reference for individual mob spawn predicates and RNG behavior.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 spawn placement/type metadata, dimension/biome checks and Forge spawn hooks are authoritative; do not infer actual spawn rates.
+- Follow-up checks: Add 1.20.1 light/heightmap/peaceful/dimension/player-distance tests and separate mob-cap/chunk/scheduler/finalizeSpawn coverage.
+- RustChunk implementation mapping: Use it for spawn-rule unit tests only; implement natural spawning scheduler and entity insertion as separate server subsystems.
+- Evidence required before adoption: Require real 1.20.1 server spawn-cycle tests with actual chunks, caps, players and Forge entities.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3560. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSprintInputOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 636a6a03881d4a4670e798b8a41e964614725ac3
+- Size: 11833 bytes
+- Coverage: Complete EOF coverage (148 logical lines).
+- Purpose: Runs LocalPlayer.aiStep through its sprint decision prefix and records sprint toggles, trigger window and movement input.
+- Dependencies / cross-references: LocalPlayer, KeyboardInput, KeyMapping, Options, MultiPlayerGameMode, GUI/tutorial shell, Player/Abilities/FoodData, UseEffects and optional ServerPlayer controller.
+- Implementation / logic: Builds client player shells, sets movement/key/food/vehicle/fluid/use states, invokes aiStep until an intentional Boundary before riding/movement and records sprint/input changes.
+- Findings: The tested prefix ends before riding and parent/world movement; jump, fall-flying, eye-fluid, collision and vehicle behavior are stubbed or deliberately suppressed. The controller shares selected server state but remains a synthetic client bridge.
+- RustChunk relevance: Useful for client sprint/input decision ordering; not complete player movement or network synchronization.
+- Decision: adaptable; reference; platform-specific; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 LocalPlayer input/sprint behavior differs; Android virtual joystick/key mapping, touch and Forge input hooks need separate work.
+- Follow-up checks: Test toggle/hold sprint, food threshold, collisions, shallow/deep water, item slowdown, vehicle and GUI focus with target-version input states.
+- RustChunk implementation mapping: Use expected transitions for RustChunk touch-input tests; keep authoritative movement and server sprint state separate.
+- Evidence required before adoption: Require 1.20.1 client/server input traces and on-device touch control tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3561. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSpriteAnimationOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 0ee728951c5cd486bd748a0acae5516616b1ac5e
+- Size: 5325 bytes
+- Coverage: Complete EOF coverage (80 logical lines).
+- Purpose: Parses animation metadata and samples native SpriteContents.AnimationState tick/frame transitions.
+- Dependencies / cross-references: AnimationMetadataSection.CODEC, SpriteContents, NativeImage, GPU buffer slice placeholder, fastutil frame map and JSON ops.
+- Implementation / logic: Decodes metadata, computes frame grid, constructs a NativeImage-backed SpriteContents for valid dimensions, advances AnimationState and captures frame/subframe/blend samples.
+- Findings: No GPU upload, texture atlas draw, shader interpolation or framebuffer output occurs. Invalid grid is handled separately from codec errors; field access relies on reflection.
+- RustChunk relevance: Useful reference for sprite animation metadata and tick sequencing.
+- Decision: adaptable; reference; platform-specific; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 sprite metadata and renderer APIs differ; preserve game tick vs render frame separation on Android.
+- Follow-up checks: Test zero/large durations, explicit frame order, non-square grids, interpolation boundaries, malformed dimensions and atlas upload.
+- RustChunk implementation mapping: Implement animation clock/data model separately from texture upload; use traces as state tests.
+- Evidence required before adoption: Require 1.20.1 sprite metadata fixtures and actual renderer/Android animation tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3562. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSquidClientOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 66b833c5476270c58a957e26f81746754ebdec82
+- Size: 4182 bytes
+- Coverage: Complete EOF coverage (73 logical lines).
+- Purpose: Calls Squid.aiStep and records tentacle/body rotation changes for controlled water and velocity inputs.
+- Dependencies / cross-references: Squid, ClientLevel, Entity interpolation handler, AABB/Vec3, LivingEntity equipment and scripted shell overrides.
+- Implementation / logic: Allocates a squid shell, supplies water/velocity/body/tentacle fields, stubs unrelated movement/AI/push logic and invokes aiStep.
+- Findings: Age locked, immobile and ineffective AI, no entity pushing/fall flight, proxy interpolation always active; it isolates selected animation/motion state and not complete squid AI or world tick.
+- RustChunk relevance: Narrow reference for squid tentacle motion/client animation math.
+- Decision: adaptable; reference; platform-specific; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 squid state fields, movement and interpolation hooks must be rebuilt and compared.
+- Follow-up checks: Test land/water transitions, velocity boundaries, event reset, rotation wrapping and real tick/interpolation behavior.
+- RustChunk implementation mapping: Use only tentacle state expectations in a client entity animation test; keep AI and physics separate.
+- Evidence required before adoption: Require 1.20.1 entity animation tests with actual movement and renderer state.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3563. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStateProviderOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 41fd631c7e55f160cfac5e0283e107426564c547
+- Size: 12086 bytes
+- Coverage: Complete EOF coverage (147 logical lines).
+- Purpose: Decodes block-state providers through direct/typed/holder codecs and calls required/optional sampling methods.
+- Dependencies / cross-references: BlockStateProvider codecs, registry/tag setup, biome registry, fluid tags, BlockState, LevelAccessor proxy, RandomSource and VanillaBlockStateCodecOracle.
+- Implementation / logic: Loads custom provider catalog and biome data, enumerates block fluid states, runs getState/getOptionalState on synthetic world access and records state/light/fluid/biome queries plus RNG.
+- Findings: It is not a feature-placement or chunk-generation test; world queries are scripted proxies and registries/tags are fixture-prepared. Global built-in fluid tag reload may affect later tests in the same JVM.
+- RustChunk relevance: Useful source for provider codec/sample behavior and RNG/query ordering.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 provider registries and codecs differ, and Forge may add provider types; isolate tag state when composing fixtures.
+- Follow-up checks: Compare direct/typed/holder codecs, optional sampling, random state, bounds, fluid/light/biome dependencies and malformed provider data.
+- RustChunk implementation mapping: Use as a codec/provider parity suite; integrate target-version providers into a separate worldgen system.
+- Evidence required before adoption: Require 1.20.1 Forge provider catalog and real chunk placement tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3564. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStatusEffectOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 31b268b7a4772c031238beaec891d42a19246526
+- Size: 4695 bytes
+- Coverage: Complete EOF coverage (28 logical lines).
+- Purpose: Tests MobEffectInstance state copying, scaling, updates, hidden chains, equality and blend state.
+- Dependencies / cross-references: MobEffectInstance, Holder<MobEffect>, duration/amplifier/ambient/visibility/icon/hiddenEffect/blendState fields and fixed speed/poison/night-vision holders.
+- Implementation / logic: Builds effect chains and aliased/copy slots, applies scripted update/scale/map operations and records identity, duration, amplifier and blend fields.
+- Findings: It tests instance objects only, not application/removal in entity active-effect maps, consume effects or tick scheduling; private field layout and blend API are newer-version-specific.
+- RustChunk relevance: Useful reference for effect-instance mutation and hidden-chain semantics.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 MobEffectInstance constructors, hidden effects and blend support differ; target-version semantics govern.
+- Follow-up checks: Compare constructor/copy, hidden chain precedence, duration scaling, update return, infinite duration and icon/ambient flags.
+- RustChunk implementation mapping: Use behavioral cases for target-version effect instance tests; keep entity application and ticking separate.
+- Evidence required before adoption: Require 1.20.1 instance parity tests including modded effects and save/load.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3565. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStatusTickOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 45fff0d9f5af4687fecc7dff5bea48727f90c2dc
+- Size: 6781 bytes
+- Coverage: Complete EOF coverage (45 logical lines).
+- Purpose: Calls MobEffectInstance tickServer/tickClient, hidden downgrade callbacks and blend-factor interpolation.
+- Dependencies / cross-references: MobEffectInstance, MobEffect callbacks, synthetic ServerLevel/ArmorStand, Holder effects, entity removal and blend-state fields.
+- Implementation / logic: Creates custom MobEffect callbacks, two fake server levels and actor; scripts server/client/skip-blending/factor/update/copy/alias operations and records tick callback order.
+- Findings: Uses synthetic effect definitions and server levels; it does not exercise actual effect registries, LivingEntity tick loop, effect map storage or network status-effect packets.
+- RustChunk relevance: Useful isolated reference for server/client effect tick semantics.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 effect duration cadence, callback names and blend model must be checked; modded effects can override behavior.
+- Follow-up checks: Test expiration/downgrade, removed entity, client tick interpolation, callback mutation, server level and entity tick order.
+- RustChunk implementation mapping: Use as a focused state-machine test, then integrate with target-version entity ticking/packet flow.
+- Evidence required before adoption: Require 1.20.1 vanilla/Forge effect tick traces and client sync tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3566. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSteppedInterpolationOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: b3edd6e483d4e7f20815924bded142d126706986
+- Size: 7771 bytes
+- Coverage: Complete EOF coverage (148 logical lines).
+- Purpose: Exercises SteppedInterpolationHandler.InterpolationData start/add/advance/reset and sampled position/rotation transitions.
+- Dependencies / cross-references: SteppedInterpolationHandler.InterpolationData, PositionPath/PositionStep, PositionAndRotation and reflection.
+- Implementation / logic: Parses case/move/tick commands, creates interpolation data, applies target paths/rotations, snaps for zero steps or advances one tick and prints raw position/rotation bits.
+- Findings: It deliberately tests only interpolation data/state; entity hooks, position deltas, network packet decoding, tick scheduling and rendering are excluded. Text parser accepts unchecked whitespace/numeric inputs.
+- RustChunk relevance: Useful reference for interpolation curve/step state and rotation wrapping.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 entity interpolation is a different API/algorithm; this modern stepped path is not automatically applicable.
+- Follow-up checks: Compare teleport/snap, stepped paths, rotation wrap/clamp, zero/one/many ticks and packet updates on 1.20.1.
+- RustChunk implementation mapping: Retain path/edge expectations if the target version matches; implement entity/network interpolation separately.
+- Evidence required before adoption: Require 1.20.1 client entity interpolation tests with real packet sequences.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3567. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStopSoundWireOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: aebeba486556e3cd4ae227ec066af07f9c03d1b9
+- Size: 1589 bytes
+- Coverage: Complete EOF coverage (30 logical lines).
+- Purpose: Encodes ClientboundStopSoundPacket for all SoundSource and null/ordinary/custom sound ID combinations.
+- Dependencies / cross-references: ClientboundStopSoundPacket.STREAM_CODEC, FriendlyByteBuf, Netty Unpooled, SoundSource and Identifier.
+- Implementation / logic: Creates each source/event selection combination, stream-encodes to a buffer, records wire hex and releases the buffer.
+- Findings: Tests serialization only, not packet framing, protocol version negotiation, server delivery or client SoundManager stop behavior; release is not protected by finally if encode fails.
+- RustChunk relevance: Useful compact protocol codec fixture for stop-sound selection.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 packet ID/layout and codec must be compared; Forge protocol handshake and delivery are separate.
+- Follow-up checks: Compare null selector bits, all source ordinals, custom identifiers and decoder round-trip against 1.20.1.
+- RustChunk implementation mapping: Use as a packet fixture only; keep network transport and sound-engine effects separate.
+- Evidence required before adoption: Require 1.20.1 vanilla/Forge packet captures and client stop-sound integration.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3568. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStorageMenuOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: a37a912c7e7cc5b483b834a5bff3c63eae784140
+- Size: 2726 bytes
+- Coverage: Complete EOF coverage (56 logical lines).
+- Purpose: Determines menu type and first-slot shulker-box acceptance for storage block entities.
+- Dependencies / cross-references: EntityBlock.newBlockEntity, BaseContainerBlockEntity.createMenu, Inventory, AbstractContainerMenu, Slot, block and menu registries.
+- Implementation / logic: Creates a block entity from each default block state, marks it removed and invokes createMenu with an empty inventory to capture menu type and slot rule.
+- Findings: It deliberately prevents opener/level interaction and only checks default-state block entities and first-slot predicate; no ServerPlayer open-screen lifecycle or packet/client menu is tested.
+- RustChunk relevance: Useful for storage-container menu/slot compatibility inventory.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 menu constructors, MenuType registrations and Forge storage extensions differ.
+- Follow-up checks: Test all slots, block states with properties, opener counters, player distance/permissions, open packet and close lifecycle.
+- RustChunk implementation mapping: Use as a registry/menu mapping reference; implement full open-container lifecycle in target server/client.
+- Evidence required before adoption: Require 1.20.1 Forge storage block menu and client synchronization tests.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3569. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStoredConsumeOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 1bbf8f133f1cb9368cb25be3a62205362f3b42be
+- Size: 11403 bytes
+- Coverage: Complete EOF coverage (57 logical lines).
+- Purpose: Exercises stored consume effects with an actor's active MobEffect map, sound and scripted random source.
+- Dependencies / cross-references: Apply/Remove/Clear StatusEffectsConsumeEffect, PlaySoundConsumeEffect, LivingEntity effect map, MobEffect callbacks, ServerLevel, SoundEvents and ItemStack.
+- Implementation / logic: Runs native consume-effect implementations against an Unsafe actor with synthetic levels/effect definitions, controlled random sources and logged add/update/remove/sound callbacks.
+- Findings: Does not execute a full item use/finish-consumption lifecycle, inventory decrement, food/nutrition, animation or network updates. Effect maps and server levels are controlled shells; custom holder hash identities are crafted.
+- RustChunk relevance: Useful reference for post-consumption effect application/removal and callback order.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 consume-effect model is legacy food properties/effects, not modern data-component consume effects; Forge food hooks also matter.
+- Follow-up checks: Compare item finishUsing flow, probability RNG, effect merge/removal, client/server sound and inventory/food state in 1.20.1.
+- RustChunk implementation mapping: Port semantic scenarios, not modern component consume objects; integrate into target-version food/item-use pipeline.
+- Evidence required before adoption: Require 1.20.1 food consume tests using vanilla and Forge items on client/server.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3570. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStoredEffectAttributesOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 43bb050aa1f6c60ebb4bc4ded475e818a5dc4c00
+- Size: 9652 bytes
+- Coverage: Complete EOF coverage (112 logical lines).
+- Purpose: Exercises AttributeSupplier/AttributeMap and MobEffect attribute modifier add/remove, lookup and dirty/sync queues.
+- Dependencies / cross-references: AttributeMap, AttributeSupplier, AttributeInstance, MobEffect attribute definitions, Holder<Attribute> and reflective internal dirty/cache/map fields.
+- Implementation / logic: Builds synthetic attribute holders and prototypes, installs/removes effect modifiers and records instance identity, computed values, map and update/sync queues.
+- Findings: Uses fabricated holder hash behavior and custom Attribute overrides to probe map semantics; it is not a full LivingEntity effect lifecycle or network sync. Private map/cache fields are version-specific.
+- RustChunk relevance: Useful reference for effect-to-attribute modifier semantics and dirty tracking.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 attribute modifier identifiers/operations and MobEffect integration differ; Forge attribute events and sync must be checked.
+- Follow-up checks: Test default attributes, transient/permanent modifiers, duplicate modifiers, modifier removal, dirty queues and client-sync filtering.
+- RustChunk implementation mapping: Use as target-version attribute unit tests; integrate with entity effect lifecycle and packet synchronization separately.
+- Evidence required before adoption: Require 1.20.1 vanilla/Forge attribute/effect tests and observed client sync.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3571. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStoredEffectNotificationsOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: d2b5fce2120794acbe225fb3f6c51e3fd1d9f926
+- Size: 7323 bytes
+- Coverage: Complete EOF coverage (69 logical lines).
+- Purpose: Invokes LivingEntity effect-added/updated/removed notifications and refreshDirtyAttributes against a real attribute map.
+- Dependencies / cross-references: LivingEntity onEffectAdded/onEffectUpdated/onEffectsRemoved/refreshDirtyAttributes, AttributeMap, passengers, ServerLevel, and StoredEffectAttributesOracle.
+- Implementation / logic: Uses Unsafe ArmorStand shell, supplies a controlled level/passenger list/effect-dirty bit, invokes notification callbacks and attribute refresh while recording event order.
+- Findings: Does not exercise the full addEffect/removeEffect map mutation or complete entity tick/packet cycle; player/vehicle/client listeners are not modeled. Depends on inherited helper and reflective private fields.
+- RustChunk relevance: Useful reference for linking status-effect notifications to attribute updates.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 effect notifications and attribute dirty tracking differ; Forge event/capability listeners need additional coverage.
+- Follow-up checks: Test effect add/update/remove order, passengers, dirty flag, refresh exceptions and server-to-client attribute packet updates on 1.20.1.
+- RustChunk implementation mapping: Use as isolated notification test; implement entity-level lifecycle and networking in target runtime.
+- Evidence required before adoption: Require 1.20.1 entity/player attribute notification tests and Forge event traces.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3572. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStructureBlockExporter.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: de6d02f99e54c5d31257d11e311debd5e30ca44d
+- Size: 2872 bytes
+- Coverage: Complete EOF coverage (49 logical lines).
+- Purpose: Exports native block-state rotate/mirror mappings, full-collision classification, randomized-container status and block-entity types.
+- Dependencies / cross-references: Block.BLOCK_STATE_REGISTRY, BlockState.rotate/mirror, EmptyBlockGetter, EntityBlock.newBlockEntity, RandomizableContainer and BuiltInRegistries.
+- Implementation / logic: Enumerates every registered block state, records rotation/mirror ids and full-block flag, constructs block entities to detect loot containers/type ids.
+- Findings: Exporter uses default registry/block factories and silently catches Throwable for block-entity construction; failed cases can be absent without an error count. It does not process structure templates or placements.
+- RustChunk relevance: Useful data exporter for structure rotation and block-entity eligibility tests.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 state IDs, transforms and BE types differ; modded registrations must be exported from actual Forge target registry.
+- Follow-up checks: Record and report all failed constructions, include blockstate properties and compare rotate/mirror outputs against 1.20.1.
+- RustChunk implementation mapping: Use generated mapping facts only as target-version test data; do not hardcode modern block ids.
+- Evidence required before adoption: Require complete 1.20.1 Forge block-state export with zero unexplained omissions.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3573. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStructureDensityOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 3d4795e54c49af2eb735f5091196cb66336775ec
+- Size: 2847 bytes
+- Coverage: Complete EOF coverage (38 logical lines).
+- Purpose: Samples native Beardifier structure density at points and through density volumes for supplied rigid pieces/junctions.
+- Dependencies / cross-references: Beardifier.Rigid, JigsawJunction, BoundingBox, TerrainAdjustment, DensityVolume, DensityBuffer and SamplerContext.
+- Implementation / logic: Builds sampler from controlled piece/junction lists, captures sampleValue and sampleVolume arrays for points and bounded volumes.
+- Findings: Only manually supplied structure pieces and junctions are sampled; no structure-start generation, biome/noise blending, chunk density pipeline or world terrain is invoked. Buffer sizes depend directly on fixture dimensions.
+- RustChunk relevance: Useful narrow oracle for structure beardifier math and volume layout.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 Beardifier and density function contracts differ; target-generation pipeline controls interpolation and blending.
+- Follow-up checks: Test rigid/terrain-adaptation types, bounding boxes, junction offsets, volume indexing and edge sizes on 1.20.1.
+- RustChunk implementation mapping: Use point/volume fixtures for math tests; integrate with a full target-version density sampler separately.
+- Evidence required before adoption: Require differential 1.20.1 structure terrain density and generated-chunk comparisons.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3574. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStructurePlacementOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 021db4b62531dcee2ce0532593e14b0259711ba8
+- Size: 20581 bytes
+- Coverage: Complete EOF coverage (261 logical lines).
+- Purpose: Generates biome/terrain for surrounding chunks, calculates structure starts/references, runs structure-piece placement and dumps target chunk blocks/block entities.
+- Dependencies / cross-references: NoiseBasedChunkGenerator, ChunkGeneratorStructureState, ProtoChunk, biome/dimension/noise/structure registries, StructureManager, StructureTemplateManager, WorldGenRegion-like proxy and temporary LevelStorageSource.
+- Implementation / logic: Loads vanilla data pack registries, calculates potential starts over 19x19 neighborhood, references for 3x3, generates 5x5 biome and 3x3 terrain chunks, manually runs structure pieces through decoration steps and serializes output.
+- Findings: Only structure pieces are run in feature phase, not placed features; entity creation disabled via empty feature flags; level is a proxy with 3x3 write bounds and stubs several world methods. Temporary storage closed but its directory is not deleted. Not a live server chunk-generation lifecycle.
+- RustChunk relevance: High-value structure terrain/placement oracle for deterministic vanilla generation, subject to extensive synthetic boundaries.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 generator, worldgen registry, structure references and piece processors differ; Forge structure types/processors/biomes need target port.
+- Follow-up checks: Compare 1.20.1 overworld/nether/end starts, piece transforms, block entities, postprocessing, chunk boundaries, RNG and full entity behavior.
+- RustChunk implementation mapping: Use snapshots as a structure-specific regression suite; keep real scheduler/chunk lifecycle, placed features and entity creation separate.
+- Evidence required before adoption: Require 1.20.1 Forge seeded generation across chunk borders with full server world, entities and clean temp-world lifecycle.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
+
+### 3575. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaStructureStartOracle.java`
+- Source repository/ref: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- Source SHA: 9a83e4cc7ca5f5931d0f5bb6f06ea7ec34a60048
+- Size: 12496 bytes
+- Coverage: Complete EOF coverage (158 logical lines).
+- Purpose: Evaluates native structure placement checks, weighted selection and Structure.generate starts for a chunk rectangle; optionally emits ring positions, heights and NBT.
+- Dependencies / cross-references: ChunkGeneratorStructureState, StructureSet placements, NoiseBasedChunkGenerator, biome/structure/structure-set/noise registries, LegacyRandomSource, StructureTemplateManager, data fixer and LevelStorageSource.
+- Implementation / logic: Loads vanilla registries/data, creates generator/random/climate samplers, selects weighted structures for each chunk, calls Structure.generate, and records starts/pieces/optional canonical NBT.
+- Findings: Generates starts only, not terrain or structure piece placement; selection and data pack are vanilla-only. Temporary LevelStorageSource is closed but temp directory remains; optional output is environment-variable controlled and calls System.exit.
+- RustChunk relevance: Useful reference for deterministic structure-start selection, ring placement and start/piece metadata.
+- Decision: adaptable; reference; version-specific; parity-test-oracle
+- 1.20.1 implications: 1.20.1 structure placement algorithms, weighted choices, registries and NBT schema are target-specific; Forge structure sets may alter selection.
+- Follow-up checks: Test placement predicates, weighted fallback, concentric rings, dimension modes, bounding boxes, pieces and canonical NBT against 1.20.1.
+- RustChunk implementation mapping: Use as target-version structure-start tests; leave full terrain, placement and chunk lifecycle to dedicated pipeline tests.
+- Evidence required before adoption: Require 1.20.1 vanilla/Forge seeded start comparisons and temporary resource cleanup checks.
+- Completion state: COMPLETE — pinned source SHA/size verified; full coverage read through EOF; static inspection only; not executed.
