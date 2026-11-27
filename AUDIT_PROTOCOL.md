@@ -1049,3 +1049,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 
 - Post-commit schema inspection detected shifted field values in stage Ledger entries 3476–3500. No source inspection or authorization scope changed; the checkpoint was held pending repair.
 - Ledger values and matching Index Decision cells have been corrected in a follow-up commit. Verify all 25 records have the exact 15-field semantic alignment, then continue at 3501.
+
+
+### Progress — checkpoint 3501–3525 — COMPLETE — 2026-11-27
+
+- Fifth checkpoint of the single 200-file grant is complete; its 25 raw-lexical sources were read through EOF and SHA/byte sizes match the complete pinned tree.
+- Exact order: PackResources, PackScreen, PackSelection, PacketCodec; PlaceRecipe, Placement. Long files 3505 (440), 3524 (1,139) and 3525 (727) were covered in contiguous chunks no larger than 400 lines.
+- Stage Ledger has 125 entries (3401–3525), exactly 15 fields each; Index has 3,525 sequential unique paths and aligned decisions.
+- Continue at 3526–3550 under Section 68's same blanket 200-file grant. No stop at 3550; final stop remains 3600.

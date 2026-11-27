@@ -1,19 +1,19 @@
 # RustChunk Audit Continuity
 
-Last reconciled: 2026-11-26
+Last reconciled: 2026-11-27
 Repository: imamirhosein/RustChunk
 Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3500**.
-- Stage **3401–3600 is ACTIVE (25/200)**; checkpoints **3401–3425**, **3426–3450** and **3451–3475 COMPLETE**, committed/read-back verified. Checkpoint 3476–3500 is now complete and committed/read-back verified; next checkpoint 3501–3525 is covered by the same grant.
-- Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is ACTIVE (100/200)**.
+- Completed entries: **1–3525**.
+- Stage **3401–3600 is ACTIVE (125/200)**; checkpoints **3401–3425**, **3426–3450**, **3451–3475**, **3476–3500** and **3501–3525 COMPLETE**, committed/read-back verified.
+- Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is ACTIVE (125/200)**.
 - The user has issued one continuous, one-time grant for **all entries 3401–3600**. This is a full 200-file authorization, not an ordinary 50-file or exceptional 100-file window.
 - **Do not stop at 3450, 3500 or 3550.** Those are not authorization boundaries for this grant. Continue through all eight exact 25-file checkpoints and STOP only at **3600**, unless a real source-access/read/provenance blocker requires stopping earlier.
-- Next entry: **3501**. The 3401–3425, 3426–3450, 3451–3475 and 3476–3500 checkpoints are complete. Remaining authorized checkpoints: 3501–3525, 3526–3550, 3551–3575 and 3576–3600. The one-time grant still covers all of them.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md` has **100 records (3401–3500)**, each with 15 fields. Index: **3,500 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,500 Index paths are unique and all exist in this tree; 1,468 remaining blobs are unindexed. The first 200 are the authorized 3401–3600 selection; the next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- Next entry: **3526** (`VanillaRandomTickSectionsOracle.java`). Checkpoints 3401–3425, 3426–3450, 3451–3475, 3476–3500 and 3501–3525 are complete. Remaining authorized checkpoints: 3526–3550, 3551–3575 and 3576–3600. The one-time grant still covers all of them.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New stage `AUDIT_LEDGER_3401_3600.md` has **125 records (3401–3525)**, each with 15 fields. Index: **3,525 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,525 Index paths are unique and all exist in this tree; 1,443 remaining blobs are unindexed. The first 200 after the 3,400-entry baseline define the authorized 3401–3600 selection; the next unselected path after that full boundary remains `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - Keep the durable 25-file checkpoint commits/read-back and serial full-file inspection. For this one-time grant, the four 50-file slices are internal bookkeeping only and do not require intermediate reports or permission.
 - Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; first-1000 image estimate remains unverified.
 - At backup/verification milestone **4000**, complete and verify the historical media backfill for the backup scope (entries 1–3999, as applicable); do not call backup closeout complete while backfill remains outstanding.
@@ -1045,3 +1045,13 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Mob AI/spawn use controlled headless fixtures; spawn-finalization RNG is neutralized. VanillaMover is a desktop test driver and was not run. Mipmap/model output is not Android GPU validation.
 - No app source, build/test/APK/device, renderer runtime, Forge/Minecraft launch, dedicated server, multiplayer or Aternos validation.
 - Next: 3501–3525 under this same 200-file grant. Do not stop at 3500/3550; final stop 3600.
+
+
+## Checkpoint 3501–3525 — COMPLETE — 2026-11-27
+
+- The 25 paths after Index 3500 were recomputed with strict raw lexical comparison across the complete pinned tree; SHA/byte-size pairs match and each file was read serially through EOF.
+- Exact sequence places PackResources, PackScreen and PackSelection before PacketCodec; PlaceRecipe before Placement. Next source is 3526, `VanillaRandomTickSectionsOracle.java`.
+- Long files: 3505 (440 lines, 1–400/401–440); 3524 (1,139, 1–400/401–800/801–1,139); 3525 (727, 1–400/401–727). Other 22 sources are at most 400 lines.
+- Ledger has 125 entries through 3525, each with 15 fields; Index has 3,525 unique sequential paths with aligned decisions.
+- Static audit only; offline protocol client is not online authentication or Aternos validation. No tests/builds/runtime/Android/Forge/Minecraft/server/device validation.
+- Continue 3526–3550 under the same grant; do not stop at 3550; final stop remains 3600.

@@ -4009,3 +4009,29 @@
 | 3498 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNaturalSpawnOracle.java` | adaptable; reference; parity-test-oracle; version-specific | NaturalSpawner and spawner/trial/vault native ticks. |
 | 3499 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaNoiseOracle.java` | adaptable; reference; parity-test-oracle | Seeded Perlin/Simplex/Smeared/Normal noise and density raw bits. |
 | 3500 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaObjectOpenMapOracle.java` | reference; runtime-specific; parity-test-oracle | fastutil Object2ObjectOpenHashMap mutation/iteration/live entries. |
+
+| 3501 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaObjectOpenSetOracle.java` | adaptable; reference; runtime-specific; parity-test-oracle | fastutil set membership and cursor semantics |
+| 3502 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaOptionsOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Options load/save and key-mapping metadata |
+| 3503 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaOptionsTableExporter.java` | adaptable; reference; version-specific; parity-data-exporter | Options registration and key-code exporter |
+| 3504 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPackResourcesOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Resource-pack precedence and lookup |
+| 3505 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPackScreenOracle.java` | adaptable; reference; platform-specific; version-specific; parity-test-oracle | Pack screen interaction/draw-state oracle |
+| 3506 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPackSelectionOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Pack ordering, compatibility and commit |
+| 3507 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPacketCodecOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Packet codec round-trip and chunk validation |
+| 3508 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPalettedContainerOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Block/biome palette and wire encoding |
+| 3509 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaParticleProvidersOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Particle provider traces |
+| 3510 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPickBlockDataOracle.java` | rewrite required; reference; version-specific; parity-test-oracle | Block-entity pick-block data |
+| 3511 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPistonMovementOracle.java` | adaptable; reference; parity-test-oracle | Piston movement limiter |
+| 3512 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPistonPushOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Piston push geometry/sticky rules |
+| 3513 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPistonShapeOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Piston collision shape/interpolation |
+| 3514 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlaceRecipeOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Recipe-book auto-placement |
+| 3515 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlacementOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Worldgen placement codec/callback behavior |
+| 3516 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerEquipmentOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Equipment, hand and inventory aliases |
+| 3517 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerFoodOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Player hunger/exhaustion query order |
+| 3518 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerHealthOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Player health/absorption sync |
+| 3519 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerHurtOracle.java` | rewrite required; reference; version-specific; parity-test-oracle | Player damage and shield lifecycle |
+| 3520 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerInventoryOracle.java` | rewrite required; reference; version-specific; parity-test-oracle | Inventory slots, stacks and equipment |
+| 3521 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerSyncOracle.java` | rewrite required; reference; version-specific; parity-test-oracle | Local player movement packet synchronization |
+| 3522 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPlayerTravelOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Player travel, fluid and flight decisions |
+| 3523 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPortalOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Nether portal discovery/create/destination |
+| 3524 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaProtocolClient.java` | rewrite required; reference; runtime-driver; version-specific; offline-auth-boundary; parity-test-oracle | TCP protocol harness; offline-mode identity only |
+| 3525 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRaidOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Patrol spawning, raid lifecycle and SNBT codec |

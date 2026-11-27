@@ -2190,3 +2190,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Corrected all 25 entries 3476–3500 by restoring explicit RustChunk relevance, moving each Decision/1.20.1 implication/follow-up/mapping/evidence value back to its intended field, and setting Completion state correctly.
 - Corrected matching Index Decision cells for entries 3476–3500. Source paths, SHAs, sizes, coverage and source findings remain unchanged.
 - Follow-up commit and full six-document read-back verification required before resuming the next checkpoint.
+
+
+## Checkpoint 3501–3525 — COMPLETE — 2026-11-27
+
+- Re-audited 25 consecutive raw-lexical source paths after Index 3500 from the pinned 4,968-blob complete tree. Every SHA/byte size matches and every source was read through EOF.
+- Exact order: ObjectOpenSet, Options, OptionsTableExporter, PackResources, PackScreen, PackSelection, PacketCodec, PalettedContainer, ParticleProviders, PickBlockData, PistonMovement, PistonPush, PistonShape, PlaceRecipe, Placement, PlayerEquipment, PlayerFood, PlayerHealth, PlayerHurt, PlayerInventory, PlayerSync, PlayerTravel, Portal, ProtocolClient and Raid.
+- Long files: 3505 PackScreen (440 lines; 1–400, 401–440), 3524 ProtocolClient (1,139; 1–400, 401–800, 801–1,139), 3525 Raid (727; 1–400, 401–727). Remaining 22 sources are at most 400 lines.
+- Stage Ledger has 125 records (3401–3525), exactly 15 fields each (1,875 fields). Index has 3,525 sequential unique paths; new path/Decision pairs align.
+- ProtocolClient uses offline UUID only for servers permitting offline mode; it does not bypass online authentication and does not prove Aternos compatibility. Its packet protocol is later than 1.20.1.
+- No RustChunk app source changed. No tests/builds/benchmarks/APK/device/renderer/Forge/Minecraft/server/multiplayer/Aternos validation was run.
+- Next: 3526–3550 under the same one-time 200-file grant; no stop at 3550. Final stop remains 3600.
