@@ -700,3 +700,10 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Long-file ranges: 3581 TabList 1–190/191–372; 3587 TextDisplayRender 1–120/121–271; 3593 Trading 1–210/211–420/421–624; 3595 TreeFeature 1–100/101–179. All remaining sources are <=400 lines.
 - Ledger: 200 records through 3600, exactly 15 fields each. Index: 3,600 unique sequential paths with aligned decisions. Six documents will be committed together and re-fetched for verification.
 - The full one-time authorization is now complete and exhausted. No work on 3601+ without a new explicit user grant.
+
+
+
+## Exceptional authorization 3601–3700 — ACTIVE — 2026-11-27
+- Exact grant: 100 entries, 3601–3700. Sections: 3601–3650 and 3651–3700. Two 25-file checkpoints per section; report/stop at 3650, continue under the same grant, then stop at 3700.
+- Current completed boundary: 3600. Next: 3601. Ledger: AUDIT_LEDGER_3601_3800.md.
+- No 4000 backup until historical media backfill 1–4000, archive/Ledger/Index reconciliation, and global structural/provenance QA have all passed, per Protocol Section 69.
