@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3500** complete; entries **3501–3600 authorized and not yet inspected**. Ledger `AUDIT_LEDGER_3401_3600.md` has 100 source records (3401–3500). Index: **3,500 sequential unique paths**, no duplicates and prior Ledger/Index alignment. Prior stage 3201–3400 closed. A one-time blanket grant covers the entire next 200-file boundary; do not stop at intermediate 50-file marks. Keep eight 25-file checkpoint commits and STOP at 3600. Backup 3000 preserved; historical media backfill 1–3300 pending.
+- Source ledgers: entries **1–3550** complete; entries **3551–3600 remain authorized and pending** under the single 200-file grant. Ledger `AUDIT_LEDGER_3401_3600.md` has 150 source records (3401–3550), each with exactly 15 fields. Index: **3,550 sequential unique paths**, no duplicates and prior Ledger/Index alignment. Prior stage 3201–3400 closed. Do not stop at intermediate 50-file marks; keep eight 25-file checkpoint commits and STOP at 3600. Backup 3000 preserved; historical media backfill 1–3300 pending.
 
 ## Part 1 — Entries 1–25
 
@@ -4035,3 +4035,29 @@
 | 3523 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaPortalOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Nether portal discovery/create/destination |
 | 3524 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaProtocolClient.java` | rewrite required; reference; runtime-driver; version-specific; offline-auth-boundary; parity-test-oracle | TCP protocol harness; offline-mode identity only |
 | 3525 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRaidOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Patrol spawning, raid lifecycle and SNBT codec |
+
+| 3526 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRandomTickSectionsOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Random-tick section selection and RNG order |
+| 3527 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRecipeBookOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Recipe-book state and persistence |
+| 3528 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRecipeBookScreenOracle.java` | adaptable; reference; platform-specific; version-specific; parity-test-oracle | Recipe-book screen draw-state oracle |
+| 3529 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRecipeBookViewOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Recipe-book search, filters and paging |
+| 3530 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRecipeOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Recipe matching, results and remainders |
+| 3531 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRegisteredEntityFluidOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Registered fluid-tag wrapper |
+| 3532 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRegisteredPlayerCombatOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Registered player damage pipeline |
+| 3533 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRegistryCollisionScanOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Block/entity collision query order |
+| 3534 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRegistryFallRayOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Fall-reset block/tag checks |
+| 3535 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRegistryFluidOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Fluid state geometry queries |
+| 3536 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRemoteAttackOracle.java` | adaptable; reference; platform-specific; version-specific; parity-test-oracle | Client remote-target attack effects |
+| 3537 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaReplaceBlockOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Feature placement write semantics |
+| 3538 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRestitutionOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Post-collision bounce/restition |
+| 3539 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRetrogenDataOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Retrogen codec and bedrock mask |
+| 3540 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaRuleTestOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Worldgen replacement-rule predicates |
+| 3541 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaScatteredOreOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Scattered ore placement behavior |
+| 3542 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSceneCollisionOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Synthetic scene collision results |
+| 3543 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSceneMotionOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Composite player movement/tick scenarios |
+| 3544 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaScoreboardOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Scoreboard mutation and persistence |
+| 3545 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSculkOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Sculk vibration and warden scenarios |
+| 3546 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaSectionMeshOracle.java` | adaptable; reference; platform-specific; version-specific; parity-test-oracle | CPU block/fluid section mesh output |
+| 3547 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaServerAddressOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Address redirect/port parsing only |
+| 3548 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaServerFilesOracle.java` | rewrite required; reference; security-sensitive; version-specific; parity-test-oracle | Server properties and user-list files; secrets need redaction |
+| 3549 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaServerPlayerCombatOracle.java` | adaptable; reference; version-specific; parity-test-oracle | ServerPlayer damage gates/reduction |
+| 3550 | `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaServerPlayerDamageOracle.java` | adaptable; reference; version-specific; parity-test-oracle | Inner player damage application only |

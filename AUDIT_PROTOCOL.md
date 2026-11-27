@@ -1057,3 +1057,11 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Exact order: PackResources, PackScreen, PackSelection, PacketCodec; PlaceRecipe, Placement. Long files 3505 (440), 3524 (1,139) and 3525 (727) were covered in contiguous chunks no larger than 400 lines.
 - Stage Ledger has 125 entries (3401–3525), exactly 15 fields each; Index has 3,525 sequential unique paths and aligned decisions.
 - Continue at 3526–3550 under Section 68's same blanket 200-file grant. No stop at 3550; final stop remains 3600.
+
+
+### Progress — checkpoint 3526–3550 — COMPLETE — 2026-11-27
+
+- Checkpoint six of the single authorized 200-file boundary has been re-read and staged. The actual branch was reconciled first; the last committed state was 3501–3525, not the previously reported but unregistered 3526–3550 state.
+- Twenty-five next raw-lexical pinned sources were read through EOF and matched against the pinned tree's SHA/byte size. Long-file ranges are consecutive and at most 400 lines: 3543 (1–200, 201–400, 401–494), 3544 (1–180, 181–350, 351–520), 3545 (1–400, 401–771).
+- Ledger now contains 150 entries (3401–3550), exactly 15 fields each; Index contains 3,550 sequential unique paths with aligned decisions. Checkpoint completion is effective only after the six-document commit and independent read-back.
+- Continue with 3551–3575 under the same full-boundary user grant. No permission stop at 3550; final stop remains 3600.

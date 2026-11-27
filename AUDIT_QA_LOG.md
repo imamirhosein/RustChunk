@@ -2201,3 +2201,16 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - ProtocolClient uses offline UUID only for servers permitting offline mode; it does not bypass online authentication and does not prove Aternos compatibility. Its packet protocol is later than 1.20.1.
 - No RustChunk app source changed. No tests/builds/benchmarks/APK/device/renderer/Forge/Minecraft/server/multiplayer/Aternos validation was run.
 - Next: 3526–3550 under the same one-time 200-file grant; no stop at 3550. Final stop remains 3600.
+
+
+## Checkpoint 3526–3550 — COMPLETE — 2026-11-27
+
+- Branch-state reconciliation before this checkpoint found the committed branch still at checkpoint 3501–3525; the previously reported 3526–3550 progress was not present in the actual Ledger/Index commit. These 25 files were therefore re-read from the pinned source and registered in this transaction; no earlier uncommitted claim was treated as evidence.
+- The exact next 25 raw-lexical paths were recomputed from the complete, untruncated pinned recursive tree after excluding the 3,525 Index paths. All 25 source SHA and byte-size pairs match the pinned blobs; every file was read through EOF.
+- Exact order: RandomTickSections, RecipeBook, RecipeBookScreen, RecipeBookView, Recipe, RegisteredEntityFluid, RegisteredPlayerCombat, RegistryCollisionScan, RegistryFallRay, RegistryFluid, RemoteAttack, ReplaceBlock, Restitution, RetrogenData, RuleTest, ScatteredOre, SceneCollision, SceneMotion, Scoreboard, Sculk, SectionMesh, ServerAddress, ServerFiles, ServerPlayerCombat and ServerPlayerDamage.
+- Long-file coverage: 3543 SceneMotion (494 lines; 1–200, 201–400, 401–494); 3544 Scoreboard (520; 1–180, 181–350, 351–520); 3545 Sculk (771; 1–400, 401–771). Other 22 sources are no more than 400 lines and were read completely.
+- Stage Ledger now has 150 entries (3401–3550), exactly 15 fields each. Index has 3,550 sequential, unique paths and matching Decision labels. This checkpoint is pending its six-document commit/read-back verification until the transaction completes.
+- Findings: random-tick oracle measures section selection/RNG, not block/fluid callbacks; SceneMotion uses synthetic chunks/services and does not run a complete native server tick; Sculk manually sequences selected tick phases on a controlled flat server; SectionMesh captures CPU quads with synthetic atlas/light/biome inputs, not GPU/device output; ServerAddress forces DNS to loopback and tests no socket; ServerFiles may emit existing RCON/management/TLS secrets and user/IP details, so all such output must be redacted.
+- These sources are later-version Java test oracles, not portable RustChunk implementation. No Forge 1.20.1 behavior is inferred from their source version.
+- No RustChunk application source changed. No build/test/benchmark/APK/device/GPU/Forge/Minecraft/server/multiplayer/Aternos validation was run.
+- Continue with 3551–3575 under the same one-time 200-file grant. Do not stop or request permission at 3550; final stop remains 3600.

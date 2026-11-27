@@ -2,11 +2,11 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3525** are committed. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED.
-- New stage **3401–3600** is ACTIVE and fully authorized as one continuous 200-file boundary (**125/200 inspected; checkpoints 1–5 closed**).
+- Entries **1–3550** are included in the audit branch after this checkpoint transaction is committed and read back. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED.
+- New stage **3401–3600** is ACTIVE and fully authorized as one continuous 200-file boundary (**150/200 inspected; checkpoints 1–6 closed after this transaction's read-back**).
 - **One-time full-boundary grant:** complete all 200 entries 3401–3600. Do not stop/request permission at 3450, 3500 or 3550. Maintain eight 25-file checkpoint commits and read-back verifications. STOP at **3600**; no authorization for 3601+.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: 200 records, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md`: 125 records (3401–3525), exactly 15 fields each. Index: 3,525 unique sequential paths.
-- Pinned tree: 4,968 blobs, complete/untruncated. All 3,525 indexed paths are unique and present. First 200 globally lexical unindexed paths define the new boundary; next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: 200 records, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md`: 150 records (3401–3550), exactly 15 fields each. Index: 3,550 unique sequential paths.
+- Pinned tree: 4,968 blobs, complete/untruncated. All 3,550 indexed paths are unique and present. First 200 globally lexical unindexed paths define the new boundary; next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - Standard 25-file commit/read-back, serial source inspection and consecutive chunks no larger than 400 lines remain in force. The four 50-file subdivisions are not authorization/reporting stops for this one-time grant.
 - Permanent media archive `AUDIT_MEDIA_ARCHIVE.md` remains continuous; historical media 1–3300 backfill is pending and required before 4000 backup closeout.
 - No RustChunk application-source implementation, tests/builds/benchmarks, APK/device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by this static audit. Do not modify `main` or backup refs.
@@ -20,11 +20,11 @@
 | 3 | 3451–3475 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 4 | 3476–3500 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 5 | 3501–3525 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
-| 6 | 3526–3550 | AUTHORIZED — NOT STARTED |
+| 6 | 3526–3550 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 7 | 3551–3575 | AUTHORIZED — NOT STARTED |
 | 8 | 3576–3600 | AUTHORIZED — NOT STARTED |
 
-All eight checkpoints are covered by one explicit user grant. Checkpoints 3401–3425 through 3501–3525 are complete; the next is 3526–3550. The 50-file marks are internal bookkeeping only; proceed without reauthorization. Final stop is after verification at 3600 unless a genuine blocker occurs.
+All eight checkpoints are covered by one explicit user grant. Checkpoints 3401–3425 through 3526–3550 are complete. The 50-file marks are internal bookkeeping only; proceed without reauthorization. Next is 3551–3575; final stop is after verification at 3600 unless a genuine blocker occurs.
 
 ## Stage partition
 
@@ -675,3 +675,12 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Ledger contains 125 records through 3525, each with exactly 15 fields; Index contains 3,525 sequential unique paths with aligned decisions. Six-document checkpoint transaction/read-back verified.
 - Next entry 3526 is VanillaRandomTickSectionsOracle.java. Continue under the same full grant through 3600; no stop at 3550.
 - Static audit only; no build/test/runtime/device/Forge/Minecraft/server/multiplayer/Aternos validation.
+
+
+## Checkpoint 3526–3550 — COMPLETE — 2026-11-27
+
+- The 25 next lexical files after the actual Index 3525 were re-read from the pinned tree because the prior progress claim was not in the committed branch. All source SHAs and byte sizes match; every file was inspected through EOF.
+- Long sources: 3543 (494 lines; 1–200, 201–400, 401–494), 3544 (520; 1–180, 181–350, 351–520), 3545 (771; 1–400, 401–771). Other 22 sources are no more than 400 lines.
+- Ledger 150 entries through 3550, exactly 15 fields each; Index 3,550 sequential unique paths with matching decisions. The 6-document transaction is followed by independent read-back verification.
+- Static-oracle limits: synthetic/manual tick scenes are not complete server ticks, mesh output is not device GPU evidence, address tests force loopback, and server-file output requires full sensitive-data redaction.
+- Continue at 3551–3575 under the same explicit 200-file grant; never request permission at the 3550 boundary. Stop only after 3600 verification.
