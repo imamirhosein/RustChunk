@@ -1082,3 +1082,30 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Final stage Ledger contains 200 source records (3401–3600), exactly 15 fields per record. The global Index contains 3,600 sequential unique paths. Final checkpoint coverage includes 3576–3600; the next globally lexical unselected source is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - This was static inspection only. No RustChunk application code changes or build/runtime/device/server/Forge/Aternos validation occurred.
 - **STOP at 3600. Do not inspect entry 3601 or continue the next batch until a new explicit user authorization is provided.**
+
+
+
+## 69. Media backfill and mandatory pre-backup gate at 4000 — 2026-11-27
+
+- The 4,000-entry backup milestone is conditional. Completing source entries 3001–4000 alone does **not** authorize or complete the backup.
+- After source entry 4000 and its final 25-file checkpoint have been committed/read-back verified, but **before creating the backup ref**, perform a dedicated historical media backfill for the entire source-entry range **1–4000**.
+- Reconcile the complete Index and every applicable stage Ledger against the pinned source tree to identify every image and video by original audit entry number, exact source path, blob SHA and byte size. Do not rely on estimates, filename-only guesses, or the existing archive as a complete inventory.
+- For every image, inspect/render it visually when tools permit and add detailed visual notes to `AUDIT_MEDIA_ARCHIVE.md`; if visual inspection is unavailable, explicitly mark **NEEDS USER REVIEW**. Never claim visual inspection without actually rendering and examining the image.
+- For every video, record verified available metadata and mark **NEEDS USER WATCH** unless it was actually watched and reviewed. Never claim unseen video content.
+- Every media item must exist both in its original numbered Ledger/Index/QA audit record and in the permanent media archive, using the same original entry number and exact path. No separate media numbering. Ordinary non-media files must not be added to the media archive.
+- Preserve chronological order. Verify archive completeness and uniqueness against all Ledger/Index media candidates for entries 1–4000; reconcile missing, duplicate, misnumbered or path-mismatched records. Explicitly report unresolved visual-review/watch items; these do not permit falsely claiming review.
+- Only after the media backfill and archive-to-Ledger/Index reconciliation pass, run global structural/provenance QA across entries 1–4000: sequential numbering, global path uniqueness, exact 15 Ledger fields, pinned SHA/byte-size, canonical line counts/EOF coverage, Ledger/Index Decision alignment, media double-recording, and six-document consistency.
+- Record the exact global-QA results and any limitations in QA Log, Continuity, Protocol, Boundary Register and Media Archive as applicable. Re-fetch and verify all changed documents from GitHub.
+- Create exactly one backup ref `backup/audit-4000-final-<date>` only after all preceding gates pass, based on the verified global-QA commit. If any media inventory, archive reconciliation or global-QA gate fails, **do not create the backup**; stop and record the blocker.
+- This rule clarifies and strengthens the existing Section 65 requirement; it does not change the 200 / 50 / 25 source-audit cadence or authorize source entries beyond the user's active grant.
+
+
+## 70. One-time exceptional authorization — entries 3601–3700 — 2026-11-27 — ACTIVE
+
+- The user explicitly renewed the exceptional grant for exactly **100 new source entries: 3601–3700**. This follows the established meaning of an exceptional authorization: 100 entries, not an open-ended “3601 onward” grant.
+- The grant covers reporting sections **3601–3650** and **3651–3700**. Preserve the normal two 25-file checkpoints per 50-file section, six-document atomic checkpoint transactions, GitHub read-back verification and user-facing report/stop at each 50-file boundary.
+- The first stage Ledger is `AUDIT_LEDGER_3601_3800.md`; add only entries 3601–3700 under this grant. Do not append to the closed 3401–3600 Ledger.
+- Recompute the next 100 source paths by strict raw lexical order from the complete, untruncated pinned recursive tree, excluding every path in the full Index. Verify source SHA/byte size and inspect each file through EOF; files over 400 logical lines require consecutive, gap-free chunks no larger than 400 lines.
+- Keep exactly 15 Ledger fields per entry and synchronize Ledger, Index, QA Log, Continuity, Protocol, Boundary Register and Media Archive when applicable under the checkpoint rules.
+- At 3650, report and continue only within the already authorized grant to 3675–3700. At **3700**, close the grant and STOP. Entry 3701+ requires fresh explicit authorization.
+- Static source audit only; do not imply builds, tests, runtime, device, Forge, Minecraft or server validation unless separately performed.
