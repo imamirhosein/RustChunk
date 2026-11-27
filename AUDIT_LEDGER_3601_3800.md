@@ -6,7 +6,7 @@
 - Authorized scope: exceptional 100-file grant, entries 3601–3700, dated 2026-11-27.
 - Selection: first 100 raw-lexically sorted unindexed blobs from the complete pinned recursive tree, excluding all 3,600 existing Index paths.
 - Checkpoint cadence: four sequential 25-file checkpoints. Commit all checkpoint records and audit documents in one Git commit, then re-fetch/read-back verify before the next checkpoint.
-- Current registered state: **25 source entries (3601–3625)**; this file will grow only under the same 3601–3700 grant. Entries 3626–3700 remain authorized but not yet inspected.
+- Current registered state: **50 source entries (3601–3650)**; this file will grow only under the same 3601–3700 grant. Entries 3626–3700 remain authorized but not yet inspected.
 
 ### 3601. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`
 - **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
@@ -432,3 +432,428 @@
 - **RustChunk implementation mapping:** Use a dedicated import broker with unique temp files, atomic no-replace commit, content hash/size checks and explicit failure UX.
 - **Evidence required before adoption:** undefined
 - **Completion state:** COMPLETE — pinned source SHA and byte size verified; complete stated coverage read through EOF (files over 400 lines inspected in consecutive chunks no larger than 400 lines); static source review only; not executed.
+
+### 3626. `packaging/android/java/io/github/juanluci/starling/StarlingActivity.java`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 2104c5ffbae19e76b75d6810e2f04f7cdafbdcfe
+- **Size:** 42794 bytes
+- **Coverage:** Complete EOF coverage (1003 logical lines).
+- **Purpose:** Android NativeActivity bridge for library loading, storage, window/input, IME, controllers, gyroscope, clipboard, file picker, browser, DNS, updates and Keystore secrets.
+- **Dependencies / cross-references:** Android NativeActivity/system services; NativeMods, StartupRecovery, TextMirror, HorizonImport, GameFolderProvider, WorkService, UpdateProvider and horizon_android JNI.
+- **Implementation / logic:** Loads selected native build or APK library; configures storage before NativeActivity starts; forwards IME/pointer/controller/sensor events; exposes import, folder, DNS, refresh-rate, update and AES-GCM Keystore methods.
+- **Findings:** Tightly coupled to Starling JNI/process contracts. onDestroy kills process directly; openFolder uses string-prefix path checks; openLink accepts any HTTPS host; secret envelope lacks version/AAD; arbitrary native library loading depends on NativeMods verification outside this file. MANAGE_EXTERNAL_STORAGE is high privilege.
+- **RustChunk relevance:** Core Android/JNI bridge reference for a Rust native game.
+- **Decision:** adaptable; reference; version-specific
+- **1.20.1 implications:** Java/runtime/library ABI and all class names need a RustChunk-specific rewrite; no 1.20.1 Forge compatibility is supplied.
+- **Follow-up checks:** Audit NativeMods and android_lib.rs; fuzz folder paths; test Keystore invalidation, URI grants, process restart and API 33 lifecycle.
+- **RustChunk implementation mapping:** Create a narrow Java bridge with SAF storage, explicit JNI lifecycle and a versioned encrypted-account envelope.
+- **Evidence required before adoption:** Require API 33 storage/URI tests, JNI lifecycle/restart tests and AndroidKeyStore round-trip/invalidation tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3627. `packaging/android/java/io/github/juanluci/starling/StartupRecovery.java`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1c35bed686462463dcf64cb8eb84eba46f3571c0
+- **Size:** 2474 bytes
+- **Coverage:** Complete EOF coverage (49 logical lines).
+- **Purpose:** Persists startup attempts and offers recovery after interruption during native startup, renderer initialization or resource loading.
+- **Dependencies / cross-references:** Android Context/filesDir, AtomicFile, JSONObject and launcher/diagnostics lifecycle.
+- **Implementation / logic:** Creates a marker before native loading, removes it after first frame/recovery offer, updates current-session.json atomically and inspects phase/clean-exit flags.
+- **Findings:** Marker write uses plain FileOutputStream; interrupted() performs one InputStream.read and assumes the full JSON arrives in one read; marker errors are mostly ignored.
+- **RustChunk relevance:** Valuable crash recovery pattern when native startup can fail before UI initialization.
+- **Decision:** adaptable; reference; android-recovery
+- **1.20.1 implications:** Phase names and file locations are Starling-specific.
+- **Follow-up checks:** Use readFully loop and atomic marker; test truncated JSON and process death at each phase.
+- **RustChunk implementation mapping:** Add a versioned recovery journal before Rust/JNI or JVM startup; keep diagnostics independent.
+- **Evidence required before adoption:** Require process-kill fault injection at every startup phase and verify one-time recovery.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3628. `packaging/android/java/io/github/juanluci/starling/TextMirror.java`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 06c46b53382981b64bc0da6174f3a91ae4845f0d
+- **Size:** 13224 bytes
+- **Coverage:** Complete EOF coverage (336 logical lines).
+- **Purpose:** Bridges Android IME to a game-rendered text field using an invisible EditText and code-point-aware selection/length.
+- **Dependencies / cross-references:** Android EditText/InputConnection/InputMethodManager/TextWatcher/InputFilter; StarlingActivity and native callbacks.
+- **Implementation / logic:** Mirrors text and selection, suppresses echo during game updates, batches edits, reports Unicode code-point cursor/anchor and routes game-specific keys.
+- **Findings:** Good UTF-16/code-point handling; OEM IME callback order and generation semantics need tests; only sendKeyEvent is explicitly wrapped.
+- **RustChunk relevance:** Highly relevant to chat, search and server-address input on Android.
+- **Decision:** adaptable; reference; android-input-bridge
+- **1.20.1 implications:** Native callbacks and field flags must be recreated; no Forge-specific logic.
+- **Follow-up checks:** Test emoji, combining marks, selection reversal, composing spans, password/multiline, hardware keyboard and OEM IMEs.
+- **RustChunk implementation mapping:** Build a standalone Java IME adapter connected to RustChunk text-input protocol.
+- **Evidence required before adoption:** Require Unicode and IME instrumentation tests on API 33 and multiple keyboards.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3629. `packaging/android/java/io/github/juanluci/starling/UpdateProvider.java`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** f564a65403f43acf4c54386008200ccf9101a9aa
+- **Size:** 3411 bytes
+- **Coverage:** Complete EOF coverage (90 logical lines).
+- **Purpose:** Exposes downloaded update APKs and diagnostic ZIPs read-only through ContentProvider.
+- **Dependencies / cross-references:** Android ContentProvider/Uri/ParcelFileDescriptor/MatrixCursor; private updates/performance directories and manifest grants.
+- **Implementation / logic:** Restricts names by APK/ZIP regex, resolves fixed private directories, opens read-only and returns display name/size.
+- **Findings:** Narrow read-only boundary is good; query ignores projection; getType checks path shape before full validation; symlink rejection is not explicit.
+- **RustChunk relevance:** Useful for update delivery and controlled diagnostic export.
+- **Decision:** adaptable; reference; android-content-provider
+- **1.20.1 implications:** Authority, paths and APK policy must be RustChunk-specific.
+- **Follow-up checks:** Test malformed/encoded URIs, projection subsets, symlinked files, grant revocation and APK signature verification.
+- **RustChunk implementation mapping:** Create a read-only provider with exact allowlists and signature/hash checks.
+- **Evidence required before adoption:** Require provider permission tests and APK signature/version validation.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3630. `packaging/android/java/io/github/juanluci/starling/WorkService.java`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 5dcf3bd4c3b849a21e68e39ff3c0673ab665294d
+- **Size:** 4380 bytes
+- **Coverage:** Complete EOF coverage (115 logical lines).
+- **Purpose:** Keeps the game process alive with an ongoing notification during browser sign-in, downloads or imports.
+- **Dependencies / cross-references:** Android Service/Notification/ServiceInfo; StarlingActivity and HorizonImport; manifest dataSync type.
+- **Implementation / logic:** Tracks named work reasons, starts foreground service while any reason remains, shows newest reason and stops after last release.
+- **Findings:** Reason map is process-local; service start failures are swallowed; Android 14+ dataSync limits and notification policy need review.
+- **RustChunk relevance:** Useful for long-running work Android may otherwise interrupt.
+- **Decision:** adaptable; reference; android-foreground-service
+- **1.20.1 implications:** Service type, target SDK and limits must match RustChunk current Android targets.
+- **Follow-up checks:** Test overlapping reasons, fast start/stop, process death and API 33/34+ restrictions.
+- **RustChunk implementation mapping:** Use persisted WorkManager/foreground-service state with clear progress.
+- **Evidence required before adoption:** Require lifecycle/race tests on API 33 and newer Android.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3631. `packaging/android/mod_build_gateway.py`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 5283430a3047d72e50dc6595f449342b0d506c9e
+- **Size:** 39128 bytes
+- **Coverage:** Complete EOF coverage (1010 logical lines).
+- **Purpose:** HTTPS gateway wakes Azure build VM, applies quotas, caches native-mod builds, dispatches GitHub Actions and serves verified results.
+- **Dependencies / cross-references:** Python HTTP/threads/urllib/zipfile; Azure managed identity/ARM; Caddy; mod_build_server; GitHub Actions API and artifact store.
+- **Implementation / logic:** Tracks jobs, hashes request bodies, enforces quotas, wakes/deallocates VM, dispatches workflows, downloads artifacts and verifies SHA-256/size.
+- **Findings:** Artifact verification and quotas are useful; address() trusts X-Forwarded-For so proxy overwrite is security-critical; connections are not consistently explicitly closed; random-token endpoints and GitHub credentials need threat review.
+- **RustChunk relevance:** Architecture reference for optional remote compilation and artifact caching; not required for Forge JAR loading.
+- **Decision:** reference; version-specific; remote-build-gateway
+- **1.20.1 implications:** Compiles Horizon native mods, not Forge mods; does not solve JVM/Forge compatibility.
+- **Follow-up checks:** Inspect Caddy/firewall/systemd/token scopes; test XFF spoofing, short bodies, socket lifecycle, artifact ZIP limits and cache eviction.
+- **RustChunk implementation mapping:** Prefer reproducible local/GitHub Actions builds; isolate any remote service from worlds/accounts and sign artifacts.
+- **Evidence required before adoption:** Require threat model, deployment review, HTTP fuzzing, quota-spoof tests and signed artifact verification.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3632. `packaging/android/mod_build_once.py`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1c6f116e6d95310edd4f2bf22d32681ad037390d
+- **Size:** 2762 bytes
+- **Coverage:** Complete EOF coverage (70 logical lines).
+- **Purpose:** Runs one native-mod build on an ephemeral GitHub runner using the same validation and sandbox as the persistent service.
+- **Dependencies / cross-references:** mod_build_server split_body/unpack/why_failed; mod_build_sandbox; subprocess and GitHub Actions.
+- **Implementation / logic:** Reads request body, validates bundles, invokes sandbox with timeout, captures logs, emits status and moves library to artifact folder.
+- **Findings:** Fixed jobs/once workspace and no finally cleanup can leave partial files after malformed input or timeout; CLI args and local artifact metadata are minimally checked.
+- **RustChunk relevance:** Useful one-request-per-run CI pattern.
+- **Decision:** reference; version-specific; build-orchestration
+- **1.20.1 implications:** Only builds Starling .hnmod native modules for Horizon 26.3.
+- **Follow-up checks:** Test malformed body, timeout cleanup, artifact contents, log truncation and runner reuse assumptions.
+- **RustChunk implementation mapping:** Build each optional native extension in a fresh ephemeral runner with provenance metadata.
+- **Evidence required before adoption:** Require workflow isolation and artifact integrity tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3633. `packaging/android/mod_build_sandbox.sh`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 2abbd7aa2ad3e7951eb776b2e61330f6b005f565
+- **Size:** 3119 bytes
+- **Coverage:** Complete EOF coverage (87 logical lines).
+- **Purpose:** Runs third-party native build scripts in Linux namespaces with network disabled and reduced filesystem/capabilities.
+- **Dependencies / cross-references:** unshare/mount/pid namespaces, sudo/timeout/setpriv, overlayfs, Rust/Android/Cargo caches and native_build.sh.
+- **Implementation / logic:** Checks out pinned source, creates private proc/tmp/home, mounts toolchains read-only, gives per-job overlay cache and drops UID/GID/groups/capabilities.
+- **Findings:** Strong isolation intent; shared Cargo cache is writable across builds and may be poisoned; trusted-base mode writes directly to base; no seccomp profile visible; cleanup paths need adversarial tests.
+- **RustChunk relevance:** Important threat-model reference for any future third-party native build system.
+- **Decision:** reference; version-specific; build-sandbox
+- **1.20.1 implications:** Linux build isolation only; unrelated to Android Forge runtime loading.
+- **Follow-up checks:** Test cache poisoning, symlink/mount attacks, timeout cleanup, environment leakage and network namespace enforcement.
+- **RustChunk implementation mapping:** Use disposable VM/container per build, read-only toolchains and isolated writable caches.
+- **Evidence required before adoption:** Require malicious build-script tests proving no cross-build or host-secret access.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3634. `packaging/android/mod_build_server.py`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 317c8053a58864fdccee755f5af4138180cf2b3a
+- **Size:** 13930 bytes
+- **Coverage:** Complete EOF coverage (349 logical lines).
+- **Purpose:** Accepts native-mod bundles, validates ZIP contents, queues builds, compiles through sandbox and serves status/library artifacts.
+- **Dependencies / cross-references:** Python stdlib, ZIP parser, filesystem, worker queue, versions.json and native build scripts.
+- **Implementation / logic:** Enforces size/count/mod limits, validates archive paths and IDs, extracts allowed Rust/TOML/data/text, deduplicates by version/commit/mod hashes and runs one worker.
+- **Findings:** Duplicate ZIP names overwrite in map; failed unpack may leave partial work; identical concurrent submissions can race over same work directory; binds 0.0.0.0 although comments assume gateway-only; Content-Length read is not robustly validated.
+- **RustChunk relevance:** Reference for safe archive intake and async job queues.
+- **Decision:** reference; version-specific; mod-build-service
+- **1.20.1 implications:** Starling .hnmod service is not a Forge mod loader.
+- **Follow-up checks:** Test concurrent identical jobs, cleanup, duplicate ZIP entries, malformed/short bodies, direct-port firewall and ranges.
+- **RustChunk implementation mapping:** Use JVM/Forge to load Forge JARs; borrow only validated queue/archive patterns.
+- **Evidence required before adoption:** Require fuzzing, concurrency stress, firewall review and adversarial ZIP tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3635. `packaging/android/native/java_launcher.c`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 746233c33abd3af4a2f1bcf26d1eca1c1cad4dc3
+- **Size:** 2953 bytes
+- **Coverage:** Complete EOF coverage (71 logical lines).
+- **Purpose:** Provides Android java/javac shims that load runtime libjli and call JLI_Launch.
+- **Dependencies / cross-references:** Android linker/dlopen/dlsym, libc++_shared, STARLING_JAVA_HOME and JDK libjli.
+- **Implementation / logic:** Finds own APK library folder, loads libc++_shared and libjli, resolves JLI_Launch and invokes Java or javac entry args.
+- **Findings:** Hard-codes Java version 25; JLI_Launch is internal ABI and signature may vary across JDK builds.
+- **RustChunk relevance:** Useful reference for packaging Java runtime tools on Android.
+- **Decision:** reference; version-specific; android-java-launcher
+- **1.20.1 implications:** Java 25 is incompatible with RustChunk Java 17 / Forge 1.20.1; requires JDK 17 bridge.
+- **Follow-up checks:** Inspect runtime distribution, JLI symbol/signature, ABI and launch flags.
+- **RustChunk implementation mapping:** Use a tested Java 17 runtime/launcher bridge; do not copy version 25 values.
+- **Evidence required before adoption:** Require java/javac 17 version checks and Forge bootstrap on Android ARM64.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3636. `packaging/android/native_build.sh`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 32d68763dc863fbf22ffa9ff787b4a191bbfc57a
+- **Size:** 7312 bytes
+- **Coverage:** Complete EOF coverage (153 logical lines).
+- **Purpose:** Builds Starling with selected native mods by applying pinned horizon-mixins, adapting bundles and invoking Android APK build.
+- **Dependencies / cross-references:** Cargo, pinned horizon-mixins, git archive, rsync, sed, Python build_apk and native_mod_permissions, Android SDK/NDK.
+- **Implementation / logic:** Validates ABI/variant, installs pinned CLI, exports source, creates plan stubs, retargets bundles, adapts code, hashes inputs, applies mixins and builds library/APK plus build.json.
+- **Findings:** Build key omits explicit Rust/NDK/SDK toolchain versions; grep/sed anchors and regex adaptation are brittle; cached target artifacts are retained intentionally.
+- **RustChunk relevance:** Reference for native extension build provenance and pipeline.
+- **Decision:** reference; version-specific; native-build-pipeline
+- **1.20.1 implications:** Horizon 26.3 native injections, not Forge 47.x or Java Mixin.
+- **Follow-up checks:** Pin toolchain versions in key; verify staged diff, bundle hashes, source revision and clean/reused cache equivalence.
+- **RustChunk implementation mapping:** Build RustChunk native engine and Java17/Forge in separate reproducible jobs.
+- **Evidence required before adoption:** Require clean-room reproducibility and complete build-key coverage.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3637. `packaging/android/native_mod_adapt.py`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 935678e132f0bf8d2fefec05e98bb6468f447a4b
+- **Size:** 7648 bytes
+- **Coverage:** Complete EOF coverage (167 logical lines).
+- **Purpose:** Rewrites older Horizon native mod manifests, module paths and Rust call sites to fit changed crate layout/API.
+- **Dependencies / cross-references:** Python pathlib/re, source crate roots, horizon-mixin manifests and Rust source files.
+- **Implementation / logic:** Discovers top-level modules, rewrites target/file paths, applies argument additions and regex replacements, then edits manifests and Rust files in place.
+- **Findings:** Not a Rust parser: delimiter counting ignores strings/comments; regexes can rewrite unintended code or comments and silently change semantics.
+- **RustChunk relevance:** Migration automation reference only; high-risk source transformation.
+- **Decision:** reference; version-specific; source-rewriter
+- **1.20.1 implications:** Paths and APIs are Horizon-specific and cannot map Forge Java mods.
+- **Follow-up checks:** Add fixture before/after tests, parser-aware edits, diff review and idempotence checks.
+- **RustChunk implementation mapping:** Prefer explicit migration patches; never auto-rewrite third-party Forge JAR contents.
+- **Evidence required before adoption:** Require deterministic golden transforms and human-reviewed diffs.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3638. `packaging/android/release-notes.md`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** d21f12e85389d0f7f19bcd912acd2525d7cd3c98
+- **Size:** 10455 bytes
+- **Coverage:** Complete EOF coverage (113 logical lines).
+- **Purpose:** Documents Starling 0.8.0 and earlier releases, APK ABIs, controls, account profiles, offline profiles, shaders, native/content mods and diagnostics.
+- **Dependencies / cross-references:** Starling/Horizon release process, .hnmod/.hmod, catalog, account providers and Android APK variants.
+- **Implementation / logic:** User-facing changelog grouped by install, new features, mods/shaders, fixes and historical release sections; contains external links and product claims.
+- **Findings:** Release notes are self-reported claims, not runtime evidence; describe Horizon 26.3 and native mods, not 1.20.1 Forge or Aternos compatibility.
+- **RustChunk relevance:** Useful changelog structure and user communication reference.
+- **Decision:** reference; version-specific; release-documentation
+- **1.20.1 implications:** Feature names, versions, auth and mod formats are not transferable without separate implementation.
+- **Follow-up checks:** Trace relevant claims to source/tests; verify offline identity and account behavior independently.
+- **RustChunk implementation mapping:** Use transparent changelog separating implemented, tested and planned features.
+- **Evidence required before adoption:** Require code, tests and release artifact evidence for every RustChunk claim.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3639. `packaging/android/release_assets.py`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 49de32baa084f5535a1d884db0616f90e38eb816
+- **Size:** 944 bytes
+- **Coverage:** Complete EOF coverage (25 logical lines).
+- **Purpose:** Checks all target ABI APKs exist before creating a shared visuals ZIP.
+- **Dependencies / cross-references:** build_apk ROOT/TARGETS/zip_folder and packaging/shaderpacks/starling-visuals.
+- **Implementation / logic:** Normalizes version prefix, checks expected APK filenames for all ABIs and zips shared visuals.
+- **Findings:** Presence-only gate; does not verify signatures, package/version metadata, ABI contents, file hashes or ZIP reproducibility.
+- **RustChunk relevance:** Useful multi-ABI release completeness gate.
+- **Decision:** adaptable; reference; release-packaging
+- **1.20.1 implications:** Targets and filenames must be RustChunk-specific.
+- **Follow-up checks:** Add signature, manifest, ABI, checksum and deterministic ZIP verification.
+- **RustChunk implementation mapping:** Use after CI has produced every supported RustChunk ABI artifact.
+- **Evidence required before adoption:** Require per-ABI install smoke tests and signing verification.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3640. `packaging/android/res/values-v31/themes.xml`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** e009fd3b8005a5f9192bb62bef3c8b0b7de510c6
+- **Size:** 503 bytes
+- **Coverage:** Complete EOF coverage (9 logical lines).
+- **Purpose:** Defines Android 12+ fullscreen game theme and splash background/icon.
+- **Dependencies / cross-references:** values-v31 resources, Starling.Game theme, mipmap icon and first-frame gating.
+- **Implementation / logic:** Overrides fullscreen theme with dark splash background and app icon for API 31+.
+- **Findings:** Visual startup polish only; does not guarantee first frame or prevent native startup failure.
+- **RustChunk relevance:** Useful Android 12 splash integration reference.
+- **Decision:** adaptable; reference; android-splash-theme
+- **1.20.1 implications:** Colors/resources and target API must match RustChunk.
+- **Follow-up checks:** Test cold start, splash transition, first-frame delay and API 31 theme merge.
+- **RustChunk implementation mapping:** Add values-v31 splash theme; keep recovery and first-frame synchronization separate.
+- **Evidence required before adoption:** Require cold-start screenshots and API 31+ launch tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3641. `packaging/android/res/values/diagnostics.xml`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 7fac6de8046763279def8fffc767bbd8241c07d5
+- **Size:** 963 bytes
+- **Coverage:** Complete EOF coverage (14 logical lines).
+- **Purpose:** Provides resource strings for diagnostics, recovery, logs, ZIP export/share, restart and failure states.
+- **Dependencies / cross-references:** DiagnosticsActivity, StartupRecovery and Android resource IDs.
+- **Implementation / logic:** Defines 12 strings for normal/recovery intros, actions, progress, success, failure and empty-report states.
+- **Findings:** Includes reminder to review report before sharing; no localization or placeholder validation here.
+- **RustChunk relevance:** Useful diagnostics copy structure.
+- **Decision:** adaptable; reference; android-diagnostics
+- **1.20.1 implications:** Resource IDs and wording must be rewritten/localized.
+- **Follow-up checks:** Check IDs, format placeholders, accessibility length and translations.
+- **RustChunk implementation mapping:** Keep diagnostic copy in Android resources rather than hard-coded Java.
+- **Evidence required before adoption:** Require resource linking and UI accessibility checks.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3642. `packaging/android/res/values/folders.xml`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** df72f7b6e950ad21913fe886144aac69b33663ee
+- **Size:** 163 bytes
+- **Coverage:** Complete EOF coverage (3 logical lines).
+- **Purpose:** Defines fallback message when no file manager can open a game folder.
+- **Dependencies / cross-references:** StarlingActivity.openFolder and open_folder_failed resource.
+- **Implementation / logic:** One string directs user to Android Files and the Starling entry.
+- **Findings:** Assumes Files app exists and the game folder is visible there.
+- **RustChunk relevance:** Small but useful storage failure UX pattern.
+- **Decision:** adaptable; reference; android-storage-copy
+- **1.20.1 implications:** Folder name and Android Files location must be RustChunk-specific.
+- **Follow-up checks:** Test devices without DocumentsUI and denied shared-storage access.
+- **RustChunk implementation mapping:** Provide a clear SAF fallback for RustChunk worlds/mods folder.
+- **Evidence required before adoption:** Require permission-denied and no-file-manager UI tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3643. `packaging/android/res/values/themes.xml`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** e5ed0b8c627d200b19b471324299da438ce98917
+- **Size:** 236 bytes
+- **Coverage:** Complete EOF coverage (5 logical lines).
+- **Purpose:** Defines the base fullscreen black game activity theme.
+- **Dependencies / cross-references:** Android resources and Starling.Game manifest theme.
+- **Implementation / logic:** Declares one style inheriting Theme.Black.NoTitleBar.Fullscreen.
+- **Findings:** Minimal theme only; no renderer, cutout, edge-to-edge or system-bar behavior.
+- **RustChunk relevance:** Useful minimal base theme for a fullscreen game activity.
+- **Decision:** adaptable; reference; android-theme
+- **1.20.1 implications:** Theme parent and API compatibility must match RustChunk SDK.
+- **Follow-up checks:** Verify resource merge with values-v31, edge-to-edge, cutouts and keyboard insets.
+- **RustChunk implementation mapping:** Use a minimal base theme with API-qualified overrides.
+- **Evidence required before adoption:** Require manifest/resource merge and multi-API screenshot tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3644. `packaging/android/res/xml/shortcuts.xml`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** dda4f27994351c2079928f35fae4cf2f1e3d076d
+- **Size:** 474 bytes
+- **Coverage:** Complete EOF coverage (7 logical lines).
+- **Purpose:** Declares launcher shortcut that opens diagnostics directly.
+- **Dependencies / cross-references:** Manifest shortcuts metadata, DiagnosticsActivity, application ID placeholder and diagnostics_title.
+- **Implementation / logic:** One enabled static shortcut with info icon and explicit VIEW target package/class.
+- **Findings:** Only one shortcut; relies on manifest alias and launcher support.
+- **RustChunk relevance:** Useful direct recovery entry point when game cannot start.
+- **Decision:** adaptable; reference; android-app-shortcut
+- **1.20.1 implications:** Application ID and class must be rewritten; diagnostics must not initialize game.
+- **Follow-up checks:** Test cold-start shortcut, package replacement and launcher compatibility.
+- **RustChunk implementation mapping:** Expose diagnostics shortcut through RustChunk launcher alias if needed.
+- **Evidence required before adoption:** Require cold-start shortcut test after simulated native crash.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3645. `packaging/icons/hicolor/128x128/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 82aa505087f9619dd9fd2c21a0cf07b4c6191d3a
+- **Size:** 1651 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** 128x128 Linux application icon variant for Horizon/Starling branding.
+- **Dependencies / cross-references:** hicolor icon theme packaging and shared icon artwork.
+- **Implementation / logic:** PNG rendered at 128x128; dark rounded square, purple horizontal band and pale geometric H/pause-like central mark; no visible text.
+- **Findings:** Visual asset only; no Android adaptive-icon metadata or attribution embedded.
+- **RustChunk relevance:** Branding reference only.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Do not reuse Starling/Horizon mark as RustChunk identity without licensing review.
+- **Follow-up checks:** Compare variants and inspect license/provenance.
+- **RustChunk implementation mapping:** Create distinct RustChunk adaptive and legacy icons.
+- **Evidence required before adoption:** Require original artwork or documented permission and Samsung launcher tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.
+
+### 3646. `packaging/icons/hicolor/16x16/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 034e64bcab27b1dc968cac4bc9644d2a6c2b182e
+- **Size:** 280 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** 16x16 hicolor icon variant.
+- **Dependencies / cross-references:** Linux hicolor theme and shared Horizon artwork.
+- **Implementation / logic:** PNG rendered at 16x16; tiny dark icon with simplified pale central mark; no visible text.
+- **Findings:** Purple band and fine geometry are barely distinguishable at this size.
+- **RustChunk relevance:** Small-icon legibility reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Not an Android launcher icon specification or RustChunk asset.
+- **Follow-up checks:** Review pixel contrast and compare adjacent sizes.
+- **RustChunk implementation mapping:** Design RustChunk small icon separately from adaptive layers.
+- **Evidence required before adoption:** Require device-density rendering and small-icon contrast review.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.
+
+### 3647. `packaging/icons/hicolor/24x24/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 10729734634614a9d04b478820452a0cc66e7ae5
+- **Size:** 390 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** 24x24 hicolor icon variant.
+- **Dependencies / cross-references:** Linux hicolor theme and shared Horizon artwork.
+- **Implementation / logic:** PNG rendered at 24x24; dark rounded square with centered pale geometric mark and subtle horizontal accent; no text.
+- **Findings:** Small-scale details are reduced.
+- **RustChunk relevance:** Size-specific icon readability reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Not a RustChunk identity asset or Android density set.
+- **Follow-up checks:** Compare pixel alignment and contrast with adjacent sizes.
+- **RustChunk implementation mapping:** Generate RustChunk icons from a vector master.
+- **Evidence required before adoption:** Require size-by-size review and launcher tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.
+
+### 3648. `packaging/icons/hicolor/256x256/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 5610f66051464788a1329ab905533400cca20890
+- **Size:** 3428 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** 256x256 high-resolution hicolor icon variant.
+- **Dependencies / cross-references:** Linux hicolor theme and shared Horizon artwork.
+- **Implementation / logic:** PNG rendered at 256x256; dark rounded-square background, broad purple stripe and two pale vertical strokes forming central emblem; no text.
+- **Findings:** Brand asset is not proof of Gaming Hub recognition behavior.
+- **RustChunk relevance:** Reference for scalable icon geometry and contrast.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Do not adopt as RustChunk branding; Android adaptive layers are separate.
+- **Follow-up checks:** Check alpha edges, corner radius, contrast and license.
+- **RustChunk implementation mapping:** Create a RustChunk vector master and export adaptive/legacy densities.
+- **Evidence required before adoption:** Require licensed artwork and Samsung Gaming Hub tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.
+
+### 3649. `packaging/icons/hicolor/32x32/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 3603cbe0fa7130493960a71c591b582d389983e1
+- **Size:** 424 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** 32x32 hicolor icon variant.
+- **Dependencies / cross-references:** Linux hicolor theme and shared Horizon artwork.
+- **Implementation / logic:** PNG rendered at 32x32; compact dark square with pale central glyph and horizontal accent; no text.
+- **Findings:** Main mark remains visible but fine details are reduced.
+- **RustChunk relevance:** Small desktop icon legibility reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Not a RustChunk icon or Android adaptive substitute.
+- **Follow-up checks:** Compare antialiasing and centering with adjacent sizes.
+- **RustChunk implementation mapping:** Generate RustChunk density resources from a master vector.
+- **Evidence required before adoption:** Require actual device launcher rendering and contrast review.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.
+
+### 3650. `packaging/icons/hicolor/48x48/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 63f1d4e176df7d214e7b5c1b29ffc30cb405e8f0
+- **Size:** 616 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** 48x48 hicolor icon variant.
+- **Dependencies / cross-references:** Linux hicolor theme and shared Horizon artwork.
+- **Implementation / logic:** PNG rendered at 48x48; rounded dark square with pale central two-stroke mark and purple band; no text.
+- **Findings:** More legible than smallest variants but remains desktop hicolor artwork.
+- **RustChunk relevance:** Multi-size icon consistency reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Branding and Android packaging differ; no direct reuse in RustChunk.
+- **Follow-up checks:** Verify pixel alignment and license provenance.
+- **RustChunk implementation mapping:** Use as a size comparison checklist for RustChunk artwork.
+- **Evidence required before adoption:** Require original artwork and Samsung/Android icon tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.

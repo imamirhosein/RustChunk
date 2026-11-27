@@ -2268,3 +2268,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 ### Validation boundary
 - Static source audit only. No RustChunk application code changed. No build, unit test, benchmark, APK, Android device, Vulkan/GPU, Forge, Minecraft gameplay, multiplayer or Aternos validation was performed.
 - **Checkpoint 3601–3625 is committed and independently read back.** The 100-file authorization remains active; next checkpoint is 3626–3650. Report at 3650, continue without a new permission request through 3700, then STOP.
+
+
+## Checkpoint 3626–3650 — 2026-11-27 — COMPLETE
+
+- Inspected exactly 25 new pinned source files, 3626–3650. Recomputed raw-lexical unindexed paths after excluding 3,625 Index entries; the first 25 matched this range in the complete 5,749-entry, untruncated upstream tree.
+- Verified every source SHA and byte size against the pinned tree. All files were read through EOF. Files above 400 logical lines were inspected in consecutive chunks: StarlingActivity.java 1–400, 401–800, 801–1003; mod_build_gateway.py 1–400, 401–800, 801–1010. All other text/XML files were at most 400 lines.
+- Six PNG files (3645–3650) were fetched as binary, rendered and visually reviewed at native sizes: 128, 16, 24, 256, 32 and 48 pixels square. Each was recorded in Ledger/Index and Media Archive with matching audit number, SHA and size.
+- Ledger now has 50 records (3601–3650), each with exactly 15 fields. Index now has 3,650 sequential unique paths and matching decisions. Media Archive contains the six new image records.
+- Material findings: StartupRecovery uses a one-shot InputStream.read and non-atomic marker write; the remote gateway trusts X-Forwarded-For for quotas; the sandbox shares a writable Cargo cache; mod_build_server has a concurrent identical-request work-directory race and cleanup/ZIP duplicate concerns; native/java_launcher.c hard-codes Java 25, incompatible with Java 17 / Forge 1.20.1; native_mod_adapt.py uses heuristic regex rewriting rather than a Rust parser.
+- The six images are visually reviewed Horizon/Starling brand icons, not approved RustChunk artwork. Release notes are self-reported product claims, not runtime evidence.
+- Static source and visual asset audit only. No RustChunk app code, build, tests, benchmark, APK, device, Vulkan/GPU, Forge, Minecraft, multiplayer or Aternos validation was performed.
+- **Checkpoint 3626–3650 committed and independently read back.** The grant remains active through 3700; 3650 is a report boundary, not a permission stop.

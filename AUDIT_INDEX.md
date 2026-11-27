@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3625** complete; authorized exceptional 100-file stage **3601–3700 ACTIVE (25/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **25 source records (3601–3625)**, each with exactly 15 fields. Index: **3,625 sequential unique paths**, no duplicates; checkpoint 3601–3625 committed and read-back verified. Next checkpoint 3626–3650 is already authorized; report at 3650 and continue under the same grant through 3700. Media backfill for entries 1–4000 remains a mandatory pre-backup gate.
+- Source ledgers: entries **1–3650** complete; exceptional 100-file stage **3601–3700 ACTIVE (50/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **50 records (3601–3650)**, each with exactly 15 fields. Index: **3,650 sequential unique paths**; checkpoint 3650 committed and read-back verified. Report the 3650 boundary, then continue under the same grant through 3700 without a new permission request. Media Archive includes six visually reviewed PNGs (3645–3650); historical media backfill 1–4000 remains mandatory before backup.
 
 ## Part 1 — Entries 1–25
 
@@ -4139,3 +4139,29 @@
 | 3623 | `packaging/android/java/io/github/juanluci/starling/GameFolderProvider.java` | adaptable; security-review-required; android-storage-provider | Exposes the game folder through Android's DocumentsProvider for Files app browsing, import/export and document picker access. |
 | 3624 | `packaging/android/java/io/github/juanluci/starling/HorizonImport.java` | adaptable; security-review-required; android-import | Imports worlds and resource packs from Horizon Android's DocumentsProvider into the game's import inbox. |
 | 3625 | `packaging/android/java/io/github/juanluci/starling/LauncherActivity.java` | adaptable; security-review-required; android-launch-flow | Routes file-open/share intents into an import inbox and restarts the game after its prior process exits. |
+
+| 3626 | `packaging/android/java/io/github/juanluci/starling/StarlingActivity.java` | adaptable; reference; version-specific | Android NativeActivity bridge for library loading, storage, window/input, IME, controllers, gyroscope, clipboard, file picker, browser, DNS, updates and Keystore secrets. |
+| 3627 | `packaging/android/java/io/github/juanluci/starling/StartupRecovery.java` | adaptable; reference; android-recovery | Persists startup attempts and offers recovery after interruption during native startup, renderer initialization or resource loading. |
+| 3628 | `packaging/android/java/io/github/juanluci/starling/TextMirror.java` | adaptable; reference; android-input-bridge | Bridges Android IME to a game-rendered text field using an invisible EditText and code-point-aware selection/length. |
+| 3629 | `packaging/android/java/io/github/juanluci/starling/UpdateProvider.java` | adaptable; reference; android-content-provider | Exposes downloaded update APKs and diagnostic ZIPs read-only through ContentProvider. |
+| 3630 | `packaging/android/java/io/github/juanluci/starling/WorkService.java` | adaptable; reference; android-foreground-service | Keeps the game process alive with an ongoing notification during browser sign-in, downloads or imports. |
+| 3631 | `packaging/android/mod_build_gateway.py` | reference; version-specific; remote-build-gateway | HTTPS gateway wakes Azure build VM, applies quotas, caches native-mod builds, dispatches GitHub Actions and serves verified results. |
+| 3632 | `packaging/android/mod_build_once.py` | reference; version-specific; build-orchestration | Runs one native-mod build on an ephemeral GitHub runner using the same validation and sandbox as the persistent service. |
+| 3633 | `packaging/android/mod_build_sandbox.sh` | reference; version-specific; build-sandbox | Runs third-party native build scripts in Linux namespaces with network disabled and reduced filesystem/capabilities. |
+| 3634 | `packaging/android/mod_build_server.py` | reference; version-specific; mod-build-service | Accepts native-mod bundles, validates ZIP contents, queues builds, compiles through sandbox and serves status/library artifacts. |
+| 3635 | `packaging/android/native/java_launcher.c` | reference; version-specific; android-java-launcher | Provides Android java/javac shims that load runtime libjli and call JLI_Launch. |
+| 3636 | `packaging/android/native_build.sh` | reference; version-specific; native-build-pipeline | Builds Starling with selected native mods by applying pinned horizon-mixins, adapting bundles and invoking Android APK build. |
+| 3637 | `packaging/android/native_mod_adapt.py` | reference; version-specific; source-rewriter | Rewrites older Horizon native mod manifests, module paths and Rust call sites to fit changed crate layout/API. |
+| 3638 | `packaging/android/release-notes.md` | reference; version-specific; release-documentation | Documents Starling 0.8.0 and earlier releases, APK ABIs, controls, account profiles, offline profiles, shaders, native/content mods and diagnostics. |
+| 3639 | `packaging/android/release_assets.py` | adaptable; reference; release-packaging | Checks all target ABI APKs exist before creating a shared visuals ZIP. |
+| 3640 | `packaging/android/res/values-v31/themes.xml` | adaptable; reference; android-splash-theme | Defines Android 12+ fullscreen game theme and splash background/icon. |
+| 3641 | `packaging/android/res/values/diagnostics.xml` | adaptable; reference; android-diagnostics | Provides resource strings for diagnostics, recovery, logs, ZIP export/share, restart and failure states. |
+| 3642 | `packaging/android/res/values/folders.xml` | adaptable; reference; android-storage-copy | Defines fallback message when no file manager can open a game folder. |
+| 3643 | `packaging/android/res/values/themes.xml` | adaptable; reference; android-theme | Defines the base fullscreen black game activity theme. |
+| 3644 | `packaging/android/res/xml/shortcuts.xml` | adaptable; reference; android-app-shortcut | Declares launcher shortcut that opens diagnostics directly. |
+| 3645 | `packaging/icons/hicolor/128x128/apps/horizon.png` | adaptable; reference; media-image | 128x128 Linux application icon variant for Horizon/Starling branding. |
+| 3646 | `packaging/icons/hicolor/16x16/apps/horizon.png` | adaptable; reference; media-image | 16x16 hicolor icon variant. |
+| 3647 | `packaging/icons/hicolor/24x24/apps/horizon.png` | adaptable; reference; media-image | 24x24 hicolor icon variant. |
+| 3648 | `packaging/icons/hicolor/256x256/apps/horizon.png` | adaptable; reference; media-image | 256x256 high-resolution hicolor icon variant. |
+| 3649 | `packaging/icons/hicolor/32x32/apps/horizon.png` | adaptable; reference; media-image | 32x32 hicolor icon variant. |
+| 3650 | `packaging/icons/hicolor/48x48/apps/horizon.png` | adaptable; reference; media-image | 48x48 hicolor icon variant. |

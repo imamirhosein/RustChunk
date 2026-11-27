@@ -723,3 +723,17 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - New stage Ledger: `AUDIT_LEDGER_3601_3800.md`; currently 25 records (3601–3625), exactly 15 fields each.
 - Media archive receives entries only for actual image/video source files, not manifests that merely reference image assets. Entry 3618 references 59 PNG assets for later provenance/visual review.
 - Before the 4000 backup, complete media backfill for entries 1–4000, reconcile all media/Ledger/Index records, and pass global structural/provenance QA. Any failed gate prohibits backup.
+
+
+## Exceptional 100-file grant — progress through 3650
+
+| Checkpoint | Range | State |
+|---|---:|---|
+| 1 | 3601–3625 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 2 | 3626–3650 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 3 | 3651–3675 | AUTHORIZED — NEXT; CONTINUE WITHOUT PERMISSION STOP |
+| 4 | 3676–3700 | AUTHORIZED — NOT STARTED |
+
+- The 3650 boundary report does not pause this explicit grant. Continue directly through 3651–3700 and STOP at 3700.
+- Ledger contains 50 records (3601–3650), each with exactly 15 fields.
+- Media Archive contains visually reviewed PNGs 3645–3650; historical media backfill 1–4000 remains a mandatory pre-backup gate.

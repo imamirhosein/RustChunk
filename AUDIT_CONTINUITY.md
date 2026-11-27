@@ -6,15 +6,14 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3625**.
-- Stage **3401–3600 is CLOSED (200/200)**; all eight 25-file checkpoints are complete, committed and independently read back.
-- Exceptional stage **3601–3700 is ACTIVE (25/100)** under the user's continuous one-time grant. Checkpoint **3601–3625 is COMPLETE**; next checkpoint **3626–3650** is already authorized.
-- At **3650**, provide the required 50-file boundary report but do **not** request permission or stop; continue under the same grant through checkpoint 3676–3700. **STOP at 3700**; 3701+ requires fresh explicit authorization.
-- New Ledger `AUDIT_LEDGER_3601_3800.md`: **25 records (3601–3625)**, each with exactly 15 fields. Index: **3,625 sequential unique paths**, no duplicates and Ledger/Index decision alignment.
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: **5,749 entries**, complete and untruncated. Existing 3,600 paths were unique and present; the first 25 raw-lexically sorted unindexed paths matched 3601–3625.
-- Permanent media archive remains continuous. Historical media backfill **1–4000** is still pending and mandatory before the final 4000 backup; the 59 PNG references in entry 3618 are a manifest, not visually reviewed image entries.
-- Static source audit only. No RustChunk application implementation, build, tests, benchmark, APK, device, renderer/GPU, Forge/Minecraft gameplay, multiplayer or Aternos validation is established by this checkpoint.
-- Preserve the existing backup refs. Do not modify `main`.
+- Completed entries: **1–3650**.
+- Stage **3401–3600 is CLOSED (200/200)**.
+- Exceptional stage **3601–3700 is ACTIVE (50/100)**. Checkpoints 3601–3625 and 3626–3650 are complete and read-back verified.
+- The 3650 boundary is reported; **do not stop or request new permission**. Continue through 3651–3675 and 3676–3700 under the same grant. **STOP at 3700**.
+- Ledger `AUDIT_LEDGER_3601_3800.md`: 50 records (3601–3650), exactly 15 fields each. Index: 3,650 sequential unique paths.
+- Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree has 5,749 entries and is untruncated.
+- Media Archive includes six visually reviewed PNG icon entries 3645–3650. Historical media backfill 1–4000 remains mandatory before backup.
+- Static source and visual asset review only; no build/test/runtime/device/GPU/Forge/Minecraft/server validation is established. Do not modify main or backup refs.
 
 The historical checkpoint notes below are append-only evidence. Older intermediate resume/STOP statements are historical and are superseded by this current authoritative block and the final closeout in Section 67 of `AUDIT_PROTOCOL.md`.
 

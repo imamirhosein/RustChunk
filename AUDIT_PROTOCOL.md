@@ -1120,3 +1120,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - No image/video source blob occurred in this checkpoint. Entry 3618 is an asset manifest listing 59 PNG references; do not claim those images were visually reviewed or add the manifest itself as an image archive record.
 - Next authorized checkpoint: **3626–3650**. At 3650 report the boundary but continue without another permission request under the same grant. Stop only after checkpoint 3676–3700 is complete at **3700**.
 - This is static source review only; no build, test, runtime, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.
+
+
+## 72. Checkpoint 3626–3650 completion — 2026-11-27
+
+- Checkpoint 3626–3650 is complete under the active exceptional grant 3601–3700.
+- Exactly 25 new source files were inspected through EOF; files above 400 lines were inspected in consecutive chunks no larger than 400 lines. SHA/byte sizes match the complete pinned tree.
+- Six PNG icon assets 3645–3650 were rendered and visually reviewed, then recorded in Ledger/Index and permanent Media Archive.
+- Ledger has 50 records (3601–3650), each with exactly 15 fields; Index has 3,650 unique sequential paths. Ledger, Index, QA, Continuity, Protocol, Boundary and Media Archive were committed together and independently read back.
+- The 3650 boundary is a report only; continue under the same grant and stop at 3700.
+- Static source/visual review only; no build, tests, runtime, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.

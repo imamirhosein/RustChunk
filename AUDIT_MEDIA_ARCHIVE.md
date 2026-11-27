@@ -68,3 +68,47 @@ Neither record replaces the other. Archive entries must not use a separate media
 ### Audit entry 3310 — IMAGE — VISUALLY REVIEWED
 - `launcher/docs/whats-next.png`; SHA `ad9d9a4416dc75d67e371c97977ae61371ff8e56`; 59064 bytes.
 - Notes: roadmap parity and packaged desktop checks, online-mode/skin/icon/hotbar limitations. Unverified and 26.3-specific.
+
+
+### Audit entry 3645 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/128x128/apps/horizon.png`
+- **Audit source SHA:** `82aa505087f9619dd9fd2c21a0cf07b4c6191d3a`
+- **Source size:** 1,651 bytes
+- **Review status:** PNG rendered at 128×128 and visually reviewed.
+- **Notes:** Dark rounded-square icon, purple horizontal band and pale geometric H/pause-like central mark; no visible text. Brand artwork only, not RustChunk identity.
+
+### Audit entry 3646 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/16x16/apps/horizon.png`
+- **Audit source SHA:** `034e64bcab27b1dc968cac4bc9644d2a6c2b182e`
+- **Source size:** 280 bytes
+- **Review status:** PNG rendered at 16×16 and visually reviewed.
+- **Notes:** Tiny dark icon with simplified pale central mark; band and fine geometry are barely distinguishable. No visible text.
+
+### Audit entry 3647 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/24x24/apps/horizon.png`
+- **Audit source SHA:** `10729734634614a9d04b478820452a0cc66e7ae5`
+- **Source size:** 390 bytes
+- **Review status:** PNG rendered at 24×24 and visually reviewed.
+- **Notes:** Dark rounded square with centered pale geometric mark and subtle horizontal accent; no visible text.
+
+### Audit entry 3648 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/256x256/apps/horizon.png`
+- **Audit source SHA:** `5610f66051464788a1329ab905533400cca20890`
+- **Source size:** 3,428 bytes
+- **Review status:** PNG rendered at 256×256 and visually reviewed.
+- **Notes:** Dark rounded-square background, broad purple stripe and two pale vertical strokes forming a minimalist central emblem; no visible text. Not evidence of Samsung Gaming Hub recognition.
+
+### Audit entry 3649 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/32x32/apps/horizon.png`
+- **Audit source SHA:** `3603cbe0fa7130493960a71c591b582d389983e1`
+- **Source size:** 424 bytes
+- **Review status:** PNG rendered at 32×32 and visually reviewed.
+- **Notes:** Compact dark square with pale central glyph and horizontal accent; fine details are reduced. No visible text.
+
+### Audit entry 3650 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/48x48/apps/horizon.png`
+- **Audit source SHA:** `63f1d4e176df7d214e7b5c1b29ffc30cb405e8f0`
+- **Source size:** 616 bytes
+- **Review status:** PNG rendered at 48×48 and visually reviewed.
+- **Notes:** Rounded dark square with pale central two-stroke mark and purple band; no visible text. Desktop hicolor asset, not Android adaptive icon.
+
