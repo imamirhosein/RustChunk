@@ -112,3 +112,124 @@ Neither record replaces the other. Archive entries must not use a separate media
 - **Review status:** PNG rendered at 48×48 and visually reviewed.
 - **Notes:** Rounded dark square with pale central two-stroke mark and purple band; no visible text. Desktop hicolor asset, not Android adaptive icon.
 
+
+
+### Audit entry 3651 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/512x512/apps/horizon.png`
+- **Audit source SHA:** `9bf6b676468876407f1c55cdda0f34636d01a4e0`
+- **Source size:** 7,618 bytes
+- **Review status:** PNG rendered at 512×512 and visually reviewed.
+- **Notes:** Dark rounded-square tile with a broad purple horizontal stripe; unlike the paired vector/ICNS mark, no central vertical glyph is visible in this standalone raster.
+
+### Audit entry 3652 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/64x64/apps/horizon.png`
+- **Audit source SHA:** `1add8b2d610b44bd2b16ec3816882154c7d000e2`
+- **Source size:** 797 bytes
+- **Review status:** PNG rendered at 64×64 and visually reviewed.
+- **Notes:** Dark rounded tile with two pale vertical bars, muted lower halves and a narrow purple horizontal line; no text.
+
+### Audit entry 3653 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/hicolor/scalable/apps/horizon.svg`
+- **Audit source SHA:** `94fb593fc7a57ff5199a5a230a04883698d5b538`
+- **Source size:** 537 bytes
+- **Review status:** SVG source inspected and rendered at 256×256.
+- **Notes:** Title Horizon; dark rounded tile, two pale upper vertical strokes, dimmer lower strokes and purple horizontal stripe. Vector mark is clear at small size.
+
+### Audit entry 3654 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/horizon.icns`
+- **Audit source SHA:** `4c691e990bb37a7dea5734ad5ee75db6c4c94324`
+- **Source size:** 40,332 bytes
+- **Review status:** ICNS decoded; all 11 embedded PNG chunks rendered and visually reviewed.
+- **Notes:** Contains icp4, icp5, icp6, ic07, ic08, ic09, ic10, ic11, ic12, ic13 and ic14 chunks, spanning tiny icons through 1024px. The larger variants show the dark rounded tile, pale two-bar glyph and purple stripe.
+
+### Audit entry 3655 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/icons/horizon.ico`
+- **Audit source SHA:** `b580493d67639d431db4dacecd4720b9f27b7b90`
+- **Source size:** 7,704 bytes
+- **Review status:** ICO decoded; all seven embedded PNG sizes rendered and visually reviewed.
+- **Notes:** Contains 16, 24, 32, 48, 64, 128 and 256px PNG variants with dark rounded tile, pale central glyph and purple horizontal accent; small sizes simplify detail.
+
+### Audit entry 3662 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_0.png`
+- **Audit source SHA:** `f644128716d56725ede497da47462fbf0fb5c3a1`
+- **Source size:** 12,956 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Transparent bitmap font atlas with white hand-drawn punctuation, digits, uppercase and lowercase ASCII glyphs arranged in rows.
+
+### Audit entry 3663 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_1.png`
+- **Audit source SHA:** `470be6b7c43370d22edfd2a0d511e7da4fc6784a`
+- **Source size:** 13,189 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Same handwritten ASCII glyph grid as hand_0 with subtle changes in stroke shapes, slant and spacing.
+
+### Audit entry 3664 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_2.png`
+- **Audit source SHA:** `b9f321fa646a0f89d7d8beebc4306b046a084b7d`
+- **Source size:** 12,959 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Alternate transparent handwritten ASCII glyph atlas with changed stroke jitter and shapes.
+
+### Audit entry 3665 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_3.png`
+- **Audit source SHA:** `ed6d005088ea8bae9e351d69c28c60cb05fe275d`
+- **Source size:** 13,148 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Handwritten ASCII atlas variant with altered slant, wobble and stroke thickness.
+
+### Audit entry 3666 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_4.png`
+- **Audit source SHA:** `91bacf1717c4ffeec4b266174fac037e1e9df9c9`
+- **Source size:** 13,153 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Fifth transparent handwritten ASCII glyph atlas with small stroke, slant and spacing changes.
+
+### Audit entry 3667 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/footer_separator.png`
+- **Audit source SHA:** `23200ec05988269bf8fad133446e6bbc56204476`
+- **Source size:** 157 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Very thin horizontal pale gray separator with slight pixel variation and transparent background.
+
+### Audit entry 3668 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/header_separator.png`
+- **Audit source SHA:** `70df76ea6e379083f3190cdc3a4853d723ca84a8`
+- **Source size:** 150 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Thin light gray/white horizontal separator on transparency, visually close to footer separator but a distinct source blob.
+
+### Audit entry 3669 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/menu_background.png`
+- **Audit source SHA:** `f2022746015d315d38dd5d04ab83561dab52c23a`
+- **Source size:** 9,801 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Dark charcoal field with subtle mottled/noise texture; no visible text or objects.
+
+### Audit entry 3670 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/menu_list_background.png`
+- **Audit source SHA:** `0bbddd06e28b0bcaf882a7df7203d13a70af1521`
+- **Source size:** 9,530 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Dark charcoal textured panel background, close in appearance to menu_background but separately stored.
+
+### Audit entry 3671 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button.png`
+- **Audit source SHA:** `a1808f7e5081c4d41f9a7df7b09f66bca100135e`
+- **Source size:** 61,321 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Very wide dark mottled button sprite with a thin irregular pale outline and transparent exterior; adjacent .mcmeta specifies nine-slice scaling.
+
+### Audit entry 3673 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png`
+- **Audit source SHA:** `bad89171c4cfa1578e59f231e4861f6cc466e1f1`
+- **Source size:** 58,780 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Alternate wide dark textured button with irregular pale border; visually distinct interior/edge noise and same nine-slice geometry as button.png.
+
+### Audit entry 3675 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_2.png`
+- **Audit source SHA:** `2666fa2ba9e43a2a7ca3338d01d4ecc3bd964644`
+- **Source size:** 55,408 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Third wide dark mottled button sprite with thin irregular pale border; no matching sidecar metadata occurs in this checkpoint.
+

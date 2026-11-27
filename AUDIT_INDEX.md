@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3650** complete; exceptional 100-file stage **3601–3700 ACTIVE (50/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **50 records (3601–3650)**, each with exactly 15 fields. Index: **3,650 sequential unique paths**; checkpoint 3650 committed and read-back verified. Report the 3650 boundary, then continue under the same grant through 3700 without a new permission request. Media Archive includes six visually reviewed PNGs (3645–3650); historical media backfill 1–4000 remains mandatory before backup.
+- Source ledgers: entries **1–3675** complete; exceptional 100-file stage **3601–3700 ACTIVE (75/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **75 records (3601–3675)**, each with exactly 15 fields. Index: **3,675 sequential unique paths**; checkpoints 3601–3675 committed and read-back verified. Next checkpoint 3676–3700 is already authorized; stop only at 3700. Media Archive now includes the reviewed icon/font/UI image assets through 3675; historical backfill 1–4000 remains mandatory before backup.
 
 ## Part 1 — Entries 1–25
 
@@ -4165,3 +4165,29 @@
 | 3648 | `packaging/icons/hicolor/256x256/apps/horizon.png` | adaptable; reference; media-image | 256x256 high-resolution hicolor icon variant. |
 | 3649 | `packaging/icons/hicolor/32x32/apps/horizon.png` | adaptable; reference; media-image | 32x32 hicolor icon variant. |
 | 3650 | `packaging/icons/hicolor/48x48/apps/horizon.png` | adaptable; reference; media-image | 48x48 hicolor icon variant. |
+
+| 3651 | `packaging/icons/hicolor/512x512/apps/horizon.png` | adaptable; reference; media-image | 512x512 hicolor Horizon application icon. |
+| 3652 | `packaging/icons/hicolor/64x64/apps/horizon.png` | adaptable; reference; media-image | 64x64 hicolor Horizon icon. |
+| 3653 | `packaging/icons/hicolor/scalable/apps/horizon.svg` | adaptable; reference; media-image | Scalable SVG application icon. |
+| 3654 | `packaging/icons/horizon.icns` | adaptable; reference; media-image | Apple ICNS icon container for Horizon. |
+| 3655 | `packaging/icons/horizon.ico` | adaptable; reference; media-image | Windows ICO icon container for Horizon. |
+| 3656 | `packaging/linux/appimage.sh` | adaptable; reference; linux-packaging | Builds a Linux x86_64 AppImage for the Horizon launcher and packages non-system shared libraries. |
+| 3657 | `packaging/linux/horizon-launcher.desktop` | adaptable; reference; linux-desktop-entry | Declares the Horizon launcher as a Linux desktop application in the Game category. |
+| 3658 | `packaging/linux/horizon.desktop` | reference; version-specific; linux-desktop-entry | Declares the Horizon game client desktop entry, hidden from normal app menus. |
+| 3659 | `packaging/lowbudget/hand.py` | adaptable; reference; procedural-font-generator | Defines a procedural handwriting glyph set and renders text with per-character jitter, slant, size, baseline and pressure variation. |
+| 3660 | `packaging/lowbudget/pack/assets/minecraft/font/default.json` | adaptable; reference; version-specific; font-resource | Defines the low-budget pack default bitmap font and four Starling-specific font variants. |
+| 3661 | `packaging/lowbudget/pack/assets/minecraft/lang/en_us.json` | adaptable; reference; version-specific; localization-resource | English localization for low-budget options, controls, accessibility, resource packs and Horizon controller features. |
+| 3662 | `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_0.png` | adaptable; reference; media-image | Primary handwritten bitmap font atlas. |
+| 3663 | `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_1.png` | adaptable; reference; media-image | Handwritten bitmap font variation 1. |
+| 3664 | `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_2.png` | adaptable; reference; media-image | Handwritten bitmap font variation 2. |
+| 3665 | `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_3.png` | adaptable; reference; media-image | Handwritten bitmap font variation 3. |
+| 3666 | `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_4.png` | adaptable; reference; media-image | Handwritten bitmap font variation 4. |
+| 3667 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/footer_separator.png` | adaptable; reference; media-image | Low-budget GUI footer separator texture. |
+| 3668 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/header_separator.png` | adaptable; reference; media-image | Low-budget GUI header separator texture. |
+| 3669 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/menu_background.png` | adaptable; reference; media-image | Low-budget menu background texture. |
+| 3670 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/menu_list_background.png` | adaptable; reference; media-image | Low-budget menu list background texture. |
+| 3671 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button.png` | adaptable; reference; media-image | Primary low-budget GUI button sprite. |
+| 3672 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Defines nine-slice scaling for the primary button sprite. |
+| 3673 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png` | adaptable; reference; media-image | Alternate low-budget GUI button sprite variant 1. |
+| 3674 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Defines nine-slice scaling for button variant 1. |
+| 3675 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_2.png` | adaptable; reference; media-image | Alternate low-budget GUI button sprite variant 2. |

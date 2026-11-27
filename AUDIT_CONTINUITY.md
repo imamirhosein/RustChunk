@@ -6,13 +6,13 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3650**.
+- Completed entries: **1–3675**.
 - Stage **3401–3600 is CLOSED (200/200)**.
-- Exceptional stage **3601–3700 is ACTIVE (50/100)**. Checkpoints 3601–3625 and 3626–3650 are complete and read-back verified.
-- The 3650 boundary is reported; **do not stop or request new permission**. Continue through 3651–3675 and 3676–3700 under the same grant. **STOP at 3700**.
-- Ledger `AUDIT_LEDGER_3601_3800.md`: 50 records (3601–3650), exactly 15 fields each. Index: 3,650 sequential unique paths.
+- Exceptional stage **3601–3700 is ACTIVE (75/100)**. Checkpoints 3601–3625, 3626–3650 and 3651–3675 are COMPLETE and read-back verified.
+- Final authorized checkpoint: **3676–3700**. Continue without a new permission request and **STOP at 3700**; 3701+ requires fresh explicit authorization.
+- Ledger `AUDIT_LEDGER_3601_3800.md`: 75 records (3601–3675), exactly 15 fields each. Index: 3,675 sequential unique paths.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree has 5,749 entries and is untruncated.
-- Media Archive includes six visually reviewed PNG icon entries 3645–3650. Historical media backfill 1–4000 remains mandatory before backup.
+- Media Archive contains the visually reviewed image/vector/container assets discovered through 3675. Historical media backfill 1–4000 remains mandatory before backup.
 - Static source and visual asset review only; no build/test/runtime/device/GPU/Forge/Minecraft/server validation is established. Do not modify main or backup refs.
 
 The historical checkpoint notes below are append-only evidence. Older intermediate resume/STOP statements are historical and are superseded by this current authoritative block and the final closeout in Section 67 of `AUDIT_PROTOCOL.md`.

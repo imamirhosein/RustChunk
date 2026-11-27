@@ -6,7 +6,7 @@
 - Authorized scope: exceptional 100-file grant, entries 3601–3700, dated 2026-11-27.
 - Selection: first 100 raw-lexically sorted unindexed blobs from the complete pinned recursive tree, excluding all 3,600 existing Index paths.
 - Checkpoint cadence: four sequential 25-file checkpoints. Commit all checkpoint records and audit documents in one Git commit, then re-fetch/read-back verify before the next checkpoint.
-- Current registered state: **50 source entries (3601–3650)**; this file will grow only under the same 3601–3700 grant. Entries 3626–3700 remain authorized but not yet inspected.
+- Current registered state: **75 source entries (3601–3675)**; this file will grow only under the same 3601–3700 grant. Entries 3626–3700 remain authorized but not yet inspected.
 
 ### 3601. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`
 - **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
@@ -857,3 +857,428 @@
 - **RustChunk implementation mapping:** Use as a size comparison checklist for RustChunk artwork.
 - **Evidence required before adoption:** Require original artwork and Samsung/Android icon tests.
 - **Completion state:** COMPLETE — pinned blob SHA/size verified; PNG rendered and visually reviewed; static asset review only; not reused.
+
+### 3651. `packaging/icons/hicolor/512x512/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 9bf6b676468876407f1c55cdda0f34636d01a4e0
+- **Size:** 7618 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** 512x512 hicolor Horizon application icon.
+- **Dependencies / cross-references:** Linux hicolor packaging and Horizon icon family.
+- **Implementation / logic:** PNG rendered at 512x512; dark rounded-square field with a broad purple horizontal band; unlike the paired vector/ICNS forms, no central vertical glyph is visible.
+- **Findings:** Visual variant differs from other icon representations; not Android adaptive artwork.
+- **RustChunk relevance:** Brand comparison only.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Do not reuse as RustChunk identity without rights review.
+- **Follow-up checks:** Compare all platform icon variants and provenance.
+- **RustChunk implementation mapping:** Create a distinct RustChunk icon family.
+- **Evidence required before adoption:** Require original artwork and launcher tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3652. `packaging/icons/hicolor/64x64/apps/horizon.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1add8b2d610b44bd2b16ec3816882154c7d000e2
+- **Size:** 797 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** 64x64 hicolor Horizon icon.
+- **Dependencies / cross-references:** Linux hicolor icon theme and shared artwork.
+- **Implementation / logic:** PNG rendered at 64x64; dark rounded tile, two pale vertical bars with muted lower halves and a narrow purple horizontal line.
+- **Findings:** Simple two-bar emblem; no text; desktop asset only.
+- **RustChunk relevance:** Small icon legibility reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Not RustChunk artwork or Android adaptive icon.
+- **Follow-up checks:** Compare with 16/24/32/48/128/256/512 variants.
+- **RustChunk implementation mapping:** Generate device-density RustChunk icons from vector master.
+- **Evidence required before adoption:** Require original artwork and device rendering.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3653. `packaging/icons/hicolor/scalable/apps/horizon.svg`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 94fb593fc7a57ff5199a5a230a04883698d5b538
+- **Size:** 537 bytes
+- **Coverage:** Complete EOF coverage (10 logical lines).
+- **Purpose:** Scalable SVG application icon.
+- **Dependencies / cross-references:** Linux hicolor scalable icon theme; SVG title Horizon and clipping path.
+- **Implementation / logic:** SVG source reviewed and rendered at 256x256; dark rounded tile, two pale vertical strokes above the center line, dimmer lower strokes and a purple horizontal stripe.
+- **Findings:** Vector geometry is clear and small; no text in visible mark. Distinct from 512 PNG band-only variant.
+- **RustChunk relevance:** Useful vector-master comparison.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Not RustChunk identity; licensing and derivative rights need review.
+- **Follow-up checks:** Compare SVG output against raster variants and inspect asset license.
+- **RustChunk implementation mapping:** Create a RustChunk-owned SVG/vector master.
+- **Evidence required before adoption:** Require rights review and visual parity tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3654. `packaging/icons/horizon.icns`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 4c691e990bb37a7dea5734ad5ee75db6c4c94324
+- **Size:** 40332 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Apple ICNS icon container for Horizon.
+- **Dependencies / cross-references:** macOS icon format with 11 embedded PNG chunks.
+- **Implementation / logic:** Decoded all 11 chunks (icp4/icp5/icp6/ic07/ic08/ic09/ic10/ic11/ic12/ic13/ic14) and rendered each; variants range from tiny glyphs to 1024px tile with pale two-bar mark and purple band.
+- **Findings:** Multiple sizes are embedded in one file; some @2x chunks duplicate dimensions; high-res mark is more detailed than the standalone 512 PNG.
+- **RustChunk relevance:** Useful multi-resolution packaging reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** macOS asset only; not Android launcher metadata or RustChunk artwork.
+- **Follow-up checks:** Check all embedded chunks, color profile, alpha and license provenance.
+- **RustChunk implementation mapping:** Generate RustChunk icon containers only from original vector artwork.
+- **Evidence required before adoption:** Require macOS icon rendering and documented asset rights.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3655. `packaging/icons/horizon.ico`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** b580493d67639d431db4dacecd4720b9f27b7b90
+- **Size:** 7704 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Windows ICO icon container for Horizon.
+- **Dependencies / cross-references:** Windows ICO directory and seven embedded PNG images.
+- **Implementation / logic:** Decoded and rendered all seven embedded PNGs at 16, 24, 32, 48, 64, 128 and 256px; dark rounded tile with pale two-bar glyph and purple horizontal accent.
+- **Findings:** A single ICO packages seven raster sizes; small versions simplify the mark and larger variants retain the rounded tile.
+- **RustChunk relevance:** Useful Windows multi-resolution packaging reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Windows desktop icon only; not RustChunk artwork.
+- **Follow-up checks:** Verify all embedded sizes and compare with ICNS/SVG/raster assets.
+- **RustChunk implementation mapping:** Create a RustChunk ICO only if Windows desktop launcher is built.
+- **Evidence required before adoption:** Require Windows shell rendering and asset rights.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3656. `packaging/linux/appimage.sh`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** d1e32ac123e70c14f8e116a1e5ad6f8fa220ae9a
+- **Size:** 6714 bytes
+- **Coverage:** Complete EOF coverage (143 logical lines).
+- **Purpose:** Builds a Linux x86_64 AppImage for the Horizon launcher and packages non-system shared libraries.
+- **Dependencies / cross-references:** Bash, ldd, patchelf, AppImage tool 1.9.1, desktop entry, hicolor icons and launcher binary.
+- **Implementation / logic:** Copies launcher/assets, walks ldd dependencies, excludes system C/graphics/session/audio libraries, patches runpaths, downloads AppImage tool with pinned SHA256, builds and smoke-checks version/desktop entry.
+- **Findings:** Explicit x86_64 and glibc baseline; APPIMAGETOOL override bypasses the built-in pinned download hash; ldd-based dependency discovery is host-specific.
+- **RustChunk relevance:** Useful packaging and dependency-boundary reference only.
+- **Decision:** adaptable; reference; linux-packaging
+- **1.20.1 implications:** Linux desktop, not Android; no Forge/JVM support.
+- **Follow-up checks:** Test AppImage on clean minimum-glibc systems, verify custom tool path and dependency closure.
+- **RustChunk implementation mapping:** Keep Android packaging separate; use similar pinned-tool and artifact smoke-check principles.
+- **Evidence required before adoption:** Require clean Linux VM install/launch tests and tool hash verification.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3657. `packaging/linux/horizon-launcher.desktop`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 2e0000e64606acbbdc2b775ad6860b94f91dc303
+- **Size:** 261 bytes
+- **Coverage:** Complete EOF coverage (10 logical lines).
+- **Purpose:** Declares the Horizon launcher as a Linux desktop application in the Game category.
+- **Dependencies / cross-references:** Desktop Entry specification and AppImage launcher executable/icon.
+- **Implementation / logic:** Names app Horizon, describes a Minecraft Java Edition 26.3 launcher, runs horizon-launcher and sets Categories=Game.
+- **Findings:** Desktop classification only; the product description is 26.3-specific and not Android Gaming Hub evidence.
+- **RustChunk relevance:** Useful desktop game-category metadata pattern.
+- **Decision:** adaptable; reference; linux-desktop-entry
+- **1.20.1 implications:** Linux-only; application ID and description must be RustChunk-specific.
+- **Follow-up checks:** Validate desktop entry and icon lookup on GNOME/KDE.
+- **RustChunk implementation mapping:** Use Android manifest game metadata for Android rather than copying desktop file.
+- **Evidence required before adoption:** Require desktop-entry validation and Linux shell tests if desktop target exists.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3658. `packaging/linux/horizon.desktop`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1331e5c4accc202a38821d52cd4e4c01f3c3ce11
+- **Size:** 205 bytes
+- **Coverage:** Complete EOF coverage (10 logical lines).
+- **Purpose:** Declares the Horizon game client desktop entry, hidden from normal app menus.
+- **Dependencies / cross-references:** Desktop Entry specification and horizon-client binary.
+- **Implementation / logic:** Runs horizon-client, uses Horizon icon, Categories=Game and NoDisplay=true.
+- **Findings:** Hidden secondary entry is not the launcher entry; description targets Java Edition 26.3.
+- **RustChunk relevance:** Desktop packaging reference only.
+- **Decision:** reference; version-specific; linux-desktop-entry
+- **1.20.1 implications:** Linux-only and version-specific.
+- **Follow-up checks:** Check desktop association and launcher/client separation.
+- **RustChunk implementation mapping:** Keep RustChunk client entry separate only if a Linux target is added.
+- **Evidence required before adoption:** Require desktop shell tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3659. `packaging/lowbudget/hand.py`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 6ca89081bafebd6185fe505d88d9589cbba1011e
+- **Size:** 11665 bytes
+- **Coverage:** Complete EOF coverage (195 logical lines).
+- **Purpose:** Defines a procedural handwriting glyph set and renders text with per-character jitter, slant, size, baseline and pressure variation.
+- **Dependencies / cross-references:** Python math/random and Pillow drawing API; make.py imports these functions.
+- **Implementation / logic:** Stores vector-like strokes for ASCII letters/digits/punctuation, smooths with Catmull-Rom, densifies paths, applies seeded random variation and draws rounded line strokes.
+- **Findings:** Deterministic seed enables repeatable texture generation; no file I/O in this module; unsupported characters fall back to question mark; kerning is only fixed advance spacing.
+- **RustChunk relevance:** Useful reference for generating stylized low-resolution UI font atlases.
+- **Decision:** adaptable; reference; procedural-font-generator
+- **1.20.1 implications:** Glyph set and visual style are custom resource-pack content, not a Minecraft 1.20.1 runtime font engine.
+- **Follow-up checks:** Inspect make.py for atlas dimensions/seeds; test all glyphs, unsupported Unicode and baseline/advance metrics.
+- **RustChunk implementation mapping:** Use only as inspiration for a RustChunk-owned font generator with licensed glyph design.
+- **Evidence required before adoption:** Require generated atlas visual review, Unicode fallback tests and license review.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3660. `packaging/lowbudget/pack/assets/minecraft/font/default.json`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** cde82c0eb789dd60f2ac7f7f4be9063189b2a72e
+- **Size:** 467 bytes
+- **Coverage:** Complete EOF coverage (30 logical lines).
+- **Purpose:** Defines the low-budget pack default bitmap font and four Starling-specific font variants.
+- **Dependencies / cross-references:** Minecraft resource-pack font provider schema, hand_0.png and Starling custom font variant loader.
+- **Implementation / logic:** Two providers: space advance 4 and bitmap atlas hand_0 at height 10/ascent 8 with six 16-character rows; custom starling:variants lists hand_1 through hand_4.
+- **Findings:** Valid JSON; custom top-level starling:variants key is not standard vanilla font schema and requires Starling code; glyph atlas is ASCII-oriented.
+- **RustChunk relevance:** Useful example of bitmap font provider and custom variants.
+- **Decision:** adaptable; reference; version-specific; font-resource
+- **1.20.1 implications:** Resource-pack font schema and custom key are version-specific; verify 1.20.1 format.
+- **Follow-up checks:** Check vanilla 1.20.1 provider schema, codepoint mapping, missing glyph and variant loader.
+- **RustChunk implementation mapping:** Rebuild a 1.20.1-compatible bitmap font pack and custom variant selector.
+- **Evidence required before adoption:** Require 1.20.1 resource reload tests and glyph coverage.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3661. `packaging/lowbudget/pack/assets/minecraft/lang/en_us.json`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 97dc50741ae051ef67958879d0339086133eaa35
+- **Size:** 10886 bytes
+- **Coverage:** Complete EOF coverage (244 logical lines).
+- **Purpose:** English localization for low-budget options, controls, accessibility, resource packs and Horizon controller features.
+- **Dependencies / cross-references:** Minecraft language resource format and Starling/Horizon custom option keys.
+- **Implementation / logic:** Valid JSON with 242 keys, 16 format placeholders and no duplicate literal keys; contains graphics/render-distance/FPS and Horizon controller labels.
+- **Findings:** Contains later-version keys and custom Horizon options; strings such as Low Budget Settings lol and Way Too Wide are informal product copy; no translation coverage.
+- **RustChunk relevance:** Useful key organization and wording reference.
+- **Decision:** adaptable; reference; version-specific; localization-resource
+- **1.20.1 implications:** Many keys differ from 1.20.1 and must be mapped to Forge target keys.
+- **Follow-up checks:** Compare every key with 1.20.1 language registry and placeholder argument counts.
+- **RustChunk implementation mapping:** Create a RustChunk-specific locale file with explicit version mapping.
+- **Evidence required before adoption:** Require resource reload and placeholder formatting tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3662. `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_0.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** f644128716d56725ede497da47462fbf0fb5c3a1
+- **Size:** 12956 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Primary handwritten bitmap font atlas.
+- **Dependencies / cross-references:** default.json bitmap provider and hand.py glyph generator.
+- **Implementation / logic:** PNG rendered; transparent atlas with white hand-drawn punctuation, digits, uppercase and lowercase ASCII glyphs in a grid.
+- **Findings:** Custom font artwork; unsupported Unicode is not represented in this atlas.
+- **RustChunk relevance:** Useful UI font atlas reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Not a drop-in 1.20.1 font without matching provider schema and glyph metrics.
+- **Follow-up checks:** Inspect glyph grid dimensions, alpha and missing codepoints; compare against provider chars rows.
+- **RustChunk implementation mapping:** Generate a RustChunk-owned atlas and codepoint map.
+- **Evidence required before adoption:** Require visual glyph review, font reload tests and asset rights.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3663. `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_1.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 470be6b7c43370d22edfd2a0d511e7da4fc6784a
+- **Size:** 13189 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Handwritten bitmap font variation 1.
+- **Dependencies / cross-references:** Starling font variants list and hand.py deterministic glyph generator.
+- **Implementation / logic:** PNG rendered; same ASCII glyph grid with slightly varied stroke shapes, slant and spacing.
+- **Findings:** Variation is subtle and intended to avoid repeated identical glyph appearance.
+- **RustChunk relevance:** Useful procedural font variation reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires Starling custom variant loader and target-version font mapping.
+- **Follow-up checks:** Compare all glyph cell boundaries and metrics against default.json.
+- **RustChunk implementation mapping:** Use deterministic seeded variants only in a RustChunk-owned font system.
+- **Evidence required before adoption:** Require atlas visual and metrics tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3664. `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_2.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** b9f321fa646a0f89d7d8beebc4306b046a084b7d
+- **Size:** 12959 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Handwritten bitmap font variation 2.
+- **Dependencies / cross-references:** Starling font variants list and hand.py generator.
+- **Implementation / logic:** PNG rendered; white handwritten ASCII glyphs on transparent atlas with alternate stroke jitter and shape.
+- **Findings:** Small glyph-level differences from hand_0/1; same overall grid and style.
+- **RustChunk relevance:** Useful font variation reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires custom loader and 1.20.1 schema check.
+- **Follow-up checks:** Compare codepoint alignment and metrics across variants.
+- **RustChunk implementation mapping:** Use as design inspiration only.
+- **Evidence required before adoption:** Require glyph-grid and resource reload tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3665. `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_3.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** ed6d005088ea8bae9e351d69c28c60cb05fe275d
+- **Size:** 13148 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Handwritten bitmap font variation 3.
+- **Dependencies / cross-references:** Starling font variants list and hand.py generator.
+- **Implementation / logic:** PNG rendered; same handwritten ASCII atlas with changed per-glyph slant, wobble and stroke thickness.
+- **Findings:** Variation is subtle; no Unicode glyph coverage beyond atlas map.
+- **RustChunk relevance:** Useful font variation reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires custom loader and 1.20.1 mapping.
+- **Follow-up checks:** Check all rows align with default provider char map.
+- **RustChunk implementation mapping:** Use only with a RustChunk-owned font pipeline.
+- **Evidence required before adoption:** Require visual and codepoint alignment tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3666. `packaging/lowbudget/pack/assets/minecraft/textures/font/hand_4.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 91bacf1717c4ffeec4b266174fac037e1e9df9c9
+- **Size:** 13153 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Handwritten bitmap font variation 4.
+- **Dependencies / cross-references:** Starling font variants list and hand.py generator.
+- **Implementation / logic:** PNG rendered; alternate hand-drawn ASCII atlas with small stroke, slant and spacing changes.
+- **Findings:** Variation set is custom art; no direct Java/Forge compatibility.
+- **RustChunk relevance:** Useful font variation reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Needs custom variant selection and 1.20.1 font schema.
+- **Follow-up checks:** Verify metrics and unsupported character fallback.
+- **RustChunk implementation mapping:** Use only as inspiration for custom RustChunk font assets.
+- **Evidence required before adoption:** Require asset license and resource reload tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3667. `packaging/lowbudget/pack/assets/minecraft/textures/gui/footer_separator.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 23200ec05988269bf8fad133446e6bbc56204476
+- **Size:** 157 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Low-budget GUI footer separator texture.
+- **Dependencies / cross-references:** Minecraft GUI resource-pack textures.
+- **Implementation / logic:** PNG rendered; very thin horizontal pale gray line with subtle pixel variation/soft edges on transparent background.
+- **Findings:** Tiny single-purpose divider; no text.
+- **RustChunk relevance:** Useful subtle UI separator reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Texture path and UI usage differ by Minecraft version.
+- **Follow-up checks:** Inspect dimensions/alpha and compare with header separator.
+- **RustChunk implementation mapping:** Create RustChunk UI divider in its own style.
+- **Evidence required before adoption:** Require in-game GUI scaling tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3668. `packaging/lowbudget/pack/assets/minecraft/textures/gui/header_separator.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 70df76ea6e379083f3190cdc3a4853d723ca84a8
+- **Size:** 150 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Low-budget GUI header separator texture.
+- **Dependencies / cross-references:** Minecraft GUI resource-pack textures.
+- **Implementation / logic:** PNG rendered; thin horizontal light gray/white separator with slight pixel variation on transparency.
+- **Findings:** Visually close to footer separator but a distinct blob and file.
+- **RustChunk relevance:** Useful UI divider reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Texture path and UI usage differ by version.
+- **Follow-up checks:** Compare dimensions/alpha and exact pixel difference from footer.
+- **RustChunk implementation mapping:** Create version-independent UI divider asset for RustChunk.
+- **Evidence required before adoption:** Require GUI scaling tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3669. `packaging/lowbudget/pack/assets/minecraft/textures/gui/menu_background.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** f2022746015d315d38dd5d04ab83561dab52c23a
+- **Size:** 9801 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Low-budget menu background texture.
+- **Dependencies / cross-references:** Minecraft GUI resource-pack background texture.
+- **Implementation / logic:** PNG rendered; dark charcoal field with very subtle mottled/noise texture and no visible text or objects.
+- **Findings:** Texture is low contrast and intended as a quiet menu backdrop.
+- **RustChunk relevance:** Useful menu surface texture reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Must be checked against 1.20.1 background scaling and GUI layers.
+- **Follow-up checks:** Inspect tiling, alpha and contrast on light/dark displays.
+- **RustChunk implementation mapping:** Create a RustChunk-owned low-noise menu background.
+- **Evidence required before adoption:** Require actual UI screenshot and accessibility contrast review.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3670. `packaging/lowbudget/pack/assets/minecraft/textures/gui/menu_list_background.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 0bbddd06e28b0bcaf882a7df7203d13a70af1521
+- **Size:** 9530 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Low-budget menu list background texture.
+- **Dependencies / cross-references:** Minecraft GUI resource-pack list background texture.
+- **Implementation / logic:** PNG rendered; dark charcoal mottled/noise surface, visually close to menu_background but used for list panels.
+- **Findings:** No visible text; distinction from menu background is subtle.
+- **RustChunk relevance:** Useful panel texture reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Resource location and GUI composition are version-specific.
+- **Follow-up checks:** Compare pixel values, tiling and list panel contrast.
+- **RustChunk implementation mapping:** Create a separate RustChunk panel texture only if needed.
+- **Evidence required before adoption:** Require UI screenshot and contrast checks.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3671. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** a1808f7e5081c4d41f9a7df7b09f66bca100135e
+- **Size:** 61321 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Primary low-budget GUI button sprite.
+- **Dependencies / cross-references:** button.png.mcmeta nine-slice configuration and Minecraft GUI sprite loader.
+- **Implementation / logic:** PNG rendered; very wide dark mottled button with thin irregular pale outline and transparent exterior.
+- **Findings:** Requires matching nine-slice metadata; visual style may be noisy at small scale.
+- **RustChunk relevance:** Useful nine-slice button skin reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Sprite metadata schema and widget IDs may not exist in 1.20.1.
+- **Follow-up checks:** Verify dimensions, border inset, hover/disabled state and metadata interpretation.
+- **RustChunk implementation mapping:** Implement RustChunk buttons in its own UI system or target-version resource pack.
+- **Evidence required before adoption:** Require 1.20.1 resource-pack render tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3672. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines).
+- **Purpose:** Defines nine-slice scaling for the primary button sprite.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser and button.png.
+- **Implementation / logic:** JSON specifies 200x20 nine_slice, borders left/right 6 and top/bottom 5, stretch_inner true.
+- **Findings:** Valid structure; this same blob SHA is also used by button_1.png.mcmeta; version support must be checked.
+- **RustChunk relevance:** Useful nine-slice metadata reference.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Likely tied to newer sprite scaling schema; verify 1.20.1 parser support.
+- **Follow-up checks:** Test all border regions and narrow/wide button sizes.
+- **RustChunk implementation mapping:** Use only after confirming target-version metadata schema.
+- **Evidence required before adoption:** Require 1.20.1 resource reload and scaling tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3673. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** bad89171c4cfa1578e59f231e4861f6cc466e1f1
+- **Size:** 58780 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Alternate low-budget GUI button sprite variant 1.
+- **Dependencies / cross-references:** button_1.png.mcmeta identical nine-slice metadata blob and Minecraft sprite loader.
+- **Implementation / logic:** PNG rendered; wide dark textured button with thin irregular pale border; interior texture and edge noise differ from button.png.
+- **Findings:** Variant is visually distinct but shares the same nine-slice geometry; custom UI state mapping is not included here.
+- **RustChunk relevance:** Useful button state/variant reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires target-version sprite registry and metadata support.
+- **Follow-up checks:** Map which GUI state uses this variant and test hover/pressed/disabled states.
+- **RustChunk implementation mapping:** Create RustChunk-owned button states and consistent nine-slice geometry.
+- **Evidence required before adoption:** Require in-game state transition screenshots.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3674. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines).
+- **Purpose:** Defines nine-slice scaling for button variant 1.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser and button_1.png.
+- **Implementation / logic:** Same JSON blob as button.png.mcmeta: 200x20 nine_slice, 6px horizontal and 5px vertical borders, stretch_inner true.
+- **Findings:** Identical content and SHA to entry 3672; duplicate blob reuse is expected, while paths remain unique.
+- **RustChunk relevance:** Useful metadata deduplication reference.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target-version parser support remains unverified.
+- **Follow-up checks:** Check why button_2 has no matching metadata in this range; inspect later files for its sidecar.
+- **RustChunk implementation mapping:** Reuse one shared metadata template only if target schema supports it.
+- **Evidence required before adoption:** Require resource reload and scaling tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; static review only; not executed.
+
+### 3675. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_2.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 2666fa2ba9e43a2a7ca3338d01d4ecc3bd964644
+- **Size:** 55408 bytes
+- **Coverage:** Complete binary image/vector/container; all embedded representations rendered and visually inspected.
+- **Purpose:** Alternate low-budget GUI button sprite variant 2.
+- **Dependencies / cross-references:** Minecraft GUI sprite system; no sidecar metadata appears in this 25-file range.
+- **Implementation / logic:** PNG rendered; wide dark mottled button with thin pale irregular outline and a slightly different interior pattern.
+- **Findings:** No matching .mcmeta file occurs in this checkpoint; it may be shared or defined later, not assumed absent globally.
+- **RustChunk relevance:** Useful additional button skin reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Sprite registration/scaling must be verified against 1.20.1.
+- **Follow-up checks:** Search full tree for button_2 metadata and state mapping.
+- **RustChunk implementation mapping:** Do not integrate until texture metadata and widget state are mapped.
+- **Evidence required before adoption:** Require 1.20.1 resource-pack render test.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.

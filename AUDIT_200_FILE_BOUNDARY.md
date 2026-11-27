@@ -737,3 +737,18 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - The 3650 boundary report does not pause this explicit grant. Continue directly through 3651–3700 and STOP at 3700.
 - Ledger contains 50 records (3601–3650), each with exactly 15 fields.
 - Media Archive contains visually reviewed PNGs 3645–3650; historical media backfill 1–4000 remains a mandatory pre-backup gate.
+
+
+## Exceptional 100-file grant — progress through 3675
+
+| Checkpoint | Range | State |
+|---|---:|---|
+| 1 | 3601–3625 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 2 | 3626–3650 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 3 | 3651–3675 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 4 | 3676–3700 | AUTHORIZED — FINAL CHECKPOINT |
+
+- The explicit grant remains active. No new permission is required.
+- Complete 3676–3700 and STOP at 3700.
+- Ledger contains 75 records (3601–3675), each with exactly 15 fields.
+- Media Archive includes the reviewed image/vector/container assets through 3675; backfill 1–4000 remains a mandatory pre-backup gate.

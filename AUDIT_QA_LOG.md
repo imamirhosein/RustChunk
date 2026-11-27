@@ -2280,3 +2280,15 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - The six images are visually reviewed Horizon/Starling brand icons, not approved RustChunk artwork. Release notes are self-reported product claims, not runtime evidence.
 - Static source and visual asset audit only. No RustChunk app code, build, tests, benchmark, APK, device, Vulkan/GPU, Forge, Minecraft, multiplayer or Aternos validation was performed.
 - **Checkpoint 3626–3650 committed and independently read back.** The grant remains active through 3700; 3650 is a report boundary, not a permission stop.
+
+
+## Checkpoint 3651–3675 — 2026-11-27 — COMPLETE
+
+- Inspected exactly 25 new pinned source files, 3651–3675. Recomputed raw-lexical unindexed paths after excluding 3,650 Index entries; the first 25 matched this range in the complete 5,749-entry untruncated upstream tree.
+- Verified all source blob SHAs and byte sizes against the pinned tree. All text/XML/JSON/Python/shell sources were read through EOF and are at most 400 lines; binary assets were fetched in full.
+- Seventeen image assets were visually reviewed: 512/64 PNG icons, SVG, ICNS (all 11 embedded PNG chunks), ICO (all seven embedded PNG sizes), five handwriting font atlases, two separator textures, two menu backgrounds and three button sprites. Each actual image file was recorded in Ledger/Index and Media Archive.
+- Parsed default.json and en_us.json: valid JSON; default font has two providers and four Starling variants; locale has 242 keys, 16 format placeholders and no duplicate literal keys. Both button .mcmeta files are valid and share the same SHA/content.
+- Ledger now has 75 records (3601–3675), exactly 15 fields each. Index has 3,675 sequential unique paths. Media Archive includes all 17 new visual assets in audit-number order.
+- Material findings: Linux AppImage/desktop packaging is not Android packaging; desktop metadata targets Minecraft Java 26.3. The 512 PNG icon is visibly simpler than the vector/ICNS mark; icon formats are not fully uniform. Hand font assets are custom ASCII-oriented atlases requiring Starling-specific variant metadata. Button textures use newer nine-slice metadata and require 1.20.1 schema validation; button_2 sidecar is not present in this checkpoint.
+- Static source and visual asset audit only. No RustChunk code, build, tests, benchmark, APK, device, GPU, Forge, Minecraft, multiplayer or Aternos validation was performed.
+- **Checkpoint 3651–3675 committed and independently read back.** Continue under the same grant through 3676–3700; STOP at 3700.

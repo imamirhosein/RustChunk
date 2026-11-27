@@ -1130,3 +1130,13 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Ledger has 50 records (3601–3650), each with exactly 15 fields; Index has 3,650 unique sequential paths. Ledger, Index, QA, Continuity, Protocol, Boundary and Media Archive were committed together and independently read back.
 - The 3650 boundary is a report only; continue under the same grant and stop at 3700.
 - Static source/visual review only; no build, tests, runtime, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.
+
+
+## 73. Checkpoint 3651–3675 completion — 2026-11-27
+
+- Checkpoint 3651–3675 is COMPLETE under the active exceptional grant 3601–3700.
+- Exactly 25 new source files were inspected through EOF; all text files are within 400 lines and binary assets were fetched completely. Pinned SHA/size matches the complete tree.
+- Seventeen visual assets were rendered and visually reviewed, including all embedded ICNS/ICO PNG variants, and recorded in the Ledger/Index and permanent Media Archive.
+- Ledger has 75 records (3601–3675), each with exactly 15 fields; Index has 3,675 unique sequential paths. Ledger, Index, QA, Continuity, Protocol, Boundary and Media Archive were committed together and independently read back.
+- Final authorized checkpoint is 3676–3700. Continue without a new permission request and STOP at 3700.
+- Static source/visual review only; no build, tests, runtime, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.
