@@ -2236,3 +2236,9 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Key limits: tab list uses a fake auth/session/skin service; tag and suffocation/swimming tests reload global registry tags; terrain fill uses a fixed biome and synthetic ProtoChunk; tick codecs/queue are not full block/fluid ticking; Trading is a controlled vanilla-only headless server with disabled ambient systems, no real client and no Forge; translucent/text render oracles record CPU-side results without GPU; UseRemainder relies on modern components and global prototype mutation.
 - These pinned Java sources are later-version oracles, not 1.20.1 Forge code. No RustChunk application source changed, and no build/test/benchmark/APK/device/GPU/Forge/Minecraft/multiplayer/Aternos validation was performed.
 - **Boundary 3401–3600 is now complete. STOP at 3600; no authorization exists for entry 3601.**
+
+
+
+## Authorization / procedural gate update — 2026-11-27
+- Exceptional authorization renewed for exactly entries 3601–3700 (100 files); active, not yet consumed. Stop at 3700; 3701+ requires fresh explicit authorization.
+- Before the 4000 backup: backfill and verify every image/video in entries 1–4000 in AUDIT_MEDIA_ARCHIVE.md; reconcile against all stage Ledgers and Index; then pass global structural/provenance QA. Backup is prohibited until all gates pass. See AUDIT_PROTOCOL.md Sections 65 and 69.
