@@ -1085,3 +1085,13 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Last 25 were completely inspected. Long files 3581 (372), 3587 (271), 3593 (624) and 3595 (179) were read in consecutive chunks; none exceeded the 400-line chunk limit.
 - Static review only. No application source changes, builds, tests, benchmarks, APKs, device/renderer validation, Forge 1.20.1 launch, multiplayer or Aternos connection was performed.
 - The one-time user grant is exhausted at **3600**. **STOP. Do not inspect 3601+ without new explicit authorization.**
+
+
+
+## Exceptional authorization 3601–3700 — ACTIVE — 2026-11-27
+- User renewed the exceptional grant for exactly 100 entries, 3601–3700. This is not open-ended.
+- The grant covers sections 3601–3650 and 3651–3700; preserve 25-file checkpoints and stop/report at 3650, then finish the already-authorized second section and stop at 3700.
+- Last completed source entry: 3600. Next source entry: 3601. New stage Ledger: AUDIT_LEDGER_3601_3800.md.
+- Re-read latest branch head and all governing audit documents before source inspection. Recompute next raw-lexical unindexed paths from the complete pinned tree; inspect serially through EOF, max 400 logical lines per chunk.
+- 4000 backup gate: after entry 4000 is fully committed/read-back verified, backfill all image/video records for entries 1–4000 into AUDIT_MEDIA_ARCHIVE.md, reconcile with all Ledgers/Index, run global structural/provenance QA, and only then create the single final 4000 backup. If any gate fails, no backup.
+- Protocol Sections 65 and 69 govern image/video inspection and the pre-backup gate. No builds/tests/runtime/device/Forge/Minecraft/server validation implied.
