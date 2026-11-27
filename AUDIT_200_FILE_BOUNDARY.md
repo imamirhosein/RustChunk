@@ -752,3 +752,18 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Complete 3676–3700 and STOP at 3700.
 - Ledger contains 75 records (3601–3675), each with exactly 15 fields.
 - Media Archive includes the reviewed image/vector/container assets through 3675; backfill 1–4000 remains a mandatory pre-backup gate.
+
+
+## Exceptional 100-file grant 3601–3700 — CLOSED / EXHAUSTED
+
+| Checkpoint | Range | State |
+|---|---:|---|
+| 1 | 3601–3625 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 2 | 3626–3650 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 3 | 3651–3675 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+| 4 | 3676–3700 | COMPLETE — COMMITTED / READ-BACK VERIFIED |
+
+- Total: **100/100 source files**. Ledger `AUDIT_LEDGER_3601_3800.md` contains 100 records, each with exactly 15 fields.
+- Index: 3,700 sequential unique paths. All four checkpoints and their read-backs are complete.
+- The exceptional grant is exhausted. **STOP at 3700; no work on 3701+ without fresh explicit authorization.**
+- Media Archive includes actual image/vector/container assets in this range. Historical backfill 1–4000, archive/Ledger/Index reconciliation and global QA remain mandatory before the 4000 backup.

@@ -2292,3 +2292,14 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 - Material findings: Linux AppImage/desktop packaging is not Android packaging; desktop metadata targets Minecraft Java 26.3. The 512 PNG icon is visibly simpler than the vector/ICNS mark; icon formats are not fully uniform. Hand font assets are custom ASCII-oriented atlases requiring Starling-specific variant metadata. Button textures use newer nine-slice metadata and require 1.20.1 schema validation; button_2 sidecar is not present in this checkpoint.
 - Static source and visual asset audit only. No RustChunk code, build, tests, benchmark, APK, device, GPU, Forge, Minecraft, multiplayer or Aternos validation was performed.
 - **Checkpoint 3651–3675 committed and independently read back.** Continue under the same grant through 3676–3700; STOP at 3700.
+
+
+## Checkpoint 3676–3700 — 2026-11-27 — COMPLETE
+
+- Inspected exactly 25 new pinned source files, 3676–3700. Recomputed raw-lexical unindexed paths after excluding 3,675 Index entries; the first 25 matched this range in the complete 5,749-entry untruncated tree.
+- Verified all source SHAs and byte sizes against the pinned tree. All 13 JSON sidecars were read through EOF, parsed and reviewed (16 logical lines each); all 12 PNG sprites were fetched in full, rendered and visually reviewed.
+- The 13 sidecars resolve the prior open question from entry 3675: button_2 has a matching .mcmeta at 3676. Button state variants share the same 200x20 nine-slice metadata blob (SHA 52d089...); scroller and scroller_background share the 6x32 metadata blob (SHA d8d19...). No missing sidecar was found in this checkpoint.
+- New Ledger has 100 records (3601–3700), exactly 15 fields each. Index has 3,700 sequential unique paths and aligned decisions. Media Archive includes the 12 new visual sprite images at 3677, 3679, 3681, 3683, 3685, 3687, 3689, 3691, 3693, 3695, 3697 and 3699.
+- Material findings: low-budget UI uses extensive normal/disabled/highlighted button texture families, vertical scroller/track and slider textures with nine-slice metadata. These asset schemas and sprite IDs need validation or rewrite for 1.20.1; texture art alone does not implement touch hit targets or widget behavior.
+- Static source and visual asset audit only. No RustChunk code, build, tests, benchmark, APK, device, GPU, Forge, Minecraft, multiplayer or Aternos validation was performed.
+- **The exceptional 100-file grant 3601–3700 is now COMPLETE and EXHAUSTED. STOP at 3700. Entry 3701+ is not authorized.**

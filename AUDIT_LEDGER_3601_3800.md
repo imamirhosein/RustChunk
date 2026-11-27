@@ -6,7 +6,7 @@
 - Authorized scope: exceptional 100-file grant, entries 3601–3700, dated 2026-11-27.
 - Selection: first 100 raw-lexically sorted unindexed blobs from the complete pinned recursive tree, excluding all 3,600 existing Index paths.
 - Checkpoint cadence: four sequential 25-file checkpoints. Commit all checkpoint records and audit documents in one Git commit, then re-fetch/read-back verify before the next checkpoint.
-- Current registered state: **75 source entries (3601–3675)**; this file will grow only under the same 3601–3700 grant. Entries 3626–3700 remain authorized but not yet inspected.
+- Current registered state: **100 source entries (3601–3700)**; this file will grow only under the same 3601–3700 grant. Entries 3626–3700 remain authorized but not yet inspected.
 
 ### 3601. `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`
 - **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
@@ -1274,7 +1274,7 @@
 - **Purpose:** Alternate low-budget GUI button sprite variant 2.
 - **Dependencies / cross-references:** Minecraft GUI sprite system; no sidecar metadata appears in this 25-file range.
 - **Implementation / logic:** PNG rendered; wide dark mottled button with thin pale irregular outline and a slightly different interior pattern.
-- **Findings:** No matching .mcmeta file occurs in this checkpoint; it may be shared or defined later, not assumed absent globally.
+- **Findings:** The matching sidecar is confirmed at audit entry 3676; it was outside this entry's 3651–3675 checkpoint.
 - **RustChunk relevance:** Useful additional button skin reference.
 - **Decision:** adaptable; reference; media-image
 - **1.20.1 implications:** Sprite registration/scaling must be verified against 1.20.1.
@@ -1282,3 +1282,428 @@
 - **RustChunk implementation mapping:** Do not integrate until texture metadata and widget state are mapped.
 - **Evidence required before adoption:** Require 1.20.1 resource-pack render test.
 - **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3676. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_2.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice scaling metadata for button_2.png.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser and button_2 texture.
+- **Implementation / logic:** Valid JSON: 200x20 nine_slice, 6px left/right and 5px top/bottom borders, stretch_inner true.
+- **Findings:** Confirms button_2 has a sidecar; content SHA is shared by other button-state metadata files.
+- **RustChunk relevance:** Useful reusable metadata template.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Newer sprite metadata schema needs 1.20.1 validation.
+- **Follow-up checks:** Test border preservation at narrow/wide widths and map to state.
+- **RustChunk implementation mapping:** Use only if target resource pack parser supports nine_slice.
+- **Evidence required before adoption:** Require 1.20.1 resource reload and scaling tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3677. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_3.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 8e717353b0adfeb088ae119ba1d18fbe759a3660
+- **Size:** 59783 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Fourth normal-state button texture variant.
+- **Dependencies / cross-references:** button_3.png.mcmeta and Minecraft GUI sprite loader.
+- **Implementation / logic:** PNG rendered; wide dark mottled button with thin irregular pale outline and transparent exterior; interior grain differs from other normal variants.
+- **Findings:** Visual state variant only; metadata is a separate source file.
+- **RustChunk relevance:** Useful button skin reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Sprite registry and nine-slice behavior must match 1.20.1.
+- **Follow-up checks:** Compare with button/button_1/button_2 and inspect all GUI states.
+- **RustChunk implementation mapping:** Build RustChunk-owned normal button texture variants.
+- **Evidence required before adoption:** Require in-game 1.20.1 UI render test.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3678. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_3.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice scaling metadata for button_3.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser and button_3 texture.
+- **Implementation / logic:** Valid JSON: 200x20 nine_slice, 6px horizontal and 5px vertical borders, stretch_inner true.
+- **Findings:** Identical content/SHA to other button metadata files; shared blob reuse is expected.
+- **RustChunk relevance:** Useful nine-slice reference.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target-version parser support unverified.
+- **Follow-up checks:** Test repeated reuse and all border corners.
+- **RustChunk implementation mapping:** Use shared template only after target schema confirmation.
+- **Evidence required before adoption:** Require resource reload and scale tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3679. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** bb879590a36723ccfeeef9765da14e0a51b39b4b
+- **Size:** 46306 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Disabled-state button texture.
+- **Dependencies / cross-references:** button_disabled.png.mcmeta and GUI disabled widget state.
+- **Implementation / logic:** PNG rendered; wide dark textured button with pale outline and substantially darker interior than active button variants.
+- **Findings:** Disabled visual state is encoded in artwork; actual widget state mapping is outside this file.
+- **RustChunk relevance:** Useful disabled-state styling reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Widget sprite IDs and state selection differ by game version.
+- **Follow-up checks:** Compare contrast and legibility against enabled/highlighted states.
+- **RustChunk implementation mapping:** Create distinct RustChunk disabled state with accessible contrast.
+- **Evidence required before adoption:** Require disabled-state screenshot and accessibility contrast test.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3680. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice scaling metadata for disabled button texture.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON: 200x20 nine_slice, borders 6/5 and stretch_inner true.
+- **Findings:** Same metadata blob as normal and highlighted button variants.
+- **RustChunk relevance:** Useful scaling template.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target-version parser support unverified.
+- **Follow-up checks:** Verify disabled texture scales without distorting border.
+- **RustChunk implementation mapping:** Use shared metadata only if supported by target.
+- **Evidence required before adoption:** Require 1.20.1 UI scaling test.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3681. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_1.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1323629b71cfbd34875be97881e03efe1809163c
+- **Size:** 49000 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Disabled-state button texture variant 1.
+- **Dependencies / cross-references:** button_disabled_1.png.mcmeta and widget state variants.
+- **Implementation / logic:** PNG rendered; dark mottled interior with irregular light border, slightly different grain from disabled base.
+- **Findings:** Variant mapping and selection are not defined in this file.
+- **RustChunk relevance:** Useful disabled texture variation reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires target sprite registration.
+- **Follow-up checks:** Compare state mapping, border thickness and readability.
+- **RustChunk implementation mapping:** Keep state variants in RustChunk-owned assets.
+- **Evidence required before adoption:** Require UI state rendering tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3682. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_1.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice scaling metadata for disabled button variant 1.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON with 200x20 nine_slice and 6/5 borders.
+- **Findings:** Same blob SHA/content as all other button state sidecars.
+- **RustChunk relevance:** Useful metadata deduplication pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target-version parser support unverified.
+- **Follow-up checks:** Test narrow and wide scaling.
+- **RustChunk implementation mapping:** Use shared metadata template only after target check.
+- **Evidence required before adoption:** Require resource reload tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3683. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_2.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1ee071c636833d55c9cee7d21ace714bb449c1a0
+- **Size:** 46092 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Disabled-state button texture variant 2.
+- **Dependencies / cross-references:** button_disabled_2.png.mcmeta and widget state variants.
+- **Implementation / logic:** PNG rendered; dark textured wide button with pale irregular outline; texture grain differs slightly from other disabled variants.
+- **Findings:** Artwork only; state selection is external.
+- **RustChunk relevance:** Useful UI state texture reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Target widget registry is version-specific.
+- **Follow-up checks:** Compare contrast and nine-slice edges.
+- **RustChunk implementation mapping:** Use as visual inspiration only.
+- **Evidence required before adoption:** Require in-game UI test.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3684. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_2.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for disabled button variant 2.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON with 200x20 dimensions, 6px horizontal/5px vertical borders and stretch_inner.
+- **Findings:** Shared blob SHA/content with button metadata family.
+- **RustChunk relevance:** Useful shared metadata pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Version-specific scaling schema.
+- **Follow-up checks:** Verify target parser and corner preservation.
+- **RustChunk implementation mapping:** Reuse only after 1.20.1 compatibility check.
+- **Evidence required before adoption:** Require resource reload and scaling tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3685. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_3.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 5b2d578852a2c0c0a7bd9b7ecfaaf806a4809d67
+- **Size:** 46159 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Disabled-state button texture variant 3.
+- **Dependencies / cross-references:** button_disabled_3.png.mcmeta and widget disabled state.
+- **Implementation / logic:** PNG rendered; dark textured interior with a thin pale frame and a distinct grain pattern.
+- **Findings:** Variant art does not prove a matching state is used at runtime.
+- **RustChunk relevance:** Useful visual state reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires target widget/state mapping.
+- **Follow-up checks:** Test contrast and hover/disabled distinction.
+- **RustChunk implementation mapping:** Create explicit RustChunk state assets.
+- **Evidence required before adoption:** Require actual UI state screenshots.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3686. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_3.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for disabled button variant 3.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON with 200x20 nine_slice, 6/5 borders and stretch_inner true.
+- **Findings:** Same blob as all other button sidecars.
+- **RustChunk relevance:** Useful metadata deduplication pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target version may not recognize schema.
+- **Follow-up checks:** Test parser and scaling.
+- **RustChunk implementation mapping:** Use only after 1.20.1 verification.
+- **Evidence required before adoption:** Require resource reload tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3687. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 1efcc21db9607546246a6246fef3917394213741
+- **Size:** 50632 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Highlighted/active button texture.
+- **Dependencies / cross-references:** button_highlighted.png.mcmeta and highlighted widget state.
+- **Implementation / logic:** PNG rendered; brighter gray diagonal hatch texture inside a pale irregular rectangular outline.
+- **Findings:** Represents a highlighted state; animation or focus behavior is not included.
+- **RustChunk relevance:** Useful hover/focus skin reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** State mapping and sprite schema are version-specific.
+- **Follow-up checks:** Test focus visibility and color contrast.
+- **RustChunk implementation mapping:** Design distinct RustChunk hover/focus texture and state.
+- **Evidence required before adoption:** Require keyboard/controller/touch focus screenshots.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3688. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for highlighted button.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON with 200x20 nine_slice and 6/5 border values.
+- **Findings:** Same shared blob as other button states.
+- **RustChunk relevance:** Useful nine-slice template.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target-version support unverified.
+- **Follow-up checks:** Test border preservation on focus state.
+- **RustChunk implementation mapping:** Reuse only after target schema check.
+- **Evidence required before adoption:** Require 1.20.1 resource tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3689. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_1.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 69677683354f60b4857e3cb5fabb9b202759f04d
+- **Size:** 45077 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Highlighted button texture variant 1.
+- **Dependencies / cross-references:** button_highlighted_1.png.mcmeta and widget state variants.
+- **Implementation / logic:** PNG rendered; diagonal lighter hatch pattern with a pale outline; one edge has a visibly different transparent/empty section.
+- **Findings:** Variant may represent different visual state/asset crop; exact mapping is not shown.
+- **RustChunk relevance:** Useful alternate focus texture reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires matching target sprite registry.
+- **Follow-up checks:** Compare alpha bounds and state usage.
+- **RustChunk implementation mapping:** Keep state mapping explicit in RustChunk UI.
+- **Evidence required before adoption:** Require state-specific UI screenshot tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3690. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_1.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for highlighted variant 1.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON with 200x20 dimensions and 6/5 borders.
+- **Findings:** Same shared metadata blob as other button variants.
+- **RustChunk relevance:** Useful metadata reuse pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target parser support unverified.
+- **Follow-up checks:** Test alpha edge and nine-slice scaling.
+- **RustChunk implementation mapping:** Use shared metadata only after target check.
+- **Evidence required before adoption:** Require 1.20.1 resource reload tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3691. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_2.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** bf5d1071e6af3dc92c8283ffd2013afea7498167
+- **Size:** 49611 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Highlighted button texture variant 2.
+- **Dependencies / cross-references:** button_highlighted_2.png.mcmeta and GUI highlighted state.
+- **Implementation / logic:** PNG rendered; diagonal gray hatch texture with a thin pale irregular frame.
+- **Findings:** Texture alone does not prove runtime focus semantics.
+- **RustChunk relevance:** Useful UI state reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Sprite IDs and state selection are version-specific.
+- **Follow-up checks:** Check texture alignment and contrast at GUI scales.
+- **RustChunk implementation mapping:** Use only as visual inspiration.
+- **Evidence required before adoption:** Require in-game focus-state test.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3692. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_2.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for highlighted variant 2.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid 200x20 nine_slice JSON with 6/5 border values.
+- **Findings:** Same blob SHA/content as button state metadata family.
+- **RustChunk relevance:** Useful shared metadata pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target version compatibility unverified.
+- **Follow-up checks:** Verify border behavior and JSON schema.
+- **RustChunk implementation mapping:** Reuse only after 1.20.1 parser test.
+- **Evidence required before adoption:** Require resource reload tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3693. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_3.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** ad0d55b50a5569274287af5e06d323158602210f
+- **Size:** 49197 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Highlighted button texture variant 3.
+- **Dependencies / cross-references:** button_highlighted_3.png.mcmeta and GUI highlighted state.
+- **Implementation / logic:** PNG rendered; diagonal light hatch texture and irregular pale outline; some edge transparency differs from other variants.
+- **Findings:** State variant mapping is not contained in texture file.
+- **RustChunk relevance:** Useful focus/highlight texture reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires target sprite/state mapping.
+- **Follow-up checks:** Inspect alpha bounds, scale and contrast.
+- **RustChunk implementation mapping:** Use explicit RustChunk focus assets.
+- **Evidence required before adoption:** Require UI screenshot and accessibility checks.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3694. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_3.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for highlighted variant 3.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid 200x20 nine_slice JSON with 6px horizontal and 5px vertical borders.
+- **Findings:** Shared content SHA across button variants.
+- **RustChunk relevance:** Useful metadata deduplication pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target schema needs 1.20.1 validation.
+- **Follow-up checks:** Test all state textures with shared metadata.
+- **RustChunk implementation mapping:** Reuse only after compatibility check.
+- **Evidence required before adoption:** Require resource reload tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3695. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 18c8cd4dfd173b892ec2d105ea838018dcbf57f7
+- **Size:** 2292 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Vertical scroller thumb texture.
+- **Dependencies / cross-references:** scroller.png.mcmeta and Minecraft GUI widget sprite loader.
+- **Implementation / logic:** PNG rendered; narrow vertical dark textured thumb with pale irregular side border and transparent center/edges.
+- **Findings:** Tiny asset designed for nine-slice stretching; contrast may be low on dark background.
+- **RustChunk relevance:** Useful scroll control skin reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Widget texture IDs and metadata parser are version-specific.
+- **Follow-up checks:** Test minimum thumb height, alpha and touch hit target independently.
+- **RustChunk implementation mapping:** Build RustChunk scroller visuals and hit targets separately.
+- **Evidence required before adoption:** Require touch/keyboard scroll screenshots and accessibility tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3696. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** d8d19dc35878dee344c686787e632ebfb3449dbe
+- **Size:** 240 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for scroller thumb.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON: 6x32 nine_slice with 2px left/right and 4px top/bottom borders, stretch_inner true.
+- **Findings:** Uses a distinct shared metadata blob from the 200x20 button family.
+- **RustChunk relevance:** Useful small vertical nine-slice example.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target schema must be validated for 1.20.1.
+- **Follow-up checks:** Test very short/tall scroller dimensions.
+- **RustChunk implementation mapping:** Use only if target parser supports nine_slice.
+- **Evidence required before adoption:** Require resource reload and scroll-state tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3697. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller_background.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** f08f91b8368fe35d60ad8517584152d2c05f58c5
+- **Size:** 2151 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Vertical scroller track background texture.
+- **Dependencies / cross-references:** scroller_background.png.mcmeta and GUI scroller widget.
+- **Implementation / logic:** PNG rendered; narrow vertical dark textured track with thin pale side edges and transparent portions.
+- **Findings:** Low contrast; hit area and visual track are separate concerns.
+- **RustChunk relevance:** Useful scroller track texture reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Requires target sprite and metadata support.
+- **Follow-up checks:** Test track/thumb contrast and scaling.
+- **RustChunk implementation mapping:** Implement scroll track and hit testing independently.
+- **Evidence required before adoption:** Require actual touch scroll UI tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3698. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller_background.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** d8d19dc35878dee344c686787e632ebfb3449dbe
+- **Size:** 240 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice metadata for scroller background.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser.
+- **Implementation / logic:** Valid JSON: 6x32 nine_slice, 2px horizontal and 4px vertical borders.
+- **Findings:** Same blob SHA/content as scroller thumb metadata.
+- **RustChunk relevance:** Useful shared scroller metadata pattern.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target-version support unverified.
+- **Follow-up checks:** Verify both scroller textures preserve borders at all sizes.
+- **RustChunk implementation mapping:** Reuse shared metadata only after 1.20.1 test.
+- **Evidence required before adoption:** Require resource reload and UI scaling tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.
+
+### 3699. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/slider.png`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** c68f0015867d6d1b6e8096032c8541a9bf2d46aa
+- **Size:** 47583 bytes
+- **Coverage:** Complete binary PNG; rendered and visually inspected.
+- **Purpose:** Slider track texture for low-budget GUI settings.
+- **Dependencies / cross-references:** slider.png.mcmeta and Minecraft GUI slider widget.
+- **Implementation / logic:** PNG rendered; wide dark mottled horizontal track with thin pale irregular outline and transparent exterior.
+- **Findings:** Track only; knob/handle and drag behavior are not included in this source file.
+- **RustChunk relevance:** Useful slider track visual reference.
+- **Decision:** adaptable; reference; media-image
+- **1.20.1 implications:** Target sprite IDs and slider state assets may differ in 1.20.1.
+- **Follow-up checks:** Inspect associated knob assets and test focus/drag states.
+- **RustChunk implementation mapping:** Create RustChunk slider track/handle with independent touch hit targets.
+- **Evidence required before adoption:** Require touch drag, keyboard adjustment and GUI screenshot tests.
+- **Completion state:** COMPLETE — pinned blob SHA/size verified; image rendered and visually reviewed; static asset review only; not reused.
+
+### 3700. `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/slider.png.mcmeta`
+- **Source repository/ref:** `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`
+- **Source SHA:** 52d0899489886054cbec548d1028e59138a6d05e
+- **Size:** 242 bytes
+- **Coverage:** Complete EOF coverage (16 logical lines); JSON parsed and reviewed.
+- **Purpose:** Nine-slice scaling metadata for slider track.
+- **Dependencies / cross-references:** Minecraft GUI sprite metadata parser and slider.png.
+- **Implementation / logic:** Valid JSON: 200x20 nine_slice, 6px left/right and 5px top/bottom borders, stretch_inner true.
+- **Findings:** Shared metadata blob reused by button/slider state assets.
+- **RustChunk relevance:** Useful nine-slice metadata reference.
+- **Decision:** adaptable; reference; version-specific; sprite-metadata
+- **1.20.1 implications:** Target parser support is not proven for Minecraft 1.20.1.
+- **Follow-up checks:** Test stretched slider lengths and border integrity.
+- **RustChunk implementation mapping:** Use shared metadata only if 1.20.1 schema supports it.
+- **Evidence required before adoption:** Require resource reload and slider interaction tests.
+- **Completion state:** COMPLETE — pinned source SHA/size verified; full stated coverage read through EOF; JSON parsed; static review only; not executed.

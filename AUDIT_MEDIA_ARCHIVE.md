@@ -233,3 +233,89 @@ Neither record replaces the other. Archive entries must not use a separate media
 - **Review status:** PNG rendered and visually reviewed.
 - **Notes:** Third wide dark mottled button sprite with thin irregular pale border; no matching sidecar metadata occurs in this checkpoint.
 
+
+
+### Audit entry 3677 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_3.png`
+- **Audit source SHA:** `8e717353b0adfeb088ae119ba1d18fbe759a3660`
+- **Source size:** 59,783 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Wide dark mottled button with thin irregular pale outline and transparent exterior; fourth normal-state texture variant.
+
+### Audit entry 3679 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled.png`
+- **Audit source SHA:** `bb879590a36723ccfeeef9765da14e0a51b39b4b`
+- **Source size:** 46,306 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Wide dark textured disabled button with pale irregular outline and a darker interior than active variants.
+
+### Audit entry 3681 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_1.png`
+- **Audit source SHA:** `1323629b71cfbd34875be97881e03efe1809163c`
+- **Source size:** 49,000 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Disabled button variant with dark mottled interior and thin pale border; grain differs from base.
+
+### Audit entry 3683 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_2.png`
+- **Audit source SHA:** `1ee071c636833d55c9cee7d21ace714bb449c1a0`
+- **Source size:** 46,092 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Dark wide disabled button with pale irregular outline and a distinct texture pattern.
+
+### Audit entry 3685 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_3.png`
+- **Audit source SHA:** `5b2d578852a2c0c0a7bd9b7ecfaaf806a4809d67`
+- **Source size:** 46,159 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Dark textured disabled button with a thin pale frame and another distinct grain pattern.
+
+### Audit entry 3687 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png`
+- **Audit source SHA:** `1efcc21db9607546246a6246fef3917394213741`
+- **Source size:** 50,632 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Brighter gray diagonal-hatch texture inside a pale irregular rectangular outline, representing a highlighted button state.
+
+### Audit entry 3689 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_1.png`
+- **Audit source SHA:** `69677683354f60b4857e3cb5fabb9b202759f04d`
+- **Source size:** 45,077 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Alternate highlighted texture with lighter diagonal hatch and pale outline; one edge has a visibly different transparent/empty section.
+
+### Audit entry 3691 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_2.png`
+- **Audit source SHA:** `bf5d1071e6af3dc92c8283ffd2013afea7498167`
+- **Source size:** 49,611 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Diagonal gray hatch texture with thin irregular pale frame.
+
+### Audit entry 3693 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_3.png`
+- **Audit source SHA:** `ad0d55b50a5569274287af5e06d323158602210f`
+- **Source size:** 49,197 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Light diagonal hatch texture with irregular pale outline and some edge transparency variation.
+
+### Audit entry 3695 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller.png`
+- **Audit source SHA:** `18c8cd4dfd173b892ec2d105ea838018dcbf57f7`
+- **Source size:** 2,292 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Narrow vertical dark textured scroller thumb with pale irregular side border and transparent center/edges.
+
+### Audit entry 3697 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller_background.png`
+- **Audit source SHA:** `f08f91b8368fe35d60ad8517584152d2c05f58c5`
+- **Source size:** 2,151 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Narrow vertical dark textured scroller track with thin pale side edges and transparent portions.
+
+### Audit entry 3699 — IMAGE — VISUALLY REVIEWED
+- **Source path:** `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/slider.png`
+- **Audit source SHA:** `c68f0015867d6d1b6e8096032c8541a9bf2d46aa`
+- **Source size:** 47,583 bytes
+- **Review status:** PNG rendered and visually reviewed.
+- **Notes:** Wide dark mottled slider track with thin pale irregular outline and transparent exterior; the knob/handle is not represented by this file.
+

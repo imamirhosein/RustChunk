@@ -6,13 +6,13 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3675**.
+- Completed entries: **1–3700**.
 - Stage **3401–3600 is CLOSED (200/200)**.
-- Exceptional stage **3601–3700 is ACTIVE (75/100)**. Checkpoints 3601–3625, 3626–3650 and 3651–3675 are COMPLETE and read-back verified.
-- Final authorized checkpoint: **3676–3700**. Continue without a new permission request and **STOP at 3700**; 3701+ requires fresh explicit authorization.
-- Ledger `AUDIT_LEDGER_3601_3800.md`: 75 records (3601–3675), exactly 15 fields each. Index: 3,675 sequential unique paths.
+- Exceptional stage **3601–3700 is CLOSED (100/100)**. All four 25-file checkpoints 3601–3625, 3626–3650, 3651–3675 and 3676–3700 are committed and independently read back.
+- New Ledger `AUDIT_LEDGER_3601_3800.md`: **100 records (3601–3700)**, each with exactly 15 fields. Index: **3,700 sequential unique paths**, no duplicates and Ledger/Index decision alignment.
 - Pinned source `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; recursive tree has 5,749 entries and is untruncated.
-- Media Archive contains the visually reviewed image/vector/container assets discovered through 3675. Historical media backfill 1–4000 remains mandatory before backup.
+- Permanent Media Archive includes all actual image/vector/container assets identified through 3700. Historical media backfill **1–4000** remains mandatory before the final 4000 backup.
+- The user's exceptional authorization is **EXHAUSTED**. **STOP at 3700; do not inspect 3701+ without fresh explicit authorization.**
 - Static source and visual asset review only; no build/test/runtime/device/GPU/Forge/Minecraft/server validation is established. Do not modify main or backup refs.
 
 The historical checkpoint notes below are append-only evidence. Older intermediate resume/STOP statements are historical and are superseded by this current authoritative block and the final closeout in Section 67 of `AUDIT_PROTOCOL.md`.

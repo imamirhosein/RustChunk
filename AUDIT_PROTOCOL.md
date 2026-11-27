@@ -1140,3 +1140,14 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Ledger has 75 records (3601–3675), each with exactly 15 fields; Index has 3,675 unique sequential paths. Ledger, Index, QA, Continuity, Protocol, Boundary and Media Archive were committed together and independently read back.
 - Final authorized checkpoint is 3676–3700. Continue without a new permission request and STOP at 3700.
 - Static source/visual review only; no build, tests, runtime, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.
+
+
+## 74. Exceptional authorization 3601–3700 — FINAL CLOSEOUT — 2026-11-27
+
+- All four authorized checkpoints are complete: 3601–3625, 3626–3650, 3651–3675 and 3676–3700.
+- Exactly 100 new pinned source files were inspected through EOF. All source SHA/byte-size pairs match the complete, untruncated pinned upstream tree. Every text file over 400 lines was read in consecutive, gap-free chunks no larger than 400 lines.
+- Ledger `AUDIT_LEDGER_3601_3800.md` contains 100 records, exactly 15 fields each. Index contains 3,700 sequential unique paths and aligned decisions. All seven checkpoint documents, including Media Archive where applicable, were committed and independently read back at each checkpoint.
+- All actual image/vector/container files in the authorized range were fetched and visually inspected; the permanent Media Archive contains their matching audit numbers, paths, hashes, sizes and review notes.
+- The exceptional grant is **EXHAUSTED**. **STOP at 3700**. No authorization for 3701+.
+- Before the 4000 backup, complete media backfill for entries 1–4000, reconcile the archive with every Ledger and Index, and pass global structural/provenance QA. No backup before all gates pass.
+- Static source and visual asset review only; no build, tests, runtime, APK, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.

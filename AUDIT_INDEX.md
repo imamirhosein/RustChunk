@@ -1,4 +1,4 @@
-- Source ledgers: entries **1–3675** complete; exceptional 100-file stage **3601–3700 ACTIVE (75/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **75 records (3601–3675)**, each with exactly 15 fields. Index: **3,675 sequential unique paths**; checkpoints 3601–3675 committed and read-back verified. Next checkpoint 3676–3700 is already authorized; stop only at 3700. Media Archive now includes the reviewed icon/font/UI image assets through 3675; historical backfill 1–4000 remains mandatory before backup.
+- Source ledgers: entries **1–3700** complete; exceptional 100-file stage **3601–3700 CLOSED (100/100)**. Ledger `AUDIT_LEDGER_3601_3800.md` has **100 records (3601–3700)**, each with exactly 15 fields. Index: **3,700 sequential unique paths**; all four 25-file checkpoints committed and read-back verified. The one-time grant is exhausted; 3701+ requires fresh explicit authorization. Media Archive includes reviewed assets through 3699; historical media backfill 1–4000 remains mandatory before backup.
 
 ## Part 1 — Entries 1–25
 
@@ -4191,3 +4191,29 @@
 | 3673 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png` | adaptable; reference; media-image | Alternate low-budget GUI button sprite variant 1. |
 | 3674 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_1.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Defines nine-slice scaling for button variant 1. |
 | 3675 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_2.png` | adaptable; reference; media-image | Alternate low-budget GUI button sprite variant 2. |
+
+| 3676 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_2.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice scaling metadata for button_2.png. |
+| 3677 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_3.png` | adaptable; reference; media-image | Fourth normal-state button texture variant. |
+| 3678 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_3.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice scaling metadata for button_3. |
+| 3679 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled.png` | adaptable; reference; media-image | Disabled-state button texture. |
+| 3680 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice scaling metadata for disabled button texture. |
+| 3681 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_1.png` | adaptable; reference; media-image | Disabled-state button texture variant 1. |
+| 3682 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_1.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice scaling metadata for disabled button variant 1. |
+| 3683 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_2.png` | adaptable; reference; media-image | Disabled-state button texture variant 2. |
+| 3684 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_2.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for disabled button variant 2. |
+| 3685 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_3.png` | adaptable; reference; media-image | Disabled-state button texture variant 3. |
+| 3686 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_disabled_3.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for disabled button variant 3. |
+| 3687 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png` | adaptable; reference; media-image | Highlighted/active button texture. |
+| 3688 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for highlighted button. |
+| 3689 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_1.png` | adaptable; reference; media-image | Highlighted button texture variant 1. |
+| 3690 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_1.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for highlighted variant 1. |
+| 3691 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_2.png` | adaptable; reference; media-image | Highlighted button texture variant 2. |
+| 3692 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_2.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for highlighted variant 2. |
+| 3693 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_3.png` | adaptable; reference; media-image | Highlighted button texture variant 3. |
+| 3694 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/button_highlighted_3.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for highlighted variant 3. |
+| 3695 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller.png` | adaptable; reference; media-image | Vertical scroller thumb texture. |
+| 3696 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for scroller thumb. |
+| 3697 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller_background.png` | adaptable; reference; media-image | Vertical scroller track background texture. |
+| 3698 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/scroller_background.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice metadata for scroller background. |
+| 3699 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/slider.png` | adaptable; reference; media-image | Slider track texture for low-budget GUI settings. |
+| 3700 | `packaging/lowbudget/pack/assets/minecraft/textures/gui/sprites/widget/slider.png.mcmeta` | adaptable; reference; version-specific; sprite-metadata | Nine-slice scaling metadata for slider track. |
