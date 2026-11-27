@@ -2,11 +2,11 @@
 
 - Repository `imamirhosein/RustChunk`; branch `starling-1.20.1-port-audit`.
 - Pinned upstream `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`; submodule `upstream/starling`.
-- Entries **1–3575** are included in the audit branch after this checkpoint transaction is committed and read back. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED.
-- New stage **3401–3600** is ACTIVE and fully authorized as one continuous 200-file boundary (**175/200 inspected; checkpoints 1–7 closed after this transaction's read-back**).
+- Entries **1–3600** are included in the audit branch after final checkpoint commit and read-back. Stages **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400** are CLOSED.
+- New stage **3401–3600** is CLOSED after completion of the continuous 200-file boundary (**200/200 inspected; all eight checkpoints committed and read-back verified**).
 - **One-time full-boundary grant:** complete all 200 entries 3401–3600. Do not stop/request permission at 3450, 3500 or 3550. Maintain eight 25-file checkpoint commits and read-back verifications. STOP at **3600**; no authorization for 3601+.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: 200 records, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md`: 175 records (3401–3575), exactly 15 fields each. Index: 3,575 unique sequential paths.
-- Pinned tree: 4,968 blobs, complete/untruncated. All 3,550 indexed paths are unique and present. First 200 globally lexical unindexed paths define the new boundary; next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: 200 records, exactly 15 fields each. New Ledger `AUDIT_LEDGER_3401_3600.md`: 200 records (3401–3600), exactly 15 fields each. Index: 3,600 unique sequential paths.
+- Pinned tree: 4,968 blobs, complete/untruncated. All 3,600 indexed paths are unique and present. First 200 globally lexical unindexed paths define the new boundary; next unselected path is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - Standard 25-file commit/read-back, serial source inspection and consecutive chunks no larger than 400 lines remain in force. The four 50-file subdivisions are not authorization/reporting stops for this one-time grant.
 - Permanent media archive `AUDIT_MEDIA_ARCHIVE.md` remains continuous; historical media 1–3300 backfill is pending and required before 4000 backup closeout.
 - No RustChunk application-source implementation, tests/builds/benchmarks, APK/device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by this static audit. Do not modify `main` or backup refs.
@@ -22,9 +22,9 @@
 | 5 | 3501–3525 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 6 | 3526–3550 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 | 7 | 3551–3575 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
-| 8 | 3576–3600 | AUTHORIZED — NEXT |
+| 8 | 3576–3600 | COMPLETE — COMMITTED/READ-BACK VERIFIED |
 
-All eight checkpoints are covered by one explicit user grant. Checkpoints 3401–3425 through 3551–3575 are complete. The 50-file marks are internal bookkeeping only; proceed without reauthorization. Next and final checkpoint is 3576–3600; stop only after verification at 3600 unless a genuine blocker occurs.
+All eight checkpoints were covered by one explicit user grant and are now complete and read-back verified. The 50-file marks were internal bookkeeping only. The grant is exhausted; STOP at 3600 and do not inspect 3601+ without new authorization.
 
 ## Stage partition
 
@@ -692,3 +692,11 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Ledger: 175 entries through 3575, exactly 15 fields each. Index: 3,575 sequential unique paths with aligned decisions. Six-document transaction and read-back verification close this checkpoint.
 - Static limits include silent OpenAL-only sound testing, unbounded native image decode/cleanup risk, synthetic single-column spawn predicates and manually driven structure placement with entities disabled.
 - Continue at 3576–3600 under the existing user grant; no reauthorization at 3575. Stop only after 3600 verification.
+
+
+## Final checkpoint 3576–3600 — COMPLETE — 2026-11-27
+
+- Final 25 paths were selected as the next strict raw-lexical unindexed files after Index 3575 from the complete pinned tree. All path/SHA/byte sizes were verified and all sources read through EOF.
+- Long-file ranges: 3581 TabList 1–190/191–372; 3587 TextDisplayRender 1–120/121–271; 3593 Trading 1–210/211–420/421–624; 3595 TreeFeature 1–100/101–179. All remaining sources are <=400 lines.
+- Ledger: 200 records through 3600, exactly 15 fields each. Index: 3,600 unique sequential paths with aligned decisions. Six documents will be committed together and re-fetched for verification.
+- The full one-time authorization is now complete and exhausted. No work on 3601+ without a new explicit user grant.

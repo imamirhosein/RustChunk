@@ -6,14 +6,14 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3575**.
-- Stage **3401–3600 is ACTIVE (175/200)**; checkpoints **3401–3425**, **3426–3450**, **3451–3475**, **3476–3500**, **3501–3525**, **3526–3550** and **3551–3575 COMPLETE**, committed/read-back verification pending until this transaction closes.
-- Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is ACTIVE (125/200)**.
+- Completed entries: **1–3600**.
+- Stage **3401–3600 is CLOSED (200/200)**; all eight 25-file checkpoints 3401–3425 through 3576–3600 are COMPLETE, committed and independently read back.
+- Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is CLOSED (200/200)**.
 - The user has issued one continuous, one-time grant for **all entries 3401–3600**. This is a full 200-file authorization, not an ordinary 50-file or exceptional 100-file window.
-- **Do not stop at 3450, 3500 or 3550.** Those are not authorization boundaries for this grant. Continue through all eight exact 25-file checkpoints and STOP only at **3600**, unless a real source-access/read/provenance blocker requires stopping earlier.
-- Next entry: **3576** (`VanillaSubtitleOracle.java`). Checkpoints 3401–3425 through 3551–3575 are complete once this six-document transaction is committed and read back. Only checkpoint 3576–3600 remains; it is already covered by the one-time grant.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New stage `AUDIT_LEDGER_3401_3600.md` has **175 records (3401–3575)**, each with 15 fields. Index: **3,575 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,575 Index paths are unique and all exist in this tree; 1,393 remaining blobs are unindexed. The first 200 after the 3,400-entry baseline define the authorized 3401–3600 selection; the next unselected path after that full boundary remains `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- The single grant authorized all eight checkpoints 3401–3600. They are now complete; **STOP at 3600**. No authorization for 3601+.
+- Final entry completed: **3600** (`VanillaViewDirectionOracle.java`). There is no next entry under this grant.
+- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New stage `AUDIT_LEDGER_3401_3600.md` has **200 records (3401–3600)**, each with 15 fields. Index: **3,600 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,600 Index paths are unique and all exist in this tree; 1,368 remaining blobs are unindexed. The first 200 after the 3,400-entry baseline define the authorized 3401–3600 selection; the next unselected path after that full boundary remains `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
 - Keep the durable 25-file checkpoint commits/read-back and serial full-file inspection. For this one-time grant, the four 50-file slices are internal bookkeeping only and do not require intermediate reports or permission.
 - Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; first-1000 image estimate remains unverified.
 - At backup/verification milestone **4000**, complete and verify the historical media backfill for the backup scope (entries 1–3999, as applicable); do not call backup closeout complete while backfill remains outstanding.
@@ -1076,3 +1076,12 @@ Keep progress updates extremely short. Report only the current range and the nex
 - Static-oracle limits: sound uses silent OpenAL/no output; skin decoding needs bounded allocation and guaranteed cleanup; container fixtures mutate global item state; spawn predicates and structure generation use synthetic/manual boundaries.
 - No application source changed and no build/test/device/server/Forge/Aternos validation was performed.
 - Continue at **3576** (`VanillaSubtitleOracle.java`) under the same explicit 200-file grant; do not stop at 3575; final stop remains 3600.
+
+
+## Final closeout — authorized boundary 3401–3600 — COMPLETE — 2026-11-27
+
+- All eight 25-file checkpoints (3401–3425, 3426–3450, 3451–3475, 3476–3500, 3501–3525, 3526–3550, 3551–3575 and 3576–3600) were committed and independently read back.
+- Final stage Ledger: 200 records (3401–3600), exactly 15 fields each. Index: 3,600 sequential unique paths; final 200 paths/SHA/byte sizes match pinned tree selection.
+- Last 25 were completely inspected. Long files 3581 (372), 3587 (271), 3593 (624) and 3595 (179) were read in consecutive chunks; none exceeded the 400-line chunk limit.
+- Static review only. No application source changes, builds, tests, benchmarks, APKs, device/renderer validation, Forge 1.20.1 launch, multiplayer or Aternos connection was performed.
+- The one-time user grant is exhausted at **3600**. **STOP. Do not inspect 3601+ without new explicit authorization.**

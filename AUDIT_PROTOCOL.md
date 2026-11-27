@@ -1073,3 +1073,12 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Stage Ledger now has 175 records (3401–3575), exactly 15 fields per entry; Index has 3,575 unique sequential paths and aligned decisions. Commit and independent read-back verification close the checkpoint.
 - Key boundaries: the audio rig has silent OpenAL No Output and inline tasks; skin decode has an image-close and size-cap concern; server spawn rules are a narrow predicate check; structure placement uses synthetic/manual server-region phases.
 - Proceed directly to 3576–3600 under the same one-time grant. No permission stop at 3575; stop only at 3600.
+
+
+## 13. Explicit one-time authorization 3401–3600 — CLOSED
+
+- The user granted one continuous 200-file audit boundary covering entries **3401–3600**. This explicit grant superseded the generic 50-file permission pauses in Section 2 for this boundary only; no intermediate permission was needed at 3450, 3500, 3550 or 3575.
+- All eight 25-file checkpoints are complete, each recorded in all six documents, committed and independently read back. The final boundary is closed at 3600.
+- Final stage Ledger contains 200 source records (3401–3600), exactly 15 fields per record. The global Index contains 3,600 sequential unique paths. Final checkpoint coverage includes 3576–3600; the next globally lexical unselected source is `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
+- This was static inspection only. No RustChunk application code changes or build/runtime/device/server/Forge/Aternos validation occurred.
+- **STOP at 3600. Do not inspect entry 3601 or continue the next batch until a new explicit user authorization is provided.**
