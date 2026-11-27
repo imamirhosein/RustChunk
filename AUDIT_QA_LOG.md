@@ -2242,3 +2242,29 @@ The original displaced detailed fields from slots 698–700 are preserved here. 
 ## Authorization / procedural gate update — 2026-11-27
 - Exceptional authorization renewed for exactly entries 3601–3700 (100 files); active, not yet consumed. Stop at 3700; 3701+ requires fresh explicit authorization.
 - Before the 4000 backup: backfill and verify every image/video in entries 1–4000 in AUDIT_MEDIA_ARCHIVE.md; reconcile against all stage Ledgers and Index; then pass global structural/provenance QA. Backup is prohibited until all gates pass. See AUDIT_PROTOCOL.md Sections 65 and 69.
+
+
+## Checkpoint 3601–3625 — 2026-11-27 — COMPLETE
+
+### Scope and provenance
+- Inspected exactly 25 new source blobs, 3601–3625, from `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`.
+- Re-fetched the current RustChunk branch head before the checkpoint; source submodule pointer remained pinned to the stated upstream commit.
+- Upstream recursive tree contained 5,749 entries and returned `truncated=false`.
+- Re-parsed the existing Index: 3,600 rows and 3,600 unique paths. Recomputed the raw-lexically sorted unindexed source paths from the complete tree; the exact first 25 matched entries 3601–3625.
+- Verified each of the 25 source blob SHAs and byte sizes against the pinned tree. Every file was read through EOF. Files above 400 logical lines were covered in consecutive chunks: `native-hooks.json` lines 1–4000 in ten 400-line chunks plus 4001–4302 (302 lines), and `bedrock-controls.json` lines 1–400 plus 401–424 (24 lines). All other files were at most 400 logical lines.
+- Parsed all of `native-hooks.json`: 113 helpers, 386 hooks, no duplicate helper/hook names or targets, no missing name/target/mod_api.contract; 126 hooks omit side metadata and 287 omit cancellable metadata (verify schema defaults before interpreting as defects).
+- Parsed `bedrock-controls.json`: 60 records (59 PNG references and one license record), unique paths, required manifest metadata present, declared aggregate payload 75,060 bytes. The manifest is not itself an image; the referenced PNGs were not visually reviewed in this checkpoint.
+- New Ledger contains 25 records and each record has exactly the 15 required fields. Index rows 3601–3625 use the matching Ledger decisions.
+- No actual image or video source blob occurred among these 25 audited paths; therefore no new media archive entry was added. The asset manifest's 59 PNG references are follow-up pointers, not visually reviewed media records.
+
+### Material findings
+- Horizon documentation and native-mod descriptor explicitly target Minecraft 26.3 / Java 25, not RustChunk's 1.20.1 / Java 17 Forge target.
+- Android manifest sets `android:isGame="true"` and `android:appCategory="game"`, but also declares a mandatory Vulkan feature; this is a useful game-classification reference, not a compatibility guarantee.
+- The native hook catalogue is a coverage checklist only; it is not a Forge 1.20.1 event/API map.
+- Storage/provider/import review identified follow-up security risks: projection handling in GameFolderProvider, unvalidated nested ZIP entry names in HorizonImport, predictable temporary import filenames and overwrite/concurrency behavior in LauncherActivity.
+- The render oracles capture CPU-side state/vertices with stub GPU interfaces; they do not validate actual Android GPU rendering or performance.
+- These are later-version source oracles and Android integration patterns, not 1.20.1 Forge implementations.
+
+### Validation boundary
+- Static source audit only. No RustChunk application code changed. No build, unit test, benchmark, APK, Android device, Vulkan/GPU, Forge, Minecraft gameplay, multiplayer or Aternos validation was performed.
+- **Checkpoint 3601–3625 is committed and independently read back.** The 100-file authorization remains active; next checkpoint is 3626–3650. Report at 3650, continue without a new permission request through 3700, then STOP.

@@ -6,19 +6,15 @@ Branch: starling-1.20.1-port-audit
 
 ## Authoritative resume point
 
-- Completed entries: **1–3600**.
-- Stage **3401–3600 is CLOSED (200/200)**; all eight 25-file checkpoints 3401–3425 through 3576–3600 are COMPLETE, committed and independently read back.
-- Closed stages: **2601–2800**, **2801–3000**, **3001–3200** and **3201–3400**. New stage **3401–3600 is CLOSED (200/200)**.
-- The user has issued one continuous, one-time grant for **all entries 3401–3600**. This is a full 200-file authorization, not an ordinary 50-file or exceptional 100-file window.
-- The single grant authorized all eight checkpoints 3401–3600. They are now complete; **STOP at 3600**. No authorization for 3601+.
-- Final entry completed: **3600** (`VanillaViewDirectionOracle.java`). There is no next entry under this grant.
-- Closed Ledger `AUDIT_LEDGER_3201_3400.md`: **200 records (3201–3400)**, exactly 15 fields each. New stage `AUDIT_LEDGER_3401_3600.md` has **200 records (3401–3600)**, each with 15 fields. Index: **3,600 sequential unique paths**, no duplicates and prior Ledger/Index alignment.
-- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: 4,968 blobs, complete and untruncated. Existing 3,600 Index paths are unique and all exist in this tree; 1,368 remaining blobs are unindexed. The first 200 after the 3,400-entry baseline define the authorized 3401–3600 selection; the next unselected path after that full boundary remains `mods/horizon/src/test/java/dev/horizonlab/parity/VanillaVillagerFarmingOracle.java`.
-- Keep the durable 25-file checkpoint commits/read-back and serial full-file inspection. For this one-time grant, the four 50-file slices are internal bookkeeping only and do not require intermediate reports or permission.
-- Permanent media archive: `AUDIT_MEDIA_ARCHIVE.md` contains media entries 3301–3310 (3301 is a video marked **NEEDS USER WATCH**; 3302–3310 are images recorded as visually reviewed). Historical media backfill for entries **1–3300 remains pending**; first-1000 image estimate remains unverified.
-- At backup/verification milestone **4000**, complete and verify the historical media backfill for the backup scope (entries 1–3999, as applicable); do not call backup closeout complete while backfill remains outstanding.
-- Static source audit only. No RustChunk application-source implementation, build, tests, benchmark, APK, device, renderer, Forge/Minecraft, multiplayer or Aternos validation is established by this grant.
-- Backup `backup/audit-3000-final-2026-11-23` remains preserved. Do not modify `main` or any backup ref.
+- Completed entries: **1–3625**.
+- Stage **3401–3600 is CLOSED (200/200)**; all eight 25-file checkpoints are complete, committed and independently read back.
+- Exceptional stage **3601–3700 is ACTIVE (25/100)** under the user's continuous one-time grant. Checkpoint **3601–3625 is COMPLETE**; next checkpoint **3626–3650** is already authorized.
+- At **3650**, provide the required 50-file boundary report but do **not** request permission or stop; continue under the same grant through checkpoint 3676–3700. **STOP at 3700**; 3701+ requires fresh explicit authorization.
+- New Ledger `AUDIT_LEDGER_3601_3800.md`: **25 records (3601–3625)**, each with exactly 15 fields. Index: **3,625 sequential unique paths**, no duplicates and Ledger/Index decision alignment.
+- Pinned source: `starling-client/starling @ 5432370d573642041585c69b40fb045b27133488`. Recursive tree: **5,749 entries**, complete and untruncated. Existing 3,600 paths were unique and present; the first 25 raw-lexically sorted unindexed paths matched 3601–3625.
+- Permanent media archive remains continuous. Historical media backfill **1–4000** is still pending and mandatory before the final 4000 backup; the 59 PNG references in entry 3618 are a manifest, not visually reviewed image entries.
+- Static source audit only. No RustChunk application implementation, build, tests, benchmark, APK, device, renderer/GPU, Forge/Minecraft gameplay, multiplayer or Aternos validation is established by this checkpoint.
+- Preserve the existing backup refs. Do not modify `main`.
 
 The historical checkpoint notes below are append-only evidence. Older intermediate resume/STOP statements are historical and are superseded by this current authoritative block and the final closeout in Section 67 of `AUDIT_PROTOCOL.md`.
 

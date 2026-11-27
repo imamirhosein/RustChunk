@@ -1109,3 +1109,14 @@ The current latest path is `crates/horizon-world/examples/probe/block_landing_fi
 - Keep exactly 15 Ledger fields per entry and synchronize Ledger, Index, QA Log, Continuity, Protocol, Boundary Register and Media Archive when applicable under the checkpoint rules.
 - At 3650, report and continue only within the already authorized grant to 3675–3700. At **3700**, close the grant and STOP. Entry 3701+ requires fresh explicit authorization.
 - Static source audit only; do not imply builds, tests, runtime, device, Forge, Minecraft or server validation unless separately performed.
+
+
+## 71. Checkpoint 3601–3625 completion — 2026-11-27
+
+- Checkpoint **3601–3625 is COMPLETE** under the active exceptional grant 3601–3700.
+- Exactly 25 new pinned source files were inspected through EOF; SHA/byte sizes match the complete, untruncated 5,749-entry upstream tree. Files above 400 lines were inspected in consecutive, gap-free chunks no larger than 400 lines.
+- Ledger `AUDIT_LEDGER_3601_3800.md` contains 25 entries, each with exactly 15 required fields. Index now contains 3,625 unique sequential paths and aligned decisions.
+- The checkpoint's Ledger, Index, QA Log, Continuity, Protocol and Boundary Register are committed together in one checkpoint commit and independently fetched/read back.
+- No image/video source blob occurred in this checkpoint. Entry 3618 is an asset manifest listing 59 PNG references; do not claim those images were visually reviewed or add the manifest itself as an image archive record.
+- Next authorized checkpoint: **3626–3650**. At 3650 report the boundary but continue without another permission request under the same grant. Stop only after checkpoint 3676–3700 is complete at **3700**.
+- This is static source review only; no build, test, runtime, device, GPU, Forge, Minecraft, multiplayer or Aternos validation is implied.

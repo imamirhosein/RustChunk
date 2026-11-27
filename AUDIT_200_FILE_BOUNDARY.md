@@ -707,3 +707,19 @@ Checkpoint 2901–2925 is complete and read-back verified. The user's exceptiona
 - Exact grant: 100 entries, 3601–3700. Sections: 3601–3650 and 3651–3700. Two 25-file checkpoints per section; report/stop at 3650, continue under the same grant, then stop at 3700.
 - Current completed boundary: 3600. Next: 3601. Ledger: AUDIT_LEDGER_3601_3800.md.
 - No 4000 backup until historical media backfill 1–4000, archive/Ledger/Index reconciliation, and global structural/provenance QA have all passed, per Protocol Section 69.
+
+
+## Exceptional 100-file grant — checkpoint 3601–3700
+
+| Checkpoint | Range | State |
+|---|---:|---|
+| 1 | 3601–3625 | **COMPLETE — COMMITTED / READ-BACK VERIFIED** |
+| 2 | 3626–3650 | **AUTHORIZED — NEXT** |
+| 3 | 3651–3675 | AUTHORIZED — NOT STARTED |
+| 4 | 3676–3700 | AUTHORIZED — NOT STARTED |
+
+- User's explicit one-time authorization covers all four checkpoints; no new permission is required at 3650.
+- Report the 3650 boundary, then continue under the same grant. **STOP at 3700**.
+- New stage Ledger: `AUDIT_LEDGER_3601_3800.md`; currently 25 records (3601–3625), exactly 15 fields each.
+- Media archive receives entries only for actual image/video source files, not manifests that merely reference image assets. Entry 3618 references 59 PNG assets for later provenance/visual review.
+- Before the 4000 backup, complete media backfill for entries 1–4000, reconcile all media/Ledger/Index records, and pass global structural/provenance QA. Any failed gate prohibits backup.
